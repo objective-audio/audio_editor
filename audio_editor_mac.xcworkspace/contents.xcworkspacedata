@@ -5,6 +5,9 @@
       location = "group:audio_editor/audio_editor.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:audio_editor_core/audio_editor_core.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:submodules/audio_engine/audio_mac/audio_mac.xcodeproj">
    </FileRef>
    <FileRef
