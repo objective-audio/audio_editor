@@ -11,7 +11,7 @@ class ae_app;
 using ae_app_ptr = std::shared_ptr<ae_app>;
 
 struct ae_app {
-    ae_app_ptr make_shared();
+    static ae_app_ptr make_shared();
 
    private:
     ae_app();
