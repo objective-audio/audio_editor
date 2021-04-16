@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A997442629B34E00DAC3FE /* audio_editor_core.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B6A997412629B34E00DAC3FE /* audio_editor_core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = audio_editor_core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A997442629B34E00DAC3FE /* audio_editor_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = audio_editor_core.h; sourceTree = "<group>"; };
 		B6A997452629B34E00DAC3FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = audio_editor_core_umbrella.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
+				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997452629B34E00DAC3FE /* Info.plist */,
 			);
 			path = audio_editor_core;
@@ -60,6 +63,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
+				B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
