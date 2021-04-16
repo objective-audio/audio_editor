@@ -74,6 +74,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B6A997492629B34E00DAC3FE /* Build configuration list for PBXNativeTarget "audio_editor_core" */;
 			buildPhases = (
+				B6A997672629B63D00DAC3FE /* ShellScript */,
 				B6A9973C2629B34E00DAC3FE /* Headers */,
 				B6A9973D2629B34E00DAC3FE /* Sources */,
 				B6A9973E2629B34E00DAC3FE /* Frameworks */,
@@ -128,6 +129,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B6A997672629B63D00DAC3FE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../script/format.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B6A9973D2629B34E00DAC3FE /* Sources */ = {
