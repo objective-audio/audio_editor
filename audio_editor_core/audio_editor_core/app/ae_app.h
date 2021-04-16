@@ -15,5 +15,10 @@ struct ae_app {
 
 private:
   ae_app();
+
+  ae_app(ae_app const &) = delete;
+  ae_app(ae_app &&) = delete;
+  ae_app &operator=(ae_app const &) = delete;
+  ae_app &operator=(ae_app &&) = delete;
 };
 } // namespace yas::ae
