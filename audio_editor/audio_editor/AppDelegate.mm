@@ -6,6 +6,7 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #include <cpp_utils/yas_cf_utils.h>
 #import <objc_utils/yas_objc_unowned.h>
+#import "AEWindowController.h"
 #import "ae_app_global.h"
 
 using namespace yas;
@@ -62,9 +63,9 @@ using namespace yas::ae;
 
 - (void)showWindow:(ae::project_ptr const &)project {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
-    NSWindowController *windowController = [storyboard instantiateInitialController];
-    windowController.window.title = (__bridge NSString *)to_cf_object(project->file_url().last_path_component());
-
+    AEWindowController *windowController = [storyboard instantiateInitialController];
+    NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
+    [windowController setupWithProject:project];
     [windowController showWindow:nil];
 }
 
