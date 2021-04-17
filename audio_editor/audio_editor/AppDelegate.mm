@@ -14,10 +14,30 @@ using namespace yas::ae;
 
 @end
 
-@implementation AppDelegate
+@implementation AppDelegate {
+    observing::canceller_pool _pool;
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+    ae::app_global
+        ->observe_projects([&self](app::projects_t::event const &event) {
+            switch (event.type) {
+                case observing::vector::event_type::any: {
+                    for (auto const &project : event.elements) {
+                        [self showWindow:project];
+                    }
+                } break;
+                case observing::vector::event_type::inserted: {
+                    [self showWindow:*event.element];
+                } break;
+                case observing::vector::event_type::replaced:
+                    break;
+                case observing::vector::event_type::erased:
+                    break;
+            }
+        })
+        .sync()
+        ->add_to(self->_pool);
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
@@ -33,14 +53,16 @@ using namespace yas::ae;
 
     if ([panel runModal] == NSModalResponseOK) {
         url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
-        app_global->add_project(file_url);
-
-        NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
-        NSWindowController *windowController = [storyboard instantiateInitialController];
-        [windowController showWindow:self];
-
-        windowController.window.title = panel.URL.lastPathComponent;
+        ae::app_global->add_project(file_url);
     }
+}
+
+- (void)showWindow:(ae::project_ptr const &)project {
+    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
+    NSWindowController *windowController = [storyboard instantiateInitialController];
+    windowController.window.title = (__bridge NSString *)to_cf_object(project->file_url().last_path_component());
+
+    [windowController showWindow:self];
 }
 
 @end
