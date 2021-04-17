@@ -19,7 +19,9 @@
 }
 
 - (void)openDocument:(id)sender {
-    NSLog(@"openDocument");
+    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
+    NSWindowController *windowController = [storyboard instantiateInitialController];
+    [windowController showWindow:self];
 }
 
 @end
