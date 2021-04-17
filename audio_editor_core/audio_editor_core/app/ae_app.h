@@ -11,6 +11,9 @@
 namespace yas::ae {
 struct app {
     void add_project(url const &file_url);
+    std::vector<project_ptr> const &projects() const;
+    observing::syncable observe_projects(
+        observing::caller<observing::vector::holder<project_ptr>::event>::handler_f &&);
 
     static app_ptr make_shared();
 
