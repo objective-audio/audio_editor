@@ -30,4 +30,13 @@ using namespace yas::ae;
     [super windowDidLoad];
 }
 
+- (BOOL)windowShouldClose:(NSWindow *)sender {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    return YES;
+}
+
+- (void)windowWillClose:(NSNotification *)notification {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 @end
