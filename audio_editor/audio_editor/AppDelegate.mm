@@ -4,6 +4,7 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#include <cpp_utils/yas_cf_utils.h>
 #import "ae_app_global.h"
 
 using namespace yas;
@@ -31,6 +32,9 @@ using namespace yas::ae;
     panel.allowedContentTypes = @[UTTypeAudio];
 
     if ([panel runModal] == NSModalResponseOK) {
+        url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
+        app_global->add_project(file_url);
+
         NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
         NSWindowController *windowController = [storyboard instantiateInitialController];
         [windowController showWindow:self];
