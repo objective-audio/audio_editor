@@ -57,7 +57,7 @@
 
 /* Begin PBXFileReference section */
 		B6690A26262A846600E86353 /* Window.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Window.storyboard; sourceTree = "<group>"; };
-		B6A9971B2629B28300DAC3FE /* audio_editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = audio_editor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6A9971B2629B28300DAC3FE /* Audio Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Audio Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A9971E2629B28300DAC3FE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B6A9971F2629B28300DAC3FE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B6A997212629B28300DAC3FE /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 		B6A9971C2629B28300DAC3FE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B6A9971B2629B28300DAC3FE /* audio_editor.app */,
+				B6A9971B2629B28300DAC3FE /* Audio Editor.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -167,7 +167,7 @@
 			);
 			name = audio_editor;
 			productName = audio_editor;
-			productReference = B6A9971B2629B28300DAC3FE /* audio_editor.app */;
+			productReference = B6A9971B2629B28300DAC3FE /* Audio Editor.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -386,7 +386,7 @@
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.audio-editor";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Audio Editor";
 			};
 			name = Debug;
 		};
@@ -406,7 +406,7 @@
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.audio-editor";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Audio Editor";
 			};
 			name = Release;
 		};
