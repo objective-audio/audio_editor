@@ -28,16 +28,17 @@ using namespace yas::ae;
             switch (event.type) {
                 case observing::vector::event_type::any: {
                     for (auto const &project : event.elements) {
-                        [unowned.object showWindow:project];
+                        [unowned.object showWindowWithProject:project];
                     }
                 } break;
                 case observing::vector::event_type::inserted: {
-                    [unowned.object showWindow:*event.element];
+                    [unowned.object showWindowWithProject:*event.element];
                 } break;
                 case observing::vector::event_type::replaced:
                     break;
-                case observing::vector::event_type::erased:
-                    break;
+                case observing::vector::event_type::erased: {
+                    [unowned.object hideWindowWithProject:*event.element];
+                } break;
             }
         })
         .sync()
@@ -61,12 +62,25 @@ using namespace yas::ae;
     }
 }
 
-- (void)showWindow:(ae::project_ptr const &)project {
+- (void)showWindowWithProject:(ae::project_ptr const &)project {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
     AEWindowController *windowController = [storyboard instantiateInitialController];
     NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
     [windowController setupWithProject:project];
     [windowController showWindow:nil];
+}
+
+- (void)hideWindowWithProject:(ae::project_ptr const &)project {
+    [NSApplication.sharedApplication
+        enumerateWindowsWithOptions:kNilOptions
+                         usingBlock:^(NSWindow *_Nonnull window, BOOL *_Nonnull stop) {
+                             AEWindowController *windowController = window.windowController;
+                             if ([windowController isKindOfClass:[AEWindowController class]]) {
+                                 if (windowController.project == project) {
+                                     [windowController dismissController:nil];
+                                 }
+                             }
+                         }];
 }
 
 @end

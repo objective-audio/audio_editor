@@ -22,6 +22,10 @@ using namespace yas::ae;
     self.window.title = (__bridge NSString *)to_cf_object(self->_project->file_url().last_path_component());
 }
 
+- (project_ptr const &)project {
+    return self->_project;
+}
+
 - (void)windowDidLoad {
     [super windowDidLoad];
 }
