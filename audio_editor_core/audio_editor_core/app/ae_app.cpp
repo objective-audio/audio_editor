@@ -12,8 +12,8 @@ using namespace yas::ae;
 app::app() {
 }
 
-void app::add_project(std::string const &file_path) {
-    std::cout << "add_project file_path:" << file_path << std::endl;
+void app::add_project(url const &file_url) {
+    std::cout << "add_project file_url:" << file_url << std::endl;
 }
 
 app_ptr app::make_shared() {
