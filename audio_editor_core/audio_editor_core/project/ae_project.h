@@ -4,12 +4,9 @@
 
 #pragma once
 
-#include <memory>
+#include <audio_editor_core/ae_ptr.h>
 
 namespace yas::ae {
-class project;
-using project_ptr = std::shared_ptr<project>;
-
 struct project {
     static project_ptr make_shared();
 
