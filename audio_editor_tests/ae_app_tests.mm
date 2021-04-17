@@ -15,7 +15,7 @@ using namespace yas::ae;
 @implementation ae_app_tests
 
 - (void)test_make_shared {
-    auto app = ae_app::make_shared();
+    auto app = app::make_shared();
 
     XCTAssertTrue(app != nullptr);
 }
