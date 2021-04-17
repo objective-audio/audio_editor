@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B6690A27262A846600E86353 /* Window.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6690A26262A846600E86353 /* Window.storyboard */; };
 		B6A997202629B28300DAC3FE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A9971F2629B28300DAC3FE /* AppDelegate.m */; };
 		B6A997232629B28300DAC3FE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A997222629B28300DAC3FE /* ViewController.m */; };
 		B6A997252629B28A00DAC3FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6A997242629B28A00DAC3FE /* Assets.xcassets */; };
@@ -55,7 +56,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B6A9971B2629B28300DAC3FE /* audio_editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = audio_editor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A26262A846600E86353 /* Window.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Window.storyboard; sourceTree = "<group>"; };
+		B6A9971B2629B28300DAC3FE /* Audio Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Audio Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A9971E2629B28300DAC3FE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B6A9971F2629B28300DAC3FE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B6A997212629B28300DAC3FE /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -108,7 +110,7 @@
 		B6A9971C2629B28300DAC3FE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B6A9971B2629B28300DAC3FE /* audio_editor.app */,
+				B6A9971B2629B28300DAC3FE /* Audio Editor.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -122,6 +124,7 @@
 				B6A997222629B28300DAC3FE /* ViewController.m */,
 				B6A997242629B28A00DAC3FE /* Assets.xcassets */,
 				B6A997262629B28A00DAC3FE /* Main.storyboard */,
+				B6690A26262A846600E86353 /* Window.storyboard */,
 				B6A997292629B28A00DAC3FE /* Info.plist */,
 				B6A9972A2629B28A00DAC3FE /* main.m */,
 				B6A9972C2629B28A00DAC3FE /* audio_editor.entitlements */,
@@ -164,7 +167,7 @@
 			);
 			name = audio_editor;
 			productName = audio_editor;
-			productReference = B6A9971B2629B28300DAC3FE /* audio_editor.app */;
+			productReference = B6A9971B2629B28300DAC3FE /* Audio Editor.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -203,6 +206,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6690A27262A846600E86353 /* Window.storyboard in Resources */,
 				B6A997252629B28A00DAC3FE /* Assets.xcassets in Resources */,
 				B6A997282629B28A00DAC3FE /* Main.storyboard in Resources */,
 			);
@@ -306,7 +310,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -359,7 +362,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -382,7 +384,7 @@
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.audio-editor";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Audio Editor";
 			};
 			name = Debug;
 		};
@@ -402,7 +404,7 @@
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.audio-editor";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Audio Editor";
 			};
 			name = Release;
 		};
