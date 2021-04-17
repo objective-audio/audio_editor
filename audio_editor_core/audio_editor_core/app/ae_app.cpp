@@ -4,6 +4,8 @@
 
 #include "ae_app.h"
 
+#include <audio_editor_core/ae_project.h>
+
 #include <iostream>
 
 using namespace yas;
@@ -13,7 +15,7 @@ app::app() {
 }
 
 void app::add_project(url const &file_url) {
-    std::cout << "add_project file_url:" << file_url << std::endl;
+    this->_projects->push_back(project::make_shared(file_url));
 }
 
 std::vector<project_ptr> const &app::projects() const {
