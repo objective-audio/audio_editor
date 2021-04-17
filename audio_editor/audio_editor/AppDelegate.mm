@@ -65,7 +65,7 @@ using namespace yas::ae;
     NSWindowController *windowController = [storyboard instantiateInitialController];
     windowController.window.title = (__bridge NSString *)to_cf_object(project->file_url().last_path_component());
 
-    [windowController showWindow:self];
+    [windowController showWindow:nil];
 }
 
 @end
