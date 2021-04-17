@@ -14,6 +14,8 @@ using namespace yas::ae;
 
 @interface AppDelegate ()
 
+@property (nonatomic) NSMutableSet<AEWindowController *> *windowControllers;
+
 @end
 
 @implementation AppDelegate {
@@ -21,6 +23,8 @@ using namespace yas::ae;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    self.windowControllers = [[NSMutableSet alloc] init];
+
     auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
 
     ae::app_global
@@ -67,20 +71,20 @@ using namespace yas::ae;
     AEWindowController *windowController = [storyboard instantiateInitialController];
     NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
     [windowController setupWithProject:project];
+    [self.windowControllers addObject:windowController];
     [windowController showWindow:nil];
 }
 
 - (void)hideWindowWithProject:(ae::project_ptr const &)project {
-    [NSApplication.sharedApplication
-        enumerateWindowsWithOptions:kNilOptions
-                         usingBlock:^(NSWindow *_Nonnull window, BOOL *_Nonnull stop) {
-                             AEWindowController *windowController = window.windowController;
-                             if ([windowController isKindOfClass:[AEWindowController class]]) {
-                                 if (windowController.project == project) {
-                                     [windowController dismissController:nil];
-                                 }
-                             }
-                         }];
+    NSMutableSet<AEWindowController *> *copiedWindowControllers = [self.windowControllers mutableCopy];
+
+    for (AEWindowController *windowController in self.windowControllers) {
+        if (windowController.project == project) {
+            [copiedWindowControllers removeObject:windowController];
+        }
+    }
+
+    self.windowControllers = copiedWindowControllers;
 }
 
 @end
