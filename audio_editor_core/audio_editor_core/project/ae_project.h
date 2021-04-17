@@ -11,6 +11,8 @@ namespace yas::ae {
 struct project {
     url const &file_url() const;
 
+    bool requestClose();
+
     static project_ptr make_shared(url const &);
 
    private:

@@ -31,12 +31,10 @@ using namespace yas::ae;
 }
 
 - (BOOL)windowShouldClose:(NSWindow *)sender {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    if (auto const project = self->_project.lock()) {
+        return project->requestClose();
+    }
     return YES;
-}
-
-- (void)windowWillClose:(NSNotification *)notification {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
 @end

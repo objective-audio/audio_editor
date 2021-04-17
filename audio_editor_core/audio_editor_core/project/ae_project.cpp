@@ -17,3 +17,7 @@ project_ptr project::make_shared(url const &file_url) {
 url const &project::file_url() const {
     return this->_file_url;
 }
+
+bool project::requestClose() {
+    return true;
+}
