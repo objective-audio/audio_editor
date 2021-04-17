@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B6690A27262A846600E86353 /* Window.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6690A26262A846600E86353 /* Window.storyboard */; };
 		B69CF582262ACC90007A0A75 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B69CF581262ACC90007A0A75 /* UniformTypeIdentifiers.framework */; };
+		B69CF592262AE2EB007A0A75 /* AEWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B69CF591262AE2EB007A0A75 /* AEWindowController.mm */; };
 		B6A997202629B28300DAC3FE /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A9971F2629B28300DAC3FE /* AppDelegate.mm */; };
 		B6A997232629B28300DAC3FE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A997222629B28300DAC3FE /* ViewController.m */; };
 		B6A997252629B28A00DAC3FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6A997242629B28A00DAC3FE /* Assets.xcassets */; };
@@ -60,6 +61,8 @@
 		B6690A26262A846600E86353 /* Window.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Window.storyboard; sourceTree = "<group>"; };
 		B69CF576262ACAAD007A0A75 /* ae_app_global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_global.h; sourceTree = "<group>"; };
 		B69CF581262ACC90007A0A75 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		B69CF590262AE2EB007A0A75 /* AEWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEWindowController.h; sourceTree = "<group>"; };
+		B69CF591262AE2EB007A0A75 /* AEWindowController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AEWindowController.mm; sourceTree = "<group>"; };
 		B6A9971B2629B28300DAC3FE /* Audio Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Audio Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A9971E2629B28300DAC3FE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B6A9971F2629B28300DAC3FE /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 			children = (
 				B6A9971E2629B28300DAC3FE /* AppDelegate.h */,
 				B6A9971F2629B28300DAC3FE /* AppDelegate.mm */,
+				B69CF590262AE2EB007A0A75 /* AEWindowController.h */,
+				B69CF591262AE2EB007A0A75 /* AEWindowController.mm */,
 				B6A997212629B28300DAC3FE /* ViewController.h */,
 				B6A997222629B28300DAC3FE /* ViewController.m */,
 				B69CF576262ACAAD007A0A75 /* ae_app_global.h */,
@@ -246,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6A997232629B28300DAC3FE /* ViewController.m in Sources */,
+				B69CF592262AE2EB007A0A75 /* AEWindowController.mm in Sources */,
 				B6A9972B2629B28A00DAC3FE /* main.m in Sources */,
 				B6A997202629B28300DAC3FE /* AppDelegate.mm in Sources */,
 			);
