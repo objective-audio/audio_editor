@@ -22,8 +22,7 @@ std::vector<project_ptr> const &app::projects() const {
     return this->_projects->value();
 }
 
-observing::syncable app::observe_projects(
-    observing::caller<observing::vector::holder<project_ptr>::event>::handler_f &&handler) {
+observing::syncable app::observe_projects(observing::caller<projects_t::event>::handler_f &&handler) {
     return this->_projects->observe(std::move(handler));
 }
 
