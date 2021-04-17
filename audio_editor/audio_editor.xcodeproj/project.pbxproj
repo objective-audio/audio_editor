@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B6690A27262A846600E86353 /* Window.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6690A26262A846600E86353 /* Window.storyboard */; };
 		B6A997202629B28300DAC3FE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A9971F2629B28300DAC3FE /* AppDelegate.m */; };
 		B6A997232629B28300DAC3FE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6A997222629B28300DAC3FE /* ViewController.m */; };
 		B6A997252629B28A00DAC3FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6A997242629B28A00DAC3FE /* Assets.xcassets */; };
@@ -55,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B6690A26262A846600E86353 /* Window.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Window.storyboard; sourceTree = "<group>"; };
 		B6A9971B2629B28300DAC3FE /* audio_editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = audio_editor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A9971E2629B28300DAC3FE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B6A9971F2629B28300DAC3FE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				B6A997222629B28300DAC3FE /* ViewController.m */,
 				B6A997242629B28A00DAC3FE /* Assets.xcassets */,
 				B6A997262629B28A00DAC3FE /* Main.storyboard */,
+				B6690A26262A846600E86353 /* Window.storyboard */,
 				B6A997292629B28A00DAC3FE /* Info.plist */,
 				B6A9972A2629B28A00DAC3FE /* main.m */,
 				B6A9972C2629B28A00DAC3FE /* audio_editor.entitlements */,
@@ -203,6 +206,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6690A27262A846600E86353 /* Window.storyboard in Resources */,
 				B6A997252629B28A00DAC3FE /* Assets.xcassets in Resources */,
 				B6A997282629B28A00DAC3FE /* Main.storyboard in Resources */,
 			);
