@@ -52,4 +52,20 @@ using namespace yas::ae;
     XCTAssertEqual(app->projects().size(), 2);
 }
 
+- (void)test_remove_project {
+    auto const app = app::make_shared();
+
+    auto const file_url_0 = url::file_url("/test/path/file0.wav");
+    app->add_project(file_url_0);
+
+    auto const file_url_1 = url::file_url("/test/path/file1.aif");
+    app->add_project(file_url_1);
+
+    app->projects().at(0)->request_close();
+    XCTAssertEqual(app->projects().size(), 1);
+
+    //    XCTAssertTrue(app->projects().at(0)->requestClose());
+    //    XCTAssertEqual(app->projects().size(), 0);
+}
+
 @end

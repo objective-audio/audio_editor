@@ -25,8 +25,9 @@ void app::add_project(url const &file_url) {
                              while (yas_each_next(each)) {
                                  auto const &idx = yas_each_index(each);
                                  if (reinterpret_cast<std::uintptr_t>(this->_projects->at(idx).get()) == project_id) {
-                                     this->_projects->erase(idx);
-                                     this->_cancellers.erase(project_id);
+                                     //                                     this->_projects->erase(idx);
+                                     //                                     this->_cancellers.erase(project_id);
+                                     break;
                                  }
                              }
                          })
