@@ -21,6 +21,7 @@ struct app {
    private:
     using projects_ptr_t = std::shared_ptr<projects_t>;
     projects_ptr_t const _projects = projects_t::make_shared();
+    std::unordered_map<uintptr_t, observing::cancellable_ptr> _cancellers;
 
     app();
 

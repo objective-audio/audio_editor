@@ -5,8 +5,7 @@
 #include "ae_app.h"
 
 #include <audio_editor_core/ae_project.h>
-
-#include <iostream>
+#include <cpp_utils/yas_fast_each.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -15,7 +14,25 @@ app::app() {
 }
 
 void app::add_project(url const &file_url) {
-    this->_projects->push_back(project::make_shared(file_url));
+    auto const project = project::make_shared(file_url);
+
+    this->_projects->push_back(project);
+
+    auto canceller = project
+                         ->observe_notify([this, project_id = reinterpret_cast<std::uintptr_t>(project.get())](
+                                              auto const &notification) {
+                             auto each = make_fast_each(this->_projects->size());
+                             while (yas_each_next(each)) {
+                                 auto const &idx = yas_each_index(each);
+                                 if (reinterpret_cast<std::uintptr_t>(this->_projects->at(idx).get()) == project_id) {
+                                     this->_projects->erase(idx);
+                                     this->_cancellers.erase(project_id);
+                                 }
+                             }
+                         })
+                         .end();
+
+    this->_cancellers.emplace(reinterpret_cast<std::uintptr_t>(project.get()), std::move(canceller));
 }
 
 std::vector<project_ptr> const &app::projects() const {
