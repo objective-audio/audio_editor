@@ -19,5 +19,10 @@ url const &project::file_url() const {
 }
 
 bool project::requestClose() {
+    this->_notifier->notify(notification::shouldClose);
     return true;
+}
+
+observing::endable project::observe_notify(std::function<void(notification const &)> &&handler) {
+    return this->_notifier->observe(std::move(handler));
 }

@@ -6,17 +6,25 @@
 
 #include <audio_editor_core/ae_ptr.h>
 #include <cpp_utils/yas_url.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct project {
+    enum class notification {
+        shouldClose,
+    };
+
     url const &file_url() const;
 
     bool requestClose();
+
+    observing::endable observe_notify(std::function<void(notification const &)> &&);
 
     static project_ptr make_shared(url const &);
 
    private:
     url const _file_url;
+    observing::notifier_ptr<notification> const _notifier = observing::notifier<notification>::make_shared();
 
     project(url const &);
 
