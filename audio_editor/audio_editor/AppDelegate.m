@@ -19,9 +19,19 @@
 }
 
 - (void)openDocument:(id)sender {
-    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
-    NSWindowController *windowController = [storyboard instantiateInitialController];
-    [windowController showWindow:self];
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.allowsMultipleSelection = NO;
+    panel.canChooseFiles = YES;
+    panel.canChooseDirectories = NO;
+    panel.allowedFileTypes = @[@"wav", @"aif", @"aiff", @"caf"];
+
+    if ([panel runModal] == NSModalResponseOK) {
+        NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
+        NSWindowController *windowController = [storyboard instantiateInitialController];
+        [windowController showWindow:self];
+
+        windowController.window.title = panel.URL.lastPathComponent;
+    }
 }
 
 @end
