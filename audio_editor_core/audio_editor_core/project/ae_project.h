@@ -16,7 +16,8 @@ struct project {
 
     url const &file_url() const;
 
-    bool requestClose();
+    bool can_close() const;
+    void request_close();
 
     observing::endable observe_notify(std::function<void(notification const &)> &&);
 
