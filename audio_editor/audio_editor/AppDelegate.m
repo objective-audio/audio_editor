@@ -18,4 +18,8 @@
     // Insert code here to tear down your application
 }
 
+- (void)openDocument:(id)sender {
+    NSLog(@"openDocument");
+}
+
 @end
