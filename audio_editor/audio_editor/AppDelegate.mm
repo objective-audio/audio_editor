@@ -1,9 +1,13 @@
 //
-//  AppDelegate.m
+//  AppDelegate.mm
 //
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import "ae_app_global.h"
+
+using namespace yas;
+using namespace yas::ae;
 
 @interface AppDelegate ()
 
