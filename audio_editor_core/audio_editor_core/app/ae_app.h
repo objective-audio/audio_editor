@@ -8,6 +8,8 @@
 
 namespace yas::ae {
 struct app {
+    void add_project(std::string const &file_path);
+
     static app_ptr make_shared();
 
    private:
