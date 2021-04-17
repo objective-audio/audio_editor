@@ -3,6 +3,7 @@
 //
 
 #import "AppDelegate.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 @interface AppDelegate ()
 
@@ -23,7 +24,7 @@
     panel.allowsMultipleSelection = NO;
     panel.canChooseFiles = YES;
     panel.canChooseDirectories = NO;
-    panel.allowedFileTypes = @[@"wav", @"aif", @"aiff", @"caf"];
+    panel.allowedContentTypes = @[UTTypeAudio];
 
     if ([panel runModal] == NSModalResponseOK) {
         NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
