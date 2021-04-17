@@ -14,10 +14,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B6A997552629B3BB00DAC3FE"
-               BuildableName = "audio_editor_tests.xctest"
-               BlueprintName = "audio_editor_tests"
-               ReferencedContainer = "container:audio_editor_tests.xcodeproj">
+               BlueprintIdentifier = "B66909F1262A7CD600E86353"
+               BuildableName = "audio_editor_mac_tests.xctest"
+               BlueprintName = "audio_editor_mac_tests"
+               ReferencedContainer = "container:audio_editor_mac_tests.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,24 +29,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "YES">
-      <CodeCoverageTargets>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B6A997402629B34E00DAC3FE"
-            BuildableName = "audio_editor_core.framework"
-            BlueprintName = "audio_editor_core"
-            ReferencedContainer = "container:../audio_editor_core/audio_editor_core.xcodeproj">
-         </BuildableReference>
-      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B6A997552629B3BB00DAC3FE"
-               BuildableName = "audio_editor_tests.xctest"
-               BlueprintName = "audio_editor_tests"
-               ReferencedContainer = "container:audio_editor_tests.xcodeproj">
+               BlueprintIdentifier = "B66909F1262A7CD600E86353"
+               BuildableName = "audio_editor_mac_tests.xctest"
+               BlueprintName = "audio_editor_mac_tests"
+               ReferencedContainer = "container:audio_editor_mac_tests.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,10 +62,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B6A997552629B3BB00DAC3FE"
-            BuildableName = "audio_editor_tests.xctest"
-            BlueprintName = "audio_editor_tests"
-            ReferencedContainer = "container:audio_editor_tests.xcodeproj">
+            BlueprintIdentifier = "B66909F1262A7CD600E86353"
+            BuildableName = "audio_editor_mac_tests.xctest"
+            BlueprintName = "audio_editor_mac_tests"
+            ReferencedContainer = "container:audio_editor_mac_tests.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -1,0 +1,341 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B66909FF262A7D2F00E86353 /* ae_app_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66909FE262A7D2F00E86353 /* ae_app_tests.mm */; };
+		B6690A03262A7D4100E86353 /* audio_editor_core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A02262A7D4100E86353 /* audio_editor_core.framework */; };
+		B6690A05262A7D4100E86353 /* audio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A04262A7D4100E86353 /* audio.framework */; };
+		B6690A07262A7D4100E86353 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A06262A7D4100E86353 /* cpp_utils.framework */; };
+		B6690A09262A7D4100E86353 /* db.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A08262A7D4100E86353 /* db.framework */; };
+		B6690A0B262A7D4100E86353 /* objc_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A0A262A7D4100E86353 /* objc_utils.framework */; };
+		B6690A0D262A7D4100E86353 /* observing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A0C262A7D4100E86353 /* observing.framework */; };
+		B6690A0F262A7D4100E86353 /* playing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A0E262A7D4100E86353 /* playing.framework */; };
+		B6690A11262A7D4100E86353 /* processing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A10262A7D4100E86353 /* processing.framework */; };
+		B6690A13262A7D4100E86353 /* ui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A12262A7D4100E86353 /* ui.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B66909F2262A7CD600E86353 /* audio_editor_mac_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = audio_editor_mac_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B66909F7262A7CD600E86353 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B66909FE262A7D2F00E86353 /* ae_app_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_app_tests.mm; path = ../../audio_editor_tests/ae_app_tests.mm; sourceTree = "<group>"; };
+		B6690A02262A7D4100E86353 /* audio_editor_core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = audio_editor_core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A04262A7D4100E86353 /* audio.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = audio.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A06262A7D4100E86353 /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A08262A7D4100E86353 /* db.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = db.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A0A262A7D4100E86353 /* objc_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = objc_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A0C262A7D4100E86353 /* observing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = observing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A0E262A7D4100E86353 /* playing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = playing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A10262A7D4100E86353 /* processing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = processing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6690A12262A7D4100E86353 /* ui.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ui.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B66909EF262A7CD600E86353 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6690A03262A7D4100E86353 /* audio_editor_core.framework in Frameworks */,
+				B6690A05262A7D4100E86353 /* audio.framework in Frameworks */,
+				B6690A07262A7D4100E86353 /* cpp_utils.framework in Frameworks */,
+				B6690A09262A7D4100E86353 /* db.framework in Frameworks */,
+				B6690A0B262A7D4100E86353 /* objc_utils.framework in Frameworks */,
+				B6690A0D262A7D4100E86353 /* observing.framework in Frameworks */,
+				B6690A0F262A7D4100E86353 /* playing.framework in Frameworks */,
+				B6690A11262A7D4100E86353 /* processing.framework in Frameworks */,
+				B6690A13262A7D4100E86353 /* ui.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B66909E7262A7CC700E86353 = {
+			isa = PBXGroup;
+			children = (
+				B66909F4262A7CD600E86353 /* audio_editor_mac_tests */,
+				B66909F3262A7CD600E86353 /* Products */,
+				B6690A01262A7D4100E86353 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B66909F3262A7CD600E86353 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B66909F2262A7CD600E86353 /* audio_editor_mac_tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B66909F4262A7CD600E86353 /* audio_editor_mac_tests */ = {
+			isa = PBXGroup;
+			children = (
+				B66909FE262A7D2F00E86353 /* ae_app_tests.mm */,
+				B66909F7262A7CD600E86353 /* Info.plist */,
+			);
+			path = audio_editor_mac_tests;
+			sourceTree = "<group>";
+		};
+		B6690A01262A7D4100E86353 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B6690A02262A7D4100E86353 /* audio_editor_core.framework */,
+				B6690A04262A7D4100E86353 /* audio.framework */,
+				B6690A06262A7D4100E86353 /* cpp_utils.framework */,
+				B6690A08262A7D4100E86353 /* db.framework */,
+				B6690A0A262A7D4100E86353 /* objc_utils.framework */,
+				B6690A0C262A7D4100E86353 /* observing.framework */,
+				B6690A0E262A7D4100E86353 /* playing.framework */,
+				B6690A10262A7D4100E86353 /* processing.framework */,
+				B6690A12262A7D4100E86353 /* ui.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B66909F1262A7CD600E86353 /* audio_editor_mac_tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B66909F8262A7CD600E86353 /* Build configuration list for PBXNativeTarget "audio_editor_mac_tests" */;
+			buildPhases = (
+				B66909EE262A7CD600E86353 /* Sources */,
+				B66909EF262A7CD600E86353 /* Frameworks */,
+				B66909F0262A7CD600E86353 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = audio_editor_mac_tests;
+			productName = audio_editor_mac_tests;
+			productReference = B66909F2262A7CD600E86353 /* audio_editor_mac_tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B66909E8262A7CC700E86353 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					B66909F1262A7CD600E86353 = {
+						CreatedOnToolsVersion = 12.4;
+					};
+				};
+			};
+			buildConfigurationList = B66909EB262A7CC700E86353 /* Build configuration list for PBXProject "audio_editor_mac_tests" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B66909E7262A7CC700E86353;
+			productRefGroup = B66909F3262A7CD600E86353 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B66909F1262A7CD600E86353 /* audio_editor_mac_tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B66909F0262A7CD600E86353 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B66909EE262A7CD600E86353 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B66909FF262A7D2F00E86353 /* ae_app_tests.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B66909EC262A7CC700E86353 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		B66909ED262A7CC700E86353 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		B66909F9262A7CD600E86353 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = WVVR5YE53F;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = audio_editor_mac_tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.audio-editor-mac-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B66909FA262A7CD600E86353 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = WVVR5YE53F;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = audio_editor_mac_tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.audio-editor-mac-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B66909EB262A7CC700E86353 /* Build configuration list for PBXProject "audio_editor_mac_tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B66909EC262A7CC700E86353 /* Debug */,
+				B66909ED262A7CC700E86353 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B66909F8262A7CD600E86353 /* Build configuration list for PBXNativeTarget "audio_editor_mac_tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B66909F9262A7CD600E86353 /* Debug */,
+				B66909FA262A7CD600E86353 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B66909E8262A7CC700E86353 /* Project object */;
+}
