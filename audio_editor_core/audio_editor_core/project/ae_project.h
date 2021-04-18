@@ -11,7 +11,7 @@
 namespace yas::ae {
 struct project {
     enum class notification {
-        shouldClose,
+        should_close,
     };
 
     uintptr_t identifier() const;

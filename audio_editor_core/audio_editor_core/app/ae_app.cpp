@@ -19,7 +19,7 @@ void app::add_project(url const &file_url) {
     auto canceller = project
                          ->observe_notification([this, project_id = project->identifier()](auto const &notification) {
                              switch (notification) {
-                                 case project::notification::shouldClose: {
+                                 case project::notification::should_close: {
                                      this->_projects->erase(project_id);
                                  } break;
                              }

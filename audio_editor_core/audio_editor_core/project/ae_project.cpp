@@ -27,7 +27,7 @@ bool project::can_close() const {
 }
 
 void project::request_close() {
-    this->_notifier->notify(notification::shouldClose);
+    this->_notifier->notify(notification::should_close);
 }
 
 observing::endable project::observe_notification(std::function<void(notification const &)> &&handler) {
