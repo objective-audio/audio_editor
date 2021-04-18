@@ -9,7 +9,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct app {
+struct app final {
     using projects_map_t = observing::map::holder<uintptr_t, std::pair<project_ptr, observing::cancellable_ptr>>;
 
     void add_project(url const &file_url);

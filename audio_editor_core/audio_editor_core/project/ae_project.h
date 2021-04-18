@@ -9,7 +9,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct project {
+struct project final {
     enum class notification {
         should_close,
     };
