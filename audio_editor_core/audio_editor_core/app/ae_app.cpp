@@ -20,14 +20,11 @@ void app::add_project(url const &file_url) {
 
     auto canceller = project
                          ->observe_notify([this, project_id = project->identifier()](auto const &notification) {
-                             auto each = make_fast_each(this->_projects->size());
-                             while (yas_each_next(each)) {
-                                 auto const &idx = yas_each_index(each);
-                                 if (this->_projects->at(idx)->identifier() == project_id) {
-                                     //                                     this->_projects->erase(idx);
-                                     //                                     this->_cancellers.erase(project_id);
-                                     break;
-                                 }
+                             switch (notification) {
+                                 case project::notification::shouldClose: {
+                                     this->_projects->erase(project_id);
+                                     this->_cancellers.erase(project_id);
+                                 } break;
                              }
                          })
                          .end();
