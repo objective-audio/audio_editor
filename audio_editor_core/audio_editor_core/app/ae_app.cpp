@@ -33,7 +33,7 @@ std::vector<project_ptr> app::projects() const {
     return to_vector<project_ptr>(this->_projects->elements(), [](auto const &pair) { return pair.second.first; });
 }
 
-observing::syncable app::observe_projects(observing::caller<projects_t::event>::handler_f &&handler) {
+observing::syncable app::observe_projects(observing::caller<projects_map_t::event>::handler_f &&handler) {
     return this->_projects->observe(std::move(handler));
 }
 

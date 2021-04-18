@@ -28,7 +28,7 @@ using namespace yas::ae;
     auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
 
     ae::app_global
-        ->observe_projects([unowned](app::projects_t::event const &event) {
+        ->observe_projects([unowned](app::projects_map_t::event const &event) {
             switch (event.type) {
                 case observing::map::event_type::any: {
                     for (auto const &pair : event.elements) {

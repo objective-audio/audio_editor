@@ -24,7 +24,7 @@ using namespace yas::ae;
 - (void)test_add_project {
     auto const app = app::make_shared();
 
-    std::vector<app::projects_t::event> called;
+    std::vector<app::projects_map_t::event> called;
 
     auto canceller = app->observe_projects([&called](auto const &event) { called.emplace_back(event); }).sync();
 

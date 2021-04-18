@@ -10,17 +10,17 @@
 
 namespace yas::ae {
 struct app {
-    using projects_t = observing::map::holder<uintptr_t, std::pair<project_ptr, observing::cancellable_ptr>>;
+    using projects_map_t = observing::map::holder<uintptr_t, std::pair<project_ptr, observing::cancellable_ptr>>;
 
     void add_project(url const &file_url);
     std::vector<project_ptr> projects() const;
-    observing::syncable observe_projects(observing::caller<projects_t::event>::handler_f &&);
+    observing::syncable observe_projects(observing::caller<projects_map_t::event>::handler_f &&);
 
     static app_ptr make_shared();
 
    private:
-    using projects_ptr_t = std::shared_ptr<projects_t>;
-    projects_ptr_t const _projects = projects_t::make_shared();
+    using projects_ptr_t = std::shared_ptr<projects_map_t>;
+    projects_ptr_t const _projects = projects_map_t::make_shared();
 
     app();
 
