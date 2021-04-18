@@ -13,7 +13,7 @@ struct project {
     enum class notification {
         shouldClose,
     };
-    
+
     uintptr_t identifier() const;
 
     url const &file_url() const;

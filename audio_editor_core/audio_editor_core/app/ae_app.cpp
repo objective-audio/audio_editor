@@ -19,12 +19,11 @@ void app::add_project(url const &file_url) {
     this->_projects->push_back(project);
 
     auto canceller = project
-                         ->observe_notify([this, project_id = reinterpret_cast<std::uintptr_t>(project.get())](
-                                              auto const &notification) {
+                         ->observe_notify([this, project_id = project->identifier()](auto const &notification) {
                              auto each = make_fast_each(this->_projects->size());
                              while (yas_each_next(each)) {
                                  auto const &idx = yas_each_index(each);
-                                 if (reinterpret_cast<std::uintptr_t>(this->_projects->at(idx).get()) == project_id) {
+                                 if (this->_projects->at(idx)->identifier() == project_id) {
                                      //                                     this->_projects->erase(idx);
                                      //                                     this->_cancellers.erase(project_id);
                                      break;
