@@ -14,6 +14,7 @@ struct app {
 
     void add_project(url const &file_url);
     std::vector<project_ptr> projects() const;
+    // TODO: eventの中身を詰め替る
     observing::syncable observe_projects(observing::caller<projects_map_t::event>::handler_f &&);
 
     static app_ptr make_shared();
