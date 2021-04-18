@@ -32,18 +32,18 @@ using namespace yas::ae;
             switch (event.type) {
                 case observing::map::event_type::any: {
                     for (auto const &pair : event.elements) {
-                        [unowned.object showWindowWithProject:pair.second];
+                        [unowned.object showWindowWithProject:pair.second.first];
                     }
                 } break;
                 case observing::map::event_type::inserted: {
-                    [unowned.object showWindowWithProject:*event.inserted];
+                    [unowned.object showWindowWithProject:event.inserted->first];
                 } break;
                 case observing::map::event_type::replaced: {
-                    [unowned.object hideWindowWithProject:*event.erased];
-                    [unowned.object showWindowWithProject:*event.inserted];
+                    [unowned.object hideWindowWithProject:event.erased->first];
+                    [unowned.object showWindowWithProject:event.inserted->first];
                 } break;
                 case observing::map::event_type::erased: {
-                    [unowned.object hideWindowWithProject:*event.erased];
+                    [unowned.object hideWindowWithProject:event.erased->first];
                 } break;
             }
         })
