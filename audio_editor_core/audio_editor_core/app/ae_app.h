@@ -10,10 +10,10 @@
 
 namespace yas::ae {
 struct app {
-    using projects_t = observing::vector::holder<project_ptr>;
+    using projects_t = observing::map::holder<uintptr_t, project_ptr>;
 
     void add_project(url const &file_url);
-    std::vector<project_ptr> const &projects() const;
+    std::map<uintptr_t, project_ptr> const &projects() const;
     observing::syncable observe_projects(observing::caller<projects_t::event>::handler_f &&);
 
     static app_ptr make_shared();

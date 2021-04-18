@@ -30,17 +30,17 @@ using namespace yas::ae;
     ae::app_global
         ->observe_projects([unowned](app::projects_t::event const &event) {
             switch (event.type) {
-                case observing::vector::event_type::any: {
-                    for (auto const &project : event.elements) {
-                        [unowned.object showWindowWithProject:project];
+                case observing::map::event_type::any: {
+                    for (auto const &pair : event.elements) {
+                        [unowned.object showWindowWithProject:pair.second];
                     }
                 } break;
-                case observing::vector::event_type::inserted: {
+                case observing::map::event_type::inserted: {
                     [unowned.object showWindowWithProject:*event.element];
                 } break;
-                case observing::vector::event_type::replaced:
+                case observing::map::event_type::replaced:
                     break;
-                case observing::vector::event_type::erased: {
+                case observing::map::event_type::erased: {
                     [unowned.object hideWindowWithProject:*event.element];
                 } break;
             }
