@@ -4,21 +4,30 @@
 
 #pragma once
 
-#include <memory>
+#include <audio_editor_core/ae_ptr.h>
+#include <cpp_utils/yas_url.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-class ae_app;
-using ae_app_ptr = std::shared_ptr<ae_app>;
+struct app {
+    using projects_map_t = observing::map::holder<uintptr_t, std::pair<project_ptr, observing::cancellable_ptr>>;
 
-struct ae_app {
-    static ae_app_ptr make_shared();
+    void add_project(url const &file_url);
+    std::vector<project_ptr> projects() const;
+    // TODO: eventの中身を詰め替る
+    observing::syncable observe_projects(observing::caller<projects_map_t::event>::handler_f &&);
+
+    static app_ptr make_shared();
 
    private:
-    ae_app();
+    using projects_ptr_t = std::shared_ptr<projects_map_t>;
+    projects_ptr_t const _projects = projects_map_t::make_shared();
 
-    ae_app(ae_app const &) = delete;
-    ae_app(ae_app &&) = delete;
-    ae_app &operator=(ae_app const &) = delete;
-    ae_app &operator=(ae_app &&) = delete;
+    app();
+
+    app(app const &) = delete;
+    app(app &&) = delete;
+    app &operator=(app const &) = delete;
+    app &operator=(app &&) = delete;
 };
 }  // namespace yas::ae

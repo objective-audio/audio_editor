@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69CF55F262AC49C007A0A75 /* ae_project.cpp */; };
+		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF569262AC7CE007A0A75 /* ae_ptr.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A997442629B34E00DAC3FE /* audio_editor_core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A997882629B72E00DAC3FE /* audio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A997802629B72E00DAC3FE /* audio.framework */; };
@@ -22,6 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B69CF55F262AC49C007A0A75 /* ae_project.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project.cpp; sourceTree = "<group>"; };
+		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
+		B69CF569262AC7CE007A0A75 /* ae_ptr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ptr.h; sourceTree = "<group>"; };
 		B6A997412629B34E00DAC3FE /* audio_editor_core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = audio_editor_core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A997442629B34E00DAC3FE /* audio_editor_core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = audio_editor_core.h; sourceTree = "<group>"; };
 		B6A997452629B34E00DAC3FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,6 +63,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B69CF55E262AC48D007A0A75 /* project */ = {
+			isa = PBXGroup;
+			children = (
+				B69CF55F262AC49C007A0A75 /* ae_project.cpp */,
+				B69CF560262AC49C007A0A75 /* ae_project.h */,
+			);
+			path = project;
+			sourceTree = "<group>";
+		};
+		B69CF568262AC7BD007A0A75 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				B69CF569262AC7CE007A0A75 /* ae_ptr.h */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
 		B6A997352629B32E00DAC3FE = {
 			isa = PBXGroup;
 			children = (
@@ -77,10 +100,12 @@
 		B6A997432629B34E00DAC3FE /* audio_editor_core */ = {
 			isa = PBXGroup;
 			children = (
-				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
-				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
+				B69CF568262AC7BD007A0A75 /* common */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
+				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
+				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B6A997452629B34E00DAC3FE /* Info.plist */,
+				B69CF55E262AC48D007A0A75 /* project */,
 			);
 			path = audio_editor_core;
 			sourceTree = "<group>";
@@ -116,8 +141,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B69CF562262AC49C007A0A75 /* ae_project.h in Headers */,
 				B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */,
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
+				B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */,
 				B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */,
+				B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
