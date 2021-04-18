@@ -30,6 +30,6 @@ void project::request_close() {
     this->_notifier->notify(notification::shouldClose);
 }
 
-observing::endable project::observe_notify(std::function<void(notification const &)> &&handler) {
+observing::endable project::observe_notification(std::function<void(notification const &)> &&handler) {
     return this->_notifier->observe(std::move(handler));
 }

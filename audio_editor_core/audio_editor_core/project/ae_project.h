@@ -21,7 +21,7 @@ struct project {
     bool can_close() const;
     void request_close();
 
-    observing::endable observe_notify(std::function<void(notification const &)> &&);
+    observing::endable observe_notification(std::function<void(notification const &)> &&);
 
     static project_ptr make_shared(url const &);
 
