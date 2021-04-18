@@ -4,12 +4,13 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_app_dependency.h>
 #include <audio_editor_core/ae_ptr.h>
 #include <cpp_utils/yas_url.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct project final {
+struct project final : app_project_interface {
     enum class notification {
         should_close,
     };
