@@ -36,12 +36,14 @@ using namespace yas::ae;
                     }
                 } break;
                 case observing::map::event_type::inserted: {
-                    [unowned.object showWindowWithProject:*event.element];
+                    [unowned.object showWindowWithProject:*event.inserted];
                 } break;
-                case observing::map::event_type::replaced:
-                    break;
+                case observing::map::event_type::replaced: {
+                    [unowned.object hideWindowWithProject:*event.erased];
+                    [unowned.object showWindowWithProject:*event.inserted];
+                } break;
                 case observing::map::event_type::erased: {
-                    [unowned.object hideWindowWithProject:*event.element];
+                    [unowned.object hideWindowWithProject:*event.erased];
                 } break;
             }
         })
