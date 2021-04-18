@@ -14,6 +14,10 @@ project_ptr project::make_shared(url const &file_url) {
     return std::shared_ptr<project>(new project{file_url});
 }
 
+uintptr_t project::identifier() const {
+    return reinterpret_cast<uintptr_t>(this);
+}
+
 url const &project::file_url() const {
     return this->_file_url;
 }
