@@ -16,24 +16,21 @@ app::app() {
 void app::add_project(url const &file_url) {
     auto const project = project::make_shared(file_url);
 
-    this->_projects->insert_or_replace(project->identifier(), project);
-
     auto canceller = project
                          ->observe_notification([this, project_id = project->identifier()](auto const &notification) {
                              switch (notification) {
                                  case project::notification::shouldClose: {
                                      this->_projects->erase(project_id);
-                                     this->_cancellers.erase(project_id);
                                  } break;
                              }
                          })
                          .end();
 
-    this->_cancellers.emplace(reinterpret_cast<std::uintptr_t>(project.get()), std::move(canceller));
+    this->_projects->insert_or_replace(project->identifier(), std::make_pair(project, std::move(canceller)));
 }
 
-std::map<uintptr_t, project_ptr> const &app::projects() const {
-    return this->_projects->elements();
+std::vector<project_ptr> app::projects() const {
+    return to_vector<project_ptr>(this->_projects->elements(), [](auto const &pair) { return pair.second.first; });
 }
 
 observing::syncable app::observe_projects(observing::caller<projects_t::event>::handler_f &&handler) {
