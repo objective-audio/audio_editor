@@ -12,12 +12,12 @@ struct app final {
         observing::map::holder<uintptr_t, std::pair<app_project_interface_ptr, observing::cancellable_ptr>>;
 
     app_project_interface_ptr add_project(url const &file_url);
-    std::vector<app_project_interface_ptr> projects() const;
+    [[nodiscard]] std::vector<app_project_interface_ptr> projects() const;
     // TODO: eventの中身を詰め替る
-    observing::syncable observe_projects(observing::caller<projects_map_t::event>::handler_f &&);
+    [[nodiscard]] observing::syncable observe_projects(observing::caller<projects_map_t::event>::handler_f &&);
 
-    static app_ptr make_shared();
-    static app_ptr make_shared(app_factory_interface_ptr const &);
+    [[nodiscard]] static app_ptr make_shared();
+    [[nodiscard]] static app_ptr make_shared(app_factory_interface_ptr const &);
 
    private:
     app_factory_interface_ptr const _factory;

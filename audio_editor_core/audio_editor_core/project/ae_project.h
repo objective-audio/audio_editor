@@ -9,15 +9,15 @@
 
 namespace yas::ae {
 struct project final : app_project_interface {
-    uintptr_t identifier() const override;
-    url const &file_url() const override;
+    [[nodiscard]] uintptr_t identifier() const override;
+    [[nodiscard]] url const &file_url() const override;
 
-    bool can_close() const override;
+    [[nodiscard]] bool can_close() const override;
     void request_close() override;
 
-    observing::endable observe_notification(std::function<void(notification const &)> &&) override;
+    [[nodiscard]] observing::endable observe_notification(std::function<void(notification const &)> &&) override;
 
-    static project_ptr make_shared(url const &);
+    [[nodiscard]] static project_ptr make_shared(url const &);
 
    private:
     url const _file_url;
