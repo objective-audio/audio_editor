@@ -30,10 +30,10 @@ using namespace yas::ae;
     ae::app_global
         ->observe_project([unowned](auto const &event) {
             switch (event.type) {
-                case app::projects_event_type::inserted: {
+                case app_projects_event_type::inserted: {
                     [unowned.object showWindowWithProject:event.project];
                 } break;
-                case app::projects_event_type::erased: {
+                case app_projects_event_type::erased: {
                     [unowned.object hideWindowWithProject:event.project];
                 } break;
             }
