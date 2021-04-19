@@ -13,16 +13,16 @@ using namespace yas::ae;
 @end
 
 @implementation AEWindowController {
-    project_wptr _project;
+    app_project_interface_wptr _project;
 }
 
-- (void)setupWithProject:(project_ptr const &)project {
+- (void)setupWithProject:(app_project_interface_ptr const &)project {
     self->_project = project;
 
     self.window.title = (__bridge NSString *)to_cf_object(project->file_url().last_path_component());
 }
 
-- (project_ptr)project {
+- (app_project_interface_ptr)project {
     return self->_project.lock();
 }
 

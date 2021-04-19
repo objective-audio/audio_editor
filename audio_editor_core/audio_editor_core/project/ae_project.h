@@ -4,26 +4,20 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_app_dependency.h>
 #include <audio_editor_core/ae_ptr.h>
-#include <cpp_utils/yas_url.h>
-#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct project {
-    enum class notification {
-        should_close,
-    };
+struct project final : app_project_interface {
+    [[nodiscard]] uintptr_t identifier() const override;
+    [[nodiscard]] url const &file_url() const override;
 
-    uintptr_t identifier() const;
+    [[nodiscard]] bool can_close() const override;
+    void request_close() override;
 
-    url const &file_url() const;
+    [[nodiscard]] observing::endable observe_notification(std::function<void(notification const &)> &&) override;
 
-    bool can_close() const;
-    void request_close();
-
-    observing::endable observe_notification(std::function<void(notification const &)> &&);
-
-    static project_ptr make_shared(url const &);
+    [[nodiscard]] static project_ptr make_shared(url const &);
 
    private:
     url const _file_url;

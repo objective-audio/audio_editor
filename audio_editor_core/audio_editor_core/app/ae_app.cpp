@@ -10,11 +10,19 @@
 using namespace yas;
 using namespace yas::ae;
 
-app::app() {
+namespace yas::ae {
+struct app_factory : app_factory_interface {
+    app_project_interface_ptr make_project(url const &file_url) const override {
+        return project::make_shared(file_url);
+    }
+};
+}  // namespace yas::ae
+
+app::app(app_factory_interface_ptr const &factory) : _factory(factory) {
 }
 
-void app::add_project(url const &file_url) {
-    auto const project = project::make_shared(file_url);
+app_project_interface_ptr app::add_project(url const &file_url) {
+    auto const project = this->_factory->make_project(file_url);
 
     auto canceller = project
                          ->observe_notification([this, project_id = project->identifier()](auto const &notification) {
@@ -27,10 +35,13 @@ void app::add_project(url const &file_url) {
                          .end();
 
     this->_projects->insert_or_replace(project->identifier(), std::make_pair(project, std::move(canceller)));
+
+    return project;
 }
 
-std::vector<project_ptr> app::projects() const {
-    return to_vector<project_ptr>(this->_projects->elements(), [](auto const &pair) { return pair.second.first; });
+std::vector<app_project_interface_ptr> app::projects() const {
+    return to_vector<app_project_interface_ptr>(this->_projects->elements(),
+                                                [](auto const &pair) { return pair.second.first; });
 }
 
 observing::syncable app::observe_projects(observing::caller<projects_map_t::event>::handler_f &&handler) {
@@ -38,5 +49,9 @@ observing::syncable app::observe_projects(observing::caller<projects_map_t::even
 }
 
 app_ptr app::make_shared() {
-    return std::shared_ptr<app>(new app{});
+    return make_shared(std::make_shared<app_factory>());
+}
+
+app_ptr app::make_shared(app_factory_interface_ptr const &factory) {
+    return std::shared_ptr<app>(new app{factory});
 }
