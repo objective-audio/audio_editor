@@ -11,10 +11,6 @@
 
 namespace yas::ae {
 struct project final : app_project_interface {
-    enum class notification {
-        should_close,
-    };
-
     uintptr_t identifier() const;
 
     url const &file_url() const;
