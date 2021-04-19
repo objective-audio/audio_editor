@@ -24,54 +24,55 @@ using namespace yas::ae;
 - (void)test_add_project {
     auto const app = app::make_shared();
 
-    std::vector<app::projects_map_t::event> called;
+    std::vector<app::projects_event> called;
 
-    auto canceller = app->observe_projects([&called](auto const &event) { called.emplace_back(event); }).sync();
+    auto canceller = app->observe_project([&called](auto const &event) { called.emplace_back(event); }).sync();
 
-    XCTAssertEqual(called.size(), 1);
-    XCTAssertEqual(called.at(0).type, observing::map::event_type::any);
-    XCTAssertEqual(called.at(0).elements.size(), 0);
-    XCTAssertEqual(app->projects().size(), 0);
+    XCTAssertEqual(called.size(), 0);
 
     auto const file_url_0 = url::file_url("/test/path/file0.wav");
-    app->add_project(file_url_0);
+    auto const project0 = app->add_project(file_url_0);
 
-    XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1).type, observing::map::event_type::inserted);
-    XCTAssertEqual(called.at(1).inserted->first->file_url(), file_url_0);
-    XCTAssertEqual(app->projects().size(), 1);
+    XCTAssertEqual(project0->file_url(), file_url_0);
+    XCTAssertEqual(called.size(), 1);
+    XCTAssertEqual(called.at(0).type, app::projects_event_type::inserted);
+    XCTAssertEqual(called.at(0).project->file_url(), file_url_0);
 
     auto const file_url_1 = url::file_url("/test/path/file1.aif");
-    app->add_project(file_url_1);
+    auto const project1 = app->add_project(file_url_1);
 
-    XCTAssertEqual(called.size(), 3);
-    XCTAssertEqual(called.at(2).type, observing::map::event_type::inserted);
-    XCTAssertEqual(called.at(2).inserted->first->file_url(), file_url_1);
-    XCTAssertEqual(app->projects().size(), 2);
+    XCTAssertEqual(project1->file_url(), file_url_1);
+    XCTAssertEqual(called.size(), 2);
+    XCTAssertEqual(called.at(1).type, app::projects_event_type::inserted);
+    XCTAssertEqual(called.at(1).project->file_url(), file_url_1);
 }
 
 - (void)test_remove_project {
     auto const app = app::make_shared();
 
     auto const file_url_0 = url::file_url("/test/path/file0.wav");
-    app->add_project(file_url_0);
+    auto const project0 = app->add_project(file_url_0);
 
     auto const file_url_1 = url::file_url("/test/path/file1.aif");
-    app->add_project(file_url_1);
+    auto const project1 = app->add_project(file_url_1);
 
-    auto const pair0 = yas::first(app->projects(), [&file_url_0](app_project_interface_ptr const &project) {
-        return project->file_url() == file_url_0;
-    });
-    XCTAssertTrue(pair0.has_value());
-    pair0.value()->request_close();
+    std::vector<app::projects_event> called;
+
+    auto canceller = app->observe_project([&called](auto const &event) { called.emplace_back(event); }).sync();
+
+    XCTAssertEqual(called.size(), 2);
+
+    project0->request_close();
     XCTAssertEqual(app->projects().size(), 1);
+    XCTAssertEqual(called.size(), 3);
+    XCTAssertEqual(called.at(2).type, app::projects_event_type::erased);
+    XCTAssertEqual(called.at(2).project, project0);
 
-    auto const pair1 = yas::first(app->projects(), [&file_url_1](app_project_interface_ptr const &project) {
-        return project->file_url() == file_url_1;
-    });
-    XCTAssertTrue(pair1.has_value());
-    pair1.value()->request_close();
+    project1->request_close();
     XCTAssertEqual(app->projects().size(), 0);
+    XCTAssertEqual(called.size(), 4);
+    XCTAssertEqual(called.at(3).type, app::projects_event_type::erased);
+    XCTAssertEqual(called.at(3).project, project1);
 }
 
 @end
