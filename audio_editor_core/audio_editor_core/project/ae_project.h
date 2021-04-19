@@ -23,7 +23,8 @@ struct project final : app_project_interface {
 
    private:
     url const _file_url;
-    project_state _state = project_state::loading;
+    observing::value::holder_ptr<project_state> const _state =
+        observing::value::holder<project_state>::make_shared(project_state::loading);
     observing::notifier_ptr<notification> const _notifier = observing::notifier<notification>::make_shared();
 
     project(url const &);

@@ -23,7 +23,7 @@ url const &project::file_url() const {
 }
 
 project_state const &project::state() const {
-    return this->_state;
+    return this->_state->value();
 }
 
 bool project::can_close() const {
