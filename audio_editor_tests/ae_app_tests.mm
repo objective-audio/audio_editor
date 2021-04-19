@@ -24,7 +24,7 @@ using namespace yas::ae;
 - (void)test_add_project {
     auto const app = app::make_shared();
 
-    std::vector<app::projects_event> called;
+    std::vector<app_projects_event> called;
 
     auto canceller = app->observe_project([&called](auto const &event) { called.emplace_back(event); }).sync();
 
@@ -56,7 +56,7 @@ using namespace yas::ae;
     auto const file_url_1 = url::file_url("/test/path/file1.aif");
     auto const project1 = app->add_project(file_url_1);
 
-    std::vector<app::projects_event> called;
+    std::vector<app_projects_event> called;
 
     auto canceller = app->observe_project([&called](auto const &event) { called.emplace_back(event); }).sync();
 
