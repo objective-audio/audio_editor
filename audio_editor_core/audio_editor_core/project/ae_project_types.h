@@ -4,4 +4,9 @@
 
 #pragma once
 
-namespace yas::ae {}
+namespace yas::ae {
+enum class project_state {
+    loading,
+    editing,
+};
+}

@@ -5,12 +5,14 @@
 #pragma once
 
 #include <audio_editor_core/ae_app_dependency.h>
+#include <audio_editor_core/ae_project_types.h>
 #include <audio_editor_core/ae_ptr.h>
 
 namespace yas::ae {
 struct project final : app_project_interface {
     [[nodiscard]] uintptr_t identifier() const override;
     [[nodiscard]] url const &file_url() const override;
+    [[nodiscard]] project_state const &state() const;
 
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
@@ -21,6 +23,7 @@ struct project final : app_project_interface {
 
    private:
     url const _file_url;
+    project_state _state = project_state::loading;
     observing::notifier_ptr<notification> const _notifier = observing::notifier<notification>::make_shared();
 
     project(url const &);
