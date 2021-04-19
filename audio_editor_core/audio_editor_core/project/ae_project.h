@@ -6,19 +6,16 @@
 
 #include <audio_editor_core/ae_app_dependency.h>
 #include <audio_editor_core/ae_ptr.h>
-#include <cpp_utils/yas_url.h>
-#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct project final : app_project_interface {
-    uintptr_t identifier() const;
+    uintptr_t identifier() const override;
+    url const &file_url() const override;
 
-    url const &file_url() const;
+    bool can_close() const override;
+    void request_close() override;
 
-    bool can_close() const;
-    void request_close();
-
-    observing::endable observe_notification(std::function<void(notification const &)> &&);
+    observing::endable observe_notification(std::function<void(notification const &)> &&) override;
 
     static project_ptr make_shared(url const &);
 
