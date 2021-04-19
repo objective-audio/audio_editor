@@ -23,8 +23,6 @@ struct app final {
 
     app_project_interface_ptr add_project(url const &file_url);
     [[nodiscard]] std::vector<app_project_interface_ptr> projects() const;
-    // TODO: eventの中身を詰め替る
-    [[nodiscard]] observing::syncable observe_projects(observing::caller<projects_map_t::event>::handler_f &&);
     [[nodiscard]] observing::syncable observe_project(std::function<void(projects_event const &)> &&);
 
     [[nodiscard]] static app_ptr make_shared();

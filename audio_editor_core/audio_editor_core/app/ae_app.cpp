@@ -44,10 +44,6 @@ std::vector<app_project_interface_ptr> app::projects() const {
                                                 [](auto const &pair) { return pair.second.first; });
 }
 
-observing::syncable app::observe_projects(observing::caller<projects_map_t::event>::handler_f &&handler) {
-    return this->_projects->observe(std::move(handler));
-}
-
 observing::syncable app::observe_project(std::function<void(projects_event const &)> &&handler) {
     return this->_projects->observe([handler = std::move(handler)](app::projects_map_t::event const &event) {
         switch (event.type) {
