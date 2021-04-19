@@ -29,8 +29,9 @@ void app::add_project(url const &file_url) {
     this->_projects->insert_or_replace(project->identifier(), std::make_pair(project, std::move(canceller)));
 }
 
-std::vector<project_ptr> app::projects() const {
-    return to_vector<project_ptr>(this->_projects->elements(), [](auto const &pair) { return pair.second.first; });
+std::vector<app_project_interface_ptr> app::projects() const {
+    return to_vector<app_project_interface_ptr>(this->_projects->elements(),
+                                                [](auto const &pair) { return pair.second.first; });
 }
 
 observing::syncable app::observe_projects(observing::caller<projects_map_t::event>::handler_f &&handler) {

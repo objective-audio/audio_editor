@@ -68,7 +68,7 @@ using namespace yas::ae;
     }
 }
 
-- (void)showWindowWithProject:(ae::project_ptr const &)project {
+- (void)showWindowWithProject:(ae::app_project_interface_ptr const &)project {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
     AEWindowController *windowController = [storyboard instantiateInitialController];
     NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
@@ -77,7 +77,7 @@ using namespace yas::ae;
     [windowController showWindow:nil];
 }
 
-- (void)hideWindowWithProject:(ae::project_ptr const &)project {
+- (void)hideWindowWithProject:(ae::app_project_interface_ptr const &)project {
     NSMutableSet<AEWindowController *> *copiedWindowControllers = [self.windowControllers mutableCopy];
 
     for (AEWindowController *windowController in self.windowControllers) {

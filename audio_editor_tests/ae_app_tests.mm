@@ -59,14 +59,16 @@ using namespace yas::ae;
     auto const file_url_1 = url::file_url("/test/path/file1.aif");
     app->add_project(file_url_1);
 
-    auto const pair0 = yas::first(
-        app->projects(), [&file_url_0](project_ptr const &project) { return project->file_url() == file_url_0; });
+    auto const pair0 = yas::first(app->projects(), [&file_url_0](app_project_interface_ptr const &project) {
+        return project->file_url() == file_url_0;
+    });
     XCTAssertTrue(pair0.has_value());
     pair0.value()->request_close();
     XCTAssertEqual(app->projects().size(), 1);
 
-    auto const pair1 = yas::first(
-        app->projects(), [&file_url_1](project_ptr const &project) { return project->file_url() == file_url_1; });
+    auto const pair1 = yas::first(app->projects(), [&file_url_1](app_project_interface_ptr const &project) {
+        return project->file_url() == file_url_1;
+    });
     XCTAssertTrue(pair1.has_value());
     pair1.value()->request_close();
     XCTAssertEqual(app->projects().size(), 0);
