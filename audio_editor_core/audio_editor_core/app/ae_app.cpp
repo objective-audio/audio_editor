@@ -21,7 +21,7 @@ struct app_factory : app_factory_interface {
 app::app(app_factory_interface_ptr const &factory) : _factory(factory) {
 }
 
-void app::add_project(url const &file_url) {
+app_project_interface_ptr app::add_project(url const &file_url) {
     auto const project = this->_factory->make_project(file_url);
 
     auto canceller = project
@@ -35,6 +35,8 @@ void app::add_project(url const &file_url) {
                          .end();
 
     this->_projects->insert_or_replace(project->identifier(), std::make_pair(project, std::move(canceller)));
+
+    return project;
 }
 
 std::vector<app_project_interface_ptr> app::projects() const {
