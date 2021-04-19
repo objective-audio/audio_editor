@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_ptr.h>
 #include <cpp_utils/yas_url.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -22,5 +23,11 @@ struct app_project_interface {
     virtual void request_close() = 0;
 
     virtual observing::endable observe_notification(std::function<void(notification const &)> &&) = 0;
+};
+
+struct app_factory_interface {
+    virtual ~app_factory_interface() = default;
+
+    virtual app_project_interface_ptr make_project() const = 0;
 };
 }  // namespace yas::ae
