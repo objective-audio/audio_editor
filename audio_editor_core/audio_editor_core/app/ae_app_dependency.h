@@ -28,6 +28,6 @@ struct app_project_interface {
 struct app_factory_interface {
     virtual ~app_factory_interface() = default;
 
-    virtual app_project_interface_ptr make_project() const = 0;
+    virtual app_project_interface_ptr make_project(url const &file_url) const = 0;
 };
 }  // namespace yas::ae

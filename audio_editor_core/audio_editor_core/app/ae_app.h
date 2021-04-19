@@ -17,12 +17,15 @@ struct app final {
     observing::syncable observe_projects(observing::caller<projects_map_t::event>::handler_f &&);
 
     static app_ptr make_shared();
+    static app_ptr make_shared(app_factory_interface_ptr const &);
 
    private:
+    app_factory_interface_ptr const _factory;
+
     using projects_ptr_t = std::shared_ptr<projects_map_t>;
     projects_ptr_t const _projects = projects_map_t::make_shared();
 
-    app();
+    app(app_factory_interface_ptr const &);
 
     app(app const &) = delete;
     app(app &&) = delete;
