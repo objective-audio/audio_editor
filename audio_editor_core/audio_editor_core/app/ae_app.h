@@ -8,6 +8,16 @@
 
 namespace yas::ae {
 struct app final {
+    enum class projects_event_type {
+        inserted,
+        erased,
+    };
+
+    struct projects_event {
+        projects_event_type type;
+        app_project_interface_ptr project;
+    };
+
     using projects_map_t =
         observing::map::holder<uintptr_t, std::pair<app_project_interface_ptr, observing::cancellable_ptr>>;
 
@@ -15,6 +25,7 @@ struct app final {
     [[nodiscard]] std::vector<app_project_interface_ptr> projects() const;
     // TODO: eventの中身を詰め替る
     [[nodiscard]] observing::syncable observe_projects(observing::caller<projects_map_t::event>::handler_f &&);
+    [[nodiscard]] observing::syncable observe_project(std::function<void(projects_event const &)> &&);
 
     [[nodiscard]] static app_ptr make_shared();
     [[nodiscard]] static app_ptr make_shared(app_factory_interface_ptr const &);

@@ -48,6 +48,28 @@ observing::syncable app::observe_projects(observing::caller<projects_map_t::even
     return this->_projects->observe(std::move(handler));
 }
 
+observing::syncable app::observe_project(std::function<void(projects_event const &)> &&handler) {
+    return this->_projects->observe([handler = std::move(handler)](app::projects_map_t::event const &event) {
+        switch (event.type) {
+            case observing::map::event_type::any: {
+                for (auto const &pair : event.elements) {
+                    handler({.type = projects_event_type::inserted, .project = pair.second.first});
+                }
+            } break;
+            case observing::map::event_type::inserted: {
+                handler({.type = projects_event_type::inserted, .project = event.inserted->first});
+            } break;
+            case observing::map::event_type::replaced: {
+                handler({.type = projects_event_type::erased, .project = event.erased->first});
+                handler({.type = projects_event_type::inserted, .project = event.inserted->first});
+            } break;
+            case observing::map::event_type::erased: {
+                handler({.type = projects_event_type::erased, .project = event.erased->first});
+            } break;
+        }
+    });
+}
+
 app_ptr app::make_shared() {
     return make_shared(std::make_shared<app_factory>());
 }
