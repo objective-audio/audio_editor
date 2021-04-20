@@ -10,6 +10,9 @@
 		B61E1698262C7E7E00C14668 /* ae_app_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B61E1697262C7E7E00C14668 /* ae_app_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE0B262DCB900021AD20 /* ae_app_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE10262DD2FA0021AD20 /* ae_project_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B668BE23262F32B60021AD20 /* ae_project_pool.cpp */; };
+		B668BE26262F32B60021AD20 /* ae_project_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE24262F32B60021AD20 /* ae_project_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE2B262F330E0021AD20 /* ae_project_pool_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE2A262F330C0021AD20 /* ae_project_pool_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69CF55F262AC49C007A0A75 /* ae_project.cpp */; };
 		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF569262AC7CE007A0A75 /* ae_ptr.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -31,6 +34,9 @@
 		B61E1697262C7E7E00C14668 /* ae_app_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_dependency.h; sourceTree = "<group>"; };
 		B668BE0B262DCB900021AD20 /* ae_app_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_types.h; sourceTree = "<group>"; };
 		B668BE10262DD2FA0021AD20 /* ae_project_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_types.h; sourceTree = "<group>"; };
+		B668BE23262F32B60021AD20 /* ae_project_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_pool.cpp; sourceTree = "<group>"; };
+		B668BE24262F32B60021AD20 /* ae_project_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_pool.h; sourceTree = "<group>"; };
+		B668BE2A262F330C0021AD20 /* ae_project_pool_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_pool_dependency.h; sourceTree = "<group>"; };
 		B69CF55F262AC49C007A0A75 /* ae_project.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project.cpp; sourceTree = "<group>"; };
 		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
 		B69CF569262AC7CE007A0A75 /* ae_ptr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ptr.h; sourceTree = "<group>"; };
@@ -69,6 +75,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B668BE22262F32870021AD20 /* project_pool */ = {
+			isa = PBXGroup;
+			children = (
+				B668BE2A262F330C0021AD20 /* ae_project_pool_dependency.h */,
+				B668BE23262F32B60021AD20 /* ae_project_pool.cpp */,
+				B668BE24262F32B60021AD20 /* ae_project_pool.h */,
+			);
+			path = project_pool;
+			sourceTree = "<group>";
+		};
 		B69CF55E262AC48D007A0A75 /* project */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +127,7 @@
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B69CF568262AC7BD007A0A75 /* common */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
+				B668BE22262F32870021AD20 /* project_pool */,
 				B69CF55E262AC48D007A0A75 /* project */,
 				B6A997452629B34E00DAC3FE /* Info.plist */,
 			);
@@ -153,6 +170,8 @@
 				B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */,
 				B69CF562262AC49C007A0A75 /* ae_project.h in Headers */,
 				B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */,
+				B668BE2B262F330E0021AD20 /* ae_project_pool_dependency.h in Headers */,
+				B668BE26262F32B60021AD20 /* ae_project_pool.h in Headers */,
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
 				B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */,
 				B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */,
@@ -249,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */,
 				B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */,
 				B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */,
 			);
