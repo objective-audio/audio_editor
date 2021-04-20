@@ -1,12 +1,10 @@
 //
-//  ae_project_pool_dependency.h
+//  ae_project_pool_types.h
 //
 
 #pragma once
 
 #include <audio_editor_core/ae_ptr.h>
-#include <cpp_utils/yas_url.h>
-#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 enum class project_pool_event_type {
