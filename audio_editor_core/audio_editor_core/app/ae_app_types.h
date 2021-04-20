@@ -14,6 +14,6 @@ enum class app_projects_event_type {
 
 struct app_projects_event {
     app_projects_event_type type;
-    app_project_interface_ptr project;
+    uintptr_t project_id;
 };
 }  // namespace yas::ae
