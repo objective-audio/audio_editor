@@ -19,6 +19,7 @@ using namespace yas::ae;
 @end
 
 @implementation AppDelegate {
+    app_delegate_presenter _presenter;
     observing::canceller_pool _pool;
 }
 
