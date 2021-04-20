@@ -27,7 +27,7 @@ using namespace yas::ae;
 
     auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
 
-    ae::app_global
+    app_global()
         ->observe_project([unowned](auto const &event) {
             switch (event.type) {
                 case app_projects_event_type::inserted: {
@@ -55,7 +55,7 @@ using namespace yas::ae;
 
     if ([panel runModal] == NSModalResponseOK) {
         url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
-        ae::app_global->add_project(file_url);
+        app_global()->add_project(file_url);
     }
 }
 
