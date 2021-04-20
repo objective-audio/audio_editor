@@ -9,9 +9,6 @@
 
 namespace yas::ae {
 struct app final {
-    using projects_map_t =
-        observing::map::holder<uintptr_t, std::pair<app_project_interface_ptr, observing::cancellable_ptr>>;
-
     app_project_interface_ptr add_project(url const &file_url);
     [[nodiscard]] app_project_interface_ptr project_for_id(uintptr_t const) const;
     [[nodiscard]] std::vector<app_project_interface_ptr> projects() const;
@@ -23,8 +20,9 @@ struct app final {
    private:
     app_factory_interface_ptr const _factory;
 
-    using projects_ptr_t = std::shared_ptr<projects_map_t>;
-    projects_ptr_t const _projects = projects_map_t::make_shared();
+    using projects_map_t =
+        observing::map::holder<uintptr_t, std::pair<app_project_interface_ptr, observing::cancellable_ptr>>;
+    std::shared_ptr<projects_map_t> const _projects = projects_map_t::make_shared();
 
     app(app_factory_interface_ptr const &);
 
