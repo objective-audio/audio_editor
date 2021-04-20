@@ -9,16 +9,20 @@
 #include <audio_editor_core/ae_ptr.h>
 
 namespace yas::ae {
-struct project final : app_project_interface {
-    [[nodiscard]] uintptr_t identifier() const override;
-    [[nodiscard]] url const &file_url() const override;
+struct project final {
+    enum class notification {
+        should_close,
+    };
+
+    [[nodiscard]] uintptr_t identifier() const;
+    [[nodiscard]] url const &file_url() const;
     [[nodiscard]] project_state const &state() const;
 
-    [[nodiscard]] bool can_close() const override;
-    void request_close() override;
+    [[nodiscard]] bool can_close() const;
+    void request_close();
 
     [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&);
-    [[nodiscard]] observing::endable observe_notification(std::function<void(notification const &)> &&) override;
+    [[nodiscard]] observing::endable observe_notification(std::function<void(notification const &)> &&);
 
     [[nodiscard]] static project_ptr make_shared(url const &);
 
