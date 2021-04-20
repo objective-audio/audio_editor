@@ -31,10 +31,10 @@ using namespace yas::ae;
         ->observe_project([unowned](auto const &event) {
             switch (event.type) {
                 case app_projects_event_type::inserted: {
-                    [unowned.object showWindowWithProject:event.project];
+                    [unowned.object showWindowWithProjectID:event.project_id];
                 } break;
                 case app_projects_event_type::erased: {
-                    [unowned.object hideWindowWithProject:event.project];
+                    [unowned.object hideWindowWithProjectID:event.project_id];
                 } break;
             }
         })
@@ -59,20 +59,20 @@ using namespace yas::ae;
     }
 }
 
-- (void)showWindowWithProject:(ae::app_project_interface_ptr const &)project {
+- (void)showWindowWithProjectID:(uintptr_t const)project_id {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
     AEWindowController *windowController = [storyboard instantiateInitialController];
     NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
-    [windowController setupWithProject:project];
+    [windowController setupWithProjectID:project_id];
     [self.windowControllers addObject:windowController];
     [windowController showWindow:nil];
 }
 
-- (void)hideWindowWithProject:(ae::app_project_interface_ptr const &)project {
+- (void)hideWindowWithProjectID:(uintptr_t const)project_id {
     NSMutableSet<AEWindowController *> *copiedWindowControllers = [self.windowControllers mutableCopy];
 
     for (AEWindowController *windowController in self.windowControllers) {
-        if (windowController.project == project) {
+        if (windowController.project_id == project_id) {
             [copiedWindowControllers removeObject:windowController];
         }
     }

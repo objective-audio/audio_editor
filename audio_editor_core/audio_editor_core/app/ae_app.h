@@ -13,6 +13,7 @@ struct app final {
         observing::map::holder<uintptr_t, std::pair<app_project_interface_ptr, observing::cancellable_ptr>>;
 
     app_project_interface_ptr add_project(url const &file_url);
+    [[nodiscard]] app_project_interface_ptr project_for_id(uintptr_t const) const;
     [[nodiscard]] std::vector<app_project_interface_ptr> projects() const;
     [[nodiscard]] observing::syncable observe_project(std::function<void(app_projects_event const &)> &&);
 

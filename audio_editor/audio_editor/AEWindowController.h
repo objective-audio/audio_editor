@@ -9,9 +9,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AEWindowController : NSWindowController
 
-@property (nonatomic, readonly) yas::ae::app_project_interface_ptr project;
+@property (nonatomic, readonly) uintptr_t project_id;
 
-- (void)setupWithProject:(yas::ae::app_project_interface_ptr const &)project;
+- (void)setupWithProjectID:(uintptr_t const &)project_id;
 
 @end
 

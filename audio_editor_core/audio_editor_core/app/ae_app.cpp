@@ -39,6 +39,14 @@ app_project_interface_ptr app::add_project(url const &file_url) {
     return project;
 }
 
+app_project_interface_ptr app::project_for_id(uintptr_t const project_id) const {
+    if (this->_projects->contains(project_id)) {
+        return this->_projects->at(project_id).first;
+    } else {
+        return nullptr;
+    }
+}
+
 std::vector<app_project_interface_ptr> app::projects() const {
     return to_vector<app_project_interface_ptr>(this->_projects->elements(),
                                                 [](auto const &pair) { return pair.second.first; });
@@ -49,18 +57,18 @@ observing::syncable app::observe_project(std::function<void(app_projects_event c
         switch (event.type) {
             case observing::map::event_type::any: {
                 for (auto const &pair : event.elements) {
-                    handler({.type = app_projects_event_type::inserted, .project = pair.second.first});
+                    handler({.type = app_projects_event_type::inserted, .project_id = pair.second.first->identifier()});
                 }
             } break;
             case observing::map::event_type::inserted: {
-                handler({.type = app_projects_event_type::inserted, .project = event.inserted->first});
+                handler({.type = app_projects_event_type::inserted, .project_id = event.inserted->first->identifier()});
             } break;
             case observing::map::event_type::replaced: {
-                handler({.type = app_projects_event_type::erased, .project = event.erased->first});
-                handler({.type = app_projects_event_type::inserted, .project = event.inserted->first});
+                handler({.type = app_projects_event_type::erased, .project_id = event.erased->first->identifier()});
+                handler({.type = app_projects_event_type::inserted, .project_id = event.inserted->first->identifier()});
             } break;
             case observing::map::event_type::erased: {
-                handler({.type = app_projects_event_type::erased, .project = event.erased->first});
+                handler({.type = app_projects_event_type::erased, .project_id = event.erased->first->identifier()});
             } break;
         }
     });
