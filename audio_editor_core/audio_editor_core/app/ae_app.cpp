@@ -12,7 +12,7 @@ using namespace yas::ae;
 
 namespace yas::ae {
 struct app_factory : app_factory_interface {
-    app_project_interface_ptr make_project(url const &file_url) const override {
+    project_ptr make_project(url const &file_url) const override {
         return project::make_shared(file_url);
     }
 };

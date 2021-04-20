@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_ptr.h>
 #include <cpp_utils/yas_url.h>
 #include <observing/yas_observing_umbrella.h>
@@ -28,6 +29,6 @@ struct app_project_interface {
 struct app_factory_interface {
     virtual ~app_factory_interface() = default;
 
-    virtual app_project_interface_ptr make_project(url const &file_url) const = 0;
+    virtual project_ptr make_project(url const &file_url) const = 0;
 };
 }  // namespace yas::ae
