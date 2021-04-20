@@ -17,6 +17,7 @@ struct project final : app_project_interface {
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
 
+    [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&);
     [[nodiscard]] observing::endable observe_notification(std::function<void(notification const &)> &&) override;
 
     [[nodiscard]] static project_ptr make_shared(url const &);
