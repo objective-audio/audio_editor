@@ -107,12 +107,12 @@
 		B6A997432629B34E00DAC3FE /* audio_editor_core */ = {
 			isa = PBXGroup;
 			children = (
-				B69CF568262AC7BD007A0A75 /* common */,
-				B6A997BE2629C0AA00DAC3FE /* app */,
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
-				B6A997452629B34E00DAC3FE /* Info.plist */,
+				B69CF568262AC7BD007A0A75 /* common */,
+				B6A997BE2629C0AA00DAC3FE /* app */,
 				B69CF55E262AC48D007A0A75 /* project */,
+				B6A997452629B34E00DAC3FE /* Info.plist */,
 			);
 			path = audio_editor_core;
 			sourceTree = "<group>";
