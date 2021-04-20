@@ -28,12 +28,13 @@ using namespace yas::ae;
     auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
 
     app_global()
+        ->project_pool()
         ->observe_project([unowned](auto const &event) {
             switch (event.type) {
-                case app_projects_event_type::inserted: {
+                case project_pool_event_type::inserted: {
                     [unowned.object showWindowWithProjectID:event.project_id];
                 } break;
-                case app_projects_event_type::erased: {
+                case project_pool_event_type::erased: {
                     [unowned.object hideWindowWithProjectID:event.project_id];
                 } break;
             }
@@ -55,7 +56,7 @@ using namespace yas::ae;
 
     if ([panel runModal] == NSModalResponseOK) {
         url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
-        app_global()->add_project(file_url);
+        app_global()->project_pool()->add_project(file_url);
     }
 }
 

@@ -35,7 +35,7 @@ using namespace yas::ae;
 
     XCTAssertEqual(project0->file_url(), file_url_0);
     XCTAssertEqual(called.size(), 1);
-    XCTAssertEqual(called.at(0).type, app_projects_event_type::inserted);
+    XCTAssertEqual(called.at(0).type, project_pool_event_type::inserted);
     XCTAssertEqual(called.at(0).project_id, project0->identifier());
 
     auto const file_url_1 = url::file_url("/test/path/file1.aif");
@@ -43,7 +43,7 @@ using namespace yas::ae;
 
     XCTAssertEqual(project1->file_url(), file_url_1);
     XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1).type, app_projects_event_type::inserted);
+    XCTAssertEqual(called.at(1).type, project_pool_event_type::inserted);
     XCTAssertEqual(called.at(1).project_id, project1->identifier());
 }
 
@@ -65,13 +65,13 @@ using namespace yas::ae;
     project0->request_close();
     XCTAssertEqual(app->projects().size(), 1);
     XCTAssertEqual(called.size(), 3);
-    XCTAssertEqual(called.at(2).type, app_projects_event_type::erased);
+    XCTAssertEqual(called.at(2).type, project_pool_event_type::erased);
     XCTAssertEqual(called.at(2).project_id, project0->identifier());
 
     project1->request_close();
     XCTAssertEqual(app->projects().size(), 0);
     XCTAssertEqual(called.size(), 4);
-    XCTAssertEqual(called.at(3).type, app_projects_event_type::erased);
+    XCTAssertEqual(called.at(3).type, project_pool_event_type::erased);
     XCTAssertEqual(called.at(3).project_id, project1->identifier());
 }
 
