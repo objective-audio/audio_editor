@@ -14,6 +14,8 @@
 		B668BE26262F32B60021AD20 /* ae_project_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE24262F32B60021AD20 /* ae_project_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE2B262F330E0021AD20 /* ae_project_pool_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE2A262F330C0021AD20 /* ae_project_pool_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE35262F3CFE0021AD20 /* ae_project_pool_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE34262F3CFE0021AD20 /* ae_project_pool_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE3F262F412B0021AD20 /* ae_app_delegate_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B668BE3D262F412B0021AD20 /* ae_app_delegate_presenter.cpp */; };
+		B668BE40262F412B0021AD20 /* ae_app_delegate_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE3E262F412B0021AD20 /* ae_app_delegate_presenter.h */; };
 		B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69CF55F262AC49C007A0A75 /* ae_project.cpp */; };
 		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF569262AC7CE007A0A75 /* ae_ptr.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -39,6 +41,8 @@
 		B668BE24262F32B60021AD20 /* ae_project_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_pool.h; sourceTree = "<group>"; };
 		B668BE2A262F330C0021AD20 /* ae_project_pool_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_pool_types.h; sourceTree = "<group>"; };
 		B668BE34262F3CFE0021AD20 /* ae_project_pool_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_pool_dependency.h; sourceTree = "<group>"; };
+		B668BE3D262F412B0021AD20 /* ae_app_delegate_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app_delegate_presenter.cpp; sourceTree = "<group>"; };
+		B668BE3E262F412B0021AD20 /* ae_app_delegate_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_delegate_presenter.h; sourceTree = "<group>"; };
 		B69CF55F262AC49C007A0A75 /* ae_project.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project.cpp; sourceTree = "<group>"; };
 		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
 		B69CF569262AC7CE007A0A75 /* ae_ptr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ptr.h; sourceTree = "<group>"; };
@@ -88,6 +92,15 @@
 			path = project_pool;
 			sourceTree = "<group>";
 		};
+		B668BE3C262F41110021AD20 /* app_delegate */ = {
+			isa = PBXGroup;
+			children = (
+				B668BE3D262F412B0021AD20 /* ae_app_delegate_presenter.cpp */,
+				B668BE3E262F412B0021AD20 /* ae_app_delegate_presenter.h */,
+			);
+			path = app_delegate;
+			sourceTree = "<group>";
+		};
 		B69CF55E262AC48D007A0A75 /* project */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +142,7 @@
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B69CF568262AC7BD007A0A75 /* common */,
+				B668BE3C262F41110021AD20 /* app_delegate */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
 				B668BE22262F32870021AD20 /* project_pool */,
 				B69CF55E262AC48D007A0A75 /* project */,
@@ -172,6 +186,7 @@
 			files = (
 				B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */,
 				B69CF562262AC49C007A0A75 /* ae_project.h in Headers */,
+				B668BE40262F412B0021AD20 /* ae_app_delegate_presenter.h in Headers */,
 				B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */,
 				B668BE35262F3CFE0021AD20 /* ae_project_pool_dependency.h in Headers */,
 				B668BE2B262F330E0021AD20 /* ae_project_pool_types.h in Headers */,
@@ -273,6 +288,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */,
+				B668BE3F262F412B0021AD20 /* ae_app_delegate_presenter.cpp in Sources */,
 				B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */,
 				B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */,
 			);
