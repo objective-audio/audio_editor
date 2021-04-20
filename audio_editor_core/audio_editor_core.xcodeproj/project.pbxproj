@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B61E1698262C7E7E00C14668 /* ae_app_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B61E1697262C7E7E00C14668 /* ae_app_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE0B262DCB900021AD20 /* ae_app_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE10262DD2FA0021AD20 /* ae_project_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69CF55F262AC49C007A0A75 /* ae_project.cpp */; };
 		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF569262AC7CE007A0A75 /* ae_ptr.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,6 +29,8 @@
 
 /* Begin PBXFileReference section */
 		B61E1697262C7E7E00C14668 /* ae_app_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_dependency.h; sourceTree = "<group>"; };
+		B668BE0B262DCB900021AD20 /* ae_app_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_types.h; sourceTree = "<group>"; };
+		B668BE10262DD2FA0021AD20 /* ae_project_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_types.h; sourceTree = "<group>"; };
 		B69CF55F262AC49C007A0A75 /* ae_project.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project.cpp; sourceTree = "<group>"; };
 		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
 		B69CF569262AC7CE007A0A75 /* ae_ptr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ptr.h; sourceTree = "<group>"; };
@@ -70,6 +74,7 @@
 			children = (
 				B69CF55F262AC49C007A0A75 /* ae_project.cpp */,
 				B69CF560262AC49C007A0A75 /* ae_project.h */,
+				B668BE10262DD2FA0021AD20 /* ae_project_types.h */,
 			);
 			path = project;
 			sourceTree = "<group>";
@@ -102,12 +107,12 @@
 		B6A997432629B34E00DAC3FE /* audio_editor_core */ = {
 			isa = PBXGroup;
 			children = (
-				B69CF568262AC7BD007A0A75 /* common */,
-				B6A997BE2629C0AA00DAC3FE /* app */,
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
-				B6A997452629B34E00DAC3FE /* Info.plist */,
+				B69CF568262AC7BD007A0A75 /* common */,
+				B6A997BE2629C0AA00DAC3FE /* app */,
 				B69CF55E262AC48D007A0A75 /* project */,
+				B6A997452629B34E00DAC3FE /* Info.plist */,
 			);
 			path = audio_editor_core;
 			sourceTree = "<group>";
@@ -131,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				B61E1697262C7E7E00C14668 /* ae_app_dependency.h */,
+				B668BE0B262DCB900021AD20 /* ae_app_types.h */,
 				B6A997B72629C07600DAC3FE /* ae_app.cpp */,
 				B6A997B82629C07600DAC3FE /* ae_app.h */,
 			);
@@ -144,9 +150,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */,
 				B69CF562262AC49C007A0A75 /* ae_project.h in Headers */,
 				B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */,
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
+				B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */,
 				B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */,
 				B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */,
 				B61E1698262C7E7E00C14668 /* ae_app_dependency.h in Headers */,
