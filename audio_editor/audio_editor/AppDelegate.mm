@@ -30,7 +30,7 @@ using namespace yas::ae;
 
     app_global()
         ->project_pool()
-        ->observe_project([unowned](auto const &event) {
+        ->observe_projects([unowned](auto const &event) {
             switch (event.type) {
                 case project_pool_event_type::inserted: {
                     [unowned.object showWindowWithProjectID:event.project_id];
