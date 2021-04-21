@@ -28,9 +28,8 @@ using namespace yas::ae;
 
     auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
 
-    app_global()
-        ->project_pool()
-        ->observe_projects([unowned](auto const &event) {
+    self->_presenter
+        .observe_projects([unowned](auto const &event) {
             switch (event.type) {
                 case project_pool_event_type::inserted: {
                     [unowned.object showWindowWithProjectID:event.project_id];
