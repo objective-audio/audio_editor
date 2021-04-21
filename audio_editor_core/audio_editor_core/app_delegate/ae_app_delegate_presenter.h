@@ -11,11 +11,21 @@
 
 namespace yas::ae {
 struct app_delegate_presenter {
+    enum class event_type {
+        make_and_show_window_controller,
+        dispose_window_controller,
+    };
+
+    struct event {
+        event_type type;
+        uintptr_t project_id;
+    };
+
     app_delegate_presenter();
     app_delegate_presenter(app_ptr const &);
 
     void add_project(url const &);
-    [[nodiscard]] observing::syncable observe_projects(std::function<void(project_pool_event const &)> &&);
+    [[nodiscard]] observing::syncable observe_projects(std::function<void(event const &)> &&);
 
    private:
     app_ptr _app;

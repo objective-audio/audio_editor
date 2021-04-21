@@ -4,6 +4,7 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import <audio_editor_core/ae_app_delegate_presenter.h>
 #import <audio_editor_core/ae_app_global.h>
 #include <cpp_utils/yas_cf_utils.h>
 #import <objc_utils/yas_objc_unowned.h>
@@ -31,10 +32,10 @@ using namespace yas::ae;
     self->_presenter
         .observe_projects([unowned](auto const &event) {
             switch (event.type) {
-                case project_pool_event_type::inserted: {
-                    [unowned.object showWindowControllerWithProjectID:event.project_id];
+                case app_delegate_presenter::event_type::make_and_show_window_controller: {
+                    [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
                 } break;
-                case project_pool_event_type::erased: {
+                case app_delegate_presenter::event_type::dispose_window_controller: {
                     [unowned.object disposeWindowControllerWithProjectID:event.project_id];
                 } break;
             }
@@ -60,7 +61,7 @@ using namespace yas::ae;
     }
 }
 
-- (void)showWindowControllerWithProjectID:(uintptr_t const)project_id {
+- (void)makeAndShowWindowControllerWithProjectID:(uintptr_t const)project_id {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
     AEWindowController *windowController = [storyboard instantiateInitialController];
     NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
