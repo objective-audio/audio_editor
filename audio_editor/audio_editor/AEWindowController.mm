@@ -3,8 +3,8 @@
 //
 
 #import "AEWindowController.h"
+#include <audio_editor_core/ae_app_global.h>
 #include <cpp_utils/yas_cf_utils.h>
-#include "ae_app_global.h"
 
 using namespace yas;
 using namespace yas::ae;

@@ -4,10 +4,10 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import <audio_editor_core/ae_app_global.h>
 #include <cpp_utils/yas_cf_utils.h>
 #import <objc_utils/yas_objc_unowned.h>
 #import "AEWindowController.h"
-#import "ae_app_global.h"
 
 using namespace yas;
 using namespace yas::ae;

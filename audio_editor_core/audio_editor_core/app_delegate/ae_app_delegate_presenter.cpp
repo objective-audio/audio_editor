@@ -4,5 +4,13 @@
 
 #include "ae_app_delegate_presenter.h"
 
+#include <audio_editor_core/ae_app_global.h>
+
 using namespace yas;
 using namespace yas::ae;
+
+app_delegate_presenter::app_delegate_presenter() : app_delegate_presenter(app_global()) {
+}
+
+app_delegate_presenter::app_delegate_presenter(app_ptr const &app) : _app(app) {
+}
