@@ -25,7 +25,7 @@ struct app_delegate_presenter {
     app_delegate_presenter(app_ptr const &);
 
     void add_project(url const &);
-    [[nodiscard]] observing::syncable observe_projects(std::function<void(event const &)> &&);
+    [[nodiscard]] observing::syncable observe_event(std::function<void(event const &)> &&);
 
    private:
     app_ptr _app;

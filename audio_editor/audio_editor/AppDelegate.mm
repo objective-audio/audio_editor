@@ -30,7 +30,7 @@ using namespace yas::ae;
     auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
 
     self->_presenter
-        .observe_projects([unowned](auto const &event) {
+        .observe_event([unowned](auto const &event) {
             switch (event.type) {
                 case app_delegate_presenter::event_type::make_and_show_window_controller: {
                     [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
