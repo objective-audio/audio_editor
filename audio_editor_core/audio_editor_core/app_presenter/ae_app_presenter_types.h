@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace yas::ae {
 enum class app_presenter_event_type {
     make_and_show_window_controller,
