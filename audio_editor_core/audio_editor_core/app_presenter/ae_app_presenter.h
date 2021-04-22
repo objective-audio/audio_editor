@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_app_presenter_types.h>
 #include <audio_editor_core/ae_project_pool_types.h>
 #include <audio_editor_core/ae_ptr.h>
 #include <cpp_utils/yas_url.h>
@@ -11,15 +12,8 @@
 
 namespace yas::ae {
 struct app_presenter {
-    enum class event_type {
-        make_and_show_window_controller,
-        dispose_window_controller,
-    };
-
-    struct event {
-        event_type type;
-        uintptr_t project_id;
-    };
+    using event_type = app_presenter_event_type;
+    using event = app_presenter_event;
 
     app_presenter();
     explicit app_presenter(app_ptr const &);
