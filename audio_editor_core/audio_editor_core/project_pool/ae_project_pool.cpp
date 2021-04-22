@@ -38,8 +38,8 @@ project_ptr project_pool::project_for_id(uintptr_t const project_id) const {
     }
 }
 
-std::vector<project_ptr> project_pool::projects() const {
-    return to_vector<project_ptr>(this->_projects->elements(), [](auto const &pair) { return pair.second.first; });
+std::size_t project_pool::size() const {
+    return this->_projects->size();
 }
 
 observing::syncable project_pool::observe_event(std::function<void(project_pool_event const &)> &&handler) {
