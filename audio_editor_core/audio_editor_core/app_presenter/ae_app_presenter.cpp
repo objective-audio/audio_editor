@@ -16,6 +16,15 @@ app_presenter::app_presenter() : app_presenter(app_global()) {
 app_presenter::app_presenter(app_ptr const &app) : _app(app) {
 }
 
+bool app_presenter::can_open_file_dialog() const {
+    return true;
+}
+
+void app_presenter::open_file_dialog() {
+    if (this->can_open_file_dialog()) {
+    }
+}
+
 void app_presenter::add_project(url const &file_url) {
     if (auto const app = this->_app.lock()) {
         app->project_pool()->add_project(file_url);
