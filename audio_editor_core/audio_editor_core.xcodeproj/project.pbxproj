@@ -183,11 +183,11 @@
 			isa = PBXGroup;
 			children = (
 				B61E1697262C7E7E00C14668 /* ae_app_dependency.h */,
+				B668BE4B26302EFD0021AD20 /* ae_app_global.cpp */,
+				B668BE4A26302EFD0021AD20 /* ae_app_global.h */,
 				B668BE0B262DCB900021AD20 /* ae_app_types.h */,
 				B6A997B72629C07600DAC3FE /* ae_app.cpp */,
 				B6A997B82629C07600DAC3FE /* ae_app.h */,
-				B668BE4B26302EFD0021AD20 /* ae_app_global.cpp */,
-				B668BE4A26302EFD0021AD20 /* ae_app_global.h */,
 			);
 			path = app;
 			sourceTree = "<group>";
