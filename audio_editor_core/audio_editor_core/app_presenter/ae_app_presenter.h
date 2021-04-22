@@ -26,5 +26,6 @@ struct app_presenter {
 
    private:
     app_wptr _app;
+    observing::notifier_ptr<event> const _event_notifier = observing::notifier<event>::make_shared();
 };
 }  // namespace yas::ae

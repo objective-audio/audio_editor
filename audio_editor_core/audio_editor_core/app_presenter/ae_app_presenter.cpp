@@ -22,6 +22,7 @@ bool app_presenter::can_open_file_dialog() const {
 
 void app_presenter::open_file_dialog() {
     if (this->can_open_file_dialog()) {
+        this->_event_notifier->notify(event{.type = event_type::open_file_dialog});
     }
 }
 
@@ -33,9 +34,13 @@ void app_presenter::add_project(url const &file_url) {
 
 observing::syncable app_presenter::observe_event(std::function<void(event const &)> &&handler) {
     if (auto const app = this->_app.lock()) {
-        return app->project_pool()->observe_event([handler = std::move(handler)](project_pool_event const &pool_event) {
+        auto syncable = app->project_pool()->observe_event([handler](project_pool_event const &pool_event) {
             handler(event{.type = to_presenter_event_type(pool_event.type), .project_id = pool_event.project_id});
         });
+
+        syncable.merge(this->_event_notifier->observe([handler](auto const &event) { handler(event); }));
+
+        return syncable;
     } else {
         return observing::syncable{};
     }

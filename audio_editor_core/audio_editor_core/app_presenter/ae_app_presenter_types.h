@@ -8,6 +8,7 @@
 
 namespace yas::ae {
 enum class app_presenter_event_type {
+    open_file_dialog,
     make_and_show_window_controller,
     dispose_window_controller,
 };

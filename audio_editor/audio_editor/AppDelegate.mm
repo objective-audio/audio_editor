@@ -32,10 +32,13 @@ using namespace yas::ae;
     self->_presenter
         .observe_event([unowned](auto const &event) {
             switch (event.type) {
-                case app_presenter::event_type::make_and_show_window_controller: {
+                case app_presenter_event_type::open_file_dialog: {
+                    [unowned.object openFileDialog];
+                } break;
+                case app_presenter_event_type::make_and_show_window_controller: {
                     [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
                 } break;
-                case app_presenter::event_type::dispose_window_controller: {
+                case app_presenter_event_type::dispose_window_controller: {
                     [unowned.object disposeWindowControllerWithProjectID:event.project_id];
                 } break;
             }
@@ -49,6 +52,12 @@ using namespace yas::ae;
 }
 
 - (void)openDocument:(id)sender {
+    self->_presenter.open_file_dialog();
+}
+
+#pragma mark - private
+
+- (void)openFileDialog {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.allowsMultipleSelection = NO;
     panel.canChooseFiles = YES;
