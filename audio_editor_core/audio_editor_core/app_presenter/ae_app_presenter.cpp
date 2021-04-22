@@ -4,7 +4,7 @@
 
 #include "ae_app_presenter.h"
 
-#include <audio_editor_core/ae_app_global.h>
+#include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_app_presenter_utils.h>
 
 using namespace yas;
