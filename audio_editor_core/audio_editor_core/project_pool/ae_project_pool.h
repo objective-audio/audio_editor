@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_app_presenter_dependency.h>
 #include <audio_editor_core/ae_project_pool_dependency.h>
 #include <audio_editor_core/ae_project_pool_types.h>
 

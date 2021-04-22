@@ -35,6 +35,7 @@
 		B6A997962629B72E00DAC3FE /* ui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A997872629B72E00DAC3FE /* ui.framework */; };
 		B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6A997B72629C07600DAC3FE /* ae_app.cpp */; };
 		B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A997B82629C07600DAC3FE /* ae_app.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		B6A997872629B72E00DAC3FE /* ui.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ui.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A997B72629C07600DAC3FE /* ae_app.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app.cpp; sourceTree = "<group>"; };
 		B6A997B82629C07600DAC3FE /* ae_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app.h; sourceTree = "<group>"; };
+		B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter_dependency.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,8 +105,9 @@
 		B668BE3C262F41110021AD20 /* app_presenter */ = {
 			isa = PBXGroup;
 			children = (
-				B668BE50263067550021AD20 /* ae_app_presenter_utils.h */,
+				B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */,
 				B668BE55263068050021AD20 /* ae_app_presenter_types.h */,
+				B668BE50263067550021AD20 /* ae_app_presenter_utils.h */,
 				B668BE3D262F412B0021AD20 /* ae_app_presenter.cpp */,
 				B668BE3E262F412B0021AD20 /* ae_app_presenter.h */,
 			);
@@ -210,6 +213,7 @@
 				B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */,
 				B668BE56263068050021AD20 /* ae_app_presenter_types.h in Headers */,
 				B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */,
+				B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */,
 				B61E1698262C7E7E00C14668 /* ae_app_dependency.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
