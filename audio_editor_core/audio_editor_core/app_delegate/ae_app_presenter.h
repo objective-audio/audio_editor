@@ -28,6 +28,6 @@ struct app_presenter {
     [[nodiscard]] observing::syncable observe_event(std::function<void(event const &)> &&);
 
    private:
-    app_ptr _app;
+    app_wptr _app;
 };
 }  // namespace yas::ae
