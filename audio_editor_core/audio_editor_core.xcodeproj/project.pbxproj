@@ -100,7 +100,7 @@
 			path = project_pool;
 			sourceTree = "<group>";
 		};
-		B668BE3C262F41110021AD20 /* app_delegate */ = {
+		B668BE3C262F41110021AD20 /* app_presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B668BE50263067550021AD20 /* ae_app_presenter_utils.h */,
@@ -108,7 +108,7 @@
 				B668BE3D262F412B0021AD20 /* ae_app_presenter.cpp */,
 				B668BE3E262F412B0021AD20 /* ae_app_presenter.h */,
 			);
-			path = app_delegate;
+			path = app_presenter;
 			sourceTree = "<group>";
 		};
 		B69CF55E262AC48D007A0A75 /* project */ = {
@@ -152,7 +152,7 @@
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B69CF568262AC7BD007A0A75 /* common */,
-				B668BE3C262F41110021AD20 /* app_delegate */,
+				B668BE3C262F41110021AD20 /* app_presenter */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
 				B668BE22262F32870021AD20 /* project_pool */,
 				B69CF55E262AC48D007A0A75 /* project */,
