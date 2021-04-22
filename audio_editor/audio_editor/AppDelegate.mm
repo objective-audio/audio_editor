@@ -66,7 +66,7 @@ using namespace yas::ae;
 
     if ([panel runModal] == NSModalResponseOK) {
         url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
-        self->_presenter.add_project(file_url);
+        self->_presenter.select_file(file_url);
     }
 }
 

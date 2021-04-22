@@ -20,8 +20,7 @@ struct app_presenter {
 
     bool can_open_file_dialog() const;
     void open_file_dialog();
-
-    void add_project(url const &);
+    void select_file(url const &);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(event const &)> &&);
 
