@@ -51,6 +51,14 @@ using namespace yas::ae;
     // Insert code here to tear down your application
 }
 
+- (BOOL)respondsToSelector:(SEL)aSelector {
+    if (aSelector == @selector(openDocument:)) {
+        return self->_presenter.can_open_file_dialog();
+    } else {
+        return [super respondsToSelector:aSelector];
+    }
+}
+
 - (void)openDocument:(id)sender {
     self->_presenter.open_file_dialog();
 }

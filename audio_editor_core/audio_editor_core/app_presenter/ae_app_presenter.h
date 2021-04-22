@@ -18,7 +18,7 @@ struct app_presenter {
     app_presenter();
     explicit app_presenter(app_ptr const &);
 
-    bool can_open_file_dialog() const;
+    [[nodiscard]] bool can_open_file_dialog() const;
     void open_file_dialog();
     void select_file(url const &);
 
