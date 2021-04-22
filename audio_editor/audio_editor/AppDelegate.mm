@@ -4,8 +4,8 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
-#import <audio_editor_core/ae_app_delegate_presenter.h>
 #import <audio_editor_core/ae_app_global.h>
+#import <audio_editor_core/ae_app_presenter.h>
 #include <cpp_utils/yas_cf_utils.h>
 #import <objc_utils/yas_objc_unowned.h>
 #import "AEWindowController.h"
@@ -20,7 +20,7 @@ using namespace yas::ae;
 @end
 
 @implementation AppDelegate {
-    app_delegate_presenter _presenter;
+    app_presenter _presenter;
     observing::canceller_pool _pool;
 }
 
@@ -32,10 +32,10 @@ using namespace yas::ae;
     self->_presenter
         .observe_event([unowned](auto const &event) {
             switch (event.type) {
-                case app_delegate_presenter::event_type::make_and_show_window_controller: {
+                case app_presenter::event_type::make_and_show_window_controller: {
                     [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
                 } break;
-                case app_delegate_presenter::event_type::dispose_window_controller: {
+                case app_presenter::event_type::dispose_window_controller: {
                     [unowned.object disposeWindowControllerWithProjectID:event.project_id];
                 } break;
             }

@@ -7,7 +7,7 @@
 #include <memory>
 
 namespace yas::ae {
-class app_delegate_presenter;
+class app_presenter;
 class app;
 class project_pool;
 class project;
