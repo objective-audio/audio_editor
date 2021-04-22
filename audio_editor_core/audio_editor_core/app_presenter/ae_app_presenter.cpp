@@ -10,10 +10,10 @@
 using namespace yas;
 using namespace yas::ae;
 
-app_presenter::app_presenter() : app_presenter(app_global()) {
+app_presenter::app_presenter() : app_presenter(app_global()->project_pool()) {
 }
 
-app_presenter::app_presenter(app_ptr const &app) : _app(app) {
+app_presenter::app_presenter(std::shared_ptr<app_presenter_project_pool_interface> const &pool) : _project_pool(pool) {
 }
 
 bool app_presenter::can_open_file_dialog() const {
@@ -27,14 +27,14 @@ void app_presenter::open_file_dialog() {
 }
 
 void app_presenter::select_file(url const &file_url) {
-    if (auto const app = this->_app.lock()) {
-        app->project_pool()->add_project(file_url);
+    if (auto const pool = this->_project_pool.lock()) {
+        pool->add_project(file_url);
     }
 }
 
 observing::syncable app_presenter::observe_event(std::function<void(event const &)> &&handler) {
-    if (auto const app = this->_app.lock()) {
-        auto syncable = app->project_pool()->observe_event([handler](project_pool_event const &pool_event) {
+    if (auto const pool = this->_project_pool.lock()) {
+        auto syncable = pool->observe_event([handler](project_pool_event const &pool_event) {
             handler(event{.type = to_presenter_event_type(pool_event.type), .project_id = pool_event.project_id});
         });
 
