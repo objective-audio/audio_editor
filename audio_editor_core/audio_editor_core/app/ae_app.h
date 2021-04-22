@@ -10,6 +10,7 @@
 namespace yas::ae {
 struct app final {
     [[nodiscard]] static app_ptr make_shared();
+    [[nodiscard]] static app_ptr global();
 
     [[nodiscard]] project_pool_ptr const &project_pool() const;
 

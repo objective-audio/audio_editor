@@ -19,7 +19,7 @@ using namespace yas::ae;
 
     std::vector<project_pool_event> called;
 
-    auto canceller = pool->observe_project([&called](auto const &event) { called.emplace_back(event); }).sync();
+    auto canceller = pool->observe_event([&called](auto const &event) { called.emplace_back(event); }).sync();
 
     XCTAssertEqual(called.size(), 0);
 
@@ -51,7 +51,7 @@ using namespace yas::ae;
 
     std::vector<project_pool_event> called;
 
-    auto canceller = pool->observe_project([&called](auto const &event) { called.emplace_back(event); }).sync();
+    auto canceller = pool->observe_event([&called](auto const &event) { called.emplace_back(event); }).sync();
 
     XCTAssertEqual(called.size(), 2);
 

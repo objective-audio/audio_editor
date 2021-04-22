@@ -4,10 +4,11 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
-#include <cpp_utils/yas_cf_utils.h>
+#import <audio_editor_core/ae_app.h>
+#import <audio_editor_core/ae_app_presenter.h>
+#import <cpp_utils/yas_cf_utils.h>
 #import <objc_utils/yas_objc_unowned.h>
 #import "AEWindowController.h"
-#import "ae_app_global.h"
 
 using namespace yas;
 using namespace yas::ae;
@@ -19,6 +20,7 @@ using namespace yas::ae;
 @end
 
 @implementation AppDelegate {
+    app_presenter _presenter;
     observing::canceller_pool _pool;
 }
 
@@ -27,15 +29,17 @@ using namespace yas::ae;
 
     auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
 
-    app_global()
-        ->project_pool()
-        ->observe_project([unowned](auto const &event) {
+    self->_presenter
+        .observe_event([unowned](auto const &event) {
             switch (event.type) {
-                case project_pool_event_type::inserted: {
-                    [unowned.object showWindowWithProjectID:event.project_id];
+                case app_presenter_event_type::open_file_dialog: {
+                    [unowned.object openFileDialog];
                 } break;
-                case project_pool_event_type::erased: {
-                    [unowned.object hideWindowWithProjectID:event.project_id];
+                case app_presenter_event_type::make_and_show_window_controller: {
+                    [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
+                } break;
+                case app_presenter_event_type::dispose_window_controller: {
+                    [unowned.object disposeWindowControllerWithProjectID:event.project_id];
                 } break;
             }
         })
@@ -47,7 +51,21 @@ using namespace yas::ae;
     // Insert code here to tear down your application
 }
 
+- (BOOL)respondsToSelector:(SEL)aSelector {
+    if (aSelector == @selector(openDocument:)) {
+        return self->_presenter.can_open_file_dialog();
+    } else {
+        return [super respondsToSelector:aSelector];
+    }
+}
+
 - (void)openDocument:(id)sender {
+    self->_presenter.open_file_dialog();
+}
+
+#pragma mark - private
+
+- (void)openFileDialog {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.allowsMultipleSelection = NO;
     panel.canChooseFiles = YES;
@@ -56,11 +74,11 @@ using namespace yas::ae;
 
     if ([panel runModal] == NSModalResponseOK) {
         url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
-        app_global()->project_pool()->add_project(file_url);
+        self->_presenter.select_file(file_url);
     }
 }
 
-- (void)showWindowWithProjectID:(uintptr_t const)project_id {
+- (void)makeAndShowWindowControllerWithProjectID:(uintptr_t const)project_id {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
     AEWindowController *windowController = [storyboard instantiateInitialController];
     NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
@@ -69,7 +87,7 @@ using namespace yas::ae;
     [windowController showWindow:nil];
 }
 
-- (void)hideWindowWithProjectID:(uintptr_t const)project_id {
+- (void)disposeWindowControllerWithProjectID:(uintptr_t const)project_id {
     NSMutableSet<AEWindowController *> *copiedWindowControllers = [self.windowControllers mutableCopy];
 
     for (AEWindowController *windowController in self.windowControllers) {

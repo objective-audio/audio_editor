@@ -14,6 +14,10 @@
 		B668BE26262F32B60021AD20 /* ae_project_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE24262F32B60021AD20 /* ae_project_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE2B262F330E0021AD20 /* ae_project_pool_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE2A262F330C0021AD20 /* ae_project_pool_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE35262F3CFE0021AD20 /* ae_project_pool_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE34262F3CFE0021AD20 /* ae_project_pool_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE3F262F412B0021AD20 /* ae_app_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B668BE3D262F412B0021AD20 /* ae_app_presenter.cpp */; };
+		B668BE40262F412B0021AD20 /* ae_app_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE3E262F412B0021AD20 /* ae_app_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE51263067550021AD20 /* ae_app_presenter_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE50263067550021AD20 /* ae_app_presenter_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE56263068050021AD20 /* ae_app_presenter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE55263068050021AD20 /* ae_app_presenter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69CF55F262AC49C007A0A75 /* ae_project.cpp */; };
 		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF569262AC7CE007A0A75 /* ae_ptr.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -29,6 +33,7 @@
 		B6A997962629B72E00DAC3FE /* ui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A997872629B72E00DAC3FE /* ui.framework */; };
 		B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6A997B72629C07600DAC3FE /* ae_app.cpp */; };
 		B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A997B82629C07600DAC3FE /* ae_app.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +44,10 @@
 		B668BE24262F32B60021AD20 /* ae_project_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_pool.h; sourceTree = "<group>"; };
 		B668BE2A262F330C0021AD20 /* ae_project_pool_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_pool_types.h; sourceTree = "<group>"; };
 		B668BE34262F3CFE0021AD20 /* ae_project_pool_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_pool_dependency.h; sourceTree = "<group>"; };
+		B668BE3D262F412B0021AD20 /* ae_app_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app_presenter.cpp; sourceTree = "<group>"; };
+		B668BE3E262F412B0021AD20 /* ae_app_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter.h; sourceTree = "<group>"; };
+		B668BE50263067550021AD20 /* ae_app_presenter_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter_utils.h; sourceTree = "<group>"; };
+		B668BE55263068050021AD20 /* ae_app_presenter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter_types.h; sourceTree = "<group>"; };
 		B69CF55F262AC49C007A0A75 /* ae_project.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project.cpp; sourceTree = "<group>"; };
 		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
 		B69CF569262AC7CE007A0A75 /* ae_ptr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ptr.h; sourceTree = "<group>"; };
@@ -56,6 +65,7 @@
 		B6A997872629B72E00DAC3FE /* ui.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ui.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A997B72629C07600DAC3FE /* ae_app.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app.cpp; sourceTree = "<group>"; };
 		B6A997B82629C07600DAC3FE /* ae_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app.h; sourceTree = "<group>"; };
+		B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter_dependency.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +96,18 @@
 				B668BE24262F32B60021AD20 /* ae_project_pool.h */,
 			);
 			path = project_pool;
+			sourceTree = "<group>";
+		};
+		B668BE3C262F41110021AD20 /* app_presenter */ = {
+			isa = PBXGroup;
+			children = (
+				B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */,
+				B668BE55263068050021AD20 /* ae_app_presenter_types.h */,
+				B668BE50263067550021AD20 /* ae_app_presenter_utils.h */,
+				B668BE3D262F412B0021AD20 /* ae_app_presenter.cpp */,
+				B668BE3E262F412B0021AD20 /* ae_app_presenter.h */,
+			);
+			path = app_presenter;
 			sourceTree = "<group>";
 		};
 		B69CF55E262AC48D007A0A75 /* project */ = {
@@ -129,6 +151,7 @@
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B69CF568262AC7BD007A0A75 /* common */,
+				B668BE3C262F41110021AD20 /* app_presenter */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
 				B668BE22262F32870021AD20 /* project_pool */,
 				B69CF55E262AC48D007A0A75 /* project */,
@@ -172,14 +195,18 @@
 			files = (
 				B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */,
 				B69CF562262AC49C007A0A75 /* ae_project.h in Headers */,
+				B668BE40262F412B0021AD20 /* ae_app_presenter.h in Headers */,
 				B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */,
+				B668BE51263067550021AD20 /* ae_app_presenter_utils.h in Headers */,
 				B668BE35262F3CFE0021AD20 /* ae_project_pool_dependency.h in Headers */,
 				B668BE2B262F330E0021AD20 /* ae_project_pool_types.h in Headers */,
 				B668BE26262F32B60021AD20 /* ae_project_pool.h in Headers */,
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
 				B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */,
 				B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */,
+				B668BE56263068050021AD20 /* ae_app_presenter_types.h in Headers */,
 				B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */,
+				B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */,
 				B61E1698262C7E7E00C14668 /* ae_app_dependency.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,6 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */,
+				B668BE3F262F412B0021AD20 /* ae_app_presenter.cpp in Sources */,
 				B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */,
 				B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */,
 			);
@@ -284,13 +312,67 @@
 		B6A9973A2629B32E00DAC3FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
 		B6A9973B2629B32E00DAC3FE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 			};
 			name = Release;

@@ -42,7 +42,7 @@ std::vector<project_ptr> project_pool::projects() const {
     return to_vector<project_ptr>(this->_projects->elements(), [](auto const &pair) { return pair.second.first; });
 }
 
-observing::syncable project_pool::observe_project(std::function<void(project_pool_event const &)> &&handler) {
+observing::syncable project_pool::observe_event(std::function<void(project_pool_event const &)> &&handler) {
     return this->_projects->observe([handler = std::move(handler)](project_pool::projects_map_t::event const &event) {
         switch (event.type) {
             case observing::map::event_type::any: {
