@@ -22,7 +22,7 @@ struct app_presenter {
     };
 
     app_presenter();
-    app_presenter(app_ptr const &);
+    explicit app_presenter(app_ptr const &);
 
     void add_project(url const &);
     [[nodiscard]] observing::syncable observe_event(std::function<void(event const &)> &&);
