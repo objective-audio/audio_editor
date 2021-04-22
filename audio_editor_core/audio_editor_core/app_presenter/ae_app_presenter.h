@@ -22,6 +22,7 @@ struct app_presenter {
     void open_file_dialog();
 
     void add_project(url const &);
+
     [[nodiscard]] observing::syncable observe_event(std::function<void(event const &)> &&);
 
    private:
