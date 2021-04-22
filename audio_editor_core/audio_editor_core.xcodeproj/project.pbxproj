@@ -18,6 +18,8 @@
 		B668BE40262F412B0021AD20 /* ae_app_delegate_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE3E262F412B0021AD20 /* ae_app_delegate_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE4C26302EFD0021AD20 /* ae_app_global.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE4A26302EFD0021AD20 /* ae_app_global.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE4D26302EFD0021AD20 /* ae_app_global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B668BE4B26302EFD0021AD20 /* ae_app_global.cpp */; };
+		B668BE51263067550021AD20 /* ae_app_delegate_presenter_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE50263067550021AD20 /* ae_app_delegate_presenter_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B668BE56263068050021AD20 /* ae_app_delegate_presenter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE55263068050021AD20 /* ae_app_delegate_presenter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69CF55F262AC49C007A0A75 /* ae_project.cpp */; };
 		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF569262AC7CE007A0A75 /* ae_ptr.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -47,6 +49,8 @@
 		B668BE3E262F412B0021AD20 /* ae_app_delegate_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_delegate_presenter.h; sourceTree = "<group>"; };
 		B668BE4A26302EFD0021AD20 /* ae_app_global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ae_app_global.h; sourceTree = "<group>"; };
 		B668BE4B26302EFD0021AD20 /* ae_app_global.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app_global.cpp; sourceTree = "<group>"; };
+		B668BE50263067550021AD20 /* ae_app_delegate_presenter_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_delegate_presenter_utils.h; sourceTree = "<group>"; };
+		B668BE55263068050021AD20 /* ae_app_delegate_presenter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_delegate_presenter_types.h; sourceTree = "<group>"; };
 		B69CF55F262AC49C007A0A75 /* ae_project.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project.cpp; sourceTree = "<group>"; };
 		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
 		B69CF569262AC7CE007A0A75 /* ae_ptr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ptr.h; sourceTree = "<group>"; };
@@ -99,6 +103,8 @@
 		B668BE3C262F41110021AD20 /* app_delegate */ = {
 			isa = PBXGroup;
 			children = (
+				B668BE50263067550021AD20 /* ae_app_delegate_presenter_utils.h */,
+				B668BE55263068050021AD20 /* ae_app_delegate_presenter_types.h */,
 				B668BE3D262F412B0021AD20 /* ae_app_delegate_presenter.cpp */,
 				B668BE3E262F412B0021AD20 /* ae_app_delegate_presenter.h */,
 			);
@@ -194,6 +200,7 @@
 				B69CF562262AC49C007A0A75 /* ae_project.h in Headers */,
 				B668BE40262F412B0021AD20 /* ae_app_delegate_presenter.h in Headers */,
 				B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */,
+				B668BE51263067550021AD20 /* ae_app_delegate_presenter_utils.h in Headers */,
 				B668BE35262F3CFE0021AD20 /* ae_project_pool_dependency.h in Headers */,
 				B668BE2B262F330E0021AD20 /* ae_project_pool_types.h in Headers */,
 				B668BE26262F32B60021AD20 /* ae_project_pool.h in Headers */,
@@ -201,6 +208,7 @@
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
 				B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */,
 				B69CF56A262AC7CE007A0A75 /* ae_ptr.h in Headers */,
+				B668BE56263068050021AD20 /* ae_app_delegate_presenter_types.h in Headers */,
 				B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */,
 				B61E1698262C7E7E00C14668 /* ae_app_dependency.h in Headers */,
 			);
