@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_app_dependency.h>
 #include <audio_editor_core/ae_project_types.h>
-#include <audio_editor_core/ae_ptr.h>
 
 namespace yas::ae {
 struct project final {
@@ -24,7 +23,7 @@ struct project final {
     [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&);
     [[nodiscard]] observing::endable observe_notification(std::function<void(notification const &)> &&);
 
-    [[nodiscard]] static project_ptr make_shared(url const &);
+    [[nodiscard]] static std::shared_ptr<project> make_shared(url const &);
 
    private:
     url const _file_url;

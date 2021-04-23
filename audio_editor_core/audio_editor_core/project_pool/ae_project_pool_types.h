@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_ptr.h>
+#include <cstdint>
 
 namespace yas::ae {
 enum class project_pool_event_type {

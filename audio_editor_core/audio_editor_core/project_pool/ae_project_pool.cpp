@@ -16,7 +16,7 @@ void project_pool::add_project(url const &file_url) {
     this->add_and_return_project(file_url);
 }
 
-project_ptr project_pool::add_and_return_project(url const &file_url) {
+std::shared_ptr<project> project_pool::add_and_return_project(url const &file_url) {
     auto const project = project::make_shared(file_url);
 
     auto canceller = project
@@ -34,7 +34,7 @@ project_ptr project_pool::add_and_return_project(url const &file_url) {
     return project;
 }
 
-project_ptr project_pool::project_for_id(uintptr_t const project_id) const {
+std::shared_ptr<project> project_pool::project_for_id(uintptr_t const project_id) const {
     if (this->_projects->contains(project_id)) {
         return this->_projects->at(project_id).first;
     } else {
@@ -68,6 +68,6 @@ observing::syncable project_pool::observe_event(std::function<void(project_pool_
     });
 }
 
-project_pool_ptr project_pool::make_shared() {
+std::shared_ptr<project_pool> project_pool::make_shared() {
     return std::shared_ptr<project_pool>(new project_pool{});
 }

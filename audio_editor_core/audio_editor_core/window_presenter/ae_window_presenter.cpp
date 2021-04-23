@@ -10,7 +10,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-window_presenter::window_presenter(project_ptr const &project) : _project(project) {
+window_presenter::window_presenter(std::shared_ptr<project> const &project) : _project(project) {
 }
 
 std::shared_ptr<window_presenter> window_presenter::make_shared(uintptr_t const project_id) {
@@ -18,7 +18,7 @@ std::shared_ptr<window_presenter> window_presenter::make_shared(uintptr_t const 
     return make_shared(project);
 }
 
-std::shared_ptr<window_presenter> window_presenter::make_shared(project_ptr const &project) {
+std::shared_ptr<window_presenter> window_presenter::make_shared(std::shared_ptr<project> const &project) {
     return std::shared_ptr<window_presenter>(new window_presenter{project});
 }
 

@@ -9,17 +9,20 @@
 #include <audio_editor_core/ae_project_pool_types.h>
 
 namespace yas::ae {
+class project;
+
 struct project_pool : app_presenter_project_pool_interface {
     void add_project(url const &file_url) override;
-    project_ptr add_and_return_project(url const &file_url);
-    [[nodiscard]] project_ptr project_for_id(uintptr_t const) const;
+    std::shared_ptr<project> add_and_return_project(url const &file_url);
+    [[nodiscard]] std::shared_ptr<project> project_for_id(uintptr_t const) const;
     [[nodiscard]] std::size_t size() const;
     [[nodiscard]] observing::syncable observe_event(std::function<void(project_pool_event const &)> &&) override;
 
-    static project_pool_ptr make_shared();
+    static std::shared_ptr<project_pool> make_shared();
 
    private:
-    using projects_map_t = observing::map::holder<uintptr_t, std::pair<project_ptr, observing::cancellable_ptr>>;
+    using projects_map_t =
+        observing::map::holder<uintptr_t, std::pair<std::shared_ptr<project>, observing::cancellable_ptr>>;
     std::shared_ptr<projects_map_t> const _projects = projects_map_t::make_shared();
 
     project_pool();
