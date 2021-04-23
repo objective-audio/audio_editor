@@ -12,7 +12,11 @@ using namespace yas::ae;
 project_pool::project_pool() {
 }
 
-project_ptr project_pool::add_project(url const &file_url) {
+void project_pool::add_project(url const &file_url) {
+    this->add_and_return_project(file_url);
+}
+
+project_ptr project_pool::add_and_return_project(url const &file_url) {
     auto const project = project::make_shared(file_url);
 
     auto canceller = project

@@ -10,7 +10,8 @@
 
 namespace yas::ae {
 struct project_pool : app_presenter_project_pool_interface {
-    project_ptr add_project(url const &file_url) override;
+    void add_project(url const &file_url) override;
+    project_ptr add_and_return_project(url const &file_url);
     [[nodiscard]] project_ptr project_for_id(uintptr_t const) const;
     [[nodiscard]] std::size_t size() const;
     [[nodiscard]] observing::syncable observe_event(std::function<void(project_pool_event const &)> &&) override;
