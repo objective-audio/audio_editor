@@ -17,5 +17,10 @@ struct window_presenter {
     project_ptr _project;
 
     window_presenter(project_ptr const &);
+
+    window_presenter(window_presenter const &) = delete;
+    window_presenter(window_presenter &&) = delete;
+    window_presenter &operator=(window_presenter const &) = delete;
+    window_presenter &operator=(window_presenter &&) = delete;
 };
 }  // namespace yas::ae
