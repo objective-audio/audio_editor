@@ -22,5 +22,10 @@ struct app_presenter {
     std::weak_ptr<app_presenter_project_pool_interface> _project_pool;
     observing::notifier_ptr<app_presenter_event> const _event_notifier =
         observing::notifier<app_presenter_event>::make_shared();
+
+    app_presenter(app_presenter const &) = delete;
+    app_presenter(app_presenter &&) = delete;
+    app_presenter &operator=(app_presenter const &) = delete;
+    app_presenter &operator=(app_presenter &&) = delete;
 };
 }  // namespace yas::ae
