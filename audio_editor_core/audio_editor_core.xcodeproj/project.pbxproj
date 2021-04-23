@@ -34,6 +34,8 @@
 		B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6A997B72629C07600DAC3FE /* ae_app.cpp */; };
 		B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A997B82629C07600DAC3FE /* ae_app.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6CF42582632ED2A00F9F297 /* ae_window_presenter.cpp */; };
+		B6CF425B2632ED2A00F9F297 /* ae_window_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +68,8 @@
 		B6A997B72629C07600DAC3FE /* ae_app.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app.cpp; sourceTree = "<group>"; };
 		B6A997B82629C07600DAC3FE /* ae_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app.h; sourceTree = "<group>"; };
 		B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter_dependency.h; sourceTree = "<group>"; };
+		B6CF42582632ED2A00F9F297 /* ae_window_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_window_presenter.cpp; sourceTree = "<group>"; };
+		B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_window_presenter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +156,7 @@
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B69CF568262AC7BD007A0A75 /* common */,
 				B668BE3C262F41110021AD20 /* app_presenter */,
+				B6CF42572632ED1800F9F297 /* window_presenter */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
 				B668BE22262F32870021AD20 /* project_pool */,
 				B69CF55E262AC48D007A0A75 /* project */,
@@ -186,6 +191,15 @@
 			path = app;
 			sourceTree = "<group>";
 		};
+		B6CF42572632ED1800F9F297 /* window_presenter */ = {
+			isa = PBXGroup;
+			children = (
+				B6CF42582632ED2A00F9F297 /* ae_window_presenter.cpp */,
+				B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */,
+			);
+			path = window_presenter;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -194,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */,
+				B6CF425B2632ED2A00F9F297 /* ae_window_presenter.h in Headers */,
 				B69CF562262AC49C007A0A75 /* ae_project.h in Headers */,
 				B668BE40262F412B0021AD20 /* ae_app_presenter.h in Headers */,
 				B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */,
@@ -299,6 +314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */,
 				B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */,
 				B668BE3F262F412B0021AD20 /* ae_app_presenter.cpp in Sources */,
 				B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */,

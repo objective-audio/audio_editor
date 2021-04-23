@@ -56,13 +56,13 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 2);
 
     project0->request_close();
-    XCTAssertEqual(pool->projects().size(), 1);
+    XCTAssertEqual(pool->size(), 1);
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2).type, project_pool_event_type::erased);
     XCTAssertEqual(called.at(2).project_id, project0->identifier());
 
     project1->request_close();
-    XCTAssertEqual(pool->projects().size(), 0);
+    XCTAssertEqual(pool->size(), 0);
     XCTAssertEqual(called.size(), 4);
     XCTAssertEqual(called.at(3).type, project_pool_event_type::erased);
     XCTAssertEqual(called.at(3).project_id, project1->identifier());
