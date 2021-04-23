@@ -25,3 +25,10 @@ std::shared_ptr<window_presenter> window_presenter::make_shared(project_ptr cons
 std::string window_presenter::title() const {
     return this->_project->file_url().last_path_component();
 }
+
+bool window_presenter::should_close() {
+    auto const project = this->_project;
+    bool const can_close = project->can_close();
+    project->request_close();
+    return can_close;
+}

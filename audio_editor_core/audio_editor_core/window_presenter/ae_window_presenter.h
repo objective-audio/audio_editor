@@ -13,6 +13,8 @@ struct window_presenter {
 
     std::string title() const;
 
+    bool should_close();
+
    private:
     project_ptr _project;
 

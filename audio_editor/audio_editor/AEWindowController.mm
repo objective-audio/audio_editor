@@ -28,12 +28,7 @@ using namespace yas::ae;
 }
 
 - (BOOL)windowShouldClose:(NSWindow *)sender {
-    if (auto const project = self->_project.lock()) {
-        bool const can_close = project->can_close();
-        project->request_close();
-        return can_close;
-    }
-    return YES;
+    return self->_presenter->should_close();
 }
 
 @end
