@@ -20,9 +20,9 @@ std::shared_ptr<project> project_pool::add_and_return_project(url const &file_ur
     auto const project = project::make_shared(file_url);
 
     auto canceller = project
-                         ->observe_notification([this, project_id = project->identifier()](auto const &notification) {
+                         ->observe_event([this, project_id = project->identifier()](auto const &notification) {
                              switch (notification) {
-                                 case project::notification::should_close: {
+                                 case project::event::should_close: {
                                      this->_projects->erase(project_id);
                                  } break;
                              }

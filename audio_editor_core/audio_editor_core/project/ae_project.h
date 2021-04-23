@@ -9,9 +9,7 @@
 
 namespace yas::ae {
 struct project final {
-    enum class notification {
-        should_close,
-    };
+    using event = project_event;
 
     [[nodiscard]] uintptr_t identifier() const;
     [[nodiscard]] url const &file_url() const;
@@ -21,7 +19,7 @@ struct project final {
     void request_close();
 
     [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&);
-    [[nodiscard]] observing::endable observe_notification(std::function<void(notification const &)> &&);
+    [[nodiscard]] observing::endable observe_event(std::function<void(event const &)> &&);
 
     [[nodiscard]] static std::shared_ptr<project> make_shared(url const &);
 
@@ -29,7 +27,7 @@ struct project final {
     url const _file_url;
     observing::value::holder_ptr<project_state> const _state =
         observing::value::holder<project_state>::make_shared(project_state::loading);
-    observing::notifier_ptr<notification> const _notifier = observing::notifier<notification>::make_shared();
+    observing::notifier_ptr<event> const _notifier = observing::notifier<event>::make_shared();
 
     project(url const &);
 
