@@ -31,13 +31,13 @@ bool project::can_close() const {
 }
 
 void project::request_close() {
-    this->_notifier->notify(event::should_close);
+    this->_notifier->notify(project_event::should_close);
 }
 
 observing::syncable project::observe_state(std::function<void(project_state const &)> &&handler) {
     return this->_state->observe(std::move(handler));
 }
 
-observing::endable project::observe_event(std::function<void(event const &)> &&handler) {
+observing::endable project::observe_event(std::function<void(project_event const &)> &&handler) {
     return this->_notifier->observe(std::move(handler));
 }
