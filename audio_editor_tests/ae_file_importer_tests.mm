@@ -32,7 +32,7 @@ using namespace yas::ae;
     uint32_t const ch_count = 2;
     audio::pcm_format const pcm_format = audio::pcm_format::int16;
 
-    auto const importer = file_importer::make_shared();
+    auto const importer = file_importer::make_shared(task_queue{}, 0);
 
     auto const test_url = test_utils::test_url();
     auto const src_url = test_url.appending("src.wav");
