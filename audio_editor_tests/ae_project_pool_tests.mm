@@ -24,7 +24,7 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 0);
 
     auto const file_url_0 = url::file_url("/test/path/file0.wav");
-    auto const project0 = pool->add_project(file_url_0);
+    auto const project0 = pool->add_and_return_project(file_url_0);
 
     XCTAssertEqual(project0->file_url(), file_url_0);
     XCTAssertEqual(called.size(), 1);
@@ -32,7 +32,7 @@ using namespace yas::ae;
     XCTAssertEqual(called.at(0).project_id, project0->identifier());
 
     auto const file_url_1 = url::file_url("/test/path/file1.aif");
-    auto const project1 = pool->add_project(file_url_1);
+    auto const project1 = pool->add_and_return_project(file_url_1);
 
     XCTAssertEqual(project1->file_url(), file_url_1);
     XCTAssertEqual(called.size(), 2);
@@ -44,10 +44,10 @@ using namespace yas::ae;
     auto const pool = project_pool::make_shared();
 
     auto const file_url_0 = url::file_url("/test/path/file0.wav");
-    auto const project0 = pool->add_project(file_url_0);
+    auto const project0 = pool->add_and_return_project(file_url_0);
 
     auto const file_url_1 = url::file_url("/test/path/file1.aif");
-    auto const project1 = pool->add_project(file_url_1);
+    auto const project1 = pool->add_and_return_project(file_url_1);
 
     std::vector<project_pool_event> called;
 

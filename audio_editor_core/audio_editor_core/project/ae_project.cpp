@@ -10,7 +10,7 @@ using namespace yas::ae;
 project::project(url const &file_url) : _file_url(file_url) {
 }
 
-project_ptr project::make_shared(url const &file_url) {
+std::shared_ptr<project> project::make_shared(url const &file_url) {
     return std::shared_ptr<project>(new project{file_url});
 }
 
@@ -31,13 +31,13 @@ bool project::can_close() const {
 }
 
 void project::request_close() {
-    this->_notifier->notify(notification::should_close);
+    this->_notifier->notify(project_event::should_close);
 }
 
 observing::syncable project::observe_state(std::function<void(project_state const &)> &&handler) {
     return this->_state->observe(std::move(handler));
 }
 
-observing::endable project::observe_notification(std::function<void(notification const &)> &&handler) {
+observing::endable project::observe_event(std::function<void(project_event const &)> &&handler) {
     return this->_notifier->observe(std::move(handler));
 }

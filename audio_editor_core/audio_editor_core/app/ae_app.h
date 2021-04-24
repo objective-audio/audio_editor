@@ -9,13 +9,13 @@
 
 namespace yas::ae {
 struct app final {
-    [[nodiscard]] static app_ptr make_shared();
-    [[nodiscard]] static app_ptr global();
+    [[nodiscard]] static std::shared_ptr<app> make_shared();
+    [[nodiscard]] static std::shared_ptr<app> global();
 
-    [[nodiscard]] project_pool_ptr const &project_pool() const;
+    [[nodiscard]] std::shared_ptr<project_pool> const &project_pool() const;
 
    private:
-    project_pool_ptr const _project_pool = project_pool::make_shared();
+    std::shared_ptr<ae::project_pool> const _project_pool = project_pool::make_shared();
 
     app();
 

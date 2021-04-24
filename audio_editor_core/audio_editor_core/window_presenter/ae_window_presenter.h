@@ -4,21 +4,24 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_ptr.h>
+#include <cstdint>
+#include <memory>
 
 namespace yas::ae {
+class project;
+
 struct window_presenter {
     static std::shared_ptr<window_presenter> make_shared(uintptr_t const project_id);
-    static std::shared_ptr<window_presenter> make_shared(project_ptr const &);
+    static std::shared_ptr<window_presenter> make_shared(std::shared_ptr<project> const &);
 
     std::string title() const;
 
     bool should_close();
 
    private:
-    project_ptr _project;
+    std::shared_ptr<project> _project;
 
-    window_presenter(project_ptr const &);
+    window_presenter(std::shared_ptr<project> const &);
 
     window_presenter(window_presenter const &) = delete;
     window_presenter(window_presenter &&) = delete;
