@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B61E1698262C7E7E00C14668 /* ae_app_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B61E1697262C7E7E00C14668 /* ae_app_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B666CDE82634125E00C1693D /* ae_system_url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B666CDE62634125E00C1693D /* ae_system_url.cpp */; };
+		B666CDE92634125E00C1693D /* ae_system_url.h in Headers */ = {isa = PBXBuildFile; fileRef = B666CDE72634125E00C1693D /* ae_system_url.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE0B262DCB900021AD20 /* ae_app_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE10262DD2FA0021AD20 /* ae_project_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B668BE23262F32B60021AD20 /* ae_project_pool.cpp */; };
@@ -39,6 +41,8 @@
 
 /* Begin PBXFileReference section */
 		B61E1697262C7E7E00C14668 /* ae_app_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_dependency.h; sourceTree = "<group>"; };
+		B666CDE62634125E00C1693D /* ae_system_url.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_system_url.cpp; sourceTree = "<group>"; };
+		B666CDE72634125E00C1693D /* ae_system_url.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_system_url.h; sourceTree = "<group>"; };
 		B668BE0B262DCB900021AD20 /* ae_app_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_types.h; sourceTree = "<group>"; };
 		B668BE10262DD2FA0021AD20 /* ae_project_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_types.h; sourceTree = "<group>"; };
 		B668BE23262F32B60021AD20 /* ae_project_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_pool.cpp; sourceTree = "<group>"; };
@@ -89,6 +93,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B666CDE52634124100C1693D /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				B666CDE62634125E00C1693D /* ae_system_url.cpp */,
+				B666CDE72634125E00C1693D /* ae_system_url.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		B668BE22262F32870021AD20 /* project_pool */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +157,7 @@
 			children = (
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
+				B666CDE52634124100C1693D /* utils */,
 				B668BE3C262F41110021AD20 /* app_presenter */,
 				B6CF42572632ED1800F9F297 /* window_presenter */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
@@ -210,6 +224,7 @@
 				B668BE56263068050021AD20 /* ae_app_presenter_types.h in Headers */,
 				B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */,
 				B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */,
+				B666CDE92634125E00C1693D /* ae_system_url.h in Headers */,
 				B61E1698262C7E7E00C14668 /* ae_app_dependency.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -305,6 +320,7 @@
 				B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */,
 				B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */,
 				B668BE3F262F412B0021AD20 /* ae_app_presenter.cpp in Sources */,
+				B666CDE82634125E00C1693D /* ae_system_url.cpp in Sources */,
 				B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */,
 				B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */,
 			);

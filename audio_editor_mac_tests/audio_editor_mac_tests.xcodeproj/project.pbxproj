@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B666CDF22634152600C1693D /* ae_system_url_tests.mm */; };
 		B668BE30262F3B700021AD20 /* ae_project_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B668BE2F262F3B700021AD20 /* ae_project_pool_tests.mm */; };
 		B66909FF262A7D2F00E86353 /* ae_app_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66909FE262A7D2F00E86353 /* ae_app_tests.mm */; };
 		B6690A03262A7D4100E86353 /* audio_editor_core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A02262A7D4100E86353 /* audio_editor_core.framework */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B666CDF22634152600C1693D /* ae_system_url_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_system_url_tests.mm; path = ../../audio_editor_tests/ae_system_url_tests.mm; sourceTree = "<group>"; };
 		B668BE2F262F3B700021AD20 /* ae_project_pool_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_project_pool_tests.mm; path = ../../audio_editor_tests/ae_project_pool_tests.mm; sourceTree = "<group>"; };
 		B66909F2262A7CD600E86353 /* audio_editor_mac_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = audio_editor_mac_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66909F7262A7CD600E86353 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				B66909FE262A7D2F00E86353 /* ae_app_tests.mm */,
 				B668BE2F262F3B700021AD20 /* ae_project_pool_tests.mm */,
 				B69CF572262AC98D007A0A75 /* ae_project_tests.mm */,
+				B666CDF22634152600C1693D /* ae_system_url_tests.mm */,
 				B66909F7262A7CD600E86353 /* Info.plist */,
 			);
 			path = audio_editor_mac_tests;
@@ -170,6 +173,7 @@
 			files = (
 				B668BE30262F3B700021AD20 /* ae_project_pool_tests.mm in Sources */,
 				B66909FF262A7D2F00E86353 /* ae_app_tests.mm in Sources */,
+				B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */,
 				B69CF573262AC98D007A0A75 /* ae_project_tests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
