@@ -1,0 +1,23 @@
+//
+//  ae_system_url.h
+//
+
+#pragma once
+
+#include <cpp_utils/yas_url.h>
+
+namespace yas::ae {
+struct system_url {
+    url document_directory() const;
+
+    static std::shared_ptr<system_url> make_shared();
+
+   private:
+    system_url() = default;
+
+    system_url(system_url const &) = delete;
+    system_url(system_url &&) = delete;
+    system_url &operator=(system_url const &) = delete;
+    system_url &operator=(system_url &&) = delete;
+};
+}  // namespace yas::ae
