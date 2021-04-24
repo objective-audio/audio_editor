@@ -25,3 +25,7 @@ std::shared_ptr<app> app::global() {
 std::shared_ptr<project_pool> const &app::project_pool() const {
     return this->_project_pool;
 }
+
+std::shared_ptr<system_url> const &app::system_url() const {
+    return this->_system_url;
+}
