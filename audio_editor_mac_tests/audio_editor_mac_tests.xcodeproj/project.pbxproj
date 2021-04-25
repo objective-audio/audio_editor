@@ -10,6 +10,7 @@
 		B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B666CDF22634152600C1693D /* ae_system_url_tests.mm */; };
 		B666CE042634225500C1693D /* ae_file_importer_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B666CE032634225500C1693D /* ae_file_importer_tests.mm */; };
 		B666CE1B26342B4100C1693D /* ae_test_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B666CE1926342B4100C1693D /* ae_test_utils.cpp */; };
+		B666CE3D2634FEF300C1693D /* ae_id_generator_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B666CE3C2634FEF300C1693D /* ae_id_generator_tests.mm */; };
 		B668BE30262F3B700021AD20 /* ae_project_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B668BE2F262F3B700021AD20 /* ae_project_pool_tests.mm */; };
 		B66909FF262A7D2F00E86353 /* ae_app_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66909FE262A7D2F00E86353 /* ae_app_tests.mm */; };
 		B6690A03262A7D4100E86353 /* audio_editor_core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A02262A7D4100E86353 /* audio_editor_core.framework */; };
@@ -27,8 +28,9 @@
 /* Begin PBXFileReference section */
 		B666CDF22634152600C1693D /* ae_system_url_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_system_url_tests.mm; path = ../../audio_editor_tests/ae_system_url_tests.mm; sourceTree = "<group>"; };
 		B666CE032634225500C1693D /* ae_file_importer_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_importer_tests.mm; path = ../../audio_editor_tests/ae_file_importer_tests.mm; sourceTree = "<group>"; };
-		B666CE1926342B4100C1693D /* ae_test_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ae_test_utils.cpp; path = ../../audio_editor_tests/ae_test_utils.cpp; sourceTree = "<group>"; };
-		B666CE1A26342B4100C1693D /* ae_test_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ae_test_utils.h; path = ../../audio_editor_tests/ae_test_utils.h; sourceTree = "<group>"; };
+		B666CE1926342B4100C1693D /* ae_test_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_test_utils.cpp; sourceTree = "<group>"; };
+		B666CE1A26342B4100C1693D /* ae_test_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_test_utils.h; sourceTree = "<group>"; };
+		B666CE3C2634FEF300C1693D /* ae_id_generator_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_id_generator_tests.mm; path = ../../audio_editor_tests/ae_id_generator_tests.mm; sourceTree = "<group>"; };
 		B668BE2F262F3B700021AD20 /* ae_project_pool_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_project_pool_tests.mm; path = ../../audio_editor_tests/ae_project_pool_tests.mm; sourceTree = "<group>"; };
 		B66909F2262A7CD600E86353 /* audio_editor_mac_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = audio_editor_mac_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66909F7262A7CD600E86353 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -65,6 +67,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B666CE412634FF3900C1693D /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				B666CE1926342B4100C1693D /* ae_test_utils.cpp */,
+				B666CE1A26342B4100C1693D /* ae_test_utils.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		B66909E7262A7CC700E86353 = {
 			isa = PBXGroup;
 			children = (
@@ -85,13 +96,13 @@
 		B66909F4262A7CD600E86353 /* audio_editor_mac_tests */ = {
 			isa = PBXGroup;
 			children = (
+				B666CE412634FF3900C1693D /* utils */,
 				B66909FE262A7D2F00E86353 /* ae_app_tests.mm */,
 				B666CE032634225500C1693D /* ae_file_importer_tests.mm */,
 				B668BE2F262F3B700021AD20 /* ae_project_pool_tests.mm */,
 				B69CF572262AC98D007A0A75 /* ae_project_tests.mm */,
 				B666CDF22634152600C1693D /* ae_system_url_tests.mm */,
-				B666CE1926342B4100C1693D /* ae_test_utils.cpp */,
-				B666CE1A26342B4100C1693D /* ae_test_utils.h */,
+				B666CE3C2634FEF300C1693D /* ae_id_generator_tests.mm */,
 				B66909F7262A7CD600E86353 /* Info.plist */,
 			);
 			path = audio_editor_mac_tests;
@@ -181,6 +192,7 @@
 			files = (
 				B668BE30262F3B700021AD20 /* ae_project_pool_tests.mm in Sources */,
 				B66909FF262A7D2F00E86353 /* ae_app_tests.mm in Sources */,
+				B666CE3D2634FEF300C1693D /* ae_id_generator_tests.mm in Sources */,
 				B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */,
 				B666CE1B26342B4100C1693D /* ae_test_utils.cpp in Sources */,
 				B666CE042634225500C1693D /* ae_file_importer_tests.mm in Sources */,
