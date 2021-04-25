@@ -9,7 +9,7 @@
 
 namespace yas::ae {
 struct project final {
-    [[nodiscard]] uintptr_t identifier() const;
+    [[nodiscard]] std::string const &identifier() const;
     [[nodiscard]] url const &file_url() const;
     [[nodiscard]] project_state const &state() const;
 

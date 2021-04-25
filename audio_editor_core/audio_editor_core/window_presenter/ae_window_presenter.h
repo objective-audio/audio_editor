@@ -11,7 +11,7 @@ namespace yas::ae {
 class project;
 
 struct window_presenter {
-    static std::shared_ptr<window_presenter> make_shared(uintptr_t const project_id);
+    static std::shared_ptr<window_presenter> make_shared(std::string const &project_id);
     static std::shared_ptr<window_presenter> make_shared(std::shared_ptr<project> const &);
 
     std::string title() const;

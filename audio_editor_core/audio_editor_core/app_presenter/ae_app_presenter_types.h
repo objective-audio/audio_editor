@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <string>
 
 namespace yas::ae {
 enum class app_presenter_event_type {
@@ -15,6 +15,6 @@ enum class app_presenter_event_type {
 
 struct app_presenter_event {
     app_presenter_event_type type;
-    uintptr_t project_id;
+    std::string project_id;
 };
 }  // namespace yas::ae

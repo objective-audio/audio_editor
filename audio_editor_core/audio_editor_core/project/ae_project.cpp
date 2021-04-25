@@ -7,15 +7,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-project::project(std::string const &identifier, url const &file_url) : _file_url(file_url) {
+project::project(std::string const &identifier, url const &file_url) : _identifier(identifier), _file_url(file_url) {
 }
 
 std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url) {
     return std::shared_ptr<project>(new project{identifier, file_url});
 }
 
-uintptr_t project::identifier() const {
-    return reinterpret_cast<uintptr_t>(this);
+std::string const &project::identifier() const {
+    return this->_identifier;
 }
 
 url const &project::file_url() const {

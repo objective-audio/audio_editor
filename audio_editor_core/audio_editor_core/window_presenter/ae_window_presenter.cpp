@@ -13,7 +13,7 @@ using namespace yas::ae;
 window_presenter::window_presenter(std::shared_ptr<project> const &project) : _project(project) {
 }
 
-std::shared_ptr<window_presenter> window_presenter::make_shared(uintptr_t const project_id) {
+std::shared_ptr<window_presenter> window_presenter::make_shared(std::string const &project_id) {
     auto const project = app::global()->project_pool()->project_for_id(project_id);
     return make_shared(project);
 }
