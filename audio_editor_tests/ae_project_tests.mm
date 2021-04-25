@@ -16,7 +16,7 @@ using namespace yas::ae;
 
 - (void)test_make_shared {
     auto const file_url = url::file_url("/test/path/file.wav");
-    auto project = project::make_shared(file_url);
+    auto project = project::make_shared("test_uuid", file_url);
 
     XCTAssertTrue(project != nullptr);
     XCTAssertEqual(project->file_url(), file_url);
