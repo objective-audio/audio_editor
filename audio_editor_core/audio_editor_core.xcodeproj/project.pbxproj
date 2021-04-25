@@ -16,6 +16,9 @@
 		B666CE1726342AD200C1693D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B666CE1626342AD200C1693D /* CoreFoundation.framework */; };
 		B666CE352634FC8300C1693D /* ae_id_generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B666CE332634FC8300C1693D /* ae_id_generator.cpp */; };
 		B666CE362634FC8300C1693D /* ae_id_generator.h in Headers */ = {isa = PBXBuildFile; fileRef = B666CE342634FC8300C1693D /* ae_id_generator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B666CE4626350A6000C1693D /* ae_project_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B666CE4526350A5E00C1693D /* ae_project_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B666CE4C26351D7900C1693D /* ae_project_url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B666CE4A26351D7900C1693D /* ae_project_url.cpp */; };
+		B666CE4D26351D7900C1693D /* ae_project_url.h in Headers */ = {isa = PBXBuildFile; fileRef = B666CE4B26351D7900C1693D /* ae_project_url.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE0B262DCB900021AD20 /* ae_app_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B668BE10262DD2FA0021AD20 /* ae_project_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B668BE23262F32B60021AD20 /* ae_project_pool.cpp */; };
@@ -55,6 +58,9 @@
 		B666CE1626342AD200C1693D /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		B666CE332634FC8300C1693D /* ae_id_generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_id_generator.cpp; sourceTree = "<group>"; };
 		B666CE342634FC8300C1693D /* ae_id_generator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_id_generator.h; sourceTree = "<group>"; };
+		B666CE4526350A5E00C1693D /* ae_project_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_dependency.h; sourceTree = "<group>"; };
+		B666CE4A26351D7900C1693D /* ae_project_url.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_url.cpp; sourceTree = "<group>"; };
+		B666CE4B26351D7900C1693D /* ae_project_url.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_url.h; sourceTree = "<group>"; };
 		B668BE0B262DCB900021AD20 /* ae_app_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_types.h; sourceTree = "<group>"; };
 		B668BE10262DD2FA0021AD20 /* ae_project_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_types.h; sourceTree = "<group>"; };
 		B668BE23262F32B60021AD20 /* ae_project_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_pool.cpp; sourceTree = "<group>"; };
@@ -153,9 +159,12 @@
 		B69CF55E262AC48D007A0A75 /* project */ = {
 			isa = PBXGroup;
 			children = (
+				B666CE4526350A5E00C1693D /* ae_project_dependency.h */,
+				B668BE10262DD2FA0021AD20 /* ae_project_types.h */,
+				B666CE4A26351D7900C1693D /* ae_project_url.cpp */,
+				B666CE4B26351D7900C1693D /* ae_project_url.h */,
 				B69CF55F262AC49C007A0A75 /* ae_project.cpp */,
 				B69CF560262AC49C007A0A75 /* ae_project.h */,
-				B668BE10262DD2FA0021AD20 /* ae_project_types.h */,
 			);
 			path = project;
 			sourceTree = "<group>";
@@ -248,8 +257,10 @@
 				B666CDFE26341C5B00C1693D /* ae_file_importer.h in Headers */,
 				B668BE35262F3CFE0021AD20 /* ae_project_pool_dependency.h in Headers */,
 				B668BE2B262F330E0021AD20 /* ae_project_pool_types.h in Headers */,
+				B666CE4626350A6000C1693D /* ae_project_dependency.h in Headers */,
 				B668BE26262F32B60021AD20 /* ae_project_pool.h in Headers */,
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
+				B666CE4D26351D7900C1693D /* ae_project_url.h in Headers */,
 				B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */,
 				B668BE56263068050021AD20 /* ae_app_presenter_types.h in Headers */,
 				B6A997622629B41B00DAC3FE /* audio_editor_core_umbrella.h in Headers */,
@@ -354,6 +365,7 @@
 				B666CDE82634125E00C1693D /* ae_system_url.cpp in Sources */,
 				B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */,
 				B666CDFD26341C5B00C1693D /* ae_file_importer.cpp in Sources */,
+				B666CE4C26351D7900C1693D /* ae_project_url.cpp in Sources */,
 				B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -4,15 +4,15 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_dependency.h>
 #include <cpp_utils/yas_task.h>
-#include <cpp_utils/yas_url.h>
 
 #include <functional>
 #include <memory>
 
 namespace yas::ae {
-struct file_importer {
-    void import(url const &src_url, url const &dst_url, std::function<void(bool const)> &&completion);
+struct file_importer : project_file_importer_interface {
+    void import(url const &src_url, url const &dst_url, std::function<void(bool const)> &&completion) override;
 
     static std::shared_ptr<file_importer> make_shared(task_queue const &, task_priority_t const);
 

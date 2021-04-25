@@ -14,10 +14,13 @@ struct app final {
 
     [[nodiscard]] std::shared_ptr<project_pool> const &project_pool() const;
     [[nodiscard]] std::shared_ptr<system_url> const &system_url() const;
+    [[nodiscard]] std::shared_ptr<file_importer> const &file_importer() const;
 
    private:
+    task_queue const _task_queue;
     std::shared_ptr<ae::project_pool> const _project_pool = project_pool::make_shared();
     std::shared_ptr<ae::system_url> const _system_url = system_url::make_shared();
+    std::shared_ptr<ae::file_importer> const _file_importer = file_importer::make_shared(this->_task_queue, 0);
 
     app();
 

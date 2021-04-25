@@ -14,7 +14,7 @@ using namespace yas::ae;
 
 @implementation ae_project_pool_tests
 
-- (void)test_add_project {
+- (void)test_add_and_return_project {
     auto const pool = project_pool::make_shared();
 
     std::vector<project_pool_event> called;
