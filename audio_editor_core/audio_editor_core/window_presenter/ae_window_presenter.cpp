@@ -22,6 +22,10 @@ std::shared_ptr<window_presenter> window_presenter::make_shared(std::shared_ptr<
     return std::shared_ptr<window_presenter>(new window_presenter{project});
 }
 
+std::string const &window_presenter::project_id() const {
+    return this->_project->identifier();
+}
+
 std::string window_presenter::title() const {
     return this->_project->file_url().last_path_component();
 }

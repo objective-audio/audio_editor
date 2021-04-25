@@ -9,9 +9,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AEWindowController : NSWindowController
 
-@property (nonatomic, readonly) uintptr_t project_id;
-
-- (void)setupWithProjectID:(uintptr_t const &)project_id;
+- (void)setupWithProjectID:(std::string const &)project_id;
+- (std::string const &)project_id;
 
 @end
 

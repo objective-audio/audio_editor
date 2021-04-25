@@ -14,6 +14,7 @@ struct window_presenter {
     static std::shared_ptr<window_presenter> make_shared(std::string const &project_id);
     static std::shared_ptr<window_presenter> make_shared(std::shared_ptr<project> const &);
 
+    std::string const &project_id() const;
     std::string title() const;
 
     bool should_close();

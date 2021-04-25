@@ -18,9 +18,13 @@ using namespace yas::ae;
     std::shared_ptr<window_presenter> _presenter;
 }
 
-- (void)setupWithProjectID:(uintptr_t const &)project_id {
+- (void)setupWithProjectID:(std::string const &)project_id {
     self->_presenter = window_presenter::make_shared(project_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
+}
+
+- (std::string const &)project_id {
+    return self->_presenter->project_id();
 }
 
 - (void)windowDidLoad {
