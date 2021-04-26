@@ -9,6 +9,11 @@
 
 namespace yas::ae {
 struct project final {
+    [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url);
+    [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url,
+                                                              std::shared_ptr<project_url_interface> const &,
+                                                              std::shared_ptr<project_file_importer_interface> const &);
+
     [[nodiscard]] std::string const &identifier() const;
     [[nodiscard]] url const &file_url() const;
     [[nodiscard]] project_state const &state() const;
@@ -19,20 +24,26 @@ struct project final {
     [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&);
     [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);
 
-    [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &);
-
    private:
     std::string const _identifier;
     url const _file_url;
+
+    std::shared_ptr<project_url_interface> const _project_url;
+    std::shared_ptr<project_file_importer_interface> const _file_importer;
+
     observing::value::holder_ptr<project_state> const _state =
-        observing::value::holder<project_state>::make_shared(project_state::loading);
+        observing::value::holder<project_state>::make_shared(project_state::launching);
+
     observing::notifier_ptr<project_event> const _notifier = observing::notifier<project_event>::make_shared();
 
-    project(std::string const &identifier, url const &);
+    project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_interface> const &,
+            std::shared_ptr<project_file_importer_interface> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;
     project &operator=(project const &) = delete;
     project &operator=(project &&) = delete;
+
+    void _setup();
 };
 }  // namespace yas::ae

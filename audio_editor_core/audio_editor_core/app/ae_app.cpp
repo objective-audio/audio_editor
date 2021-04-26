@@ -29,3 +29,7 @@ std::shared_ptr<project_pool> const &app::project_pool() const {
 std::shared_ptr<system_url> const &app::system_url() const {
     return this->_system_url;
 }
+
+std::shared_ptr<file_importer> const &app::file_importer() const {
+    return this->_file_importer;
+}

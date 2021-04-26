@@ -10,6 +10,7 @@ enum class project_event {
 };
 
 enum class project_state {
+    launching,
     loading,
     editing,
     failure,
