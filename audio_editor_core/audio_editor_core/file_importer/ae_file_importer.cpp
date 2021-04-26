@@ -25,10 +25,12 @@ void file_importer::import(url const &src_url, url const &dst_url, std::function
                 if (src_file.has_value()) {
                     src_file.value()->close();
                 }
+
                 if (dst_file.has_value()) {
                     dst_file.value()->close();
                 }
-                completion(result);
+
+                thread::perform_async_on_main([result, completion = std::move(completion)] { completion(result); });
             };
 
             auto const src_file_result = audio::file::make_opened({.file_url = src_url});
