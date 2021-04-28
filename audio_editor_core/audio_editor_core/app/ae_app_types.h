@@ -4,4 +4,8 @@
 
 #pragma once
 
-namespace yas::ae {}  // namespace yas::ae
+namespace yas::ae {
+enum class worker_priority : uint32_t {
+    file_importing,
+};
+}  // namespace yas::ae

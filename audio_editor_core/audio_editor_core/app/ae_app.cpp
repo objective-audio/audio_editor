@@ -11,6 +11,7 @@ using namespace yas;
 using namespace yas::ae;
 
 app::app() {
+    this->_worker->start();
 }
 
 std::shared_ptr<app> app::make_shared() {

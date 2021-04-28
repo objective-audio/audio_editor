@@ -17,10 +17,11 @@ struct app final {
     [[nodiscard]] std::shared_ptr<file_importer> const &file_importer() const;
 
    private:
-    task_queue const _task_queue;
+    worker_ptr const _worker = worker::make_shared();
     std::shared_ptr<ae::project_pool> const _project_pool = project_pool::make_shared();
     std::shared_ptr<ae::system_url> const _system_url = system_url::make_shared();
-    std::shared_ptr<ae::file_importer> const _file_importer = file_importer::make_shared(this->_task_queue, 0);
+    std::shared_ptr<ae::file_importer> const _file_importer =
+        file_importer::make_shared(this->_worker, static_cast<uint32_t>(worker_priority::file_importing));
 
     app();
 

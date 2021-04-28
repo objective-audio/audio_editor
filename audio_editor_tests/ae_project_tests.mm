@@ -30,10 +30,10 @@ struct project_url_stub : project_url_interface {
 struct file_importer_stub : project_file_importer_interface {
     std::function<bool(url const &, url const &)> import_handler{[](url const &, url const &) { return false; }};
 
-    void import(url const &src_url, url const &dst_url, std::function<void(bool const)> &&completion) {
-        bool result = this->import_handler(src_url, dst_url);
+    void import(file_importing_context &&context) override {
+        bool result = this->import_handler(context.src_url, context.dst_url);
 
-        thread::perform_async_on_main([result, completion = std::move(completion)] { completion(result); });
+        thread::perform_async_on_main([result, completion = std::move(context.completion)] { completion(result); });
     }
 };
 }
