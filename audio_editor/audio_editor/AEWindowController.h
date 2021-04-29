@@ -3,7 +3,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#include <audio_editor_core/audio_editor_core_umbrella.h>
+#include <string>
 
 NS_ASSUME_NONNULL_BEGIN
 

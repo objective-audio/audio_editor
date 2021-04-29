@@ -10,4 +10,6 @@
 #include <audio_editor_core/ae_id_generator.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_project_view_presenter.h>
 #include <audio_editor_core/ae_system_url.h>
+#include <audio_editor_core/ae_window_presenter.h>

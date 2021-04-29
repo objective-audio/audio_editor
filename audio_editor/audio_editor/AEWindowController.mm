@@ -3,9 +3,9 @@
 //
 
 #import "AEWindowController.h"
-#include <audio_editor_core/ae_app.h>
-#include <audio_editor_core/ae_window_presenter.h>
+#include <audio_editor_core/audio_editor_core_umbrella.h>
 #include <cpp_utils/yas_cf_utils.h>
+#import "ViewController.h"
 
 using namespace yas;
 using namespace yas::ae;
@@ -21,6 +21,10 @@ using namespace yas::ae;
 - (void)setupWithProjectID:(std::string const &)project_id {
     self->_presenter = window_presenter::make_shared(project_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
+
+    ViewController *content = (ViewController *)self.contentViewController;
+    NSAssert([content isKindOfClass:[ViewController class]], @"");
+    [content setupWithProjectID:project_id];
 }
 
 - (std::string const &)project_id {
