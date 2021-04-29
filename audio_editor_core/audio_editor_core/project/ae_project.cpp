@@ -60,7 +60,8 @@ observing::endable project::observe_event(std::function<void(project_event const
 void project::_setup() {
     this->_state->set_value(project_state::loading);
 
-    this->_file_importer->import({.src_url = this->_file_url,
+    this->_file_importer->import({.identifier = this->_identifier,
+                                  .src_url = this->_file_url,
                                   .dst_url = this->_project_url->editing_file(),
                                   .completion = [weak_state = to_weak(this->_state)](bool const result) {
                                       if (auto const state = weak_state.lock()) {
