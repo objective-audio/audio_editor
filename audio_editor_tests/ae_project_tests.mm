@@ -79,6 +79,8 @@ struct file_importer_stub : project_file_importer_interface {
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
     XCTAssertEqual(called->dst_url.path(), "/test/root/editing.caf");
+
+    XCTAssertEqual(project->state(), project_state::loading);
 }
 
 - (void)test_state_import_success {
