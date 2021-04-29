@@ -19,5 +19,6 @@ struct project_file_importer_interface {
     virtual ~project_file_importer_interface() = default;
 
     virtual void import(file_importing_context &&) = 0;
+    virtual void cancel(std::string const &) = 0;
 };
 }  // namespace yas::ae

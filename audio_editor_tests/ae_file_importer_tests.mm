@@ -10,6 +10,12 @@
 using namespace yas;
 using namespace yas::ae;
 
+namespace yas::ae::test_utils::file_importer {
+double const sample_rate = 48000.0;
+uint32_t const ch_count = 2;
+audio::pcm_format const pcm_format = audio::pcm_format::int16;
+}
+
 @interface ae_file_importer_tests : XCTestCase
 
 @end
@@ -28,49 +34,20 @@ using namespace yas::ae;
 }
 
 - (void)test_import {
-    double const sample_rate = 48000.0;
-    uint32_t const ch_count = 2;
-    audio::pcm_format const pcm_format = audio::pcm_format::int16;
-
-    auto const worker = worker_stub::make_shared();
-    auto const importer = file_importer::make_shared(worker, 0);
-
-    worker->start();
+    double const sample_rate = test_utils::file_importer::sample_rate;
+    uint32_t const ch_count = test_utils::file_importer::ch_count;
+    audio::pcm_format const pcm_format = test_utils::file_importer::pcm_format;
 
     auto const test_url = test_utils::test_url();
     auto const src_url = test_url.appending("src.wav");
     auto const dst_url = test_url.appending("dst.caf");
 
-    auto const wave_settings = audio::wave_file_settings(sample_rate, ch_count, 16);
-    auto const src_file_result = audio::file::make_created(
-        {.file_url = src_url, .pcm_format = audio::pcm_format::int16, .settings = wave_settings});
-    if (src_file_result.is_error()) {
-        XCTFail();
-        return;
-    }
-    auto const src_file = src_file_result.value();
+    [self setup_src_file:src_url];
 
-    audio::format const src_proc_format = src_file->processing_format();
-    audio::pcm_buffer src_buffer{src_proc_format, 4};
+    auto const worker = worker_stub::make_shared();
+    auto const importer = file_importer::make_shared(worker, 0);
 
-    auto src_data_0 = src_buffer.data_ptr_at_index<int16_t>(0);
-    src_data_0[0] = 10;
-    src_data_0[1] = 11;
-    src_data_0[2] = 12;
-    src_data_0[3] = 13;
-    auto src_data_1 = src_buffer.data_ptr_at_index<int16_t>(1);
-    src_data_1[0] = 20;
-    src_data_1[1] = 21;
-    src_data_1[2] = 22;
-    src_data_1[3] = 23;
-
-    auto const write_result = src_file->write_from_buffer(src_buffer);
-    src_file->close();
-
-    if (write_result.is_error()) {
-        XCTFail();
-        return;
-    }
+    worker->start();
 
     std::vector<bool> results;
 
@@ -127,6 +104,45 @@ using namespace yas::ae;
     XCTAssertEqual(dst_data_1[1], 21);
     XCTAssertEqual(dst_data_1[2], 22);
     XCTAssertEqual(dst_data_1[3], 23);
+}
+
+- (bool)setup_src_file:(url const &)src_url {
+    double const sample_rate = test_utils::file_importer::sample_rate;
+    uint32_t const ch_count = test_utils::file_importer::ch_count;
+    audio::pcm_format const pcm_format = test_utils::file_importer::pcm_format;
+
+    auto const wave_settings = audio::wave_file_settings(sample_rate, ch_count, 16);
+    auto const src_file_result =
+        audio::file::make_created({.file_url = src_url, .pcm_format = pcm_format, .settings = wave_settings});
+    if (src_file_result.is_error()) {
+        XCTFail();
+        return false;
+    }
+    auto const src_file = src_file_result.value();
+
+    audio::format const src_proc_format = src_file->processing_format();
+    audio::pcm_buffer src_buffer{src_proc_format, 4};
+
+    auto src_data_0 = src_buffer.data_ptr_at_index<int16_t>(0);
+    src_data_0[0] = 10;
+    src_data_0[1] = 11;
+    src_data_0[2] = 12;
+    src_data_0[3] = 13;
+    auto src_data_1 = src_buffer.data_ptr_at_index<int16_t>(1);
+    src_data_1[0] = 20;
+    src_data_1[1] = 21;
+    src_data_1[2] = 22;
+    src_data_1[3] = 23;
+
+    auto const write_result = src_file->write_from_buffer(src_buffer);
+    src_file->close();
+
+    if (write_result.is_error()) {
+        XCTFail();
+        return false;
+    }
+
+    return true;
 }
 
 @end

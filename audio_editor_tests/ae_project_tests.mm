@@ -29,11 +29,16 @@ struct project_url_stub : project_url_interface {
 
 struct file_importer_stub : project_file_importer_interface {
     std::function<bool(url const &, url const &)> import_handler{[](url const &, url const &) { return false; }};
+    std::function<void(std::string const &)> cancel_handler{[](std::string const &) {}};
 
     void import(file_importing_context &&context) override {
         bool result = this->import_handler(context.src_url, context.dst_url);
 
         thread::perform_async_on_main([result, completion = std::move(context.completion)] { completion(result); });
+    }
+
+    void cancel(std::string const &cancel_id) override {
+        this->cancel_handler(cancel_id);
     }
 };
 }
@@ -74,6 +79,8 @@ struct file_importer_stub : project_file_importer_interface {
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
     XCTAssertEqual(called->dst_url.path(), "/test/root/editing.caf");
+
+    XCTAssertEqual(project->state(), project_state::loading);
 }
 
 - (void)test_state_import_success {
@@ -96,6 +103,7 @@ struct file_importer_stub : project_file_importer_interface {
                              switch (state) {
                                  case project_state::launching:
                                  case project_state::loading:
+                                 case project_state::closing:
                                      break;
                                  case project_state::editing:
                                  case project_state::failure:
@@ -136,6 +144,7 @@ struct file_importer_stub : project_file_importer_interface {
                              switch (state) {
                                  case project_state::launching:
                                  case project_state::loading:
+                                 case project_state::closing:
                                      break;
                                  case project_state::editing:
                                  case project_state::failure:

@@ -46,6 +46,19 @@ bool project::can_close() const {
 }
 
 void project::request_close() {
+    switch (this->_state->value()) {
+        case project_state::closing:
+            return;
+        case project_state::loading:
+            this->_file_importer->cancel(this->_identifier);
+            [[fallthrough]];
+        case project_state::launching:
+        case project_state::editing:
+        case project_state::failure:
+            this->_state->set_value(project_state::closing);
+            break;
+    }
+
     this->_notifier->notify(project_event::should_close);
 }
 
@@ -60,14 +73,25 @@ observing::endable project::observe_event(std::function<void(project_event const
 void project::_setup() {
     this->_state->set_value(project_state::loading);
 
-    this->_file_importer->import({.src_url = this->_file_url,
+    this->_file_importer->import({.identifier = this->_identifier,
+                                  .src_url = this->_file_url,
                                   .dst_url = this->_project_url->editing_file(),
                                   .completion = [weak_state = to_weak(this->_state)](bool const result) {
                                       if (auto const state = weak_state.lock()) {
-                                          if (result) {
-                                              state->set_value(project_state::editing);
-                                          } else {
-                                              state->set_value(project_state::failure);
+                                          switch (state->value()) {
+                                              case project_state::loading: {
+                                                  if (result) {
+                                                      state->set_value(project_state::editing);
+                                                  } else {
+                                                      state->set_value(project_state::failure);
+                                                  }
+                                              } break;
+
+                                              case project_state::launching:
+                                              case project_state::editing:
+                                              case project_state::failure:
+                                              case project_state::closing:
+                                                  break;
                                           }
                                       }
                                   }});

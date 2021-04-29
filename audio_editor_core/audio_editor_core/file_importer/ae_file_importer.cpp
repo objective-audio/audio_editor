@@ -107,6 +107,10 @@ void file_importer::import(file_importing_context &&context) {
     this->_resource->push_context_on_main(std::move(context));
 }
 
+void file_importer::cancel(std::string const &cancel_id) {
+    this->_resource->cancel_on_main(cancel_id);
+}
+
 std::shared_ptr<file_importer> file_importer::make_shared(workable_ptr const &worker, uint32_t const priority) {
     return std::shared_ptr<file_importer>(new file_importer{worker, priority});
 }
