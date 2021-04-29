@@ -101,6 +101,7 @@ struct file_importer_stub : project_file_importer_interface {
                              switch (state) {
                                  case project_state::launching:
                                  case project_state::loading:
+                                 case project_state::closing:
                                      break;
                                  case project_state::editing:
                                  case project_state::failure:
@@ -141,6 +142,7 @@ struct file_importer_stub : project_file_importer_interface {
                              switch (state) {
                                  case project_state::launching:
                                  case project_state::loading:
+                                 case project_state::closing:
                                      break;
                                  case project_state::editing:
                                  case project_state::failure:
