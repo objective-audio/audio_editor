@@ -1,5 +1,5 @@
 //
-//  ae_id_generator_tests.mm
+//  ae_uuid_generator_tests.mm
 //
 
 #import <XCTest/XCTest.h>
@@ -9,14 +9,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-@interface ae_id_generator_tests : XCTestCase
+@interface ae_uuid_generator_tests : XCTestCase
 
 @end
 
-@implementation ae_id_generator_tests
+@implementation ae_uuid_generator_tests
 
 - (void)test_generate {
-    auto const generator = id_generator::make_shared();
+    auto const generator = uuid_generator::make_shared();
 
     std::string const uuid = generator->generate();
 

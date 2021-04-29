@@ -4,13 +4,13 @@
 
 #include "ae_project_pool.h"
 
-#include <audio_editor_core/ae_id_generator.h>
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_uuid_generator.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-project_pool::project_pool() : _id_generator(id_generator::make_shared()) {
+project_pool::project_pool() : _uuid_generator(uuid_generator::make_shared()) {
 }
 
 void project_pool::add_project(url const &file_url) {
@@ -18,7 +18,7 @@ void project_pool::add_project(url const &file_url) {
 }
 
 std::shared_ptr<project> project_pool::add_and_return_project(url const &file_url) {
-    auto const project = project::make_shared(this->_id_generator->generate(), file_url);
+    auto const project = project::make_shared(this->_uuid_generator->generate(), file_url);
 
     auto canceller = project
                          ->observe_event([this, project_id = project->identifier()](auto const &event) {

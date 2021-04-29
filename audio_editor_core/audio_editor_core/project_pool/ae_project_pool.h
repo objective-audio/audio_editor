@@ -10,7 +10,7 @@
 
 namespace yas::ae {
 class project;
-class id_generator;
+class uuid_generator;
 
 struct project_pool : app_presenter_project_pool_interface {
     void add_project(url const &file_url) override;
@@ -22,7 +22,7 @@ struct project_pool : app_presenter_project_pool_interface {
     static std::shared_ptr<project_pool> make_shared();
 
    private:
-    std::shared_ptr<id_generator> const _id_generator;
+    std::shared_ptr<uuid_generator> const _uuid_generator;
     using projects_map_t =
         observing::map::holder<std::string, std::pair<std::shared_ptr<project>, observing::cancellable_ptr>>;
     std::shared_ptr<projects_map_t> const _projects = projects_map_t::make_shared();
