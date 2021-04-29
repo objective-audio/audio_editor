@@ -20,14 +20,15 @@ struct project_pool : app_presenter_project_pool_interface {
     [[nodiscard]] observing::syncable observe_event(std::function<void(project_pool_event const &)> &&) override;
 
     static std::shared_ptr<project_pool> make_shared();
+    static std::shared_ptr<project_pool> make_shared(std::shared_ptr<project_pool_uuid_generator_interface> const &);
 
    private:
-    std::shared_ptr<uuid_generator> const _uuid_generator;
+    std::shared_ptr<project_pool_uuid_generator_interface> const _uuid_generator;
     using projects_map_t =
         observing::map::holder<std::string, std::pair<std::shared_ptr<project>, observing::cancellable_ptr>>;
     std::shared_ptr<projects_map_t> const _projects = projects_map_t::make_shared();
 
-    project_pool();
+    project_pool(std::shared_ptr<project_pool_uuid_generator_interface> const &);
 
     project_pool(project_pool const &) = delete;
     project_pool(project_pool &&) = delete;

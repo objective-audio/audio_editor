@@ -10,7 +10,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-project_pool::project_pool() : _uuid_generator(uuid_generator::make_shared()) {
+project_pool::project_pool(std::shared_ptr<project_pool_uuid_generator_interface> const &uuid_generator)
+    : _uuid_generator(uuid_generator) {
 }
 
 void project_pool::add_project(url const &file_url) {
@@ -70,5 +71,10 @@ observing::syncable project_pool::observe_event(std::function<void(project_pool_
 }
 
 std::shared_ptr<project_pool> project_pool::make_shared() {
-    return std::shared_ptr<project_pool>(new project_pool{});
+    return make_shared(uuid_generator::make_shared());
+}
+
+std::shared_ptr<project_pool> project_pool::make_shared(
+    std::shared_ptr<project_pool_uuid_generator_interface> const &uuid_generator) {
+    return std::shared_ptr<project_pool>(new project_pool{uuid_generator});
 }
