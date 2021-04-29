@@ -65,10 +65,12 @@ void project::_setup() {
                                   .dst_url = this->_project_url->editing_file(),
                                   .completion = [weak_state = to_weak(this->_state)](bool const result) {
                                       if (auto const state = weak_state.lock()) {
-                                          if (result) {
-                                              state->set_value(project_state::editing);
-                                          } else {
-                                              state->set_value(project_state::failure);
+                                          if (state->value() == project_state::loading) {
+                                              if (result) {
+                                                  state->set_value(project_state::editing);
+                                              } else {
+                                                  state->set_value(project_state::failure);
+                                              }
                                           }
                                       }
                                   }});
