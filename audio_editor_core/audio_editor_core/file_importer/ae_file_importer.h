@@ -15,6 +15,7 @@ class file_importer_resource;
 
 struct file_importer : project_file_importer_interface {
     void import(file_importing_context &&) override;
+    void cancel(std::string const &);
 
     static std::shared_ptr<file_importer> make_shared(workable_ptr const &, uint32_t const priority);
 
