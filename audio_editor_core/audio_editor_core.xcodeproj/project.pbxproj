@@ -135,6 +135,16 @@
 			path = project_view_presenter;
 			sourceTree = "<group>";
 		};
+		B634FDB7263C2C0B0096E69F /* presenters */ = {
+			isa = PBXGroup;
+			children = (
+				B668BE3C262F41110021AD20 /* app_presenter */,
+				B6CF42572632ED1800F9F297 /* window_presenter */,
+				B60204D2263AAEA000CFC752 /* project_view_presenter */,
+			);
+			path = presenters;
+			sourceTree = "<group>";
+		};
 		B666CDE52634124100C1693D /* utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -218,9 +228,7 @@
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B666CE08263424DA00C1693D /* file_importer */,
 				B666CDE52634124100C1693D /* utils */,
-				B668BE3C262F41110021AD20 /* app_presenter */,
-				B6CF42572632ED1800F9F297 /* window_presenter */,
-				B60204D2263AAEA000CFC752 /* project_view_presenter */,
+				B634FDB7263C2C0B0096E69F /* presenters */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
 				B668BE22262F32870021AD20 /* project_pool */,
 				B69CF55E262AC48D007A0A75 /* project */,
