@@ -6,11 +6,13 @@
 
 #include <audio_editor_core/ae_project.h>
 #include <cpp_utils/yas_fast_each.h>
+#include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 app::app() {
+    file_manager::remove_contents_in_directory(this->_system_url->document_directory().path());
     this->_worker->start();
 }
 

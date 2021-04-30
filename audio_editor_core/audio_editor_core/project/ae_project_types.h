@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace yas::ae {
 enum class project_event {
     should_close,

@@ -20,8 +20,10 @@ struct project_view_presenter {
 
     std::string const &project_id() const;
     std::string state_string() const;
+    std::string file_info_string() const;
 
     observing::syncable observe_state_string(std::function<void(std::string const &)> &&);
+    observing::syncable observe_file_info_string(std::function<void(std::string const &)> &&);
 
    private:
     std::shared_ptr<project> _project;
