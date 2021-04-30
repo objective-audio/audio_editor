@@ -5,6 +5,8 @@
 #include "ae_project.h"
 
 #include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_file_importer.h>
+#include <audio_editor_core/ae_system_url.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;

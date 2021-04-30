@@ -4,13 +4,20 @@
 
 #include "ae_app.h"
 
+#include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_system_url.h>
 #include <cpp_utils/yas_fast_each.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-app::app() {
+app::app()
+    : _project_pool(project_pool::make_shared()),
+      _system_url(system_url::make_shared()),
+      _file_importer(
+          file_importer::make_shared(this->_worker, static_cast<uint32_t>(worker_priority::file_importing))) {
     this->_worker->start();
 }
 
