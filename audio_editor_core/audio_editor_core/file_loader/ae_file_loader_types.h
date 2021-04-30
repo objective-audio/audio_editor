@@ -7,7 +7,7 @@
 #include <cstdint>
 
 namespace yas::ae {
-struct file_info {
+struct file_info final {
     double sample_rate;
     int64_t length;
 
