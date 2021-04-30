@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace yas::ae {
-struct file_importer_resource {
+struct file_importer_resource final {
     void push_context_on_main(file_importing_context &&);
     void cancel_on_main(std::string const &identifier);
 

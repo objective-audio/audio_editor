@@ -12,7 +12,7 @@ enum class project_pool_event_type {
     erased,
 };
 
-struct project_pool_event {
+struct project_pool_event final {
     project_pool_event_type type;
     std::string project_id;
 };

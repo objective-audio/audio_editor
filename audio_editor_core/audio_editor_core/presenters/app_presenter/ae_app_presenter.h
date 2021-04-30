@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_app_presenter_types.h>
 
 namespace yas::ae {
-struct app_presenter {
+struct app_presenter final {
     app_presenter();
     explicit app_presenter(std::shared_ptr<app_presenter_project_pool_interface> const &);
 

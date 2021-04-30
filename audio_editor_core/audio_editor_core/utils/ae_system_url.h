@@ -7,7 +7,7 @@
 #include <cpp_utils/yas_url.h>
 
 namespace yas::ae {
-struct system_url {
+struct system_url final {
     url document_directory() const;
     url project_directory(std::string const &project_id) const;
 

@@ -12,7 +12,7 @@ namespace yas::ae {
 class project;
 class uuid_generator;
 
-struct project_pool : app_presenter_project_pool_interface {
+struct project_pool final : app_presenter_project_pool_interface {
     void add_project(url const &file_url) override;
     std::shared_ptr<project> add_and_return_project(url const &file_url);
     [[nodiscard]] std::shared_ptr<project> project_for_id(std::string const &) const;

@@ -14,7 +14,7 @@ namespace yas::ae {
 class project;
 enum class project_state;
 
-struct project_view_presenter {
+struct project_view_presenter final {
     static std::shared_ptr<project_view_presenter> make_shared(std::string const &project_id);
     static std::shared_ptr<project_view_presenter> make_shared(std::shared_ptr<project> const &);
 
