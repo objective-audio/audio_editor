@@ -49,6 +49,9 @@
 		B6A997962629B72E00DAC3FE /* ui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A997872629B72E00DAC3FE /* ui.framework */; };
 		B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6A997B72629C07600DAC3FE /* ae_app.cpp */; };
 		B6A997BA2629C07600DAC3FE /* ae_app.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A997B82629C07600DAC3FE /* ae_app.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6B002B8263BC7320013E6D0 /* ae_file_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6B002B6263BC7320013E6D0 /* ae_file_loader.cpp */; };
+		B6B002B9263BC7320013E6D0 /* ae_file_loader.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B002B7263BC7320013E6D0 /* ae_file_loader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6B002BF263BC8880013E6D0 /* ae_file_loader_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B002BD263BC8550013E6D0 /* ae_file_loader_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6CF42582632ED2A00F9F297 /* ae_window_presenter.cpp */; };
 		B6CF425B2632ED2A00F9F297 /* ae_window_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -99,6 +102,9 @@
 		B6A997872629B72E00DAC3FE /* ui.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ui.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6A997B72629C07600DAC3FE /* ae_app.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app.cpp; sourceTree = "<group>"; };
 		B6A997B82629C07600DAC3FE /* ae_app.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app.h; sourceTree = "<group>"; };
+		B6B002B6263BC7320013E6D0 /* ae_file_loader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_loader.cpp; sourceTree = "<group>"; };
+		B6B002B7263BC7320013E6D0 /* ae_file_loader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_loader.h; sourceTree = "<group>"; };
+		B6B002BD263BC8550013E6D0 /* ae_file_loader_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_loader_types.h; sourceTree = "<group>"; };
 		B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter_dependency.h; sourceTree = "<group>"; };
 		B6CF42582632ED2A00F9F297 /* ae_window_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_window_presenter.cpp; sourceTree = "<group>"; };
 		B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_window_presenter.h; sourceTree = "<group>"; };
@@ -227,6 +233,7 @@
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B666CE08263424DA00C1693D /* file_importer */,
+				B6B002B5263BC7220013E6D0 /* file_loader */,
 				B666CDE52634124100C1693D /* utils */,
 				B634FDB7263C2C0B0096E69F /* presenters */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
@@ -264,6 +271,16 @@
 			path = app;
 			sourceTree = "<group>";
 		};
+		B6B002B5263BC7220013E6D0 /* file_loader */ = {
+			isa = PBXGroup;
+			children = (
+				B6B002B6263BC7320013E6D0 /* ae_file_loader.cpp */,
+				B6B002B7263BC7320013E6D0 /* ae_file_loader.h */,
+				B6B002BD263BC8550013E6D0 /* ae_file_loader_types.h */,
+			);
+			path = file_loader;
+			sourceTree = "<group>";
+		};
 		B6CF42572632ED1800F9F297 /* window_presenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,8 +298,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B666CE0B263424FF00C1693D /* ae_file_importer_types.h in Headers */,
+				B6B002B9263BC7320013E6D0 /* ae_file_loader.h in Headers */,
 				B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */,
 				B666CE362634FC8300C1693D /* ae_uuid_generator.h in Headers */,
+				B6B002BF263BC8880013E6D0 /* ae_file_loader_types.h in Headers */,
 				B69708EB2639A15E0045E975 /* ae_file_importer.h in Headers */,
 				B6CF425B2632ED2A00F9F297 /* ae_window_presenter.h in Headers */,
 				B69CF562262AC49C007A0A75 /* ae_project.h in Headers */,
@@ -405,6 +424,7 @@
 				B666CDE82634125E00C1693D /* ae_system_url.cpp in Sources */,
 				B69708F12639B0390045E975 /* ae_file_importer_resource.cpp in Sources */,
 				B6A997B92629C07600DAC3FE /* ae_app.cpp in Sources */,
+				B6B002B8263BC7320013E6D0 /* ae_file_loader.cpp in Sources */,
 				B666CE4C26351D7900C1693D /* ae_project_url.cpp in Sources */,
 				B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */,
 			);
