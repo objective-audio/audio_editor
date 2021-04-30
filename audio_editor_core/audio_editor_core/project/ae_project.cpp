@@ -15,7 +15,12 @@ using namespace yas::ae;
 project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<project_url_interface> const &project_url,
                  std::shared_ptr<project_file_importer_interface> const &file_importer)
-    : _identifier(identifier), _file_url(file_url), _project_url(project_url), _file_importer(file_importer) {
+    : _identifier(identifier),
+      _file_url(file_url),
+      _project_url(project_url),
+      _file_importer(file_importer),
+      _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
+      _notifier(observing::notifier<project_event>::make_shared()) {
     this->_setup();
 }
 
