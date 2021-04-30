@@ -33,7 +33,7 @@ struct project final {
 
     observing::value::holder_ptr<project_state> const _state;
 
-    observing::notifier_ptr<project_event> const _notifier;
+    observing::notifier_ptr<project_event> const _event_notifier;
 
     project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_interface> const &,
             std::shared_ptr<project_file_importer_interface> const &);

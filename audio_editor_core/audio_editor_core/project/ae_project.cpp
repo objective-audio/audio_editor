@@ -20,7 +20,7 @@ project::project(std::string const &identifier, url const &file_url,
       _project_url(project_url),
       _file_importer(file_importer),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
-      _notifier(observing::notifier<project_event>::make_shared()) {
+      _event_notifier(observing::notifier<project_event>::make_shared()) {
     this->_setup();
 }
 
@@ -66,7 +66,7 @@ void project::request_close() {
             break;
     }
 
-    this->_notifier->notify(project_event::should_close);
+    this->_event_notifier->notify(project_event::should_close);
 }
 
 observing::syncable project::observe_state(std::function<void(project_state const &)> &&handler) {
@@ -74,7 +74,7 @@ observing::syncable project::observe_state(std::function<void(project_state cons
 }
 
 observing::endable project::observe_event(std::function<void(project_event const &)> &&handler) {
-    return this->_notifier->observe(std::move(handler));
+    return this->_event_notifier->observe(std::move(handler));
 }
 
 void project::_setup() {
