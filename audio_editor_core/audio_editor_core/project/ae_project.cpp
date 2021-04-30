@@ -5,8 +5,10 @@
 #include "ae_project.h"
 
 #include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_file_loader.h>
-#include <audio_editor_core/ae_project_utils.h>
+#include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_system_url.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
@@ -29,7 +31,8 @@ project::project(std::string const &identifier, url const &file_url,
 std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url) {
     auto const project_url = project_url::make_shared(app::global()->system_url()->project_directory(identifier));
     auto const file_importer = app::global()->file_importer();
-    return make_shared(identifier, file_url, project_url, file_importer, file_loader::make_shared());
+    auto const file_loader = app::global()->file_loader();
+    return make_shared(identifier, file_url, project_url, file_importer, file_loader);
 }
 
 std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url,
