@@ -13,7 +13,7 @@
 namespace yas::ae {
 class file_importer_resource;
 
-struct file_importer : project_file_importer_interface {
+struct file_importer final : project_file_importer_interface {
     void import(file_importing_context &&) override;
     void cancel(std::string const &) override;
 

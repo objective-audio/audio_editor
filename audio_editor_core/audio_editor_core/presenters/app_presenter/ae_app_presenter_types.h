@@ -13,7 +13,7 @@ enum class app_presenter_event_type {
     dispose_window_controller,
 };
 
-struct app_presenter_event {
+struct app_presenter_event final {
     app_presenter_event_type type;
     std::string project_id;
 };
