@@ -21,6 +21,7 @@ using namespace yas::ae;
     XCTAssertTrue(app->project_pool() != nullptr);
     XCTAssertTrue(app->system_url() != nullptr);
     XCTAssertTrue(app->file_importer() != nullptr);
+    XCTAssertTrue(app->file_loader() != nullptr);
 }
 
 @end
