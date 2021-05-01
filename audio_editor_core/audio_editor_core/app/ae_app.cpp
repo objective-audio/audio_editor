@@ -20,6 +20,7 @@ app::app()
       _system_url(system_url::make_shared()),
       _file_importer(file_importer::make_shared(this->_worker, static_cast<uint32_t>(worker_priority::file_importing))),
       _file_loader(file_loader::make_shared()) {
+    file_manager::remove_contents_in_directory(this->_system_url->app_directory().path());
     this->_worker->start();
 }
 

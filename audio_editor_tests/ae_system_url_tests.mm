@@ -15,9 +15,31 @@ using namespace yas::ae;
 @implementation ae_system_url_tests
 
 - (void)test_document_directory {
-    auto const url = system_url::make_shared();
+    auto const system_url = system_url::make_shared();
 
-    XCTAssertEqual(url->document_directory().last_path_component(), "Documents");
+    XCTAssertEqual(system_url->document_directory().last_path_component(), "Documents");
+}
+
+- (void)test_app_directory {
+    auto const system_url = system_url::make_shared();
+    auto const app_url = system_url->app_directory();
+
+    XCTAssertEqual(app_url.last_path_component(), "audio_editor_app");
+
+    auto document_url = app_url.deleting_last_path_component();
+
+    XCTAssertEqual(document_url.last_path_component(), "Documents");
+}
+
+- (void)test_project_directory {
+    auto const system_url = system_url::make_shared();
+    auto const project_url = system_url->project_directory("TEST_PROJECT_ID");
+
+    XCTAssertEqual(project_url.last_path_component(), "TEST_PROJECT_ID");
+
+    auto const app_url = project_url.deleting_last_path_component();
+
+    XCTAssertEqual(app_url.last_path_component(), "audio_editor_app");
 }
 
 @end
