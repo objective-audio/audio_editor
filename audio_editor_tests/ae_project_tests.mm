@@ -57,7 +57,7 @@ struct file_importer_stub : project_file_importer_interface {
     XCTAssertEqual(project->file_url(), file_url);
 }
 
-- (void)test_state_import_url_from_project_url {
+- (void)test_loading {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
@@ -83,7 +83,7 @@ struct file_importer_stub : project_file_importer_interface {
     XCTAssertEqual(project->state(), project_state::loading);
 }
 
-- (void)test_state_import_success {
+- (void)test_import_success {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
@@ -124,7 +124,7 @@ struct file_importer_stub : project_file_importer_interface {
     XCTAssertEqual(called.at(1), project_state::editing);
 }
 
-- (void)test_state_import_failure {
+- (void)test_import_failure {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
