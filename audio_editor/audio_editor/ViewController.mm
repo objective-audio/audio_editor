@@ -13,6 +13,7 @@ using namespace yas::ae;
 @interface ViewController ()
 
 @property (nonatomic, weak) IBOutlet NSTextField *statusLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *fileInfoLabel;
 
 @end
 
@@ -29,6 +30,13 @@ using namespace yas::ae;
     self->_presenter
         ->observe_state_string([unowned](std::string const &string) {
             unowned.object.statusLabel.stringValue = (__bridge NSString *)to_cf_object(string);
+        })
+        .sync()
+        ->add_to(self->_pool);
+
+    self->_presenter
+        ->observe_file_info_string([unowned](std::string const &string) {
+            unowned.object.fileInfoLabel.stringValue = (__bridge NSString *)to_cf_object(string);
         })
         .sync()
         ->add_to(self->_pool);

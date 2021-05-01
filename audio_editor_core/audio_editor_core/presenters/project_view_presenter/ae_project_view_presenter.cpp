@@ -32,8 +32,19 @@ std::string project_view_presenter::state_string() const {
     return project_view_presenter_utils::to_label_string(this->_project->state());
 }
 
+std::string project_view_presenter::file_info_string() const {
+    return project_view_presenter_utils::to_label_string(this->_project->file_info());
+}
+
 observing::syncable project_view_presenter::observe_state_string(std::function<void(std::string const &)> &&handler) {
     return this->_project->observe_state([handler = std::move(handler)](project_state const &state) {
         handler(project_view_presenter_utils::to_label_string(state));
+    });
+}
+
+observing::syncable project_view_presenter::observe_file_info_string(
+    std::function<void(std::string const &)> &&handler) {
+    return this->_project->observe_file_info([handler = std::move(handler)](std::optional<file_info> const &file_info) {
+        handler(project_view_presenter_utils::to_label_string(file_info));
     });
 }

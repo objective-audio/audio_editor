@@ -21,3 +21,12 @@ std::string project_view_presenter_utils::to_label_string(project_state const &s
             return "closing";
     }
 }
+
+std::string project_view_presenter_utils::to_label_string(std::optional<file_info> const &file_info) {
+    if (file_info.has_value()) {
+        return "sample rate : " + std::to_string(file_info.value().sample_rate) +
+               " / length : " + std::to_string(file_info.value().length);
+    } else {
+        return "-";
+    }
+}
