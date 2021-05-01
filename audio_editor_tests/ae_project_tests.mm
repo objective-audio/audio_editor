@@ -41,6 +41,14 @@ struct file_importer_stub : project_file_importer_interface {
         this->cancel_handler(cancel_id);
     }
 };
+
+struct file_loader_stub : project_file_loader_interface {
+    std::optional<file_info> file_info_value = std::nullopt;
+
+    std::optional<file_info> load_file_info(url const &) const override {
+        return this->file_info_value;
+    }
+};
 }
 
 @interface ae_project_tests : XCTestCase
@@ -61,6 +69,7 @@ struct file_importer_stub : project_file_importer_interface {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
+    auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
 
     struct called_values {
         url src_url;
@@ -74,7 +83,7 @@ struct file_importer_stub : project_file_importer_interface {
         return false;
     };
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader);
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -87,10 +96,12 @@ struct file_importer_stub : project_file_importer_interface {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
+    auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
+    file_loader->file_info_value = {.sample_rate = 48000, .length = 2};
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader);
 
     std::vector<project_state> called;
 
@@ -106,8 +117,10 @@ struct file_importer_stub : project_file_importer_interface {
                                  case project_state::closing:
                                      break;
                                  case project_state::editing:
-                                 case project_state::failure:
                                      [expectation fulfill];
+                                     break;
+                                 case project_state::failure:
+                                     XCTFail();
                                      break;
                              }
                          })
@@ -116,22 +129,26 @@ struct file_importer_stub : project_file_importer_interface {
     XCTAssertEqual(project->state(), project_state::loading);
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), project_state::loading);
+    XCTAssertFalse(project->file_info().has_value());
 
     [self waitForExpectations:@[expectation] timeout:10.0];
 
     XCTAssertEqual(project->state(), project_state::editing);
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::editing);
+    XCTAssertEqual(project->file_info(), (file_info{.sample_rate = 48000, .length = 2}));
 }
 
 - (void)test_import_failure {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
+    auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
+    file_loader->file_info_value = {.sample_rate = 96000, .length = 3};
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader);
 
     std::vector<project_state> called;
 
@@ -147,6 +164,8 @@ struct file_importer_stub : project_file_importer_interface {
                                  case project_state::closing:
                                      break;
                                  case project_state::editing:
+                                     XCTFail();
+                                     break;
                                  case project_state::failure:
                                      [expectation fulfill];
                                      break;
@@ -157,12 +176,14 @@ struct file_importer_stub : project_file_importer_interface {
     XCTAssertEqual(project->state(), project_state::loading);
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), project_state::loading);
+    XCTAssertFalse(project->file_info().has_value());
 
     [self waitForExpectations:@[expectation] timeout:10.0];
 
     XCTAssertEqual(project->state(), project_state::failure);
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::failure);
+    XCTAssertFalse(project->file_info().has_value());
 }
 
 @end
