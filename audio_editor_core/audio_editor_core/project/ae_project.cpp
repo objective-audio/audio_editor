@@ -28,9 +28,10 @@ project::project(std::string const &identifier, url const &file_url,
 }
 
 std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url) {
-    auto const project_url = project_url::make_shared(app::global()->system_url()->project_directory(identifier));
-    auto const file_importer = app::global()->file_importer();
-    auto const file_loader = file_loader::make_shared();
+    auto const app = app::global();
+    auto const project_url = project_url::make_shared(app->system_url()->project_directory(identifier));
+    auto const file_importer = app->file_importer();
+    auto const file_loader = app->file_loader();
     return make_shared(identifier, file_url, project_url, file_importer, file_loader);
 }
 
