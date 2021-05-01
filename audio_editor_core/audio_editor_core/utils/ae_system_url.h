@@ -9,6 +9,7 @@
 namespace yas::ae {
 struct system_url final {
     url document_directory() const;
+    url app_directory() const;
     url project_directory(std::string const &project_id) const;
 
     static std::shared_ptr<system_url> make_shared();
