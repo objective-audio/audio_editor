@@ -13,6 +13,7 @@ namespace yas::ae::test_utils {
 struct project_url_stub : project_url_interface {
     url root_directory_value{url::file_url("/test/root")};
     url editing_file_value{url::file_url("/test/root/editing.caf")};
+    url playing_directory_value{url::file_url("/test/root/playing")};
 
     url const &root_directory() const override {
         return this->root_directory_value;
@@ -20,6 +21,10 @@ struct project_url_stub : project_url_interface {
 
     url editing_file() const override {
         return this->editing_file_value;
+    }
+
+    url playing_directory() const override {
+        return this->playing_directory_value;
     }
 
     static std::shared_ptr<project_url_stub> make_shared() {
@@ -49,6 +54,28 @@ struct file_loader_stub : project_file_loader_interface {
         return this->file_info_value;
     }
 };
+
+struct player_stub : project_player_interface {
+    void set_playing(bool const) override {
+    }
+
+    bool is_playing() const override {
+        return false;
+    }
+
+    void seek(frame_index_t const) override {
+    }
+
+    frame_index_t current_frame() const override {
+        return 0;
+    }
+
+    observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override {
+        return observing::syncable{};
+    }
+};
+
+struct timeline_editor_stub : project_timeline_editor_interface {};
 }
 
 @interface ae_project_tests : XCTestCase
@@ -70,6 +97,8 @@ struct file_loader_stub : project_file_loader_interface {
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
+    auto const player = std::make_shared<test_utils::player_stub>();
+    auto const timeline_editor = std::make_shared<test_utils::timeline_editor_stub>();
 
     struct called_values {
         url src_url;
@@ -83,7 +112,8 @@ struct file_loader_stub : project_file_loader_interface {
         return false;
     };
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              player, timeline_editor);
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -97,11 +127,14 @@ struct file_loader_stub : project_file_loader_interface {
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
+    auto const player = std::make_shared<test_utils::player_stub>();
+    auto const timeline_editor = std::make_shared<test_utils::timeline_editor_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .length = 2};
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              player, timeline_editor);
 
     std::vector<project_state> called;
 
@@ -144,11 +177,14 @@ struct file_loader_stub : project_file_loader_interface {
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
+    auto const player = std::make_shared<test_utils::player_stub>();
+    auto const timeline_editor = std::make_shared<test_utils::timeline_editor_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .length = 3};
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              player, timeline_editor);
 
     std::vector<project_state> called;
 

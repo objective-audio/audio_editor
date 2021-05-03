@@ -21,9 +21,14 @@ struct project_view_presenter final {
     std::string const &project_id() const;
     std::string state_string() const;
     std::string file_info_string() const;
+    std::string player_string() const;
+    std::string play_button_string() const;
+
+    void play_button_clicked();
 
     observing::syncable observe_state_string(std::function<void(std::string const &)> &&);
     observing::syncable observe_file_info_string(std::function<void(std::string const &)> &&);
+    observing::syncable observe_play_button_string(std::function<void(std::string const &)> &&);
 
    private:
     std::shared_ptr<project> _project;

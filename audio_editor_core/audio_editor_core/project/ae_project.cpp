@@ -7,7 +7,9 @@
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_file_loader.h>
+#include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_system_url.h>
+#include <audio_editor_core/ae_timeline_editor.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
@@ -16,12 +18,16 @@ using namespace yas::ae;
 project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<project_url_interface> const &project_url,
                  std::shared_ptr<project_file_importer_interface> const &file_importer,
-                 std::shared_ptr<project_file_loader_interface> const &file_loader)
+                 std::shared_ptr<project_file_loader_interface> const &file_loader,
+                 std::shared_ptr<project_player_interface> const &player,
+                 std::shared_ptr<project_timeline_editor_interface> const &timeline_editor)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),
       _file_importer(file_importer),
       _file_loader(file_loader),
+      _player(player),
+      _timeline_editor(timeline_editor),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _file_info(observing::value::holder<std::optional<ae::file_info>>::make_shared(std::nullopt)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
@@ -32,14 +38,19 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
     auto const project_url = project_url::make_shared(app->system_url()->project_directory(identifier));
     auto const file_importer = app->file_importer();
     auto const file_loader = app->file_loader();
-    return make_shared(identifier, file_url, project_url, file_importer, file_loader);
+    auto const player = player::make_shared(project_url->playing_directory(), identifier);
+    auto const timeline_editor = timeline_editor::make_shared(player);
+    return make_shared(identifier, file_url, project_url, file_importer, file_loader, player, timeline_editor);
 }
 
-std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url,
-                                              std::shared_ptr<project_url_interface> const &project_url,
-                                              std::shared_ptr<project_file_importer_interface> const &file_importer,
-                                              std::shared_ptr<project_file_loader_interface> const &file_loader) {
-    auto shared = std::shared_ptr<project>(new project{identifier, file_url, project_url, file_importer, file_loader});
+std::shared_ptr<project> project::make_shared(
+    std::string const &identifier, url const &file_url, std::shared_ptr<project_url_interface> const &project_url,
+    std::shared_ptr<project_file_importer_interface> const &file_importer,
+    std::shared_ptr<project_file_loader_interface> const &file_loader,
+    std::shared_ptr<project_player_interface> const &player,
+    std::shared_ptr<project_timeline_editor_interface> const &timeline_editor) {
+    auto shared = std::shared_ptr<project>(
+        new project{identifier, file_url, project_url, file_importer, file_loader, player, timeline_editor});
     shared->_setup(shared);
     return shared;
 }
@@ -58,6 +69,10 @@ project_state const &project::state() const {
 
 std::optional<file_info> project::file_info() const {
     return this->_file_info->value();
+}
+
+std::shared_ptr<project_player_interface> const &project::player() const {
+    return this->_player;
 }
 
 bool project::can_close() const {

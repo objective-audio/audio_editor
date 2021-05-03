@@ -36,6 +36,18 @@ std::string project_view_presenter::file_info_string() const {
     return project_view_presenter_utils::to_label_string(this->_project->file_info());
 }
 
+std::string project_view_presenter::player_string() const {
+    return project_view_presenter_utils::to_player_string(this->_project->player()->current_frame());
+}
+
+std::string project_view_presenter::play_button_string() const {
+    return project_view_presenter_utils::to_play_button_string(this->_project->player()->is_playing());
+}
+
+void project_view_presenter::play_button_clicked() {
+    this->_project->player()->toggle_playing();
+}
+
 observing::syncable project_view_presenter::observe_state_string(std::function<void(std::string const &)> &&handler) {
     return this->_project->observe_state([handler = std::move(handler)](project_state const &state) {
         handler(project_view_presenter_utils::to_label_string(state));
@@ -46,5 +58,12 @@ observing::syncable project_view_presenter::observe_file_info_string(
     std::function<void(std::string const &)> &&handler) {
     return this->_project->observe_file_info([handler = std::move(handler)](std::optional<file_info> const &file_info) {
         handler(project_view_presenter_utils::to_label_string(file_info));
+    });
+}
+
+observing::syncable project_view_presenter::observe_play_button_string(
+    std::function<void(std::string const &)> &&handler) {
+    return this->_project->player()->observe_is_playing([handler = std::move(handler)](bool const is_playing) {
+        handler(project_view_presenter_utils::to_play_button_string(is_playing));
     });
 }

@@ -11,15 +11,17 @@
 namespace yas::ae {
 struct project final {
     [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url);
-    [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url,
-                                                              std::shared_ptr<project_url_interface> const &,
-                                                              std::shared_ptr<project_file_importer_interface> const &,
-                                                              std::shared_ptr<project_file_loader_interface> const &);
+    [[nodiscard]] static std::shared_ptr<project> make_shared(
+        std::string const &identifier, url const &file_url, std::shared_ptr<project_url_interface> const &,
+        std::shared_ptr<project_file_importer_interface> const &,
+        std::shared_ptr<project_file_loader_interface> const &, std::shared_ptr<project_player_interface> const &,
+        std::shared_ptr<project_timeline_editor_interface> const &);
 
     [[nodiscard]] std::string const &identifier() const;
     [[nodiscard]] url const &file_url() const;
     [[nodiscard]] project_state const &state() const;
     [[nodiscard]] std::optional<file_info> file_info() const;
+    [[nodiscard]] std::shared_ptr<project_player_interface> const &player() const;
 
     [[nodiscard]] bool can_close() const;
     void request_close();
@@ -34,7 +36,9 @@ struct project final {
 
     std::shared_ptr<project_url_interface> const _project_url;
     std::shared_ptr<project_file_importer_interface> const _file_importer;
-    std::shared_ptr<project_file_loader_interface> _file_loader;
+    std::shared_ptr<project_file_loader_interface> const _file_loader;
+    std::shared_ptr<project_player_interface> const _player;
+    std::shared_ptr<project_timeline_editor_interface> const _timeline_editor;
 
     observing::value::holder_ptr<project_state> const _state;
     observing::value::holder_ptr<std::optional<ae::file_info>> const _file_info;
@@ -43,7 +47,8 @@ struct project final {
 
     project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_interface> const &,
             std::shared_ptr<project_file_importer_interface> const &,
-            std::shared_ptr<project_file_loader_interface> const &);
+            std::shared_ptr<project_file_loader_interface> const &, std::shared_ptr<project_player_interface> const &,
+            std::shared_ptr<project_timeline_editor_interface> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;
