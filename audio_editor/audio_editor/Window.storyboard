@@ -34,7 +34,7 @@
         <scene sceneID="O6b-dR-0jn">
             <objects>
                 <customObject id="lM5-bE-y3f" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <viewController id="dut-rD-dZ9" customClass="ViewController" sceneMemberID="viewController">
+                <viewController id="dut-rD-dZ9" customClass="AEViewController" sceneMemberID="viewController">
                     <view key="view" id="JWB-IS-sDu">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
