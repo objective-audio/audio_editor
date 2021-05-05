@@ -56,5 +56,7 @@ struct project_player_interface {
 
 struct project_timeline_editor_interface {
     virtual ~project_timeline_editor_interface() = default;
+
+    virtual void setup(url const &) = 0;
 };
 }  // namespace yas::ae
