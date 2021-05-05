@@ -18,6 +18,10 @@ void player::set_timeline(proc::timeline_ptr const &time_line) {
     this->_coordinator->set_timeline(time_line, this->_identifier);
 }
 
+void player::reset_timeline() {
+    this->_coordinator->reset_timeline();
+}
+
 void player::set_playing(bool const is_playing) {
     this->_coordinator->set_playing(is_playing);
 }

@@ -10,7 +10,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::test_utils {
-struct project_url_stub : project_url_interface {
+struct project_url_stub final : project_url_interface {
     url root_directory_value{url::file_url("/test/root")};
     url editing_file_value{url::file_url("/test/root/editing.caf")};
     url playing_directory_value{url::file_url("/test/root/playing")};
@@ -32,7 +32,7 @@ struct project_url_stub : project_url_interface {
     }
 };
 
-struct file_importer_stub : project_file_importer_interface {
+struct file_importer_stub final : project_file_importer_interface {
     std::function<bool(url const &, url const &)> import_handler{[](url const &, url const &) { return false; }};
     std::function<void(std::string const &)> cancel_handler{[](std::string const &) {}};
 
@@ -47,7 +47,7 @@ struct file_importer_stub : project_file_importer_interface {
     }
 };
 
-struct file_loader_stub : project_file_loader_interface {
+struct file_loader_stub final : project_file_loader_interface {
     std::optional<file_info> file_info_value = std::nullopt;
 
     std::optional<file_info> load_file_info(url const &) const override {
@@ -55,7 +55,7 @@ struct file_loader_stub : project_file_loader_interface {
     }
 };
 
-struct player_stub : project_player_interface {
+struct player_stub final : project_player_interface {
     void set_playing(bool const) override {
     }
 
@@ -75,7 +75,10 @@ struct player_stub : project_player_interface {
     }
 };
 
-struct timeline_editor_stub : project_timeline_editor_interface {};
+struct timeline_editor_stub final : project_timeline_editor_interface {
+    void setup(url const &) override {
+    }
+};
 }
 
 @interface ae_project_tests : XCTestCase
@@ -131,7 +134,7 @@ struct timeline_editor_stub : project_timeline_editor_interface {};
     auto const timeline_editor = std::make_shared<test_utils::timeline_editor_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
-    file_loader->file_info_value = {.sample_rate = 48000, .length = 2};
+    file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
                                               player, timeline_editor);
@@ -169,7 +172,7 @@ struct timeline_editor_stub : project_timeline_editor_interface {};
     XCTAssertEqual(project->state(), project_state::editing);
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::editing);
-    XCTAssertEqual(project->file_info(), (file_info{.sample_rate = 48000, .length = 2}));
+    XCTAssertEqual(project->file_info(), (file_info{.sample_rate = 48000, .channel_count = 1, .length = 2}));
 }
 
 - (void)test_import_failure {
@@ -181,7 +184,7 @@ struct timeline_editor_stub : project_timeline_editor_interface {};
     auto const timeline_editor = std::make_shared<test_utils::timeline_editor_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
-    file_loader->file_info_value = {.sample_rate = 96000, .length = 3};
+    file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
                                               player, timeline_editor);

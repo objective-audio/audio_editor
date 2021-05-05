@@ -124,6 +124,7 @@ void project::_setup(std::weak_ptr<project> weak) {
                                                       project->_file_info->set_value(
                                                           project->_file_loader->load_file_info(dst_url));
                                                       if (project->_file_info->value().has_value()) {
+                                                          project->_timeline_editor->setup(dst_url);
                                                           project->_state->set_value(project_state::editing);
                                                       } else {
                                                           project->_state->set_value(project_state::failure);

@@ -15,11 +15,13 @@ struct system_url final {
     static std::shared_ptr<system_url> make_shared();
 
    private:
-    system_url() = default;
+    system_url();
 
     system_url(system_url const &) = delete;
     system_url(system_url &&) = delete;
     system_url &operator=(system_url const &) = delete;
     system_url &operator=(system_url &&) = delete;
+
+    void _log_app_directory() const;
 };
 }  // namespace yas::ae

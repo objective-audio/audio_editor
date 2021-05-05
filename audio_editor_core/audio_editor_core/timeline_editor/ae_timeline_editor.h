@@ -9,13 +9,18 @@
 
 namespace yas::ae {
 struct timeline_editor final : project_timeline_editor_interface {
+    void setup(url const &) override;
+
     static std::shared_ptr<timeline_editor> make_shared(std::shared_ptr<timeline_player_interface> const &);
+    static std::shared_ptr<timeline_editor> make_shared(std::shared_ptr<timeline_file_loader_interface> const &,
+                                                        std::shared_ptr<timeline_player_interface> const &);
 
    private:
-    std::shared_ptr<proc::timeline> const _timeline;
+    std::shared_ptr<timeline_file_loader_interface> const _file_loader;
     std::shared_ptr<timeline_player_interface> const _player;
 
-    timeline_editor(std::shared_ptr<timeline_player_interface> const &);
+    timeline_editor(std::shared_ptr<timeline_file_loader_interface> const &,
+                    std::shared_ptr<timeline_player_interface> const &);
 
     timeline_editor(timeline_editor const &) = delete;
     timeline_editor(timeline_editor &&) = delete;
