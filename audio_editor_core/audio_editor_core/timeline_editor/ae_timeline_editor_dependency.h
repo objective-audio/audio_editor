@@ -23,5 +23,6 @@ struct timeline_player_interface {
     virtual ~timeline_player_interface() = default;
 
     virtual void set_timeline(std::shared_ptr<proc::timeline> const &) = 0;
+    virtual void reset_timeline() = 0;
 };
 }  // namespace yas::ae
