@@ -18,6 +18,10 @@ url project_url::editing_file() const {
     return this->_root.appending("editing.caf");
 }
 
+url project_url::playing_directory() const {
+    return this->_root.appending("playing");
+}
+
 std::shared_ptr<project_url> project_url::make_shared(url const &root) {
     return std::shared_ptr<project_url>(new project_url{root});
 }

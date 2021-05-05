@@ -14,12 +14,20 @@ using namespace yas::ae;
 
 @property (nonatomic, weak) IBOutlet NSTextField *statusLabel;
 @property (nonatomic, weak) IBOutlet NSTextField *fileInfoLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *playerLabel;
+@property (nonatomic, weak) IBOutlet NSButton *isPlayButton;
+
+@property (nonatomic) NSTimer *timer;
 
 @end
 
 @implementation AEViewController {
     std::shared_ptr<project_view_presenter> _presenter;
     observing::canceller_pool _pool;
+}
+
+- (void)dealloc {
+    [self.timer invalidate];
 }
 
 - (void)setupWithProjectID:(std::string const &)project_id {
@@ -40,12 +48,32 @@ using namespace yas::ae;
         })
         .sync()
         ->add_to(self->_pool);
+
+    self->_presenter
+        ->observe_play_button_string([unowned](std::string const &string) {
+            unowned.object.isPlayButton.title = (__bridge NSString *)to_cf_object(string);
+        })
+        .sync()
+        ->add_to(self->_pool);
+
+    self.timer = [NSTimer
+        scheduledTimerWithTimeInterval:1.0 / 10.0
+                               repeats:YES
+                                 block:^(NSTimer *timer) {
+                                     AEViewController *viewController = unowned.object;
+                                     viewController.playerLabel.stringValue =
+                                         (__bridge NSString *)to_cf_object(viewController->_presenter->player_string());
+                                 }];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     // Do any additional setup after loading the view.
+}
+
+- (IBAction)playButtonClicked:(NSButton *)sender {
+    self->_presenter->play_button_clicked();
 }
 
 @end

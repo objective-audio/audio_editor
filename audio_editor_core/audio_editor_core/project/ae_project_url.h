@@ -10,6 +10,7 @@ namespace yas::ae {
 struct project_url final : project_url_interface {
     url const &root_directory() const override;
     url editing_file() const override;
+    url playing_directory() const override;
 
     static std::shared_ptr<project_url> make_shared(url const &root);
 

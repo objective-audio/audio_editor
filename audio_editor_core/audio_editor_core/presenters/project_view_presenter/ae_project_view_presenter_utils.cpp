@@ -30,3 +30,11 @@ std::string project_view_presenter_utils::to_label_string(std::optional<file_inf
         return "-";
     }
 }
+
+std::string project_view_presenter_utils::to_player_string(frame_index_t const current_frame) {
+    return "current : " + std::to_string(current_frame);
+}
+
+std::string project_view_presenter_utils::to_play_button_string(bool const is_playing) {
+    return is_playing ? "played" : "paused";
+}
