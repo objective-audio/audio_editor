@@ -14,8 +14,10 @@ player::player(std::shared_ptr<playing::coordinator> const &coordinator, std::st
     : _identifier(identifier), _coordinator(coordinator) {
 }
 
-void player::set_timeline(proc::timeline_ptr const &time_line) {
+void player::set_timeline(proc::timeline_ptr const &time_line, playing::sample_rate_t const sample_rate,
+                          audio::pcm_format const pcm_format) {
     this->_coordinator->set_timeline(time_line, this->_identifier);
+    this->_coordinator->set_timeline_format(sample_rate, pcm_format);
 }
 
 void player::reset_timeline() {

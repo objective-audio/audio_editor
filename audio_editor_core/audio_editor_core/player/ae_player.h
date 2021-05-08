@@ -13,7 +13,8 @@
 
 namespace yas::ae {
 struct player final : project_player_interface, timeline_player_interface {
-    void set_timeline(std::shared_ptr<proc::timeline> const &) override;
+    void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,
+                      audio::pcm_format const) override;
     void reset_timeline() override;
     void set_playing(bool const) override;
     bool is_playing() const override;

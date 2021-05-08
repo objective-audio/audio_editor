@@ -8,7 +8,7 @@
 
 namespace yas::ae {
 struct file_info final {
-    double sample_rate;
+    uint32_t sample_rate;
     uint32_t channel_count;
     uint64_t length;
 

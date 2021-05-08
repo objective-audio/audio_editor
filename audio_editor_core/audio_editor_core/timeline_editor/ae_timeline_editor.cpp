@@ -34,7 +34,7 @@ void timeline_editor::setup(url const &url) {
         track->insert_module(module, 0, proc::time::range{0, file_info.length});
         timeline->insert_track(0, track);
 
-        this->_player->set_timeline(timeline);
+        this->_player->set_timeline(timeline, file_info.sample_rate, audio::pcm_format::float32);
     } else {
         this->_player->reset_timeline();
     }

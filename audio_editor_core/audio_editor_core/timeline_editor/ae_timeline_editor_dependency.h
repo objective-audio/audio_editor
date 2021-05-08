@@ -4,7 +4,9 @@
 
 #pragma once
 
+#include <audio/yas_audio_umbrella.h>
 #include <audio_editor_core/ae_file_loader_types.h>
+#include <playing/yas_playing_umbrella.h>
 
 #include <memory>
 
@@ -22,7 +24,8 @@ struct timeline_file_loader_interface {
 struct timeline_player_interface {
     virtual ~timeline_player_interface() = default;
 
-    virtual void set_timeline(std::shared_ptr<proc::timeline> const &) = 0;
+    virtual void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,
+                              audio::pcm_format const) = 0;
     virtual void reset_timeline() = 0;
 };
 }  // namespace yas::ae
