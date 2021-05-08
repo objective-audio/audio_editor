@@ -25,6 +25,10 @@ url system_url::app_directory() const {
     return this->document_directory().appending("audio_editor_app");
 }
 
+url system_url::playing_directory() const {
+    return this->app_directory().appending("playing");
+}
+
 url system_url::project_directory(std::string const &project_id) const {
     return this->app_directory().appending(project_id);
 }

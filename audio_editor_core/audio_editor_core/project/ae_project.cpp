@@ -38,7 +38,7 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
     auto const project_url = project_url::make_shared(app->system_url()->project_directory(identifier));
     auto const file_importer = app->file_importer();
     auto const file_loader = app->file_loader();
-    auto const player = player::make_shared(project_url->playing_directory(), identifier);
+    auto const player = player::make_shared(app->system_url()->playing_directory(), identifier);
     auto const timeline_editor = timeline_editor::make_shared(player);
     return make_shared(identifier, file_url, project_url, file_importer, file_loader, player, timeline_editor);
 }
