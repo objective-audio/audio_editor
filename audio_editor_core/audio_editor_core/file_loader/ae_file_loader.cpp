@@ -22,7 +22,7 @@ std::optional<file_info> file_loader::load_file_info(url const &url) const {
 
     auto const &processing_format = file->processing_format();
 
-    return file_info{.sample_rate = processing_format.sample_rate(),
+    return file_info{.sample_rate = static_cast<uint32_t>(std::round(processing_format.sample_rate())),
                      .channel_count = processing_format.channel_count(),
                      .length = static_cast<uint64_t>(file->processing_length())};
 }
