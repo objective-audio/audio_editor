@@ -13,14 +13,17 @@ struct timeline_editor final : project_timeline_editor_interface {
 
     static std::shared_ptr<timeline_editor> make_shared(std::shared_ptr<timeline_player_interface> const &);
     static std::shared_ptr<timeline_editor> make_shared(std::shared_ptr<timeline_file_loader_interface> const &,
-                                                        std::shared_ptr<timeline_player_interface> const &);
+                                                        std::shared_ptr<timeline_player_interface> const &,
+                                                        std::shared_ptr<timeline_file_track_interface> const &);
 
    private:
     std::shared_ptr<timeline_file_loader_interface> const _file_loader;
     std::shared_ptr<timeline_player_interface> const _player;
+    std::shared_ptr<timeline_file_track_interface> const _file_track;
 
     timeline_editor(std::shared_ptr<timeline_file_loader_interface> const &,
-                    std::shared_ptr<timeline_player_interface> const &);
+                    std::shared_ptr<timeline_player_interface> const &,
+                    std::shared_ptr<timeline_file_track_interface> const &);
 
     timeline_editor(timeline_editor const &) = delete;
     timeline_editor(timeline_editor &&) = delete;

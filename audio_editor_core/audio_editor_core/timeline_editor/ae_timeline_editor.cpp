@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_file_loader.h>
+#include <audio_editor_core/ae_file_track.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
 
@@ -13,8 +14,9 @@ using namespace yas;
 using namespace yas::ae;
 
 timeline_editor::timeline_editor(std::shared_ptr<timeline_file_loader_interface> const &file_loader,
-                                 std::shared_ptr<timeline_player_interface> const &player)
-    : _file_loader(file_loader), _player(player) {
+                                 std::shared_ptr<timeline_player_interface> const &player,
+                                 std::shared_ptr<timeline_file_track_interface> const &file_track)
+    : _file_loader(file_loader), _player(player), _file_track(file_track) {
 }
 
 void timeline_editor::setup(url const &url) {
@@ -42,11 +44,12 @@ void timeline_editor::setup(url const &url) {
 
 std::shared_ptr<timeline_editor> timeline_editor::make_shared(
     std::shared_ptr<timeline_player_interface> const &player) {
-    return make_shared(app::global()->file_loader(), player);
+    return make_shared(app::global()->file_loader(), player, file_track::make_shared());
 }
 
 std::shared_ptr<timeline_editor> timeline_editor::make_shared(
     std::shared_ptr<timeline_file_loader_interface> const &file_loader,
-    std::shared_ptr<timeline_player_interface> const &player) {
-    return std::shared_ptr<timeline_editor>(new timeline_editor{file_loader, player});
+    std::shared_ptr<timeline_player_interface> const &player,
+    std::shared_ptr<timeline_file_track_interface> const &file_track) {
+    return std::shared_ptr<timeline_editor>(new timeline_editor{file_loader, player, file_track});
 }

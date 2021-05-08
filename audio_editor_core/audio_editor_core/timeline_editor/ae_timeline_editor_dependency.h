@@ -28,4 +28,8 @@ struct timeline_player_interface {
                               audio::pcm_format const) = 0;
     virtual void reset_timeline() = 0;
 };
+
+struct timeline_file_track_interface {
+    virtual ~timeline_file_track_interface() = default;
+};
 }  // namespace yas::ae
