@@ -10,14 +10,14 @@
 
 namespace yas::ae {
 struct file_track final : timeline_file_track_interface {
-    file_track_module_map_t const &modules() const;
+    [[nodiscard]] file_track_module_map_t const &modules() const;
 
     void replace_modules(std::vector<file_module> &&);
     void insert_module(file_module const &);
 
-    observing::syncable observe_event(std::function<void(file_track_event const &)> &&);
+    [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&);
 
-    static std::shared_ptr<file_track> make_shared();
+    [[nodiscard]] static std::shared_ptr<file_track> make_shared();
 
    private:
     file_track_module_map_t _modules;
