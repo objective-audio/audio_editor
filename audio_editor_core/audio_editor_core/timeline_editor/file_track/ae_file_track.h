@@ -14,7 +14,7 @@ struct file_track final : timeline_file_track_interface {
 
     void insert_module(file_module const &);
 
-    observing::syncable observe(std::function<void(file_track_event const &)> &&);
+    observing::syncable observe_event(std::function<void(file_track_event const &)> &&);
 
     static std::shared_ptr<file_track> make_shared();
 

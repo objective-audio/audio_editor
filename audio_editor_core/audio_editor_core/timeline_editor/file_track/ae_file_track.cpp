@@ -21,7 +21,7 @@ void file_track::insert_module(file_module const &module) {
     this->_event_fetcher->push({.type = file_track_event_type::inserted, .module = module, .modules = this->_modules});
 }
 
-observing::syncable file_track::observe(std::function<void(file_track_event const &)> &&handler) {
+observing::syncable file_track::observe_event(std::function<void(file_track_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }
 
