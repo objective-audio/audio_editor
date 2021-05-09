@@ -65,13 +65,24 @@ using namespace yas::ae;
 
     track->replace_modules({module1, module2});
 
-    track->observe_event([&called](auto const &event) {
-        called.emplace_back(called_event{.type = event.type, .module = event.module, .modules = event.modules});
-    });
+    auto canceller =
+        track
+            ->observe_event([&called](auto const &event) {
+                called.emplace_back(called_event{.type = event.type, .module = event.module, .modules = event.modules});
+            })
+            .sync();
+
+    XCTAssertEqual(called.size(), 1);
+    XCTAssertEqual(called.at(0).type, file_track_event_type::any);
 
     file_module const module3{.range = proc::time::range{4, 3}, .file_frame = 4};
 
     track->insert_module(module3);
+
+    XCTAssertEqual(called.size(), 2);
+    XCTAssertEqual(called.at(1).type, file_track_event_type::inserted);
+
+    canceller->cancel();
 }
 
 @end
