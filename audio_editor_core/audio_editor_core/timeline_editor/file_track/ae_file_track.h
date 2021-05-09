@@ -14,7 +14,7 @@ struct file_track final : timeline_file_track_interface {
     using module_map_t = std::map<proc::time::range, file_module>;
     module_map_t const &modules() const;
 
-    void insert_module(file_module &&);
+    void insert_module(file_module const &);
 
     static std::shared_ptr<file_track> make_shared();
 
