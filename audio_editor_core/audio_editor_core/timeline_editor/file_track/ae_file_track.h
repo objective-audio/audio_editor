@@ -4,24 +4,26 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_file_module.h>
+#include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_timeline_editor_dependency.h>
-
-#include <map>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct file_track final : timeline_file_track_interface {
-    using module_map_t = std::map<proc::time::range, file_module>;
-    module_map_t const &modules() const;
+    file_track_module_map_t const &modules() const;
 
     void insert_module(file_module const &);
+
+    observing::syncable observe(std::function<void(file_track_event const &)> &&);
 
     static std::shared_ptr<file_track> make_shared();
 
    private:
-    module_map_t _modules;
+    file_track_module_map_t _modules;
 
-    file_track() = default;
+    observing::fetcher_ptr<file_track_event> _event_fetcher;
+
+    file_track();
 
     file_track(file_track const &) = delete;
     file_track(file_track &&) = delete;
