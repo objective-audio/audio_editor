@@ -4,6 +4,8 @@
 
 #include "ae_file_track.h"
 
+#include <cpp_utils/yas_stl_utils.h>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -14,6 +16,11 @@ file_track::file_track() {
 
 file_track_module_map_t const &file_track::modules() const {
     return this->_modules;
+}
+
+void file_track::replace_modules(std::vector<file_module> &&modules) {
+    this->_modules = to_map<proc::time::range>(modules, [](file_module const &module) { return module.range; });
+    this->_event_fetcher->push({.type = file_track_event_type::any, .modules = this->_modules});
 }
 
 void file_track::insert_module(file_module const &module) {

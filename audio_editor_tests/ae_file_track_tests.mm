@@ -49,4 +49,29 @@ using namespace yas::ae;
     XCTAssertEqual(iterator->first, module2.range);
 }
 
+- (void)test_observe_event {
+    struct called_event {
+        file_track_event_type type;
+        std::optional<file_module> module{std::nullopt};
+        file_track_module_map_t modules;
+    };
+
+    std::vector<called_event> called;
+
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = proc::time::range{0, 4}, .file_frame = 0};
+    file_module const module2{.range = proc::time::range{7, 5}, .file_frame = 7};
+
+    track->replace_modules({module1, module2});
+
+    track->observe_event([&called](auto const &event) {
+        called.emplace_back(called_event{.type = event.type, .module = event.module, .modules = event.modules});
+    });
+
+    file_module const module3{.range = proc::time::range{4, 3}, .file_frame = 4};
+
+    track->insert_module(module3);
+}
+
 @end
