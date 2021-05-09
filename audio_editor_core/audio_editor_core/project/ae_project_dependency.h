@@ -54,9 +54,13 @@ struct project_player_interface {
     [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;
 };
 
-struct project_timeline_editor_interface {
-    virtual ~project_timeline_editor_interface() = default;
+struct project_editor_interface {
+    virtual ~project_editor_interface() = default;
+};
 
-    virtual void setup(url const &) = 0;
+struct project_editor_maker_interface {
+    virtual ~project_editor_maker_interface() = default;
+
+    [[nodiscard]] virtual std::shared_ptr<project_editor_interface> make(url const &, file_info const &) const = 0;
 };
 }  // namespace yas::ae
