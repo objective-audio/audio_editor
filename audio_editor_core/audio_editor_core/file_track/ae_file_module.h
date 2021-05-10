@@ -12,12 +12,7 @@ struct file_module {
     proc::time::range range;
     proc::frame_index_t file_frame;
 
-    bool operator==(file_module const &rhs) const {
-        return this->range == rhs.range && this->file_frame == rhs.file_frame;
-    }
-
-    bool operator!=(file_module const &rhs) const {
-        return !(*this == rhs);
-    }
+    bool operator==(file_module const &rhs) const;
+    bool operator!=(file_module const &rhs) const;
 };
 }  // namespace yas::ae
