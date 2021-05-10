@@ -36,6 +36,16 @@ void file_track::erase_module(file_module const &module) {
     }
 }
 
+std::optional<file_module> file_track::splittable_module(proc::frame_index_t const frame) const {
+    for (auto const &pair : this->_modules) {
+        auto const &range = pair.first;
+        if (range.is_contain(frame) && range.frame != frame) {
+            return pair.second;
+        }
+    }
+    return std::nullopt;
+}
+
 observing::syncable file_track::observe_event(std::function<void(file_track_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }

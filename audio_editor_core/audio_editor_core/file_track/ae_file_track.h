@@ -16,6 +16,8 @@ struct file_track final : project_editor_file_track_interface {
     void insert_module(file_module const &);
     void erase_module(file_module const &);
 
+    std::optional<file_module> splittable_module(proc::frame_index_t const) const;
+
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&);
 
     [[nodiscard]] static std::shared_ptr<file_track> make_shared();
