@@ -49,6 +49,22 @@ using namespace yas::ae;
     XCTAssertEqual(iterator->first, module2.range);
 }
 
+- (void)test_erase_module {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = proc::time::range{0, 4}, .file_frame = 0};
+    file_module const module2{.range = proc::time::range{5, 3}, .file_frame = 5};
+
+    track->replace_modules({module1, module2});
+
+    XCTAssertEqual(track->modules().size(), 2);
+
+    track->erase_module(module1);
+
+    XCTAssertEqual(track->modules().size(), 1);
+    XCTAssertEqual(track->modules().count(module2.range), 1);
+}
+
 - (void)test_observe_event {
     struct called_event {
         file_track_event_type type;
@@ -74,6 +90,8 @@ using namespace yas::ae;
 
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0).type, file_track_event_type::any);
+    XCTAssertEqual(called.at(0).modules.size(), 2);
+    XCTAssertEqual(called.at(0).module, std::nullopt);
 
     file_module const module3{.range = proc::time::range{4, 3}, .file_frame = 4};
 
@@ -81,6 +99,15 @@ using namespace yas::ae;
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, file_track_event_type::inserted);
+    XCTAssertEqual(called.at(1).modules.size(), 3);
+    XCTAssertEqual(called.at(1).module, module3);
+
+    track->erase_module(module1);
+
+    XCTAssertEqual(called.size(), 3);
+    XCTAssertEqual(called.at(2).type, file_track_event_type::erased);
+    XCTAssertEqual(called.at(2).modules.size(), 2);
+    XCTAssertEqual(called.at(2).module, module1);
 
     canceller->cancel();
 }
