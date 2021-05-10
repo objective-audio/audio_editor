@@ -13,7 +13,7 @@
 #include <optional>
 
 namespace yas::ae {
-struct file_loader final : project_file_loader_interface, timeline_file_loader_interface {
+struct file_loader final : project_file_loader_interface, project_editor_file_loader_interface {
     std::optional<file_info> load_file_info(url const &) const override;
 
     static std::shared_ptr<file_loader> make_shared();

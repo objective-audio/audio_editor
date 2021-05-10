@@ -9,7 +9,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct file_track final : timeline_file_track_interface {
+struct file_track final : project_editor_file_track_interface {
     [[nodiscard]] file_track_module_map_t const &modules() const;
 
     void replace_modules(std::vector<file_module> &&);

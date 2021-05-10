@@ -17,22 +17,22 @@ class timeline;
 }
 
 namespace yas::ae {
-struct timeline_file_loader_interface {
-    virtual ~timeline_file_loader_interface() = default;
+struct project_editor_file_loader_interface {
+    virtual ~project_editor_file_loader_interface() = default;
 
     virtual std::optional<file_info> load_file_info(url const &) const = 0;
 };
 
-struct timeline_player_interface {
-    virtual ~timeline_player_interface() = default;
+struct project_editor_player_interface {
+    virtual ~project_editor_player_interface() = default;
 
     virtual void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,
                               audio::pcm_format const) = 0;
     virtual void reset_timeline() = 0;
 };
 
-struct timeline_file_track_interface {
-    virtual ~timeline_file_track_interface() = default;
+struct project_editor_file_track_interface {
+    virtual ~project_editor_file_track_interface() = default;
 
     virtual void replace_modules(std::vector<file_module> &&) = 0;
     virtual void insert_module(file_module const &) = 0;
