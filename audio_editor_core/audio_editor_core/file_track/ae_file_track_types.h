@@ -19,7 +19,7 @@ enum file_track_event_type {
 
 struct file_track_event {
     file_track_event_type type;
-    std::optional<file_module> module{std::nullopt};
+    std::optional<file_module> module{std::nullopt};  // inserted, erased
     file_track_module_map_t const &modules;
 };
 }  // namespace yas::ae
