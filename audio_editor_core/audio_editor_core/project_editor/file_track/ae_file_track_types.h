@@ -14,6 +14,7 @@ using file_track_module_map_t = std::map<proc::time::range, file_module>;
 enum file_track_event_type {
     any,
     inserted,
+    erased,
 };
 
 struct file_track_event {
