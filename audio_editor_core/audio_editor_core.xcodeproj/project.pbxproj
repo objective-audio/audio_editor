@@ -278,7 +278,7 @@
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B666CE08263424DA00C1693D /* file_importer */,
 				B6B002B5263BC7220013E6D0 /* file_loader */,
-				B6EA40DB2641721100BF3D06 /* timeline_editor */,
+				B6EA40DB2641721100BF3D06 /* project_editor */,
 				B6C9A7242640476A00585FDF /* player */,
 				B666CDE52634124100C1693D /* utils */,
 				B634FDB7263C2C0B0096E69F /* presenters */,
@@ -347,7 +347,7 @@
 			path = window_presenter;
 			sourceTree = "<group>";
 		};
-		B6EA40DB2641721100BF3D06 /* timeline_editor */ = {
+		B6EA40DB2641721100BF3D06 /* project_editor */ = {
 			isa = PBXGroup;
 			children = (
 				B6EA40E22641742300BF3D06 /* ae_project_editor_dependency.h */,
@@ -359,7 +359,7 @@
 				B6EA40DD2641722600BF3D06 /* ae_project_editor.h */,
 				B6604F7C2646D7C7003439F1 /* file_track */,
 			);
-			path = timeline_editor;
+			path = project_editor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
