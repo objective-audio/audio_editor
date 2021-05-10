@@ -112,4 +112,27 @@ using namespace yas::ae;
     canceller->cancel();
 }
 
+- (void)test_splittable_module {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = proc::time::range{0, 1}, .file_frame = 0};
+    file_module const module2{.range = proc::time::range{1, 2}, .file_frame = 1};
+    file_module const module3{.range = proc::time::range{3, 3}, .file_frame = 3};
+    file_module const module4{.range = proc::time::range{7, 2}, .file_frame = 7};
+
+    track->replace_modules({module1, module2, module3, module4});
+
+    XCTAssertFalse(track->splittable_module(-1));
+    XCTAssertFalse(track->splittable_module(0));
+    XCTAssertFalse(track->splittable_module(1));
+    XCTAssertTrue(track->splittable_module(2));
+    XCTAssertFalse(track->splittable_module(3));
+    XCTAssertTrue(track->splittable_module(4));
+    XCTAssertTrue(track->splittable_module(5));
+    XCTAssertFalse(track->splittable_module(6));
+    XCTAssertFalse(track->splittable_module(7));
+    XCTAssertTrue(track->splittable_module(8));
+    XCTAssertFalse(track->splittable_module(9));
+}
+
 @end
