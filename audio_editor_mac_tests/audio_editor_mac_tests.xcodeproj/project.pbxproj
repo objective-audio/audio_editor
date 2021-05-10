@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B64E2121263C44A300B1BF51 /* ae_file_loader_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */; };
+		B6604F8E26476FD5003439F1 /* ae_file_track_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6604F8D26476FD5003439F1 /* ae_file_track_tests.mm */; };
 		B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B666CDF22634152600C1693D /* ae_system_url_tests.mm */; };
 		B666CE1B26342B4100C1693D /* ae_test_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B666CE1926342B4100C1693D /* ae_test_utils.cpp */; };
 		B666CE3D2634FEF300C1693D /* ae_uuid_generator_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B666CE3C2634FEF300C1693D /* ae_uuid_generator_tests.mm */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_loader_tests.mm; path = ../../audio_editor_tests/ae_file_loader_tests.mm; sourceTree = "<group>"; };
+		B6604F8D26476FD5003439F1 /* ae_file_track_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_track_tests.mm; path = ../../audio_editor_tests/ae_file_track_tests.mm; sourceTree = "<group>"; };
 		B666CDF22634152600C1693D /* ae_system_url_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_system_url_tests.mm; path = ../../audio_editor_tests/ae_system_url_tests.mm; sourceTree = "<group>"; };
 		B666CE1926342B4100C1693D /* ae_test_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_test_utils.cpp; sourceTree = "<group>"; };
 		B666CE1A26342B4100C1693D /* ae_test_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_test_utils.h; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				B666CDF22634152600C1693D /* ae_system_url_tests.mm */,
 				B666CE3C2634FEF300C1693D /* ae_uuid_generator_tests.mm */,
 				B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */,
+				B6604F8D26476FD5003439F1 /* ae_file_track_tests.mm */,
 				B66909F7262A7CD600E86353 /* Info.plist */,
 			);
 			path = audio_editor_mac_tests;
@@ -205,6 +208,7 @@
 				B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */,
 				B666CE1B26342B4100C1693D /* ae_test_utils.cpp in Sources */,
 				B69CF573262AC98D007A0A75 /* ae_project_tests.mm in Sources */,
+				B6604F8E26476FD5003439F1 /* ae_file_track_tests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

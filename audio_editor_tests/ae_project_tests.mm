@@ -75,8 +75,11 @@ struct player_stub final : project_player_interface {
     }
 };
 
-struct timeline_editor_stub final : project_timeline_editor_interface {
-    void setup(url const &) override {
+struct project_editor_stub final : project_editor_interface {};
+
+struct project_editor_maker_stub final : project_editor_maker_interface {
+    [[nodiscard]] std::shared_ptr<project_editor_interface> make(url const &, file_info const &) const override {
+        return std::make_shared<project_editor_stub>();
     }
 };
 }
@@ -101,7 +104,7 @@ struct timeline_editor_stub final : project_timeline_editor_interface {
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
-    auto const timeline_editor = std::make_shared<test_utils::timeline_editor_stub>();
+    auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
 
     struct called_values {
         url src_url;
@@ -116,7 +119,7 @@ struct timeline_editor_stub final : project_timeline_editor_interface {
     };
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, timeline_editor);
+                                              player, editor_maker);
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -131,13 +134,13 @@ struct timeline_editor_stub final : project_timeline_editor_interface {
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
-    auto const timeline_editor = std::make_shared<test_utils::timeline_editor_stub>();
+    auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, timeline_editor);
+                                              player, editor_maker);
 
     std::vector<project_state> called;
 
@@ -181,13 +184,13 @@ struct timeline_editor_stub final : project_timeline_editor_interface {
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
-    auto const timeline_editor = std::make_shared<test_utils::timeline_editor_stub>();
+    auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, timeline_editor);
+                                              player, editor_maker);
 
     std::vector<project_state> called;
 

@@ -8,8 +8,8 @@
 #include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_player.h>
+#include <audio_editor_core/ae_project_editor_maker.h>
 #include <audio_editor_core/ae_system_url.h>
-#include <audio_editor_core/ae_timeline_editor.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
@@ -20,14 +20,14 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<project_file_importer_interface> const &file_importer,
                  std::shared_ptr<project_file_loader_interface> const &file_loader,
                  std::shared_ptr<project_player_interface> const &player,
-                 std::shared_ptr<project_timeline_editor_interface> const &timeline_editor)
+                 std::shared_ptr<project_editor_maker_interface> const &editor_maker)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),
       _file_importer(file_importer),
       _file_loader(file_loader),
       _player(player),
-      _timeline_editor(timeline_editor),
+      _editor_maker(editor_maker),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _file_info(observing::value::holder<std::optional<ae::file_info>>::make_shared(std::nullopt)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
@@ -39,18 +39,18 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
     auto const file_importer = app->file_importer();
     auto const file_loader = app->file_loader();
     auto const player = player::make_shared(app->system_url()->playing_directory(), identifier);
-    auto const timeline_editor = timeline_editor::make_shared(player);
-    return make_shared(identifier, file_url, project_url, file_importer, file_loader, player, timeline_editor);
+    auto const editor_maker = project_editor_maker::make_shared(player);
+    return make_shared(identifier, file_url, project_url, file_importer, file_loader, player, editor_maker);
 }
 
-std::shared_ptr<project> project::make_shared(
-    std::string const &identifier, url const &file_url, std::shared_ptr<project_url_interface> const &project_url,
-    std::shared_ptr<project_file_importer_interface> const &file_importer,
-    std::shared_ptr<project_file_loader_interface> const &file_loader,
-    std::shared_ptr<project_player_interface> const &player,
-    std::shared_ptr<project_timeline_editor_interface> const &timeline_editor) {
+std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url,
+                                              std::shared_ptr<project_url_interface> const &project_url,
+                                              std::shared_ptr<project_file_importer_interface> const &file_importer,
+                                              std::shared_ptr<project_file_loader_interface> const &file_loader,
+                                              std::shared_ptr<project_player_interface> const &player,
+                                              std::shared_ptr<project_editor_maker_interface> const &editor_maker) {
     auto shared = std::shared_ptr<project>(
-        new project{identifier, file_url, project_url, file_importer, file_loader, player, timeline_editor});
+        new project{identifier, file_url, project_url, file_importer, file_loader, player, editor_maker});
     shared->_setup(shared);
     return shared;
 }
@@ -111,35 +111,36 @@ observing::endable project::observe_event(std::function<void(project_event const
 void project::_setup(std::weak_ptr<project> weak) {
     this->_state->set_value(project_state::loading);
 
-    this->_file_importer->import({.identifier = this->_identifier,
-                                  .src_url = this->_file_url,
-                                  .dst_url = this->_project_url->editing_file(),
-                                  .completion = [weak](bool const result) {
-                                      if (auto const project = weak.lock()) {
-                                          auto const &state = project->_state->value();
-                                          switch (state) {
-                                              case project_state::loading: {
-                                                  if (result) {
-                                                      auto const dst_url = project->_project_url->editing_file();
-                                                      project->_file_info->set_value(
-                                                          project->_file_loader->load_file_info(dst_url));
-                                                      if (project->_file_info->value().has_value()) {
-                                                          project->_timeline_editor->setup(dst_url);
-                                                          project->_state->set_value(project_state::editing);
-                                                      } else {
-                                                          project->_state->set_value(project_state::failure);
-                                                      }
-                                                  } else {
-                                                      project->_state->set_value(project_state::failure);
-                                                  }
-                                              } break;
+    this->_file_importer->import(
+        {.identifier = this->_identifier,
+         .src_url = this->_file_url,
+         .dst_url = this->_project_url->editing_file(),
+         .completion = [weak](bool const result) {
+             if (auto const project = weak.lock()) {
+                 auto const &state = project->_state->value();
+                 switch (state) {
+                     case project_state::loading: {
+                         if (result) {
+                             auto const dst_url = project->_project_url->editing_file();
+                             project->_file_info->set_value(project->_file_loader->load_file_info(dst_url));
+                             if (project->_file_info->value().has_value()) {
+                                 project->_editor =
+                                     project->_editor_maker->make(dst_url, project->_file_info->value().value());
+                                 project->_state->set_value(project_state::editing);
+                             } else {
+                                 project->_state->set_value(project_state::failure);
+                             }
+                         } else {
+                             project->_state->set_value(project_state::failure);
+                         }
+                     } break;
 
-                                              case project_state::launching:
-                                              case project_state::editing:
-                                              case project_state::failure:
-                                              case project_state::closing:
-                                                  break;
-                                          }
-                                      }
-                                  }});
+                     case project_state::launching:
+                     case project_state::editing:
+                     case project_state::failure:
+                     case project_state::closing:
+                         break;
+                 }
+             }
+         }});
 }
