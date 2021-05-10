@@ -274,18 +274,19 @@
 		B6A997432629B34E00DAC3FE /* audio_editor_core */ = {
 			isa = PBXGroup;
 			children = (
+				B6A997BE2629C0AA00DAC3FE /* app */,
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
 				B666CE08263424DA00C1693D /* file_importer */,
 				B6B002B5263BC7220013E6D0 /* file_loader */,
-				B6EA40DB2641721100BF3D06 /* project_editor */,
-				B6C9A7242640476A00585FDF /* player */,
-				B666CDE52634124100C1693D /* utils */,
-				B634FDB7263C2C0B0096E69F /* presenters */,
-				B6A997BE2629C0AA00DAC3FE /* app */,
-				B668BE22262F32870021AD20 /* project_pool */,
-				B69CF55E262AC48D007A0A75 /* project */,
+				B6604F7C2646D7C7003439F1 /* file_track */,
 				B6A997452629B34E00DAC3FE /* Info.plist */,
+				B6C9A7242640476A00585FDF /* player */,
+				B634FDB7263C2C0B0096E69F /* presenters */,
+				B69CF55E262AC48D007A0A75 /* project */,
+				B6EA40DB2641721100BF3D06 /* project_editor */,
+				B668BE22262F32870021AD20 /* project_pool */,
+				B666CDE52634124100C1693D /* utils */,
 			);
 			path = audio_editor_core;
 			sourceTree = "<group>";
@@ -357,7 +358,6 @@
 				B6D385302649623A005ADD0B /* ae_project_editor_utils.h */,
 				B6EA40DC2641722600BF3D06 /* ae_project_editor.cpp */,
 				B6EA40DD2641722600BF3D06 /* ae_project_editor.h */,
-				B6604F7C2646D7C7003439F1 /* file_track */,
 			);
 			path = project_editor;
 			sourceTree = "<group>";
