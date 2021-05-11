@@ -135,4 +135,37 @@ using namespace yas::ae;
     XCTAssertFalse(track->splittable_module(9));
 }
 
+- (void)test_split {
+    auto const track = file_track::make_shared();
+
+    file_module const src_module{.range = {0, 8}, .file_frame = 0};
+
+    track->replace_modules({src_module});
+
+    track->split(-1);
+    track->split(0);
+    track->split(8);
+    track->split(9);
+
+    XCTAssertEqual(track->modules().size(), 1);
+
+    track->split(1);
+
+    XCTAssertEqual(track->modules().size(), 2);
+    XCTAssertEqual(track->modules().count(proc::time::range{0, 1}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->modules().count(proc::time::range{1, 7}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{1, 7}), (file_module{.range = {1, 7}, .file_frame = 1}));
+
+    track->split(3);
+
+    XCTAssertEqual(track->modules().size(), 3);
+    XCTAssertEqual(track->modules().count(proc::time::range{0, 1}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->modules().count(proc::time::range{1, 2}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{1, 2}), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertEqual(track->modules().count(proc::time::range{3, 5}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{3, 5}), (file_module{.range = {3, 5}, .file_frame = 3}));
+}
+
 @end
