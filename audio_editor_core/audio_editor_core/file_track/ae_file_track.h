@@ -17,6 +17,7 @@ struct file_track final : project_editor_file_track_interface {
     void erase_module(file_module const &) override;
 
     std::optional<file_module> splittable_module(proc::frame_index_t const) const override;
+    void split(proc::frame_index_t const);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&) override;
 
