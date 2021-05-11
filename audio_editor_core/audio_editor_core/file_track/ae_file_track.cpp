@@ -38,8 +38,7 @@ void file_track::erase_module(file_module const &module) {
 
 std::optional<file_module> file_track::splittable_module(proc::frame_index_t const frame) const {
     for (auto const &pair : this->_modules) {
-        auto const &range = pair.first;
-        if (range.is_contain(frame) && range.frame != frame) {
+        if (pair.second.can_split(frame)) {
             return pair.second;
         }
     }
@@ -49,19 +48,9 @@ std::optional<file_module> file_track::splittable_module(proc::frame_index_t con
 void file_track::split(proc::frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
-
         this->erase_module(module);
-
-        auto const first_length = static_cast<proc::length_t>(frame - module.range.frame);
-        auto const next_length = static_cast<proc::length_t>(module.range.next_frame() - frame);
-
-        file_module const first_module{.range = {module.range.frame, first_length}, .file_frame = module.file_frame};
-        file_module const second_module{
-            .range = {frame, next_length},
-            .file_frame = static_cast<proc::frame_index_t>(module.file_frame + first_length)};
-
-        this->insert_module(first_module);
-        this->insert_module(second_module);
+        this->insert_module(module.tail_dropped(frame).value());
+        this->insert_module(module.head_dropped(frame).value());
     }
 }
 
