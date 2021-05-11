@@ -14,5 +14,9 @@ struct file_module {
 
     bool operator==(file_module const &rhs) const;
     bool operator!=(file_module const &rhs) const;
+
+    bool can_split(proc::frame_index_t const) const;
+    std::optional<file_module> head_dropped(proc::frame_index_t const) const;
+    std::optional<file_module> tail_dropped(proc::frame_index_t const) const;
 };
 }  // namespace yas::ae
