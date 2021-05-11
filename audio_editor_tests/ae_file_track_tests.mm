@@ -20,21 +20,21 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 0);
 
-    file_module const module1{.range = proc::time::range{0, 4}, .file_frame = 0};
+    file_module const module1{.range = {0, 4}, .file_frame = 0};
 
     track->insert_module(module1);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().at(module1.range), module1);
 
-    file_module const module2{.range = proc::time::range{4, 3}, .file_frame = 4};
+    file_module const module2{.range = {4, 3}, .file_frame = 4};
 
     track->insert_module(module2);
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().at(module2.range), module2);
 
-    file_module const module3{.range = proc::time::range{-2, 2}, .file_frame = 7};
+    file_module const module3{.range = {-2, 2}, .file_frame = 7};
 
     track->insert_module(module3);
 
@@ -52,8 +52,8 @@ using namespace yas::ae;
 - (void)test_erase_module {
     auto const track = file_track::make_shared();
 
-    file_module const module1{.range = proc::time::range{0, 4}, .file_frame = 0};
-    file_module const module2{.range = proc::time::range{5, 3}, .file_frame = 5};
+    file_module const module1{.range = {0, 4}, .file_frame = 0};
+    file_module const module2{.range = {5, 3}, .file_frame = 5};
 
     track->replace_modules({module1, module2});
 
@@ -76,8 +76,8 @@ using namespace yas::ae;
 
     auto const track = file_track::make_shared();
 
-    file_module const module1{.range = proc::time::range{0, 4}, .file_frame = 0};
-    file_module const module2{.range = proc::time::range{7, 5}, .file_frame = 7};
+    file_module const module1{.range = {0, 4}, .file_frame = 0};
+    file_module const module2{.range = {7, 5}, .file_frame = 7};
 
     track->replace_modules({module1, module2});
 
@@ -93,7 +93,7 @@ using namespace yas::ae;
     XCTAssertEqual(called.at(0).modules.size(), 2);
     XCTAssertEqual(called.at(0).module, std::nullopt);
 
-    file_module const module3{.range = proc::time::range{4, 3}, .file_frame = 4};
+    file_module const module3{.range = {4, 3}, .file_frame = 4};
 
     track->insert_module(module3);
 
@@ -115,10 +115,10 @@ using namespace yas::ae;
 - (void)test_splittable_module {
     auto const track = file_track::make_shared();
 
-    file_module const module1{.range = proc::time::range{0, 1}, .file_frame = 0};
-    file_module const module2{.range = proc::time::range{1, 2}, .file_frame = 1};
-    file_module const module3{.range = proc::time::range{3, 3}, .file_frame = 3};
-    file_module const module4{.range = proc::time::range{7, 2}, .file_frame = 7};
+    file_module const module1{.range = {0, 1}, .file_frame = 0};
+    file_module const module2{.range = {1, 2}, .file_frame = 1};
+    file_module const module3{.range = {3, 3}, .file_frame = 3};
+    file_module const module4{.range = {7, 2}, .file_frame = 7};
 
     track->replace_modules({module1, module2, module3, module4});
 
@@ -133,6 +133,39 @@ using namespace yas::ae;
     XCTAssertFalse(track->splittable_module(7));
     XCTAssertTrue(track->splittable_module(8));
     XCTAssertFalse(track->splittable_module(9));
+}
+
+- (void)test_split {
+    auto const track = file_track::make_shared();
+
+    file_module const src_module{.range = {0, 8}, .file_frame = 0};
+
+    track->replace_modules({src_module});
+
+    track->split(-1);
+    track->split(0);
+    track->split(8);
+    track->split(9);
+
+    XCTAssertEqual(track->modules().size(), 1);
+
+    track->split(1);
+
+    XCTAssertEqual(track->modules().size(), 2);
+    XCTAssertEqual(track->modules().count(proc::time::range{0, 1}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->modules().count(proc::time::range{1, 7}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{1, 7}), (file_module{.range = {1, 7}, .file_frame = 1}));
+
+    track->split(3);
+
+    XCTAssertEqual(track->modules().size(), 3);
+    XCTAssertEqual(track->modules().count(proc::time::range{0, 1}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->modules().count(proc::time::range{1, 2}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{1, 2}), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertEqual(track->modules().count(proc::time::range{3, 5}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{3, 5}), (file_module{.range = {3, 5}, .file_frame = 3}));
 }
 
 @end
