@@ -4,6 +4,7 @@
 
 #include "ae_file_track.h"
 
+#include <audio_editor_core/ae_file_module_utils.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
@@ -38,7 +39,7 @@ void file_track::erase_module(file_module const &module) {
 
 std::optional<file_module> file_track::splittable_module(proc::frame_index_t const frame) const {
     for (auto const &pair : this->_modules) {
-        if (pair.second.can_split(frame)) {
+        if (file_module_utils::can_split_time_range(pair.second.range, frame)) {
             return pair.second;
         }
     }
