@@ -15,8 +15,8 @@ using namespace yas;
 using namespace yas::ae;
 
 project_editor::project_editor(url const &url, file_info const &file_info,
-                               std::shared_ptr<timeline_player_interface> const &player,
-                               std::shared_ptr<timeline_file_track_interface> const &file_track)
+                               std::shared_ptr<project_editor_player_interface> const &player,
+                               std::shared_ptr<project_editor_file_track_interface> const &file_track)
     : _url(url),
       _file_info(file_info),
       _player(player),
@@ -59,13 +59,13 @@ project_editor::project_editor(url const &url, file_info const &file_info,
     this->_file_track->insert_module(file_module{proc::time::range{0, file_info.length}, 0});
 }
 
-std::shared_ptr<project_editor> project_editor::make_shared(url const &url, file_info const &file_info,
-                                                            std::shared_ptr<timeline_player_interface> const &player) {
+std::shared_ptr<project_editor> project_editor::make_shared(
+    url const &url, file_info const &file_info, std::shared_ptr<project_editor_player_interface> const &player) {
     return make_shared(url, file_info, player, file_track::make_shared());
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
-    url const &url, file_info const &file_info, std::shared_ptr<timeline_player_interface> const &player,
-    std::shared_ptr<timeline_file_track_interface> const &file_track) {
+    url const &url, file_info const &file_info, std::shared_ptr<project_editor_player_interface> const &player,
+    std::shared_ptr<project_editor_file_track_interface> const &file_track) {
     return std::shared_ptr<project_editor>(new project_editor{url, file_info, player, file_track});
 }

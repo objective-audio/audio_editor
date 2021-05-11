@@ -9,11 +9,14 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct file_track final : timeline_file_track_interface {
+struct file_track final : project_editor_file_track_interface {
     [[nodiscard]] file_track_module_map_t const &modules() const;
 
     void replace_modules(std::vector<file_module> &&);
     void insert_module(file_module const &);
+    void erase_module(file_module const &);
+
+    std::optional<file_module> splittable_module(proc::frame_index_t const) const;
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&);
 

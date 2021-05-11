@@ -12,23 +12,23 @@ struct project_editor final : project_editor_interface {
     void setup(url const &);
 
     static std::shared_ptr<project_editor> make_shared(url const &, file_info const &,
-                                                       std::shared_ptr<timeline_player_interface> const &);
+                                                       std::shared_ptr<project_editor_player_interface> const &);
     static std::shared_ptr<project_editor> make_shared(url const &, file_info const &,
-                                                       std::shared_ptr<timeline_player_interface> const &,
-                                                       std::shared_ptr<timeline_file_track_interface> const &);
+                                                       std::shared_ptr<project_editor_player_interface> const &,
+                                                       std::shared_ptr<project_editor_file_track_interface> const &);
 
    private:
     url const _url;
     file_info const _file_info;
-    std::shared_ptr<timeline_player_interface> const _player;
-    std::shared_ptr<timeline_file_track_interface> const _file_track;
+    std::shared_ptr<project_editor_player_interface> const _player;
+    std::shared_ptr<project_editor_file_track_interface> const _file_track;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
     observing::canceller_pool _pool;
 
-    project_editor(url const &, file_info const &, std::shared_ptr<timeline_player_interface> const &,
-                   std::shared_ptr<timeline_file_track_interface> const &);
+    project_editor(url const &, file_info const &, std::shared_ptr<project_editor_player_interface> const &,
+                   std::shared_ptr<project_editor_file_track_interface> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;
