@@ -168,4 +168,48 @@ using namespace yas::ae;
     XCTAssertEqual(track->modules().at(proc::time::range{3, 5}), (file_module{.range = {3, 5}, .file_frame = 3}));
 }
 
+- (void)test_drop_head {
+    auto const track = file_track::make_shared();
+
+    file_module const src_module{.range = {10, 4}, .file_frame = 100};
+
+    track->replace_modules({src_module});
+
+    track->drop_head(9);
+    track->drop_head(10);
+    track->drop_head(14);
+    track->drop_head(15);
+
+    XCTAssertEqual(track->modules().size(), 1);
+    XCTAssertEqual(track->modules().count(proc::time::range{10, 4}), 1);
+
+    track->drop_head(11);
+
+    XCTAssertEqual(track->modules().size(), 1);
+    XCTAssertEqual(track->modules().count(proc::time::range{11, 3}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{11, 3}), (file_module{.range = {11, 3}, .file_frame = 101}));
+}
+
+- (void)test_drop_tail {
+    auto const track = file_track::make_shared();
+
+    file_module const src_module{.range = {10, 4}, .file_frame = 100};
+
+    track->replace_modules({src_module});
+
+    track->drop_tail(9);
+    track->drop_tail(10);
+    track->drop_tail(14);
+    track->drop_tail(15);
+
+    XCTAssertEqual(track->modules().size(), 1);
+    XCTAssertEqual(track->modules().count(proc::time::range{10, 4}), 1);
+
+    track->drop_tail(13);
+
+    XCTAssertEqual(track->modules().size(), 1);
+    XCTAssertEqual(track->modules().count(proc::time::range{10, 3}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{10, 3}), (file_module{.range = {10, 3}, .file_frame = 100}));
+}
+
 @end
