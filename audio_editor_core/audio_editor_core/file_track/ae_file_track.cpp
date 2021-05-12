@@ -55,6 +55,22 @@ void file_track::split(proc::frame_index_t const frame) {
     }
 }
 
+void file_track::drop_head(proc::frame_index_t const frame) {
+    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+        auto const &module = module_opt.value();
+        this->erase_module(module);
+        this->insert_module(module.head_dropped(frame).value());
+    }
+}
+
+void file_track::drop_tail(proc::frame_index_t const frame) {
+    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+        auto const &module = module_opt.value();
+        this->erase_module(module);
+        this->insert_module(module.tail_dropped(frame).value());
+    }
+}
+
 observing::syncable file_track::observe_event(std::function<void(file_track_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }
