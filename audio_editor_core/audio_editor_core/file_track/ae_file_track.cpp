@@ -38,36 +38,15 @@ void file_track::erase_module(file_module const &module) {
 }
 
 std::optional<file_module> file_track::module(proc::frame_index_t const frame) {
-    for (auto const &pair : this->_modules) {
-        if (pair.first.is_contain(frame)) {
-            return pair.second;
-        }
-    }
-    return std::nullopt;
+    return file_module_utils::module(this->_modules, frame);
 }
 
 std::optional<file_module> file_track::previous_module(proc::frame_index_t const frame) {
-    auto it = this->_modules.rbegin();
-
-    while (it != this->_modules.rend()) {
-        auto const &pair = *it;
-        if (pair.first.next_frame() <= frame) {
-            return pair.second;
-        }
-        ++it;
-    }
-
-    return std::nullopt;
+    return file_module_utils::previous_module(this->_modules, frame);
 }
 
 std::optional<file_module> file_track::next_module(proc::frame_index_t const frame) {
-    for (auto const &pair : this->_modules) {
-        if (frame < pair.first.frame) {
-            return pair.second;
-        }
-    }
-
-    return std::nullopt;
+    return file_module_utils::next_module(this->_modules, frame);
 }
 
 std::optional<file_module> file_track::splittable_module(proc::frame_index_t const frame) const {
