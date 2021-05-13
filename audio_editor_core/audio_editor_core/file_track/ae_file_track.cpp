@@ -46,6 +46,30 @@ std::optional<file_module> file_track::module(proc::frame_index_t const frame) {
     return std::nullopt;
 }
 
+std::optional<file_module> file_track::previous_module(proc::frame_index_t const frame) {
+    auto it = this->_modules.rbegin();
+
+    while (it != this->_modules.rend()) {
+        auto const &pair = *it;
+        if (pair.first.next_frame() <= frame) {
+            return pair.second;
+        }
+        ++it;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<file_module> file_track::next_module(proc::frame_index_t const frame) {
+    for (auto const &pair : this->_modules) {
+        if (frame < pair.first.frame) {
+            return pair.second;
+        }
+    }
+
+    return std::nullopt;
+}
+
 std::optional<file_module> file_track::splittable_module(proc::frame_index_t const frame) const {
     for (auto const &pair : this->_modules) {
         if (file_module_utils::can_split_time_range(pair.second.range, frame)) {
