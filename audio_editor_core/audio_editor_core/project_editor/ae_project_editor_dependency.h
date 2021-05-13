@@ -38,7 +38,13 @@ struct project_editor_file_track_interface {
     virtual void insert_module(file_module const &) = 0;
     virtual void erase_module(file_module const &) = 0;
 
+    virtual std::optional<file_module> module(proc::frame_index_t const) = 0;
+    virtual std::optional<file_module> previous_module(proc::frame_index_t const) = 0;
+    virtual std::optional<file_module> next_module(proc::frame_index_t const) = 0;
     virtual std::optional<file_module> splittable_module(proc::frame_index_t const) const = 0;
+    virtual void split(proc::frame_index_t const) = 0;
+    virtual void drop_head(proc::frame_index_t const) = 0;
+    virtual void drop_tail(proc::frame_index_t const) = 0;
 
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(file_track_event const &)> &&) = 0;
 };

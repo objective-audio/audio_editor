@@ -37,13 +37,20 @@ void file_track::erase_module(file_module const &module) {
     }
 }
 
+std::optional<file_module> file_track::module(proc::frame_index_t const frame) {
+    return file_module_utils::module(this->_modules, frame);
+}
+
+std::optional<file_module> file_track::previous_module(proc::frame_index_t const frame) {
+    return file_module_utils::previous_module(this->_modules, frame);
+}
+
+std::optional<file_module> file_track::next_module(proc::frame_index_t const frame) {
+    return file_module_utils::next_module(this->_modules, frame);
+}
+
 std::optional<file_module> file_track::splittable_module(proc::frame_index_t const frame) const {
-    for (auto const &pair : this->_modules) {
-        if (file_module_utils::can_split_time_range(pair.second.range, frame)) {
-            return pair.second;
-        }
-    }
-    return std::nullopt;
+    return file_module_utils::splittable_module(this->_modules, frame);
 }
 
 void file_track::split(proc::frame_index_t const frame) {
