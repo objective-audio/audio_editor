@@ -17,4 +17,5 @@ std::optional<file_module> previous_module(file_track_module_map_t const &, proc
 std::optional<file_module> next_module(file_track_module_map_t const &, proc::frame_index_t const);
 
 bool can_split_time_range(proc::time::range const &, proc::frame_index_t const);
+std::optional<file_module> splittable_module(file_track_module_map_t const &modules, proc::frame_index_t const frame);
 }  // namespace yas::ae::file_module_utils

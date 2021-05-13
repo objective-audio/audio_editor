@@ -46,3 +46,13 @@ std::optional<file_module> file_module_utils::next_module(file_track_module_map_
 bool file_module_utils::can_split_time_range(proc::time::range const &range, proc::frame_index_t const frame) {
     return range.is_contain(frame) && range.frame != frame;
 }
+
+std::optional<file_module> file_module_utils::splittable_module(file_track_module_map_t const &modules,
+                                                                proc::frame_index_t const frame) {
+    for (auto const &pair : modules) {
+        if (can_split_time_range(pair.second.range, frame)) {
+            return pair.second;
+        }
+    }
+    return std::nullopt;
+}
