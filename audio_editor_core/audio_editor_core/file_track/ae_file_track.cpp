@@ -37,6 +37,15 @@ void file_track::erase_module(file_module const &module) {
     }
 }
 
+std::optional<file_module> file_track::module(proc::frame_index_t const frame) {
+    for (auto const &pair : this->_modules) {
+        if (pair.first.is_contain(frame)) {
+            return pair.second;
+        }
+    }
+    return std::nullopt;
+}
+
 std::optional<file_module> file_track::splittable_module(proc::frame_index_t const frame) const {
     for (auto const &pair : this->_modules) {
         if (file_module_utils::can_split_time_range(pair.second.range, frame)) {

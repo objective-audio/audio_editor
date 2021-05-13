@@ -16,6 +16,7 @@ struct file_track final : project_editor_file_track_interface {
     void insert_module(file_module const &) override;
     void erase_module(file_module const &) override;
 
+    std::optional<file_module> module(proc::frame_index_t const);
     std::optional<file_module> splittable_module(proc::frame_index_t const) const override;
     void split(proc::frame_index_t const);
     void drop_head(proc::frame_index_t const);
