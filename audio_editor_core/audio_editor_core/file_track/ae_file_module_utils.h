@@ -14,4 +14,6 @@ std::optional<file_module> next_module(file_track_module_map_t const &, proc::fr
 
 bool can_split_time_range(proc::time::range const &, proc::frame_index_t const);
 std::optional<file_module> splittable_module(file_track_module_map_t const &modules, proc::frame_index_t const frame);
+
+std::vector<file_module> overlapped_modules(file_track_module_map_t const &, proc::time::range const &);
 }  // namespace yas::ae::file_module_utils

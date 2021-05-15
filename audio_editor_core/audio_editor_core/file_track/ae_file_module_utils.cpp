@@ -56,3 +56,20 @@ std::optional<file_module> file_module_utils::splittable_module(file_track_modul
     }
     return std::nullopt;
 }
+
+std::vector<file_module> file_module_utils::overlapped_modules(file_track_module_map_t const &modules,
+                                                               proc::time::range const &range) {
+    auto const next_frame = range.next_frame();
+
+    std::vector<file_module> result;
+    for (auto const &pair : modules) {
+        auto const &module_range = pair.first;
+        if (next_frame <= module_range.frame) {
+            break;
+        }
+        if (module_range.is_overlap(range)) {
+            result.emplace_back(pair.second);
+        }
+    }
+    return result;
+}
