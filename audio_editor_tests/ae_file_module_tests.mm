@@ -32,4 +32,12 @@ using namespace yas::ae;
     XCTAssertEqual(module.tail_dropped(4), std::nullopt);
 }
 
+- (void)test_offset {
+    file_module const module{.range = {1, 3}, .file_frame = 10};
+
+    XCTAssertEqual(module.offset(-1), (file_module{.range = {0, 3}, .file_frame = 10}));
+    XCTAssertEqual(module.offset(0), (file_module{.range = {1, 3}, .file_frame = 10}));
+    XCTAssertEqual(module.offset(1), (file_module{.range = {2, 3}, .file_frame = 10}));
+}
+
 @end
