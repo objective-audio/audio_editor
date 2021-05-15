@@ -17,5 +17,6 @@ struct file_module {
 
     std::optional<file_module> head_dropped(proc::frame_index_t const) const;
     std::optional<file_module> tail_dropped(proc::frame_index_t const) const;
+    file_module offset(proc::frame_index_t const) const;
 };
 }  // namespace yas::ae

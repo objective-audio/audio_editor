@@ -272,4 +272,40 @@ using namespace yas::ae;
     XCTAssertEqual(track->modules().at(proc::time::range{10, 3}), (file_module{.range = {10, 3}, .file_frame = 100}));
 }
 
+- (void)test_drop_head_and_offset {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = {0, 1}, .file_frame = 0};
+    file_module const module2{.range = {1, 2}, .file_frame = 1};
+    file_module const module3{.range = {4, 3}, .file_frame = 4};
+
+    track->replace_modules({module1, module2, module3});
+
+    track->drop_head_and_offset(2);
+
+    auto const &modules = track->modules();
+    XCTAssertEqual(modules.size(), 3);
+    XCTAssertEqual(modules.at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(modules.at(proc::time::range{1, 1}), (file_module{.range = {1, 1}, .file_frame = 2}));
+    XCTAssertEqual(modules.at(proc::time::range{3, 3}), (file_module{.range = {3, 3}, .file_frame = 4}));
+}
+
+- (void)test_drop_tail_and_offset {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = {0, 1}, .file_frame = 0};
+    file_module const module2{.range = {1, 2}, .file_frame = 1};
+    file_module const module3{.range = {4, 3}, .file_frame = 4};
+
+    track->replace_modules({module1, module2, module3});
+
+    track->drop_tail_and_offset(2);
+
+    auto const &modules = track->modules();
+    XCTAssertEqual(modules.size(), 3);
+    XCTAssertEqual(modules.at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(modules.at(proc::time::range{1, 1}), (file_module{.range = {1, 1}, .file_frame = 1}));
+    XCTAssertEqual(modules.at(proc::time::range{3, 3}), (file_module{.range = {3, 3}, .file_frame = 4}));
+}
+
 @end

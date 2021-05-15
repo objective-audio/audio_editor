@@ -35,3 +35,7 @@ std::optional<file_module> file_module::tail_dropped(proc::frame_index_t const f
         return std::nullopt;
     }
 }
+
+file_module file_module::offset(proc::frame_index_t const offset) const {
+    return file_module{.range = this->range.offset(offset), .file_frame = this->file_frame};
+}

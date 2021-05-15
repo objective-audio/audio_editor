@@ -78,6 +78,44 @@ void file_track::drop_tail(proc::frame_index_t const frame) {
     }
 }
 
+void file_track::drop_head_and_offset(proc::frame_index_t const frame) {
+    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+        auto const &module = module_opt.value();
+        proc::frame_index_t const offset = module.range.frame - frame;
+
+        this->erase_module(module);
+        this->insert_module(module.head_dropped(frame).value());
+
+        auto const copied_modules = this->_modules;
+        for (auto const &pair : copied_modules) {
+            if (frame <= pair.first.frame) {
+                auto const &moving_module = pair.second;
+                this->erase_module(moving_module);
+                this->insert_module(moving_module.offset(offset));
+            }
+        }
+    }
+}
+
+void file_track::drop_tail_and_offset(proc::frame_index_t const frame) {
+    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+        auto const &module = module_opt.value();
+        proc::frame_index_t const offset = frame - module.range.next_frame();
+
+        this->erase_module(module);
+        this->insert_module(module.tail_dropped(frame).value());
+
+        auto const copied_modules = this->_modules;
+        for (auto const &pair : copied_modules) {
+            if (frame <= pair.first.frame) {
+                auto const &moving_module = pair.second;
+                this->erase_module(moving_module);
+                this->insert_module(moving_module.offset(offset));
+            }
+        }
+    }
+}
+
 observing::syncable file_track::observe_event(std::function<void(file_track_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }

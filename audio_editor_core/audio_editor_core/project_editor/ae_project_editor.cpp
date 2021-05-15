@@ -51,6 +51,12 @@ project_editor::project_editor(url const &url, file_info const &file_info,
                                                 file_module.range);
                     }
                     break;
+                case file_track_event_type::erased:
+                    if (auto const &track = this->_track) {
+                        auto const &file_module = event.module.value();
+                        track->erase_modules_for_range(file_module.range);
+                    }
+                    break;
             }
         })
         .sync()

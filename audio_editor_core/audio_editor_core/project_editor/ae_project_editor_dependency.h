@@ -45,6 +45,8 @@ struct project_editor_file_track_interface {
     virtual void split(proc::frame_index_t const) = 0;
     virtual void drop_head(proc::frame_index_t const) = 0;
     virtual void drop_tail(proc::frame_index_t const) = 0;
+    virtual void drop_head_and_offset(proc::frame_index_t const) = 0;
+    virtual void drop_tail_and_offset(proc::frame_index_t const) = 0;
 
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(file_track_event const &)> &&) = 0;
 };
