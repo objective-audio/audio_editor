@@ -116,6 +116,34 @@ void file_track::drop_tail_and_offset(proc::frame_index_t const frame) {
     }
 }
 
+void file_track::move(std::set<proc::time::range> const &ranges, proc::frame_index_t const offset) {
+    std::vector<file_module> moving_modules;
+    for (auto const &range : ranges) {
+        if (this->_modules.count(range) > 0) {
+            auto const &module = this->_modules.at(range);
+            moving_modules.emplace_back(module.offset(offset));
+            this->erase_module(module);
+        }
+    }
+
+    for (auto const &moving_module : moving_modules) {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(this->_modules, moving_module.range);
+        for (auto const &overlapped_module : overlapped_modules) {
+            this->erase_module(overlapped_module);
+            auto const cropped_ranges = overlapped_module.range.cropped(moving_module.range);
+            for (auto const &cropped_range : cropped_ranges) {
+                proc::frame_index_t const file_frame_offset = cropped_range.frame - overlapped_module.range.frame;
+                this->insert_module(
+                    {.range = cropped_range, .file_frame = overlapped_module.range.frame + file_frame_offset});
+            }
+        }
+    }
+
+    for (auto const &moving_module : moving_modules) {
+        this->insert_module(moving_module);
+    }
+}
+
 observing::syncable file_track::observe_event(std::function<void(file_track_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }
