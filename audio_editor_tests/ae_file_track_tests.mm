@@ -308,4 +308,65 @@ using namespace yas::ae;
     XCTAssertEqual(modules.at(proc::time::range{3, 3}), (file_module{.range = {3, 3}, .file_frame = 4}));
 }
 
+- (void)test_move_one_module {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = {0, 1}, .file_frame = 0};
+
+    track->replace_modules({module1});
+
+    track->move({{0, 1}}, 1);
+
+    XCTAssertEqual(track->modules().size(), 1);
+    XCTAssertEqual(track->modules().count({1, 1}), 1);
+    XCTAssertEqual(track->modules().at({1, 1}), (file_module{.range = {1, 1}, .file_frame = 0}));
+
+    track->move({{1, 1}}, -2);
+
+    XCTAssertEqual(track->modules().size(), 1);
+    XCTAssertEqual(track->modules().count({-1, 1}), 1);
+    XCTAssertEqual(track->modules().at({-1, 1}), (file_module{.range = {-1, 1}, .file_frame = 0}));
+}
+
+- (void)test_move_many_modules {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = {0, 1}, .file_frame = 0};
+    file_module const module2{.range = {1, 1}, .file_frame = 1};
+    file_module const module3{.range = {2, 1}, .file_frame = 2};
+
+    track->replace_modules({module1, module2, module3});
+
+    track->move({{1, 1}, {2, 1}}, 1);
+
+    XCTAssertEqual(track->modules().size(), 3);
+    XCTAssertEqual(track->modules().count({0, 1}), 1);
+    XCTAssertEqual(track->modules().at({0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->modules().count({2, 1}), 1);
+    XCTAssertEqual(track->modules().at({2, 1}), (file_module{.range = {2, 1}, .file_frame = 1}));
+    XCTAssertEqual(track->modules().count({3, 1}), 1);
+    XCTAssertEqual(track->modules().at({3, 1}), (file_module{.range = {3, 1}, .file_frame = 2}));
+}
+
+- (void)test_move_cropped {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = {0, 4}, .file_frame = 0};
+    file_module const module2{.range = {4, 2}, .file_frame = 4};
+
+    track->replace_modules({module1, module2});
+
+    XCTAssertEqual(track->modules().size(), 2);
+
+    track->move({{4, 2}}, -3);
+
+    XCTAssertEqual(track->modules().size(), 3);
+    XCTAssertEqual(track->modules().count({0, 1}), 1);
+    XCTAssertEqual(track->modules().count({1, 2}), 1);
+    XCTAssertEqual(track->modules().count({3, 1}), 1);
+    XCTAssertEqual(track->modules().at({0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->modules().at({1, 2}), (file_module{.range = {1, 2}, .file_frame = 4}));
+    XCTAssertEqual(track->modules().at({3, 1}), (file_module{.range = {3, 1}, .file_frame = 3}));
+}
+
 @end
