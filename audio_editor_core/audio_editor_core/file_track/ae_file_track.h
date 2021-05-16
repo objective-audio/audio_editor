@@ -12,21 +12,22 @@ namespace yas::ae {
 struct file_track final : project_editor_file_track_interface {
     [[nodiscard]] file_track_module_map_t const &modules() const;
 
-    void replace_modules(std::vector<file_module> &&) override;
-    void insert_module(file_module const &) override;
-    void erase_module(file_module const &) override;
+    void replace_modules_and_notify(std::vector<file_module> &&) override;
+    void insert_module_and_notify(file_module const &) override;
+    void erase_module_and_notify(file_module const &) override;
 
     std::optional<file_module> module(proc::frame_index_t const) const override;
     std::optional<file_module> previous_module(proc::frame_index_t const) const override;
     std::optional<file_module> next_module(proc::frame_index_t const) const override;
     std::optional<file_module> splittable_module(proc::frame_index_t const) const override;
+
     void split(proc::frame_index_t const) override;
     void drop_head(proc::frame_index_t const) override;
     void drop_tail(proc::frame_index_t const) override;
     void drop_head_and_offset(proc::frame_index_t const) override;
     void drop_tail_and_offset(proc::frame_index_t const) override;
-    void overwrite_module(file_module const &);
-    void move_modules(std::set<proc::time::range> const &, proc::frame_index_t const);
+    void overwrite_module(file_module const &) override;
+    void move_modules(std::set<proc::time::range> const &, proc::frame_index_t const) override;
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&) override;
 

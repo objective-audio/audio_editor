@@ -62,7 +62,7 @@ project_editor::project_editor(url const &url, file_info const &file_info,
         .sync()
         ->add_to(this->_pool);
 
-    this->_file_track->insert_module(file_module{proc::time::range{0, file_info.length}, 0});
+    this->_file_track->insert_module_and_notify(file_module{proc::time::range{0, file_info.length}, 0});
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
