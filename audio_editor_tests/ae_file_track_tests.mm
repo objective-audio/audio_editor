@@ -308,6 +308,39 @@ using namespace yas::ae;
     XCTAssertEqual(modules.at(proc::time::range{3, 3}), (file_module{.range = {3, 3}, .file_frame = 4}));
 }
 
+- (void)test_overwrite_module_middle_cropped {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = {0, 4}, .file_frame = 0};
+
+    track->replace_modules({module1});
+
+    track->overwrite_module({.range = {1, 2}, .file_frame = 100});
+
+    auto const &modules = track->modules();
+    XCTAssertEqual(modules.size(), 3);
+    XCTAssertEqual(modules.at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(modules.at(proc::time::range{1, 2}), (file_module{.range = {1, 2}, .file_frame = 100}));
+    XCTAssertEqual(modules.at(proc::time::range{3, 1}), (file_module{.range = {3, 1}, .file_frame = 3}));
+}
+
+- (void)test_overwrite_module_edge_cropped {
+    auto const track = file_track::make_shared();
+
+    file_module const module1{.range = {0, 3}, .file_frame = 0};
+    file_module const module2{.range = {3, 3}, .file_frame = 3};
+
+    track->replace_modules({module1, module2});
+
+    track->overwrite_module({.range = {2, 2}, .file_frame = 200});
+
+    auto const &modules = track->modules();
+    XCTAssertEqual(modules.size(), 3);
+    XCTAssertEqual(modules.at(proc::time::range{0, 2}), (file_module{.range = {0, 2}, .file_frame = 0}));
+    XCTAssertEqual(modules.at(proc::time::range{2, 2}), (file_module{.range = {2, 2}, .file_frame = 200}));
+    XCTAssertEqual(modules.at(proc::time::range{4, 2}), (file_module{.range = {4, 2}, .file_frame = 4}));
+}
+
 - (void)test_move_one_module {
     auto const track = file_track::make_shared();
 
@@ -315,13 +348,13 @@ using namespace yas::ae;
 
     track->replace_modules({module1});
 
-    track->move({{0, 1}}, 1);
+    track->move_modules({{0, 1}}, 1);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count({1, 1}), 1);
     XCTAssertEqual(track->modules().at({1, 1}), (file_module{.range = {1, 1}, .file_frame = 0}));
 
-    track->move({{1, 1}}, -2);
+    track->move_modules({{1, 1}}, -2);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count({-1, 1}), 1);
@@ -337,7 +370,7 @@ using namespace yas::ae;
 
     track->replace_modules({module1, module2, module3});
 
-    track->move({{1, 1}, {2, 1}}, 1);
+    track->move_modules({{1, 1}, {2, 1}}, 1);
 
     XCTAssertEqual(track->modules().size(), 3);
     XCTAssertEqual(track->modules().count({0, 1}), 1);
@@ -358,7 +391,7 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 2);
 
-    track->move({{4, 2}}, -3);
+    track->move_modules({{4, 2}}, -3);
 
     XCTAssertEqual(track->modules().size(), 3);
     XCTAssertEqual(track->modules().count({0, 1}), 1);
