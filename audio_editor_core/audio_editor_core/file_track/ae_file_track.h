@@ -25,6 +25,7 @@ struct file_track final : project_editor_file_track_interface {
     void drop_tail(proc::frame_index_t const) override;
     void drop_head_and_offset(proc::frame_index_t const) override;
     void drop_tail_and_offset(proc::frame_index_t const) override;
+    void move(std::set<proc::time::range> const &, proc::frame_index_t const);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&) override;
 

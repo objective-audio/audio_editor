@@ -24,4 +24,57 @@ using namespace yas::ae;
     XCTAssertFalse(file_module_utils::can_split_time_range(range, 4));
 }
 
+- (void)test_overlapped_modules {
+    file_track_module_map_t const modules{
+        {proc::time::range{0, 3}, {.range = proc::time::range{0, 3}, .file_frame = 0}},
+        {proc::time::range{3, 2}, {.range = proc::time::range{3, 2}, .file_frame = 3}}};
+
+    {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(modules, {-2, 2});
+        XCTAssertEqual(overlapped_modules.size(), 0);
+    }
+
+    {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(modules, {-1, 2});
+        XCTAssertEqual(overlapped_modules.size(), 1);
+        XCTAssertEqual(overlapped_modules.at(0).range, (proc::time::range{0, 3}));
+    }
+
+    {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(modules, {0, 2});
+        XCTAssertEqual(overlapped_modules.size(), 1);
+        XCTAssertEqual(overlapped_modules.at(0).range, (proc::time::range{0, 3}));
+    }
+
+    {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(modules, {1, 2});
+        XCTAssertEqual(overlapped_modules.size(), 1);
+        XCTAssertEqual(overlapped_modules.at(0).range, (proc::time::range{0, 3}));
+    }
+
+    {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(modules, {2, 2});
+        XCTAssertEqual(overlapped_modules.size(), 2);
+        XCTAssertEqual(overlapped_modules.at(0).range, (proc::time::range{0, 3}));
+        XCTAssertEqual(overlapped_modules.at(1).range, (proc::time::range{3, 2}));
+    }
+
+    {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(modules, {3, 2});
+        XCTAssertEqual(overlapped_modules.size(), 1);
+        XCTAssertEqual(overlapped_modules.at(0).range, (proc::time::range{3, 2}));
+    }
+
+    {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(modules, {4, 2});
+        XCTAssertEqual(overlapped_modules.size(), 1);
+        XCTAssertEqual(overlapped_modules.at(0).range, (proc::time::range{3, 2}));
+    }
+
+    {
+        auto const overlapped_modules = file_module_utils::overlapped_modules(modules, {5, 2});
+        XCTAssertEqual(overlapped_modules.size(), 0);
+    }
+}
+
 @end
