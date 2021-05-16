@@ -19,17 +19,17 @@ file_track_module_map_t const &file_track::modules() const {
     return this->_modules;
 }
 
-void file_track::replace_modules(std::vector<file_module> &&modules) {
+void file_track::replace_modules_and_notify(std::vector<file_module> &&modules) {
     this->_modules = to_map<proc::time::range>(modules, [](file_module const &module) { return module.range; });
     this->_event_fetcher->push({.type = file_track_event_type::any, .modules = this->_modules});
 }
 
-void file_track::insert_module(file_module const &module) {
+void file_track::insert_module_and_notify(file_module const &module) {
     this->_modules.emplace(module.range, module);
     this->_event_fetcher->push({.type = file_track_event_type::inserted, .module = module, .modules = this->_modules});
 }
 
-void file_track::erase_module(file_module const &module) {
+void file_track::erase_module_and_notify(file_module const &module) {
     if (this->_modules.count(module.range) > 0) {
         this->_modules.erase(module.range);
         this->_event_fetcher->push(
@@ -56,25 +56,25 @@ std::optional<file_module> file_track::splittable_module(proc::frame_index_t con
 void file_track::split(proc::frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
-        this->erase_module(module);
-        this->insert_module(module.tail_dropped(frame).value());
-        this->insert_module(module.head_dropped(frame).value());
+        this->erase_module_and_notify(module);
+        this->insert_module_and_notify(module.tail_dropped(frame).value());
+        this->insert_module_and_notify(module.head_dropped(frame).value());
     }
 }
 
 void file_track::drop_head(proc::frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
-        this->erase_module(module);
-        this->insert_module(module.head_dropped(frame).value());
+        this->erase_module_and_notify(module);
+        this->insert_module_and_notify(module.head_dropped(frame).value());
     }
 }
 
 void file_track::drop_tail(proc::frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
-        this->erase_module(module);
-        this->insert_module(module.tail_dropped(frame).value());
+        this->erase_module_and_notify(module);
+        this->insert_module_and_notify(module.tail_dropped(frame).value());
     }
 }
 
@@ -83,15 +83,15 @@ void file_track::drop_head_and_offset(proc::frame_index_t const frame) {
         auto const &module = module_opt.value();
         proc::frame_index_t const offset = module.range.frame - frame;
 
-        this->erase_module(module);
-        this->insert_module(module.head_dropped(frame).value());
+        this->erase_module_and_notify(module);
+        this->insert_module_and_notify(module.head_dropped(frame).value());
 
         auto const copied_modules = this->_modules;
         for (auto const &pair : copied_modules) {
             if (frame <= pair.first.frame) {
                 auto const &moving_module = pair.second;
-                this->erase_module(moving_module);
-                this->insert_module(moving_module.offset(offset));
+                this->erase_module_and_notify(moving_module);
+                this->insert_module_and_notify(moving_module.offset(offset));
             }
         }
     }
@@ -102,15 +102,15 @@ void file_track::drop_tail_and_offset(proc::frame_index_t const frame) {
         auto const &module = module_opt.value();
         proc::frame_index_t const offset = frame - module.range.next_frame();
 
-        this->erase_module(module);
-        this->insert_module(module.tail_dropped(frame).value());
+        this->erase_module_and_notify(module);
+        this->insert_module_and_notify(module.tail_dropped(frame).value());
 
         auto const copied_modules = this->_modules;
         for (auto const &pair : copied_modules) {
             if (frame <= pair.first.frame) {
                 auto const &moving_module = pair.second;
-                this->erase_module(moving_module);
-                this->insert_module(moving_module.offset(offset));
+                this->erase_module_and_notify(moving_module);
+                this->insert_module_and_notify(moving_module.offset(offset));
             }
         }
     }
@@ -119,16 +119,16 @@ void file_track::drop_tail_and_offset(proc::frame_index_t const frame) {
 void file_track::overwrite_module(file_module const &module) {
     auto const overlapped_modules = file_module_utils::overlapped_modules(this->_modules, module.range);
     for (auto const &overlapped_module : overlapped_modules) {
-        this->erase_module(overlapped_module);
+        this->erase_module_and_notify(overlapped_module);
         auto const cropped_ranges = overlapped_module.range.cropped(module.range);
         for (auto const &cropped_range : cropped_ranges) {
             proc::frame_index_t const file_frame_offset = cropped_range.frame - overlapped_module.range.frame;
-            this->insert_module(
+            this->insert_module_and_notify(
                 {.range = cropped_range, .file_frame = overlapped_module.range.frame + file_frame_offset});
         }
     }
 
-    this->insert_module(module);
+    this->insert_module_and_notify(module);
 }
 
 void file_track::move_modules(std::set<proc::time::range> const &ranges, proc::frame_index_t const offset) {
@@ -137,7 +137,7 @@ void file_track::move_modules(std::set<proc::time::range> const &ranges, proc::f
         if (this->_modules.count(range) > 0) {
             auto const &module = this->_modules.at(range);
             moving_modules.emplace_back(module.offset(offset));
-            this->erase_module(module);
+            this->erase_module_and_notify(module);
         }
     }
 
