@@ -41,7 +41,7 @@ std::optional<file_module> file_track::module_at(proc::frame_index_t const frame
     return file_module_utils::module(this->_modules, frame);
 }
 
-std::optional<file_module> file_track::previous_module(proc::frame_index_t const frame) const {
+std::optional<file_module> file_track::previous_module_at(proc::frame_index_t const frame) const {
     return file_module_utils::previous_module(this->_modules, frame);
 }
 

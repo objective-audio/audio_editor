@@ -141,15 +141,15 @@ using namespace yas::ae;
 
     track->replace_modules_and_notify({module1, module2, module3});
 
-    XCTAssertEqual(track->previous_module(-1), std::nullopt);
-    XCTAssertEqual(track->previous_module(0), std::nullopt);
-    XCTAssertEqual(track->previous_module(1), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(track->previous_module(2), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(track->previous_module(3), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->previous_module(4), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->previous_module(5), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->previous_module(6), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->previous_module(7), (file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertEqual(track->previous_module_at(-1), std::nullopt);
+    XCTAssertEqual(track->previous_module_at(0), std::nullopt);
+    XCTAssertEqual(track->previous_module_at(1), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->previous_module_at(2), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->previous_module_at(3), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertEqual(track->previous_module_at(4), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertEqual(track->previous_module_at(5), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertEqual(track->previous_module_at(6), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertEqual(track->previous_module_at(7), (file_module{.range = {4, 3}, .file_frame = 4}));
 }
 
 - (void)test_next_module {
