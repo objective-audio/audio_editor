@@ -257,15 +257,15 @@ using namespace yas::ae;
 
     track->replace_modules_and_notify({src_module});
 
-    track->drop_tail(9);
-    track->drop_tail(10);
-    track->drop_tail(14);
-    track->drop_tail(15);
+    track->drop_tail_at(9);
+    track->drop_tail_at(10);
+    track->drop_tail_at(14);
+    track->drop_tail_at(15);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count(proc::time::range{10, 4}), 1);
 
-    track->drop_tail(13);
+    track->drop_tail_at(13);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count(proc::time::range{10, 3}), 1);

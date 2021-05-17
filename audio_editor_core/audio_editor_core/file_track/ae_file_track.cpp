@@ -70,7 +70,7 @@ void file_track::drop_head_at(proc::frame_index_t const frame) {
     }
 }
 
-void file_track::drop_tail(proc::frame_index_t const frame) {
+void file_track::drop_tail_at(proc::frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
         this->erase_module_and_notify(module);
