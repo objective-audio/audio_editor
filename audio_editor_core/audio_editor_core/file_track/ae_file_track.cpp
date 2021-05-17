@@ -97,7 +97,7 @@ void file_track::drop_head_and_offset_at(proc::frame_index_t const frame) {
     }
 }
 
-void file_track::drop_tail_and_offset(proc::frame_index_t const frame) {
+void file_track::drop_tail_and_offset_at(proc::frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
         proc::frame_index_t const offset = frame - module.range.next_frame();

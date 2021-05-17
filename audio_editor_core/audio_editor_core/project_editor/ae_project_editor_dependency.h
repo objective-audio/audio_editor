@@ -46,7 +46,7 @@ struct project_editor_file_track_interface {
     virtual void drop_head_at(proc::frame_index_t const) = 0;
     virtual void drop_tail_at(proc::frame_index_t const) = 0;
     virtual void drop_head_and_offset_at(proc::frame_index_t const) = 0;
-    virtual void drop_tail_and_offset(proc::frame_index_t const) = 0;
+    virtual void drop_tail_and_offset_at(proc::frame_index_t const) = 0;
     virtual void overwrite_module(file_module const &) = 0;
     virtual void move_modules(std::set<proc::time::range> const &, proc::frame_index_t const) = 0;
 

@@ -299,7 +299,7 @@ using namespace yas::ae;
 
     track->replace_modules_and_notify({module1, module2, module3});
 
-    track->drop_tail_and_offset(2);
+    track->drop_tail_and_offset_at(2);
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
