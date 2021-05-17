@@ -161,15 +161,15 @@ using namespace yas::ae;
 
     track->replace_modules_and_notify({module1, module2, module3});
 
-    XCTAssertEqual(track->next_module(-1), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(track->next_module(0), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->next_module(1), (file_module{.range = {4, 3}, .file_frame = 4}));
-    XCTAssertEqual(track->next_module(2), (file_module{.range = {4, 3}, .file_frame = 4}));
-    XCTAssertEqual(track->next_module(3), (file_module{.range = {4, 3}, .file_frame = 4}));
-    XCTAssertEqual(track->next_module(4), std::nullopt);
-    XCTAssertEqual(track->next_module(5), std::nullopt);
-    XCTAssertEqual(track->next_module(6), std::nullopt);
-    XCTAssertEqual(track->next_module(7), std::nullopt);
+    XCTAssertEqual(track->next_module_at(-1), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertEqual(track->next_module_at(0), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertEqual(track->next_module_at(1), (file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertEqual(track->next_module_at(2), (file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertEqual(track->next_module_at(3), (file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertEqual(track->next_module_at(4), std::nullopt);
+    XCTAssertEqual(track->next_module_at(5), std::nullopt);
+    XCTAssertEqual(track->next_module_at(6), std::nullopt);
+    XCTAssertEqual(track->next_module_at(7), std::nullopt);
 }
 
 - (void)test_splittable_module {
