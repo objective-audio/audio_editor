@@ -235,15 +235,15 @@ using namespace yas::ae;
 
     track->replace_modules_and_notify({src_module});
 
-    track->drop_head(9);
-    track->drop_head(10);
-    track->drop_head(14);
-    track->drop_head(15);
+    track->drop_head_at(9);
+    track->drop_head_at(10);
+    track->drop_head_at(14);
+    track->drop_head_at(15);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count(proc::time::range{10, 4}), 1);
 
-    track->drop_head(11);
+    track->drop_head_at(11);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count(proc::time::range{11, 3}), 1);

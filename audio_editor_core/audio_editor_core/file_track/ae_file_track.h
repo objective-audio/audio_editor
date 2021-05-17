@@ -22,7 +22,7 @@ struct file_track final : project_editor_file_track_interface {
     std::optional<file_module> splittable_module_at(proc::frame_index_t const) const override;
 
     void split_at(proc::frame_index_t const) override;
-    void drop_head(proc::frame_index_t const) override;
+    void drop_head_at(proc::frame_index_t const) override;
     void drop_tail(proc::frame_index_t const) override;
     void drop_head_and_offset(proc::frame_index_t const) override;
     void drop_tail_and_offset(proc::frame_index_t const) override;
