@@ -15,7 +15,7 @@ using namespace yas::ae;
 
 @implementation ae_file_track_tests
 
-- (void)test_insert_module {
+- (void)test_insert_module_and_notify {
     auto const track = file_track::make_shared();
 
     XCTAssertEqual(track->modules().size(), 0);
@@ -49,7 +49,7 @@ using namespace yas::ae;
     XCTAssertEqual(iterator->first, module2.range);
 }
 
-- (void)test_erase_module {
+- (void)test_erase_module_and_notify {
     auto const track = file_track::make_shared();
 
     file_module const module1{.range = {0, 4}, .file_frame = 0};
@@ -112,7 +112,7 @@ using namespace yas::ae;
     canceller->cancel();
 }
 
-- (void)test_module {
+- (void)test_module_at {
     auto const track = file_track::make_shared();
 
     file_module const module1{.range = {0, 1}, .file_frame = 0};
@@ -132,7 +132,7 @@ using namespace yas::ae;
     XCTAssertEqual(track->module_at(7), std::nullopt);
 }
 
-- (void)test_previous_module {
+- (void)test_previous_module_at {
     auto const track = file_track::make_shared();
 
     file_module const module1{.range = {0, 1}, .file_frame = 0};
@@ -152,7 +152,7 @@ using namespace yas::ae;
     XCTAssertEqual(track->previous_module_at(7), (file_module{.range = {4, 3}, .file_frame = 4}));
 }
 
-- (void)test_next_module {
+- (void)test_next_module_at {
     auto const track = file_track::make_shared();
 
     file_module const module1{.range = {0, 1}, .file_frame = 0};
@@ -172,7 +172,7 @@ using namespace yas::ae;
     XCTAssertEqual(track->next_module_at(7), std::nullopt);
 }
 
-- (void)test_splittable_module {
+- (void)test_splittable_module_at {
     auto const track = file_track::make_shared();
 
     file_module const module1{.range = {0, 1}, .file_frame = 0};
@@ -195,7 +195,7 @@ using namespace yas::ae;
     XCTAssertFalse(track->splittable_module_at(9));
 }
 
-- (void)test_split {
+- (void)test_split_at {
     auto const track = file_track::make_shared();
 
     file_module const src_module{.range = {0, 8}, .file_frame = 0};
@@ -228,7 +228,7 @@ using namespace yas::ae;
     XCTAssertEqual(track->modules().at(proc::time::range{3, 5}), (file_module{.range = {3, 5}, .file_frame = 3}));
 }
 
-- (void)test_drop_head {
+- (void)test_drop_head_at {
     auto const track = file_track::make_shared();
 
     file_module const src_module{.range = {10, 4}, .file_frame = 100};
@@ -250,7 +250,7 @@ using namespace yas::ae;
     XCTAssertEqual(track->modules().at(proc::time::range{11, 3}), (file_module{.range = {11, 3}, .file_frame = 101}));
 }
 
-- (void)test_drop_tail {
+- (void)test_drop_tail_at {
     auto const track = file_track::make_shared();
 
     file_module const src_module{.range = {10, 4}, .file_frame = 100};
@@ -272,7 +272,7 @@ using namespace yas::ae;
     XCTAssertEqual(track->modules().at(proc::time::range{10, 3}), (file_module{.range = {10, 3}, .file_frame = 100}));
 }
 
-- (void)test_drop_head_and_offset {
+- (void)test_drop_head_and_offset_at {
     auto const track = file_track::make_shared();
 
     file_module const module1{.range = {0, 1}, .file_frame = 0};
