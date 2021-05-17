@@ -38,7 +38,7 @@ struct project_editor_file_track_interface {
     virtual void insert_module_and_notify(file_module const &) = 0;
     virtual void erase_module_and_notify(file_module const &) = 0;
 
-    virtual std::optional<file_module> module(proc::frame_index_t const) const = 0;
+    virtual std::optional<file_module> module_at(proc::frame_index_t const) const = 0;
     virtual std::optional<file_module> previous_module(proc::frame_index_t const) const = 0;
     virtual std::optional<file_module> next_module(proc::frame_index_t const) const = 0;
     virtual std::optional<file_module> splittable_module(proc::frame_index_t const) const = 0;
