@@ -41,7 +41,7 @@ struct project_editor_file_track_interface {
     virtual std::optional<file_module> module_at(proc::frame_index_t const) const = 0;
     virtual std::optional<file_module> previous_module_at(proc::frame_index_t const) const = 0;
     virtual std::optional<file_module> next_module_at(proc::frame_index_t const) const = 0;
-    virtual std::optional<file_module> splittable_module(proc::frame_index_t const) const = 0;
+    virtual std::optional<file_module> splittable_module_at(proc::frame_index_t const) const = 0;
     virtual void split(proc::frame_index_t const) = 0;
     virtual void drop_head(proc::frame_index_t const) = 0;
     virtual void drop_tail(proc::frame_index_t const) = 0;

@@ -182,17 +182,17 @@ using namespace yas::ae;
 
     track->replace_modules_and_notify({module1, module2, module3, module4});
 
-    XCTAssertFalse(track->splittable_module(-1));
-    XCTAssertFalse(track->splittable_module(0));
-    XCTAssertFalse(track->splittable_module(1));
-    XCTAssertTrue(track->splittable_module(2));
-    XCTAssertFalse(track->splittable_module(3));
-    XCTAssertTrue(track->splittable_module(4));
-    XCTAssertTrue(track->splittable_module(5));
-    XCTAssertFalse(track->splittable_module(6));
-    XCTAssertFalse(track->splittable_module(7));
-    XCTAssertTrue(track->splittable_module(8));
-    XCTAssertFalse(track->splittable_module(9));
+    XCTAssertFalse(track->splittable_module_at(-1));
+    XCTAssertFalse(track->splittable_module_at(0));
+    XCTAssertFalse(track->splittable_module_at(1));
+    XCTAssertTrue(track->splittable_module_at(2));
+    XCTAssertFalse(track->splittable_module_at(3));
+    XCTAssertTrue(track->splittable_module_at(4));
+    XCTAssertTrue(track->splittable_module_at(5));
+    XCTAssertFalse(track->splittable_module_at(6));
+    XCTAssertFalse(track->splittable_module_at(7));
+    XCTAssertTrue(track->splittable_module_at(8));
+    XCTAssertFalse(track->splittable_module_at(9));
 }
 
 - (void)test_split {

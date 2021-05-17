@@ -49,12 +49,12 @@ std::optional<file_module> file_track::next_module_at(proc::frame_index_t const 
     return file_module_utils::next_module(this->_modules, frame);
 }
 
-std::optional<file_module> file_track::splittable_module(proc::frame_index_t const frame) const {
+std::optional<file_module> file_track::splittable_module_at(proc::frame_index_t const frame) const {
     return file_module_utils::splittable_module(this->_modules, frame);
 }
 
 void file_track::split(proc::frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
         this->erase_module_and_notify(module);
         this->insert_module_and_notify(module.tail_dropped(frame).value());
@@ -63,7 +63,7 @@ void file_track::split(proc::frame_index_t const frame) {
 }
 
 void file_track::drop_head(proc::frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
         this->erase_module_and_notify(module);
         this->insert_module_and_notify(module.head_dropped(frame).value());
@@ -71,7 +71,7 @@ void file_track::drop_head(proc::frame_index_t const frame) {
 }
 
 void file_track::drop_tail(proc::frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
         this->erase_module_and_notify(module);
         this->insert_module_and_notify(module.tail_dropped(frame).value());
@@ -79,7 +79,7 @@ void file_track::drop_tail(proc::frame_index_t const frame) {
 }
 
 void file_track::drop_head_and_offset(proc::frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
         proc::frame_index_t const offset = module.range.frame - frame;
 
@@ -98,7 +98,7 @@ void file_track::drop_head_and_offset(proc::frame_index_t const frame) {
 }
 
 void file_track::drop_tail_and_offset(proc::frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module(frame); module_opt.has_value()) {
+    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
         proc::frame_index_t const offset = frame - module.range.next_frame();
 
