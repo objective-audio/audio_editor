@@ -202,14 +202,14 @@ using namespace yas::ae;
 
     track->replace_modules_and_notify({src_module});
 
-    track->split(-1);
-    track->split(0);
-    track->split(8);
-    track->split(9);
+    track->split_at(-1);
+    track->split_at(0);
+    track->split_at(8);
+    track->split_at(9);
 
     XCTAssertEqual(track->modules().size(), 1);
 
-    track->split(1);
+    track->split_at(1);
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().count(proc::time::range{0, 1}), 1);
@@ -217,7 +217,7 @@ using namespace yas::ae;
     XCTAssertEqual(track->modules().count(proc::time::range{1, 7}), 1);
     XCTAssertEqual(track->modules().at(proc::time::range{1, 7}), (file_module{.range = {1, 7}, .file_frame = 1}));
 
-    track->split(3);
+    track->split_at(3);
 
     XCTAssertEqual(track->modules().size(), 3);
     XCTAssertEqual(track->modules().count(proc::time::range{0, 1}), 1);
