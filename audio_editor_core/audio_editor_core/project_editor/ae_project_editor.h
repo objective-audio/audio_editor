@@ -9,8 +9,6 @@
 
 namespace yas::ae {
 struct project_editor final : project_editor_interface {
-    void setup(url const &);
-
     static std::shared_ptr<project_editor> make_shared(url const &, file_info const &,
                                                        std::shared_ptr<project_editor_player_interface> const &);
     static std::shared_ptr<project_editor> make_shared(url const &, file_info const &,
