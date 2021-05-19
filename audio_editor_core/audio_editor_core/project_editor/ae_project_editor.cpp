@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_file_track.h>
+#include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
@@ -16,13 +17,15 @@ using namespace yas::ae;
 
 project_editor::project_editor(url const &url, file_info const &file_info,
                                std::shared_ptr<project_editor_player_interface> const &player,
-                               std::shared_ptr<project_editor_file_track_interface> const &file_track)
+                               std::shared_ptr<project_editor_file_track_interface> const &file_track,
+                               std::shared_ptr<project_editor_marker_pool_interface> const &marker_pool)
     : _url(url),
       _file_info(file_info),
       _player(player),
       _file_track(file_track),
       _timeline(proc::timeline::make_shared()),
-      _track(proc::track::make_shared()) {
+      _track(proc::track::make_shared()),
+      _marker_pool(marker_pool) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -67,11 +70,12 @@ project_editor::project_editor(url const &url, file_info const &file_info,
 
 std::shared_ptr<project_editor> project_editor::make_shared(
     url const &url, file_info const &file_info, std::shared_ptr<project_editor_player_interface> const &player) {
-    return make_shared(url, file_info, player, file_track::make_shared());
+    return make_shared(url, file_info, player, file_track::make_shared(), marker_pool::make_shared());
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
     url const &url, file_info const &file_info, std::shared_ptr<project_editor_player_interface> const &player,
-    std::shared_ptr<project_editor_file_track_interface> const &file_track) {
-    return std::shared_ptr<project_editor>(new project_editor{url, file_info, player, file_track});
+    std::shared_ptr<project_editor_file_track_interface> const &file_track,
+    std::shared_ptr<project_editor_marker_pool_interface> const &marker_pool) {
+    return std::shared_ptr<project_editor>(new project_editor{url, file_info, player, file_track, marker_pool});
 }
