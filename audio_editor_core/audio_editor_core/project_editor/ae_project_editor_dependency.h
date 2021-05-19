@@ -52,4 +52,8 @@ struct project_editor_file_track_interface {
 
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(file_track_event const &)> &&) = 0;
 };
+
+struct project_editor_marker_pool_interface {
+    virtual ~project_editor_marker_pool_interface() = default;
+};
 }  // namespace yas::ae

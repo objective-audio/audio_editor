@@ -5,10 +5,11 @@
 #pragma once
 
 #include <audio_editor_core/ae_marker_pool_types.h>
+#include <audio_editor_core/ae_project_editor_dependency.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct marker_pool {
+struct marker_pool : project_editor_marker_pool_interface {
     void replace_markers(std::vector<marker> &&);
     void insert_marker(marker const &);
     void erase_at(proc::frame_index_t const);
