@@ -23,7 +23,7 @@
                         </connections>
                     </window>
                     <connections>
-                        <segue destination="dut-rD-dZ9" kind="relationship" relationship="window.shadowedContentViewController" id="0fC-PS-7uv"/>
+                        <segue destination="6Ev-hC-LNJ" kind="relationship" relationship="window.shadowedContentViewController" id="xWc-DB-y4b"/>
                     </connections>
                 </windowController>
                 <customObject id="g4b-1i-5mo" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -97,6 +97,19 @@
                 </viewController>
             </objects>
             <point key="canvasLocation" x="75" y="655"/>
+        </scene>
+        <!--Metal View Controller-->
+        <scene sceneID="JtD-wN-OzD">
+            <objects>
+                <viewController id="6Ev-hC-LNJ" customClass="AEMetalViewController" sceneMemberID="viewController">
+                    <view key="view" id="Uoq-Ji-Vhn" customClass="YASUIMetalView">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="uOX-xR-Bjv" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="625" y="653"/>
         </scene>
     </scenes>
 </document>

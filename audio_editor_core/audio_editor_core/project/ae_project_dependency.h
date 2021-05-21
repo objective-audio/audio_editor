@@ -63,4 +63,8 @@ struct project_editor_maker_interface {
 
     [[nodiscard]] virtual std::shared_ptr<project_editor_interface> make(url const &, file_info const &) const = 0;
 };
+
+struct project_ui_root_interface {
+    virtual ~project_ui_root_interface() = default;
+};
 }  // namespace yas::ae
