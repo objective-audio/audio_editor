@@ -75,14 +75,14 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
 
     // layout
 
-    auto const &safe_area_guide = this->_renderer->safe_area_layout_guide_rect();
-    auto const &safe_area_h_guide = this->_renderer->safe_area_layout_guide_rect()->horizontal_range();
-    auto const &play_button_frame_guide = this->_play_button->layout_guide_rect();
-    auto const &status_frame_guide = this->_status_strings->frame_layout_guide_rect();
-    auto const &file_info_frame_guide = this->_file_info_strings->frame_layout_guide_rect();
-    auto const &player_frame_guide = this->_player_strings->frame_layout_guide_rect();
-    auto const status_actual_guide = ui::layout_guide_rect::make_shared();
-    auto const file_info_actual_guide = ui::layout_guide_rect::make_shared();
+    auto const &safe_area_guide = this->_renderer->safe_area_layout_region_guide();
+    auto const &safe_area_h_guide = this->_renderer->safe_area_layout_region_guide()->horizontal_range();
+    auto const &play_button_frame_guide = this->_play_button->layout_region_guide();
+    auto const &status_frame_guide = this->_status_strings->frame_layout_region_guide();
+    auto const &file_info_frame_guide = this->_file_info_strings->frame_layout_region_guide();
+    auto const &player_frame_guide = this->_player_strings->frame_layout_region_guide();
+    auto const status_actual_guide = ui::layout_region_guide::make_shared();
+    auto const file_info_actual_guide = ui::layout_region_guide::make_shared();
 
     ui::layout(safe_area_guide, play_button_frame_guide,
                [](ui::region const &source) {
