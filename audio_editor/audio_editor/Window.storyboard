@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="gkB-uE-7Od">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="gkB-uE-7Od">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,80 +23,25 @@
                         </connections>
                     </window>
                     <connections>
-                        <segue destination="dut-rD-dZ9" kind="relationship" relationship="window.shadowedContentViewController" id="0fC-PS-7uv"/>
+                        <segue destination="6Ev-hC-LNJ" kind="relationship" relationship="window.shadowedContentViewController" id="xWc-DB-y4b"/>
                     </connections>
                 </windowController>
                 <customObject id="g4b-1i-5mo" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="O6b-dR-0jn">
+        <!--Metal View Controller-->
+        <scene sceneID="JtD-wN-OzD">
             <objects>
-                <customObject id="lM5-bE-y3f" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <viewController id="dut-rD-dZ9" customClass="AEViewController" sceneMemberID="viewController">
-                    <view key="view" id="JWB-IS-sDu">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                <viewController id="6Ev-hC-LNJ" customClass="AEMetalViewController" sceneMemberID="viewController">
+                    <view key="view" id="Uoq-Ji-Vhn" customClass="YASUIMetalView">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LdN-Ng-1Ox">
-                                <rect key="frame" x="18" y="234" width="37" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="l3o-ao-jDm">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0u1-Io-jcp">
-                                <rect key="frame" x="18" y="210" width="37" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="E0e-MV-oox">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="h38-tE-3Si">
-                                <rect key="frame" x="18" y="186" width="37" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="UA3-bG-YXq">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OJa-Kx-0W6">
-                                <rect key="frame" x="13" y="151" width="59" height="32"/>
-                                <buttonCell key="cell" type="push" title="play" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tel-k8-cBl">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="playButtonClicked:" target="dut-rD-dZ9" id="6i3-Wj-JQq"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="LdN-Ng-1Ox" firstAttribute="top" secondItem="JWB-IS-sDu" secondAttribute="top" constant="20" symbolic="YES" id="0Zs-DS-WyY"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="h38-tE-3Si" secondAttribute="trailing" constant="20" id="5SB-MV-NgJ"/>
-                            <constraint firstItem="OJa-Kx-0W6" firstAttribute="top" secondItem="h38-tE-3Si" secondAttribute="bottom" constant="8" symbolic="YES" id="9jP-8J-aiy"/>
-                            <constraint firstItem="LdN-Ng-1Ox" firstAttribute="leading" secondItem="JWB-IS-sDu" secondAttribute="leading" constant="20" symbolic="YES" id="ArV-w0-NnE"/>
-                            <constraint firstItem="0u1-Io-jcp" firstAttribute="leading" secondItem="LdN-Ng-1Ox" secondAttribute="leading" id="Cbs-oW-prf"/>
-                            <constraint firstItem="h38-tE-3Si" firstAttribute="leading" secondItem="LdN-Ng-1Ox" secondAttribute="leading" id="Nrn-Qh-LSf"/>
-                            <constraint firstItem="OJa-Kx-0W6" firstAttribute="leading" secondItem="LdN-Ng-1Ox" secondAttribute="leading" id="Stt-Mz-4Wl"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="0u1-Io-jcp" secondAttribute="trailing" constant="20" id="XDO-Q0-fGy"/>
-                            <constraint firstItem="0u1-Io-jcp" firstAttribute="top" secondItem="LdN-Ng-1Ox" secondAttribute="bottom" constant="8" symbolic="YES" id="amt-Q1-iGG"/>
-                            <constraint firstItem="h38-tE-3Si" firstAttribute="top" secondItem="0u1-Io-jcp" secondAttribute="bottom" constant="8" symbolic="YES" id="hHD-ry-BcH"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LdN-Ng-1Ox" secondAttribute="trailing" constant="20" id="mcf-96-zE5"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="fileInfoLabel" destination="0u1-Io-jcp" id="yyl-n3-Zfa"/>
-                        <outlet property="isPlayButton" destination="OJa-Kx-0W6" id="mhU-S2-WbJ"/>
-                        <outlet property="playerLabel" destination="h38-tE-3Si" id="Nwn-3Y-b1B"/>
-                        <outlet property="statusLabel" destination="LdN-Ng-1Ox" id="9de-vq-4ec"/>
-                    </connections>
                 </viewController>
+                <customObject id="uOX-xR-Bjv" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="60" y="725"/>
         </scene>
     </scenes>
 </document>

@@ -5,7 +5,7 @@
 #import "AEWindowController.h"
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #include <cpp_utils/yas_cf_utils.h>
-#import "AEViewController.h"
+#import "AEMetalViewController.h"
 
 using namespace yas;
 using namespace yas::ae;
@@ -22,8 +22,8 @@ using namespace yas::ae;
     self->_presenter = window_presenter::make_shared(project_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
 
-    AEViewController *content = (AEViewController *)self.contentViewController;
-    NSAssert([content isKindOfClass:[AEViewController class]], @"");
+    AEMetalViewController *content = (AEMetalViewController *)self.contentViewController;
+    NSAssert([content isKindOfClass:[AEMetalViewController class]], @"");
     [content setupWithProjectID:project_id];
 }
 
