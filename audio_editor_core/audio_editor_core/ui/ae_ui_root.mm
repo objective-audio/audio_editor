@@ -75,14 +75,14 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
 
     // layout
 
-    auto const &safe_area_guide = this->_renderer->safe_area_layout_region_guide();
-    auto const &safe_area_h_guide = this->_renderer->safe_area_layout_region_guide()->horizontal_range();
-    auto const &play_button_frame_guide = this->_play_button->layout_region_guide();
-    auto const &status_frame_guide = this->_status_strings->frame_layout_region_guide();
-    auto const &file_info_frame_guide = this->_file_info_strings->frame_layout_region_guide();
-    auto const &player_frame_guide = this->_player_strings->frame_layout_region_guide();
-    auto const status_actual_guide = ui::layout_region_guide::make_shared();
-    auto const file_info_actual_guide = ui::layout_region_guide::make_shared();
+    auto const &safe_area_guide = this->_renderer->safe_area_layout_guide();
+    auto const &safe_area_h_guide = this->_renderer->safe_area_layout_guide()->horizontal_range();
+    auto const &play_button_frame_guide = this->_play_button->layout_guide();
+    auto const &status_frame_guide = this->_status_strings->preferred_layout_guide();
+    auto const status_actual_source = this->_status_strings->actual_frame_layout_source();
+    auto const &file_info_frame_guide = this->_file_info_strings->preferred_layout_guide();
+    auto const file_info_actual_source = this->_file_info_strings->actual_frame_layout_source();
+    auto const &player_frame_guide = this->_player_strings->preferred_layout_guide();
 
     ui::layout(safe_area_guide, play_button_frame_guide,
                [](ui::region const &source) {
@@ -98,16 +98,7 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
     ui::layout(play_button_frame_guide->bottom(), status_frame_guide->top(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
-    ui::layout(play_button_frame_guide->bottom(), status_frame_guide->bottom(), ui_layout_utils::constant(0.0f))
-        .sync()
-        ->add_to(this->_pool);
-
-    this->_status_strings
-        ->observe_actual_frame([status_actual_guide](auto const &region) {
-            if (region.has_value()) {
-                status_actual_guide->set_region(region.value());
-            }
-        })
+    ui::layout(status_frame_guide->top(), status_frame_guide->bottom(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
 
@@ -115,19 +106,11 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
                ui_layout_utils::constant(ui::range_insets::zero()))
         .sync()
         ->add_to(this->_pool);
-    ui::layout(status_actual_guide->bottom(), file_info_frame_guide->top(), ui_layout_utils::constant(0.0f))
+    ui::layout(status_actual_source->layout_vertical_range_source()->layout_min_value_source(),
+               file_info_frame_guide->top(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
-    ui::layout(status_actual_guide->bottom(), file_info_frame_guide->bottom(), ui_layout_utils::constant(0.0f))
-        .sync()
-        ->add_to(this->_pool);
-
-    this->_file_info_strings
-        ->observe_actual_frame([file_info_actual_guide](auto const &region) {
-            if (region.has_value()) {
-                file_info_actual_guide->set_region(region.value());
-            }
-        })
+    ui::layout(file_info_frame_guide->top(), file_info_frame_guide->bottom(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
 
@@ -135,10 +118,11 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
                ui_layout_utils::constant(ui::range_insets::zero()))
         .sync()
         ->add_to(this->_pool);
-    ui::layout(file_info_actual_guide->bottom(), player_frame_guide->top(), ui_layout_utils::constant(0.0f))
+    ui::layout(file_info_actual_source->layout_vertical_range_source()->layout_min_value_source(),
+               player_frame_guide->top(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
-    ui::layout(file_info_actual_guide->bottom(), player_frame_guide->bottom(), ui_layout_utils::constant(0.0f))
+    ui::layout(player_frame_guide->top(), player_frame_guide->bottom(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
 }
