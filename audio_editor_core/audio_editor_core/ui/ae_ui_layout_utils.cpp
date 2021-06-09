@@ -36,6 +36,6 @@ std::function<ui::range(ui::range const &)> ui_layout_utils::constant(ui::range_
     return [distance](ui::range const &range) { return range + distance; };
 }
 
-std::function<ui::region(ui::region const &)> constant(ui::region_insets const &insets) {
+std::function<ui::region(ui::region const &)> ui_layout_utils::constant(ui::region_insets const &insets) {
     return [insets](ui::region const &region) { return region + insets; };
 }

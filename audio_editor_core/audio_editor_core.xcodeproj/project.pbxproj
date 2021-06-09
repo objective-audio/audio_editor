@@ -51,6 +51,8 @@
 		B69708EB2639A15E0045E975 /* ae_file_importer.h in Headers */ = {isa = PBXBuildFile; fileRef = B69708E92639A15E0045E975 /* ae_file_importer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69708F12639B0390045E975 /* ae_file_importer_resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69708EF2639B0390045E975 /* ae_file_importer_resource.cpp */; };
 		B69708F22639B0390045E975 /* ae_file_importer_resource.h in Headers */ = {isa = PBXBuildFile; fileRef = B69708F02639B0390045E975 /* ae_file_importer_resource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B69C68A22670F5BF00C1083F /* ae_ui_button.mm in Sources */ = {isa = PBXBuildFile; fileRef = B69C68A02670F5BF00C1083F /* ae_ui_button.mm */; };
+		B69C68A32670F5BF00C1083F /* ae_ui_button.h in Headers */ = {isa = PBXBuildFile; fileRef = B69C68A12670F5BF00C1083F /* ae_ui_button.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69CF55F262AC49C007A0A75 /* ae_project.cpp */; };
 		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A55ECB266C81980039E56F /* ae_ui_layout_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A55EC9266C81960039E56F /* ae_ui_layout_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -131,6 +133,8 @@
 		B69708E92639A15E0045E975 /* ae_file_importer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_importer.h; sourceTree = "<group>"; };
 		B69708EF2639B0390045E975 /* ae_file_importer_resource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_importer_resource.cpp; sourceTree = "<group>"; };
 		B69708F02639B0390045E975 /* ae_file_importer_resource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_importer_resource.h; sourceTree = "<group>"; };
+		B69C68A02670F5BF00C1083F /* ae_ui_button.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_button.mm; sourceTree = "<group>"; };
+		B69C68A12670F5BF00C1083F /* ae_ui_button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_button.h; sourceTree = "<group>"; };
 		B69CF55F262AC49C007A0A75 /* ae_project.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project.cpp; sourceTree = "<group>"; };
 		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
 		B6A55EC9266C81960039E56F /* ae_ui_layout_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ae_ui_layout_utils.h; sourceTree = "<group>"; };
@@ -208,6 +212,8 @@
 				B64DE67E2658B990006FC562 /* ae_ui_root_dependency.h */,
 				B605EA6E2657E5530031B177 /* ae_ui_root.mm */,
 				B605EA6F2657E5530031B177 /* ae_ui_root.h */,
+				B69C68A02670F5BF00C1083F /* ae_ui_button.mm */,
+				B69C68A12670F5BF00C1083F /* ae_ui_button.h */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -461,6 +467,7 @@
 				B666CDE92634125E00C1693D /* ae_system_url.h in Headers */,
 				B6F3E065264287C90067E53A /* ae_player_dependency.h in Headers */,
 				B6A55ECB266C81980039E56F /* ae_ui_layout_utils.h in Headers */,
+				B69C68A32670F5BF00C1083F /* ae_ui_button.h in Headers */,
 				B64DE67F2658B990006FC562 /* ae_ui_root_dependency.h in Headers */,
 				B6D385322649623A005ADD0B /* ae_project_editor_utils.h in Headers */,
 				B6EA40D526411D0600BF3D06 /* ae_player_types.h in Headers */,
@@ -564,6 +571,7 @@
 				B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */,
 				B6D1B3EB26480D7F002CE49E /* ae_project_editor_maker.cpp in Sources */,
 				B64E9FC82650EDC800758FE8 /* ae_marker_pool.cpp in Sources */,
+				B69C68A22670F5BF00C1083F /* ae_ui_button.mm in Sources */,
 				B668BE25262F32B60021AD20 /* ae_project_pool.cpp in Sources */,
 				B668BE3F262F412B0021AD20 /* ae_app_presenter.cpp in Sources */,
 				B6A55ECC266C81980039E56F /* ae_ui_layout_utils.cpp in Sources */,
