@@ -13,11 +13,11 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
                  std::shared_ptr<project_view_presenter> const &presenter)
     : _presenter(presenter),
       _renderer(renderer),
-      _play_button(ui::button::make_shared({.size = {44, 44}})),
       _font_atlas(
           ui::font_atlas::make_shared({.font_name = "TrebuchetMS-Bold",
                                        .font_size = 14.0f,
                                        .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-"})),
+      _play_button(ui_button::make_shared(this->_font_atlas)),
       _status_strings(ui::strings::make_shared({.text = "",
                                                 .alignment = ui::layout_alignment::min,
                                                 .font_atlas = this->_font_atlas,
@@ -37,14 +37,9 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
 
     this->_renderer->background()->set_color({.v = 0.1f});
 
-    this->_play_button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
-    this->_play_button->rect_plane()->data()->set_rect_color(to_float4(ui::orange_color(), 1.0f),
-                                                             to_rect_index(0, false));
-    this->_play_button->rect_plane()->data()->set_rect_color(to_float4(ui::cyan_color(), 1.0f), to_rect_index(0, true));
-
     auto const &root_node = this->_renderer->root_node();
 
-    root_node->add_sub_node(this->_play_button->rect_plane()->node());
+    root_node->add_sub_node(this->_play_button->node());
     root_node->add_sub_node(this->_status_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
     root_node->add_sub_node(this->_player_strings->rect_plane()->node());
@@ -58,20 +53,17 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
         .sync()
         ->add_to(this->_pool);
 
+    presenter->observe_play_button_string([this](std::string const &string) { this->_play_button->set_text(string); })
+        .sync()
+        ->add_to(this->_pool);
+
     this->_renderer
         ->observe_will_render(
             [this](auto const &) { this->_player_strings->set_text(this->_presenter->player_string()); })
         .end()
         ->add_to(this->_pool);
 
-    this->_play_button
-        ->observe([this](auto const &context) {
-            if (context.method == ui::button::method::ended) {
-                this->_presenter->play_button_clicked();
-            }
-        })
-        .end()
-        ->add_to(this->_pool);
+    this->_play_button->observe_tapped([this] { this->_presenter->play_button_clicked(); }).end()->add_to(this->_pool);
 
     // layout
 
@@ -86,7 +78,7 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
 
     ui::layout(safe_area_guide, play_button_frame_guide,
                [](ui::region const &source) {
-                   return ui::region{.origin = {source.left(), source.top() - 44.0f}, .size = {44.0f, 44.0f}};
+                   return ui::region{.origin = {source.left(), source.top() - 44.0f}, .size = {60.0f, 44.0f}};
                })
         .sync()
         ->add_to(this->_pool);
