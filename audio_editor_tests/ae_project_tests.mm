@@ -75,7 +75,13 @@ struct player_stub final : project_player_interface {
     }
 };
 
-struct project_editor_stub final : project_editor_interface {};
+struct project_editor_stub final : project_editor_interface {
+    std::shared_ptr<project_editor_file_track_interface> file_track_value = nullptr;
+
+    std::shared_ptr<project_editor_file_track_interface> const &file_track() const override {
+        return file_track_value;
+    }
+};
 
 struct project_editor_maker_stub final : project_editor_maker_interface {
     [[nodiscard]] std::shared_ptr<project_editor_interface> make(url const &, file_info const &) const override {

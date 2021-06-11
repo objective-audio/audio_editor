@@ -9,12 +9,14 @@
 
 namespace yas::ae {
 struct project_editor final : project_editor_interface {
-    static std::shared_ptr<project_editor> make_shared(url const &, file_info const &,
-                                                       std::shared_ptr<project_editor_player_interface> const &);
-    static std::shared_ptr<project_editor> make_shared(url const &, file_info const &,
-                                                       std::shared_ptr<project_editor_player_interface> const &,
-                                                       std::shared_ptr<project_editor_file_track_interface> const &,
-                                                       std::shared_ptr<project_editor_marker_pool_interface> const &);
+    [[nodiscard]] std::shared_ptr<project_editor_file_track_interface> const &file_track() const override;
+
+    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
+        url const &, file_info const &, std::shared_ptr<project_editor_player_interface> const &);
+    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
+        url const &, file_info const &, std::shared_ptr<project_editor_player_interface> const &,
+        std::shared_ptr<project_editor_file_track_interface> const &,
+        std::shared_ptr<project_editor_marker_pool_interface> const &);
 
    private:
     url const _url;

@@ -25,6 +25,9 @@ struct project_view_presenter final {
     std::string play_button_string() const;
 
     void play_button_clicked();
+    void split_button_clicked();
+    void drop_head_button_clicked();
+    void drop_tail_button_clicked();
 
     observing::syncable observe_state_string(std::function<void(std::string const &)> &&);
     observing::syncable observe_file_info_string(std::function<void(std::string const &)> &&);

@@ -9,20 +9,35 @@ using namespace yas;
 using namespace yas::ae;
 
 ui_button::ui_button(std::shared_ptr<ui::font_atlas> const &font_atlas)
-    : _button(ui::button::make_shared({.origin = ui::point::zero(), .size = {60.0f, 44.0f}})),
+    : _button(ui::button::make_shared(ui::region::zero())),
       _strings(ui::strings::make_shared({.font_atlas = font_atlas, .alignment = ui::layout_alignment::mid})) {
     this->_button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::orange_color(), 1.0f), to_rect_index(0, false));
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::cyan_color(), 1.0f), to_rect_index(0, true));
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.4f}, 1.0f), to_rect_index(0, false));
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.5f}, 1.0f), to_rect_index(0, true));
 
     this->node()->add_sub_node(this->_strings->rect_plane()->node());
 
+    auto const center = std::make_shared<ui::point>();
+    auto const height = std::make_shared<float>();
+    auto const layout_strings = [center, height, this] {
+        ui::point const point{center->x, center->y + *height * 0.5f};
+        this->_strings->rect_plane()->node()->set_position(point);
+    };
+
     this->_button->layout_guide()
-        ->observe([this](ui::region const &region) {
-            auto const &font_atlas = this->_strings->font_atlas();
-            float const text_height = font_atlas->ascent() + font_atlas->descent();
-            this->_strings->rect_plane()->node()->set_position(region.center() +
-                                                               ui::point{.x = 0.0f, .y = text_height * 0.5f});
+        ->observe([center, layout_strings](ui::region const &region) {
+            *center = region.center();
+            layout_strings();
+        })
+        .sync()
+        ->add_to(this->_pool);
+
+    this->_strings->actual_layout_source()
+        ->layout_vertical_range_source()
+        ->layout_length_value_source()
+        ->observe_layout_value([height, layout_strings](float const &value) {
+            *height = value;
+            layout_strings();
         })
         .sync()
         ->add_to(this->_pool);

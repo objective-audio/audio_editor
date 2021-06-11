@@ -68,6 +68,10 @@ project_editor::project_editor(url const &url, file_info const &file_info,
     this->_file_track->insert_module_and_notify(file_module{proc::time::range{0, file_info.length}, 0});
 }
 
+std::shared_ptr<project_editor_file_track_interface> const &project_editor::file_track() const {
+    return this->_file_track;
+}
+
 std::shared_ptr<project_editor> project_editor::make_shared(
     url const &url, file_info const &file_info, std::shared_ptr<project_editor_player_interface> const &player) {
     return make_shared(url, file_info, player, file_track::make_shared(), marker_pool::make_shared());

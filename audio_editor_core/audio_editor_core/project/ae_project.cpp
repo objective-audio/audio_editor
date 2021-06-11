@@ -75,6 +75,10 @@ std::shared_ptr<project_player_interface> const &project::player() const {
     return this->_player;
 }
 
+std::shared_ptr<project_editor_interface> const &project::editor() const {
+    return this->_editor;
+}
+
 bool project::can_close() const {
     return true;
 }

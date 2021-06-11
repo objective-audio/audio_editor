@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_file_importer_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_player_types.h>
+#include <audio_editor_core/ae_project_editor_dependency.h>
 #include <cpp_utils/yas_url.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -20,9 +21,9 @@ namespace yas::ae {
 struct project_url_interface {
     virtual ~project_url_interface() = default;
 
-    virtual url const &root_directory() const = 0;
-    virtual url editing_file() const = 0;
-    virtual url playing_directory() const = 0;
+    [[nodiscard]] virtual url const &root_directory() const = 0;
+    [[nodiscard]] virtual url editing_file() const = 0;
+    [[nodiscard]] virtual url playing_directory() const = 0;
 };
 
 struct project_file_importer_interface {
@@ -35,7 +36,7 @@ struct project_file_importer_interface {
 struct project_file_loader_interface {
     virtual ~project_file_loader_interface() = default;
 
-    virtual std::optional<file_info> load_file_info(url const &) const = 0;
+    [[nodiscard]] virtual std::optional<file_info> load_file_info(url const &) const = 0;
 };
 
 struct project_player_interface {
@@ -56,6 +57,8 @@ struct project_player_interface {
 
 struct project_editor_interface {
     virtual ~project_editor_interface() = default;
+
+    [[nodiscard]] virtual std::shared_ptr<project_editor_file_track_interface> const &file_track() const = 0;
 };
 
 struct project_editor_maker_interface {
