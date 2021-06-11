@@ -8,22 +8,6 @@ using namespace yas;
 using namespace yas::ui;
 using namespace yas::ae;
 
-float ui_layout_utils::equal_value(float const &value) {
-    return value;
-}
-
-ui::point ui_layout_utils::equal_point(ui::point const &point) {
-    return point;
-}
-
-ui::range ui_layout_utils::equal_range(ui::range const &range) {
-    return range;
-}
-
-ui::region ui_layout_utils::equal_region(ui::region const &region) {
-    return region;
-}
-
 std::function<float(float const &)> ui_layout_utils::constant(float const distance) {
     return [distance](float const &value) { return value + distance; };
 }
