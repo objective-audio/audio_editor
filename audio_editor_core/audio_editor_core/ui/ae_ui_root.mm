@@ -89,6 +89,11 @@ void ui_root::_setup_observing() {
         .sync()
         ->add_to(this->_pool);
 
+    presenter
+        ->observe_file_track_string([this](std::string const &string) { this->_file_track_strings->set_text(string); })
+        .sync()
+        ->add_to(this->_pool);
+
     this->_renderer
         ->observe_will_render(
             [this](auto const &) { this->_player_strings->set_text(this->_presenter->player_string()); })
