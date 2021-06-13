@@ -76,27 +76,26 @@ void ui_root::_setup_node_hierarchie() {
 void ui_root::_setup_observing() {
     auto const &presenter = this->_presenter;
 
-    presenter->observe_state_string([this](std::string const &string) { this->_status_strings->set_text(string); })
+    presenter->observe_state_text([this](std::string const &string) { this->_status_strings->set_text(string); })
+        .sync()
+        ->add_to(this->_pool);
+
+    presenter->observe_file_info_text([this](std::string const &string) { this->_file_info_strings->set_text(string); })
+        .sync()
+        ->add_to(this->_pool);
+
+    presenter->observe_play_button_text([this](std::string const &string) { this->_play_button->set_text(string); })
         .sync()
         ->add_to(this->_pool);
 
     presenter
-        ->observe_file_info_string([this](std::string const &string) { this->_file_info_strings->set_text(string); })
-        .sync()
-        ->add_to(this->_pool);
-
-    presenter->observe_play_button_string([this](std::string const &string) { this->_play_button->set_text(string); })
-        .sync()
-        ->add_to(this->_pool);
-
-    presenter
-        ->observe_file_track_string([this](std::string const &string) { this->_file_track_strings->set_text(string); })
+        ->observe_file_track_text([this](std::string const &string) { this->_file_track_strings->set_text(string); })
         .sync()
         ->add_to(this->_pool);
 
     this->_renderer
         ->observe_will_render(
-            [this](auto const &) { this->_player_strings->set_text(this->_presenter->player_string()); })
+            [this](auto const &) { this->_player_strings->set_text(this->_presenter->player_text()); })
         .end()
         ->add_to(this->_pool);
 
