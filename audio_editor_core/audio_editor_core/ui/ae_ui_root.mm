@@ -39,7 +39,11 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
       _player_strings(ui::strings::make_shared({.text = "",
                                                 .alignment = ui::layout_alignment::min,
                                                 .font_atlas = this->_font_atlas,
-                                                .max_word_count = 128})) {
+                                                .max_word_count = 128})),
+      _file_track_strings(ui::strings::make_shared({.text = "",
+                                                    .alignment = ui::layout_alignment::min,
+                                                    .font_atlas = this->_font_atlas,
+                                                    .max_word_count = 1024})) {
     auto const texture = ui::texture::make_shared({.point_size = {1024, 1024}});
     texture->sync_scale_from_renderer(this->_renderer);
 
@@ -66,6 +70,7 @@ void ui_root::_setup_node_hierarchie() {
     root_node->add_sub_node(this->_status_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
     root_node->add_sub_node(this->_player_strings->rect_plane()->node());
+    root_node->add_sub_node(this->_file_track_strings->rect_plane()->node());
 }
 
 void ui_root::_setup_observing() {
@@ -112,6 +117,10 @@ void ui_root::_setup_layout() {
     auto const &file_info_preferred_guide = this->_file_info_strings->preferred_layout_guide();
     auto const file_info_actual_source = this->_file_info_strings->actual_layout_source();
     auto const &player_preferred_guide = this->_player_strings->preferred_layout_guide();
+    auto const player_actual_source = this->_player_strings->actual_layout_source();
+    auto const &file_track_preferred_guide = this->_file_track_strings->preferred_layout_guide();
+
+    // button_collection
 
     ui::layout(safe_area_guide, button_collection_guide, ui_layout_utils::constant(ui::region_insets::zero()))
         .sync()
@@ -141,6 +150,8 @@ void ui_root::_setup_layout() {
         .sync()
         ->add_to(this->_pool);
 
+    // status_strings
+
     ui::layout(safe_area_h_guide, status_preferred_guide->horizontal_range(),
                ui_layout_utils::constant(ui::range_insets::zero()))
         .sync()
@@ -152,6 +163,8 @@ void ui_root::_setup_layout() {
     ui::layout(status_preferred_guide->top(), status_preferred_guide->bottom(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
+
+    // file_info_strings
 
     ui::layout(safe_area_h_guide, file_info_preferred_guide->horizontal_range(),
                ui_layout_utils::constant(ui::range_insets::zero()))
@@ -165,6 +178,8 @@ void ui_root::_setup_layout() {
         .sync()
         ->add_to(this->_pool);
 
+    // player_strings
+
     ui::layout(safe_area_h_guide, player_preferred_guide->horizontal_range(),
                ui_layout_utils::constant(ui::range_insets::zero()))
         .sync()
@@ -174,6 +189,20 @@ void ui_root::_setup_layout() {
         .sync()
         ->add_to(this->_pool);
     ui::layout(player_preferred_guide->top(), player_preferred_guide->bottom(), ui_layout_utils::constant(0.0f))
+        .sync()
+        ->add_to(this->_pool);
+
+    // file_track_strings
+
+    ui::layout(safe_area_h_guide, file_track_preferred_guide->horizontal_range(),
+               ui_layout_utils::constant(ui::range_insets::zero()))
+        .sync()
+        ->add_to(this->_pool);
+    ui::layout(player_actual_source->layout_vertical_range_source()->layout_min_value_source(),
+               file_track_preferred_guide->top(), ui_layout_utils::constant(0.0f))
+        .sync()
+        ->add_to(this->_pool);
+    ui::layout(file_track_preferred_guide->top(), file_track_preferred_guide->bottom(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
 }

@@ -30,6 +30,7 @@ struct ui_root : project_ui_root_interface {
     std::shared_ptr<ui::strings> const _status_strings;
     std::shared_ptr<ui::strings> const _file_info_strings;
     std::shared_ptr<ui::strings> const _player_strings;
+    std::shared_ptr<ui::strings> const _file_track_strings;
 
     observing::canceller_pool _pool;
 
