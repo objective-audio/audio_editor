@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_file_track_types.h>
 #include <observing/yas_observing_umbrella.h>
 
 #include <cstdint>
@@ -37,6 +38,8 @@ struct project_view_presenter final {
 
    private:
     std::shared_ptr<project> _project;
+    observing::fetcher_ptr<file_track_event> const _file_track_event_fetcher;
+    observing::canceller_pool _pool;
 
     project_view_presenter(std::shared_ptr<project> const &);
 
