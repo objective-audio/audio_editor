@@ -44,6 +44,11 @@ std::string project_view_presenter::play_button_string() const {
     return project_view_presenter_utils::to_play_button_string(this->_project->player()->is_playing());
 }
 
+std::string project_view_presenter::file_track_string() const {
+#warning todo
+    return "file_track_string";
+}
+
 void project_view_presenter::play_button_clicked() {
     this->_project->player()->toggle_playing();
 }
@@ -81,4 +86,10 @@ observing::syncable project_view_presenter::observe_play_button_string(
     return this->_project->player()->observe_is_playing([handler = std::move(handler)](bool const is_playing) {
         handler(project_view_presenter_utils::to_play_button_string(is_playing));
     });
+}
+
+observing::syncable project_view_presenter::observe_file_track_string(
+    std::function<void(std::string const &)> &&handler) {
+#warning todo
+    return observing::syncable{};
 }
