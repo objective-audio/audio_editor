@@ -48,6 +48,21 @@ void project_view_presenter::play_button_clicked() {
     this->_project->player()->toggle_playing();
 }
 
+void project_view_presenter::split_button_clicked() {
+    auto const current_frame = this->_project->player()->current_frame();
+    this->_project->editor()->file_track()->split_at(current_frame);
+}
+
+void project_view_presenter::drop_head_button_clicked() {
+    auto const current_frame = this->_project->player()->current_frame();
+    this->_project->editor()->file_track()->drop_head_and_offset_at(current_frame);
+}
+
+void project_view_presenter::drop_tail_button_clicked() {
+    auto const current_frame = this->_project->player()->current_frame();
+    this->_project->editor()->file_track()->drop_tail_and_offset_at(current_frame);
+}
+
 observing::syncable project_view_presenter::observe_state_string(std::function<void(std::string const &)> &&handler) {
     return this->_project->observe_state([handler = std::move(handler)](project_state const &state) {
         handler(project_view_presenter_utils::to_label_string(state));

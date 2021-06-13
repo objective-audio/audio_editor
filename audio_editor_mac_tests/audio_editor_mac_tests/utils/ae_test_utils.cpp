@@ -8,8 +8,6 @@
 #include <cpp_utils/yas_system_path_utils.h>
 #include <cpp_utils/yas_url.h>
 
-#include <iostream>
-
 using namespace yas;
 using namespace yas::ae;
 

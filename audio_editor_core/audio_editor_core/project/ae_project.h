@@ -23,6 +23,7 @@ struct project final {
     [[nodiscard]] project_state const &state() const;
     [[nodiscard]] std::optional<file_info> file_info() const;
     [[nodiscard]] std::shared_ptr<project_player_interface> const &player() const;
+    [[nodiscard]] std::shared_ptr<project_editor_interface> const &editor() const;
 
     [[nodiscard]] bool can_close() const;
     void request_close();
