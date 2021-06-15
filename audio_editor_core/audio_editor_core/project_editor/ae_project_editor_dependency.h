@@ -34,6 +34,8 @@ struct project_editor_player_interface {
 struct project_editor_file_track_interface {
     virtual ~project_editor_file_track_interface() = default;
 
+    [[nodiscard]] virtual file_track_module_map_t const &modules() const = 0;
+
     virtual void replace_modules_and_notify(std::vector<file_module> &&) = 0;
     virtual void insert_module_and_notify(file_module const &) = 0;
     virtual void erase_module_and_notify(file_module const &) = 0;
