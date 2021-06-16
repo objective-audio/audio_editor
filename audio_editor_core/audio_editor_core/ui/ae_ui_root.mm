@@ -17,17 +17,18 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
           ui::font_atlas::make_shared({.font_name = "TrebuchetMS-Bold",
                                        .font_size = 14.0f,
                                        .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-"})),
-      _button_collection_layout(ui::collection_layout::make_shared({.preferred_cell_count = 4,
-                                                                    .row_spacing = 1.0f,
-                                                                    .col_spacing = 1.0f,
-                                                                    .default_cell_size = {60.0f, 44.0f},
-                                                                    .row_order = ui::layout_order::descending})),
       _play_button(ui_button::make_shared(this->_font_atlas)),
       _split_button(ui_button::make_shared(this->_font_atlas)),
       _drop_head_and_offset_button(ui_button::make_shared(this->_font_atlas)),
       _drop_tail_and_offset_button(ui_button::make_shared(this->_font_atlas)),
+      _erase_and_offset_button(ui_button::make_shared(this->_font_atlas)),
       _buttons({this->_play_button, this->_split_button, this->_drop_head_and_offset_button,
-                this->_drop_tail_and_offset_button}),
+                this->_drop_tail_and_offset_button, this->_erase_and_offset_button}),
+      _button_collection_layout(ui::collection_layout::make_shared({.preferred_cell_count = this->_buttons.size(),
+                                                                    .row_spacing = 1.0f,
+                                                                    .col_spacing = 1.0f,
+                                                                    .default_cell_size = {60.0f, 44.0f},
+                                                                    .row_order = ui::layout_order::descending})),
       _status_strings(ui::strings::make_shared({.text = "",
                                                 .alignment = ui::layout_alignment::min,
                                                 .font_atlas = this->_font_atlas,
@@ -54,6 +55,7 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
     this->_split_button->set_text("split");
     this->_drop_head_and_offset_button->set_text("drop\nhead");
     this->_drop_tail_and_offset_button->set_text("drop\ntail");
+    this->_erase_and_offset_button->set_text("erase");
 
     this->_setup_node_hierarchie();
     this->_setup_observing();
@@ -67,6 +69,7 @@ void ui_root::_setup_node_hierarchie() {
     root_node->add_sub_node(this->_split_button->node());
     root_node->add_sub_node(this->_drop_head_and_offset_button->node());
     root_node->add_sub_node(this->_drop_tail_and_offset_button->node());
+    root_node->add_sub_node(this->_erase_and_offset_button->node());
     root_node->add_sub_node(this->_status_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
     root_node->add_sub_node(this->_player_strings->rect_plane()->node());
@@ -107,6 +110,9 @@ void ui_root::_setup_observing() {
         .end()
         ->add_to(this->_pool);
     this->_drop_tail_and_offset_button->observe_tapped([this] { this->_presenter->drop_tail_button_clicked(); })
+        .end()
+        ->add_to(this->_pool);
+    this->_erase_and_offset_button->observe_tapped([this] { this->_presenter->erase_button_clicked(); })
         .end()
         ->add_to(this->_pool);
 }
