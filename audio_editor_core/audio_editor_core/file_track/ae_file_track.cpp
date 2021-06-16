@@ -62,6 +62,30 @@ void file_track::split_at(proc::frame_index_t const frame) {
     }
 }
 
+void file_track::erase_at(proc::frame_index_t const frame) {
+    if (auto const module_opt = this->module_at(frame); module_opt.has_value()) {
+        this->erase_module_and_notify(module_opt.value());
+    }
+}
+
+void file_track::erase_and_offset_at(proc::frame_index_t const frame) {
+    if (auto const module_opt = this->module_at(frame); module_opt.has_value()) {
+        auto const &module = module_opt.value();
+        proc::frame_index_t const offset = -int64_t(module.range.length);
+
+        this->erase_module_and_notify(module);
+
+        auto const copied_modules = this->_modules;
+        for (auto const &pair : copied_modules) {
+            if (frame <= pair.first.frame) {
+                auto const &moving_module = pair.second;
+                this->erase_module_and_notify(moving_module);
+                this->insert_module_and_notify(moving_module.offset(offset));
+            }
+        }
+    }
+}
+
 void file_track::drop_head_at(proc::frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value();
