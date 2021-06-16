@@ -228,6 +228,40 @@ using namespace yas::ae;
     XCTAssertEqual(track->modules().at(proc::time::range{3, 5}), (file_module{.range = {3, 5}, .file_frame = 3}));
 }
 
+- (void)test_erase_at {
+    auto const track = file_track::make_shared();
+
+    track->replace_modules_and_notify(
+        {{.range = {0, 2}, .file_frame = 0}, {.range = {2, 2}, .file_frame = 2}, {.range = {4, 2}, .file_frame = 4}});
+
+    XCTAssertEqual(track->modules().size(), 3);
+
+    track->erase_at(3);
+
+    XCTAssertEqual(track->modules().size(), 2);
+    XCTAssertEqual(track->modules().count(proc::time::range{0, 2}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{0, 2}), (file_module{.range = {0, 2}, .file_frame = 0}));
+    XCTAssertEqual(track->modules().count(proc::time::range{4, 2}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{4, 2}), (file_module{.range = {4, 2}, .file_frame = 4}));
+}
+
+- (void)test_erase_and_offset_at {
+    auto const track = file_track::make_shared();
+
+    track->replace_modules_and_notify(
+        {{.range = {0, 2}, .file_frame = 0}, {.range = {2, 2}, .file_frame = 2}, {.range = {4, 2}, .file_frame = 4}});
+
+    XCTAssertEqual(track->modules().size(), 3);
+
+    track->erase_and_offset_at(3);
+
+    XCTAssertEqual(track->modules().size(), 2);
+    XCTAssertEqual(track->modules().count(proc::time::range{0, 2}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{0, 2}), (file_module{.range = {0, 2}, .file_frame = 0}));
+    XCTAssertEqual(track->modules().count(proc::time::range{2, 2}), 1);
+    XCTAssertEqual(track->modules().at(proc::time::range{2, 2}), (file_module{.range = {2, 2}, .file_frame = 4}));
+}
+
 - (void)test_drop_head_at {
     auto const track = file_track::make_shared();
 
