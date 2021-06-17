@@ -31,6 +31,7 @@ struct project_view_presenter final {
     void drop_head_button_clicked();
     void drop_tail_button_clicked();
     void erase_button_clicked();
+    void zero_button_clicked();
 
     [[nodiscard]] observing::syncable observe_state_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_file_info_text(std::function<void(std::string const &)> &&);

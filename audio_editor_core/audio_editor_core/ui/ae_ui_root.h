@@ -26,6 +26,7 @@ struct ui_root : project_ui_root_interface {
     std::shared_ptr<ui_button> const _drop_head_and_offset_button;
     std::shared_ptr<ui_button> const _drop_tail_and_offset_button;
     std::shared_ptr<ui_button> const _erase_and_offset_button;
+    std::shared_ptr<ui_button> const _zero_button;
     std::vector<std::shared_ptr<ui_button>> const _buttons;
     std::shared_ptr<ui::collection_layout> const _button_collection_layout;
     std::shared_ptr<ui::strings> const _status_strings;

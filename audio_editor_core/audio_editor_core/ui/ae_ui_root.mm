@@ -22,8 +22,9 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
       _drop_head_and_offset_button(ui_button::make_shared(this->_font_atlas)),
       _drop_tail_and_offset_button(ui_button::make_shared(this->_font_atlas)),
       _erase_and_offset_button(ui_button::make_shared(this->_font_atlas)),
+      _zero_button(ui_button::make_shared(this->_font_atlas)),
       _buttons({this->_play_button, this->_split_button, this->_drop_head_and_offset_button,
-                this->_drop_tail_and_offset_button, this->_erase_and_offset_button}),
+                this->_drop_tail_and_offset_button, this->_erase_and_offset_button, this->_zero_button}),
       _button_collection_layout(ui::collection_layout::make_shared({.preferred_cell_count = this->_buttons.size(),
                                                                     .row_spacing = 1.0f,
                                                                     .col_spacing = 1.0f,
@@ -56,6 +57,7 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
     this->_drop_head_and_offset_button->set_text("drop\nhead");
     this->_drop_tail_and_offset_button->set_text("drop\ntail");
     this->_erase_and_offset_button->set_text("erase");
+    this->_zero_button->set_text("zero");
 
     this->_setup_node_hierarchie();
     this->_setup_observing();
@@ -70,6 +72,7 @@ void ui_root::_setup_node_hierarchie() {
     root_node->add_sub_node(this->_drop_head_and_offset_button->node());
     root_node->add_sub_node(this->_drop_tail_and_offset_button->node());
     root_node->add_sub_node(this->_erase_and_offset_button->node());
+    root_node->add_sub_node(this->_zero_button->node());
     root_node->add_sub_node(this->_status_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
     root_node->add_sub_node(this->_player_strings->rect_plane()->node());
@@ -115,6 +118,7 @@ void ui_root::_setup_observing() {
     this->_erase_and_offset_button->observe_tapped([this] { this->_presenter->erase_button_clicked(); })
         .end()
         ->add_to(this->_pool);
+    this->_zero_button->observe_tapped([this] { this->_presenter->zero_button_clicked(); }).end()->add_to(this->_pool);
 }
 
 void ui_root::_setup_layout() {
