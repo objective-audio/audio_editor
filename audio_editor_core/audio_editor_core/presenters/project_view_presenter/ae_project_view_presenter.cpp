@@ -82,6 +82,11 @@ void project_view_presenter::drop_tail_button_clicked() {
     this->_project->editor()->file_track()->drop_tail_and_offset_at(current_frame);
 }
 
+void project_view_presenter::erase_button_clicked() {
+    auto const current_frame = this->_project->player()->current_frame();
+    this->_project->editor()->file_track()->erase_at(current_frame);
+}
+
 observing::syncable project_view_presenter::observe_state_text(std::function<void(std::string const &)> &&handler) {
     return this->_project->observe_state([handler = std::move(handler)](project_state const &state) {
         handler(project_view_presenter_utils::to_label_text(state));
