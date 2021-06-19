@@ -63,6 +63,12 @@ std::string project_view_presenter::file_track_text() const {
                                                                   file_track_module_map_t{});
 }
 
+std::string project_view_presenter::time_text() const {
+    auto const &file_info = this->_project->file_info();
+    auto const &player = this->_project->player();
+    return project_view_presenter_utils::time_text(player->current_frame(), file_info->sample_rate);
+}
+
 void project_view_presenter::play_button_clicked() {
     this->_project->player()->toggle_playing();
 }
