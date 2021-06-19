@@ -9,7 +9,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::string project_view_presenter_utils::to_label_text(project_state const &state) {
+std::string project_view_presenter_utils::label_text(project_state const &state) {
     switch (state) {
         case ae::project_state::launching:
             return "launching";
@@ -24,7 +24,7 @@ std::string project_view_presenter_utils::to_label_text(project_state const &sta
     }
 }
 
-std::string project_view_presenter_utils::to_label_text(std::optional<file_info> const &file_info) {
+std::string project_view_presenter_utils::label_text(std::optional<file_info> const &file_info) {
     if (file_info.has_value()) {
         return "sample rate : " + std::to_string(file_info.value().sample_rate) +
                " / channel count : " + std::to_string(file_info.value().channel_count) +
@@ -34,15 +34,15 @@ std::string project_view_presenter_utils::to_label_text(std::optional<file_info>
     }
 }
 
-std::string project_view_presenter_utils::to_player_text(frame_index_t const current_frame) {
+std::string project_view_presenter_utils::player_text(frame_index_t const current_frame) {
     return "current : " + std::to_string(current_frame);
 }
 
-std::string project_view_presenter_utils::to_play_button_text(bool const is_playing) {
+std::string project_view_presenter_utils::play_button_text(bool const is_playing) {
     return is_playing ? "played" : "paused";
 }
 
-std::string project_view_presenter_utils::to_file_track_text(file_track_module_map_t const &modules) {
+std::string project_view_presenter_utils::file_track_text(file_track_module_map_t const &modules) {
     std::vector<std::string> module_texts;
 
     for (auto const &pair : modules) {
