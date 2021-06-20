@@ -25,6 +25,7 @@ struct project_view_presenter final {
     [[nodiscard]] std::string player_text() const;
     [[nodiscard]] std::string play_button_text() const;
     [[nodiscard]] std::string file_track_text() const;
+    [[nodiscard]] std::string time_text() const;
 
     void play_button_clicked();
     void split_button_clicked();

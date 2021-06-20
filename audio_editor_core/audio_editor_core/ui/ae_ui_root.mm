@@ -13,10 +13,10 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
                  std::shared_ptr<project_view_presenter> const &presenter)
     : _presenter(presenter),
       _renderer(renderer),
-      _font_atlas(
-          ui::font_atlas::make_shared({.font_name = "TrebuchetMS-Bold",
-                                       .font_size = 14.0f,
-                                       .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-"})),
+      _font_atlas(ui::font_atlas::make_shared(
+          {.font_name = "TrebuchetMS-Bold",
+           .font_size = 14.0f,
+           .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"})),
       _play_button(ui_button::make_shared(this->_font_atlas)),
       _split_button(ui_button::make_shared(this->_font_atlas)),
       _drop_head_and_offset_button(ui_button::make_shared(this->_font_atlas)),
