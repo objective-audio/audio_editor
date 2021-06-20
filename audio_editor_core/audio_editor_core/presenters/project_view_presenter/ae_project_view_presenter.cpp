@@ -98,6 +98,20 @@ void project_view_presenter::zero_button_clicked() {
     this->_project->player()->seek(0);
 }
 
+void project_view_presenter::jump_next_button_clicked() {
+    frame_index_t const current_frame = this->_project->player()->current_frame();
+    if (auto const edge = this->_project->editor()->file_track()->next_edge(current_frame)) {
+        this->_project->player()->seek(edge.value());
+    }
+}
+
+void project_view_presenter::jump_previous_button_clicked() {
+    frame_index_t const current_frame = this->_project->player()->current_frame();
+    if (auto const edge = this->_project->editor()->file_track()->previous_edge(current_frame)) {
+        this->_project->player()->seek(edge.value());
+    }
+}
+
 observing::syncable project_view_presenter::observe_state_text(std::function<void(std::string const &)> &&handler) {
     return this->_project->observe_state([handler = std::move(handler)](project_state const &state) {
         handler(project_view_presenter_utils::label_text(state));
