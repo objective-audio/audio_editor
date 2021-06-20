@@ -44,6 +44,8 @@ struct project_editor_file_track_interface {
     virtual std::optional<file_module> previous_module_at(proc::frame_index_t const) const = 0;
     virtual std::optional<file_module> next_module_at(proc::frame_index_t const) const = 0;
     virtual std::optional<file_module> splittable_module_at(proc::frame_index_t const) const = 0;
+    virtual std::optional<proc::frame_index_t> next_edge(proc::frame_index_t const) const = 0;
+    virtual std::optional<proc::frame_index_t> previous_edge(proc::frame_index_t const) const = 0;
     virtual void split_at(proc::frame_index_t const) = 0;
     virtual void erase_at(proc::frame_index_t const) = 0;
     virtual void erase_and_offset_at(proc::frame_index_t const) = 0;

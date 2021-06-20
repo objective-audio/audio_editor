@@ -20,6 +20,8 @@ struct file_track final : project_editor_file_track_interface {
     std::optional<file_module> previous_module_at(proc::frame_index_t const) const override;
     std::optional<file_module> next_module_at(proc::frame_index_t const) const override;
     std::optional<file_module> splittable_module_at(proc::frame_index_t const) const override;
+    std::optional<proc::frame_index_t> next_edge(proc::frame_index_t const) const override;
+    std::optional<proc::frame_index_t> previous_edge(proc::frame_index_t const) const override;
 
     void split_at(proc::frame_index_t const) override;
     void erase_at(proc::frame_index_t const) override;
