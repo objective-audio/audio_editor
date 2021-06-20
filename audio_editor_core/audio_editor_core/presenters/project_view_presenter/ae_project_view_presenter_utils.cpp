@@ -38,8 +38,9 @@ std::string project_view_presenter_utils::label_text(std::optional<file_info> co
     }
 }
 
-std::string project_view_presenter_utils::player_text(frame_index_t const current_frame) {
-    return "current : " + std::to_string(current_frame);
+std::string project_view_presenter_utils::player_text(frame_index_t const frame, uint32_t const sample_rate) {
+    std::string const time = time_text(frame, sample_rate);
+    return time + " [" + std::to_string(frame) + "]";
 }
 
 std::string project_view_presenter_utils::play_button_text(bool const is_playing) {

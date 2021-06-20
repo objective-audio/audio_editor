@@ -50,7 +50,8 @@ std::string project_view_presenter::file_info_text() const {
 }
 
 std::string project_view_presenter::player_text() const {
-    return project_view_presenter_utils::player_text(this->_project->player()->current_frame());
+    return project_view_presenter_utils::player_text(this->_project->player()->current_frame(),
+                                                     this->_project->file_info()->sample_rate);
 }
 
 std::string project_view_presenter::play_button_text() const {
