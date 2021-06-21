@@ -36,6 +36,8 @@ struct project_view_presenter final {
     void jump_next_button_clicked();
     void jump_previous_button_clicked();
 
+    void space_pressed();
+
     [[nodiscard]] observing::syncable observe_state_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_file_info_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_play_button_text(std::function<void(std::string const &)> &&);

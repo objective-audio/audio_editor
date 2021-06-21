@@ -112,6 +112,10 @@ void project_view_presenter::jump_previous_button_clicked() {
     }
 }
 
+void project_view_presenter::space_pressed() {
+    this->_project->player()->toggle_playing();
+}
+
 observing::syncable project_view_presenter::observe_state_text(std::function<void(std::string const &)> &&handler) {
     return this->_project->observe_state([handler = std::move(handler)](project_state const &state) {
         handler(project_view_presenter_utils::label_text(state));
