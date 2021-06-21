@@ -20,6 +20,7 @@ struct ui_root : project_ui_root_interface {
     std::shared_ptr<project_view_presenter> const _presenter;
 
     std::shared_ptr<ui::renderer> const _renderer;
+    std::shared_ptr<ui_root_keyboard_interface> const _keyboard;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui_button> const _play_button;
     std::shared_ptr<ui_button> const _split_button;

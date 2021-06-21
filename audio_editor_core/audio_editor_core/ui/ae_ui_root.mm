@@ -3,6 +3,7 @@
 //
 
 #include "ae_ui_root.h"
+#include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_project_view_presenter.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
 
@@ -13,6 +14,7 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
                  std::shared_ptr<project_view_presenter> const &presenter)
     : _presenter(presenter),
       _renderer(renderer),
+      _keyboard(ae::keyboard::make_shared(renderer->event_manager())),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",
            .font_size = 14.0f,
@@ -131,6 +133,17 @@ void ui_root::_setup_observing() {
         .end()
         ->add_to(this->_pool);
     this->_jump_next_button->observe_tapped([this] { this->_presenter->jump_next_button_clicked(); })
+        .end()
+        ->add_to(this->_pool);
+
+    this->_keyboard
+        ->observe([this](ae::key const &key) {
+            switch (key) {
+                case key::space: {
+                    this->_presenter->space_pressed();
+                } break;
+            }
+        })
         .end()
         ->add_to(this->_pool);
 }
