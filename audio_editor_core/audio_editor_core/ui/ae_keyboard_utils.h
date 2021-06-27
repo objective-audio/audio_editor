@@ -10,5 +10,5 @@
 #include <optional>
 
 namespace yas::ae::keyboard_utils {
-std::optional<ae::key> to_key(uint16_t const key_code);
+std::optional<key> to_key(uint16_t const key_code);
 }

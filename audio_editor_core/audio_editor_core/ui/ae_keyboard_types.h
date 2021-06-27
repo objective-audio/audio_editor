@@ -7,5 +7,9 @@
 namespace yas::ae {
 enum class key {
     space,
+    a,
+    s,
+    d,
+    del,
 };
 }

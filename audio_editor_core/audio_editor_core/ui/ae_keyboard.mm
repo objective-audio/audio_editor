@@ -33,7 +33,7 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
                     if (event->phase() == ui::event_phase::ended && this->_modifiers.empty()) {
                         auto const key_event = event->get<ui::key>();
                         if (auto const key = keyboard_utils::to_key(key_event.key_code())) {
-                            this->_notifier->notify(ae::key::space);
+                            this->_notifier->notify(key.value());
                         }
                     }
                 } break;

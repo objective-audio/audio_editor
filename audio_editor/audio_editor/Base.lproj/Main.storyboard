@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -333,6 +332,70 @@
                                                     </menuItem>
                                                 </items>
                                             </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="smV-R6-mld"/>
+                                        <menuItem title="Toggle Play" keyEquivalent=" " id="94p-dH-9Qg">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="togglePlay:" target="Ady-hI-5gd" id="UZ5-h4-67j"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Nudge Previous" keyEquivalent="" id="XfT-aA-Bsv">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="nudgePrevious:" target="Ady-hI-5gd" id="GUc-aJ-Zd5"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Nudge Next" keyEquivalent="" id="8Ov-Wa-tqQ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="nudgeNext:" target="Ady-hI-5gd" id="HWB-JC-WGu"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Jump Previous" keyEquivalent="" id="6gq-aS-lqI">
+                                            <connections>
+                                                <action selector="jumpPrevious:" target="Ady-hI-5gd" id="HTZ-jZ-X9L"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Jump Next" keyEquivalent="" id="oXG-5i-J63">
+                                            <connections>
+                                                <action selector="jumpNext:" target="Ady-hI-5gd" id="bE6-jN-FEn"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Drop Head and Offset" keyEquivalent="a" id="eb1-1v-ryf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="dropHeadAndOffset:" target="Ady-hI-5gd" id="g3R-TU-kGk"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Split" keyEquivalent="s" id="9yX-fx-0lZ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="split:" target="Ady-hI-5gd" id="PsJ-q9-KlF"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Drop Tail and Offset" keyEquivalent="d" id="QbC-Ih-FdR">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="dropTailAndOffset:" target="Ady-hI-5gd" id="OUc-s7-W9P"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Erase" id="97u-Db-E56">
+                                            <string key="keyEquivalent" base64-UTF8="YES">
+CA
+</string>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="erase:" target="Ady-hI-5gd" id="osD-hX-GeG"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Return to Zero" id="qVI-MP-icT">
+                                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                            <connections>
+                                                <action selector="returnToZero:" target="Ady-hI-5gd" id="4Lu-rI-qaf"/>
+                                            </connections>
                                         </menuItem>
                                     </items>
                                 </menu>
