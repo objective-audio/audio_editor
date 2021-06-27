@@ -70,50 +70,102 @@ std::string project_view_presenter::time_text() const {
     return project_view_presenter_utils::time_text(player->current_frame(), file_info->sample_rate);
 }
 
-void project_view_presenter::play_button_clicked() {
-    this->_project->player()->toggle_playing();
-}
+bool project_view_presenter::responds_to_action(action const action) {
+#warning todo
 
-void project_view_presenter::split_button_clicked() {
-    auto const current_frame = this->_project->player()->current_frame();
-    this->_project->editor()->file_track()->split_at(current_frame);
-}
+    switch (action) {
+        case action::toggle_play: {
+        } break;
 
-void project_view_presenter::drop_head_button_clicked() {
-    auto const current_frame = this->_project->player()->current_frame();
-    this->_project->editor()->file_track()->drop_head_and_offset_at(current_frame);
-}
+        case action::nudge_previous: {
+        } break;
 
-void project_view_presenter::drop_tail_button_clicked() {
-    auto const current_frame = this->_project->player()->current_frame();
-    this->_project->editor()->file_track()->drop_tail_and_offset_at(current_frame);
-}
+        case action::nudge_next: {
+        } break;
 
-void project_view_presenter::erase_button_clicked() {
-    auto const current_frame = this->_project->player()->current_frame();
-    this->_project->editor()->file_track()->erase_at(current_frame);
-}
+        case action::jump_previous: {
+        } break;
 
-void project_view_presenter::zero_button_clicked() {
-    this->_project->player()->seek(0);
-}
+        case action::jump_next: {
+        } break;
 
-void project_view_presenter::jump_next_button_clicked() {
-    frame_index_t const current_frame = this->_project->player()->current_frame();
-    if (auto const edge = this->_project->editor()->file_track()->next_edge(current_frame)) {
-        this->_project->player()->seek(edge.value());
+        case action::drop_head_and_offset: {
+        } break;
+
+        case action::split: {
+        } break;
+
+        case action::drop_tail_and_offset: {
+        } break;
+
+        case action::erase: {
+        } break;
+
+        case action::return_to_zero: {
+        } break;
     }
+
+    return true;
 }
 
-void project_view_presenter::jump_previous_button_clicked() {
-    frame_index_t const current_frame = this->_project->player()->current_frame();
-    if (auto const edge = this->_project->editor()->file_track()->previous_edge(current_frame)) {
-        this->_project->player()->seek(edge.value());
+void project_view_presenter::handle_action(action const action) {
+    if (!this->responds_to_action(action)) {
+        return;
     }
-}
 
-void project_view_presenter::space_pressed() {
-    this->_project->player()->toggle_playing();
+    switch (action) {
+        case action::toggle_play: {
+            this->_project->player()->toggle_playing();
+        } break;
+
+        case action::nudge_previous: {
+            frame_index_t const current_frame = this->_project->player()->current_frame();
+            this->_project->player()->seek(current_frame - 1);
+        } break;
+
+        case action::nudge_next: {
+            frame_index_t const current_frame = this->_project->player()->current_frame();
+            this->_project->player()->seek(current_frame + 1);
+        } break;
+
+        case action::jump_previous: {
+            frame_index_t const current_frame = this->_project->player()->current_frame();
+            if (auto const edge = this->_project->editor()->file_track()->previous_edge(current_frame)) {
+                this->_project->player()->seek(edge.value());
+            }
+        } break;
+
+        case action::jump_next: {
+            frame_index_t const current_frame = this->_project->player()->current_frame();
+            if (auto const edge = this->_project->editor()->file_track()->next_edge(current_frame)) {
+                this->_project->player()->seek(edge.value());
+            }
+        } break;
+
+        case action::drop_head_and_offset: {
+            auto const current_frame = this->_project->player()->current_frame();
+            this->_project->editor()->file_track()->drop_head_and_offset_at(current_frame);
+        } break;
+
+        case action::split: {
+            auto const current_frame = this->_project->player()->current_frame();
+            this->_project->editor()->file_track()->split_at(current_frame);
+        } break;
+
+        case action::drop_tail_and_offset: {
+            auto const current_frame = this->_project->player()->current_frame();
+            this->_project->editor()->file_track()->drop_tail_and_offset_at(current_frame);
+        } break;
+
+        case action::erase: {
+            auto const current_frame = this->_project->player()->current_frame();
+            this->_project->editor()->file_track()->erase_at(current_frame);
+        } break;
+
+        case action::return_to_zero: {
+            this->_project->player()->seek(0);
+        } break;
+    }
 }
 
 observing::syncable project_view_presenter::observe_state_text(std::function<void(std::string const &)> &&handler) {

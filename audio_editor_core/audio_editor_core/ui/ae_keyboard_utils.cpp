@@ -7,10 +7,19 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::optional<ae::key> keyboard_utils::to_key(uint16_t const key_code) {
+std::optional<key> keyboard_utils::to_key(uint16_t const key_code) {
     switch (key_code) {
         case 49:
-            return ae::key::space;
+            return key::space;
+        case 51:
+            return key::del;
+
+        case 0:
+            return key::a;
+        case 1:
+            return key::s;
+        case 2:
+            return key::d;
 
         default:
             return std::nullopt;

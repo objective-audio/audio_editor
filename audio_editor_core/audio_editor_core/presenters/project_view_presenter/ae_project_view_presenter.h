@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -27,16 +28,8 @@ struct project_view_presenter final {
     [[nodiscard]] std::string file_track_text() const;
     [[nodiscard]] std::string time_text() const;
 
-    void play_button_clicked();
-    void split_button_clicked();
-    void drop_head_button_clicked();
-    void drop_tail_button_clicked();
-    void erase_button_clicked();
-    void zero_button_clicked();
-    void jump_next_button_clicked();
-    void jump_previous_button_clicked();
-
-    void space_pressed();
+    bool responds_to_action(action const);
+    void handle_action(action const);
 
     [[nodiscard]] observing::syncable observe_state_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_file_info_text(std::function<void(std::string const &)> &&);

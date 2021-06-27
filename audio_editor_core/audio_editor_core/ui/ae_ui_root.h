@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_ui_button.h>
 #include <audio_editor_core/ae_ui_root_dependency.h>
@@ -12,6 +13,9 @@
 namespace yas::ae {
 struct ui_root : project_ui_root_interface {
     std::shared_ptr<ui::renderer> const &renderer() const;
+
+    bool responds_to_action(action const);
+    void handle_action(action const);
 
     static std::shared_ptr<ui_root> make_shared(std::shared_ptr<ui::renderer> const &,
                                                 std::shared_ptr<project_view_presenter> const &);

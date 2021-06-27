@@ -6,6 +6,7 @@
 #include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_project_view_presenter.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
+#include <audio_editor_core/ae_ui_root_utils.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -115,35 +116,35 @@ void ui_root::_setup_observing() {
         .end()
         ->add_to(this->_pool);
 
-    this->_play_button->observe_tapped([this] { this->_presenter->play_button_clicked(); }).end()->add_to(this->_pool);
-    this->_split_button->observe_tapped([this] { this->_presenter->split_button_clicked(); })
+    this->_play_button->observe_tapped([this] { this->_presenter->handle_action(action::toggle_play); })
         .end()
         ->add_to(this->_pool);
-    this->_drop_head_and_offset_button->observe_tapped([this] { this->_presenter->drop_head_button_clicked(); })
+    this->_split_button->observe_tapped([this] { this->_presenter->handle_action(action::split); })
         .end()
         ->add_to(this->_pool);
-    this->_drop_tail_and_offset_button->observe_tapped([this] { this->_presenter->drop_tail_button_clicked(); })
+    this->_drop_head_and_offset_button
+        ->observe_tapped([this] { this->_presenter->handle_action(action::drop_head_and_offset); })
         .end()
         ->add_to(this->_pool);
-    this->_erase_and_offset_button->observe_tapped([this] { this->_presenter->erase_button_clicked(); })
+    this->_drop_tail_and_offset_button
+        ->observe_tapped([this] { this->_presenter->handle_action(action::drop_tail_and_offset); })
         .end()
         ->add_to(this->_pool);
-    this->_zero_button->observe_tapped([this] { this->_presenter->zero_button_clicked(); }).end()->add_to(this->_pool);
-    this->_jump_previous_button->observe_tapped([this] { this->_presenter->jump_previous_button_clicked(); })
+    this->_erase_and_offset_button->observe_tapped([this] { this->_presenter->handle_action(action::erase); })
         .end()
         ->add_to(this->_pool);
-    this->_jump_next_button->observe_tapped([this] { this->_presenter->jump_next_button_clicked(); })
+    this->_zero_button->observe_tapped([this] { this->_presenter->handle_action(action::return_to_zero); })
+        .end()
+        ->add_to(this->_pool);
+    this->_jump_previous_button->observe_tapped([this] { this->_presenter->handle_action(action::jump_previous); })
+        .end()
+        ->add_to(this->_pool);
+    this->_jump_next_button->observe_tapped([this] { this->_presenter->handle_action(action::jump_next); })
         .end()
         ->add_to(this->_pool);
 
     this->_keyboard
-        ->observe([this](ae::key const &key) {
-            switch (key) {
-                case key::space: {
-                    this->_presenter->space_pressed();
-                } break;
-            }
-        })
+        ->observe([this](ae::key const &key) { this->_presenter->handle_action(ui_root_utils::to_action(key)); })
         .end()
         ->add_to(this->_pool);
 }
@@ -250,6 +251,14 @@ void ui_root::_setup_layout() {
 
 std::shared_ptr<ui::renderer> const &ui_root::renderer() const {
     return this->_renderer;
+}
+
+bool ui_root::responds_to_action(action const action) {
+    return this->_presenter->responds_to_action(action);
+}
+
+void ui_root::handle_action(action const action) {
+    return this->_presenter->handle_action(action);
 }
 
 std::shared_ptr<ui_root> ui_root::make_shared(std::shared_ptr<ui::renderer> const &renderer,
