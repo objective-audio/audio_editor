@@ -12,18 +12,19 @@
 
 namespace yas::ae {
 struct ui_root : project_ui_root_interface {
-    std::shared_ptr<ui::renderer> const &renderer() const;
+    std::shared_ptr<ui::standard> const &standard() const;
 
     bool responds_to_action(action const);
     void handle_action(action const);
 
-    static std::shared_ptr<ui_root> make_shared(std::shared_ptr<ui::renderer> const &,
+    static std::shared_ptr<ui_root> make_shared(std::shared_ptr<ui::standard> const &,
                                                 std::shared_ptr<project_view_presenter> const &);
 
    private:
     std::shared_ptr<project_view_presenter> const _presenter;
 
-    std::shared_ptr<ui::renderer> const _renderer;
+    std::shared_ptr<ui::standard> const _standard;
+    std::shared_ptr<ui::texture> const _texture;
     std::shared_ptr<ui_root_keyboard_interface> const _keyboard;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui_button> const _play_button;
@@ -43,7 +44,7 @@ struct ui_root : project_ui_root_interface {
 
     observing::canceller_pool _pool;
 
-    ui_root(std::shared_ptr<ui::renderer> const &, std::shared_ptr<project_view_presenter> const &);
+    ui_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<project_view_presenter> const &);
 
     void _setup_node_hierarchie();
     void _setup_observing();

@@ -11,23 +11,25 @@
 using namespace yas;
 using namespace yas::ae;
 
-ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
+ui_root::ui_root(std::shared_ptr<ui::standard> const &standard,
                  std::shared_ptr<project_view_presenter> const &presenter)
     : _presenter(presenter),
-      _renderer(renderer),
-      _keyboard(ae::keyboard::make_shared(renderer->event_manager())),
+      _standard(standard),
+      _texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
+      _keyboard(ae::keyboard::make_shared(standard->event_manager())),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",
            .font_size = 14.0f,
-           .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"})),
-      _play_button(ui_button::make_shared(this->_font_atlas)),
-      _split_button(ui_button::make_shared(this->_font_atlas)),
-      _drop_head_and_offset_button(ui_button::make_shared(this->_font_atlas)),
-      _drop_tail_and_offset_button(ui_button::make_shared(this->_font_atlas)),
-      _erase_and_offset_button(ui_button::make_shared(this->_font_atlas)),
-      _zero_button(ui_button::make_shared(this->_font_atlas)),
-      _jump_previous_button(ui_button::make_shared(this->_font_atlas)),
-      _jump_next_button(ui_button::make_shared(this->_font_atlas)),
+           .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"},
+          _texture)),
+      _play_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _split_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _drop_head_and_offset_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _drop_tail_and_offset_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _erase_and_offset_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _zero_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _jump_previous_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _jump_next_button(ui_button::make_shared(this->_font_atlas, standard)),
       _buttons({this->_play_button, this->_split_button, this->_drop_head_and_offset_button,
                 this->_drop_tail_and_offset_button, this->_erase_and_offset_button, this->_zero_button,
                 this->_jump_previous_button, this->_jump_next_button}),
@@ -36,28 +38,15 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
                                                                     .col_spacing = 1.0f,
                                                                     .default_cell_size = {60.0f, 44.0f},
                                                                     .row_order = ui::layout_order::descending})),
-      _status_strings(ui::strings::make_shared({.text = "",
-                                                .alignment = ui::layout_alignment::min,
-                                                .font_atlas = this->_font_atlas,
-                                                .max_word_count = 128})),
-      _file_info_strings(ui::strings::make_shared({.text = "",
-                                                   .alignment = ui::layout_alignment::min,
-                                                   .font_atlas = this->_font_atlas,
-                                                   .max_word_count = 128})),
-      _player_strings(ui::strings::make_shared({.text = "",
-                                                .alignment = ui::layout_alignment::min,
-                                                .font_atlas = this->_font_atlas,
-                                                .max_word_count = 128})),
-      _file_track_strings(ui::strings::make_shared({.text = "",
-                                                    .alignment = ui::layout_alignment::min,
-                                                    .font_atlas = this->_font_atlas,
-                                                    .max_word_count = 1024})) {
-    auto const texture = ui::texture::make_shared({.point_size = {1024, 1024}});
-    texture->sync_scale_from_renderer(this->_renderer);
-
-    this->_font_atlas->set_texture(texture);
-
-    this->_renderer->background()->set_color({.v = 0.2f});
+      _status_strings(ui::strings::make_shared(
+          {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
+      _file_info_strings(ui::strings::make_shared(
+          {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
+      _player_strings(ui::strings::make_shared(
+          {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
+      _file_track_strings(ui::strings::make_shared(
+          {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)) {
+    standard->view_look()->background()->set_color({.v = 0.2f});
 
     this->_split_button->set_text("split");
     this->_drop_head_and_offset_button->set_text("drop\nhead");
@@ -73,7 +62,7 @@ ui_root::ui_root(std::shared_ptr<ui::renderer> const &renderer,
 }
 
 void ui_root::_setup_node_hierarchie() {
-    auto const &root_node = this->_renderer->root_node();
+    auto const &root_node = this->_standard->root_node();
 
     root_node->add_sub_node(this->_play_button->node());
     root_node->add_sub_node(this->_split_button->node());
@@ -110,7 +99,7 @@ void ui_root::_setup_observing() {
         .sync()
         ->add_to(this->_pool);
 
-    this->_renderer
+    this->_standard->renderer()
         ->observe_will_render(
             [this](auto const &) { this->_player_strings->set_text(this->_presenter->player_text()); })
         .end()
@@ -150,8 +139,8 @@ void ui_root::_setup_observing() {
 }
 
 void ui_root::_setup_layout() {
-    auto const &safe_area_guide = this->_renderer->safe_area_layout_guide();
-    auto const &safe_area_h_guide = this->_renderer->safe_area_layout_guide()->horizontal_range();
+    auto const &safe_area_guide = this->_standard->view_look()->safe_area_layout_guide();
+    auto const &safe_area_h_guide = this->_standard->view_look()->safe_area_layout_guide()->horizontal_range();
     auto const &button_collection_guide = this->_button_collection_layout->preferred_layout_guide();
     auto const &button_collection_actual_source = this->_button_collection_layout->actual_frame_layout_source();
     auto const &status_preferred_guide = this->_status_strings->preferred_layout_guide();
@@ -249,8 +238,8 @@ void ui_root::_setup_layout() {
         ->add_to(this->_pool);
 }
 
-std::shared_ptr<ui::renderer> const &ui_root::renderer() const {
-    return this->_renderer;
+std::shared_ptr<ui::standard> const &ui_root::standard() const {
+    return this->_standard;
 }
 
 bool ui_root::responds_to_action(action const action) {
@@ -261,7 +250,7 @@ void ui_root::handle_action(action const action) {
     return this->_presenter->handle_action(action);
 }
 
-std::shared_ptr<ui_root> ui_root::make_shared(std::shared_ptr<ui::renderer> const &renderer,
+std::shared_ptr<ui_root> ui_root::make_shared(std::shared_ptr<ui::standard> const &standard,
                                               std::shared_ptr<project_view_presenter> const &presenter) {
-    return std::shared_ptr<ui_root>(new ui_root{renderer, presenter});
+    return std::shared_ptr<ui_root>(new ui_root{standard, presenter});
 }
