@@ -393,6 +393,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.audio-editor";
 				PRODUCT_NAME = "Audio Editor";
 			};
@@ -413,6 +414,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.audio-editor";
 				PRODUCT_NAME = "Audio Editor";
 			};
