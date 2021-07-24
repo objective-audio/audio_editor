@@ -17,10 +17,13 @@ using namespace yas::ae;
 }
 
 - (void)setupWithProjectID:(std::string const &)project_id {
-    auto const renderer = ui::renderer::make_shared(
-        ui::metal_system::make_shared(objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object()));
-    [self setRenderer:renderer];
-    self->_ui_root = ui_root::make_shared(renderer, project_view_presenter::make_shared(project_id));
+    auto const metal_system = ui::metal_system::make_shared(
+        objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
+    auto const standard = ui::standard::make_shared([self view_look], metal_system);
+    self->_ui_root = ui_root::make_shared(standard, project_view_presenter::make_shared(project_id));
+
+    [self configure_with_metal_system:metal_system renderer:standard->renderer()];
+    [self.metalView set_event_manager:standard->event_manager()];
 }
 
 - (IBAction)togglePlay:(NSMenuItem *)sender {
