@@ -22,8 +22,9 @@ using namespace yas::ae;
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
     self->_ui_root = ui_root::make_shared(standard, project_view_presenter::make_shared(project_id));
 
-    [self configure_with_metal_system:metal_system renderer:standard->renderer()];
-    [self.metalView set_event_manager:standard->event_manager()];
+    [self configure_with_metal_system:metal_system
+                             renderer:standard->renderer()
+                        event_manager:standard->event_manager()];
 }
 
 - (IBAction)togglePlay:(NSMenuItem *)sender {
