@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_system_url.h>
-#include <cpp_utils/yas_fast_each.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
