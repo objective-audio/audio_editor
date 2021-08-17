@@ -17,22 +17,22 @@ class timeline;
 }
 
 namespace yas::ae {
-struct project_editor_file_loader_interface {
-    virtual ~project_editor_file_loader_interface() = default;
+struct file_loader_for_project_editor {
+    virtual ~file_loader_for_project_editor() = default;
 
     virtual std::optional<file_info> load_file_info(url const &) const = 0;
 };
 
-struct project_editor_player_interface {
-    virtual ~project_editor_player_interface() = default;
+struct player_for_project_editor {
+    virtual ~player_for_project_editor() = default;
 
     virtual void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,
                               audio::pcm_format const) = 0;
     virtual void reset_timeline() = 0;
 };
 
-struct project_editor_file_track_interface {
-    virtual ~project_editor_file_track_interface() = default;
+struct file_track_for_project_editor {
+    virtual ~file_track_for_project_editor() = default;
 
     [[nodiscard]] virtual file_track_module_map_t const &modules() const = 0;
 
@@ -59,7 +59,7 @@ struct project_editor_file_track_interface {
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(file_track_event const &)> &&) = 0;
 };
 
-struct project_editor_marker_pool_interface {
-    virtual ~project_editor_marker_pool_interface() = default;
+struct marker_pool_for_project_editor {
+    virtual ~marker_pool_for_project_editor() = default;
 };
 }  // namespace yas::ae

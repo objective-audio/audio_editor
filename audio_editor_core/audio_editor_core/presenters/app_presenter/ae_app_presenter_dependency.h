@@ -9,8 +9,8 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct app_presenter_project_pool_interface {
-    virtual ~app_presenter_project_pool_interface() = default;
+struct project_pool_for_app_presenter {
+    virtual ~project_pool_for_app_presenter() = default;
 
     virtual void add_project(url const &file_url) = 0;
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(project_pool_event const &)> &&) = 0;

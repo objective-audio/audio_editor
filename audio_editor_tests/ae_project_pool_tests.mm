@@ -9,7 +9,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::test_utils {
-struct uuid_generator_stub : project_pool_uuid_generator_interface {
+struct uuid_generator_stub : uuid_generator_for_project_pool {
     std::function<std::string(void)> generate_handler = [] { return ""; };
 
     std::string generate() const override {

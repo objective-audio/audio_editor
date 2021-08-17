@@ -12,7 +12,7 @@
 #include <memory>
 
 namespace yas::ae {
-struct player final : project_player_interface, project_editor_player_interface {
+struct player final : player_for_project, player_for_project_editor {
     void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,
                       audio::pcm_format const) override;
     void reset_timeline() override;

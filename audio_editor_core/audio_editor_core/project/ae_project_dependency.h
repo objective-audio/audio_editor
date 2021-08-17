@@ -18,29 +18,29 @@ class timeline;
 }
 
 namespace yas::ae {
-struct project_url_interface {
-    virtual ~project_url_interface() = default;
+struct project_url_for_project {
+    virtual ~project_url_for_project() = default;
 
     [[nodiscard]] virtual url const &root_directory() const = 0;
     [[nodiscard]] virtual url editing_file() const = 0;
     [[nodiscard]] virtual url playing_directory() const = 0;
 };
 
-struct project_file_importer_interface {
-    virtual ~project_file_importer_interface() = default;
+struct file_importer_for_project {
+    virtual ~file_importer_for_project() = default;
 
     virtual void import(file_importing_context &&) = 0;
     virtual void cancel(std::string const &) = 0;
 };
 
-struct project_file_loader_interface {
-    virtual ~project_file_loader_interface() = default;
+struct file_loader_for_project {
+    virtual ~file_loader_for_project() = default;
 
     [[nodiscard]] virtual std::optional<file_info> load_file_info(url const &) const = 0;
 };
 
-struct project_player_interface {
-    virtual ~project_player_interface() = default;
+struct player_for_project {
+    virtual ~player_for_project() = default;
 
     virtual void set_playing(bool const) = 0;
     virtual bool is_playing() const = 0;
@@ -55,19 +55,19 @@ struct project_player_interface {
     [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;
 };
 
-struct project_editor_interface {
-    virtual ~project_editor_interface() = default;
+struct project_editor_for_project {
+    virtual ~project_editor_for_project() = default;
 
-    [[nodiscard]] virtual std::shared_ptr<project_editor_file_track_interface> const &file_track() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<file_track_for_project_editor> const &file_track() const = 0;
 };
 
-struct project_editor_maker_interface {
-    virtual ~project_editor_maker_interface() = default;
+struct project_editor_maker_for_project {
+    virtual ~project_editor_maker_for_project() = default;
 
-    [[nodiscard]] virtual std::shared_ptr<project_editor_interface> make(url const &, file_info const &) const = 0;
+    [[nodiscard]] virtual std::shared_ptr<project_editor_for_project> make(url const &, file_info const &) const = 0;
 };
 
-struct project_ui_root_interface {
-    virtual ~project_ui_root_interface() = default;
+struct ui_root_for_project {
+    virtual ~ui_root_for_project() = default;
 };
 }  // namespace yas::ae

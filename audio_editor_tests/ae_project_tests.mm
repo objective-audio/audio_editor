@@ -10,7 +10,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::test_utils {
-struct project_url_stub final : project_url_interface {
+struct project_url_stub final : project_url_for_project {
     url root_directory_value{url::file_url("/test/root")};
     url editing_file_value{url::file_url("/test/root/editing.caf")};
     url playing_directory_value{url::file_url("/test/root/playing")};
@@ -32,7 +32,7 @@ struct project_url_stub final : project_url_interface {
     }
 };
 
-struct file_importer_stub final : project_file_importer_interface {
+struct file_importer_stub final : file_importer_for_project {
     std::function<bool(url const &, url const &)> import_handler{[](url const &, url const &) { return false; }};
     std::function<void(std::string const &)> cancel_handler{[](std::string const &) {}};
 
@@ -47,7 +47,7 @@ struct file_importer_stub final : project_file_importer_interface {
     }
 };
 
-struct file_loader_stub final : project_file_loader_interface {
+struct file_loader_stub final : file_loader_for_project {
     std::optional<file_info> file_info_value = std::nullopt;
 
     std::optional<file_info> load_file_info(url const &) const override {
@@ -55,7 +55,7 @@ struct file_loader_stub final : project_file_loader_interface {
     }
 };
 
-struct player_stub final : project_player_interface {
+struct player_stub final : player_for_project {
     void set_playing(bool const) override {
     }
 
@@ -75,16 +75,16 @@ struct player_stub final : project_player_interface {
     }
 };
 
-struct project_editor_stub final : project_editor_interface {
-    std::shared_ptr<project_editor_file_track_interface> file_track_value = nullptr;
+struct project_editor_stub final : project_editor_for_project {
+    std::shared_ptr<file_track_for_project_editor> file_track_value = nullptr;
 
-    std::shared_ptr<project_editor_file_track_interface> const &file_track() const override {
+    std::shared_ptr<file_track_for_project_editor> const &file_track() const override {
         return file_track_value;
     }
 };
 
-struct project_editor_maker_stub final : project_editor_maker_interface {
-    [[nodiscard]] std::shared_ptr<project_editor_interface> make(url const &, file_info const &) const override {
+struct project_editor_maker_stub final : project_editor_maker_for_project {
+    [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &, file_info const &) const override {
         return std::make_shared<project_editor_stub>();
     }
 };

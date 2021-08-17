@@ -16,11 +16,11 @@ using namespace yas;
 using namespace yas::ae;
 
 project::project(std::string const &identifier, url const &file_url,
-                 std::shared_ptr<project_url_interface> const &project_url,
-                 std::shared_ptr<project_file_importer_interface> const &file_importer,
-                 std::shared_ptr<project_file_loader_interface> const &file_loader,
-                 std::shared_ptr<project_player_interface> const &player,
-                 std::shared_ptr<project_editor_maker_interface> const &editor_maker)
+                 std::shared_ptr<project_url_for_project> const &project_url,
+                 std::shared_ptr<file_importer_for_project> const &file_importer,
+                 std::shared_ptr<file_loader_for_project> const &file_loader,
+                 std::shared_ptr<player_for_project> const &player,
+                 std::shared_ptr<project_editor_maker_for_project> const &editor_maker)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),
@@ -44,11 +44,11 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
 }
 
 std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url,
-                                              std::shared_ptr<project_url_interface> const &project_url,
-                                              std::shared_ptr<project_file_importer_interface> const &file_importer,
-                                              std::shared_ptr<project_file_loader_interface> const &file_loader,
-                                              std::shared_ptr<project_player_interface> const &player,
-                                              std::shared_ptr<project_editor_maker_interface> const &editor_maker) {
+                                              std::shared_ptr<project_url_for_project> const &project_url,
+                                              std::shared_ptr<file_importer_for_project> const &file_importer,
+                                              std::shared_ptr<file_loader_for_project> const &file_loader,
+                                              std::shared_ptr<player_for_project> const &player,
+                                              std::shared_ptr<project_editor_maker_for_project> const &editor_maker) {
     auto shared = std::shared_ptr<project>(
         new project{identifier, file_url, project_url, file_importer, file_loader, player, editor_maker});
     shared->_setup(shared);
@@ -71,11 +71,11 @@ std::optional<file_info> project::file_info() const {
     return this->_file_info->value();
 }
 
-std::shared_ptr<project_player_interface> const &project::player() const {
+std::shared_ptr<player_for_project> const &project::player() const {
     return this->_player;
 }
 
-std::shared_ptr<project_editor_interface> const &project::editor() const {
+std::shared_ptr<project_editor_for_project> const &project::editor() const {
     return this->_editor;
 }
 

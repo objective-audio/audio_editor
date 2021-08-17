@@ -8,10 +8,8 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-class project_view_presenter;
-
-struct ui_root_keyboard_interface {
-    virtual ~ui_root_keyboard_interface() = default;
+struct keyboard_for_ui_root {
+    virtual ~keyboard_for_ui_root() = default;
 
     [[nodiscard]] virtual observing::endable observe(std::function<void(ae::key const &)> &&) = 0;
 };

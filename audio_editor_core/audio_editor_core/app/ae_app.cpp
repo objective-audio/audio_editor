@@ -9,14 +9,14 @@
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_system_url.h>
-#include <cpp_utils/yas_fast_each.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 app::app()
-    : _project_pool(project_pool::make_shared()),
+    : _worker(worker::make_shared()),
+      _project_pool(project_pool::make_shared()),
       _system_url(system_url::make_shared()),
       _file_importer(file_importer::make_shared(this->_worker, static_cast<uint32_t>(worker_priority::file_importing))),
       _file_loader(file_loader::make_shared()) {

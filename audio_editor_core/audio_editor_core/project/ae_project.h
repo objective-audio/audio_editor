@@ -11,19 +11,17 @@
 namespace yas::ae {
 struct project final {
     [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url);
-    [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url,
-                                                              std::shared_ptr<project_url_interface> const &,
-                                                              std::shared_ptr<project_file_importer_interface> const &,
-                                                              std::shared_ptr<project_file_loader_interface> const &,
-                                                              std::shared_ptr<project_player_interface> const &,
-                                                              std::shared_ptr<project_editor_maker_interface> const &);
+    [[nodiscard]] static std::shared_ptr<project> make_shared(
+        std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
+        std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
+        std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &);
 
     [[nodiscard]] std::string const &identifier() const;
     [[nodiscard]] url const &file_url() const;
     [[nodiscard]] project_state const &state() const;
     [[nodiscard]] std::optional<file_info> file_info() const;
-    [[nodiscard]] std::shared_ptr<project_player_interface> const &player() const;
-    [[nodiscard]] std::shared_ptr<project_editor_interface> const &editor() const;
+    [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
+    [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const;
 
     [[nodiscard]] bool can_close() const;
     void request_close();
@@ -36,22 +34,21 @@ struct project final {
     std::string const _identifier;
     url const _file_url;
 
-    std::shared_ptr<project_url_interface> const _project_url;
-    std::shared_ptr<project_file_importer_interface> const _file_importer;
-    std::shared_ptr<project_file_loader_interface> const _file_loader;
-    std::shared_ptr<project_player_interface> const _player;
-    std::shared_ptr<project_editor_maker_interface> const _editor_maker;
-    std::shared_ptr<project_editor_interface> _editor = nullptr;
+    std::shared_ptr<project_url_for_project> const _project_url;
+    std::shared_ptr<file_importer_for_project> const _file_importer;
+    std::shared_ptr<file_loader_for_project> const _file_loader;
+    std::shared_ptr<player_for_project> const _player;
+    std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
+    std::shared_ptr<project_editor_for_project> _editor = nullptr;
 
     observing::value::holder_ptr<project_state> const _state;
     observing::value::holder_ptr<std::optional<ae::file_info>> const _file_info;
 
     observing::notifier_ptr<project_event> const _event_notifier;
 
-    project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_interface> const &,
-            std::shared_ptr<project_file_importer_interface> const &,
-            std::shared_ptr<project_file_loader_interface> const &, std::shared_ptr<project_player_interface> const &,
-            std::shared_ptr<project_editor_maker_interface> const &);
+    project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
+            std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
+            std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;

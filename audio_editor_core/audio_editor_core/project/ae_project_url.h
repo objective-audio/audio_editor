@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_project_dependency.h>
 
 namespace yas::ae {
-struct project_url final : project_url_interface {
+struct project_url final : project_url_for_project {
     url const &root_directory() const override;
     url editing_file() const override;
     url playing_directory() const override;
