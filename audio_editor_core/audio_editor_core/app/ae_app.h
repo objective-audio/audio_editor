@@ -23,7 +23,7 @@ struct app final {
     [[nodiscard]] std::shared_ptr<file_loader> const &file_loader() const;
 
    private:
-    worker_ptr const _worker = worker::make_shared();
+    worker_ptr const _worker;
     std::shared_ptr<ae::project_pool> const _project_pool;
     std::shared_ptr<ae::system_url> const _system_url;
     std::shared_ptr<ae::file_importer> const _file_importer;
