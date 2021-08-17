@@ -8,8 +8,8 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct project_pool_uuid_generator_interface {
-    virtual ~project_pool_uuid_generator_interface() = default;
+struct uuid_generator_for_project_pool {
+    virtual ~uuid_generator_for_project_pool() = default;
 
     virtual std::string generate() const = 0;
 };

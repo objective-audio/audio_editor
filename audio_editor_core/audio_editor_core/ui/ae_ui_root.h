@@ -11,7 +11,9 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-struct ui_root : project_ui_root_interface {
+class project_view_presenter;
+
+struct ui_root : ui_root_for_project {
     std::shared_ptr<ui::standard> const &standard() const;
 
     bool responds_to_action(action const);
@@ -25,7 +27,7 @@ struct ui_root : project_ui_root_interface {
 
     std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<ui::texture> const _texture;
-    std::shared_ptr<ui_root_keyboard_interface> const _keyboard;
+    std::shared_ptr<keyboard_for_ui_root> const _keyboard;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui_button> const _play_button;
     std::shared_ptr<ui_button> const _split_button;

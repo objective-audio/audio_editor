@@ -14,7 +14,7 @@ using namespace yas::ae;
 app_presenter::app_presenter() : app_presenter(app::global()->project_pool()) {
 }
 
-app_presenter::app_presenter(std::shared_ptr<app_presenter_project_pool_interface> const &pool) : _project_pool(pool) {
+app_presenter::app_presenter(std::shared_ptr<project_pool_for_app_presenter> const &pool) : _project_pool(pool) {
 }
 
 bool app_presenter::can_open_file_dialog() const {

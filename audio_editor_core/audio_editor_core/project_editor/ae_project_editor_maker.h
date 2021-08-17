@@ -8,15 +8,15 @@
 #include <audio_editor_core/ae_project_editor_dependency.h>
 
 namespace yas::ae {
-struct project_editor_maker final : project_editor_maker_interface {
-    [[nodiscard]] std::shared_ptr<project_editor_interface> make(url const &, file_info const &) const override;
+struct project_editor_maker final : project_editor_maker_for_project {
+    [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &, file_info const &) const override;
 
-    static std::shared_ptr<project_editor_maker> make_shared(std::shared_ptr<project_editor_player_interface> const &);
+    static std::shared_ptr<project_editor_maker> make_shared(std::shared_ptr<player_for_project_editor> const &);
 
    private:
-    std::shared_ptr<project_editor_player_interface> const _player;
+    std::shared_ptr<player_for_project_editor> const _player;
 
-    project_editor_maker(std::shared_ptr<project_editor_player_interface> const &);
+    project_editor_maker(std::shared_ptr<player_for_project_editor> const &);
 
     project_editor_maker(project_editor_maker const &) = delete;
     project_editor_maker(project_editor_maker &&) = delete;

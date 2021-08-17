@@ -9,7 +9,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct marker_pool : project_editor_marker_pool_interface {
+struct marker_pool : marker_pool_for_project_editor {
     void replace_markers(std::vector<marker> &&);
     void insert_marker(marker const &);
     void erase_at(proc::frame_index_t const);
