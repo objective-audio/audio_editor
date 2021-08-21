@@ -71,41 +71,32 @@ std::string project_view_presenter::time_text() const {
 }
 
 bool project_view_presenter::responds_to_action(action const action) {
-#warning todo
-
     switch (action) {
-        case action::toggle_play: {
-        } break;
+        case action::toggle_play:
+            return true;
+        case action::nudge_previous:
+            return this->_project->can_nudge();
+        case action::nudge_next:
+            return this->_project->can_nudge();
 
-        case action::nudge_previous: {
-        } break;
+        case action::jump_previous:
+            return this->_project->can_jump_to_previous_edge();
+        case action::jump_next:
+            return this->_project->can_jump_to_next_edge();
 
-        case action::nudge_next: {
-        } break;
+        case action::drop_head_and_offset:
+            return this->_project->can_split();
+        case action::split:
+            return this->_project->can_split();
+        case action::drop_tail_and_offset:
+            return this->_project->can_split();
 
-        case action::jump_previous: {
-        } break;
+        case action::erase:
+            return this->_project->can_erase();
 
-        case action::jump_next: {
-        } break;
-
-        case action::drop_head_and_offset: {
-        } break;
-
-        case action::split: {
-        } break;
-
-        case action::drop_tail_and_offset: {
-        } break;
-
-        case action::erase: {
-        } break;
-
-        case action::return_to_zero: {
-        } break;
+        case action::return_to_zero:
+            return this->_project->can_return_to_zero();
     }
-
-    return true;
 }
 
 void project_view_presenter::handle_action(action const action) {
@@ -114,57 +105,36 @@ void project_view_presenter::handle_action(action const action) {
     }
 
     switch (action) {
-        case action::toggle_play: {
+        case action::toggle_play:
             this->_project->player()->toggle_playing();
-        } break;
-
-        case action::nudge_previous: {
-            frame_index_t const current_frame = this->_project->player()->current_frame();
-            this->_project->player()->seek(current_frame - 1);
-        } break;
-
-        case action::nudge_next: {
-            frame_index_t const current_frame = this->_project->player()->current_frame();
-            this->_project->player()->seek(current_frame + 1);
-        } break;
-
-        case action::jump_previous: {
-            frame_index_t const current_frame = this->_project->player()->current_frame();
-            if (auto const edge = this->_project->editor()->file_track()->previous_edge(current_frame)) {
-                this->_project->player()->seek(edge.value());
-            }
-        } break;
-
-        case action::jump_next: {
-            frame_index_t const current_frame = this->_project->player()->current_frame();
-            if (auto const edge = this->_project->editor()->file_track()->next_edge(current_frame)) {
-                this->_project->player()->seek(edge.value());
-            }
-        } break;
-
-        case action::drop_head_and_offset: {
-            auto const current_frame = this->_project->player()->current_frame();
-            this->_project->editor()->file_track()->drop_head_and_offset_at(current_frame);
-        } break;
-
-        case action::split: {
-            auto const current_frame = this->_project->player()->current_frame();
-            this->_project->editor()->file_track()->split_at(current_frame);
-        } break;
-
-        case action::drop_tail_and_offset: {
-            auto const current_frame = this->_project->player()->current_frame();
-            this->_project->editor()->file_track()->drop_tail_and_offset_at(current_frame);
-        } break;
-
-        case action::erase: {
-            auto const current_frame = this->_project->player()->current_frame();
-            this->_project->editor()->file_track()->erase_at(current_frame);
-        } break;
-
-        case action::return_to_zero: {
-            this->_project->player()->seek(0);
-        } break;
+            break;
+        case action::nudge_previous:
+            this->_project->nudge_previous();
+            break;
+        case action::nudge_next:
+            this->_project->nudge_next();
+            break;
+        case action::jump_previous:
+            this->_project->jump_to_previous_edge();
+            break;
+        case action::jump_next:
+            this->_project->jump_to_next_edge();
+            break;
+        case action::drop_head_and_offset:
+            this->_project->drop_head_and_offset();
+            break;
+        case action::split:
+            this->_project->split();
+            break;
+        case action::drop_tail_and_offset:
+            this->_project->drop_tail_and_offset();
+            break;
+        case action::erase:
+            this->_project->erase();
+            break;
+        case action::return_to_zero:
+            this->_project->return_to_zero();
+            break;
     }
 }
 
