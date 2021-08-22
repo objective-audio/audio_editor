@@ -26,6 +26,26 @@ struct project final {
     [[nodiscard]] bool can_close() const;
     void request_close();
 
+    [[nodiscard]] bool can_nudge() const;
+    void nudge_previous();
+    void nudge_next();
+
+    [[nodiscard]] bool can_jump_to_previous_edge() const;
+    [[nodiscard]] bool can_jump_to_next_edge() const;
+    void jump_to_previous_edge();
+    void jump_to_next_edge();
+
+    [[nodiscard]] bool can_split() const;
+    void split();
+    void drop_head_and_offset();
+    void drop_tail_and_offset();
+
+    [[nodiscard]] bool can_erase() const;
+    void erase();
+
+    [[nodiscard]] bool can_return_to_zero() const;
+    void return_to_zero();
+
     [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&);
     [[nodiscard]] observing::syncable observe_file_info(std::function<void(std::optional<ae::file_info>)> &&);
     [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);

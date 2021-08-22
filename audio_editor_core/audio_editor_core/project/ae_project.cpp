@@ -100,6 +100,90 @@ void project::request_close() {
     this->_event_notifier->notify(project_event::should_close);
 }
 
+bool project::can_nudge() const {
+    return !this->player()->is_playing();
+}
+
+void project::nudge_previous() {
+    if (!this->can_nudge()) {
+        return;
+    }
+
+    frame_index_t const current_frame = this->player()->current_frame();
+    this->player()->seek(current_frame - 1);
+}
+
+void project::nudge_next() {
+    if (!this->can_nudge()) {
+        return;
+    }
+
+    frame_index_t const current_frame = this->player()->current_frame();
+    this->player()->seek(current_frame + 1);
+}
+
+bool project::can_jump_to_previous_edge() const {
+    frame_index_t const current_frame = this->player()->current_frame();
+    return this->editor()->file_track()->previous_edge(current_frame).has_value();
+}
+
+bool project::can_jump_to_next_edge() const {
+    frame_index_t const current_frame = this->player()->current_frame();
+    return this->editor()->file_track()->next_edge(current_frame).has_value();
+}
+
+void project::jump_to_previous_edge() {
+    frame_index_t const current_frame = this->player()->current_frame();
+    if (auto const edge = this->editor()->file_track()->previous_edge(current_frame)) {
+        this->player()->seek(edge.value());
+    }
+}
+
+void project::jump_to_next_edge() {
+    frame_index_t const current_frame = this->player()->current_frame();
+    if (auto const edge = this->editor()->file_track()->next_edge(current_frame)) {
+        this->player()->seek(edge.value());
+    }
+}
+
+bool project::can_split() const {
+    auto const current_frame = this->player()->current_frame();
+    return this->editor()->file_track()->splittable_module_at(current_frame).has_value();
+}
+
+void project::split() {
+    auto const current_frame = this->player()->current_frame();
+    this->editor()->file_track()->split_at(current_frame);
+}
+
+void project::drop_head_and_offset() {
+    auto const current_frame = this->player()->current_frame();
+    this->editor()->file_track()->drop_head_and_offset_at(current_frame);
+}
+
+void project::drop_tail_and_offset() {
+    auto const current_frame = this->player()->current_frame();
+    this->editor()->file_track()->drop_tail_and_offset_at(current_frame);
+}
+
+bool project::can_erase() const {
+    auto const current_frame = this->player()->current_frame();
+    return this->editor()->file_track()->module_at(current_frame).has_value();
+}
+
+void project::erase() {
+    auto const current_frame = this->player()->current_frame();
+    this->editor()->file_track()->erase_at(current_frame);
+}
+
+bool project::can_return_to_zero() const {
+    return this->player()->current_frame() != 0;
+}
+
+void project::return_to_zero() {
+    this->player()->seek(0);
+}
+
 observing::syncable project::observe_state(std::function<void(project_state const &)> &&handler) {
     return this->_state->observe(std::move(handler));
 }
