@@ -71,7 +71,7 @@ using namespace yas::ae;
 
     std::vector<marker_pool_event> called;
 
-    auto canceller = pool->observe([&called](auto const &event) { called.emplace_back(event); }).sync();
+    auto canceller = pool->observe_event([&called](auto const &event) { called.emplace_back(event); }).sync();
 
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0).type, marker_pool_event_type::any);

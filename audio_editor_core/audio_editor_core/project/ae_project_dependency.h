@@ -59,6 +59,7 @@ struct project_editor_for_project {
     virtual ~project_editor_for_project() = default;
 
     [[nodiscard]] virtual std::shared_ptr<file_track_for_project_editor> const &file_track() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const = 0;
 };
 
 struct project_editor_maker_for_project {

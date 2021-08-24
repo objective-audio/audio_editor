@@ -30,9 +30,10 @@ ui_root::ui_root(std::shared_ptr<ui::standard> const &standard,
       _zero_button(ui_button::make_shared(this->_font_atlas, standard)),
       _jump_previous_button(ui_button::make_shared(this->_font_atlas, standard)),
       _jump_next_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _insert_marker_button(ui_button::make_shared(this->_font_atlas, standard)),
       _buttons({this->_play_button, this->_split_button, this->_drop_head_and_offset_button,
                 this->_drop_tail_and_offset_button, this->_erase_and_offset_button, this->_zero_button,
-                this->_jump_previous_button, this->_jump_next_button}),
+                this->_jump_previous_button, this->_jump_next_button, this->_insert_marker_button}),
       _button_collection_layout(ui::collection_layout::make_shared({.preferred_cell_count = this->_buttons.size(),
                                                                     .row_spacing = 1.0f,
                                                                     .col_spacing = 1.0f,
@@ -45,6 +46,8 @@ ui_root::ui_root(std::shared_ptr<ui::standard> const &standard,
       _player_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
       _file_track_strings(ui::strings::make_shared(
+          {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
+      _marker_pool_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)) {
     standard->view_look()->background()->set_color({.v = 0.2f});
 
@@ -55,6 +58,7 @@ ui_root::ui_root(std::shared_ptr<ui::standard> const &standard,
     this->_zero_button->set_text("zero");
     this->_jump_previous_button->set_text("jump\nprev");
     this->_jump_next_button->set_text("jump\nnext");
+    this->_insert_marker_button->set_text("insert\nmarker");
 
     this->_setup_node_hierarchie();
     this->_setup_observing();
@@ -72,11 +76,13 @@ void ui_root::_setup_node_hierarchie() {
     root_node->add_sub_node(this->_zero_button->node());
     root_node->add_sub_node(this->_jump_previous_button->node());
     root_node->add_sub_node(this->_jump_next_button->node());
+    root_node->add_sub_node(this->_insert_marker_button->node());
 
     root_node->add_sub_node(this->_status_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
     root_node->add_sub_node(this->_player_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_track_strings->rect_plane()->node());
+    root_node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
 }
 
 void ui_root::_setup_observing() {
@@ -96,6 +102,11 @@ void ui_root::_setup_observing() {
 
     presenter
         ->observe_file_track_text([this](std::string const &string) { this->_file_track_strings->set_text(string); })
+        .sync()
+        ->add_to(this->_pool);
+
+    presenter
+        ->observe_marker_pool_text([this](std::string const &string) { this->_marker_pool_strings->set_text(string); })
         .sync()
         ->add_to(this->_pool);
 
@@ -131,6 +142,9 @@ void ui_root::_setup_observing() {
     this->_jump_next_button->observe_tapped([this] { this->_presenter->handle_action(action::jump_next); })
         .end()
         ->add_to(this->_pool);
+    this->_insert_marker_button->observe_tapped([this] { this->_presenter->handle_action(action::insert_marker); })
+        .end()
+        ->add_to(this->_pool);
 
     this->_keyboard
         ->observe([this](ae::key const &key) { this->_presenter->handle_action(ui_root_utils::to_action(key)); })
@@ -150,6 +164,8 @@ void ui_root::_setup_layout() {
     auto const &player_preferred_guide = this->_player_strings->preferred_layout_guide();
     auto const player_actual_source = this->_player_strings->actual_layout_source();
     auto const &file_track_preferred_guide = this->_file_track_strings->preferred_layout_guide();
+    auto const file_track_actual_source = this->_file_track_strings->actual_layout_source();
+    auto const &marker_pool_preferred_guide = this->_marker_pool_strings->preferred_layout_guide();
 
     // button_collection
 
@@ -234,6 +250,21 @@ void ui_root::_setup_layout() {
         .sync()
         ->add_to(this->_pool);
     ui::layout(file_track_preferred_guide->top(), file_track_preferred_guide->bottom(), ui_layout_utils::constant(0.0f))
+        .sync()
+        ->add_to(this->_pool);
+
+    // marker_pool_string
+
+    ui::layout(safe_area_h_guide, marker_pool_preferred_guide->horizontal_range(),
+               ui_layout_utils::constant(ui::range_insets::zero()))
+        .sync()
+        ->add_to(this->_pool);
+    ui::layout(file_track_actual_source->layout_vertical_range_source()->layout_min_value_source(),
+               marker_pool_preferred_guide->top(), ui_layout_utils::constant(0.0f))
+        .sync()
+        ->add_to(this->_pool);
+    ui::layout(marker_pool_preferred_guide->top(), marker_pool_preferred_guide->bottom(),
+               ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
 }

@@ -63,6 +63,24 @@ std::string project_view_presenter_utils::file_track_text(file_track_module_map_
     }
 }
 
+std::string project_view_presenter_utils::marker_pool_text(marker_map_t const &markers) {
+    std::vector<std::string> texts;
+
+    std::size_t idx = 0;
+
+    for (auto const &pair : markers) {
+        marker const &marker = pair.second;
+        texts.emplace_back("marker index:" + std::to_string(idx) + "/frame:" + std::to_string(marker.frame));
+        ++idx;
+    }
+
+    if (texts.empty()) {
+        return "--";
+    } else {
+        return joined(texts, "\n");
+    }
+}
+
 int project_view_presenter_utils::after_point_digits(uint32_t const sample_rate) {
     if (sample_rate == 0) {
         throw std::invalid_argument("sample_rate is zero.");
@@ -125,7 +143,7 @@ std::string project_view_presenter_utils::time_text(int64_t const frame, uint32_
     return stream.str();
 }
 
-observing::fetcher_ptr<file_track_event> project_view_presenter_utils::make_fetcher(
+observing::fetcher_ptr<file_track_event> project_view_presenter_utils::make_file_track_fetcher(
     std::shared_ptr<project> const &project) {
     return observing::fetcher<file_track_event>::make_shared([weak_project = to_weak(project)] {
         if (auto const &project = weak_project.lock()) {
@@ -134,7 +152,19 @@ observing::fetcher_ptr<file_track_event> project_view_presenter_utils::make_fetc
                     {.type = file_track_event_type::any, .modules = editor->file_track()->modules()});
             }
         }
-        static file_track_module_map_t const _empty_modules;
-        return file_track_event({.type = file_track_event_type::any, .modules = _empty_modules});
+        return file_track_event({.type = file_track_event_type::any, .modules = ae::empty_file_track_modules});
+    });
+}
+
+observing::fetcher_ptr<marker_pool_event> project_view_presenter_utils::make_marker_pool_fetcher(
+    std::shared_ptr<project> const &project) {
+    return observing::fetcher<marker_pool_event>::make_shared([weak_project = to_weak(project)] {
+        if (auto const &project = weak_project.lock()) {
+            if (auto const &editor = project->editor()) {
+                return marker_pool_event(
+                    {.type = marker_pool_event_type::any, .markers = editor->marker_pool()->markers()});
+            }
+        }
+        return marker_pool_event({.type = marker_pool_event_type::any, .markers = ae::empty_markers});
     });
 }

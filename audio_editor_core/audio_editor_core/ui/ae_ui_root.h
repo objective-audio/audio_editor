@@ -37,12 +37,14 @@ struct ui_root : ui_root_for_project {
     std::shared_ptr<ui_button> const _zero_button;
     std::shared_ptr<ui_button> const _jump_previous_button;
     std::shared_ptr<ui_button> const _jump_next_button;
+    std::shared_ptr<ui_button> const _insert_marker_button;
     std::vector<std::shared_ptr<ui_button>> const _buttons;
     std::shared_ptr<ui::collection_layout> const _button_collection_layout;
     std::shared_ptr<ui::strings> const _status_strings;
     std::shared_ptr<ui::strings> const _file_info_strings;
     std::shared_ptr<ui::strings> const _player_strings;
     std::shared_ptr<ui::strings> const _file_track_strings;
+    std::shared_ptr<ui::strings> const _marker_pool_strings;
 
     observing::canceller_pool _pool;
 

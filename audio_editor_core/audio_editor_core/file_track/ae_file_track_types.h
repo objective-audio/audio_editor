@@ -11,6 +11,8 @@
 namespace yas::ae {
 using file_track_module_map_t = std::map<proc::time::range, file_module>;
 
+static file_track_module_map_t const empty_file_track_modules;
+
 enum file_track_event_type {
     any,
     inserted,

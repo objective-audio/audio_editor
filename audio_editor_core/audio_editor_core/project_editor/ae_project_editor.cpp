@@ -72,6 +72,10 @@ std::shared_ptr<file_track_for_project_editor> const &project_editor::file_track
     return this->_file_track;
 }
 
+std::shared_ptr<marker_pool_for_project_editor> const &project_editor::marker_pool() const {
+    return this->_marker_pool;
+}
+
 std::shared_ptr<project_editor> project_editor::make_shared(url const &url, file_info const &file_info,
                                                             std::shared_ptr<player_for_project_editor> const &player) {
     return make_shared(url, file_info, player, file_track::make_shared(), marker_pool::make_shared());

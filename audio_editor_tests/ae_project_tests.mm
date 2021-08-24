@@ -77,9 +77,14 @@ struct player_stub final : player_for_project {
 
 struct project_editor_stub final : project_editor_for_project {
     std::shared_ptr<file_track_for_project_editor> file_track_value = nullptr;
+    std::shared_ptr<marker_pool_for_project_editor> marker_pool_value = nullptr;
 
     std::shared_ptr<file_track_for_project_editor> const &file_track() const override {
-        return file_track_value;
+        return this->file_track_value;
+    }
+
+    std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const override {
+        return this->marker_pool_value;
     }
 };
 

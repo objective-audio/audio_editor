@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19158" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19158"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -387,6 +388,11 @@ CA
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="erase:" target="Ady-hI-5gd" id="osD-hX-GeG"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Insert Marker" keyEquivalent="m" id="tZZ-Nw-iyd">
+                                            <connections>
+                                                <action selector="insertMarker:" target="Ady-hI-5gd" id="WVW-KF-1ks"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Return to Zero" id="qVI-MP-icT">

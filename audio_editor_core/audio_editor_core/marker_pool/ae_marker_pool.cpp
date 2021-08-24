@@ -33,7 +33,7 @@ std::map<proc::frame_index_t, marker> const &marker_pool::markers() const {
     return this->_markers->elements();
 }
 
-observing::syncable marker_pool::observe(std::function<void(marker_pool_event const &)> &&handler) {
+observing::syncable marker_pool::observe_event(std::function<void(marker_pool_event const &)> &&handler) {
     return this->_markers->observe([handler = std::move(handler)](auto const &event) {
         switch (event.type) {
             case observing::map::event_type::any:
