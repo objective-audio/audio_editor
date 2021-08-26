@@ -33,6 +33,25 @@ std::map<proc::frame_index_t, marker> const &marker_pool::markers() const {
     return this->_markers->elements();
 }
 
+std::optional<proc::frame_index_t> marker_pool::next_edge(proc::frame_index_t const frame) const {
+    auto const &markers = this->markers();
+    auto upper_it = markers.upper_bound(frame);
+    if (upper_it != markers.end()) {
+        return upper_it->first;
+    }
+    return std::nullopt;
+}
+
+std::optional<proc::frame_index_t> marker_pool::previous_edge(proc::frame_index_t const frame) const {
+    auto const &markers = this->markers();
+    for (auto it = markers.rbegin(); it != markers.rend(); ++it) {
+        if (it->first < frame) {
+            return it->first;
+        }
+    }
+    return std::nullopt;
+}
+
 observing::syncable marker_pool::observe_event(std::function<void(marker_pool_event const &)> &&handler) {
     return this->_markers->observe([handler = std::move(handler)](auto const &event) {
         switch (event.type) {
