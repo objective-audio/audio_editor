@@ -176,6 +176,16 @@ void project::erase() {
     this->editor()->file_track()->erase_at(current_frame);
 }
 
+bool project::can_insert_marker() const {
+    auto const current_frame = this->player()->current_frame();
+    return this->editor()->marker_pool()->markers().count(current_frame) == 0;
+}
+
+void project::insert_marker() {
+    auto const current_frame = this->player()->current_frame();
+    this->editor()->marker_pool()->insert_marker(marker{.frame = current_frame});
+}
+
 bool project::can_return_to_zero() const {
     return this->player()->current_frame() != 0;
 }

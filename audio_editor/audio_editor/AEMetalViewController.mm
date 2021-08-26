@@ -63,6 +63,10 @@ using namespace yas::ae;
     self->_ui_root->handle_action(action::erase);
 }
 
+- (IBAction)insertMarker:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::insert_marker);
+}
+
 - (IBAction)returnToZero:(NSMenuItem *)sender {
     self->_ui_root->handle_action(action::return_to_zero);
 }
@@ -96,6 +100,8 @@ using namespace yas::ae;
         return action::drop_tail_and_offset;
     } else if (selector == @selector(erase:)) {
         return action::erase;
+    } else if (selector == @selector(insertMarker:)) {
+        return action::insert_marker;
     } else if (selector == @selector(returnToZero:)) {
         return action::return_to_zero;
     }
@@ -123,6 +129,8 @@ using namespace yas::ae;
             return @selector(dropTailAndOffset:);
         case action::erase:
             return @selector(erase:);
+        case action::insert_marker:
+            return @selector(insertMarker:);
         case action::return_to_zero:
             return @selector(returnToZero:);
     }

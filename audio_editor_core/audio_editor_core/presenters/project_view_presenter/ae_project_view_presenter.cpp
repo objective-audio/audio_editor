@@ -13,15 +13,23 @@ using namespace yas;
 using namespace yas::ae;
 
 project_view_presenter::project_view_presenter(std::shared_ptr<project> const &project)
-    : _project(project), _file_track_event_fetcher(project_view_presenter_utils::make_fetcher(project)) {
+    : _project(project),
+      _file_track_event_fetcher(project_view_presenter_utils::make_file_track_fetcher(project)),
+      _marker_pool_event_fetcher(project_view_presenter_utils::make_marker_pool_fetcher(project)) {
     project
-        ->observe_state([this, canceller = observing::cancellable_ptr{nullptr}](auto const &state) mutable {
+        ->observe_state([this, pool = observing::canceller_pool::make_shared()](auto const &state) {
             if (state == project_state::editing) {
-                canceller =
-                    this->_project->editor()
-                        ->file_track()
-                        ->observe_event([this](auto const &event) { this->_file_track_event_fetcher->push(event); })
-                        .sync();
+                this->_project->editor()
+                    ->file_track()
+                    ->observe_event([this](auto const &event) { this->_file_track_event_fetcher->push(event); })
+                    .sync()
+                    ->add_to(*pool);
+
+                this->_project->editor()
+                    ->marker_pool()
+                    ->observe_event([this](auto const &event) { this->_marker_pool_event_fetcher->push(event); })
+                    .sync()
+                    ->add_to(*pool);
             }
         })
         .end()
@@ -60,8 +68,14 @@ std::string project_view_presenter::play_button_text() const {
 
 std::string project_view_presenter::file_track_text() const {
     auto const &editor = this->_project->editor();
-    return project_view_presenter_utils::file_track_text(editor ? editor->file_track()->modules() :
-                                                                  file_track_module_map_t{});
+    auto const &modules = editor ? editor->file_track()->modules() : ae::empty_file_track_modules;
+    return project_view_presenter_utils::file_track_text(modules);
+}
+
+std::string project_view_presenter::marker_pool_text() const {
+    auto const &editor = this->_project->editor();
+    auto const &markers = editor ? editor->marker_pool()->markers() : ae::empty_markers;
+    return project_view_presenter_utils::marker_pool_text(markers);
 }
 
 std::string project_view_presenter::time_text() const {
@@ -93,6 +107,9 @@ bool project_view_presenter::responds_to_action(action const action) {
 
         case action::erase:
             return this->_project->can_erase();
+
+        case action::insert_marker:
+            return this->_project->can_insert_marker();
 
         case action::return_to_zero:
             return this->_project->can_return_to_zero();
@@ -132,6 +149,9 @@ void project_view_presenter::handle_action(action const action) {
         case action::erase:
             this->_project->erase();
             break;
+        case action::insert_marker:
+            this->_project->insert_marker();
+            break;
         case action::return_to_zero:
             this->_project->return_to_zero();
             break;
@@ -161,4 +181,10 @@ observing::syncable project_view_presenter::observe_file_track_text(
     std::function<void(std::string const &)> &&handler) {
     return this->_file_track_event_fetcher->observe(
         [handler = std::move(handler), this](auto const &event) { handler(this->file_track_text()); });
+}
+
+observing::syncable project_view_presenter::observe_marker_pool_text(
+    std::function<void(std::string const &)> &&handler) {
+    return this->_marker_pool_event_fetcher->observe(
+        [handler = std::move(handler), this](auto const &event) { handler(this->marker_pool_text()); });
 }

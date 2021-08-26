@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_types.h>
+#include <audio_editor_core/ae_marker_pool_types.h>
 #include <playing/yas_playing_umbrella.h>
 
 #include <memory>
@@ -61,5 +62,14 @@ struct file_track_for_project_editor {
 
 struct marker_pool_for_project_editor {
     virtual ~marker_pool_for_project_editor() = default;
+
+    virtual void replace_markers(std::vector<marker> &&) = 0;
+    virtual void insert_marker(marker const &) = 0;
+    virtual void erase_at(proc::frame_index_t const) = 0;
+    virtual void erase_marker(marker const &) = 0;
+
+    virtual std::map<proc::frame_index_t, marker> const &markers() const = 0;
+
+    virtual observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) = 0;
 };
 }  // namespace yas::ae

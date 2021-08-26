@@ -10,14 +10,14 @@
 
 namespace yas::ae {
 struct marker_pool : marker_pool_for_project_editor {
-    void replace_markers(std::vector<marker> &&);
-    void insert_marker(marker const &);
-    void erase_at(proc::frame_index_t const);
-    void erase_marker(marker const &);
+    void replace_markers(std::vector<marker> &&) override;
+    void insert_marker(marker const &) override;
+    void erase_at(proc::frame_index_t const) override;
+    void erase_marker(marker const &) override;
 
-    std::map<proc::frame_index_t, marker> const &markers() const;
+    std::map<proc::frame_index_t, marker> const &markers() const override;
 
-    observing::syncable observe(std::function<void(marker_pool_event const &)> &&);
+    observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) override;
 
     static std::shared_ptr<marker_pool> make_shared();
 
