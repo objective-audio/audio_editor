@@ -123,25 +123,21 @@ void project::nudge_next() {
 }
 
 bool project::can_jump_to_previous_edge() const {
-    frame_index_t const current_frame = this->player()->current_frame();
-    return this->editor()->file_track()->previous_edge(current_frame).has_value();
+    return this->_previous_edge().has_value();
 }
 
 bool project::can_jump_to_next_edge() const {
-    frame_index_t const current_frame = this->player()->current_frame();
-    return this->editor()->file_track()->next_edge(current_frame).has_value();
+    return this->_next_edge().has_value();
 }
 
 void project::jump_to_previous_edge() {
-    frame_index_t const current_frame = this->player()->current_frame();
-    if (auto const edge = this->editor()->file_track()->previous_edge(current_frame)) {
+    if (auto const edge = this->_previous_edge()) {
         this->player()->seek(edge.value());
     }
 }
 
 void project::jump_to_next_edge() {
-    frame_index_t const current_frame = this->player()->current_frame();
-    if (auto const edge = this->editor()->file_track()->next_edge(current_frame)) {
+    if (auto const edge = this->_next_edge()) {
         this->player()->seek(edge.value());
     }
 }
@@ -241,4 +237,36 @@ void project::_setup(std::weak_ptr<project> weak) {
                  }
              }
          }});
+}
+
+std::optional<proc::frame_index_t> project::_previous_edge() const {
+    frame_index_t const current_frame = this->player()->current_frame();
+    auto const file_track_edge = this->editor()->file_track()->previous_edge(current_frame);
+    auto const marker_pool_edge = this->editor()->marker_pool()->previous_edge(current_frame);
+
+    if (file_track_edge.has_value() && marker_pool_edge.has_value()) {
+        return std::max(file_track_edge.value(), marker_pool_edge.value());
+    } else if (file_track_edge.has_value()) {
+        return file_track_edge.value();
+    } else if (marker_pool_edge.has_value()) {
+        return marker_pool_edge.value();
+    } else {
+        return std::nullopt;
+    }
+}
+
+std::optional<proc::frame_index_t> project::_next_edge() const {
+    frame_index_t const current_frame = this->player()->current_frame();
+    auto const file_track_edge = this->editor()->file_track()->next_edge(current_frame);
+    auto const marker_pool_edge = this->editor()->marker_pool()->next_edge(current_frame);
+
+    if (file_track_edge.has_value() && marker_pool_edge.has_value()) {
+        return std::min(file_track_edge.value(), marker_pool_edge.value());
+    } else if (file_track_edge.has_value()) {
+        return file_track_edge.value();
+    } else if (marker_pool_edge.has_value()) {
+        return marker_pool_edge.value();
+    } else {
+        return std::nullopt;
+    }
 }

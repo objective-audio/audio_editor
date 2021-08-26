@@ -70,6 +70,9 @@ struct marker_pool_for_project_editor {
 
     virtual std::map<proc::frame_index_t, marker> const &markers() const = 0;
 
+    virtual std::optional<proc::frame_index_t> next_edge(proc::frame_index_t const) const = 0;
+    virtual std::optional<proc::frame_index_t> previous_edge(proc::frame_index_t const) const = 0;
+
     virtual observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) = 0;
 };
 }  // namespace yas::ae

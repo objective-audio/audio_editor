@@ -79,5 +79,8 @@ struct project final {
     project &operator=(project &&) = delete;
 
     void _setup(std::weak_ptr<project>);
+
+    std::optional<proc::frame_index_t> _previous_edge() const;
+    std::optional<proc::frame_index_t> _next_edge() const;
 };
 }  // namespace yas::ae

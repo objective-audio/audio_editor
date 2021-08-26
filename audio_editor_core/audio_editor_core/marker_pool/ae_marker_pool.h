@@ -17,6 +17,9 @@ struct marker_pool : marker_pool_for_project_editor {
 
     std::map<proc::frame_index_t, marker> const &markers() const override;
 
+    std::optional<proc::frame_index_t> next_edge(proc::frame_index_t const) const override;
+    std::optional<proc::frame_index_t> previous_edge(proc::frame_index_t const) const override;
+
     observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) override;
 
     static std::shared_ptr<marker_pool> make_shared();
