@@ -33,6 +33,8 @@ using namespace yas::ae;
 
 - (void)windowDidLoad {
     [super windowDidLoad];
+
+    [self.window setFrame:self.window.screen.visibleFrame display:NO];
 }
 
 - (BOOL)windowShouldClose:(NSWindow *)sender {
