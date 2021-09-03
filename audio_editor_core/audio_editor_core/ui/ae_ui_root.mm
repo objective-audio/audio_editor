@@ -174,26 +174,20 @@ void ui_root::_setup_layout() {
         ->add_to(this->_pool);
 
     this->_button_collection_layout
-        ->observe_actual_cell_layout_guides(
-            [pool = std::make_shared<observing::canceller_pool>(), buttons = this->_buttons](auto const &cell_guides) {
-                pool->cancel();
+        ->observe_actual_cell_regions([buttons = this->_buttons](auto const &regions) {
+            auto each = make_fast_each(buttons.size());
+            while (yas_each_next(each)) {
+                auto const &idx = yas_each_index(each);
+                auto const &button = buttons.at(idx);
 
-                auto each = make_fast_each(buttons.size());
-                while (yas_each_next(each)) {
-                    auto const &idx = yas_each_index(each);
-                    auto const &button = buttons.at(idx);
-
-                    if (idx < cell_guides.size()) {
-                        button->node()->set_is_enabled(true);
-                        ui::layout(cell_guides.at(idx), button->layout_guide(),
-                                   ui_layout_utils::constant(ui::region_insets::zero()))
-                            .sync()
-                            ->add_to(*pool);
-                    } else {
-                        button->node()->set_is_enabled(false);
-                    }
+                if (idx < regions.size()) {
+                    button->node()->set_is_enabled(true);
+                    button->layout_guide()->set_region(regions.at(idx));
+                } else {
+                    button->node()->set_is_enabled(false);
                 }
-            })
+            }
+        })
         .sync()
         ->add_to(this->_pool);
 
