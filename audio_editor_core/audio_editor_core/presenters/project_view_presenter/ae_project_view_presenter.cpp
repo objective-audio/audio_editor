@@ -84,6 +84,38 @@ std::string project_view_presenter::time_text() const {
     return project_view_presenter_utils::time_text(player->current_frame(), file_info->sample_rate);
 }
 
+bool project_view_presenter::is_split_button_enabled() const {
+    return this->_project->can_split();
+}
+
+bool project_view_presenter::is_drop_head_and_offset_button_enabled() const {
+    return this->_project->can_split();
+}
+
+bool project_view_presenter::is_drop_tail_and_offset_button_enabled() const {
+    return this->_project->can_split();
+}
+
+bool project_view_presenter::is_jump_previous_button_enabled() const {
+    return this->_project->can_jump_to_previous_edge();
+}
+
+bool project_view_presenter::is_jump_next_button_enabled() const {
+    return this->_project->can_jump_to_next_edge();
+}
+
+bool project_view_presenter::is_erase_and_offset_button_enabled() const {
+    return this->_project->can_erase();
+}
+
+bool project_view_presenter::is_insert_marker_button_enabled() const {
+    return this->_project->can_insert_marker();
+}
+
+bool project_view_presenter::is_zero_button_enabled() const {
+    return this->_project->can_return_to_zero();
+}
+
 bool project_view_presenter::responds_to_action(action const action) {
     switch (action) {
         case action::toggle_play:

@@ -143,8 +143,13 @@ void project::jump_to_next_edge() {
 }
 
 bool project::can_split() const {
-    auto const current_frame = this->player()->current_frame();
-    return this->editor()->file_track()->splittable_module_at(current_frame).has_value();
+    if (auto const &editor = this->editor()) {
+        auto const &file_track = editor->file_track();
+        auto const current_frame = this->player()->current_frame();
+        return file_track->splittable_module_at(current_frame).has_value();
+    } else {
+        return false;
+    }
 }
 
 void project::split() {

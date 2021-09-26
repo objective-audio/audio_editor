@@ -9,6 +9,7 @@
 namespace yas::ae {
 struct ui_button {
     void set_text(std::string const &);
+    void set_enabled(bool const);
 
     std::shared_ptr<ui::node> const &node() const;
 
