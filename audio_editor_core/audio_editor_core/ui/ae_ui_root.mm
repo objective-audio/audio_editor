@@ -267,6 +267,8 @@ void ui_root::_setup_layout() {
 
 void ui_root::_update_buttons_enabled() {
     auto const &presenter = this->_presenter;
+
+    this->_play_button->set_enabled(presenter->is_play_button_enabled());
     this->_split_button->set_enabled(presenter->is_split_button_enabled());
     this->_drop_head_and_offset_button->set_enabled(presenter->is_drop_head_and_offset_button_enabled());
     this->_drop_tail_and_offset_button->set_enabled(presenter->is_drop_tail_and_offset_button_enabled());

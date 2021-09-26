@@ -3,6 +3,7 @@
 //
 
 #include "ae_ui_button.h"
+#include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
 
 using namespace yas;
@@ -12,10 +13,18 @@ ui_button::ui_button(std::shared_ptr<ui::font_atlas> const &font_atlas, std::sha
     : _button(ui::button::make_shared(ui::region::zero(), 2, standard->event_manager(), standard->detector())),
       _strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, font_atlas)) {
     this->_button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.4f}, 1.0f), to_rect_index(0, false));
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.5f}, 1.0f), to_rect_index(0, true));
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.1f}, 1.0f), to_rect_index(1, false));
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.1f}, 1.0f), to_rect_index(1, true));
+
+    auto const disabled_state_idx = ui_button_utils::to_state_idx(ui_button_state::disabled);
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.1f}, 1.0f),
+                                                        to_rect_index(disabled_state_idx, false));
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.1f}, 1.0f),
+                                                        to_rect_index(disabled_state_idx, true));
+
+    auto const enabled_state_idx = ui_button_utils::to_state_idx(ui_button_state::enabled);
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.4f}, 1.0f),
+                                                        to_rect_index(enabled_state_idx, false));
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.5f}, 1.0f),
+                                                        to_rect_index(enabled_state_idx, true));
 
     this->node()->add_sub_node(this->_strings->rect_plane()->node());
 
@@ -51,7 +60,8 @@ void ui_button::set_text(std::string const &text) {
 
 void ui_button::set_enabled(bool const enabled) {
     this->_button->rect_plane()->node()->collider()->set_enabled(enabled);
-    this->_button->set_state_index(enabled ? 0 : 1);
+    auto const state = enabled ? ui_button_state::enabled : ui_button_state::disabled;
+    this->_button->set_state_index(ui_button_utils::to_state_idx(state));
 }
 
 std::shared_ptr<ui::node> const &ui_button::node() const {
