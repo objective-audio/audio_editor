@@ -30,6 +30,15 @@ struct project_view_presenter final {
     [[nodiscard]] std::string marker_pool_text() const;
     [[nodiscard]] std::string time_text() const;
 
+    [[nodiscard]] bool is_split_button_enabled() const;
+    [[nodiscard]] bool is_drop_head_and_offset_button_enabled() const;
+    [[nodiscard]] bool is_drop_tail_and_offset_button_enabled() const;
+    [[nodiscard]] bool is_jump_previous_button_enabled() const;
+    [[nodiscard]] bool is_jump_next_button_enabled() const;
+    [[nodiscard]] bool is_erase_and_offset_button_enabled() const;
+    [[nodiscard]] bool is_insert_marker_button_enabled() const;
+    [[nodiscard]] bool is_zero_button_enabled() const;
+
     bool responds_to_action(action const);
     void handle_action(action const);
 

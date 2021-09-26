@@ -53,5 +53,7 @@ struct ui_root : ui_root_for_project {
     void _setup_node_hierarchie();
     void _setup_observing();
     void _setup_layout();
+
+    void _update_buttons_enabled();
 };
 }  // namespace yas::ae

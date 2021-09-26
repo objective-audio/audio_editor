@@ -111,8 +111,10 @@ void ui_root::_setup_observing() {
         ->add_to(this->_pool);
 
     this->_standard->renderer()
-        ->observe_will_render(
-            [this](auto const &) { this->_player_strings->set_text(this->_presenter->player_text()); })
+        ->observe_will_render([this](auto const &) {
+            this->_player_strings->set_text(this->_presenter->player_text());
+            this->_update_buttons_enabled();
+        })
         .end()
         ->add_to(this->_pool);
 
@@ -261,6 +263,18 @@ void ui_root::_setup_layout() {
                ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
+}
+
+void ui_root::_update_buttons_enabled() {
+    auto const &presenter = this->_presenter;
+    this->_split_button->set_enabled(presenter->is_split_button_enabled());
+    this->_drop_head_and_offset_button->set_enabled(presenter->is_drop_head_and_offset_button_enabled());
+    this->_drop_tail_and_offset_button->set_enabled(presenter->is_drop_tail_and_offset_button_enabled());
+    this->_jump_previous_button->set_enabled(presenter->is_jump_previous_button_enabled());
+    this->_jump_next_button->set_enabled(presenter->is_jump_next_button_enabled());
+    this->_erase_and_offset_button->set_enabled(presenter->is_erase_and_offset_button_enabled());
+    this->_insert_marker_button->set_enabled(presenter->is_insert_marker_button_enabled());
+    this->_zero_button->set_enabled(presenter->is_zero_button_enabled());
 }
 
 std::shared_ptr<ui::standard> const &ui_root::standard() const {
