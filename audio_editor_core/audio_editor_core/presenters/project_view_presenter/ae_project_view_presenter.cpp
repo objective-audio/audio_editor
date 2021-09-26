@@ -84,6 +84,10 @@ std::string project_view_presenter::time_text() const {
     return project_view_presenter_utils::time_text(player->current_frame(), file_info->sample_rate);
 }
 
+bool project_view_presenter::is_play_button_enabled() const {
+    return true;
+}
+
 bool project_view_presenter::is_split_button_enabled() const {
     return this->_project->can_split();
 }

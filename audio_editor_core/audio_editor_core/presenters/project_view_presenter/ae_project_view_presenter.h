@@ -30,6 +30,7 @@ struct project_view_presenter final {
     [[nodiscard]] std::string marker_pool_text() const;
     [[nodiscard]] std::string time_text() const;
 
+    [[nodiscard]] bool is_play_button_enabled() const;
     [[nodiscard]] bool is_split_button_enabled() const;
     [[nodiscard]] bool is_drop_head_and_offset_button_enabled() const;
     [[nodiscard]] bool is_drop_tail_and_offset_button_enabled() const;
