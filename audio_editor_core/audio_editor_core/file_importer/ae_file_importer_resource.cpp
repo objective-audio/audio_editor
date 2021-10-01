@@ -16,8 +16,8 @@ void file_importer_resource::push_context_on_main(file_importing_context &&conte
 
 void file_importer_resource::cancel_on_main(std::string const &identifier) {
     std::lock_guard<std::mutex> lock(this->_mutex);
-    erase_if(this->_contexts,
-             [&identifier](file_importing_context const &context) { return context.identifier == identifier; });
+    std::erase_if(this->_contexts,
+                  [&identifier](file_importing_context const &context) { return context.identifier == identifier; });
     this->_cancel_ids.emplace_back(identifier);
 }
 
