@@ -20,7 +20,7 @@ using namespace yas::ae;
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
-    self->_ui_root = ui_root::make_shared(standard, project_view_presenter::make_shared(project_id));
+    self->_ui_root = ui_root::make_shared(standard, project_id);
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()

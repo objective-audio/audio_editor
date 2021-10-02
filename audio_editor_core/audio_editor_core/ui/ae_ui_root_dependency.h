@@ -4,13 +4,14 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_keyboard_types.h>
-#include <observing/yas_observing_umbrella.h>
+#include <memory>
 
 namespace yas::ae {
-struct keyboard_for_ui_root {
-    virtual ~keyboard_for_ui_root() = default;
+class ui_editing_root;
 
-    [[nodiscard]] virtual observing::endable observe(std::function<void(ae::key const &)> &&) = 0;
+struct ui_editing_root_maker_for_ui_root {
+    virtual ~ui_editing_root_maker_for_ui_root() = default;
+
+    virtual std::shared_ptr<ui_editing_root> make() const = 0;
 };
 }  // namespace yas::ae
