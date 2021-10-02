@@ -50,7 +50,7 @@ struct project_view_presenter final {
     [[nodiscard]] observing::syncable observe_marker_pool_text(std::function<void(std::string const &)> &&);
 
    private:
-    std::shared_ptr<project> _project;
+    std::weak_ptr<project> _project;
     observing::fetcher_ptr<file_track_event> const _file_track_event_fetcher;
     observing::fetcher_ptr<marker_pool_event> const _marker_pool_event_fetcher;
     observing::canceller_pool _pool;

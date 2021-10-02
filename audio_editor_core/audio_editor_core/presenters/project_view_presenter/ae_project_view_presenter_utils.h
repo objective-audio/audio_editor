@@ -13,6 +13,7 @@
 #include <string>
 
 namespace yas::ae::project_view_presenter_utils {
+std::string const &empty_text();
 std::string label_text(project_state const &state);
 std::string label_text(std::optional<file_info> const &file_info);
 std::string player_text(frame_index_t const frame, uint32_t const sample_rate);
