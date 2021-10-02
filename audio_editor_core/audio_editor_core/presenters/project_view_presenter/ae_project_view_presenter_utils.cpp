@@ -13,6 +13,11 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::string const &project_view_presenter_utils::empty_text() {
+    static std::string const text = "";
+    return text;
+}
+
 std::string project_view_presenter_utils::label_text(project_state const &state) {
     switch (state) {
         case ae::project_state::launching:
@@ -146,7 +151,7 @@ std::string project_view_presenter_utils::time_text(int64_t const frame, uint32_
 observing::fetcher_ptr<file_track_event> project_view_presenter_utils::make_file_track_fetcher(
     std::shared_ptr<project> const &project) {
     return observing::fetcher<file_track_event>::make_shared([weak_project = to_weak(project)] {
-        if (auto const &project = weak_project.lock()) {
+        if (auto const project = weak_project.lock()) {
             if (auto const &editor = project->editor()) {
                 return file_track_event(
                     {.type = file_track_event_type::any, .modules = editor->file_track()->modules()});
@@ -159,7 +164,7 @@ observing::fetcher_ptr<file_track_event> project_view_presenter_utils::make_file
 observing::fetcher_ptr<marker_pool_event> project_view_presenter_utils::make_marker_pool_fetcher(
     std::shared_ptr<project> const &project) {
     return observing::fetcher<marker_pool_event>::make_shared([weak_project = to_weak(project)] {
-        if (auto const &project = weak_project.lock()) {
+        if (auto const project = weak_project.lock()) {
             if (auto const &editor = project->editor()) {
                 return marker_pool_event(
                     {.type = marker_pool_event_type::any, .markers = editor->marker_pool()->markers()});
