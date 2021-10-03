@@ -1,5 +1,5 @@
 //
-//  ae_project_view_presenter_utils.h
+//  ae_editing_root_presenter_utils.h
 //
 
 #pragma once
@@ -12,7 +12,7 @@
 #include <optional>
 #include <string>
 
-namespace yas::ae::project_view_presenter_utils {
+namespace yas::ae::editing_root_presenter_utils {
 std::string const &empty_text();
 std::string label_text(project_state const &state);
 std::string label_text(std::optional<file_info> const &file_info);
@@ -25,4 +25,4 @@ std::string time_text(int64_t const frame, uint32_t const sample_rate);
 
 observing::fetcher_ptr<file_track_event> make_file_track_fetcher(std::shared_ptr<project> const &);
 observing::fetcher_ptr<marker_pool_event> make_marker_pool_fetcher(std::shared_ptr<project> const &);
-}  // namespace yas::ae::project_view_presenter_utils
+}  // namespace yas::ae::editing_root_presenter_utils

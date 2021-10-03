@@ -1,8 +1,8 @@
 //
-//  ae_project_view_presenter_utils.cpp
+//  ae_editing_root_presenter_utils.cpp
 //
 
-#include "ae_project_view_presenter_utils.h"
+#include "ae_editing_root_presenter_utils.h"
 
 #include <audio_editor_core/ae_file_track_types.h>
 #include <playing/yas_playing_math.h>
@@ -13,12 +13,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::string const &project_view_presenter_utils::empty_text() {
+std::string const &editing_root_presenter_utils::empty_text() {
     static std::string const text = "";
     return text;
 }
 
-std::string project_view_presenter_utils::label_text(project_state const &state) {
+std::string editing_root_presenter_utils::label_text(project_state const &state) {
     switch (state) {
         case ae::project_state::launching:
             return "launching";
@@ -33,7 +33,7 @@ std::string project_view_presenter_utils::label_text(project_state const &state)
     }
 }
 
-std::string project_view_presenter_utils::label_text(std::optional<file_info> const &file_info) {
+std::string editing_root_presenter_utils::label_text(std::optional<file_info> const &file_info) {
     if (file_info.has_value()) {
         return "sample rate : " + std::to_string(file_info.value().sample_rate) +
                " / channel count : " + std::to_string(file_info.value().channel_count) +
@@ -43,16 +43,16 @@ std::string project_view_presenter_utils::label_text(std::optional<file_info> co
     }
 }
 
-std::string project_view_presenter_utils::player_text(frame_index_t const frame, uint32_t const sample_rate) {
+std::string editing_root_presenter_utils::player_text(frame_index_t const frame, uint32_t const sample_rate) {
     std::string const time = time_text(frame, sample_rate);
     return time + " [" + std::to_string(frame) + "]";
 }
 
-std::string project_view_presenter_utils::play_button_text(bool const is_playing) {
+std::string editing_root_presenter_utils::play_button_text(bool const is_playing) {
     return is_playing ? "played" : "paused";
 }
 
-std::string project_view_presenter_utils::file_track_text(file_track_module_map_t const &modules) {
+std::string editing_root_presenter_utils::file_track_text(file_track_module_map_t const &modules) {
     std::vector<std::string> module_texts;
 
     for (auto const &pair : modules) {
@@ -68,7 +68,7 @@ std::string project_view_presenter_utils::file_track_text(file_track_module_map_
     }
 }
 
-std::string project_view_presenter_utils::marker_pool_text(marker_map_t const &markers) {
+std::string editing_root_presenter_utils::marker_pool_text(marker_map_t const &markers) {
     std::vector<std::string> texts;
 
     std::size_t idx = 0;
@@ -86,7 +86,7 @@ std::string project_view_presenter_utils::marker_pool_text(marker_map_t const &m
     }
 }
 
-int project_view_presenter_utils::after_point_digits(uint32_t const sample_rate) {
+int editing_root_presenter_utils::after_point_digits(uint32_t const sample_rate) {
     if (sample_rate == 0) {
         throw std::invalid_argument("sample_rate is zero.");
     }
@@ -116,7 +116,7 @@ int project_view_presenter_utils::after_point_digits(uint32_t const sample_rate)
     return static_cast<int>(digits);
 }
 
-std::string project_view_presenter_utils::time_text(int64_t const frame, uint32_t const sample_rate) {
+std::string editing_root_presenter_utils::time_text(int64_t const frame, uint32_t const sample_rate) {
     bool const is_minus = frame < 0;
     int64_t const abs_frame = std::abs(frame);
 
@@ -148,7 +148,7 @@ std::string project_view_presenter_utils::time_text(int64_t const frame, uint32_
     return stream.str();
 }
 
-observing::fetcher_ptr<file_track_event> project_view_presenter_utils::make_file_track_fetcher(
+observing::fetcher_ptr<file_track_event> editing_root_presenter_utils::make_file_track_fetcher(
     std::shared_ptr<project> const &project) {
     return observing::fetcher<file_track_event>::make_shared([weak_project = to_weak(project)] {
         if (auto const project = weak_project.lock()) {
@@ -161,7 +161,7 @@ observing::fetcher_ptr<file_track_event> project_view_presenter_utils::make_file
     });
 }
 
-observing::fetcher_ptr<marker_pool_event> project_view_presenter_utils::make_marker_pool_fetcher(
+observing::fetcher_ptr<marker_pool_event> editing_root_presenter_utils::make_marker_pool_fetcher(
     std::shared_ptr<project> const &project) {
     return observing::fetcher<marker_pool_event>::make_shared([weak_project = to_weak(project)] {
         if (auto const project = weak_project.lock()) {
