@@ -11,5 +11,7 @@ enum class key {
     s,
     d,
     del,
+
+    zero,
 };
 }
