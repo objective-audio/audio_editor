@@ -13,6 +13,7 @@
 namespace yas::ae {
 class editing_root_presenter;
 class action_controller;
+class ui_track;
 
 struct ui_editing_root final {
     bool responds_to_action(action const);
@@ -45,11 +46,12 @@ struct ui_editing_root final {
     std::shared_ptr<ui::strings> const _player_strings;
     std::shared_ptr<ui::strings> const _file_track_strings;
     std::shared_ptr<ui::strings> const _marker_pool_strings;
+    std::shared_ptr<ui_track> const _track;
 
     observing::canceller_pool _pool;
 
     ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<editing_root_presenter> const &,
-                    std::shared_ptr<action_controller> const &);
+                    std::shared_ptr<action_controller> const &, std::shared_ptr<ui_track> const &);
 
     void _setup_node_hierarchie();
     void _setup_observing();
