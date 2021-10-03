@@ -8,13 +8,15 @@
 #include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_ui_editing_root_utils.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
+#include <audio_editor_core/ae_ui_track.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
-                                 std::shared_ptr<action_controller> const &action_controller)
+                                 std::shared_ptr<action_controller> const &action_controller,
+                                 std::shared_ptr<ui_track> const &track)
     : _presenter(presenter),
       _action_controller(action_controller),
       _standard(standard),
@@ -51,7 +53,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _file_track_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
       _marker_pool_strings(ui::strings::make_shared(
-          {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)) {
+          {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
+      _track(track) {
     standard->view_look()->background()->set_color({.v = 0.2f});
 
     this->_split_button->set_text("split");
@@ -70,6 +73,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
 
 void ui_editing_root::_setup_node_hierarchie() {
     auto const &root_node = this->_standard->root_node();
+
+    root_node->add_sub_node(this->_track->node());
 
     root_node->add_sub_node(this->_play_button->node());
     root_node->add_sub_node(this->_split_button->node());
@@ -290,5 +295,6 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::shared_ptr<ui
                                                               std::string const &project_id) {
     auto const presenter = editing_root_presenter::make_shared(project_id);
     auto const controller = action_controller::make_shared(project_id);
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, presenter, controller});
+    auto const ui_track = ui_track::make_shared(standard, project_id);
+    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, presenter, controller, ui_track});
 }
