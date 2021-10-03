@@ -21,6 +21,9 @@ std::optional<key> keyboard_utils::to_key(uint16_t const key_code) {
         case 2:
             return key::d;
 
+        case 29:
+            return key::zero;
+
         default:
             return std::nullopt;
     }

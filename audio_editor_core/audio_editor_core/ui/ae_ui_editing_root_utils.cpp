@@ -19,5 +19,7 @@ action ui_editing_root_utils::to_action(key const key) {
             return action::split;
         case key::d:
             return action::drop_tail_and_offset;
+        case key::zero:
+            return action::return_to_zero;
     }
 }
