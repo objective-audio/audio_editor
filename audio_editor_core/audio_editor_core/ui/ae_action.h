@@ -14,7 +14,7 @@ enum class action {
     drop_head_and_offset,
     split,
     drop_tail_and_offset,
-    erase,
+    erase_and_offset,
     insert_marker,
     return_to_zero,
 };
