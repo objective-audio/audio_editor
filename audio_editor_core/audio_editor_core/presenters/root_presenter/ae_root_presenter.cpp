@@ -49,7 +49,7 @@ bool root_presenter::responds_to_action(action const action) {
         case action::drop_tail_and_offset:
             return project->can_split();
 
-        case action::erase:
+        case action::erase_and_offset:
             return project->can_erase();
 
         case action::insert_marker:

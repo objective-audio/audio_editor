@@ -26,7 +26,7 @@ ui_module_plane::ui_module_plane(std::size_t const max_count)
           ui::mesh::make_shared({.use_mesh_color = true}, this->_vertex_data, this->_triangle_index_data, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, this->_vertex_data,
                                        this->_line_index_data, nullptr)) {
-    this->_node->add_sub_node(this->_triangle_node);
+    //    this->_node->add_sub_node(this->_triangle_node);
     this->_node->add_sub_node(this->_line_node);
 
     this->_triangle_node->set_mesh(this->_triangle_mesh);

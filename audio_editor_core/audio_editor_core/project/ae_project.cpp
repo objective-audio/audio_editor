@@ -172,9 +172,9 @@ bool project::can_erase() const {
     return this->editor()->file_track()->module_at(current_frame).has_value();
 }
 
-void project::erase() {
+void project::erase_and_offset() {
     auto const current_frame = this->player()->current_frame();
-    this->editor()->file_track()->erase_at(current_frame);
+    this->editor()->file_track()->erase_and_offset_at(current_frame);
 }
 
 bool project::can_insert_marker() const {

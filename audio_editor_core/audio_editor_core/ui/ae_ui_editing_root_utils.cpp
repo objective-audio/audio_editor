@@ -12,7 +12,7 @@ action ui_editing_root_utils::to_action(key const key) {
         case key::space:
             return action::toggle_play;
         case key::del:
-            return action::erase;
+            return action::erase_and_offset;
         case key::a:
             return action::drop_head_and_offset;
         case key::s:

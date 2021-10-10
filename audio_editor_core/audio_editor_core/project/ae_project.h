@@ -41,7 +41,7 @@ struct project final {
     void drop_tail_and_offset();
 
     [[nodiscard]] bool can_erase() const;
-    void erase();
+    void erase_and_offset();
 
     [[nodiscard]] bool can_insert_marker() const;
     void insert_marker();

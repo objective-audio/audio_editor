@@ -140,7 +140,8 @@ void ui_editing_root::_setup_observing() {
         ->observe_tapped([this] { this->_action_controller->handle_action(action::drop_tail_and_offset); })
         .end()
         ->add_to(this->_pool);
-    this->_erase_and_offset_button->observe_tapped([this] { this->_action_controller->handle_action(action::erase); })
+    this->_erase_and_offset_button
+        ->observe_tapped([this] { this->_action_controller->handle_action(action::erase_and_offset); })
         .end()
         ->add_to(this->_pool);
     this->_zero_button->observe_tapped([this] { this->_action_controller->handle_action(action::return_to_zero); })

@@ -50,8 +50,8 @@ void action_controller::handle_action(action const action) {
         case action::drop_tail_and_offset:
             project->drop_tail_and_offset();
             break;
-        case action::erase:
-            project->erase();
+        case action::erase_and_offset:
+            project->erase_and_offset();
             break;
         case action::insert_marker:
             project->insert_marker();
