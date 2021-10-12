@@ -54,7 +54,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
       _marker_pool_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
-      _track(track) {
+      _track(track),
+      _playing_line(ui::rect_plane::make_shared(1)) {
     standard->view_look()->background()->set_color({.v = 0.2f});
 
     this->_split_button->set_text("split");
@@ -91,6 +92,8 @@ void ui_editing_root::_setup_node_hierarchie() {
     root_node->add_sub_node(this->_player_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_track_strings->rect_plane()->node());
     root_node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
+
+    root_node->add_sub_node(this->_playing_line->node());
 }
 
 void ui_editing_root::_setup_observing() {
@@ -115,6 +118,20 @@ void ui_editing_root::_setup_observing() {
 
     presenter
         ->observe_marker_pool_text([this](std::string const &string) { this->_marker_pool_strings->set_text(string); })
+        .sync()
+        ->add_to(this->_pool);
+
+    presenter
+        ->observe_playing_line_state([this](auto const &state) {
+            switch (state) {
+                case editing_root_presenter::playing_line_state_t::playing:
+                    this->_playing_line->node()->set_color(ui::green_color());
+                    break;
+                case editing_root_presenter::playing_line_state_t::nothing:
+                    this->_playing_line->node()->set_color(ui::light_gray_color());
+                    break;
+            }
+        })
         .sync()
         ->add_to(this->_pool);
 
@@ -274,6 +291,17 @@ void ui_editing_root::_setup_layout() {
         ->add_to(this->_pool);
     ui::layout(marker_pool_preferred_guide->top(), marker_pool_preferred_guide->bottom(),
                ui_layout_utils::constant(0.0f))
+        .sync()
+        ->add_to(this->_pool);
+
+    // playing_line
+
+    safe_area_guide
+        ->observe([this](ui::region const &src_region) {
+            ui::region const dst_region{.origin = {.x = src_region.center().x - 0.5f, .y = src_region.origin.y},
+                                        .size = {.width = 1.0f, .height = src_region.size.height}};
+            this->_playing_line->data()->set_rect_position(dst_region, 0);
+        })
         .sync()
         ->add_to(this->_pool);
 }

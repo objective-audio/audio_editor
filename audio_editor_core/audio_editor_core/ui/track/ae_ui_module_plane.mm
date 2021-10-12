@@ -26,7 +26,7 @@ ui_module_plane::ui_module_plane(std::size_t const max_count)
           ui::mesh::make_shared({.use_mesh_color = true}, this->_vertex_data, this->_triangle_index_data, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, this->_vertex_data,
                                        this->_line_index_data, nullptr)) {
-    //    this->_node->add_sub_node(this->_triangle_node);
+    this->_node->add_sub_node(this->_triangle_node);
     this->_node->add_sub_node(this->_line_node);
 
     this->_triangle_node->set_mesh(this->_triangle_mesh);
@@ -46,7 +46,7 @@ ui_module_plane::ui_module_plane(std::size_t const max_count)
 
             auto each = make_fast_each(4);
             while (yas_each_next(each)) {
-                vertex_rect.v[yas_each_index(each)].color = to_float4(color, 1.0f);
+                vertex_rect.v[yas_each_index(each)].color = to_float4(color, 0.3f);
             }
         }
     });
@@ -102,6 +102,7 @@ void ui_module_plane::update_vertices(std::vector<element> const &elements) {
 
 void ui_module_plane::_set_rect_count(std::size_t const rect_count) {
     this->_vertex_data->set_count(rect_count * 4);
+    this->_triangle_index_data->set_count(rect_count * 6);
     this->_line_index_data->set_count(rect_count * 8);
 }
 

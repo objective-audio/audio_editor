@@ -47,6 +47,7 @@ struct ui_editing_root final {
     std::shared_ptr<ui::strings> const _file_track_strings;
     std::shared_ptr<ui::strings> const _marker_pool_strings;
     std::shared_ptr<ui_track> const _track;
+    std::shared_ptr<ui::rect_plane> const _playing_line;
 
     observing::canceller_pool _pool;
 
