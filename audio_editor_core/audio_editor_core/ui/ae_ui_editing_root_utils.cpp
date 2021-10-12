@@ -19,7 +19,25 @@ action ui_editing_root_utils::to_action(key const key) {
             return action::split;
         case key::d:
             return action::drop_tail_and_offset;
-        case key::zero:
+        case key::num_0:
             return action::return_to_zero;
+        case key::num_1:
+            return action::go_to_marker_1;
+        case key::num_2:
+            return action::go_to_marker_2;
+        case key::num_3:
+            return action::go_to_marker_3;
+        case key::num_4:
+            return action::go_to_marker_4;
+        case key::num_5:
+            return action::go_to_marker_5;
+        case key::num_6:
+            return action::go_to_marker_6;
+        case key::num_7:
+            return action::go_to_marker_7;
+        case key::num_8:
+            return action::go_to_marker_8;
+        case key::num_9:
+            return action::go_to_marker_9;
     }
 }

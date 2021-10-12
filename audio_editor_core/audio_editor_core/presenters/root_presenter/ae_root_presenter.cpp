@@ -57,6 +57,24 @@ bool root_presenter::responds_to_action(action const action) {
 
         case action::return_to_zero:
             return project->can_return_to_zero();
+        case action::go_to_marker_1:
+            return project->can_go_to_marker(0);
+        case action::go_to_marker_2:
+            return project->can_go_to_marker(1);
+        case action::go_to_marker_3:
+            return project->can_go_to_marker(2);
+        case action::go_to_marker_4:
+            return project->can_go_to_marker(3);
+        case action::go_to_marker_5:
+            return project->can_go_to_marker(4);
+        case action::go_to_marker_6:
+            return project->can_go_to_marker(5);
+        case action::go_to_marker_7:
+            return project->can_go_to_marker(6);
+        case action::go_to_marker_8:
+            return project->can_go_to_marker(7);
+        case action::go_to_marker_9:
+            return project->can_go_to_marker(8);
     }
 }
 

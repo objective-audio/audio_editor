@@ -17,5 +17,14 @@ enum class action {
     erase_and_offset,
     insert_marker,
     return_to_zero,
+    go_to_marker_1,
+    go_to_marker_2,
+    go_to_marker_3,
+    go_to_marker_4,
+    go_to_marker_5,
+    go_to_marker_6,
+    go_to_marker_7,
+    go_to_marker_8,
+    go_to_marker_9,
 };
 }
