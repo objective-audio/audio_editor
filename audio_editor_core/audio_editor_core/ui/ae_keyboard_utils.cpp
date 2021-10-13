@@ -22,7 +22,25 @@ std::optional<key> keyboard_utils::to_key(uint16_t const key_code) {
             return key::d;
 
         case 29:
-            return key::zero;
+            return key::num_0;
+        case 18:
+            return key::num_1;
+        case 19:
+            return key::num_2;
+        case 20:
+            return key::num_3;
+        case 21:
+            return key::num_4;
+        case 23:
+            return key::num_5;
+        case 22:
+            return key::num_6;
+        case 26:
+            return key::num_7;
+        case 28:
+            return key::num_8;
+        case 25:
+            return key::num_9;
 
         default:
             return std::nullopt;

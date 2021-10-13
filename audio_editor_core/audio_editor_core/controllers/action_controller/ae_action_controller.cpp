@@ -59,5 +59,32 @@ void action_controller::handle_action(action const action) {
         case action::return_to_zero:
             project->return_to_zero();
             break;
+        case action::go_to_marker_1:
+            project->go_to_marker(0);
+            break;
+        case action::go_to_marker_2:
+            project->go_to_marker(1);
+            break;
+        case action::go_to_marker_3:
+            project->go_to_marker(2);
+            break;
+        case action::go_to_marker_4:
+            project->go_to_marker(3);
+            break;
+        case action::go_to_marker_5:
+            project->go_to_marker(4);
+            break;
+        case action::go_to_marker_6:
+            project->go_to_marker(5);
+            break;
+        case action::go_to_marker_7:
+            project->go_to_marker(6);
+            break;
+        case action::go_to_marker_8:
+            project->go_to_marker(7);
+            break;
+        case action::go_to_marker_9:
+            project->go_to_marker(8);
+            break;
     }
 }

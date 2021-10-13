@@ -33,6 +33,21 @@ std::map<proc::frame_index_t, marker> const &marker_pool::markers() const {
     return this->_markers->elements();
 }
 
+std::optional<marker> marker_pool::marker_at(std::size_t const idx) const {
+    auto const &markers = this->markers();
+    if (markers.size() <= idx) {
+        return std::nullopt;
+    }
+
+    auto iterator = markers.begin();
+    auto each = make_fast_each(idx);
+    while (yas_each_next(each)) {
+        ++iterator;
+    }
+
+    return iterator->second;
+}
+
 std::optional<proc::frame_index_t> marker_pool::next_edge(proc::frame_index_t const frame) const {
     auto const &markers = this->markers();
     auto upper_it = markers.upper_bound(frame);

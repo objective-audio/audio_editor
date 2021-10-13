@@ -195,6 +195,22 @@ void project::return_to_zero() {
     this->player()->seek(0);
 }
 
+bool project::can_go_to_marker(std::size_t const marker_idx) const {
+    auto const &marker_pool = this->editor()->marker_pool();
+    if (auto const marker = marker_pool->marker_at(marker_idx)) {
+        return this->player()->current_frame() != marker->frame;
+    } else {
+        return false;
+    }
+}
+
+void project::go_to_marker(std::size_t const marker_idx) {
+    auto const &marker_pool = this->editor()->marker_pool();
+    if (auto const marker = marker_pool->marker_at(marker_idx)) {
+        this->player()->seek(marker->frame);
+    }
+}
+
 observing::syncable project::observe_state(std::function<void(project_state const &)> &&handler) {
     return this->_state->observe(std::move(handler));
 }

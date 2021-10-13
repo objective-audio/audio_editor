@@ -71,6 +71,42 @@ using namespace yas::ae;
     self->_ui_root->handle_action(action::return_to_zero);
 }
 
+- (IBAction)goToMarker1:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_1);
+}
+
+- (IBAction)goToMarker2:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_2);
+}
+
+- (IBAction)goToMarker3:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_3);
+}
+
+- (IBAction)goToMarker4:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_4);
+}
+
+- (IBAction)goToMarker5:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_5);
+}
+
+- (IBAction)goToMarker6:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_6);
+}
+
+- (IBAction)goToMarker7:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_7);
+}
+
+- (IBAction)goToMarker8:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_8);
+}
+
+- (IBAction)goToMarker9:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::go_to_marker_9);
+}
+
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -104,6 +140,24 @@ using namespace yas::ae;
         return action::insert_marker;
     } else if (selector == @selector(returnToZero:)) {
         return action::return_to_zero;
+    } else if (selector == @selector(goToMarker1:)) {
+        return action::go_to_marker_1;
+    } else if (selector == @selector(goToMarker2:)) {
+        return action::go_to_marker_2;
+    } else if (selector == @selector(goToMarker3:)) {
+        return action::go_to_marker_3;
+    } else if (selector == @selector(goToMarker4:)) {
+        return action::go_to_marker_4;
+    } else if (selector == @selector(goToMarker5:)) {
+        return action::go_to_marker_5;
+    } else if (selector == @selector(goToMarker6:)) {
+        return action::go_to_marker_6;
+    } else if (selector == @selector(goToMarker7:)) {
+        return action::go_to_marker_7;
+    } else if (selector == @selector(goToMarker8:)) {
+        return action::go_to_marker_8;
+    } else if (selector == @selector(goToMarker9:)) {
+        return action::go_to_marker_9;
     }
 
     return std::nullopt;
@@ -133,6 +187,24 @@ using namespace yas::ae;
             return @selector(insertMarker:);
         case action::return_to_zero:
             return @selector(returnToZero:);
+        case action::go_to_marker_1:
+            return @selector(goToMarker1:);
+        case action::go_to_marker_2:
+            return @selector(goToMarker2:);
+        case action::go_to_marker_3:
+            return @selector(goToMarker3:);
+        case action::go_to_marker_4:
+            return @selector(goToMarker4:);
+        case action::go_to_marker_5:
+            return @selector(goToMarker5:);
+        case action::go_to_marker_6:
+            return @selector(goToMarker6:);
+        case action::go_to_marker_7:
+            return @selector(goToMarker7:);
+        case action::go_to_marker_8:
+            return @selector(goToMarker8:);
+        case action::go_to_marker_9:
+            return @selector(goToMarker9:);
     }
 }
 
