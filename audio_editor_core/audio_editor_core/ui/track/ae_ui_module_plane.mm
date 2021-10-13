@@ -78,15 +78,11 @@ std::shared_ptr<ui::node> const &ui_module_plane::node() const {
     return this->_node;
 }
 
-std::shared_ptr<ui::dynamic_mesh_vertex_data> const &ui_module_plane::vertex_data() const {
-    return this->_vertex_data;
+void ui_module_plane::set_scale(ui::size const &scale) {
+    this->_node->set_scale(scale);
 }
 
-std::shared_ptr<ui::dynamic_mesh_index_data> const &ui_module_plane::index_data() const {
-    return this->_line_index_data;
-}
-
-void ui_module_plane::update_vertices(std::vector<element> const &elements) {
+void ui_module_plane::set_elements(std::vector<element> const &elements) {
     this->_write_vertices([&elements](vertex2d_rect *vertex_rects) {
         auto each = make_fast_each(elements.size());
         while (yas_each_next(each)) {

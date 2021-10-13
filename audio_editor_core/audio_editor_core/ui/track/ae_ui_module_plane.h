@@ -21,10 +21,9 @@ struct ui_module_plane {
     };
 
     std::shared_ptr<ui::node> const &node() const;
-    std::shared_ptr<ui::dynamic_mesh_vertex_data> const &vertex_data() const;
-    std::shared_ptr<ui::dynamic_mesh_index_data> const &index_data() const;
 
-    void update_vertices(std::vector<element> const &);
+    void set_scale(ui::size const &);
+    void set_elements(std::vector<element> const &);
 
     static std::shared_ptr<ui_module_plane> make_shared(std::size_t const max_count);
 
