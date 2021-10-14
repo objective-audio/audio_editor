@@ -32,6 +32,16 @@ file_track_module_map_t const &track_presenter::modules() const {
     return empty_file_track_modules;
 }
 
+std::map<proc::frame_index_t, marker> const &track_presenter::markers() const {
+    if (auto const project = this->_project.lock()) {
+        if (auto const &editor = project->editor()) {
+            return editor->marker_pool()->markers();
+        }
+    }
+    static std::map<proc::frame_index_t, marker> const _empty_markers;
+    return _empty_markers;
+}
+
 std::optional<file_info> track_presenter::file_info() const {
     if (auto const project = this->_project.lock()) {
         return project->file_info();
@@ -50,11 +60,19 @@ double track_presenter::current_time() const {
     return 0.0;
 }
 
-observing::syncable track_presenter::observe(std::function<void(std::nullptr_t const &)> &&handler) {
+observing::syncable track_presenter::observe_modules(std::function<void()> &&handler) {
     if (auto const project = this->_project.lock()) {
         if (auto const &editor = project->editor()) {
-            return editor->file_track()->observe_event(
-                [handler = std::move(handler)](auto const &) { handler(nullptr); });
+            return editor->file_track()->observe_event([handler = std::move(handler)](auto const &) { handler(); });
+        }
+    }
+    return observing::syncable{};
+}
+
+observing::syncable track_presenter::observe_markers(std::function<void()> &&handler) {
+    if (auto const project = this->_project.lock()) {
+        if (auto const &editor = project->editor()) {
+            return editor->marker_pool()->observe_event([handler = std::move(handler)](auto const &) { handler(); });
         }
     }
     return observing::syncable{};
