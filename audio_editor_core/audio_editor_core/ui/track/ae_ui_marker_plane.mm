@@ -40,7 +40,7 @@ void ui_marker_plane::set_scale(ui::size const &scale) {
     this->_update_sub_nodes();
 }
 
-void ui_marker_plane::set_elements(std::vector<element> &&elements) {
+void ui_marker_plane::set_elements(std::vector<marker_element> &&elements) {
     this->_elements = std::move(elements);
     this->_update_sub_nodes();
 }

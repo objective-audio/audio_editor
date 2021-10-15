@@ -3,6 +3,7 @@
 //
 
 #include "ae_ui_module_plane.h"
+#include <audio_editor_core/ae_module_element.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -82,7 +83,7 @@ void ui_module_plane::set_scale(ui::size const &scale) {
     this->_node->set_scale(scale);
 }
 
-void ui_module_plane::set_elements(std::vector<element> const &elements) {
+void ui_module_plane::set_elements(std::vector<module_element> const &elements) {
     this->_write_vertices([&elements](vertex2d_rect *vertex_rects) {
         auto each = make_fast_each(elements.size());
         while (yas_each_next(each)) {

@@ -7,6 +7,8 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
+class module_element;
+
 struct ui_module_plane {
     using vertex2d_rect = ui::vertex2d_rect;
     using triangle_index2d_rect = ui::index2d_rect;
@@ -15,15 +17,11 @@ struct ui_module_plane {
 
         void set_all(ui::index2d_t const first);
     };
-    struct element {
-        float position;
-        float length;
-    };
 
     std::shared_ptr<ui::node> const &node() const;
 
     void set_scale(ui::size const &);
-    void set_elements(std::vector<element> const &);
+    void set_elements(std::vector<module_element> const &);
 
     static std::shared_ptr<ui_module_plane> make_shared(std::size_t const max_count);
 

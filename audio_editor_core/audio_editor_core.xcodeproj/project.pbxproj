@@ -19,6 +19,8 @@
 		B629D7722717101300EE379A /* ae_ui_marker_plane.h in Headers */ = {isa = PBXBuildFile; fileRef = B629D7702717101300EE379A /* ae_ui_marker_plane.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B629D7732717101300EE379A /* ae_ui_marker_plane.mm in Sources */ = {isa = PBXBuildFile; fileRef = B629D7712717101300EE379A /* ae_ui_marker_plane.mm */; };
 		B633290027094C1D0047E45F /* ae_ui_root_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B63328FF27094C1D0047E45F /* ae_ui_root_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B64504AE2719C4D9009E05D6 /* ae_module_element.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AD2719C4D9009E05D6 /* ae_module_element.h */; };
+		B64504B02719C4E4009E05D6 /* ae_marker_element.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AF2719C4E4009E05D6 /* ae_marker_element.h */; };
 		B64DE67F2658B990006FC562 /* ae_ui_editing_root_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B64DE67E2658B990006FC562 /* ae_ui_editing_root_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B64DE6852658C099006FC562 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B64DE6842658C099006FC562 /* Metal.framework */; };
 		B64E94F82652B7660056F511 /* ae_marker_pool_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B64E94F72652B7660056F511 /* ae_marker_pool_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -129,6 +131,8 @@
 		B629D7702717101300EE379A /* ae_ui_marker_plane.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_marker_plane.h; sourceTree = "<group>"; };
 		B629D7712717101300EE379A /* ae_ui_marker_plane.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_marker_plane.mm; sourceTree = "<group>"; };
 		B63328FF27094C1D0047E45F /* ae_ui_root_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_root_dependency.h; sourceTree = "<group>"; };
+		B64504AD2719C4D9009E05D6 /* ae_module_element.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_module_element.h; sourceTree = "<group>"; };
+		B64504AF2719C4E4009E05D6 /* ae_marker_element.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_marker_element.h; sourceTree = "<group>"; };
 		B64DE67E2658B990006FC562 /* ae_ui_editing_root_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_editing_root_dependency.h; sourceTree = "<group>"; };
 		B64DE6842658C099006FC562 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		B64E94F72652B7660056F511 /* ae_marker_pool_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_marker_pool_types.h; sourceTree = "<group>"; };
@@ -377,6 +381,8 @@
 		B68C3E722707F1D900888A53 /* track_presenter */ = {
 			isa = PBXGroup;
 			children = (
+				B64504AF2719C4E4009E05D6 /* ae_marker_element.h */,
+				B64504AD2719C4D9009E05D6 /* ae_module_element.h */,
 				B68C3E742707F1F500888A53 /* ae_track_presenter.cpp */,
 				B68C3E732707F1F500888A53 /* ae_track_presenter.h */,
 			);
@@ -556,6 +562,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6604F812646D7DF003439F1 /* ae_file_track.h in Headers */,
+				B64504B02719C4E4009E05D6 /* ae_marker_element.h in Headers */,
 				B68C3E8027088FF000888A53 /* ae_root_presenter.h in Headers */,
 				B68C3E782708255600888A53 /* ae_ui_track_constants.h in Headers */,
 				B666CE0B263424FF00C1693D /* ae_file_importer_types.h in Headers */,
@@ -608,6 +615,7 @@
 				B657D4D426803C7B0048C6AD /* ae_keyboard_types.h in Headers */,
 				B69C68A32670F5BF00C1083F /* ae_ui_button.h in Headers */,
 				B64DE67F2658B990006FC562 /* ae_ui_editing_root_dependency.h in Headers */,
+				B64504AE2719C4D9009E05D6 /* ae_module_element.h in Headers */,
 				B6D385322649623A005ADD0B /* ae_project_editor_utils.h in Headers */,
 				B6EA40D526411D0600BF3D06 /* ae_player_types.h in Headers */,
 				B60204F7263ABBC400CFC752 /* ae_editing_root_presenter_utils.h in Headers */,

@@ -67,7 +67,7 @@ project_state const &project::state() const {
     return this->_state->value();
 }
 
-std::optional<file_info> project::file_info() const {
+std::optional<file_info> const &project::file_info() const {
     return this->_file_info->value();
 }
 
