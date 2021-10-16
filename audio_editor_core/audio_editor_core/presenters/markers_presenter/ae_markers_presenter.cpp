@@ -23,7 +23,7 @@ std::shared_ptr<markers_presenter> markers_presenter::make_shared(std::shared_pt
 markers_presenter::markers_presenter(std::shared_ptr<project> const &project) : _project(project) {
 }
 
-std::vector<marker_element> markers_presenter::marker_elements() const {
+std::vector<marker_location> markers_presenter::marker_locations() const {
     if (auto const project = this->_project.lock()) {
         auto const &editor = project->editor();
         auto const &file_info = project->file_info();
@@ -31,9 +31,9 @@ std::vector<marker_element> markers_presenter::marker_elements() const {
             auto const &markers = editor->marker_pool()->markers();
             auto const &sample_rate = file_info.value().sample_rate;
 
-            return to_vector<marker_element>(markers, [&sample_rate](auto const &pair) {
-                float const position = float(pair.first) / float(sample_rate);
-                return marker_element{position};
+            return to_vector<marker_location>(markers, [&sample_rate](auto const &pair) {
+                double const position = static_cast<double>(pair.first) / static_cast<double>(sample_rate);
+                return marker_location{static_cast<float>(position)};
             });
         }
     }
@@ -42,11 +42,11 @@ std::vector<marker_element> markers_presenter::marker_elements() const {
 }
 
 observing::syncable markers_presenter::observe_markers(
-    std::function<void(std::vector<marker_element> const &)> &&handler) {
+    std::function<void(std::vector<marker_location> const &)> &&handler) {
     if (auto const project = this->_project.lock()) {
         if (auto const &editor = project->editor()) {
             return editor->marker_pool()->observe_event(
-                [this, handler = std::move(handler)](auto const &) { handler(this->marker_elements()); });
+                [this, handler = std::move(handler)](auto const &) { handler(this->marker_locations()); });
         }
     }
     return observing::syncable{};

@@ -1,9 +1,10 @@
 //
-//  ae_ui_module_plane.mm
+//  ae_ui_modules.mm
 //
 
 #include "ae_ui_modules.h"
-#include <audio_editor_core/ae_module_element.h>
+#include <audio_editor_core/ae_module_location.h>
+#include <audio_editor_core/ae_modules_presenter.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -15,8 +16,9 @@ void ui_modules::line_index2d_rect::set_all(ui::index2d_t const first) {
     this->v[5] = this->v[6] = first + 2;
 }
 
-ui_modules::ui_modules(std::size_t const max_count)
-    : _max_count(max_count),
+ui_modules::ui_modules(std::size_t const max_count, std::shared_ptr<modules_presenter> const &presenter)
+    : _presenter(presenter),
+      _max_count(max_count),
       _node(ui::node::make_shared()),
       _triangle_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
@@ -69,10 +71,15 @@ ui_modules::ui_modules(std::size_t const max_count)
             index_rects[rect_idx].set_all(rect_head_idx);
         }
     });
+
+    presenter->observe_modules([this](auto const &elements) { this->set_elements(elements); })
+        .sync()
+        ->add_to(this->_pool);
 }
 
-std::shared_ptr<ui_modules> ui_modules::make_shared(std::size_t const max_count) {
-    return std::shared_ptr<ui_modules>(new ui_modules{max_count});
+std::shared_ptr<ui_modules> ui_modules::make_shared(std::size_t const max_count, std::string const &project_id) {
+    auto const presenter = modules_presenter::make_shared(project_id);
+    return std::shared_ptr<ui_modules>(new ui_modules{max_count, presenter});
 }
 
 std::shared_ptr<ui::node> const &ui_modules::node() const {
@@ -83,14 +90,14 @@ void ui_modules::set_scale(ui::size const &scale) {
     this->_node->set_scale(scale);
 }
 
-void ui_modules::set_elements(std::vector<module_element> const &elements) {
+void ui_modules::set_elements(std::vector<module_location> const &elements) {
     this->_write_vertices([&elements](vertex2d_rect *vertex_rects) {
         auto each = make_fast_each(elements.size());
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
             auto const &element = elements.at(idx);
-            vertex_rects[idx].set_position(ui::region{.origin = {.x = element.position, .y = 0.0f},
-                                                      .size = {.width = element.length, .height = 1.0f}});
+            vertex_rects[idx].set_position(
+                ui::region{.origin = {.x = element.x, .y = 0.0f}, .size = {.width = element.width, .height = 1.0f}});
         }
     });
 

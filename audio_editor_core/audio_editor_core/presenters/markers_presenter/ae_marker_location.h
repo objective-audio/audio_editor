@@ -1,11 +1,11 @@
 //
-//  ae_marker_element.h
+//  ae_marker_location.h
 //
 
 #pragma once
 
 namespace yas::ae {
-struct marker_element {
-    float position;
+struct marker_location {
+    float x;
 };
 }  // namespace yas::ae

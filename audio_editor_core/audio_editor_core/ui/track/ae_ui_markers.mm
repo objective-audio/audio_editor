@@ -1,5 +1,5 @@
 //
-//  ae_ui_marker_plane.mm
+//  ae_ui_markers.mm
 //
 
 #include "ae_ui_markers.h"
@@ -47,7 +47,7 @@ void ui_markers::set_scale(ui::size const &scale) {
     this->_update_sub_nodes();
 }
 
-void ui_markers::set_elements(std::vector<marker_element> const &elements) {
+void ui_markers::set_elements(std::vector<marker_location> const &elements) {
     this->_elements = elements;
     this->_update_sub_nodes();
 }
@@ -64,7 +64,7 @@ void ui_markers::_update_sub_nodes() {
         auto const &element = this->_elements.at(yas_each_index(each));
         auto node = ui::node::make_shared();
         node->set_mesh(ui::mesh::make_shared({}, this->_vertex_data, this->_index_data, nullptr));
-        node->set_position({element.position * this->_scale.width, this->_scale.height});
+        node->set_position({element.x * this->_scale.width, this->_scale.height});
         this->_root_node->add_sub_node(node);
         this->_sub_nodes.emplace_back(std::move(node));
     }

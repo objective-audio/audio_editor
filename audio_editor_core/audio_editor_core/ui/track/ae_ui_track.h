@@ -27,6 +27,6 @@ struct ui_track final {
     observing::canceller_pool _pool;
 
     ui_track(std::shared_ptr<ui::standard> const &, std::shared_ptr<track_presenter> const &,
-             std::shared_ptr<ui_markers> const &);
+             std::shared_ptr<ui_modules> const &, std::shared_ptr<ui_markers> const &);
 };
 }  // namespace yas::ae

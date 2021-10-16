@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_marker_element.h>
+#include <audio_editor_core/ae_marker_location.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -14,7 +14,7 @@ struct ui_markers {
     std::shared_ptr<ui::node> const &node() const;
 
     void set_scale(ui::size const &);
-    void set_elements(std::vector<marker_element> const &);
+    void set_elements(std::vector<marker_location> const &);
 
     static std::shared_ptr<ui_markers> make_shared(std::string const &project_id);
 
@@ -23,7 +23,7 @@ struct ui_markers {
     std::size_t const _max_count;
 
     ui::size _scale;
-    std::vector<marker_element> _elements;
+    std::vector<marker_location> _elements;
 
     std::shared_ptr<ui::node> const _root_node;
     std::vector<std::shared_ptr<ui::node>> _sub_nodes;
