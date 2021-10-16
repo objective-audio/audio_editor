@@ -8,8 +8,8 @@
 
 namespace yas::ae {
 class track_presenter;
-class ui_module_plane;
-class ui_marker_plane;
+class ui_modules;
+class ui_markers;
 
 struct ui_track final {
     std::shared_ptr<ui::node> const node() const;
@@ -21,11 +21,12 @@ struct ui_track final {
     std::shared_ptr<track_presenter> const _presenter;
     std::shared_ptr<ui::node> const _root_node;
     std::shared_ptr<ui::node> const _time_node;
-    std::shared_ptr<ui_module_plane> const _module_plane;
-    std::shared_ptr<ui_marker_plane> const _marker_plane;
+    std::shared_ptr<ui_modules> const _modules;
+    std::shared_ptr<ui_markers> const _markers;
 
     observing::canceller_pool _pool;
 
-    ui_track(std::shared_ptr<ui::standard> const &, std::shared_ptr<track_presenter> const &);
+    ui_track(std::shared_ptr<ui::standard> const &, std::shared_ptr<track_presenter> const &,
+             std::shared_ptr<ui_markers> const &);
 };
 }  // namespace yas::ae

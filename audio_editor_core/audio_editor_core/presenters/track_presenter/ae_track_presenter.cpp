@@ -43,22 +43,15 @@ std::vector<module_element> track_presenter::module_elements() const {
     return {};
 }
 
-std::vector<marker_element> track_presenter::marker_elements() const {
+observing::syncable track_presenter::observe_modules(
+    std::function<void(std::vector<module_element> const &)> &&handler) {
     if (auto const project = this->_project.lock()) {
-        auto const &editor = project->editor();
-        auto const &file_info = project->file_info();
-        if (editor && file_info) {
-            auto const &markers = editor->marker_pool()->markers();
-            auto const &sample_rate = file_info.value().sample_rate;
-
-            return to_vector<marker_element>(markers, [&sample_rate](auto const &pair) {
-                float const position = float(pair.first) / float(sample_rate);
-                return marker_element{position};
-            });
+        if (auto const &editor = project->editor()) {
+            return editor->file_track()->observe_event(
+                [this, handler = std::move(handler)](auto const &) { handler(this->module_elements()); });
         }
     }
-
-    return {};
+    return observing::syncable{};
 }
 
 double track_presenter::current_time() const {
@@ -69,22 +62,4 @@ double track_presenter::current_time() const {
         }
     }
     return 0.0;
-}
-
-observing::syncable track_presenter::observe_modules(std::function<void()> &&handler) {
-    if (auto const project = this->_project.lock()) {
-        if (auto const &editor = project->editor()) {
-            return editor->file_track()->observe_event([handler = std::move(handler)](auto const &) { handler(); });
-        }
-    }
-    return observing::syncable{};
-}
-
-observing::syncable track_presenter::observe_markers(std::function<void()> &&handler) {
-    if (auto const project = this->_project.lock()) {
-        if (auto const &editor = project->editor()) {
-            return editor->marker_pool()->observe_event([handler = std::move(handler)](auto const &) { handler(); });
-        }
-    }
-    return observing::syncable{};
 }

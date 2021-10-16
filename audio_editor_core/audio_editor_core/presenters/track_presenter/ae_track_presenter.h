@@ -19,12 +19,9 @@ struct track_presenter {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::shared_ptr<project> const &);
 
     [[nodiscard]] std::vector<module_element> module_elements() const;
-    [[nodiscard]] std::vector<marker_element> marker_elements() const;
+    [[nodiscard]] observing::syncable observe_modules(std::function<void(std::vector<module_element> const &)> &&);
 
     [[nodiscard]] double current_time() const;
-
-    [[nodiscard]] observing::syncable observe_modules(std::function<void()> &&);
-    [[nodiscard]] observing::syncable observe_markers(std::function<void()> &&);
 
    private:
     std::weak_ptr<project> _project;

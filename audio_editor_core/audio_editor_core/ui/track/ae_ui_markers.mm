@@ -2,13 +2,15 @@
 //  ae_ui_marker_plane.mm
 //
 
-#include "ae_ui_marker_plane.h"
+#include "ae_ui_markers.h"
+#include <audio_editor_core/ae_markers_presenter.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-ui_marker_plane::ui_marker_plane(std::size_t const max_count)
-    : _max_count(max_count),
+ui_markers::ui_markers(std::size_t const max_count, std::shared_ptr<markers_presenter> const &presenter)
+    : _presenter(presenter),
+      _max_count(max_count),
       _root_node(ui::node::make_shared()),
       _vertex_data(ui::static_mesh_vertex_data::make_shared(3)),
       _index_data(ui::static_mesh_index_data::make_shared(3)) {
@@ -25,27 +27,32 @@ ui_marker_plane::ui_marker_plane(std::size_t const max_count)
         indices[1] = 1;
         indices[2] = 2;
     });
+
+    this->_presenter->observe_markers([this](auto const &elements) { this->set_elements(elements); })
+        .sync()
+        ->add_to(this->_pool);
 }
 
-std::shared_ptr<ui_marker_plane> ui_marker_plane::make_shared(std::size_t const max_count) {
-    return std::shared_ptr<ui_marker_plane>(new ui_marker_plane{max_count});
+std::shared_ptr<ui_markers> ui_markers::make_shared(std::string const &project_id) {
+    auto const presenter = markers_presenter::make_shared(project_id);
+    return std::shared_ptr<ui_markers>(new ui_markers{10, presenter});
 }
 
-std::shared_ptr<ui::node> const &ui_marker_plane::node() const {
+std::shared_ptr<ui::node> const &ui_markers::node() const {
     return this->_root_node;
 }
 
-void ui_marker_plane::set_scale(ui::size const &scale) {
+void ui_markers::set_scale(ui::size const &scale) {
     this->_scale = scale;
     this->_update_sub_nodes();
 }
 
-void ui_marker_plane::set_elements(std::vector<marker_element> &&elements) {
-    this->_elements = std::move(elements);
+void ui_markers::set_elements(std::vector<marker_element> const &elements) {
+    this->_elements = elements;
     this->_update_sub_nodes();
 }
 
-void ui_marker_plane::_update_sub_nodes() {
+void ui_markers::_update_sub_nodes() {
     for (auto const &node : this->_sub_nodes) {
         node->remove_from_super_node();
     }

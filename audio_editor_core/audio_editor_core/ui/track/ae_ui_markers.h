@@ -1,5 +1,5 @@
 //
-//  ae_ui_marker_plane.h
+//  ae_ui_markers.h
 //
 
 #pragma once
@@ -8,25 +8,31 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-struct ui_marker_plane {
+class markers_presenter;
+
+struct ui_markers {
     std::shared_ptr<ui::node> const &node() const;
 
     void set_scale(ui::size const &);
-    void set_elements(std::vector<marker_element> &&);
+    void set_elements(std::vector<marker_element> const &);
 
-    static std::shared_ptr<ui_marker_plane> make_shared(std::size_t const max_count);
+    static std::shared_ptr<ui_markers> make_shared(std::string const &project_id);
 
    private:
+    std::shared_ptr<markers_presenter> const _presenter;
+    std::size_t const _max_count;
+
     ui::size _scale;
     std::vector<marker_element> _elements;
 
-    std::size_t const _max_count;
     std::shared_ptr<ui::node> const _root_node;
     std::vector<std::shared_ptr<ui::node>> _sub_nodes;
     std::shared_ptr<ui::static_mesh_vertex_data> const _vertex_data;
     std::shared_ptr<ui::static_mesh_index_data> const _index_data;
 
-    ui_marker_plane(std::size_t const max_count);
+    observing::canceller_pool _pool;
+
+    ui_markers(std::size_t const max_count, std::shared_ptr<markers_presenter> const &);
 
     void _update_sub_nodes();
 };
