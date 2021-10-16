@@ -6,7 +6,9 @@
 
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_file_track_types.h>
+#include <audio_editor_core/ae_marker_element.h>
 #include <audio_editor_core/ae_marker_pool.h>
+#include <audio_editor_core/ae_module_element.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
@@ -16,9 +18,9 @@ struct track_presenter {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::string const &project_id);
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::shared_ptr<project> const &);
 
-    [[nodiscard]] file_track_module_map_t const &modules() const;
-    [[nodiscard]] std::map<proc::frame_index_t, marker> const &markers() const;
-    [[nodiscard]] std::optional<file_info> file_info() const;
+    [[nodiscard]] std::vector<module_element> module_elements() const;
+    [[nodiscard]] std::vector<marker_element> marker_elements() const;
+
     [[nodiscard]] double current_time() const;
 
     [[nodiscard]] observing::syncable observe_modules(std::function<void()> &&);

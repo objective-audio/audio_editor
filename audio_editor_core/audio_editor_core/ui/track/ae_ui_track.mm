@@ -26,50 +26,11 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
     this->_module_plane->set_scale(scale);
     this->_marker_plane->set_scale(scale);
 
-    presenter
-        ->observe_modules([this] {
-            auto const file_info = this->_presenter->file_info();
-            if (!file_info.has_value()) {
-                return;
-            }
-
-            auto const &sample_rate = file_info.value().sample_rate;
-            auto const &modules = this->_presenter->modules();
-
-            std::vector<ui_module_plane::element> elements;
-            elements.reserve(modules.size());
-
-            for (auto const &pair : modules) {
-                float const x = float(pair.second.range.frame) / float(sample_rate);
-                float const width = float(pair.second.range.length) / float(sample_rate);
-                elements.emplace_back(ui_module_plane::element{x, width});
-            }
-
-            this->_module_plane->set_elements(elements);
-        })
+    presenter->observe_modules([this] { this->_module_plane->set_elements(this->_presenter->module_elements()); })
         .sync()
         ->add_to(this->_pool);
 
-    presenter
-        ->observe_markers([this] {
-            auto const file_info = this->_presenter->file_info();
-            if (!file_info.has_value()) {
-                return;
-            }
-
-            auto const &sample_rate = file_info.value().sample_rate;
-            auto const &markers = this->_presenter->markers();
-
-            std::vector<ui_marker_plane::element> elements;
-            elements.reserve(markers.size());
-
-            for (auto const &pair : markers) {
-                float const position = float(pair.first) / float(sample_rate);
-                elements.emplace_back(ui_marker_plane::element{position});
-            }
-
-            this->_marker_plane->set_elements(std::move(elements));
-        })
+    presenter->observe_markers([this] { this->_marker_plane->set_elements(this->_presenter->marker_elements()); })
         .sync()
         ->add_to(this->_pool);
 

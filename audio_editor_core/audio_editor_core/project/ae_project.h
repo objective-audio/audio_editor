@@ -19,7 +19,7 @@ struct project final {
     [[nodiscard]] std::string const &identifier() const;
     [[nodiscard]] url const &file_url() const;
     [[nodiscard]] project_state const &state() const;
-    [[nodiscard]] std::optional<file_info> file_info() const;
+    [[nodiscard]] std::optional<file_info> const &file_info() const;
     [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
     [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const;
 
