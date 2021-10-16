@@ -1,5 +1,5 @@
 //
-//  ae_ui_module_plane.h
+//  ae_ui_modules.h
 //
 
 #pragma once
@@ -9,7 +9,7 @@
 namespace yas::ae {
 class module_element;
 
-struct ui_module_plane {
+struct ui_modules {
     using vertex2d_rect = ui::vertex2d_rect;
     using triangle_index2d_rect = ui::index2d_rect;
     struct line_index2d_rect {
@@ -23,7 +23,7 @@ struct ui_module_plane {
     void set_scale(ui::size const &);
     void set_elements(std::vector<module_element> const &);
 
-    static std::shared_ptr<ui_module_plane> make_shared(std::size_t const max_count);
+    static std::shared_ptr<ui_modules> make_shared(std::size_t const max_count);
 
    private:
     std::size_t const _max_count;
@@ -36,7 +36,7 @@ struct ui_module_plane {
     std::shared_ptr<ui::mesh> const _triangle_mesh;
     std::shared_ptr<ui::mesh> const _line_mesh;
 
-    ui_module_plane(std::size_t const max_count);
+    ui_modules(std::size_t const max_count);
 
     void _set_rect_count(std::size_t const);
     void _write_vertices(std::function<void(vertex2d_rect *)> const &);

@@ -2,20 +2,20 @@
 //  ae_ui_module_plane.mm
 //
 
-#include "ae_ui_module_plane.h"
+#include "ae_ui_modules.h"
 #include <audio_editor_core/ae_module_element.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-void ui_module_plane::line_index2d_rect::set_all(ui::index2d_t const first) {
+void ui_modules::line_index2d_rect::set_all(ui::index2d_t const first) {
     this->v[0] = this->v[7] = first;
     this->v[1] = this->v[2] = first + 1;
     this->v[3] = this->v[4] = first + 3;
     this->v[5] = this->v[6] = first + 2;
 }
 
-ui_module_plane::ui_module_plane(std::size_t const max_count)
+ui_modules::ui_modules(std::size_t const max_count)
     : _max_count(max_count),
       _node(ui::node::make_shared()),
       _triangle_node(ui::node::make_shared()),
@@ -71,19 +71,19 @@ ui_module_plane::ui_module_plane(std::size_t const max_count)
     });
 }
 
-std::shared_ptr<ui_module_plane> ui_module_plane::make_shared(std::size_t const max_count) {
-    return std::shared_ptr<ui_module_plane>(new ui_module_plane{max_count});
+std::shared_ptr<ui_modules> ui_modules::make_shared(std::size_t const max_count) {
+    return std::shared_ptr<ui_modules>(new ui_modules{max_count});
 }
 
-std::shared_ptr<ui::node> const &ui_module_plane::node() const {
+std::shared_ptr<ui::node> const &ui_modules::node() const {
     return this->_node;
 }
 
-void ui_module_plane::set_scale(ui::size const &scale) {
+void ui_modules::set_scale(ui::size const &scale) {
     this->_node->set_scale(scale);
 }
 
-void ui_module_plane::set_elements(std::vector<module_element> const &elements) {
+void ui_modules::set_elements(std::vector<module_element> const &elements) {
     this->_write_vertices([&elements](vertex2d_rect *vertex_rects) {
         auto each = make_fast_each(elements.size());
         while (yas_each_next(each)) {
@@ -97,20 +97,20 @@ void ui_module_plane::set_elements(std::vector<module_element> const &elements) 
     this->_set_rect_count(elements.size());
 }
 
-void ui_module_plane::_set_rect_count(std::size_t const rect_count) {
+void ui_modules::_set_rect_count(std::size_t const rect_count) {
     this->_vertex_data->set_count(rect_count * 4);
     this->_triangle_index_data->set_count(rect_count * 6);
     this->_line_index_data->set_count(rect_count * 8);
 }
 
-void ui_module_plane::_write_vertices(std::function<void(vertex2d_rect *)> const &handler) {
+void ui_modules::_write_vertices(std::function<void(vertex2d_rect *)> const &handler) {
     this->_vertex_data->write([&handler](auto &vertices) { handler((ui::vertex2d_rect *)vertices.data()); });
 }
 
-void ui_module_plane::_write_triangle_indices(std::function<void(triangle_index2d_rect *)> const &handler) {
+void ui_modules::_write_triangle_indices(std::function<void(triangle_index2d_rect *)> const &handler) {
     this->_triangle_index_data->write([&handler](auto &indices) { handler((triangle_index2d_rect *)indices.data()); });
 }
 
-void ui_module_plane::_write_line_indices(std::function<void(line_index2d_rect *)> const &handler) {
+void ui_modules::_write_line_indices(std::function<void(line_index2d_rect *)> const &handler) {
     this->_line_index_data->write([&handler](auto &indices) { handler((line_index2d_rect *)indices.data()); });
 }
