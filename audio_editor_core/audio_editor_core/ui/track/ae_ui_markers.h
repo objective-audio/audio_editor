@@ -14,16 +14,15 @@ struct ui_markers {
     std::shared_ptr<ui::node> const &node() const;
 
     void set_scale(ui::size const &);
-    void set_elements(std::vector<marker_location> const &);
+    void set_locations(std::vector<marker_location> const &);
 
     static std::shared_ptr<ui_markers> make_shared(std::string const &project_id);
 
    private:
     std::shared_ptr<markers_presenter> const _presenter;
-    std::size_t const _max_count;
 
     ui::size _scale;
-    std::vector<marker_location> _elements;
+    std::vector<marker_location> _locations;
 
     std::shared_ptr<ui::node> const _root_node;
     std::vector<std::shared_ptr<ui::node>> _sub_nodes;
@@ -32,7 +31,7 @@ struct ui_markers {
 
     observing::canceller_pool _pool;
 
-    ui_markers(std::size_t const max_count, std::shared_ptr<markers_presenter> const &);
+    ui_markers(std::shared_ptr<markers_presenter> const &);
 
     void _update_sub_nodes();
 };

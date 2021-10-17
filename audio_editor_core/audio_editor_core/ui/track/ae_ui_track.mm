@@ -44,7 +44,7 @@ std::shared_ptr<ui::node> const ui_track::node() const {
 std::shared_ptr<ui_track> ui_track::make_shared(std::shared_ptr<ui::standard> const &standard,
                                                 std::string const &project_id) {
     auto const presenter = track_presenter::make_shared(project_id);
-    auto const modules = ui_modules::make_shared(ui_track_constants::max_plane_count, project_id);
+    auto const modules = ui_modules::make_shared(project_id);
     auto const markers = ui_markers::make_shared(project_id);
     return std::shared_ptr<ui_track>(new ui_track{standard, presenter, modules, markers});
 }
