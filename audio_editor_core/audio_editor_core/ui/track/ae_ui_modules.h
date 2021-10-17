@@ -7,7 +7,8 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-class module_element;
+class module_location;
+class modules_presenter;
 
 struct ui_modules {
     using vertex2d_rect = ui::vertex2d_rect;
@@ -21,11 +22,12 @@ struct ui_modules {
     std::shared_ptr<ui::node> const &node() const;
 
     void set_scale(ui::size const &);
-    void set_elements(std::vector<module_element> const &);
+    void set_elements(std::vector<module_location> const &);
 
-    static std::shared_ptr<ui_modules> make_shared(std::size_t const max_count);
+    static std::shared_ptr<ui_modules> make_shared(std::size_t const max_count, std::string const &project_id);
 
    private:
+    std::shared_ptr<modules_presenter> const _presenter;
     std::size_t const _max_count;
     std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::node> const _triangle_node;
@@ -36,7 +38,9 @@ struct ui_modules {
     std::shared_ptr<ui::mesh> const _triangle_mesh;
     std::shared_ptr<ui::mesh> const _line_mesh;
 
-    ui_modules(std::size_t const max_count);
+    observing::canceller_pool _pool;
+
+    ui_modules(std::size_t const max_count, std::shared_ptr<modules_presenter> const &);
 
     void _set_rect_count(std::size_t const);
     void _write_vertices(std::function<void(vertex2d_rect *)> const &);
