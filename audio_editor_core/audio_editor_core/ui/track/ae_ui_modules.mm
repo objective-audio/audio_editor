@@ -58,7 +58,9 @@ void ui_modules::set_scale(ui::size const &scale) {
 void ui_modules::set_locations(std::vector<module_location> const &locations) {
     this->_set_rect_count(locations.size());
 
-    this->_write_vertices([&locations](vertex2d_rect *vertex_rects) {
+    this->_vertex_data->write([&locations](std::vector<ui::vertex2d_t> &vertices) {
+        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+
         auto each = make_fast_each(locations.size());
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
@@ -88,7 +90,9 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         ui::dynamic_mesh_index_data::make_shared(max_count * triangle_index2d_rect::vector_count);
     this->_line_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * line_index2d_rect::vector_count);
 
-    this->_write_vertices([&max_count](vertex2d_rect *vertex_rects) {
+    this->_vertex_data->write([&max_count](std::vector<ui::vertex2d_t> &vertices) {
+        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+
         auto rect_each = make_fast_each(max_count);
         while (yas_each_next(rect_each)) {
             auto const &rect_idx = yas_each_index(rect_each);
@@ -104,7 +108,9 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         }
     });
 
-    this->_write_triangle_indices([&max_count](triangle_index2d_rect *index_rects) {
+    this->_triangle_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
+        auto *index_rects = (triangle_index2d_rect *)indices.data();
+
         auto each = make_fast_each(max_count);
         while (yas_each_next(each)) {
             auto const &rect_idx = yas_each_index(each);
@@ -113,7 +119,9 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         }
     });
 
-    this->_write_line_indices([&max_count](line_index2d_rect *index_rects) {
+    this->_line_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
+        auto *index_rects = (line_index2d_rect *)indices.data();
+
         auto each = make_fast_each(max_count);
         while (yas_each_next(each)) {
             auto const &rect_idx = yas_each_index(each);
@@ -136,22 +144,12 @@ void ui_modules::_set_rect_count(std::size_t const rect_count) {
     if (this->_vertex_data) {
         this->_vertex_data->set_count(rect_count * vertex2d_rect::vector_count);
     }
+
     if (this->_triangle_index_data) {
         this->_triangle_index_data->set_count(rect_count * triangle_index2d_rect::vector_count);
     }
+
     if (this->_line_index_data) {
         this->_line_index_data->set_count(rect_count * line_index2d_rect::vector_count);
     }
-}
-
-void ui_modules::_write_vertices(std::function<void(vertex2d_rect *)> const &handler) {
-    this->_vertex_data->write([&handler](auto &vertices) { handler((ui::vertex2d_rect *)vertices.data()); });
-}
-
-void ui_modules::_write_triangle_indices(std::function<void(triangle_index2d_rect *)> const &handler) {
-    this->_triangle_index_data->write([&handler](auto &indices) { handler((triangle_index2d_rect *)indices.data()); });
-}
-
-void ui_modules::_write_line_indices(std::function<void(line_index2d_rect *)> const &handler) {
-    this->_line_index_data->write([&handler](auto &indices) { handler((line_index2d_rect *)indices.data()); });
 }

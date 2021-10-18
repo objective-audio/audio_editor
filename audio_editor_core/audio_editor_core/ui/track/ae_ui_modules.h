@@ -47,8 +47,5 @@ struct ui_modules {
 
     void _remake_data_if_needed(std::size_t const);
     void _set_rect_count(std::size_t const);
-    void _write_vertices(std::function<void(vertex2d_rect *)> const &);
-    void _write_triangle_indices(std::function<void(triangle_index2d_rect *)> const &);
-    void _write_line_indices(std::function<void(line_index2d_rect *)> const &);
 };
 }  // namespace yas::ae
