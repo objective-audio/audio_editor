@@ -14,7 +14,9 @@ struct ui_modules {
     using vertex2d_rect = ui::vertex2d_rect;
     using triangle_index2d_rect = ui::index2d_rect;
     struct line_index2d_rect {
-        ui::index2d_t v[8];
+        static std::size_t constexpr vector_count = 8;
+
+        ui::index2d_t v[vector_count];
 
         void set_all(ui::index2d_t const first);
     };
@@ -22,16 +24,17 @@ struct ui_modules {
     std::shared_ptr<ui::node> const &node() const;
 
     void set_scale(ui::size const &);
-    void set_elements(std::vector<module_location> const &);
+    void set_locations(std::vector<module_location> const &);
 
-    static std::shared_ptr<ui_modules> make_shared(std::size_t const max_count, std::string const &project_id);
+    static std::shared_ptr<ui_modules> make_shared(std::string const &project_id);
 
    private:
     std::shared_ptr<modules_presenter> const _presenter;
-    std::size_t const _max_count;
     std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::node> const _triangle_node;
     std::shared_ptr<ui::node> const _line_node;
+
+    std::size_t _remaked_count = 0;
     std::shared_ptr<ui::dynamic_mesh_vertex_data> _vertex_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _triangle_index_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _line_index_data;
@@ -40,8 +43,9 @@ struct ui_modules {
 
     observing::canceller_pool _pool;
 
-    ui_modules(std::size_t const max_count, std::shared_ptr<modules_presenter> const &);
+    ui_modules(std::shared_ptr<modules_presenter> const &);
 
+    void _remake_data_if_needed(std::size_t const);
     void _set_rect_count(std::size_t const);
     void _write_vertices(std::function<void(vertex2d_rect *)> const &);
     void _write_triangle_indices(std::function<void(triangle_index2d_rect *)> const &);
