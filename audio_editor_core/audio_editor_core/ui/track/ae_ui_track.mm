@@ -23,17 +23,24 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
     this->_time_node->add_sub_node(this->_modules->node());
     this->_time_node->add_sub_node(this->_markers->node());
 
-    ui::size const scale{ui_track_constants::width_per_sec, ui_track_constants::height};
-    this->_modules->set_scale(scale);
-    this->_markers->set_scale(scale);
-
     standard->renderer()
         ->observe_will_render([this](auto const &) {
             auto const time = this->_presenter->current_position();
-            float const x = -time * ui_track_constants::width_per_sec;
+            auto const scale = this->_presenter->scale();
+            float const x = -time * ui_track_constants::width_per_sec * scale;
             this->_time_node->set_position(ui::point{x, 0.0f});
         })
         .end()
+        ->add_to(this->_pool);
+
+    presenter
+        ->observe_scale([this](double const &value) {
+            ui::size const scale{static_cast<float>(value * ui_track_constants::width_per_sec),
+                                 ui_track_constants::height};
+            this->_modules->set_scale(scale);
+            this->_markers->set_scale(scale);
+        })
+        .sync()
         ->add_to(this->_pool);
 }
 

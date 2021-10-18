@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_zooming.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
@@ -32,4 +33,19 @@ float track_presenter::current_position() const {
         }
     }
     return 0.0;
+}
+
+double track_presenter::scale() const {
+    if (auto const project = this->_project.lock()) {
+        return project->zooming()->scale();
+    } else {
+        return 1.0;
+    }
+}
+
+observing::syncable track_presenter::observe_scale(std::function<void(double const &)> &&handler) {
+    if (auto const project = this->_project.lock()) {
+        return project->zooming()->observe_scale(std::move(handler));
+    }
+    return observing::syncable{};
 }

@@ -25,6 +25,10 @@ using namespace yas::ae;
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
                         event_manager:standard->event_manager()];
+
+    [self.view
+        addGestureRecognizer:[[NSMagnificationGestureRecognizer alloc] initWithTarget:self
+                                                                               action:@selector(handlePinchGesture:)]];
 }
 
 - (IBAction)togglePlay:(NSMenuItem *)sender {
@@ -105,6 +109,24 @@ using namespace yas::ae;
 
 - (IBAction)goToMarker9:(NSMenuItem *)sender {
     self->_ui_root->handle_action(action::go_to_marker_9);
+}
+
+- (void)handlePinchGesture:(NSMagnificationGestureRecognizer *)gesture {
+    gesture_state state = [&gesture] {
+        switch (gesture.state) {
+            case NSGestureRecognizerStateBegan:
+                return gesture_state::began;
+            case NSGestureRecognizerStateChanged:
+                return gesture_state::changed;
+            case NSGestureRecognizerStateEnded:
+            case NSGestureRecognizerStateCancelled:
+            case NSGestureRecognizerStateFailed:
+            case NSGestureRecognizerStatePossible:
+                return gesture_state::ended;
+        }
+    }();
+
+    self->_ui_root->handle_pinch_gesture({.state = state, .magnification = gesture.magnification});
 }
 
 #pragma mark -

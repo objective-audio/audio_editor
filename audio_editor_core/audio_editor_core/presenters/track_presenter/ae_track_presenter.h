@@ -18,8 +18,8 @@ struct track_presenter {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::string const &project_id);
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::shared_ptr<project> const &);
 
-    [[nodiscard]] std::vector<module_location> module_locations() const;
-    [[nodiscard]] observing::syncable observe_modules(std::function<void(std::vector<module_location> const &)> &&);
+    [[nodiscard]] double scale() const;
+    [[nodiscard]] observing::syncable observe_scale(std::function<void(double const &)> &&);
 
     [[nodiscard]] float current_position() const;
 
