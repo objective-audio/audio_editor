@@ -70,7 +70,8 @@ void ui_modules::set_locations(std::vector<module_location> const &locations) {
 }
 
 void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
-    if (max_count <= this->_remaked_count) {
+    if (max_count <= this->_remaked_count &&
+        (this->_vertex_data != nullptr || this->_triangle_index_data != nullptr || this->_line_index_data != nullptr)) {
         return;
     }
 
@@ -82,8 +83,9 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     this->_line_mesh->set_vertex_data(nullptr);
     this->_line_mesh->set_index_data(nullptr);
 
-    this->_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(max_count * 4);
-    this->_triangle_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * 6);
+    this->_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(max_count * vertex2d_rect::vector_count);
+    this->_triangle_index_data =
+        ui::dynamic_mesh_index_data::make_shared(max_count * triangle_index2d_rect::vector_count);
     this->_line_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * line_index2d_rect::vector_count);
 
     this->_write_vertices([&max_count](vertex2d_rect *vertex_rects) {
@@ -106,7 +108,7 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         auto each = make_fast_each(max_count);
         while (yas_each_next(each)) {
             auto const &rect_idx = yas_each_index(each);
-            uint32_t const rect_head_idx = static_cast<uint32_t>(rect_idx * triangle_index2d_rect::vector_count);
+            uint32_t const rect_head_idx = static_cast<uint32_t>(rect_idx * vertex2d_rect::vector_count);
             index_rects[rect_idx].set_all(rect_head_idx);
         }
     });
@@ -115,7 +117,7 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         auto each = make_fast_each(max_count);
         while (yas_each_next(each)) {
             auto const &rect_idx = yas_each_index(each);
-            uint32_t const rect_head_idx = static_cast<uint32_t>(rect_idx * line_index2d_rect::vector_count);
+            uint32_t const rect_head_idx = static_cast<uint32_t>(rect_idx * vertex2d_rect::vector_count);
             index_rects[rect_idx].set_all(rect_head_idx);
         }
     });
@@ -131,9 +133,15 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
 void ui_modules::_set_rect_count(std::size_t const rect_count) {
     this->_remake_data_if_needed(common_utils::reserving_count(rect_count, ui_modules_constants::reserving_interval));
 
-    this->_vertex_data->set_count(rect_count * vertex2d_rect::vector_count);
-    this->_triangle_index_data->set_count(rect_count * triangle_index2d_rect::vector_count);
-    this->_line_index_data->set_count(rect_count * line_index2d_rect::vector_count);
+    if (this->_vertex_data) {
+        this->_vertex_data->set_count(rect_count * vertex2d_rect::vector_count);
+    }
+    if (this->_triangle_index_data) {
+        this->_triangle_index_data->set_count(rect_count * triangle_index2d_rect::vector_count);
+    }
+    if (this->_line_index_data) {
+        this->_line_index_data->set_count(rect_count * line_index2d_rect::vector_count);
+    }
 }
 
 void ui_modules::_write_vertices(std::function<void(vertex2d_rect *)> const &handler) {
