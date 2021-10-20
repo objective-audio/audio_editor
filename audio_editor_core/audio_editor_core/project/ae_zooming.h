@@ -11,7 +11,7 @@ struct zooming {
     static std::shared_ptr<zooming> make_shared();
 
     void begin();
-    void set(double const);
+    void set_magnification(double const);
     void end();
 
     double scale() const;

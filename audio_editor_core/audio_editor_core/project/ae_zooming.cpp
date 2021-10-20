@@ -18,7 +18,7 @@ void zooming::begin() {
     this->_began_scale = this->_scale->value();
 }
 
-void zooming::set(double const magnification) {
+void zooming::set_magnification(double const magnification) {
     if (auto const began_scale = this->_began_scale) {
         double const rate = std::pow(10.0, magnification / 2.0);
         double const value = std::min(std::max(began_scale.value() * rate, 0.1), 10.0);
