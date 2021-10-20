@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_maker.h>
 #include <audio_editor_core/ae_system_url.h>
+#include <audio_editor_core/ae_zooming.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
@@ -28,6 +29,7 @@ project::project(std::string const &identifier, url const &file_url,
       _file_loader(file_loader),
       _player(player),
       _editor_maker(editor_maker),
+      _zooming(zooming::make_shared()),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _file_info(observing::value::holder<std::optional<ae::file_info>>::make_shared(std::nullopt)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
@@ -77,6 +79,10 @@ std::shared_ptr<player_for_project> const &project::player() const {
 
 std::shared_ptr<project_editor_for_project> const &project::editor() const {
     return this->_editor;
+}
+
+std::shared_ptr<zooming> const &project::zooming() const {
+    return this->_zooming;
 }
 
 bool project::can_close() const {

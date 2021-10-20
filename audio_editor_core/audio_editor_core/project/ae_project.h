@@ -9,6 +9,8 @@
 #include <audio_editor_core/ae_project_types.h>
 
 namespace yas::ae {
+class zooming;
+
 struct project final {
     [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url);
     [[nodiscard]] static std::shared_ptr<project> make_shared(
@@ -22,6 +24,7 @@ struct project final {
     [[nodiscard]] std::optional<file_info> const &file_info() const;
     [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
     [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const;
+    [[nodiscard]] std::shared_ptr<zooming> const &zooming() const;
 
     [[nodiscard]] bool can_close() const;
     void request_close();
@@ -66,6 +69,7 @@ struct project final {
     std::shared_ptr<player_for_project> const _player;
     std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
     std::shared_ptr<project_editor_for_project> _editor = nullptr;
+    std::shared_ptr<ae::zooming> const _zooming;
 
     observing::value::holder_ptr<project_state> const _state;
     observing::value::holder_ptr<std::optional<ae::file_info>> const _file_info;
