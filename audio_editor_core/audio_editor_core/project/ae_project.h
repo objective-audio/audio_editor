@@ -10,6 +10,7 @@
 
 namespace yas::ae {
 class zooming;
+class scrolling;
 
 struct project final {
     [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url);
@@ -25,6 +26,7 @@ struct project final {
     [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
     [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const;
     [[nodiscard]] std::shared_ptr<zooming> const &zooming() const;
+    [[nodiscard]] std::shared_ptr<scrolling> const &scrolling() const;
 
     [[nodiscard]] bool can_close() const;
     void request_close();
@@ -70,11 +72,13 @@ struct project final {
     std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
     std::shared_ptr<project_editor_for_project> _editor = nullptr;
     std::shared_ptr<ae::zooming> const _zooming;
+    std::shared_ptr<ae::scrolling> const _scrolling;
 
     observing::value::holder_ptr<project_state> const _state;
     observing::value::holder_ptr<std::optional<ae::file_info>> const _file_info;
 
     observing::notifier_ptr<project_event> const _event_notifier;
+    observing::canceller_pool _pool;
 
     project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
             std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
