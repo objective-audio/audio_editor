@@ -40,6 +40,8 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
 
                 case ui::event_type::cursor:
                 case ui::event_type::touch:
+                case ui::event_type::pinch:
+                case ui::event_type::scroll:
                     break;
             }
         })
