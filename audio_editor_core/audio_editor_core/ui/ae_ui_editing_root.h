@@ -13,6 +13,7 @@
 namespace yas::ae {
 class editing_root_presenter;
 class action_controller;
+class pinch_gesture_controller;
 class ui_track;
 
 struct ui_editing_root final {
@@ -25,6 +26,7 @@ struct ui_editing_root final {
    private:
     std::shared_ptr<editing_root_presenter> const _presenter;
     std::shared_ptr<action_controller> const _action_controller;
+    std::shared_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
 
     std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<ui::texture> const _texture;
@@ -52,7 +54,8 @@ struct ui_editing_root final {
     observing::canceller_pool _pool;
 
     ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<editing_root_presenter> const &,
-                    std::shared_ptr<action_controller> const &, std::shared_ptr<ui_track> const &);
+                    std::shared_ptr<action_controller> const &, std::shared_ptr<pinch_gesture_controller> const &,
+                    std::shared_ptr<ui_track> const &);
 
     void _setup_node_hierarchie();
     void _setup_observing();

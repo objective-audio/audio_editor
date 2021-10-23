@@ -26,13 +26,13 @@ void pinch_gesture_controller::handle_gesture(pinch_gesture const &gesture) {
         switch (gesture.state) {
             case gesture_state::began:
                 project->zooming()->begin();
-                project->zooming()->set(gesture.magnification);
+                project->zooming()->set_magnification(gesture.magnification);
                 break;
             case gesture_state::changed:
-                project->zooming()->set(gesture.magnification);
+                project->zooming()->set_magnification(gesture.magnification);
                 break;
             case gesture_state::ended:
-                project->zooming()->set(gesture.magnification);
+                project->zooming()->set_magnification(gesture.magnification);
                 project->zooming()->end();
                 break;
         }
