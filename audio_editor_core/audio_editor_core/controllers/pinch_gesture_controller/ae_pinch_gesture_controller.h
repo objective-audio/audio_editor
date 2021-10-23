@@ -8,7 +8,7 @@
 #include <optional>
 
 namespace yas::ae {
-class project;
+class zooming;
 class pinch_gesture;
 
 struct pinch_gesture_controller {
@@ -17,8 +17,8 @@ struct pinch_gesture_controller {
     void handle_gesture(pinch_gesture const &);
 
    private:
-    std::weak_ptr<project> const _project;
+    std::weak_ptr<zooming> const _zooming;
 
-    pinch_gesture_controller(std::shared_ptr<project> const &);
+    pinch_gesture_controller(std::shared_ptr<zooming> const &);
 };
 }  // namespace yas::ae
