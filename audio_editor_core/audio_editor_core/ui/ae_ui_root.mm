@@ -52,7 +52,3 @@ bool ui_root::responds_to_action(action const action) {
 void ui_root::handle_action(action const action) {
     this->_action_controller->handle_action(action);
 }
-
-void ui_root::handle_pinch_gesture(pinch_gesture const &gesture) {
-    this->_pinch_gesture_controller->handle_gesture(gesture);
-}

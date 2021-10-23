@@ -5,7 +5,9 @@
 #include "ae_ui_editing_root.h"
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_editing_root_presenter.h>
+#include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_keyboard.h>
+#include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_ui_editing_root_utils.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_track.h>
@@ -16,9 +18,11 @@ using namespace yas::ae;
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
                                  std::shared_ptr<action_controller> const &action_controller,
+                                 std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
                                  std::shared_ptr<ui_track> const &track)
     : _presenter(presenter),
       _action_controller(action_controller),
+      _pinch_gesture_controller(pinch_gesture_controller),
       _standard(standard),
       _texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
       _keyboard(ae::keyboard::make_shared(standard->event_manager())),
@@ -182,6 +186,33 @@ void ui_editing_root::_setup_observing() {
         })
         .end()
         ->add_to(this->_pool);
+
+    this->_standard->event_manager()
+        ->observe([this](std::shared_ptr<ui::event> const &event) {
+            if (event->type() == ui::event_type::pinch) {
+                auto const &pinch_event = event->get<ui::pinch>();
+
+                gesture_state const state = [&event] {
+                    switch (event->phase()) {
+                        case ui::event_phase::began:
+                            return gesture_state::began;
+                        case ui::event_phase::changed:
+                        case ui::event_phase::stationary:
+                            return gesture_state::changed;
+                        case ui::event_phase::ended:
+                        case ui::event_phase::canceled:
+                        case ui::event_phase::may_begin:
+                        case ui::event_phase::none:
+                            return gesture_state::ended;
+                    }
+                }();
+
+                this->_pinch_gesture_controller->handle_gesture(
+                    pinch_gesture{.state = state, .magnification = pinch_event.magnification()});
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
 }
 
 void ui_editing_root::_setup_layout() {
@@ -323,7 +354,9 @@ void ui_editing_root::_update_buttons_enabled() {
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::shared_ptr<ui::standard> const &standard,
                                                               std::string const &project_id) {
     auto const presenter = editing_root_presenter::make_shared(project_id);
-    auto const controller = action_controller::make_shared(project_id);
+    auto const action_controller = action_controller::make_shared(project_id);
+    auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
     auto const ui_track = ui_track::make_shared(standard, project_id);
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, presenter, controller, ui_track});
+    return std::shared_ptr<ui_editing_root>(
+        new ui_editing_root{standard, presenter, action_controller, pinch_gesture_controller, ui_track});
 }

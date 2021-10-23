@@ -5,7 +5,6 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
-#include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_ui_root_dependency.h>
 #include <ui/yas_ui_umbrella.h>
 
@@ -24,7 +23,6 @@ struct ui_root final {
 
     bool responds_to_action(action const);
     void handle_action(action const);
-    void handle_pinch_gesture(pinch_gesture const &);
 
    private:
     std::shared_ptr<ui::standard> const _standard;
