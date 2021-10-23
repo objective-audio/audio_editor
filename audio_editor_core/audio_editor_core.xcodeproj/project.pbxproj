@@ -317,6 +317,24 @@
 			path = ui;
 			sourceTree = "<group>";
 		};
+		B62D8F9C2723AEBA00779D42 /* pinch_gesture_controller */ = {
+			isa = PBXGroup;
+			children = (
+				B681357B271EF1FA009CC0FC /* ae_pinch_gesture_controller.cpp */,
+				B681357A271EF1FA009CC0FC /* ae_pinch_gesture_controller.h */,
+			);
+			path = pinch_gesture_controller;
+			sourceTree = "<group>";
+		};
+		B62D8FA42723CE4D00779D42 /* zooming */ = {
+			isa = PBXGroup;
+			children = (
+				B681357F271F0745009CC0FC /* ae_zooming.cpp */,
+				B681357E271F0745009CC0FC /* ae_zooming.h */,
+			);
+			path = zooming;
+			sourceTree = "<group>";
+		};
 		B634FDB7263C2C0B0096E69F /* presenters */ = {
 			isa = PBXGroup;
 			children = (
@@ -447,6 +465,7 @@
 			isa = PBXGroup;
 			children = (
 				B68C3E87270897B700888A53 /* action_controller */,
+				B62D8F9C2723AEBA00779D42 /* pinch_gesture_controller */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -456,8 +475,6 @@
 			children = (
 				B68C3E84270897AB00888A53 /* ae_action_controller.cpp */,
 				B68C3E83270897AB00888A53 /* ae_action_controller.h */,
-				B681357B271EF1FA009CC0FC /* ae_pinch_gesture_controller.cpp */,
-				B681357A271EF1FA009CC0FC /* ae_pinch_gesture_controller.h */,
 			);
 			path = action_controller;
 			sourceTree = "<group>";
@@ -471,8 +488,7 @@
 				B666CE4B26351D7900C1693D /* ae_project_url.h */,
 				B69CF55F262AC49C007A0A75 /* ae_project.cpp */,
 				B69CF560262AC49C007A0A75 /* ae_project.h */,
-				B681357E271F0745009CC0FC /* ae_zooming.h */,
-				B681357F271F0745009CC0FC /* ae_zooming.cpp */,
+				B62D8FA42723CE4D00779D42 /* zooming */,
 			);
 			path = project;
 			sourceTree = "<group>";

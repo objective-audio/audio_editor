@@ -12,7 +12,7 @@ class project;
 class pinch_gesture;
 
 struct pinch_gesture_controller {
-    static std::shared_ptr<pinch_gesture_controller> make_shared(std::string const &project_id);
+    [[nodiscard]] static std::shared_ptr<pinch_gesture_controller> make_shared(std::string const &project_id);
 
     void handle_gesture(pinch_gesture const &);
 
