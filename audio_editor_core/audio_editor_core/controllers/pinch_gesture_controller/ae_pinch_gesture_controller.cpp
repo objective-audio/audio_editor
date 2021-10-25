@@ -15,25 +15,25 @@ using namespace yas::ae;
 
 std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(std::string const &project_id) {
     auto const project = app::global()->project_pool()->project_for_id(project_id);
-    return std::shared_ptr<pinch_gesture_controller>(new pinch_gesture_controller{project});
+    return std::shared_ptr<pinch_gesture_controller>(new pinch_gesture_controller{project->zooming()});
 }
 
-pinch_gesture_controller::pinch_gesture_controller(std::shared_ptr<project> const &project) : _project(project) {
+pinch_gesture_controller::pinch_gesture_controller(std::shared_ptr<zooming> const &zooming) : _zooming(zooming) {
 }
 
 void pinch_gesture_controller::handle_gesture(pinch_gesture const &gesture) {
-    if (auto const project = this->_project.lock()) {
+    if (auto const zooming = this->_zooming.lock()) {
         switch (gesture.state) {
             case gesture_state::began:
-                project->zooming()->begin();
-                project->zooming()->set_magnification(gesture.magnification);
+                zooming->begin();
+                zooming->set_magnification(gesture.magnification);
                 break;
             case gesture_state::changed:
-                project->zooming()->set_magnification(gesture.magnification);
+                zooming->set_magnification(gesture.magnification);
                 break;
             case gesture_state::ended:
-                project->zooming()->set_magnification(gesture.magnification);
-                project->zooming()->end();
+                zooming->set_magnification(gesture.magnification);
+                zooming->end();
                 break;
         }
     }

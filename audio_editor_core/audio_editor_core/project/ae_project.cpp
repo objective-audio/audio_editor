@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_maker.h>
+#include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_zooming.h>
 #include <cpp_utils/yas_file_manager.h>
@@ -30,6 +31,7 @@ project::project(std::string const &identifier, url const &file_url,
       _player(player),
       _editor_maker(editor_maker),
       _zooming(zooming::make_shared()),
+      _scrolling(scrolling::make_shared()),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _file_info(observing::value::holder<std::optional<ae::file_info>>::make_shared(std::nullopt)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
@@ -83,6 +85,10 @@ std::shared_ptr<project_editor_for_project> const &project::editor() const {
 
 std::shared_ptr<zooming> const &project::zooming() const {
     return this->_zooming;
+}
+
+std::shared_ptr<scrolling> const &project::scrolling() const {
+    return this->_scrolling;
 }
 
 bool project::can_close() const {
@@ -264,6 +270,24 @@ void project::_setup(std::weak_ptr<project> weak) {
                  }
              }
          }});
+
+    this->_scrolling
+        ->observe([this](scrolling_event const &event) {
+            if (auto const &file_info_value = this->_file_info->value()) {
+                double const sample_rate = file_info_value.value().sample_rate;
+                double const current_time = static_cast<double>(this->_player->current_frame()) / sample_rate;
+                double const seek_time = current_time + event.delta_time;
+                auto const seek_frame = static_cast<int64_t>(seek_time * sample_rate);
+
+                this->_player->seek(seek_frame);
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
+
+    this->_player->observe_is_playing([this](auto const &is_playing) { this->_scrolling->set_enabled(!is_playing); })
+        .end()
+        ->add_to(this->_pool);
 }
 
 std::optional<proc::frame_index_t> project::_previous_edge() const {

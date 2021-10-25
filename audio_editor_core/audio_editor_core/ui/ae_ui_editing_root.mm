@@ -191,21 +191,7 @@ void ui_editing_root::_setup_observing() {
         ->observe([this](std::shared_ptr<ui::event> const &event) {
             if (event->type() == ui::event_type::pinch) {
                 auto const &pinch_event = event->get<ui::pinch>();
-
-                gesture_state const state = [&event] {
-                    switch (event->phase()) {
-                        case ui::event_phase::began:
-                            return gesture_state::began;
-                        case ui::event_phase::changed:
-                        case ui::event_phase::stationary:
-                            return gesture_state::changed;
-                        case ui::event_phase::ended:
-                        case ui::event_phase::canceled:
-                        case ui::event_phase::may_begin:
-                        case ui::event_phase::none:
-                            return gesture_state::ended;
-                    }
-                }();
+                gesture_state const state = to_gesture_state(event->phase());
 
                 this->_pinch_gesture_controller->handle_gesture(
                     pinch_gesture{.state = state, .magnification = pinch_event.magnification()});

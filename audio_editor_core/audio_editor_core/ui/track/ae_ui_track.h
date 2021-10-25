@@ -10,6 +10,7 @@ namespace yas::ae {
 class track_presenter;
 class ui_modules;
 class ui_markers;
+class scroll_gesture_controller;
 
 struct ui_track final {
     std::shared_ptr<ui::node> const node() const;
@@ -19,6 +20,9 @@ struct ui_track final {
 
    private:
     std::shared_ptr<track_presenter> const _presenter;
+    std::shared_ptr<scroll_gesture_controller> const _scroll_gesture_controller;
+
+    std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<ui::node> const _root_node;
     std::shared_ptr<ui::node> const _time_node;
     std::shared_ptr<ui_modules> const _modules;
@@ -27,6 +31,7 @@ struct ui_track final {
     observing::canceller_pool _pool;
 
     ui_track(std::shared_ptr<ui::standard> const &, std::shared_ptr<track_presenter> const &,
-             std::shared_ptr<ui_modules> const &, std::shared_ptr<ui_markers> const &);
+             std::shared_ptr<scroll_gesture_controller> const &, std::shared_ptr<ui_modules> const &,
+             std::shared_ptr<ui_markers> const &);
 };
 }  // namespace yas::ae
