@@ -23,15 +23,19 @@ struct player final : player_for_project, player_for_project_editor {
 
     [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
 
-    static std::shared_ptr<player> make_shared(url const &root_url, std::string const &identifier);
+    static std::shared_ptr<player> make_shared(url const &root_url, std::string const &identifier,
+                                               std::shared_ptr<scrolling_for_player> const &);
     static std::shared_ptr<player> make_shared(std::shared_ptr<playing::coordinator> const &,
-                                               std::string const &identifier);
+                                               std::string const &identifier,
+                                               std::shared_ptr<scrolling_for_player> const &);
 
    private:
     std::string const _identifier;
     std::shared_ptr<playing::coordinator> const _coordinator;
+    std::shared_ptr<scrolling_for_player> const _scrolling;
 
-    player(std::shared_ptr<playing::coordinator> const &, std::string const &identifier);
+    player(std::shared_ptr<playing::coordinator> const &, std::string const &identifier,
+           std::shared_ptr<scrolling_for_player> const &);
 
     player(player const &) = delete;
     player(player &&) = delete;

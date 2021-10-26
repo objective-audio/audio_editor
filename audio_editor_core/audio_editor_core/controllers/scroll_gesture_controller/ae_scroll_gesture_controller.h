@@ -4,8 +4,9 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
+
 #include <memory>
-#include <optional>
 
 namespace yas::ae {
 class scrolling;
@@ -17,8 +18,8 @@ struct scroll_gesture_controller {
     void handle_gesture(scroll_gesture const &);
 
    private:
-    std::weak_ptr<scrolling> const _scrolling;
+    std::weak_ptr<scrolling_for_gesture_controller> const _scrolling;
 
-    scroll_gesture_controller(std::shared_ptr<scrolling> const &);
+    scroll_gesture_controller(std::shared_ptr<scrolling_for_gesture_controller> const &);
 };
 }  // namespace yas::ae

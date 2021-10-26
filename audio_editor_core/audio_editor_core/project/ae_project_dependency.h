@@ -6,8 +6,10 @@
 
 #include <audio_editor_core/ae_file_importer_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_player_types.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
+#include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
 #include <cpp_utils/yas_url.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -66,5 +68,9 @@ struct project_editor_maker_for_project {
     virtual ~project_editor_maker_for_project() = default;
 
     [[nodiscard]] virtual std::shared_ptr<project_editor_for_project> make(url const &, file_info const &) const = 0;
+};
+
+struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_controller {
+    virtual ~scrolling_for_project() = default;
 };
 }  // namespace yas::ae

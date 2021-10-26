@@ -18,7 +18,7 @@ std::shared_ptr<scroll_gesture_controller> scroll_gesture_controller::make_share
     return std::shared_ptr<scroll_gesture_controller>(new scroll_gesture_controller{project->scrolling()});
 }
 
-scroll_gesture_controller::scroll_gesture_controller(std::shared_ptr<scrolling> const &scrolling)
+scroll_gesture_controller::scroll_gesture_controller(std::shared_ptr<scrolling_for_gesture_controller> const &scrolling)
     : _scrolling(scrolling) {
 }
 

@@ -22,7 +22,8 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<file_importer_for_project> const &file_importer,
                  std::shared_ptr<file_loader_for_project> const &file_loader,
                  std::shared_ptr<player_for_project> const &player,
-                 std::shared_ptr<project_editor_maker_for_project> const &editor_maker)
+                 std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
+                 std::shared_ptr<scrolling_for_project> const &scrolling)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),
@@ -31,7 +32,7 @@ project::project(std::string const &identifier, url const &file_url,
       _player(player),
       _editor_maker(editor_maker),
       _zooming(zooming::make_shared()),
-      _scrolling(scrolling::make_shared()),
+      _scrolling(scrolling),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _file_info(observing::value::holder<std::optional<ae::file_info>>::make_shared(std::nullopt)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
@@ -42,9 +43,10 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
     auto const project_url = project_url::make_shared(app->system_url()->project_directory(identifier));
     auto const file_importer = app->file_importer();
     auto const file_loader = app->file_loader();
-    auto const player = player::make_shared(app->system_url()->playing_directory(), identifier);
+    auto const scrolling = scrolling::make_shared();
+    auto const player = player::make_shared(app->system_url()->playing_directory(), identifier, scrolling);
     auto const editor_maker = project_editor_maker::make_shared(player);
-    return make_shared(identifier, file_url, project_url, file_importer, file_loader, player, editor_maker);
+    return make_shared(identifier, file_url, project_url, file_importer, file_loader, player, editor_maker, scrolling);
 }
 
 std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url,
@@ -52,9 +54,10 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
                                               std::shared_ptr<file_importer_for_project> const &file_importer,
                                               std::shared_ptr<file_loader_for_project> const &file_loader,
                                               std::shared_ptr<player_for_project> const &player,
-                                              std::shared_ptr<project_editor_maker_for_project> const &editor_maker) {
+                                              std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
+                                              std::shared_ptr<scrolling_for_project> const &scrolling) {
     auto shared = std::shared_ptr<project>(
-        new project{identifier, file_url, project_url, file_importer, file_loader, player, editor_maker});
+        new project{identifier, file_url, project_url, file_importer, file_loader, player, editor_maker, scrolling});
     shared->_setup(shared);
     return shared;
 }
@@ -87,7 +90,7 @@ std::shared_ptr<zooming> const &project::zooming() const {
     return this->_zooming;
 }
 
-std::shared_ptr<scrolling> const &project::scrolling() const {
+std::shared_ptr<scrolling_for_project> const &project::scrolling() const {
     return this->_scrolling;
 }
 
