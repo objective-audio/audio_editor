@@ -274,20 +274,6 @@ void project::_setup(std::weak_ptr<project> weak) {
              }
          }});
 
-    this->_scrolling
-        ->observe([this](scrolling_event const &event) {
-            if (auto const &file_info_value = this->_file_info->value()) {
-                double const sample_rate = file_info_value.value().sample_rate;
-                double const current_time = static_cast<double>(this->_player->current_frame()) / sample_rate;
-                double const seek_time = current_time + event.delta_time;
-                auto const seek_frame = static_cast<int64_t>(seek_time * sample_rate);
-
-                this->_player->seek(seek_frame);
-            }
-        })
-        .end()
-        ->add_to(this->_pool);
-
     this->_player->observe_is_playing([this](auto const &is_playing) { this->_scrolling->set_enabled(!is_playing); })
         .end()
         ->add_to(this->_pool);
