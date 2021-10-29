@@ -4,24 +4,21 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_scrolling_types.h>
-#include <observing/yas_observing_umbrella.h>
-
-#include <memory>
-#include <optional>
 
 namespace yas::ae {
-struct scrolling {
+struct scrolling final : scrolling_for_project {
     [[nodiscard]] static std::shared_ptr<scrolling> make_shared();
 
-    bool is_enabled() const;
-    void set_enabled(bool const);
+    [[nodiscard]] bool is_enabled() const override;
+    void set_enabled(bool const) override;
 
-    void begin();
-    void set_delta_time(double const);
-    void end();
+    void begin() override;
+    void set_delta_time(double const) override;
+    void end() override;
 
-    [[nodiscard]] observing::endable observe(std::function<void(scrolling_event const &)> &&);
+    [[nodiscard]] observing::endable observe(std::function<void(scrolling_event const &)> &&) override;
 
    private:
     observing::notifier_ptr<scrolling_event> const _notifier;

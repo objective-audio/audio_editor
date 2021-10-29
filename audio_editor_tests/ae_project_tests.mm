@@ -93,6 +93,25 @@ struct project_editor_maker_stub final : project_editor_maker_for_project {
         return std::make_shared<project_editor_stub>();
     }
 };
+
+struct scrolling_stub final : scrolling_for_project {
+    bool is_enabled() const override {
+        return false;
+    }
+    void set_enabled(bool const) override {
+    }
+
+    void begin() override {
+    }
+    void set_delta_time(double const) override {
+    }
+    void end() override {
+    }
+
+    observing::endable observe(std::function<void(scrolling_event const &)> &&) override {
+        return observing::endable{};
+    }
+};
 }
 
 @interface ae_project_tests : XCTestCase
@@ -116,6 +135,7 @@ struct project_editor_maker_stub final : project_editor_maker_for_project {
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
     auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
+    auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
 
     struct called_values {
         url src_url;
@@ -130,7 +150,7 @@ struct project_editor_maker_stub final : project_editor_maker_for_project {
     };
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, editor_maker);
+                                              player, editor_maker, scrolling);
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -146,12 +166,13 @@ struct project_editor_maker_stub final : project_editor_maker_for_project {
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
     auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
+    auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, editor_maker);
+                                              player, editor_maker, scrolling);
 
     std::vector<project_state> called;
 
@@ -196,12 +217,13 @@ struct project_editor_maker_stub final : project_editor_maker_for_project {
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
     auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
+    auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, editor_maker);
+                                              player, editor_maker, scrolling);
 
     std::vector<project_state> called;
 

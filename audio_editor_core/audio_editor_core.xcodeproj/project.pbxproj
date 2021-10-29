@@ -117,6 +117,7 @@
 		B6B9736127006FF500E1BD12 /* ae_ui_button_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B9735F27006FF500E1BD12 /* ae_ui_button_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6C3A58627102C9800514B94 /* ae_ui_modules.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C3A58427102C9800514B94 /* ae_ui_modules.h */; };
 		B6C3A58727102C9800514B94 /* ae_ui_modules.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C3A58527102C9800514B94 /* ae_ui_modules.mm */; };
+		B6C94C58272848800023A948 /* ae_scroll_gesture_controller_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C94C57272848800023A948 /* ae_scroll_gesture_controller_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6C9A727264047B100585FDF /* ae_player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6C9A725264047B100585FDF /* ae_player.cpp */; };
 		B6C9A728264047B100585FDF /* ae_player.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C9A726264047B100585FDF /* ae_player.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -248,6 +249,7 @@
 		B6B9735F27006FF500E1BD12 /* ae_ui_button_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_button_utils.h; sourceTree = "<group>"; };
 		B6C3A58427102C9800514B94 /* ae_ui_modules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_modules.h; sourceTree = "<group>"; };
 		B6C3A58527102C9800514B94 /* ae_ui_modules.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_modules.mm; sourceTree = "<group>"; };
+		B6C94C57272848800023A948 /* ae_scroll_gesture_controller_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_scroll_gesture_controller_dependency.h; sourceTree = "<group>"; };
 		B6C9A725264047B100585FDF /* ae_player.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_player.cpp; sourceTree = "<group>"; };
 		B6C9A726264047B100585FDF /* ae_player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_player.h; sourceTree = "<group>"; };
 		B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter_dependency.h; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 		B62D8F9D2723AEC900779D42 /* scroll_gesture_controller */ = {
 			isa = PBXGroup;
 			children = (
+				B6C94C57272848800023A948 /* ae_scroll_gesture_controller_dependency.h */,
 				B62D8F992723AEAE00779D42 /* ae_scroll_gesture_controller.cpp */,
 				B62D8F982723AEAE00779D42 /* ae_scroll_gesture_controller.h */,
 			);
@@ -670,6 +673,7 @@
 				B6B002B9263BC7320013E6D0 /* ae_file_loader.h in Headers */,
 				B68C3E752707F1F500888A53 /* ae_track_presenter.h in Headers */,
 				B668BE11262DD2FA0021AD20 /* ae_project_types.h in Headers */,
+				B6C94C58272848800023A948 /* ae_scroll_gesture_controller_dependency.h in Headers */,
 				B6EA40DF2641722600BF3D06 /* ae_project_editor.h in Headers */,
 				B666CE362634FC8300C1693D /* ae_uuid_generator.h in Headers */,
 				B6B002BF263BC8880013E6D0 /* ae_file_loader_types.h in Headers */,
