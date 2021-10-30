@@ -157,9 +157,8 @@ bool editing_root_presenter::is_zero_button_enabled() const {
 playing_line_state_t editing_root_presenter::playing_line_state() const {
     if (auto const project = this->_project.lock()) {
         auto const &player = project->player();
-#warning todo ドラッグ中にする
-        if (player->is_seeking()) {
-            return playing_line_state_t::dragging;
+        if (player->is_scrolling()) {
+            return playing_line_state_t::scrolling;
         } else if (player->is_playing()) {
             return playing_line_state_t::playing;
         }

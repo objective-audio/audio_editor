@@ -8,6 +8,6 @@ namespace yas::ae {
 enum playing_line_state_t {
     nothing,
     playing,
-    dragging,
+    scrolling,
 };
 }

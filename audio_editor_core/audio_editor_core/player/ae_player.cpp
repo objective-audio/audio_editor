@@ -63,8 +63,8 @@ void player::seek(frame_index_t const frame) {
     }
 }
 
-bool player::is_seeking() const {
-    return this->_coordinator->is_seeking();
+bool player::is_scrolling() const {
+    return this->_scrolling->is_began();
 }
 
 frame_index_t player::current_frame() const {

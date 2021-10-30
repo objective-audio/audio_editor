@@ -53,7 +53,7 @@ struct player_for_project {
 
     virtual void seek(frame_index_t const) = 0;
     virtual frame_index_t current_frame() const = 0;
-    virtual bool is_seeking() const = 0;
+    virtual bool is_scrolling() const = 0;
 
     [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;
 };
