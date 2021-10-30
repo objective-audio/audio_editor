@@ -24,6 +24,8 @@ struct scrolling_for_player {
     [[nodiscard]] virtual bool is_enabled() const = 0;
     virtual void set_enabled(bool const) = 0;
 
+    [[nodiscard]] virtual bool is_began() const = 0;
+
     [[nodiscard]] virtual observing::endable observe(std::function<void(scrolling_event const &)> &&) = 0;
 };
 }  // namespace yas::ae

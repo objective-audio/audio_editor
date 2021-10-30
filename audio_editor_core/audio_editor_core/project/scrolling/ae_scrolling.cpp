@@ -29,22 +29,26 @@ void scrolling::begin() {
     this->end();
 
     if (this->_is_enabled) {
-        this->_began = true;
+        this->_is_began = true;
         this->_notifier->notify({.state = scrolling_state::began, .delta_time = 0.0});
     }
 }
 
 void scrolling::set_delta_time(double const value) {
-    if (this->_began) {
+    if (this->_is_began) {
         this->_notifier->notify({.state = scrolling_state::changed, .delta_time = value});
     }
 }
 
 void scrolling::end() {
-    if (this->_began) {
-        this->_began = false;
+    if (this->_is_began) {
+        this->_is_began = false;
         this->_notifier->notify({.state = scrolling_state::ended, .delta_time = 0.0});
     }
+}
+
+bool scrolling::is_began() const {
+    return this->_is_began;
 }
 
 observing::endable scrolling::observe(std::function<void(scrolling_event const &)> &&handler) {
