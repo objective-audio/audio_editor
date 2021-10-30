@@ -127,14 +127,8 @@ void ui_editing_root::_setup_observing() {
 
     presenter
         ->observe_playing_line_state([this](auto const &state) {
-            switch (state) {
-                case editing_root_presenter::playing_line_state_t::playing:
-                    this->_playing_line->node()->set_color(ui::green_color());
-                    break;
-                case editing_root_presenter::playing_line_state_t::nothing:
-                    this->_playing_line->node()->set_color(ui::light_gray_color());
-                    break;
-            }
+            auto const color = ui_editing_root_utils::to_playing_line_color(state);
+            this->_playing_line->node()->set_color(color);
         })
         .sync()
         ->add_to(this->_pool);

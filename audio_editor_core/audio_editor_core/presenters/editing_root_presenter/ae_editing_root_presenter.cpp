@@ -154,7 +154,7 @@ bool editing_root_presenter::is_zero_button_enabled() const {
     return project ? project->can_return_to_zero() : false;
 }
 
-editing_root_presenter::playing_line_state_t editing_root_presenter::playing_line_state() const {
+playing_line_state_t editing_root_presenter::playing_line_state() const {
     if (auto const project = this->_project.lock()) {
         if (project->player()->is_playing()) {
             return playing_line_state_t::playing;

@@ -41,3 +41,14 @@ action ui_editing_root_utils::to_action(key const key) {
             return action::go_to_marker_9;
     }
 }
+
+ui::color ui_editing_root_utils::to_playing_line_color(playing_line_state_t const state) {
+    switch (state) {
+        case playing_line_state_t::playing:
+            return ui::green_color();
+        case playing_line_state_t::dragging:
+            return ui::orange_color();
+        case playing_line_state_t::nothing:
+            return ui::light_gray_color();
+    }
+}

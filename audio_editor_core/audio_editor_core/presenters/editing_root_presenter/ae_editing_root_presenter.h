@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
+#include <audio_editor_core/ae_editing_root_presenter_types.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
 #include <observing/yas_observing_umbrella.h>
@@ -39,11 +40,6 @@ struct editing_root_presenter final {
     [[nodiscard]] bool is_erase_and_offset_button_enabled() const;
     [[nodiscard]] bool is_insert_marker_button_enabled() const;
     [[nodiscard]] bool is_zero_button_enabled() const;
-
-    enum playing_line_state_t {
-        nothing,
-        playing,
-    };
 
     [[nodiscard]] playing_line_state_t playing_line_state() const;
 
