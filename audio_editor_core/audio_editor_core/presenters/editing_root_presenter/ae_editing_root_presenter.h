@@ -48,7 +48,6 @@ struct editing_root_presenter final {
     [[nodiscard]] observing::syncable observe_play_button_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_file_track_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_marker_pool_text(std::function<void(std::string const &)> &&);
-    [[nodiscard]] observing::syncable observe_playing_line_state(std::function<void(playing_line_state_t const &)> &&);
 
    private:
     std::weak_ptr<project> _project;

@@ -125,18 +125,13 @@ void ui_editing_root::_setup_observing() {
         .sync()
         ->add_to(this->_pool);
 
-    presenter
-        ->observe_playing_line_state([this](auto const &state) {
-            auto const color = ui_editing_root_utils::to_playing_line_color(state);
-            this->_playing_line->node()->set_color(color);
-        })
-        .sync()
-        ->add_to(this->_pool);
-
     this->_standard->renderer()
         ->observe_will_render([this](auto const &) {
             this->_player_strings->set_text(this->_presenter->player_text());
             this->_update_buttons_enabled();
+
+            this->_playing_line->node()->set_color(
+                ui_editing_root_utils::to_playing_line_color(this->_presenter->playing_line_state()));
         })
         .end()
         ->add_to(this->_pool);

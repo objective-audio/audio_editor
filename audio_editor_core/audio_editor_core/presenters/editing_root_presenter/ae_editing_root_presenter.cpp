@@ -156,7 +156,11 @@ bool editing_root_presenter::is_zero_button_enabled() const {
 
 playing_line_state_t editing_root_presenter::playing_line_state() const {
     if (auto const project = this->_project.lock()) {
-        if (project->player()->is_playing()) {
+        auto const &player = project->player();
+#warning todo ドラッグ中にする
+        if (player->is_seeking()) {
+            return playing_line_state_t::dragging;
+        } else if (player->is_playing()) {
             return playing_line_state_t::playing;
         }
     }
@@ -190,16 +194,6 @@ observing::syncable editing_root_presenter::observe_play_button_text(
         return project->player()->observe_is_playing([handler = std::move(handler)](bool const is_playing) {
             handler(editing_root_presenter_utils::play_button_text(is_playing));
         });
-    } else {
-        return observing::syncable{};
-    }
-}
-
-observing::syncable editing_root_presenter::observe_playing_line_state(
-    std::function<void(playing_line_state_t const &)> &&handler) {
-    if (auto const project = this->_project.lock()) {
-        return project->player()->observe_is_playing(
-            [handler = std::move(handler), this](bool const is_playing) { handler(this->playing_line_state()); });
     } else {
         return observing::syncable{};
     }
