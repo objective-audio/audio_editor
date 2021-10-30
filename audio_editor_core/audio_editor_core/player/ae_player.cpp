@@ -63,6 +63,10 @@ void player::seek(frame_index_t const frame) {
     }
 }
 
+bool player::is_seeking() const {
+    return this->_coordinator->is_seeking();
+}
+
 frame_index_t player::current_frame() const {
     if (this->_reserved_frame.has_value()) {
         return this->_reserved_frame.value();

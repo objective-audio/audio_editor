@@ -19,6 +19,7 @@ struct player final : player_for_project, player_for_project_editor {
     void set_playing(bool const) override;
     [[nodiscard]] bool is_playing() const override;
     void seek(frame_index_t const) override;
+    [[nodiscard]] bool is_seeking() const override;
     [[nodiscard]] frame_index_t current_frame() const override;
 
     [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
