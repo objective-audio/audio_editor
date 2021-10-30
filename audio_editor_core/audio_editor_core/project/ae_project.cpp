@@ -273,10 +273,6 @@ void project::_setup(std::weak_ptr<project> weak) {
                  }
              }
          }});
-
-    this->_player->observe_is_playing([this](auto const &is_playing) { this->_scrolling->set_enabled(!is_playing); })
-        .end()
-        ->add_to(this->_pool);
 }
 
 std::optional<proc::frame_index_t> project::_previous_edge() const {

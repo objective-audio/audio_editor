@@ -17,17 +17,18 @@ struct player final : player_for_project, player_for_project_editor {
                       audio::pcm_format const) override;
     void reset_timeline() override;
     void set_playing(bool const) override;
-    bool is_playing() const override;
+    [[nodiscard]] bool is_playing() const override;
     void seek(frame_index_t const) override;
-    frame_index_t current_frame() const override;
+    [[nodiscard]] bool is_scrolling() const override;
+    [[nodiscard]] frame_index_t current_frame() const override;
 
     [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
 
-    static std::shared_ptr<player> make_shared(url const &root_url, std::string const &identifier,
-                                               std::shared_ptr<scrolling_for_player> const &);
-    static std::shared_ptr<player> make_shared(std::shared_ptr<playing::coordinator> const &,
-                                               std::string const &identifier,
-                                               std::shared_ptr<scrolling_for_player> const &);
+    [[nodiscard]] static std::shared_ptr<player> make_shared(url const &root_url, std::string const &identifier,
+                                                             std::shared_ptr<scrolling_for_player> const &);
+    [[nodiscard]] static std::shared_ptr<player> make_shared(std::shared_ptr<playing::coordinator> const &,
+                                                             std::string const &identifier,
+                                                             std::shared_ptr<scrolling_for_player> const &);
 
    private:
     std::string const _identifier;

@@ -50,7 +50,6 @@ void player::reset_timeline() {
 
 void player::set_playing(bool const is_playing) {
     this->_coordinator->set_playing(is_playing);
-    this->_scrolling->set_enabled(!is_playing);
 }
 
 bool player::is_playing() const {
@@ -62,6 +61,10 @@ void player::seek(frame_index_t const frame) {
         this->_coordinator->seek(frame);
         this->_seeking_frame = frame;
     }
+}
+
+bool player::is_scrolling() const {
+    return this->_scrolling->is_began();
 }
 
 frame_index_t player::current_frame() const {

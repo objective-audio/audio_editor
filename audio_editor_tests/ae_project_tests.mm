@@ -70,6 +70,10 @@ struct player_stub final : player_for_project {
         return 0;
     }
 
+    bool is_scrolling() const override {
+        return false;
+    }
+
     observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override {
         return observing::syncable{};
     }
@@ -95,17 +99,14 @@ struct project_editor_maker_stub final : project_editor_maker_for_project {
 };
 
 struct scrolling_stub final : scrolling_for_project {
-    bool is_enabled() const override {
-        return false;
-    }
-    void set_enabled(bool const) override {
-    }
-
     void begin() override {
     }
     void set_delta_time(double const) override {
     }
     void end() override {
+    }
+    bool is_began() const override {
+        return false;
     }
 
     observing::endable observe(std::function<void(scrolling_event const &)> &&) override {

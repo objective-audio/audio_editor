@@ -21,8 +21,7 @@ class scrolling_event;
 struct scrolling_for_player {
     virtual ~scrolling_for_player() = default;
 
-    [[nodiscard]] virtual bool is_enabled() const = 0;
-    virtual void set_enabled(bool const) = 0;
+    [[nodiscard]] virtual bool is_began() const = 0;
 
     [[nodiscard]] virtual observing::endable observe(std::function<void(scrolling_event const &)> &&) = 0;
 };
