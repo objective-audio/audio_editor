@@ -50,7 +50,6 @@ void player::reset_timeline() {
 
 void player::set_playing(bool const is_playing) {
     this->_coordinator->set_playing(is_playing);
-    this->_scrolling->set_enabled(!is_playing);
 }
 
 bool player::is_playing() const {
