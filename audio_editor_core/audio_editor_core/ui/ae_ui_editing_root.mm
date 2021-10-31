@@ -40,9 +40,12 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _jump_previous_button(ui_button::make_shared(this->_font_atlas, standard)),
       _jump_next_button(ui_button::make_shared(this->_font_atlas, standard)),
       _insert_marker_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _undo_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _redo_button(ui_button::make_shared(this->_font_atlas, standard)),
       _buttons({this->_play_button, this->_split_button, this->_drop_head_and_offset_button,
                 this->_drop_tail_and_offset_button, this->_erase_and_offset_button, this->_zero_button,
-                this->_jump_previous_button, this->_jump_next_button, this->_insert_marker_button}),
+                this->_jump_previous_button, this->_jump_next_button, this->_insert_marker_button, this->_undo_button,
+                this->_redo_button}),
       _button_collection_layout(ui::collection_layout::make_shared({.preferred_cell_count = this->_buttons.size(),
                                                                     .row_spacing = 1.0f,
                                                                     .col_spacing = 1.0f,
@@ -70,6 +73,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
     this->_jump_previous_button->set_text("jump\nprev");
     this->_jump_next_button->set_text("jump\nnext");
     this->_insert_marker_button->set_text("insert\nmarker");
+    this->_undo_button->set_text("undo");
+    this->_redo_button->set_text("redo");
 
     this->_setup_node_hierarchie();
     this->_setup_observing();
@@ -90,6 +95,8 @@ void ui_editing_root::_setup_node_hierarchie() {
     root_node->add_sub_node(this->_jump_previous_button->node());
     root_node->add_sub_node(this->_jump_next_button->node());
     root_node->add_sub_node(this->_insert_marker_button->node());
+    root_node->add_sub_node(this->_undo_button->node());
+    root_node->add_sub_node(this->_redo_button->node());
 
     root_node->add_sub_node(this->_status_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
@@ -166,6 +173,12 @@ void ui_editing_root::_setup_observing() {
         ->add_to(this->_pool);
     this->_insert_marker_button
         ->observe_tapped([this] { this->_action_controller->handle_action(action::insert_marker); })
+        .end()
+        ->add_to(this->_pool);
+    this->_undo_button->observe_tapped([this] { this->_action_controller->handle_action(action::undo); })
+        .end()
+        ->add_to(this->_pool);
+    this->_redo_button->observe_tapped([this] { this->_action_controller->handle_action(action::redo); })
         .end()
         ->add_to(this->_pool);
 
@@ -324,6 +337,8 @@ void ui_editing_root::_update_buttons_enabled() {
     this->_erase_and_offset_button->set_enabled(presenter->is_erase_and_offset_button_enabled());
     this->_insert_marker_button->set_enabled(presenter->is_insert_marker_button_enabled());
     this->_zero_button->set_enabled(presenter->is_zero_button_enabled());
+    this->_undo_button->set_enabled(presenter->is_undo_button_enabled());
+    this->_redo_button->set_enabled(presenter->is_redo_button_enabled());
 }
 
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::shared_ptr<ui::standard> const &standard,

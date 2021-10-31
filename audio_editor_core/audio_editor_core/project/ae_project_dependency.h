@@ -26,6 +26,7 @@ struct project_url_for_project {
     [[nodiscard]] virtual url const &root_directory() const = 0;
     [[nodiscard]] virtual url editing_file() const = 0;
     [[nodiscard]] virtual url playing_directory() const = 0;
+    [[nodiscard]] virtual url db_file() const = 0;
 };
 
 struct file_importer_for_project {
@@ -63,12 +64,15 @@ struct project_editor_for_project {
 
     [[nodiscard]] virtual std::shared_ptr<file_track_for_project_editor> const &file_track() const = 0;
     [[nodiscard]] virtual std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<database_for_project_editor> const &database() const = 0;
 };
 
 struct project_editor_maker_for_project {
     virtual ~project_editor_maker_for_project() = default;
 
-    [[nodiscard]] virtual std::shared_ptr<project_editor_for_project> make(url const &, file_info const &) const = 0;
+    [[nodiscard]] virtual std::shared_ptr<project_editor_for_project> make(url const &editing_file_url,
+                                                                           url const &db_file_url,
+                                                                           file_info const &) const = 0;
 };
 
 struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_controller {

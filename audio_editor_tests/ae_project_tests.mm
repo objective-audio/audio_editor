@@ -14,6 +14,7 @@ struct project_url_stub final : project_url_for_project {
     url root_directory_value{url::file_url("/test/root")};
     url editing_file_value{url::file_url("/test/root/editing.caf")};
     url playing_directory_value{url::file_url("/test/root/playing")};
+    url db_file_value{url::file_url("/test/root/db.sqlite")};
 
     url const &root_directory() const override {
         return this->root_directory_value;
@@ -25,6 +26,10 @@ struct project_url_stub final : project_url_for_project {
 
     url playing_directory() const override {
         return this->playing_directory_value;
+    }
+
+    url db_file() const override {
+        return this->db_file_value;
     }
 
     static std::shared_ptr<project_url_stub> make_shared() {
@@ -82,6 +87,7 @@ struct player_stub final : player_for_project {
 struct project_editor_stub final : project_editor_for_project {
     std::shared_ptr<file_track_for_project_editor> file_track_value = nullptr;
     std::shared_ptr<marker_pool_for_project_editor> marker_pool_value = nullptr;
+    std::shared_ptr<database_for_project_editor> database_value = nullptr;
 
     std::shared_ptr<file_track_for_project_editor> const &file_track() const override {
         return this->file_track_value;
@@ -90,10 +96,15 @@ struct project_editor_stub final : project_editor_for_project {
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const override {
         return this->marker_pool_value;
     }
+
+    std::shared_ptr<database_for_project_editor> const &database() const override {
+        return this->database_value;
+    }
 };
 
 struct project_editor_maker_stub final : project_editor_maker_for_project {
-    [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &, file_info const &) const override {
+    [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &, url const &,
+                                                                   file_info const &) const override {
         return std::make_shared<project_editor_stub>();
     }
 };

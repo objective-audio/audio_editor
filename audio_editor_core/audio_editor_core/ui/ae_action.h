@@ -26,5 +26,7 @@ enum class action {
     go_to_marker_7,
     go_to_marker_8,
     go_to_marker_9,
+    undo,
+    redo,
 };
 }  // namespace yas::ae

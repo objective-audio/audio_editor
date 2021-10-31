@@ -41,6 +41,8 @@ struct ui_editing_root final {
     std::shared_ptr<ui_button> const _jump_previous_button;
     std::shared_ptr<ui_button> const _jump_next_button;
     std::shared_ptr<ui_button> const _insert_marker_button;
+    std::shared_ptr<ui_button> const _undo_button;
+    std::shared_ptr<ui_button> const _redo_button;
     std::vector<std::shared_ptr<ui_button>> const _buttons;
     std::shared_ptr<ui::collection_layout> const _button_collection_layout;
     std::shared_ptr<ui::strings> const _status_strings;

@@ -39,3 +39,8 @@ std::optional<file_module> file_module::tail_dropped(proc::frame_index_t const f
 file_module file_module::offset(proc::frame_index_t const offset) const {
     return file_module{.range = this->range.offset(offset), .file_frame = this->file_frame};
 }
+
+std::string yas::to_string(ae::file_module const &file_module) {
+    return std::string{"{file_frame:" + std::to_string(file_module.file_frame) +
+                       ", range:" + to_string(file_module.range) + "}"};
+}

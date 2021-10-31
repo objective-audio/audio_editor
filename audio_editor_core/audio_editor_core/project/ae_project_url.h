@@ -11,6 +11,7 @@ struct project_url final : project_url_for_project {
     url const &root_directory() const override;
     url editing_file() const override;
     url playing_directory() const override;
+    url db_file() const override;
 
     static std::shared_ptr<project_url> make_shared(url const &root);
 

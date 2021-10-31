@@ -22,6 +22,10 @@ url project_url::playing_directory() const {
     return this->_root.appending("playing");
 }
 
+url project_url::db_file() const {
+    return this->_root.appending("db.sqlite");
+}
+
 std::shared_ptr<project_url> project_url::make_shared(url const &root) {
     return std::shared_ptr<project_url>(new project_url{root});
 }

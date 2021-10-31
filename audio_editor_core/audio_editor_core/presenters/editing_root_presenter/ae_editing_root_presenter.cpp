@@ -154,6 +154,16 @@ bool editing_root_presenter::is_zero_button_enabled() const {
     return project ? project->can_return_to_zero() : false;
 }
 
+bool editing_root_presenter::is_undo_button_enabled() const {
+    auto const project = this->_project.lock();
+    return project->editor()->database()->can_undo();
+}
+
+bool editing_root_presenter::is_redo_button_enabled() const {
+    auto const project = this->_project.lock();
+    return project->editor()->database()->can_redo();
+}
+
 playing_line_state_t editing_root_presenter::playing_line_state() const {
     if (auto const project = this->_project.lock()) {
         auto const &player = project->player();

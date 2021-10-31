@@ -86,5 +86,11 @@ void action_controller::handle_action(action const action) {
         case action::go_to_marker_9:
             project->go_to_marker(8);
             break;
+        case action::undo:
+            project->undo();
+            break;
+        case action::redo:
+            project->redo();
+            break;
     }
 }

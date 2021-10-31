@@ -19,9 +19,9 @@ file_track_module_map_t const &file_track::modules() const {
     return this->_modules;
 }
 
-void file_track::replace_modules_and_notify(std::vector<file_module> &&modules) {
+void file_track::revert_modules_and_notify(std::vector<file_module> &&modules) {
     this->_modules = to_map<proc::time::range>(modules, [](file_module const &module) { return module.range; });
-    this->_event_fetcher->push({.type = file_track_event_type::any, .modules = this->_modules});
+    this->_event_fetcher->push({.type = file_track_event_type::reverted, .modules = this->_modules});
 }
 
 void file_track::insert_module_and_notify(file_module const &module) {
