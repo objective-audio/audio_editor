@@ -59,6 +59,12 @@ struct project final {
     [[nodiscard]] bool can_go_to_marker(std::size_t const) const;
     void go_to_marker(std::size_t const);
 
+    [[nodiscard]] bool can_undo() const;
+    void undo();
+
+    [[nodiscard]] bool can_redo() const;
+    void redo();
+
     [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&);
     [[nodiscard]] observing::syncable observe_file_info(std::function<void(std::optional<ae::file_info>)> &&);
     [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);

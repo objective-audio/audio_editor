@@ -226,6 +226,34 @@ void project::go_to_marker(std::size_t const marker_idx) {
     }
 }
 
+bool project::can_undo() const {
+    if (auto const &editor = this->_editor) {
+        return editor->database()->can_undo();
+    } else {
+        return false;
+    }
+}
+
+void project::undo() {
+    if (auto const &editor = this->_editor) {
+        editor->database()->undo();
+    }
+}
+
+bool project::can_redo() const {
+    if (auto const &editor = this->_editor) {
+        return editor->database()->can_redo();
+    } else {
+        return false;
+    }
+}
+
+void project::redo() {
+    if (auto const &editor = this->_editor) {
+        editor->database()->redo();
+    }
+}
+
 observing::syncable project::observe_state(std::function<void(project_state const &)> &&handler) {
     return this->_state->observe(std::move(handler));
 }
@@ -251,11 +279,12 @@ void project::_setup(std::weak_ptr<project> weak) {
                  switch (state) {
                      case project_state::loading: {
                          if (result) {
-                             auto const dst_url = project->_project_url->editing_file();
-                             project->_file_info->set_value(project->_file_loader->load_file_info(dst_url));
+                             auto const &project_url = project->_project_url;
+                             auto const editing_file_url = project_url->editing_file();
+                             project->_file_info->set_value(project->_file_loader->load_file_info(editing_file_url));
                              if (project->_file_info->value().has_value()) {
-                                 project->_editor =
-                                     project->_editor_maker->make(dst_url, project->_file_info->value().value());
+                                 project->_editor = project->_editor_maker->make(
+                                     editing_file_url, project_url->db_file(), project->_file_info->value().value());
                                  project->_state->set_value(project_state::editing);
                              } else {
                                  project->_state->set_value(project_state::failure);

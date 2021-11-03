@@ -75,6 +75,11 @@ bool root_presenter::responds_to_action(action const action) {
             return project->can_go_to_marker(7);
         case action::go_to_marker_9:
             return project->can_go_to_marker(8);
+
+        case action::undo:
+            return project->can_undo();
+        case action::redo:
+            return project->can_redo();
     }
 }
 

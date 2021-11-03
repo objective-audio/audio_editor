@@ -11,28 +11,32 @@ namespace yas::ae {
 struct project_editor final : project_editor_for_project {
     [[nodiscard]] std::shared_ptr<file_track_for_project_editor> const &file_track() const override;
     [[nodiscard]] std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const override;
+    [[nodiscard]] std::shared_ptr<database_for_project_editor> const &database() const override;
 
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
-        url const &, file_info const &, std::shared_ptr<player_for_project_editor> const &);
+        url const &editing_file_url, url const &db_url, file_info const &,
+        std::shared_ptr<player_for_project_editor> const &);
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
-        url const &, file_info const &, std::shared_ptr<player_for_project_editor> const &,
-        std::shared_ptr<file_track_for_project_editor> const &,
-        std::shared_ptr<marker_pool_for_project_editor> const &);
+        url const &editing_file_url, file_info const &, std::shared_ptr<player_for_project_editor> const &,
+        std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
+        std::shared_ptr<database_for_project_editor> const &);
 
    private:
-    url const _url;
+    url const _editing_file_url;
     file_info const _file_info;
     std::shared_ptr<player_for_project_editor> const _player;
     std::shared_ptr<file_track_for_project_editor> const _file_track;
     std::shared_ptr<marker_pool_for_project_editor> const _marker_pool;
+    std::shared_ptr<database_for_project_editor> const _database;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
     observing::canceller_pool _pool;
 
-    project_editor(url const &, file_info const &, std::shared_ptr<player_for_project_editor> const &,
+    project_editor(url const &editing_file_url, file_info const &, std::shared_ptr<player_for_project_editor> const &,
                    std::shared_ptr<file_track_for_project_editor> const &,
-                   std::shared_ptr<marker_pool_for_project_editor> const &);
+                   std::shared_ptr<marker_pool_for_project_editor> const &,
+                   std::shared_ptr<database_for_project_editor> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

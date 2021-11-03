@@ -7,6 +7,8 @@
 #include <processing/yas_processing_common_types.h>
 #include <processing/yas_processing_time.h>
 
+#include <string>
+
 namespace yas::ae {
 struct file_module {
     proc::time::range range;
@@ -20,3 +22,7 @@ struct file_module {
     file_module offset(proc::frame_index_t const) const;
 };
 }  // namespace yas::ae
+
+namespace yas {
+std::string to_string(ae::file_module const &);
+}

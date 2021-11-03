@@ -9,7 +9,8 @@
 
 namespace yas::ae {
 struct project_editor_maker final : project_editor_maker_for_project {
-    [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &, file_info const &) const override;
+    [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &editing_file_url, url const &db_file_url,
+                                                                   file_info const &) const override;
 
     static std::shared_ptr<project_editor_maker> make_shared(std::shared_ptr<player_for_project_editor> const &);
 

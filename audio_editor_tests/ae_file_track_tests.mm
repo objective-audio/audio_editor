@@ -55,7 +55,7 @@ using namespace yas::ae;
     file_module const module1{.range = {0, 4}, .file_frame = 0};
     file_module const module2{.range = {5, 3}, .file_frame = 5};
 
-    track->replace_modules_and_notify({module1, module2});
+    track->revert_modules_and_notify({module1, module2});
 
     XCTAssertEqual(track->modules().size(), 2);
 
@@ -79,7 +79,7 @@ using namespace yas::ae;
     file_module const module1{.range = {0, 4}, .file_frame = 0};
     file_module const module2{.range = {7, 5}, .file_frame = 7};
 
-    track->replace_modules_and_notify({module1, module2});
+    track->revert_modules_and_notify({module1, module2});
 
     auto canceller =
         track
@@ -109,6 +109,13 @@ using namespace yas::ae;
     XCTAssertEqual(called.at(2).modules.size(), 2);
     XCTAssertEqual(called.at(2).module, module1);
 
+    track->revert_modules_and_notify({module2});
+
+    XCTAssertEqual(called.size(), 4);
+    XCTAssertEqual(called.at(3).type, file_track_event_type::reverted);
+    XCTAssertEqual(called.at(3).modules.size(), 1);
+    XCTAssertEqual(called.at(3).module, std::nullopt);
+
     canceller->cancel();
 }
 
@@ -119,7 +126,7 @@ using namespace yas::ae;
     file_module const module2{.range = {1, 2}, .file_frame = 1};
     file_module const module3{.range = {4, 3}, .file_frame = 4};
 
-    track->replace_modules_and_notify({module1, module2, module3});
+    track->revert_modules_and_notify({module1, module2, module3});
 
     XCTAssertEqual(track->module_at(-1), std::nullopt);
     XCTAssertEqual(track->module_at(0), (file_module{.range = {0, 1}, .file_frame = 0}));
@@ -139,7 +146,7 @@ using namespace yas::ae;
     file_module const module2{.range = {1, 2}, .file_frame = 1};
     file_module const module3{.range = {4, 3}, .file_frame = 4};
 
-    track->replace_modules_and_notify({module1, module2, module3});
+    track->revert_modules_and_notify({module1, module2, module3});
 
     XCTAssertEqual(track->previous_module_at(-1), std::nullopt);
     XCTAssertEqual(track->previous_module_at(0), std::nullopt);
@@ -159,7 +166,7 @@ using namespace yas::ae;
     file_module const module2{.range = {1, 2}, .file_frame = 1};
     file_module const module3{.range = {4, 3}, .file_frame = 4};
 
-    track->replace_modules_and_notify({module1, module2, module3});
+    track->revert_modules_and_notify({module1, module2, module3});
 
     XCTAssertEqual(track->next_module_at(-1), (file_module{.range = {0, 1}, .file_frame = 0}));
     XCTAssertEqual(track->next_module_at(0), (file_module{.range = {1, 2}, .file_frame = 1}));
@@ -180,7 +187,7 @@ using namespace yas::ae;
     file_module const module3{.range = {3, 3}, .file_frame = 3};
     file_module const module4{.range = {7, 2}, .file_frame = 7};
 
-    track->replace_modules_and_notify({module1, module2, module3, module4});
+    track->revert_modules_and_notify({module1, module2, module3, module4});
 
     XCTAssertFalse(track->splittable_module_at(-1));
     XCTAssertFalse(track->splittable_module_at(0));
@@ -200,7 +207,7 @@ using namespace yas::ae;
 
     file_module const src_module{.range = {0, 8}, .file_frame = 0};
 
-    track->replace_modules_and_notify({src_module});
+    track->revert_modules_and_notify({src_module});
 
     track->split_at(-1);
     track->split_at(0);
@@ -231,7 +238,7 @@ using namespace yas::ae;
 - (void)test_erase_at {
     auto const track = file_track::make_shared();
 
-    track->replace_modules_and_notify(
+    track->revert_modules_and_notify(
         {{.range = {0, 2}, .file_frame = 0}, {.range = {2, 2}, .file_frame = 2}, {.range = {4, 2}, .file_frame = 4}});
 
     XCTAssertEqual(track->modules().size(), 3);
@@ -248,7 +255,7 @@ using namespace yas::ae;
 - (void)test_erase_and_offset_at {
     auto const track = file_track::make_shared();
 
-    track->replace_modules_and_notify(
+    track->revert_modules_and_notify(
         {{.range = {0, 2}, .file_frame = 0}, {.range = {2, 2}, .file_frame = 2}, {.range = {4, 2}, .file_frame = 4}});
 
     XCTAssertEqual(track->modules().size(), 3);
@@ -267,7 +274,7 @@ using namespace yas::ae;
 
     file_module const src_module{.range = {10, 4}, .file_frame = 100};
 
-    track->replace_modules_and_notify({src_module});
+    track->revert_modules_and_notify({src_module});
 
     track->drop_head_at(9);
     track->drop_head_at(10);
@@ -289,7 +296,7 @@ using namespace yas::ae;
 
     file_module const src_module{.range = {10, 4}, .file_frame = 100};
 
-    track->replace_modules_and_notify({src_module});
+    track->revert_modules_and_notify({src_module});
 
     track->drop_tail_at(9);
     track->drop_tail_at(10);
@@ -313,7 +320,7 @@ using namespace yas::ae;
     file_module const module2{.range = {1, 2}, .file_frame = 1};
     file_module const module3{.range = {4, 3}, .file_frame = 4};
 
-    track->replace_modules_and_notify({module1, module2, module3});
+    track->revert_modules_and_notify({module1, module2, module3});
 
     track->drop_head_and_offset_at(2);
 
@@ -331,7 +338,7 @@ using namespace yas::ae;
     file_module const module2{.range = {1, 2}, .file_frame = 1};
     file_module const module3{.range = {4, 3}, .file_frame = 4};
 
-    track->replace_modules_and_notify({module1, module2, module3});
+    track->revert_modules_and_notify({module1, module2, module3});
 
     track->drop_tail_and_offset_at(2);
 
@@ -347,7 +354,7 @@ using namespace yas::ae;
 
     file_module const module1{.range = {0, 4}, .file_frame = 0};
 
-    track->replace_modules_and_notify({module1});
+    track->revert_modules_and_notify({module1});
 
     track->overwrite_module({.range = {1, 2}, .file_frame = 100});
 
@@ -364,7 +371,7 @@ using namespace yas::ae;
     file_module const module1{.range = {0, 3}, .file_frame = 0};
     file_module const module2{.range = {3, 3}, .file_frame = 3};
 
-    track->replace_modules_and_notify({module1, module2});
+    track->revert_modules_and_notify({module1, module2});
 
     track->overwrite_module({.range = {2, 2}, .file_frame = 200});
 
@@ -380,7 +387,7 @@ using namespace yas::ae;
 
     file_module const module1{.range = {0, 1}, .file_frame = 0};
 
-    track->replace_modules_and_notify({module1});
+    track->revert_modules_and_notify({module1});
 
     track->move_modules({{0, 1}}, 1);
 
@@ -402,7 +409,7 @@ using namespace yas::ae;
     file_module const module2{.range = {1, 1}, .file_frame = 1};
     file_module const module3{.range = {2, 1}, .file_frame = 2};
 
-    track->replace_modules_and_notify({module1, module2, module3});
+    track->revert_modules_and_notify({module1, module2, module3});
 
     track->move_modules({{1, 1}, {2, 1}}, 1);
 
@@ -421,7 +428,7 @@ using namespace yas::ae;
     file_module const module1{.range = {0, 4}, .file_frame = 0};
     file_module const module2{.range = {4, 2}, .file_frame = 4};
 
-    track->replace_modules_and_notify({module1, module2});
+    track->revert_modules_and_notify({module1, module2});
 
     XCTAssertEqual(track->modules().size(), 2);
 

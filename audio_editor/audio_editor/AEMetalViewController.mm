@@ -107,6 +107,14 @@ using namespace yas::ae;
     self->_ui_root->handle_action(action::go_to_marker_9);
 }
 
+- (IBAction)undo:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::undo);
+}
+
+- (IBAction)redo:(NSMenuItem *)sender {
+    self->_ui_root->handle_action(action::redo);
+}
+
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -158,6 +166,10 @@ using namespace yas::ae;
         return action::go_to_marker_8;
     } else if (selector == @selector(goToMarker9:)) {
         return action::go_to_marker_9;
+    } else if (selector == @selector(undo:)) {
+        return action::undo;
+    } else if (selector == @selector(redo:)) {
+        return action::redo;
     }
 
     return std::nullopt;
@@ -205,6 +217,10 @@ using namespace yas::ae;
             return @selector(goToMarker8:);
         case action::go_to_marker_9:
             return @selector(goToMarker9:);
+        case action::undo:
+            return @selector(undo:);
+        case action::redo:
+            return @selector(redo:);
     }
 }
 

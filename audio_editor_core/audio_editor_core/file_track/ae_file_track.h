@@ -12,7 +12,7 @@ namespace yas::ae {
 struct file_track final : file_track_for_project_editor {
     [[nodiscard]] file_track_module_map_t const &modules() const override;
 
-    void replace_modules_and_notify(std::vector<file_module> &&) override;
+    void revert_modules_and_notify(std::vector<file_module> &&) override;
     void insert_module_and_notify(file_module const &) override;
     void erase_module_and_notify(file_module const &) override;
 
