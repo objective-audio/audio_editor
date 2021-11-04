@@ -95,6 +95,6 @@ struct database_for_project_editor {
     [[nodiscard]] virtual bool can_redo() const = 0;
     virtual void redo() = 0;
 
-    [[nodiscard]] virtual observing::endable observe_reverted(std::function<void(std::nullptr_t const &)> &&) = 0;
+    [[nodiscard]] virtual observing::endable observe_reverted(std::function<void(void)> &&) = 0;
 };
 }  // namespace yas::ae

@@ -105,8 +105,8 @@ void database::redo() {
     this->_revert(this->_current_save_id() + 1);
 }
 
-observing::endable database::observe_reverted(std::function<void(std::nullptr_t const &)> &&handler) {
-    return this->_reverted_notifier->observe(std::move(handler));
+observing::endable database::observe_reverted(std::function<void(void)> &&handler) {
+    return this->_reverted_notifier->observe([handler = std::move(handler)](auto const &) { handler(); });
 }
 
 void database::_setup(std::weak_ptr<database> weak_db) {
