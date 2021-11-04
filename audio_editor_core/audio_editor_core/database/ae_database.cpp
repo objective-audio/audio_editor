@@ -25,7 +25,15 @@ std::shared_ptr<database> database::make_shared(std::shared_ptr<db::manager> con
 }
 
 database::database(std::shared_ptr<db::manager> const &manager)
-    : _manager(manager), _reverted_notifier(observing::notifier<db_modules_map>::make_shared()) {
+    : _manager(manager), _reverted_notifier(observing::notifier<std::nullptr_t>::make_shared()) {
+}
+
+db_modules_map const &database::modules() const {
+    return this->_modules;
+}
+
+db_markers_map const &database::markers() const {
+    return this->_markers;
 }
 
 bool database::is_processing() const {
@@ -37,9 +45,20 @@ void database::add_module(file_module const &file_module) {
 }
 
 void database::remove_module(proc::time::range const &range) {
-    if (this->_modules.count(range)) {
+    if (this->_modules.contains(range)) {
         this->_modules.at(range).remove();
         this->_modules.erase(range);
+    }
+}
+
+void database::add_marker(marker const &marker) {
+    this->_markers.emplace(marker.frame, db_marker::create(this->_manager, marker));
+}
+
+void database::remove_marker(proc::frame_index_t const &frame) {
+    if (this->_markers.contains(frame)) {
+        this->_markers.at(frame).remove();
+        this->_markers.erase(frame);
     }
 }
 
@@ -86,7 +105,7 @@ void database::redo() {
     this->_revert(this->_current_save_id() + 1);
 }
 
-observing::endable database::observe_reverted(std::function<void(db_modules_map const &)> &&handler) {
+observing::endable database::observe_reverted(std::function<void(std::nullptr_t const &)> &&handler) {
     return this->_reverted_notifier->observe(std::move(handler));
 }
 
@@ -126,6 +145,8 @@ void database::_revert(db::integer::type const revert_id) {
 
     this->_increment_processing_count();
 
+    this->_manager->suspend();
+
     this->_manager->revert(
         db::no_cancellation, [revert_id]() { return revert_id; }, [](db::manager_vector_result_t result) {});
 
@@ -137,28 +158,69 @@ void database::_revert(db::integer::type const revert_id) {
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
         [weak_db = this->_weak_database](db::manager_vector_result_t result) mutable {
+            assert(thread::is_main());
+
             auto const database = weak_db.lock();
-            if (database) {
-                if (result) {
-                    auto const &result_objects = result.value();
+            if (database && result) {
+                auto const &result_objects = result.value();
 
-                    db_modules_map modules;
+                db_modules_map modules;
 
-                    if (result_objects.contains(db_constants::module::entity_name)) {
-                        auto const &objects = result_objects.at(db_constants::module::entity_name);
-                        for (auto const &object : objects) {
-                            db_module module{object};
-                            if (auto const file_module = module.file_module()) {
-                                modules.emplace(file_module.value().range, std::move(module));
-                            }
+                if (result_objects.contains(db_constants::module::entity_name)) {
+                    auto const &objects = result_objects.at(db_constants::module::entity_name);
+                    for (auto const &object : objects) {
+                        db_module module{object};
+                        if (auto const file_module = module.file_module()) {
+                            modules.emplace(file_module.value().range, std::move(module));
                         }
                     }
-
-                    database->_modules = std::move(modules);
-                    database->_reverted_notifier->notify(database->_modules);
                 }
 
+                database->_modules = std::move(modules);
+            }
+        });
+
+    this->_manager->fetch_objects(
+        db::no_cancellation,
+        [] {
+            return db::to_fetch_option(
+                db::select_option{.table = db_constants::marker::entity_name,
+                                  .field_orders = {{db::object_id_field, db::order::ascending}}});
+        },
+        [weak_db = this->_weak_database](db::manager_vector_result_t result) mutable {
+            assert(thread::is_main());
+
+            auto const database = weak_db.lock();
+            if (database && result) {
+                auto const &result_objects = result.value();
+
+                db_markers_map markers;
+
+                if (result_objects.contains(db_constants::marker::entity_name)) {
+                    auto const &objects = result_objects.at(db_constants::marker::entity_name);
+                    for (auto const &object : objects) {
+                        db_marker db_marker{object};
+                        if (auto const marker = db_marker.marker()) {
+                            markers.emplace(marker.value().frame, std::move(db_marker));
+                        }
+                    }
+                }
+
+                database->_markers = std::move(markers);
+            }
+        });
+
+    this->_manager->execute(db::no_cancellation, [weak_db = this->_weak_database](auto const &) {
+        assert(!thread::is_main());
+
+        thread::perform_sync_on_main([weak_db] {
+            auto const database = weak_db.lock();
+            if (database) {
+                database->_reverted_notifier->notify();
                 database->_decrement_processing_count();
             }
         });
+    });
+
+    this->_manager->resume();
 }

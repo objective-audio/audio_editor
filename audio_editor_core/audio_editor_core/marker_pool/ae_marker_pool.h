@@ -10,7 +10,7 @@
 
 namespace yas::ae {
 struct marker_pool : marker_pool_for_project_editor {
-    void replace_markers(std::vector<marker> &&) override;
+    void revert_markers(std::vector<marker> &&) override;
     void insert_marker(marker const &) override;
     void erase_at(proc::frame_index_t const) override;
     void erase_marker(marker const &) override;
@@ -27,6 +27,8 @@ struct marker_pool : marker_pool_for_project_editor {
 
    private:
     observing::map::holder_ptr<proc::frame_index_t, marker> const _markers;
+    observing::fetcher_ptr<marker_pool_event> _fetcher;
+    observing::canceller_pool _pool;
 
     marker_pool();
 };

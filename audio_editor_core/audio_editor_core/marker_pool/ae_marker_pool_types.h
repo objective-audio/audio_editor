@@ -16,6 +16,7 @@ static marker_map_t const empty_markers;
 
 enum class marker_pool_event_type {
     any,
+    reverted,
     inserted,
     erased,
 };

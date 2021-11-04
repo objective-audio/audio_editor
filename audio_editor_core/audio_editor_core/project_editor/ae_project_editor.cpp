@@ -86,17 +86,53 @@ project_editor::project_editor(url const &editing_file_url, file_info const &fil
         .sync()
         ->add_to(this->_pool);
 
+    this->_marker_pool
+        ->observe_event([this](marker_pool_event const &event) {
+            switch (event.type) {
+                case marker_pool_event_type::any:
+                    if (event.markers.size() > 0) {
+                        for (auto const &pair : event.markers) {
+                            this->_database->add_marker(pair.second);
+                        }
+                        this->_database->save();
+                    }
+                    break;
+                case marker_pool_event_type::reverted:
+                    break;
+                case marker_pool_event_type::inserted:
+                    this->_database->add_marker(event.marker.value());
+                    this->_database->save();
+                    break;
+                case marker_pool_event_type::erased:
+                    this->_database->remove_marker(event.marker.value().frame);
+                    this->_database->save();
+                    break;
+            }
+        })
+        .sync()
+        ->add_to(this->_pool);
+
     this->_database
-        ->observe_reverted([this](db_modules_map const &db_modules) {
+        ->observe_reverted([this](auto const &) {
             std::vector<file_module> file_modules;
 
-            for (auto const &pair : db_modules) {
+            for (auto const &pair : this->_database->modules()) {
                 if (auto file_module = pair.second.file_module()) {
                     file_modules.emplace_back(std::move(file_module.value()));
                 }
             }
 
             this->_file_track->revert_modules_and_notify(std::move(file_modules));
+
+            std::vector<marker> markers;
+
+            for (auto const &pair : this->_database->markers()) {
+                if (auto const marker = pair.second.marker()) {
+                    markers.emplace_back(std::move(marker.value()));
+                }
+            }
+
+            this->_marker_pool->revert_markers(std::move(markers));
         })
         .end()
         ->add_to(this->_pool);

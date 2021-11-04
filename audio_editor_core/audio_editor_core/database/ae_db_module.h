@@ -19,6 +19,6 @@ struct db_module {
     void remove();
 
    private:
-    db::object_ptr _object;
+    db::object_ptr const _object;
 };
 }  // namespace yas::ae

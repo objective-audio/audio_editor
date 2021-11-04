@@ -20,10 +20,10 @@ using namespace yas::ae;
     XCTAssertEqual(pool->markers().size(), 0);
 }
 
-- (void)test_replace {
+- (void)test_revert {
     auto const pool = marker_pool::make_shared();
 
-    pool->replace_markers({{.frame = 0}, {.frame = 1}, {.frame = -1}});
+    pool->revert_markers({{.frame = 0}, {.frame = 1}, {.frame = -1}});
 
     XCTAssertEqual(pool->markers().size(), 3);
 
@@ -55,7 +55,7 @@ using namespace yas::ae;
 - (void)test_erase_at {
     auto const pool = marker_pool::make_shared();
 
-    pool->replace_markers({{.frame = 0}, {.frame = 1}, {.frame = -1}});
+    pool->revert_markers({{.frame = 0}, {.frame = 1}, {.frame = -1}});
 
     pool->erase_at(0);
 
@@ -67,7 +67,7 @@ using namespace yas::ae;
 - (void)test_observe {
     auto const pool = marker_pool::make_shared();
 
-    pool->replace_markers({{.frame = 0}, {.frame = 1}});
+    pool->revert_markers({{.frame = 0}, {.frame = 1}});
 
     std::vector<marker_pool_event> called;
 
