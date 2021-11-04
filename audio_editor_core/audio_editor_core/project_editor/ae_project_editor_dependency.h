@@ -64,7 +64,7 @@ struct file_track_for_project_editor {
 struct marker_pool_for_project_editor {
     virtual ~marker_pool_for_project_editor() = default;
 
-    virtual void replace_markers(std::vector<marker> &&) = 0;
+    virtual void revert_markers(std::vector<marker> &&) = 0;
     virtual void insert_marker(marker const &) = 0;
     virtual void erase_at(proc::frame_index_t const) = 0;
     virtual void erase_marker(marker const &) = 0;
@@ -81,8 +81,13 @@ struct marker_pool_for_project_editor {
 struct database_for_project_editor {
     virtual ~database_for_project_editor() = default;
 
+    [[nodiscard]] virtual db_modules_map const &modules() const = 0;
+    [[nodiscard]] virtual db_markers_map const &markers() const = 0;
+
     virtual void add_module(file_module const &) = 0;
     virtual void remove_module(proc::time::range const &) = 0;
+    virtual void add_marker(marker const &) = 0;
+    virtual void remove_marker(proc::frame_index_t const &) = 0;
     virtual void save() = 0;
 
     [[nodiscard]] virtual bool can_undo() const = 0;
@@ -90,6 +95,6 @@ struct database_for_project_editor {
     [[nodiscard]] virtual bool can_redo() const = 0;
     virtual void redo() = 0;
 
-    [[nodiscard]] virtual observing::endable observe_reverted(std::function<void(db_modules_map const &)> &&) = 0;
+    [[nodiscard]] virtual observing::endable observe_reverted(std::function<void(std::nullptr_t const &)> &&) = 0;
 };
 }  // namespace yas::ae

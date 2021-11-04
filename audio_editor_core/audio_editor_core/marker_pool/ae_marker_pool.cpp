@@ -12,7 +12,7 @@ using namespace yas::ae;
 marker_pool::marker_pool() : _markers(observing::map::holder<proc::frame_index_t, marker>::make_shared()) {
 }
 
-void marker_pool::replace_markers(std::vector<marker> &&markers) {
+void marker_pool::revert_markers(std::vector<marker> &&markers) {
     this->_markers->replace(
         to_map<proc::frame_index_t>(std::move(markers), [](auto const &marker) { return marker.frame; }));
 }
@@ -68,27 +68,44 @@ std::optional<proc::frame_index_t> marker_pool::previous_edge(proc::frame_index_
 }
 
 observing::syncable marker_pool::observe_event(std::function<void(marker_pool_event const &)> &&handler) {
-    return this->_markers->observe([handler = std::move(handler)](auto const &event) {
-        switch (event.type) {
-            case observing::map::event_type::any:
-                handler(marker_pool_event{.type = marker_pool_event_type::any, .markers = event.elements});
-                break;
-            case observing::map::event_type::inserted:
-                handler(marker_pool_event{
-                    .type = marker_pool_event_type::inserted, .marker = *event.inserted, .markers = event.elements});
-                break;
-            case observing::map::event_type::erased:
-                handler(marker_pool_event{
-                    .type = marker_pool_event_type::erased, .marker = *event.erased, .markers = event.elements});
-                break;
-            case observing::map::event_type::replaced:
-                handler(marker_pool_event{
-                    .type = marker_pool_event_type::erased, .marker = *event.erased, .markers = event.elements});
-                handler(marker_pool_event{
-                    .type = marker_pool_event_type::inserted, .marker = *event.inserted, .markers = event.elements});
-                break;
-        }
-    });
+    if (!this->_fetcher) {
+        this->_fetcher = observing::fetcher<marker_pool_event>::make_shared([this] {
+            return marker_pool_event{.type = marker_pool_event_type::any, .markers = this->_markers->elements()};
+        });
+
+        this->_markers
+            ->observe([this](auto const &event) {
+                switch (event.type) {
+                    case observing::map::event_type::any:
+                        this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::reverted,
+                                                               .marker = std::nullopt,
+                                                               .markers = event.elements});
+                        break;
+                    case observing::map::event_type::inserted:
+                        this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::inserted,
+                                                               .marker = *event.inserted,
+                                                               .markers = event.elements});
+                        break;
+                    case observing::map::event_type::erased:
+                        this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::erased,
+                                                               .marker = *event.erased,
+                                                               .markers = event.elements});
+                        break;
+                    case observing::map::event_type::replaced:
+                        this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::erased,
+                                                               .marker = *event.erased,
+                                                               .markers = event.elements});
+                        this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::inserted,
+                                                               .marker = *event.inserted,
+                                                               .markers = event.elements});
+                        break;
+                }
+            })
+            .end()
+            ->add_to(this->_pool);
+    }
+
+    return this->_fetcher->observe(std::move(handler));
 }
 
 std::shared_ptr<marker_pool> marker_pool::make_shared() {
