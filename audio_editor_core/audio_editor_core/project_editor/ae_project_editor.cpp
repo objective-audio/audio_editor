@@ -113,7 +113,7 @@ project_editor::project_editor(url const &editing_file_url, file_info const &fil
         ->add_to(this->_pool);
 
     this->_database
-        ->observe_reverted([this](auto const &) {
+        ->observe_reverted([this] {
             std::vector<file_module> file_modules;
 
             for (auto const &pair : this->_database->modules()) {

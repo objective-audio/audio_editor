@@ -35,7 +35,7 @@ struct database final : database_for_project_editor {
     [[nodiscard]] bool can_redo() const override;
     void redo() override;
 
-    [[nodiscard]] observing::endable observe_reverted(std::function<void(std::nullptr_t const &)> &&) override;
+    [[nodiscard]] observing::endable observe_reverted(std::function<void(void)> &&) override;
 
    private:
     std::weak_ptr<database> _weak_database;
