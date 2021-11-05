@@ -8,11 +8,11 @@
 #include <memory>
 
 namespace yas::ae {
-class project;
+class project_for_window_presenter;
 
 struct window_presenter final {
     static std::shared_ptr<window_presenter> make_shared(std::string const &project_id);
-    static std::shared_ptr<window_presenter> make_shared(std::shared_ptr<project> const &);
+    static std::shared_ptr<window_presenter> make_shared(std::shared_ptr<project_for_window_presenter> const &);
 
     std::string const &project_id() const;
     std::string title() const;
@@ -20,9 +20,9 @@ struct window_presenter final {
     bool should_close();
 
    private:
-    std::shared_ptr<project> _project;
+    std::shared_ptr<project_for_window_presenter> _project;
 
-    window_presenter(std::shared_ptr<project> const &);
+    window_presenter(std::shared_ptr<project_for_window_presenter> const &);
 
     window_presenter(window_presenter const &) = delete;
     window_presenter(window_presenter &&) = delete;

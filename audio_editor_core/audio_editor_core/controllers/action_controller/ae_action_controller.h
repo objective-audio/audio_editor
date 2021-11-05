@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
+#include <audio_editor_core/ae_action_controller_dependency.h>
 
 #include <memory>
 
@@ -17,8 +18,8 @@ struct action_controller {
     void handle_action(action const);
 
    private:
-    std::weak_ptr<project> const _project;
+    std::weak_ptr<project_editor_for_action_controller> const _project_editor;
 
-    action_controller(std::shared_ptr<project> const &);
+    action_controller(std::shared_ptr<project_editor_for_action_controller> const &);
 };
 }  // namespace yas::ae

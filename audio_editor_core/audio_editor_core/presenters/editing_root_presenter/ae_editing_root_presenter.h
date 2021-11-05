@@ -15,12 +15,15 @@
 #include <memory>
 
 namespace yas::ae {
-class project;
+class project_for_editing_root_presenter;
+class project_editor_for_editing_root_presenter;
 enum class project_state;
 
 struct editing_root_presenter final {
     [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(std::string const &project_id);
-    [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(std::shared_ptr<project> const &);
+    [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(
+        std::shared_ptr<project_for_editing_root_presenter> const &,
+        std::shared_ptr<project_editor_for_editing_root_presenter> const &);
 
     [[nodiscard]] std::string const &project_id() const;
     [[nodiscard]] std::string state_text() const;
@@ -46,18 +49,21 @@ struct editing_root_presenter final {
     [[nodiscard]] playing_line_state_t playing_line_state() const;
 
     [[nodiscard]] observing::syncable observe_state_text(std::function<void(std::string const &)> &&);
-    [[nodiscard]] observing::syncable observe_file_info_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_play_button_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_file_track_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_marker_pool_text(std::function<void(std::string const &)> &&);
 
+    [[nodiscard]] bool responds_to_action(action const);
+
    private:
-    std::weak_ptr<project> _project;
+    std::weak_ptr<project_for_editing_root_presenter> _project;
+    std::weak_ptr<project_editor_for_editing_root_presenter> _project_editor;
     observing::fetcher_ptr<file_track_event> const _file_track_event_fetcher;
     observing::fetcher_ptr<marker_pool_event> const _marker_pool_event_fetcher;
     observing::canceller_pool _pool;
 
-    editing_root_presenter(std::shared_ptr<project> const &);
+    editing_root_presenter(std::shared_ptr<project_for_editing_root_presenter> const &,
+                           std::shared_ptr<project_editor_for_editing_root_presenter> const &);
 
     editing_root_presenter(editing_root_presenter const &) = delete;
     editing_root_presenter(editing_root_presenter &&) = delete;
