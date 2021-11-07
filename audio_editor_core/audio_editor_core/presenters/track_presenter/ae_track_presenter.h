@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_marker_location.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_module_location.h>
-#include <observing/yas_observing_umbrella.h>
+#include <audio_editor_core/ae_track_presenter_dependency.h>
 
 namespace yas::ae {
 class project;

@@ -10,10 +10,12 @@
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_markers_presenter_dependency.h>
 #include <audio_editor_core/ae_modules_presenter_dependency.h>
+#include <audio_editor_core/ae_pinch_gesture_controller_dependency.h>
 #include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_player_types.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
+#include <audio_editor_core/ae_track_presenter_dependency.h>
 #include <cpp_utils/yas_url.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -67,5 +69,9 @@ struct project_editor_maker_for_project {
 
 struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_controller {
     virtual ~scrolling_for_project() = default;
+};
+
+struct zooming_for_project : zooming_for_track_presenter, zooming_for_pinch_gesture_controller {
+    virtual ~zooming_for_project() = default;
 };
 }  // namespace yas::ae

@@ -15,13 +15,11 @@ class zooming;
 
 struct project final : project_for_window_presenter, project_for_editing_root_presenter {
     [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url);
-    [[nodiscard]] static std::shared_ptr<project> make_shared(std::string const &identifier, url const &file_url,
-                                                              std::shared_ptr<project_url_for_project> const &,
-                                                              std::shared_ptr<file_importer_for_project> const &,
-                                                              std::shared_ptr<file_loader_for_project> const &,
-                                                              std::shared_ptr<player_for_project> const &,
-                                                              std::shared_ptr<project_editor_maker_for_project> const &,
-                                                              std::shared_ptr<scrolling_for_project> const &);
+    [[nodiscard]] static std::shared_ptr<project> make_shared(
+        std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
+        std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
+        std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &,
+        std::shared_ptr<zooming_for_project> const &, std::shared_ptr<scrolling_for_project> const &);
 
     [[nodiscard]] std::string const &identifier() const override;
     [[nodiscard]] url const &file_url() const override;
@@ -29,7 +27,7 @@ struct project final : project_for_window_presenter, project_for_editing_root_pr
     [[nodiscard]] std::optional<ae::file_info> const &file_info() const override;
     [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
     [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const;
-    [[nodiscard]] std::shared_ptr<zooming> const &zooming() const;
+    [[nodiscard]] std::shared_ptr<zooming_for_project> const &zooming() const;
     [[nodiscard]] std::shared_ptr<scrolling_for_project> const &scrolling() const;
 
     [[nodiscard]] bool can_close() const override;
@@ -49,7 +47,7 @@ struct project final : project_for_window_presenter, project_for_editing_root_pr
     std::shared_ptr<player_for_project> const _player;
     std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
     std::shared_ptr<project_editor_for_project> _editor = nullptr;
-    std::shared_ptr<ae::zooming> const _zooming;
+    std::shared_ptr<zooming_for_project> const _zooming;
     std::shared_ptr<scrolling_for_project> const _scrolling;
 
     observing::value::holder_ptr<project_state> const _state;
@@ -61,7 +59,7 @@ struct project final : project_for_window_presenter, project_for_editing_root_pr
     project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
             std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
             std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &,
-            std::shared_ptr<scrolling_for_project> const &);
+            std::shared_ptr<zooming_for_project> const &, std::shared_ptr<scrolling_for_project> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;
