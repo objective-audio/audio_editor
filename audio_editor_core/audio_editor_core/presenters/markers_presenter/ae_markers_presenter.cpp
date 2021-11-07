@@ -17,11 +17,11 @@ std::shared_ptr<markers_presenter> markers_presenter::make_shared(std::string co
 }
 
 std::shared_ptr<markers_presenter> markers_presenter::make_shared(
-    std::shared_ptr<project_editor_for_project> const &editor) {
+    std::shared_ptr<project_editor_for_markers_presenter> const &editor) {
     return std::shared_ptr<markers_presenter>(new markers_presenter{editor});
 }
 
-markers_presenter::markers_presenter(std::shared_ptr<project_editor_for_project> const &editor)
+markers_presenter::markers_presenter(std::shared_ptr<project_editor_for_markers_presenter> const &editor)
     : _project_editor(editor) {
 }
 
