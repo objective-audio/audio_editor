@@ -17,11 +17,11 @@ std::shared_ptr<modules_presenter> modules_presenter::make_shared(std::string co
 }
 
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(
-    std::shared_ptr<project_editor_for_project> const &editor) {
+    std::shared_ptr<project_editor_for_modules_presenter> const &editor) {
     return std::shared_ptr<modules_presenter>(new modules_presenter{editor});
 }
 
-modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_project> const &editor)
+modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_presenter> const &editor)
     : _project_editor(editor) {
 }
 

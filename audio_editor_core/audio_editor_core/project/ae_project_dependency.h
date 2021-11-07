@@ -8,6 +8,8 @@
 #include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_file_importer_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_markers_presenter_dependency.h>
+#include <audio_editor_core/ae_modules_presenter_dependency.h>
 #include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_player_types.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
@@ -48,7 +50,10 @@ struct player_for_project {
     virtual frame_index_t current_frame() const = 0;
 };
 
-struct project_editor_for_project : project_editor_for_editing_root_presenter, project_editor_for_action_controller {
+struct project_editor_for_project : project_editor_for_editing_root_presenter,
+                                    project_editor_for_action_controller,
+                                    project_editor_for_markers_presenter,
+                                    project_editor_for_modules_presenter {
     virtual ~project_editor_for_project() = default;
 };
 

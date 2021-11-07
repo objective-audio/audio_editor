@@ -29,7 +29,7 @@ void marker_pool::erase_marker(marker const &marker) {
     this->erase_at(marker.frame);
 }
 
-std::map<proc::frame_index_t, marker> const &marker_pool::markers() const {
+marker_map_t const &marker_pool::markers() const {
     return this->_markers->elements();
 }
 
