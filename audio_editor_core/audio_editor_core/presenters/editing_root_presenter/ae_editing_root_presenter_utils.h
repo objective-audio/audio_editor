@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
 #include <audio_editor_core/ae_player_types.h>
@@ -23,6 +24,8 @@ std::string marker_pool_text(marker_map_t const &);
 int after_point_digits(uint32_t const sample_rate);
 std::string time_text(int64_t const frame, uint32_t const sample_rate);
 
-observing::fetcher_ptr<file_track_event> make_file_track_fetcher(std::shared_ptr<project> const &);
-observing::fetcher_ptr<marker_pool_event> make_marker_pool_fetcher(std::shared_ptr<project> const &);
+observing::fetcher_ptr<file_track_event> make_file_track_fetcher(
+    std::shared_ptr<project_editor_for_editing_root_presenter> const &);
+observing::fetcher_ptr<marker_pool_event> make_marker_pool_fetcher(
+    std::shared_ptr<project_editor_for_editing_root_presenter> const &);
 }  // namespace yas::ae::editing_root_presenter_utils

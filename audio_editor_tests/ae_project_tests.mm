@@ -61,44 +61,110 @@ struct file_loader_stub final : file_loader_for_project {
 };
 
 struct player_stub final : player_for_project {
-    void set_playing(bool const) override {
-    }
-
-    bool is_playing() const override {
-        return false;
-    }
-
-    void seek(frame_index_t const) override {
-    }
-
     frame_index_t current_frame() const override {
         return 0;
     }
+};
 
+struct project_editor_stub final : project_editor_for_project {
+    ae::file_info const &file_info() const override {
+        static ae::file_info info;
+        return info;
+    }
+
+    proc::frame_index_t current_frame() const override {
+        return 0;
+    }
+    bool is_playing() const override {
+        return false;
+    }
     bool is_scrolling() const override {
         return false;
+    }
+
+    bool can_nudge() const override {
+        return false;
+    }
+    bool can_jump_to_previous_edge() const override {
+        return false;
+    }
+    bool can_jump_to_next_edge() const override {
+        return false;
+    }
+    bool can_split() const override {
+        return false;
+    }
+    bool can_erase() const override {
+        return false;
+    }
+    bool can_insert_marker() const override {
+        return false;
+    }
+    bool can_return_to_zero() const override {
+        return false;
+    }
+    bool can_go_to_marker(std::size_t const) const override {
+        return false;
+    }
+    bool can_undo() const override {
+        return false;
+    }
+    bool can_redo() const override {
+        return false;
+    }
+
+    std::optional<proc::frame_index_t> previous_edge() const override {
+        return std::nullopt;
+    }
+    std::optional<proc::frame_index_t> next_edge() const override {
+        return std::nullopt;
+    }
+
+    std::map<proc::frame_index_t, marker> const &markers() const override {
+        return ae::empty_markers;
+    }
+    file_track_module_map_t const &modules() const override {
+        return ae::empty_file_track_modules;
     }
 
     observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override {
         return observing::syncable{};
     }
-};
-
-struct project_editor_stub final : project_editor_for_project {
-    std::shared_ptr<file_track_for_project_editor> file_track_value = nullptr;
-    std::shared_ptr<marker_pool_for_project_editor> marker_pool_value = nullptr;
-    std::shared_ptr<database_for_project_editor> database_value = nullptr;
-
-    std::shared_ptr<file_track_for_project_editor> const &file_track() const override {
-        return this->file_track_value;
+    observing::syncable observe_file_track_event(std::function<void(file_track_event const &)> &&) override {
+        return observing::syncable{};
+    }
+    observing::syncable observe_marker_pool_event(std::function<void(marker_pool_event const &)> &&) override {
+        return observing::syncable{};
     }
 
-    std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const override {
-        return this->marker_pool_value;
+    void set_playing(bool const) override {
     }
 
-    std::shared_ptr<database_for_project_editor> const &database() const override {
-        return this->database_value;
+    void nudge_previous() override {
+    }
+    void nudge_next() override {
+    }
+    void jump_to_previous_edge() override {
+    }
+    void jump_to_next_edge() override {
+    }
+    void split() override {
+    }
+    void drop_head_and_offset() override {
+    }
+    void drop_tail_and_offset() override {
+    }
+    void erase_and_offset() override {
+    }
+    void insert_marker() override {
+    }
+    void return_to_zero() override {
+    }
+    void go_to_marker(std::size_t const) override {
+    }
+    void undo() override {
+    }
+    void redo() override {
     }
 };
 

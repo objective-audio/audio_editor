@@ -65,6 +65,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _playing_line(ui::rect_plane::make_shared(1)) {
     standard->view_look()->background()->set_color({.v = 0.2f});
 
+    this->_file_info_strings->set_text(presenter->file_info_text());
+
     this->_split_button->set_text("split");
     this->_drop_head_and_offset_button->set_text("drop\nhead");
     this->_drop_tail_and_offset_button->set_text("drop\ntail");
@@ -79,6 +81,14 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
     this->_setup_node_hierarchie();
     this->_setup_observing();
     this->_setup_layout();
+}
+
+bool ui_editing_root::responds_to_action(action const action) {
+    return this->_presenter->responds_to_action(action);
+}
+
+void ui_editing_root::handle_action(action const action) {
+    this->_action_controller->handle_action(action);
 }
 
 void ui_editing_root::_setup_node_hierarchie() {
@@ -111,10 +121,6 @@ void ui_editing_root::_setup_observing() {
     auto const &presenter = this->_presenter;
 
     presenter->observe_state_text([this](std::string const &string) { this->_status_strings->set_text(string); })
-        .sync()
-        ->add_to(this->_pool);
-
-    presenter->observe_file_info_text([this](std::string const &string) { this->_file_info_strings->set_text(string); })
         .sync()
         ->add_to(this->_pool);
 

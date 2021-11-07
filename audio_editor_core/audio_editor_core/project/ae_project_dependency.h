@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_action_controller_dependency.h>
+#include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_file_importer_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_player_dependency.h>
@@ -12,8 +14,6 @@
 #include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
 #include <cpp_utils/yas_url.h>
 #include <observing/yas_observing_umbrella.h>
-
-#include <optional>
 
 namespace yas::proc {
 class timeline;
@@ -45,26 +45,11 @@ struct file_loader_for_project {
 struct player_for_project {
     virtual ~player_for_project() = default;
 
-    virtual void set_playing(bool const) = 0;
-    virtual bool is_playing() const = 0;
-
-    void toggle_playing() {
-        this->set_playing(!this->is_playing());
-    }
-
-    virtual void seek(frame_index_t const) = 0;
     virtual frame_index_t current_frame() const = 0;
-    virtual bool is_scrolling() const = 0;
-
-    [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;
 };
 
-struct project_editor_for_project {
+struct project_editor_for_project : project_editor_for_editing_root_presenter, project_editor_for_action_controller {
     virtual ~project_editor_for_project() = default;
-
-    [[nodiscard]] virtual std::shared_ptr<file_track_for_project_editor> const &file_track() const = 0;
-    [[nodiscard]] virtual std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const = 0;
-    [[nodiscard]] virtual std::shared_ptr<database_for_project_editor> const &database() const = 0;
 };
 
 struct project_editor_maker_for_project {

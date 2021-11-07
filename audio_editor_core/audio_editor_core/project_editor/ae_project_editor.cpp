@@ -16,7 +16,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-project_editor::project_editor(url const &editing_file_url, file_info const &file_info,
+project_editor::project_editor(url const &editing_file_url, ae::file_info const &file_info,
                                std::shared_ptr<player_for_project_editor> const &player,
                                std::shared_ptr<file_track_for_project_editor> const &file_track,
                                std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
@@ -140,6 +140,14 @@ project_editor::project_editor(url const &editing_file_url, file_info const &fil
     this->_file_track->insert_module_and_notify(file_module{proc::time::range{0, file_info.length}, 0});
 }
 
+ae::file_info const &project_editor::file_info() const {
+    return this->_file_info;
+}
+
+std::shared_ptr<player_for_project_editor> const &project_editor::player() const {
+    return this->_player;
+}
+
 std::shared_ptr<file_track_for_project_editor> const &project_editor::file_track() const {
     return this->_file_track;
 }
@@ -152,15 +160,208 @@ std::shared_ptr<database_for_project_editor> const &project_editor::database() c
     return this->_database;
 }
 
+proc::frame_index_t project_editor::current_frame() const {
+    return this->_player->current_frame();
+}
+
+void project_editor::set_playing(bool const is_playing) {
+    this->_player->set_playing(is_playing);
+}
+
+bool project_editor::is_playing() const {
+    return this->_player->is_playing();
+}
+
+bool project_editor::is_scrolling() const {
+    return this->_player->is_scrolling();
+}
+
+bool project_editor::can_nudge() const {
+    return !this->_player->is_playing();
+}
+
+void project_editor::nudge_previous() {
+    if (!this->can_nudge()) {
+        return;
+    }
+
+    frame_index_t const current_frame = this->_player->current_frame();
+    this->_player->seek(current_frame - 1);
+}
+
+void project_editor::nudge_next() {
+    if (!this->can_nudge()) {
+        return;
+    }
+
+    frame_index_t const current_frame = this->_player->current_frame();
+    this->_player->seek(current_frame + 1);
+}
+
+bool project_editor::can_jump_to_previous_edge() const {
+    return this->previous_edge().has_value();
+}
+
+bool project_editor::can_jump_to_next_edge() const {
+    return this->next_edge().has_value();
+}
+
+void project_editor::jump_to_previous_edge() {
+    if (auto const edge = this->previous_edge()) {
+        this->_player->seek(edge.value());
+    }
+}
+
+void project_editor::jump_to_next_edge() {
+    if (auto const edge = this->next_edge()) {
+        this->_player->seek(edge.value());
+    }
+}
+
+bool project_editor::can_split() const {
+    auto const &file_track = this->file_track();
+    auto const current_frame = this->_player->current_frame();
+    return file_track->splittable_module_at(current_frame).has_value();
+}
+
+void project_editor::split() {
+    auto const current_frame = this->_player->current_frame();
+    this->file_track()->split_at(current_frame);
+}
+
+void project_editor::drop_head_and_offset() {
+    auto const current_frame = this->_player->current_frame();
+    this->file_track()->drop_head_and_offset_at(current_frame);
+}
+
+void project_editor::drop_tail_and_offset() {
+    auto const current_frame = this->_player->current_frame();
+    this->file_track()->drop_tail_and_offset_at(current_frame);
+}
+
+bool project_editor::can_erase() const {
+    auto const current_frame = this->_player->current_frame();
+    return this->file_track()->module_at(current_frame).has_value();
+}
+
+void project_editor::erase_and_offset() {
+    auto const current_frame = this->_player->current_frame();
+    this->file_track()->erase_and_offset_at(current_frame);
+}
+
+bool project_editor::can_insert_marker() const {
+    auto const current_frame = this->_player->current_frame();
+    return this->marker_pool()->markers().count(current_frame) == 0;
+}
+
+void project_editor::insert_marker() {
+    auto const current_frame = this->_player->current_frame();
+    this->marker_pool()->insert_marker(marker{.frame = current_frame});
+}
+
+bool project_editor::can_return_to_zero() const {
+    return this->_player->current_frame() != 0;
+}
+
+void project_editor::return_to_zero() {
+    this->_player->seek(0);
+}
+
+bool project_editor::can_go_to_marker(std::size_t const marker_idx) const {
+    auto const &marker_pool = this->marker_pool();
+    if (auto const marker = marker_pool->marker_at(marker_idx)) {
+        return this->_player->current_frame() != marker->frame;
+    } else {
+        return false;
+    }
+}
+
+void project_editor::go_to_marker(std::size_t const marker_idx) {
+    auto const &marker_pool = this->marker_pool();
+    if (auto const marker = marker_pool->marker_at(marker_idx)) {
+        this->_player->seek(marker->frame);
+    }
+}
+
+bool project_editor::can_undo() const {
+    return this->database()->can_undo();
+}
+
+void project_editor::undo() {
+    this->database()->undo();
+}
+
+bool project_editor::can_redo() const {
+    return this->database()->can_redo();
+}
+
+void project_editor::redo() {
+    this->database()->redo();
+}
+
+std::optional<proc::frame_index_t> project_editor::previous_edge() const {
+    frame_index_t const current_frame = this->_player->current_frame();
+    auto const file_track_edge = this->_file_track->previous_edge(current_frame);
+    auto const marker_pool_edge = this->_marker_pool->previous_edge(current_frame);
+
+    if (file_track_edge.has_value() && marker_pool_edge.has_value()) {
+        return std::max(file_track_edge.value(), marker_pool_edge.value());
+    } else if (file_track_edge.has_value()) {
+        return file_track_edge.value();
+    } else if (marker_pool_edge.has_value()) {
+        return marker_pool_edge.value();
+    } else {
+        return std::nullopt;
+    }
+}
+
+std::optional<proc::frame_index_t> project_editor::next_edge() const {
+    frame_index_t const current_frame = this->_player->current_frame();
+    auto const file_track_edge = this->file_track()->next_edge(current_frame);
+    auto const marker_pool_edge = this->marker_pool()->next_edge(current_frame);
+
+    if (file_track_edge.has_value() && marker_pool_edge.has_value()) {
+        return std::min(file_track_edge.value(), marker_pool_edge.value());
+    } else if (file_track_edge.has_value()) {
+        return file_track_edge.value();
+    } else if (marker_pool_edge.has_value()) {
+        return marker_pool_edge.value();
+    } else {
+        return std::nullopt;
+    }
+}
+
+std::map<proc::frame_index_t, marker> const &project_editor::markers() const {
+    return this->_marker_pool->markers();
+}
+
+file_track_module_map_t const &project_editor::modules() const {
+    return this->_file_track->modules();
+}
+
+observing::syncable project_editor::observe_is_playing(std::function<void(bool const &)> &&handler) {
+    return this->_player->observe_is_playing(std::move(handler));
+}
+
+observing::syncable project_editor::observe_file_track_event(std::function<void(file_track_event const &)> &&handler) {
+    return this->_file_track->observe_event(std::move(handler));
+}
+
+observing::syncable project_editor::observe_marker_pool_event(
+    std::function<void(marker_pool_event const &)> &&handler) {
+    return this->_marker_pool->observe_event(std::move(handler));
+}
+
 std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_file_url, url const &db_file_url,
-                                                            file_info const &file_info,
+                                                            ae::file_info const &file_info,
                                                             std::shared_ptr<player_for_project_editor> const &player) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
                        database::make_shared(db_file_url));
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
-    url const &editing_file_url, file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
+    url const &editing_file_url, ae::file_info const &file_info,
+    std::shared_ptr<player_for_project_editor> const &player,
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
     std::shared_ptr<database_for_project_editor> const &database) {

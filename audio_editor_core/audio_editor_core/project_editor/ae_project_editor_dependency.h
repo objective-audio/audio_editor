@@ -31,6 +31,15 @@ struct player_for_project_editor {
     virtual void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,
                               audio::pcm_format const) = 0;
     virtual void reset_timeline() = 0;
+
+    virtual void set_playing(bool const) = 0;
+    [[nodiscard]] virtual bool is_playing() const = 0;
+
+    virtual void seek(proc::frame_index_t const) = 0;
+    [[nodiscard]] virtual proc::frame_index_t current_frame() const = 0;
+    virtual bool is_scrolling() const = 0;
+
+    [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;
 };
 
 struct file_track_for_project_editor {

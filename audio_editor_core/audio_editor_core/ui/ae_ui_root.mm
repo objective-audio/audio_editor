@@ -13,12 +13,10 @@ using namespace yas;
 using namespace yas::ae;
 
 ui_root::ui_root(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<root_presenter> const &presenter,
-                 std::shared_ptr<action_controller> const &action_controller,
                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
                  std::shared_ptr<ui_editing_root_maker_for_ui_root> const &editing_root_maker)
     : _standard(standard),
       _presenter(presenter),
-      _action_controller(action_controller),
       _pinch_gesture_controller(pinch_gesture_controller),
       _editing_root_maker(editing_root_maker) {
     presenter
@@ -34,11 +32,9 @@ ui_root::ui_root(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
 std::shared_ptr<ui_root> ui_root::make_shared(std::shared_ptr<ui::standard> const &standard,
                                               std::string const &project_id) {
     auto const presenter = root_presenter::make_shared(project_id);
-    auto const controller = action_controller::make_shared(project_id);
     auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
     auto const editing_root_maker = ui_editing_root_maker::make_shared(standard, project_id);
-    return std::shared_ptr<ui_root>(
-        new ui_root{standard, presenter, controller, pinch_gesture_controller, editing_root_maker});
+    return std::shared_ptr<ui_root>(new ui_root{standard, presenter, pinch_gesture_controller, editing_root_maker});
 }
 
 std::shared_ptr<ui::standard> const &ui_root::standard() const {
@@ -46,9 +42,15 @@ std::shared_ptr<ui::standard> const &ui_root::standard() const {
 }
 
 bool ui_root::responds_to_action(action const action) {
-    return this->_presenter->responds_to_action(action);
+    if (auto const &editing_root = this->_editing_root) {
+        return editing_root->responds_to_action(action);
+    } else {
+        return false;
+    }
 }
 
 void ui_root::handle_action(action const action) {
-    this->_action_controller->handle_action(action);
+    if (auto const &editing_root = this->_editing_root) {
+        editing_root->handle_action(action);
+    }
 }

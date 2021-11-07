@@ -13,8 +13,6 @@ class project;
 struct root_presenter {
     [[nodiscard]] static std::shared_ptr<root_presenter> make_shared(std::string const &project_id);
 
-    [[nodiscard]] bool responds_to_action(action const);
-
     [[nodiscard]] observing::syncable observe_is_editing(std::function<void(bool const &)> &&);
 
    private:
