@@ -18,7 +18,8 @@ std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(
     return std::shared_ptr<pinch_gesture_controller>(new pinch_gesture_controller{project->zooming()});
 }
 
-pinch_gesture_controller::pinch_gesture_controller(std::shared_ptr<zooming> const &zooming) : _zooming(zooming) {
+pinch_gesture_controller::pinch_gesture_controller(std::shared_ptr<zooming_for_pinch_gesture_controller> const &zooming)
+    : _zooming(zooming) {
 }
 
 void pinch_gesture_controller::handle_gesture(pinch_gesture const &gesture) {
