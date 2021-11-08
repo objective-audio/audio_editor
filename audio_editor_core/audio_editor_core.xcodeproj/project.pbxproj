@@ -128,6 +128,9 @@
 		B6B563C7271BD3FD0003ED60 /* ae_common_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6B563C5271BD3FD0003ED60 /* ae_common_utils.cpp */; };
 		B6B9736027006FF500E1BD12 /* ae_ui_button_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6B9735E27006FF500E1BD12 /* ae_ui_button_utils.cpp */; };
 		B6B9736127006FF500E1BD12 /* ae_ui_button_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B9735F27006FF500E1BD12 /* ae_ui_button_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6BDCCF82739636C00B6560C /* ae_project_maker.h in Headers */ = {isa = PBXBuildFile; fileRef = B6BDCCF62739636B00B6560C /* ae_project_maker.h */; };
+		B6BDCCF92739636C00B6560C /* ae_project_maker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6BDCCF72739636C00B6560C /* ae_project_maker.cpp */; };
+		B6BDCCFB273A9FA400B6560C /* ae_root_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6BDCCFA273A9FA400B6560C /* ae_root_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6BE6B9A2733BECD0097C99D /* ae_db_marker.h in Headers */ = {isa = PBXBuildFile; fileRef = B6BE6B982733BECD0097C99D /* ae_db_marker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6BE6B9B2733BECD0097C99D /* ae_db_marker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6BE6B992733BECD0097C99D /* ae_db_marker.cpp */; };
 		B6BE6B9D27356DA80097C99D /* ae_editing_root_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6BE6B9C27356DA80097C99D /* ae_editing_root_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -278,6 +281,9 @@
 		B6B563C5271BD3FD0003ED60 /* ae_common_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_common_utils.cpp; sourceTree = "<group>"; };
 		B6B9735E27006FF500E1BD12 /* ae_ui_button_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_ui_button_utils.cpp; sourceTree = "<group>"; };
 		B6B9735F27006FF500E1BD12 /* ae_ui_button_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_button_utils.h; sourceTree = "<group>"; };
+		B6BDCCF62739636B00B6560C /* ae_project_maker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_maker.h; sourceTree = "<group>"; };
+		B6BDCCF72739636C00B6560C /* ae_project_maker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_maker.cpp; sourceTree = "<group>"; };
+		B6BDCCFA273A9FA400B6560C /* ae_root_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_root_presenter_dependency.h; sourceTree = "<group>"; };
 		B6BE6B982733BECD0097C99D /* ae_db_marker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_db_marker.h; sourceTree = "<group>"; };
 		B6BE6B992733BECD0097C99D /* ae_db_marker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_db_marker.cpp; sourceTree = "<group>"; };
 		B6BE6B9C27356DA80097C99D /* ae_editing_root_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_editing_root_presenter_dependency.h; sourceTree = "<group>"; };
@@ -373,9 +379,9 @@
 		B62D8F9C2723AEBA00779D42 /* pinch_gesture_controller */ = {
 			isa = PBXGroup;
 			children = (
+				B632197D2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h */,
 				B681357B271EF1FA009CC0FC /* ae_pinch_gesture_controller.cpp */,
 				B681357A271EF1FA009CC0FC /* ae_pinch_gesture_controller.h */,
-				B632197D2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h */,
 			);
 			path = pinch_gesture_controller;
 			sourceTree = "<group>";
@@ -532,6 +538,7 @@
 		B68C3E7D27088FA400888A53 /* root_presenter */ = {
 			isa = PBXGroup;
 			children = (
+				B6BDCCFA273A9FA400B6560C /* ae_root_presenter_dependency.h */,
 				B68C3E7F27088FF000888A53 /* ae_root_presenter.cpp */,
 				B68C3E7E27088FF000888A53 /* ae_root_presenter.h */,
 			);
@@ -579,6 +586,8 @@
 			isa = PBXGroup;
 			children = (
 				B666CE4526350A5E00C1693D /* ae_project_dependency.h */,
+				B6BDCCF72739636C00B6560C /* ae_project_maker.cpp */,
+				B6BDCCF62739636B00B6560C /* ae_project_maker.h */,
 				B668BE10262DD2FA0021AD20 /* ae_project_types.h */,
 				B666CE4A26351D7900C1693D /* ae_project_url.cpp */,
 				B666CE4B26351D7900C1693D /* ae_project_url.h */,
@@ -743,6 +752,7 @@
 				B6B002BF263BC8880013E6D0 /* ae_file_loader_types.h in Headers */,
 				B69708EB2639A15E0045E975 /* ae_file_importer.h in Headers */,
 				B64E94F82652B7660056F511 /* ae_marker_pool_types.h in Headers */,
+				B6BDCCFB273A9FA400B6560C /* ae_root_presenter_dependency.h in Headers */,
 				B632197E2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h in Headers */,
 				B6966F45272EDB2F00A90733 /* ae_db_module.h in Headers */,
 				B6E8995D2688806E00BBFA73 /* ae_ui_editing_root_utils.h in Headers */,
@@ -809,6 +819,7 @@
 				B681357C271EF1FA009CC0FC /* ae_pinch_gesture_controller.h in Headers */,
 				B6966F41272E639D00A90733 /* ae_db_utils.h in Headers */,
 				B6B563C6271BD3FD0003ED60 /* ae_common_utils.h in Headers */,
+				B6BDCCF82739636C00B6560C /* ae_project_maker.h in Headers */,
 				B6966F33272CEF9100A90733 /* ae_editing_root_presenter_types.h in Headers */,
 				B605EA712657E5530031B177 /* ae_ui_editing_root.h in Headers */,
 			);
@@ -904,6 +915,7 @@
 			files = (
 				B69708EA2639A15E0045E975 /* ae_file_importer.cpp in Sources */,
 				B60204F6263ABBC400CFC752 /* ae_editing_root_presenter_utils.cpp in Sources */,
+				B6BDCCF92739636C00B6560C /* ae_project_maker.cpp in Sources */,
 				B68C3E8127088FF000888A53 /* ae_root_presenter.cpp in Sources */,
 				B6BE6B9B2733BECD0097C99D /* ae_db_marker.cpp in Sources */,
 				B657D4D1268037720048C6AD /* ae_keyboard.mm in Sources */,

@@ -19,5 +19,10 @@ struct project_url final : project_url_for_project {
     url _root;
 
     project_url(url const &root);
+
+    project_url(project_url const &) = delete;
+    project_url(project_url &&) = delete;
+    project_url &operator=(project_url const &) = delete;
+    project_url &operator=(project_url &&) = delete;
 };
 }  // namespace yas::ae

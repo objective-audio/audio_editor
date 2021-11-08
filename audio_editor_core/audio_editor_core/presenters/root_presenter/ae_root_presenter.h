@@ -4,22 +4,23 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_action.h>
-#include <observing/yas_observing_umbrella.h>
+#include <audio_editor_core/ae_root_presenter_dependency.h>
 
 namespace yas::ae {
-class project;
-
 struct root_presenter {
     [[nodiscard]] static std::shared_ptr<root_presenter> make_shared(std::string const &project_id);
 
     [[nodiscard]] observing::syncable observe_is_editing(std::function<void(bool const &)> &&);
 
    private:
-    std::weak_ptr<project> const _project;
     observing::value::holder_ptr<bool> const _is_editing;
     observing::canceller_pool _pool;
 
-    root_presenter(std::shared_ptr<project> const &);
+    root_presenter(std::shared_ptr<project_for_root_presenter> const &);
+
+    root_presenter(root_presenter const &) = delete;
+    root_presenter(root_presenter &&) = delete;
+    root_presenter &operator=(root_presenter const &) = delete;
+    root_presenter &operator=(root_presenter &&) = delete;
 };
 }  // namespace yas::ae

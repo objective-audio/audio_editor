@@ -16,8 +16,8 @@ std::shared_ptr<root_presenter> root_presenter::make_shared(std::string const &p
     return std::shared_ptr<root_presenter>(new root_presenter{project});
 }
 
-root_presenter::root_presenter(std::shared_ptr<project> const &project)
-    : _project(project), _is_editing(observing::value::holder<bool>::make_shared(false)) {
+root_presenter::root_presenter(std::shared_ptr<project_for_root_presenter> const &project)
+    : _is_editing(observing::value::holder<bool>::make_shared(false)) {
     project->observe_state([this](auto const &state) { this->_is_editing->set_value(state == project_state::editing); })
         .sync()
         ->add_to(this->_pool);

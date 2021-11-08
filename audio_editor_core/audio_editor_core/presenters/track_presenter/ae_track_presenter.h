@@ -4,11 +4,6 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_file_loader_types.h>
-#include <audio_editor_core/ae_file_track_types.h>
-#include <audio_editor_core/ae_marker_location.h>
-#include <audio_editor_core/ae_marker_pool.h>
-#include <audio_editor_core/ae_module_location.h>
 #include <audio_editor_core/ae_track_presenter_dependency.h>
 
 namespace yas::ae {
@@ -29,5 +24,10 @@ struct track_presenter {
 
     track_presenter(std::shared_ptr<project_editor_for_track_presenter> const &,
                     std::shared_ptr<zooming_for_track_presenter> const &);
+
+    track_presenter(track_presenter const &) = delete;
+    track_presenter(track_presenter &&) = delete;
+    track_presenter &operator=(track_presenter const &) = delete;
+    track_presenter &operator=(track_presenter &&) = delete;
 };
 }  // namespace yas::ae

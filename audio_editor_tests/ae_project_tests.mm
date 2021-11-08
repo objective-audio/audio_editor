@@ -220,7 +220,16 @@ struct scrolling_stub final : scrolling_for_project {
 
 - (void)test_make_shared {
     auto const file_url = url::file_url("/test/path/file.wav");
-    auto project = project::make_shared("test_uuid", file_url);
+    auto const project_url = std::make_shared<test_utils::project_url_stub>();
+    auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
+    auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
+    auto const player = std::make_shared<test_utils::player_stub>();
+    auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
+    auto const zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
+
+    auto project = project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, player,
+                                        editor_maker, zooming, scrolling);
 
     XCTAssertTrue(project != nullptr);
     XCTAssertEqual(project->file_url(), file_url);

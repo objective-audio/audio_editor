@@ -4,13 +4,28 @@
 
 #pragma once
 
-#include <cpp_utils/yas_url.h>
-#include <observing/yas_observing_umbrella.h>
+#include <audio_editor_core/ae_editing_root_presenter_dependency.h>
+#include <audio_editor_core/ae_project_dependency.h>
+#include <audio_editor_core/ae_root_presenter_dependency.h>
+#include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
-struct uuid_generator_for_project_pool {
-    virtual ~uuid_generator_for_project_pool() = default;
+struct project_for_project_pool : project_for_window_presenter,
+                                  project_for_root_presenter,
+                                  project_for_editing_root_presenter {
+    virtual ~project_for_project_pool() = default;
 
-    virtual std::string generate() const = 0;
+    [[nodiscard]] virtual std::string const &identifier() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<project_editor_for_project> const &editor() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<zooming_for_project> const &zooming() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<scrolling_for_project> const &scrolling() const = 0;
+
+    [[nodiscard]] virtual observing::endable observe_event(std::function<void(project_event const &)> &&) = 0;
+};
+
+struct project_maker_for_project_pool {
+    virtual ~project_maker_for_project_pool() = default;
+
+    [[nodiscard]] virtual std::shared_ptr<project_for_project_pool> make(url const &file_url) = 0;
 };
 }  // namespace yas::ae

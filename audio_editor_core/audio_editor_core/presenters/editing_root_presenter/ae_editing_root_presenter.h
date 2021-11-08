@@ -5,20 +5,10 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
+#include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_editing_root_presenter_types.h>
-#include <audio_editor_core/ae_file_track_types.h>
-#include <audio_editor_core/ae_marker_pool_types.h>
-#include <observing/yas_observing_umbrella.h>
-
-#include <cstdint>
-#include <functional>
-#include <memory>
 
 namespace yas::ae {
-class project_for_editing_root_presenter;
-class project_editor_for_editing_root_presenter;
-enum class project_state;
-
 struct editing_root_presenter final {
     [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(std::string const &project_id);
     [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(

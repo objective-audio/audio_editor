@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_module_location.h>
 #include <audio_editor_core/ae_modules_presenter_dependency.h>
-#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct modules_presenter {
@@ -21,5 +20,10 @@ struct modules_presenter {
     std::weak_ptr<project_editor_for_modules_presenter> _project_editor;
 
     modules_presenter(std::shared_ptr<project_editor_for_modules_presenter> const &);
+
+    modules_presenter(modules_presenter const &) = delete;
+    modules_presenter(modules_presenter &&) = delete;
+    modules_presenter &operator=(modules_presenter const &) = delete;
+    modules_presenter &operator=(modules_presenter &&) = delete;
 };
 }  // namespace yas::ae
