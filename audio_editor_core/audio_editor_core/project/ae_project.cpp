@@ -35,7 +35,6 @@ project::project(std::string const &identifier, url const &file_url,
       _zooming(zooming),
       _scrolling(scrolling),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
-      _file_info(observing::value::holder<std::optional<ae::file_info>>::make_shared(std::nullopt)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
 }
 
@@ -76,10 +75,6 @@ url const &project::file_url() const {
 
 project_state const &project::state() const {
     return this->_state->value();
-}
-
-std::optional<file_info> const &project::file_info() const {
-    return this->_file_info->value();
 }
 
 std::shared_ptr<player_for_project> const &project::player() const {
@@ -123,10 +118,6 @@ observing::syncable project::observe_state(std::function<void(project_state cons
     return this->_state->observe(std::move(handler));
 }
 
-observing::syncable project::observe_file_info(std::function<void(std::optional<ae::file_info>)> &&handler) {
-    return this->_file_info->observe(std::move(handler));
-}
-
 observing::endable project::observe_event(std::function<void(project_event const &)> &&handler) {
     return this->_event_notifier->observe(std::move(handler));
 }
@@ -146,10 +137,9 @@ void project::_setup(std::weak_ptr<project> weak) {
                          if (result) {
                              auto const &project_url = project->_project_url;
                              auto const editing_file_url = project_url->editing_file();
-                             project->_file_info->set_value(project->_file_loader->load_file_info(editing_file_url));
-                             if (project->_file_info->value().has_value()) {
+                             if (auto const file_info = project->_file_loader->load_file_info(editing_file_url)) {
                                  project->_editor = project->_editor_maker->make(
-                                     editing_file_url, project_url->db_file(), project->_file_info->value().value());
+                                     editing_file_url, project_url->db_file(), file_info.value());
                                  project->_state->set_value(project_state::editing);
                              } else {
                                  project->_state->set_value(project_state::failure);

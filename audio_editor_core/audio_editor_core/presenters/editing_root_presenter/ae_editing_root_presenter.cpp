@@ -56,8 +56,8 @@ std::string editing_root_presenter::state_text() const {
 }
 
 std::string editing_root_presenter::file_info_text() const {
-    if (auto const project = this->_project.lock()) {
-        return editing_root_presenter_utils::label_text(project->file_info());
+    if (auto const editor = this->_project_editor.lock()) {
+        return editing_root_presenter_utils::label_text(editor->file_info());
     } else {
         return editing_root_presenter_utils::empty_text();
     }

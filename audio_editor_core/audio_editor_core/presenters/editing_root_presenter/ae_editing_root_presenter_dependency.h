@@ -22,7 +22,6 @@ struct project_for_editing_root_presenter {
 
     [[nodiscard]] virtual std::string const &identifier() const = 0;
     [[nodiscard]] virtual project_state const &state() const = 0;
-    [[nodiscard]] virtual std::optional<file_info> const &file_info() const = 0;
 
     [[nodiscard]] virtual observing::syncable observe_state(std::function<void(project_state const &)> &&) = 0;
 };

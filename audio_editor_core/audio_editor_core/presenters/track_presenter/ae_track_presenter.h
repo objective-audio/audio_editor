@@ -12,11 +12,11 @@
 #include <audio_editor_core/ae_track_presenter_dependency.h>
 
 namespace yas::ae {
-class project;
-
 struct track_presenter {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::string const &project_id);
-    [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::shared_ptr<project> const &);
+    [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(
+        std::shared_ptr<project_editor_for_track_presenter> const &,
+        std::shared_ptr<zooming_for_track_presenter> const &);
 
     [[nodiscard]] double scale() const;
     [[nodiscard]] observing::syncable observe_scale(std::function<void(double const &)> &&);
@@ -24,8 +24,10 @@ struct track_presenter {
     [[nodiscard]] float current_position() const;
 
    private:
-    std::weak_ptr<project> _project;
+    std::weak_ptr<project_editor_for_track_presenter> _project_editor;
+    std::weak_ptr<zooming_for_track_presenter> _zooming;
 
-    track_presenter(std::shared_ptr<project> const &);
+    track_presenter(std::shared_ptr<project_editor_for_track_presenter> const &,
+                    std::shared_ptr<zooming_for_track_presenter> const &);
 };
 }  // namespace yas::ae
