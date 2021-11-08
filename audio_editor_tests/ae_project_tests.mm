@@ -67,9 +67,10 @@ struct player_stub final : player_for_project {
 };
 
 struct project_editor_stub final : project_editor_for_project {
+    ae::file_info file_info_value;
+
     ae::file_info const &file_info() const override {
-        static ae::file_info info;
-        return info;
+        return file_info_value;
     }
 
     proc::frame_index_t current_frame() const override {
@@ -170,8 +171,10 @@ struct project_editor_stub final : project_editor_for_project {
 
 struct project_editor_maker_stub final : project_editor_maker_for_project {
     [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &, url const &,
-                                                                   file_info const &) const override {
-        return std::make_shared<project_editor_stub>();
+                                                                   file_info const &info) const override {
+        auto editor = std::make_shared<project_editor_stub>();
+        editor->file_info_value = info;
+        return editor;
     }
 };
 
@@ -297,14 +300,15 @@ struct scrolling_stub final : scrolling_for_project {
     XCTAssertEqual(project->state(), project_state::loading);
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), project_state::loading);
-    XCTAssertFalse(project->file_info().has_value());
 
     [self waitForExpectations:@[expectation] timeout:10.0];
 
     XCTAssertEqual(project->state(), project_state::editing);
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::editing);
-    XCTAssertEqual(project->file_info(), (file_info{.sample_rate = 48000, .channel_count = 1, .length = 2}));
+
+    std::shared_ptr<project_editor_for_track_presenter> const editor = project->editor();
+    XCTAssertEqual(editor->file_info(), (file_info{.sample_rate = 48000, .channel_count = 1, .length = 2}));
 }
 
 - (void)test_import_failure {
@@ -349,14 +353,14 @@ struct scrolling_stub final : scrolling_for_project {
     XCTAssertEqual(project->state(), project_state::loading);
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), project_state::loading);
-    XCTAssertFalse(project->file_info().has_value());
+    XCTAssertFalse(project->editor());
 
     [self waitForExpectations:@[expectation] timeout:10.0];
 
     XCTAssertEqual(project->state(), project_state::failure);
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::failure);
-    XCTAssertFalse(project->file_info().has_value());
+    XCTAssertFalse(project->editor());
 }
 
 @end

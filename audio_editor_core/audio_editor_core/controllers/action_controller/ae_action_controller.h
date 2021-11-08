@@ -10,8 +10,6 @@
 #include <memory>
 
 namespace yas::ae {
-class project;
-
 struct action_controller {
     [[nodiscard]] static std::shared_ptr<action_controller> make_shared(std::string const &project_id);
 

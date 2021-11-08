@@ -15,37 +15,40 @@ using namespace yas::ae;
 
 std::shared_ptr<track_presenter> track_presenter::make_shared(std::string const &project_id) {
     auto const project = app::global()->project_pool()->project_for_id(project_id);
-    return make_shared(project);
+    return make_shared(project->editor(), project->zooming());
 }
 
-std::shared_ptr<track_presenter> track_presenter::make_shared(std::shared_ptr<project> const &project) {
-    return std::shared_ptr<track_presenter>(new track_presenter{project});
+std::shared_ptr<track_presenter> track_presenter::make_shared(
+    std::shared_ptr<project_editor_for_track_presenter> const &editor,
+    std::shared_ptr<zooming_for_track_presenter> const &zooming) {
+    return std::shared_ptr<track_presenter>(new track_presenter{editor, zooming});
 }
 
-track_presenter::track_presenter(std::shared_ptr<project> const &project) : _project(project) {
+track_presenter::track_presenter(std::shared_ptr<project_editor_for_track_presenter> const &editor,
+                                 std::shared_ptr<zooming_for_track_presenter> const &zooming)
+    : _project_editor(editor), _zooming(zooming) {
 }
 
 float track_presenter::current_position() const {
-    if (auto const project = this->_project.lock()) {
-        if (auto const &file_info = project->file_info()) {
-            double const sample_rate = file_info.value().sample_rate;
-            return static_cast<double>(project->player()->current_frame()) / sample_rate;
-        }
+    if (auto const editor = this->_project_editor.lock()) {
+        auto const &file_info = editor->file_info();
+        double const sample_rate = file_info.sample_rate;
+        return static_cast<double>(editor->current_frame()) / sample_rate;
     }
     return 0.0;
 }
 
 double track_presenter::scale() const {
-    if (auto const project = this->_project.lock()) {
-        return project->zooming()->scale();
+    if (auto const zooming = this->_zooming.lock()) {
+        return zooming->scale();
     } else {
         return 1.0;
     }
 }
 
 observing::syncable track_presenter::observe_scale(std::function<void(double const &)> &&handler) {
-    if (auto const project = this->_project.lock()) {
-        return project->zooming()->observe_scale(std::move(handler));
+    if (auto const zooming = this->_zooming.lock()) {
+        return zooming->observe_scale(std::move(handler));
     }
     return observing::syncable{};
 }

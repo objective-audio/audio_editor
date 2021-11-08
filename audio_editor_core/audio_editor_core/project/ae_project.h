@@ -24,7 +24,6 @@ struct project final : project_for_window_presenter, project_for_editing_root_pr
     [[nodiscard]] std::string const &identifier() const override;
     [[nodiscard]] url const &file_url() const override;
     [[nodiscard]] project_state const &state() const override;
-    [[nodiscard]] std::optional<ae::file_info> const &file_info() const override;
     [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
     [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const;
     [[nodiscard]] std::shared_ptr<zooming_for_project> const &zooming() const;
@@ -34,7 +33,6 @@ struct project final : project_for_window_presenter, project_for_editing_root_pr
     void request_close() override;
 
     [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&) override;
-    [[nodiscard]] observing::syncable observe_file_info(std::function<void(std::optional<ae::file_info>)> &&);
     [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);
 
    private:
@@ -51,7 +49,6 @@ struct project final : project_for_window_presenter, project_for_editing_root_pr
     std::shared_ptr<scrolling_for_project> const _scrolling;
 
     observing::value::holder_ptr<project_state> const _state;
-    observing::value::holder_ptr<std::optional<ae::file_info>> const _file_info;
 
     observing::notifier_ptr<project_event> const _event_notifier;
     observing::canceller_pool _pool;

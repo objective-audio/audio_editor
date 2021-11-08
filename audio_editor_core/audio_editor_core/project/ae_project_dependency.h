@@ -55,7 +55,8 @@ struct player_for_project {
 struct project_editor_for_project : project_editor_for_editing_root_presenter,
                                     project_editor_for_action_controller,
                                     project_editor_for_markers_presenter,
-                                    project_editor_for_modules_presenter {
+                                    project_editor_for_modules_presenter,
+                                    project_editor_for_track_presenter {
     virtual ~project_editor_for_project() = default;
 };
 
