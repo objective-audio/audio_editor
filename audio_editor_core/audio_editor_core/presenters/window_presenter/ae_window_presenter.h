@@ -4,12 +4,9 @@
 
 #pragma once
 
-#include <cstdint>
-#include <memory>
+#include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
-class project_for_window_presenter;
-
 struct window_presenter final {
     static std::shared_ptr<window_presenter> make_shared(std::string const &project_id);
     static std::shared_ptr<window_presenter> make_shared(std::shared_ptr<project_for_window_presenter> const &);

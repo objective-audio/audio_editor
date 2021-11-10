@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_marker_location.h>
 #include <audio_editor_core/ae_markers_presenter_dependency.h>
-#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct markers_presenter {
@@ -21,5 +20,10 @@ struct markers_presenter {
     std::weak_ptr<project_editor_for_markers_presenter> _project_editor;
 
     markers_presenter(std::shared_ptr<project_editor_for_markers_presenter> const &);
+
+    markers_presenter(markers_presenter const &) = delete;
+    markers_presenter(markers_presenter &&) = delete;
+    markers_presenter &operator=(markers_presenter const &) = delete;
+    markers_presenter &operator=(markers_presenter &&) = delete;
 };
 }  // namespace yas::ae

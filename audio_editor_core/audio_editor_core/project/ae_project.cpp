@@ -4,16 +4,6 @@
 
 #include "ae_project.h"
 
-#include <audio_editor_core/ae_app.h>
-#include <audio_editor_core/ae_file_importer.h>
-#include <audio_editor_core/ae_file_loader.h>
-#include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_editor_maker.h>
-#include <audio_editor_core/ae_scrolling.h>
-#include <audio_editor_core/ae_system_url.h>
-#include <audio_editor_core/ae_zooming.h>
-#include <cpp_utils/yas_file_manager.h>
-
 using namespace yas;
 using namespace yas::ae;
 
@@ -36,19 +26,6 @@ project::project(std::string const &identifier, url const &file_url,
       _scrolling(scrolling),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
-}
-
-std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url) {
-    auto const app = app::global();
-    auto const project_url = project_url::make_shared(app->system_url()->project_directory(identifier));
-    auto const file_importer = app->file_importer();
-    auto const file_loader = app->file_loader();
-    auto const scrolling = scrolling::make_shared();
-    auto const zooming = zooming::make_shared();
-    auto const player = player::make_shared(app->system_url()->playing_directory(), identifier, scrolling);
-    auto const editor_maker = project_editor_maker::make_shared(player);
-    return make_shared(identifier, file_url, project_url, file_importer, file_loader, player, editor_maker, zooming,
-                       scrolling);
 }
 
 std::shared_ptr<project> project::make_shared(std::string const &identifier, url const &file_url,

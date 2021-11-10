@@ -17,7 +17,6 @@
 #include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
 #include <audio_editor_core/ae_track_presenter_dependency.h>
 #include <cpp_utils/yas_url.h>
-#include <observing/yas_observing_umbrella.h>
 
 namespace yas::proc {
 class timeline;
@@ -74,5 +73,11 @@ struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_contr
 
 struct zooming_for_project : zooming_for_track_presenter, zooming_for_pinch_gesture_controller {
     virtual ~zooming_for_project() = default;
+};
+
+struct uuid_generator_for_project_maker {
+    virtual ~uuid_generator_for_project_maker() = default;
+
+    virtual std::string generate() const = 0;
 };
 }  // namespace yas::ae

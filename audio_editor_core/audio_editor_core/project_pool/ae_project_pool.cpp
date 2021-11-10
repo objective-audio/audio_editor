@@ -5,21 +5,22 @@
 #include "ae_project_pool.h"
 
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_maker.h>
 #include <audio_editor_core/ae_uuid_generator.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-project_pool::project_pool(std::shared_ptr<uuid_generator_for_project_pool> const &uuid_generator)
-    : _uuid_generator(uuid_generator) {
+project_pool::project_pool(std::shared_ptr<project_maker_for_project_pool> const &project_maker)
+    : _project_maker(project_maker) {
 }
 
 void project_pool::add_project(url const &file_url) {
     this->add_and_return_project(file_url);
 }
 
-std::shared_ptr<project> project_pool::add_and_return_project(url const &file_url) {
-    auto const project = project::make_shared(this->_uuid_generator->generate(), file_url);
+std::shared_ptr<project_for_project_pool> project_pool::add_and_return_project(url const &file_url) {
+    auto const project = this->_project_maker->make(file_url);
 
     auto canceller = project
                          ->observe_event([this, project_id = project->identifier()](auto const &event) {
@@ -36,7 +37,7 @@ std::shared_ptr<project> project_pool::add_and_return_project(url const &file_ur
     return project;
 }
 
-std::shared_ptr<project> project_pool::project_for_id(std::string const &project_id) const {
+std::shared_ptr<project_for_project_pool> project_pool::project_for_id(std::string const &project_id) const {
     if (this->_projects->contains(project_id)) {
         return this->_projects->at(project_id).first;
     } else {
@@ -71,10 +72,10 @@ observing::syncable project_pool::observe_event(std::function<void(project_pool_
 }
 
 std::shared_ptr<project_pool> project_pool::make_shared() {
-    return make_shared(uuid_generator::make_shared());
+    return make_shared(project_maker::make_shared());
 }
 
 std::shared_ptr<project_pool> project_pool::make_shared(
-    std::shared_ptr<uuid_generator_for_project_pool> const &uuid_generator) {
-    return std::shared_ptr<project_pool>(new project_pool{uuid_generator});
+    std::shared_ptr<project_maker_for_project_pool> const &project_maker) {
+    return std::shared_ptr<project_pool>(new project_pool{project_maker});
 }

@@ -9,15 +9,64 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::test_utils {
-struct uuid_generator_stub : uuid_generator_for_project_pool {
-    std::function<std::string(void)> generate_handler = [] { return ""; };
+struct project_stub : project_for_project_pool {
+    url file_url_value{""};
+    std::string identifier_value;
+    observing::notifier_ptr<project_event> const event_notifier = observing::notifier<project_event>::make_shared();
 
-    std::string generate() const override {
-        return this->generate_handler();
+    std::string const &identifier() const override {
+        return this->identifier_value;
     }
 
-    static std::shared_ptr<uuid_generator_stub> make_shared() {
-        return std::make_shared<uuid_generator_stub>();
+    std::shared_ptr<project_editor_for_project> const &editor() const override {
+        static std::shared_ptr<project_editor_for_project> const _value = nullptr;
+        return _value;
+    }
+
+    std::shared_ptr<zooming_for_project> const &zooming() const override {
+        static std::shared_ptr<zooming_for_project> const _value = nullptr;
+        return _value;
+    }
+
+    std::shared_ptr<scrolling_for_project> const &scrolling() const override {
+        static std::shared_ptr<scrolling_for_project> const _value = nullptr;
+        return _value;
+    }
+
+    [[nodiscard]] url const &file_url() const override {
+        return this->file_url_value;
+    }
+
+    [[nodiscard]] bool can_close() const override {
+        return false;
+    }
+
+    void request_close() override {
+        event_notifier->notify(project_event::should_close);
+    }
+
+    project_state const &state() const override {
+        static project_state constexpr _value = project_state::launching;
+        return _value;
+    }
+
+    observing::endable observe_event(std::function<void(project_event const &)> &&handler) override {
+        return event_notifier->observe(std::move(handler));
+    }
+
+    observing::syncable observe_state(std::function<void(project_state const &)> &&) override {
+        return observing::syncable{};
+    }
+};
+
+struct project_maker_stub : project_maker_for_project_pool {
+    std::function<std::string(void)> generate_handler = [] { return ""; };
+
+    std::shared_ptr<project_for_project_pool> make(url const &file_url) override {
+        auto project = std::make_shared<project_stub>();
+        project->identifier_value = generate_handler();
+        project->file_url_value = file_url;
+        return project;
     }
 };
 };
@@ -29,11 +78,12 @@ struct uuid_generator_stub : uuid_generator_for_project_pool {
 @implementation ae_project_pool_tests
 
 - (void)test_add_and_return_project {
-    auto const generator = test_utils::uuid_generator_stub::make_shared();
     std::string project_id;
-    generator->generate_handler = [&project_id] { return project_id; };
 
-    auto const pool = project_pool::make_shared(generator);
+    auto const maker = std::make_shared<test_utils::project_maker_stub>();
+    maker->generate_handler = [&project_id] { return project_id; };
+
+    auto const pool = project_pool::make_shared(maker);
 
     std::vector<project_pool_event> called;
 
@@ -63,11 +113,12 @@ struct uuid_generator_stub : uuid_generator_for_project_pool {
 }
 
 - (void)test_remove_project {
-    auto const generator = test_utils::uuid_generator_stub::make_shared();
     std::string project_id;
-    generator->generate_handler = [&project_id] { return project_id; };
 
-    auto const pool = project_pool::make_shared(generator);
+    auto const maker = std::make_shared<test_utils::project_maker_stub>();
+    maker->generate_handler = [&project_id] { return project_id; };
+
+    auto const pool = project_pool::make_shared(maker);
 
     project_id = "PROJECT_ID_0";
     auto const file_url_0 = url::file_url("/test/path/file0.wav");

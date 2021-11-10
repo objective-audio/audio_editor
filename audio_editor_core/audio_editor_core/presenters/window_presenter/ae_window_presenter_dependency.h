@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include <cpp_utils/yas_url.h>
+
+#include <string>
+
 namespace yas::ae {
 struct project_for_window_presenter {
     virtual ~project_for_window_presenter() = default;
