@@ -20,7 +20,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<player_for_project_editor> const &player,
                                std::shared_ptr<file_track_for_project_editor> const &file_track,
                                std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
-                               std::shared_ptr<database_for_project_editor> const &database)
+                               std::shared_ptr<database_for_project_editor> const &database,
+                               std::shared_ptr<action_controller> const &action_controller)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),
@@ -28,7 +29,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _timeline(proc::timeline::make_shared()),
       _track(proc::track::make_shared()),
       _marker_pool(marker_pool),
-      _database(database) {
+      _database(database),
+      _action_controller(action_controller) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -138,6 +140,80 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         ->add_to(this->_pool);
 
     this->_file_track->insert_module_and_notify(file_module{proc::time::range{0, file_info.length}, 0});
+
+    action_controller
+        ->observe_action([this](action const &action) {
+            switch (action) {
+                case action::toggle_play:
+                    this->set_playing(!this->is_playing());
+                    break;
+                case action::nudge_previous:
+                    this->nudge_previous();
+                    break;
+                case action::nudge_next:
+                    this->nudge_next();
+                    break;
+                case action::jump_previous:
+                    this->jump_to_previous_edge();
+                    break;
+                case action::jump_next:
+                    this->jump_to_next_edge();
+                    break;
+                case action::drop_head_and_offset:
+                    this->drop_head_and_offset();
+                    break;
+                case action::split:
+                    this->split();
+                    break;
+                case action::drop_tail_and_offset:
+                    this->drop_tail_and_offset();
+                    break;
+                case action::erase_and_offset:
+                    this->erase_and_offset();
+                    break;
+                case action::insert_marker:
+                    this->insert_marker();
+                    break;
+                case action::return_to_zero:
+                    this->return_to_zero();
+                    break;
+                case action::go_to_marker_1:
+                    this->go_to_marker(0);
+                    break;
+                case action::go_to_marker_2:
+                    this->go_to_marker(1);
+                    break;
+                case action::go_to_marker_3:
+                    this->go_to_marker(2);
+                    break;
+                case action::go_to_marker_4:
+                    this->go_to_marker(3);
+                    break;
+                case action::go_to_marker_5:
+                    this->go_to_marker(4);
+                    break;
+                case action::go_to_marker_6:
+                    this->go_to_marker(5);
+                    break;
+                case action::go_to_marker_7:
+                    this->go_to_marker(6);
+                    break;
+                case action::go_to_marker_8:
+                    this->go_to_marker(7);
+                    break;
+                case action::go_to_marker_9:
+                    this->go_to_marker(8);
+                    break;
+                case action::undo:
+                    this->undo();
+                    break;
+                case action::redo:
+                    this->redo();
+                    break;
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
 }
 
 ae::file_info const &project_editor::file_info() const {
@@ -225,16 +301,28 @@ bool project_editor::can_split() const {
 }
 
 void project_editor::split() {
+    if (!this->can_split()) {
+        return;
+    }
+
     auto const current_frame = this->_player->current_frame();
     this->file_track()->split_at(current_frame);
 }
 
 void project_editor::drop_head_and_offset() {
+    if (!this->can_split()) {
+        return;
+    }
+
     auto const current_frame = this->_player->current_frame();
     this->file_track()->drop_head_and_offset_at(current_frame);
 }
 
 void project_editor::drop_tail_and_offset() {
+    if (!this->can_split()) {
+        return;
+    }
+
     auto const current_frame = this->_player->current_frame();
     this->file_track()->drop_tail_and_offset_at(current_frame);
 }
@@ -245,6 +333,10 @@ bool project_editor::can_erase() const {
 }
 
 void project_editor::erase_and_offset() {
+    if (!this->can_erase()) {
+        return;
+    }
+
     auto const current_frame = this->_player->current_frame();
     this->file_track()->erase_and_offset_at(current_frame);
 }
@@ -255,6 +347,10 @@ bool project_editor::can_insert_marker() const {
 }
 
 void project_editor::insert_marker() {
+    if (!this->can_insert_marker()) {
+        return;
+    }
+
     auto const current_frame = this->_player->current_frame();
     this->marker_pool()->insert_marker(marker{.frame = current_frame});
 }
@@ -264,6 +360,10 @@ bool project_editor::can_return_to_zero() const {
 }
 
 void project_editor::return_to_zero() {
+    if (!this->can_return_to_zero()) {
+        return;
+    }
+
     this->_player->seek(0);
 }
 
@@ -277,6 +377,10 @@ bool project_editor::can_go_to_marker(std::size_t const marker_idx) const {
 }
 
 void project_editor::go_to_marker(std::size_t const marker_idx) {
+    if (!this->can_go_to_marker(marker_idx)) {
+        return;
+    }
+
     auto const &marker_pool = this->marker_pool();
     if (auto const marker = marker_pool->marker_at(marker_idx)) {
         this->_player->seek(marker->frame);
@@ -288,6 +392,10 @@ bool project_editor::can_undo() const {
 }
 
 void project_editor::undo() {
+    if (!this->can_undo()) {
+        return;
+    }
+
     this->database()->undo();
 }
 
@@ -296,6 +404,10 @@ bool project_editor::can_redo() const {
 }
 
 void project_editor::redo() {
+    if (!this->can_redo()) {
+        return;
+    }
+
     this->database()->redo();
 }
 
@@ -352,11 +464,12 @@ observing::syncable project_editor::observe_marker_pool_event(
     return this->_marker_pool->observe_event(std::move(handler));
 }
 
-std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_file_url, url const &db_file_url,
-                                                            ae::file_info const &file_info,
-                                                            std::shared_ptr<player_for_project_editor> const &player) {
+std::shared_ptr<project_editor> project_editor::make_shared(
+    url const &editing_file_url, url const &db_file_url, ae::file_info const &file_info,
+    std::shared_ptr<player_for_project_editor> const &player,
+    std::shared_ptr<action_controller> const &action_controller) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
-                       database::make_shared(db_file_url));
+                       database::make_shared(db_file_url), action_controller);
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
@@ -364,7 +477,8 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<player_for_project_editor> const &player,
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
-    std::shared_ptr<database_for_project_editor> const &database) {
+    std::shared_ptr<database_for_project_editor> const &database,
+    std::shared_ptr<action_controller> const &action_controller) {
     return std::shared_ptr<project_editor>(
-        new project_editor{editing_file_url, file_info, player, file_track, marker_pool, database});
+        new project_editor{editing_file_url, file_info, player, file_track, marker_pool, database, action_controller});
 }

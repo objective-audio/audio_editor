@@ -5,22 +5,19 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
-#include <audio_editor_core/ae_action_controller_dependency.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct action_controller {
-    [[nodiscard]] static std::shared_ptr<action_controller> make_shared(std::string const &project_id);
+struct action_controller final {
+    [[nodiscard]] static std::shared_ptr<action_controller> make_shared();
 
     void handle_action(action const);
 
+    [[nodiscard]] observing::endable observe_action(std::function<void(action const &)> &&);
+
    private:
-    std::weak_ptr<project_editor_for_action_controller> const _project_editor;
+    observing::notifier_ptr<action> const _notifier;
 
-    action_controller(std::shared_ptr<project_editor_for_action_controller> const &);
-
-    action_controller(action_controller const &) = delete;
-    action_controller(action_controller &&) = delete;
-    action_controller &operator=(action_controller const &) = delete;
-    action_controller &operator=(action_controller &&) = delete;
+    action_controller();
 };
 }  // namespace yas::ae

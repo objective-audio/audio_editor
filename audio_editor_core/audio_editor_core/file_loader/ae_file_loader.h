@@ -7,10 +7,6 @@
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
-#include <cpp_utils/yas_url.h>
-
-#include <memory>
-#include <optional>
 
 namespace yas::ae {
 struct file_loader final : file_loader_for_project, file_loader_for_project_editor {

@@ -3,6 +3,9 @@
 //
 
 #import "AEMetalViewController.h"
+#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 
 using namespace yas;
@@ -14,6 +17,8 @@ using namespace yas::ae;
 
 @implementation AEMetalViewController {
     std::shared_ptr<ui_root> _ui_root;
+    std::weak_ptr<action_controller> _action_controller;
+    observing::canceller_pool _pool;
 }
 
 - (void)setupWithProjectID:(std::string const &)project_id {
@@ -22,97 +27,143 @@ using namespace yas::ae;
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
     self->_ui_root = ui_root::make_shared(standard, project_id);
 
+    self->_action_controller = app::global()->project_pool()->project_for_id(project_id)->action_controller();
+
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
                         event_manager:standard->event_manager()];
 }
 
 - (IBAction)togglePlay:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::toggle_play);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::toggle_play);
+    }
 }
 
 - (IBAction)nudgePrevious:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::nudge_previous);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::nudge_previous);
+    }
 }
 
 - (IBAction)nudgeNext:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::nudge_next);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::nudge_next);
+    }
 }
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::jump_previous);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::jump_previous);
+    }
 }
 
 - (IBAction)jumpNext:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::jump_next);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::jump_next);
+    }
 }
 
 - (IBAction)dropHeadAndOffset:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::drop_head_and_offset);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::drop_head_and_offset);
+    }
 }
 
 - (IBAction)split:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::split);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::split);
+    }
 }
 
 - (IBAction)dropTailAndOffset:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::drop_tail_and_offset);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::drop_tail_and_offset);
+    }
 }
 
 - (IBAction)erase:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::erase_and_offset);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::erase_and_offset);
+    }
 }
 
 - (IBAction)insertMarker:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::insert_marker);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::insert_marker);
+    }
 }
 
 - (IBAction)returnToZero:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::return_to_zero);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::return_to_zero);
+    }
 }
 
 - (IBAction)goToMarker1:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_1);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_1);
+    }
 }
 
 - (IBAction)goToMarker2:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_2);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_2);
+    }
 }
 
 - (IBAction)goToMarker3:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_3);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_3);
+    }
 }
 
 - (IBAction)goToMarker4:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_4);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_4);
+    }
 }
 
 - (IBAction)goToMarker5:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_5);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_5);
+    }
 }
 
 - (IBAction)goToMarker6:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_6);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_6);
+    }
 }
 
 - (IBAction)goToMarker7:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_7);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_7);
+    }
 }
 
 - (IBAction)goToMarker8:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_8);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_8);
+    }
 }
 
 - (IBAction)goToMarker9:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::go_to_marker_9);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::go_to_marker_9);
+    }
 }
 
 - (IBAction)undo:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::undo);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::undo);
+    }
 }
 
 - (IBAction)redo:(NSMenuItem *)sender {
-    self->_ui_root->handle_action(action::redo);
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::redo);
+    }
 }
 
 #pragma mark -

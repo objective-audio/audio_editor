@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_action_controller_dependency.h>
 #include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_file_importer_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
@@ -52,7 +51,6 @@ struct player_for_project {
 };
 
 struct project_editor_for_project : project_editor_for_editing_root_presenter,
-                                    project_editor_for_action_controller,
                                     project_editor_for_markers_presenter,
                                     project_editor_for_modules_presenter,
                                     project_editor_for_track_presenter {

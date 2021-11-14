@@ -9,9 +9,6 @@
 #include <audio_editor_core/ae_project_pool_types.h>
 
 namespace yas::ae {
-class project;
-class uuid_generator;
-
 struct project_pool final : project_pool_for_app_presenter {
     void add_project(url const &file_url) override;
     std::shared_ptr<project_for_project_pool> add_and_return_project(url const &file_url);
