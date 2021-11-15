@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_root_presenter_dependency.h>
@@ -19,6 +20,7 @@ struct project_for_project_pool : project_for_window_presenter,
     [[nodiscard]] virtual std::shared_ptr<project_editor_for_project> const &editor() const = 0;
     [[nodiscard]] virtual std::shared_ptr<zooming_for_project> const &zooming() const = 0;
     [[nodiscard]] virtual std::shared_ptr<scrolling_for_project> const &scrolling() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<action_controller> const &action_controller() const = 0;
 
     [[nodiscard]] virtual observing::endable observe_event(std::function<void(project_event const &)> &&) = 0;
 };

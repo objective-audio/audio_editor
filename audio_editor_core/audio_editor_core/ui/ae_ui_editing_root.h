@@ -18,14 +18,13 @@ class ui_track;
 
 struct ui_editing_root final {
     bool responds_to_action(action const);
-    void handle_action(action const);
 
     static std::shared_ptr<ui_editing_root> make_shared(std::shared_ptr<ui::standard> const &,
                                                         std::string const &project_id);
 
    private:
     std::shared_ptr<editing_root_presenter> const _presenter;
-    std::shared_ptr<action_controller> const _action_controller;
+    std::weak_ptr<action_controller> const _action_controller;
     std::shared_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
 
     std::shared_ptr<ui::standard> const _standard;
@@ -43,6 +42,7 @@ struct ui_editing_root final {
     std::shared_ptr<ui_button> const _insert_marker_button;
     std::shared_ptr<ui_button> const _undo_button;
     std::shared_ptr<ui_button> const _redo_button;
+    std::shared_ptr<ui_button> const _export_button;
     std::vector<std::shared_ptr<ui_button>> const _buttons;
     std::shared_ptr<ui::collection_layout> const _button_collection_layout;
     std::shared_ptr<ui::strings> const _status_strings;

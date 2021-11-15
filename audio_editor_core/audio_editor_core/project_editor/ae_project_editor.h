@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
@@ -18,42 +19,42 @@ struct project_editor final : project_editor_for_project {
 
     [[nodiscard]] proc::frame_index_t current_frame() const override;
 
-    void set_playing(bool const) override;
+    void set_playing(bool const);
     [[nodiscard]] bool is_playing() const override;
 
     [[nodiscard]] bool is_scrolling() const override;
 
     [[nodiscard]] bool can_nudge() const override;
-    void nudge_previous() override;
-    void nudge_next() override;
+    void nudge_previous();
+    void nudge_next();
 
     [[nodiscard]] bool can_jump_to_previous_edge() const override;
     [[nodiscard]] bool can_jump_to_next_edge() const override;
-    void jump_to_previous_edge() override;
-    void jump_to_next_edge() override;
+    void jump_to_previous_edge();
+    void jump_to_next_edge();
 
     [[nodiscard]] bool can_split() const override;
-    void split() override;
-    void drop_head_and_offset() override;
-    void drop_tail_and_offset() override;
+    void split();
+    void drop_head_and_offset();
+    void drop_tail_and_offset();
 
     [[nodiscard]] bool can_erase() const override;
-    void erase_and_offset() override;
+    void erase_and_offset();
 
     [[nodiscard]] bool can_insert_marker() const override;
-    void insert_marker() override;
+    void insert_marker();
 
     [[nodiscard]] bool can_return_to_zero() const override;
-    void return_to_zero() override;
+    void return_to_zero();
 
     [[nodiscard]] bool can_go_to_marker(std::size_t const) const override;
-    void go_to_marker(std::size_t const) override;
+    void go_to_marker(std::size_t const);
 
     [[nodiscard]] bool can_undo() const override;
-    void undo() override;
+    void undo();
 
     [[nodiscard]] bool can_redo() const override;
-    void redo() override;
+    void redo();
 
     [[nodiscard]] std::optional<proc::frame_index_t> previous_edge() const override;
     [[nodiscard]] std::optional<proc::frame_index_t> next_edge() const override;
@@ -67,13 +68,14 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] observing::syncable observe_marker_pool_event(
         std::function<void(marker_pool_event const &)> &&) override;
 
-    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
-        url const &editing_file_url, url const &db_url, ae::file_info const &,
-        std::shared_ptr<player_for_project_editor> const &);
+    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(url const &editing_file_url, url const &db_url,
+                                                                     ae::file_info const &,
+                                                                     std::shared_ptr<player_for_project_editor> const &,
+                                                                     std::shared_ptr<action_controller> const &);
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
         std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
-        std::shared_ptr<database_for_project_editor> const &);
+        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<action_controller> const &);
 
    private:
     url const _editing_file_url;
@@ -82,6 +84,7 @@ struct project_editor final : project_editor_for_project {
     std::shared_ptr<file_track_for_project_editor> const _file_track;
     std::shared_ptr<marker_pool_for_project_editor> const _marker_pool;
     std::shared_ptr<database_for_project_editor> const _database;
+    std::shared_ptr<action_controller> const _action_controller;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
@@ -91,7 +94,7 @@ struct project_editor final : project_editor_for_project {
                    std::shared_ptr<player_for_project_editor> const &,
                    std::shared_ptr<file_track_for_project_editor> const &,
                    std::shared_ptr<marker_pool_for_project_editor> const &,
-                   std::shared_ptr<database_for_project_editor> const &);
+                   std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<action_controller> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

@@ -4,10 +4,13 @@
 
 #include "ae_ui_editing_root.h"
 #include <audio_editor_core/ae_action_controller.h>
+#include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_editing_root_presenter.h>
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
+#include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_ui_editing_root_utils.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_track.h>
@@ -42,10 +45,11 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _insert_marker_button(ui_button::make_shared(this->_font_atlas, standard)),
       _undo_button(ui_button::make_shared(this->_font_atlas, standard)),
       _redo_button(ui_button::make_shared(this->_font_atlas, standard)),
+      _export_button(ui_button::make_shared(this->_font_atlas, standard)),
       _buttons({this->_play_button, this->_split_button, this->_drop_head_and_offset_button,
                 this->_drop_tail_and_offset_button, this->_erase_and_offset_button, this->_zero_button,
                 this->_jump_previous_button, this->_jump_next_button, this->_insert_marker_button, this->_undo_button,
-                this->_redo_button}),
+                this->_redo_button, this->_export_button}),
       _button_collection_layout(ui::collection_layout::make_shared({.preferred_cell_count = this->_buttons.size(),
                                                                     .row_spacing = 1.0f,
                                                                     .col_spacing = 1.0f,
@@ -77,6 +81,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
     this->_insert_marker_button->set_text("insert\nmarker");
     this->_undo_button->set_text("undo");
     this->_redo_button->set_text("redo");
+    this->_export_button->set_text("export");
 
     this->_setup_node_hierarchie();
     this->_setup_observing();
@@ -85,10 +90,6 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
 
 bool ui_editing_root::responds_to_action(action const action) {
     return this->_presenter->responds_to_action(action);
-}
-
-void ui_editing_root::handle_action(action const action) {
-    this->_action_controller->handle_action(action);
 }
 
 void ui_editing_root::_setup_node_hierarchie() {
@@ -149,48 +150,100 @@ void ui_editing_root::_setup_observing() {
         .end()
         ->add_to(this->_pool);
 
-    this->_play_button->observe_tapped([this] { this->_action_controller->handle_action(action::toggle_play); })
+    this->_play_button
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::toggle_play);
+            }
+        })
         .end()
         ->add_to(this->_pool);
-    this->_split_button->observe_tapped([this] { this->_action_controller->handle_action(action::split); })
+    this->_split_button
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::split);
+            }
+        })
         .end()
         ->add_to(this->_pool);
     this->_drop_head_and_offset_button
-        ->observe_tapped([this] { this->_action_controller->handle_action(action::drop_head_and_offset); })
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::drop_head_and_offset);
+            }
+        })
         .end()
         ->add_to(this->_pool);
     this->_drop_tail_and_offset_button
-        ->observe_tapped([this] { this->_action_controller->handle_action(action::drop_tail_and_offset); })
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::drop_tail_and_offset);
+            }
+        })
         .end()
         ->add_to(this->_pool);
     this->_erase_and_offset_button
-        ->observe_tapped([this] { this->_action_controller->handle_action(action::erase_and_offset); })
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::erase_and_offset);
+            }
+        })
         .end()
         ->add_to(this->_pool);
-    this->_zero_button->observe_tapped([this] { this->_action_controller->handle_action(action::return_to_zero); })
+    this->_zero_button
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::return_to_zero);
+            }
+        })
         .end()
         ->add_to(this->_pool);
     this->_jump_previous_button
-        ->observe_tapped([this] { this->_action_controller->handle_action(action::jump_previous); })
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::jump_previous);
+            }
+        })
         .end()
         ->add_to(this->_pool);
-    this->_jump_next_button->observe_tapped([this] { this->_action_controller->handle_action(action::jump_next); })
+    this->_jump_next_button
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::jump_next);
+            }
+        })
         .end()
         ->add_to(this->_pool);
     this->_insert_marker_button
-        ->observe_tapped([this] { this->_action_controller->handle_action(action::insert_marker); })
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::insert_marker);
+            }
+        })
         .end()
         ->add_to(this->_pool);
-    this->_undo_button->observe_tapped([this] { this->_action_controller->handle_action(action::undo); })
+    this->_undo_button
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::undo);
+            }
+        })
         .end()
         ->add_to(this->_pool);
-    this->_redo_button->observe_tapped([this] { this->_action_controller->handle_action(action::redo); })
+    this->_redo_button
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::redo);
+            }
+        })
         .end()
         ->add_to(this->_pool);
 
     this->_keyboard
         ->observe([this](ae::key const &key) {
-            this->_action_controller->handle_action(ui_editing_root_utils::to_action(key));
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(ui_editing_root_utils::to_action(key));
+            }
         })
         .end()
         ->add_to(this->_pool);
@@ -350,7 +403,7 @@ void ui_editing_root::_update_buttons_enabled() {
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::shared_ptr<ui::standard> const &standard,
                                                               std::string const &project_id) {
     auto const presenter = editing_root_presenter::make_shared(project_id);
-    auto const action_controller = action_controller::make_shared(project_id);
+    auto const action_controller = app::global()->project_pool()->project_for_id(project_id)->action_controller();
     auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
     auto const ui_track = ui_track::make_shared(standard, project_id);
     return std::shared_ptr<ui_editing_root>(

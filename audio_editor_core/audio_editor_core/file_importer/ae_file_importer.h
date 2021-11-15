@@ -7,9 +7,6 @@
 #include <audio_editor_core/ae_project_dependency.h>
 #include <cpp_utils/yas_worker.h>
 
-#include <functional>
-#include <memory>
-
 namespace yas::ae {
 class file_importer_resource;
 

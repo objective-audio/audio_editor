@@ -14,7 +14,8 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<player_for_project> const &player,
                  std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
                  std::shared_ptr<zooming_for_project> const &zooming,
-                 std::shared_ptr<scrolling_for_project> const &scrolling)
+                 std::shared_ptr<scrolling_for_project> const &scrolling,
+                 std::shared_ptr<ae::action_controller> const &action_controller)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),
@@ -24,6 +25,7 @@ project::project(std::string const &identifier, url const &file_url,
       _editor_maker(editor_maker),
       _zooming(zooming),
       _scrolling(scrolling),
+      _action_controller(action_controller),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
 }
@@ -35,9 +37,10 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
                                               std::shared_ptr<player_for_project> const &player,
                                               std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
                                               std::shared_ptr<zooming_for_project> const &zooming,
-                                              std::shared_ptr<scrolling_for_project> const &scrolling) {
+                                              std::shared_ptr<scrolling_for_project> const &scrolling,
+                                              std::shared_ptr<ae::action_controller> const &action_controller) {
     auto shared = std::shared_ptr<project>(new project{identifier, file_url, project_url, file_importer, file_loader,
-                                                       player, editor_maker, zooming, scrolling});
+                                                       player, editor_maker, zooming, scrolling, action_controller});
     shared->_setup(shared);
     return shared;
 }
@@ -68,6 +71,10 @@ std::shared_ptr<zooming_for_project> const &project::zooming() const {
 
 std::shared_ptr<scrolling_for_project> const &project::scrolling() const {
     return this->_scrolling;
+}
+
+std::shared_ptr<action_controller> const &project::action_controller() const {
+    return this->_action_controller;
 }
 
 bool project::can_close() const {

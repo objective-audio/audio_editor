@@ -3,7 +3,6 @@
 //
 
 #include "ae_ui_root.h"
-#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_root_presenter.h>
 #include <audio_editor_core/ae_ui_editing_root.h>
@@ -46,11 +45,5 @@ bool ui_root::responds_to_action(action const action) {
         return editing_root->responds_to_action(action);
     } else {
         return false;
-    }
-}
-
-void ui_root::handle_action(action const action) {
-    if (auto const &editing_root = this->_editing_root) {
-        editing_root->handle_action(action);
     }
 }
