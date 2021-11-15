@@ -33,6 +33,11 @@ struct project_stub : project_for_project_pool {
         return _value;
     }
 
+    std::shared_ptr<ae::action_controller> const &action_controller() const override {
+        static std::shared_ptr<ae::action_controller> const _value = nullptr;
+        return _value;
+    }
+
     [[nodiscard]] url const &file_url() const override {
         return this->file_url_value;
     }
