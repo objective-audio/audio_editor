@@ -113,6 +113,9 @@ struct project_editor_stub final : project_editor_for_project {
     bool can_redo() const override {
         return false;
     }
+    bool can_select_file_for_export() const override {
+        return false;
+    }
 
     std::optional<proc::frame_index_t> previous_edge() const override {
         return std::nullopt;

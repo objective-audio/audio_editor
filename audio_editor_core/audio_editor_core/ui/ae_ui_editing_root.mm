@@ -108,6 +108,7 @@ void ui_editing_root::_setup_node_hierarchie() {
     root_node->add_sub_node(this->_insert_marker_button->node());
     root_node->add_sub_node(this->_undo_button->node());
     root_node->add_sub_node(this->_redo_button->node());
+    root_node->add_sub_node(this->_export_button->node());
 
     root_node->add_sub_node(this->_status_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
@@ -234,6 +235,14 @@ void ui_editing_root::_setup_observing() {
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
                 controller->handle_action(action::redo);
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
+    this->_export_button
+        ->observe_tapped([this] {
+            if (auto const controller = this->_action_controller.lock()) {
+                controller->handle_action(action::select_file_for_export);
             }
         })
         .end()
@@ -398,6 +407,7 @@ void ui_editing_root::_update_buttons_enabled() {
     this->_zero_button->set_enabled(presenter->is_zero_button_enabled());
     this->_undo_button->set_enabled(presenter->is_undo_button_enabled());
     this->_redo_button->set_enabled(presenter->is_redo_button_enabled());
+    this->_export_button->set_enabled(presenter->is_export_button_enabled());
 }
 
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::shared_ptr<ui::standard> const &standard,

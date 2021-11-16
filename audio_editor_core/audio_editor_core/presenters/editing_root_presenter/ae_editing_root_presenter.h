@@ -35,6 +35,7 @@ struct editing_root_presenter final {
     [[nodiscard]] bool is_zero_button_enabled() const;
     [[nodiscard]] bool is_undo_button_enabled() const;
     [[nodiscard]] bool is_redo_button_enabled() const;
+    [[nodiscard]] bool is_export_button_enabled() const;
 
     [[nodiscard]] playing_line_state_t playing_line_state() const;
 

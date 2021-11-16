@@ -28,5 +28,6 @@ enum class action {
     go_to_marker_9,
     undo,
     redo,
+    select_file_for_export,
 };
 }  // namespace yas::ae

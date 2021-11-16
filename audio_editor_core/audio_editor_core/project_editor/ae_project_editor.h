@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action_controller.h>
+#include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
@@ -56,6 +57,11 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_redo() const override;
     void redo();
 
+    [[nodiscard]] bool can_select_file_for_export() const override;
+    void select_file_for_export();
+    [[nodiscard]] bool can_export_to_file() const;
+    void export_to_file(url const &);
+
     [[nodiscard]] std::optional<proc::frame_index_t> previous_edge() const override;
     [[nodiscard]] std::optional<proc::frame_index_t> next_edge() const override;
 
@@ -71,11 +77,13 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(url const &editing_file_url, url const &db_url,
                                                                      ae::file_info const &,
                                                                      std::shared_ptr<player_for_project_editor> const &,
-                                                                     std::shared_ptr<action_controller> const &);
+                                                                     std::shared_ptr<action_controller> const &,
+                                                                     std::shared_ptr<dialog_presenter> const &);
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
         std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
-        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<action_controller> const &);
+        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<action_controller> const &,
+        std::shared_ptr<dialog_presenter> const &);
 
    private:
     url const _editing_file_url;
@@ -85,6 +93,7 @@ struct project_editor final : project_editor_for_project {
     std::shared_ptr<marker_pool_for_project_editor> const _marker_pool;
     std::shared_ptr<database_for_project_editor> const _database;
     std::shared_ptr<action_controller> const _action_controller;
+    std::shared_ptr<dialog_presenter> const _dialog_presenter;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
@@ -94,7 +103,8 @@ struct project_editor final : project_editor_for_project {
                    std::shared_ptr<player_for_project_editor> const &,
                    std::shared_ptr<file_track_for_project_editor> const &,
                    std::shared_ptr<marker_pool_for_project_editor> const &,
-                   std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<action_controller> const &);
+                   std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<action_controller> const &,
+                   std::shared_ptr<dialog_presenter> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

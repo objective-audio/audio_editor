@@ -45,6 +45,7 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual bool can_go_to_marker(std::size_t const) const = 0;
     [[nodiscard]] virtual bool can_undo() const = 0;
     [[nodiscard]] virtual bool can_redo() const = 0;
+    [[nodiscard]] virtual bool can_select_file_for_export() const = 0;
 
     [[nodiscard]] virtual std::optional<proc::frame_index_t> previous_edge() const = 0;
     [[nodiscard]] virtual std::optional<proc::frame_index_t> next_edge() const = 0;

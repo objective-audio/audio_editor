@@ -12,7 +12,7 @@ namespace yas::ae {
 struct project_pool final : project_pool_for_app_presenter {
     void add_project(url const &file_url) override;
     std::shared_ptr<project_for_project_pool> add_and_return_project(url const &file_url);
-    [[nodiscard]] std::shared_ptr<project_for_project_pool> project_for_id(std::string const &) const;
+    [[nodiscard]] std::shared_ptr<project_for_project_pool> const &project_for_id(std::string const &) const;
     [[nodiscard]] std::size_t size() const;
     [[nodiscard]] observing::syncable observe_event(std::function<void(project_pool_event const &)> &&) override;
 
