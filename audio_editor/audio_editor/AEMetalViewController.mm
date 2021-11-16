@@ -39,15 +39,15 @@ using namespace yas::ae;
         ->observe_event([weak_controller = self->_action_controller](dialog_event const &event) {
             auto const panel = [NSSavePanel savePanel];
             panel.canCreateDirectories = YES;
-            panel.extensionHidden = NO;
-            panel.allowedContentTypes = @[UTTypeAudio];
+            panel.allowedFileTypes = @[@"wav"];
+            panel.nameFieldStringValue = @"Untitled";
 
             if ([panel runModal] == NSModalResponseOK) {
                 auto const path = to_string((__bridge CFStringRef)panel.URL.path);
-                auto const export_url = url::file_url(path);
+                auto const url = url::file_url(path);
 
                 if (auto const controller = weak_controller.lock()) {
-                    controller->export_to_file(export_url);
+                    controller->export_to_file(url);
                 }
             }
         })

@@ -4,13 +4,12 @@
 
 #pragma once
 
-#include <audio/yas_audio_umbrella.h>
 #include <audio_editor_core/ae_db_types.h>
+#include <audio_editor_core/ae_exporter_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
-#include <playing/yas_playing_umbrella.h>
 
 #include <memory>
 
@@ -105,5 +104,13 @@ struct database_for_project_editor {
     virtual void redo() = 0;
 
     [[nodiscard]] virtual observing::endable observe_reverted(std::function<void(void)> &&) = 0;
+};
+
+struct exporter_for_project_editor {
+    virtual ~exporter_for_project_editor() = default;
+
+    virtual void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &) = 0;
+    [[nodiscard]] virtual bool is_exporting() const = 0;
+    [[nodiscard]] virtual observing::syncable observe_is_exporting(std::function<void(bool const &)> &&) = 0;
 };
 }  // namespace yas::ae

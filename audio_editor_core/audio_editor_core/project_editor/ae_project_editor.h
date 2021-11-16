@@ -79,8 +79,8 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
         std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
-        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<action_controller> const &,
-        std::shared_ptr<dialog_presenter> const &);
+        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
+        std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &);
 
    private:
     url const _editing_file_url;
@@ -89,6 +89,7 @@ struct project_editor final : project_editor_for_project {
     std::shared_ptr<file_track_for_project_editor> const _file_track;
     std::shared_ptr<marker_pool_for_project_editor> const _marker_pool;
     std::shared_ptr<database_for_project_editor> const _database;
+    std::shared_ptr<exporter_for_project_editor> const _exporter;
     std::shared_ptr<action_controller> const _action_controller;
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
 
@@ -100,7 +101,8 @@ struct project_editor final : project_editor_for_project {
                    std::shared_ptr<player_for_project_editor> const &,
                    std::shared_ptr<file_track_for_project_editor> const &,
                    std::shared_ptr<marker_pool_for_project_editor> const &,
-                   std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<action_controller> const &,
+                   std::shared_ptr<database_for_project_editor> const &,
+                   std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<action_controller> const &,
                    std::shared_ptr<dialog_presenter> const &);
 
     project_editor(project_editor const &) = delete;
@@ -110,5 +112,6 @@ struct project_editor final : project_editor_for_project {
 
     [[nodiscard]] std::optional<proc::frame_index_t> _previous_edge() const;
     [[nodiscard]] std::optional<proc::frame_index_t> _next_edge() const;
+    [[nodiscard]] bool _can_editing() const;
 };
 }  // namespace yas::ae
