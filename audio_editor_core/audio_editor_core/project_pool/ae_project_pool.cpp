@@ -37,11 +37,12 @@ std::shared_ptr<project_for_project_pool> project_pool::add_and_return_project(u
     return project;
 }
 
-std::shared_ptr<project_for_project_pool> project_pool::project_for_id(std::string const &project_id) const {
+std::shared_ptr<project_for_project_pool> const &project_pool::project_for_id(std::string const &project_id) const {
     if (this->_projects->contains(project_id)) {
         return this->_projects->at(project_id).first;
     } else {
-        return nullptr;
+        static std::shared_ptr<project_for_project_pool> const empty_project = nullptr;
+        return empty_project;
     }
 }
 

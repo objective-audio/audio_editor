@@ -21,7 +21,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<file_track_for_project_editor> const &file_track,
                                std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
                                std::shared_ptr<database_for_project_editor> const &database,
-                               std::shared_ptr<action_controller> const &action_controller)
+                               std::shared_ptr<action_controller> const &action_controller,
+                               std::shared_ptr<dialog_presenter> const &dialog_presenter)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),
@@ -30,7 +31,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _track(proc::track::make_shared()),
       _marker_pool(marker_pool),
       _database(database),
-      _action_controller(action_controller) {
+      _action_controller(action_controller),
+      _dialog_presenter(dialog_presenter) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -210,10 +212,15 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action::redo:
                     this->redo();
                     break;
+                case action::select_file_for_export:
+                    this->select_file_for_export();
+                    break;
             }
         })
         .end()
         ->add_to(this->_pool);
+
+    action_controller->observe_export([this](url const &url) { this->export_to_file(url); }).end()->add_to(this->_pool);
 }
 
 ae::file_info const &project_editor::file_info() const {
@@ -411,6 +418,27 @@ void project_editor::redo() {
     this->database()->redo();
 }
 
+bool project_editor::can_select_file_for_export() const {
+    return this->can_export_to_file();
+}
+
+void project_editor::select_file_for_export() {
+    if (!this->can_select_file_for_export()) {
+        return;
+    }
+
+    this->_dialog_presenter->notify_event(dialog_event::select_file_for_export);
+}
+
+bool project_editor::can_export_to_file() const {
+#warning todo
+    return false;
+}
+
+void project_editor::export_to_file(url const &export_url){
+#warning todo
+}
+
 std::optional<proc::frame_index_t> project_editor::previous_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->_file_track->previous_edge(current_frame);
@@ -464,12 +492,13 @@ observing::syncable project_editor::observe_marker_pool_event(
     return this->_marker_pool->observe_event(std::move(handler));
 }
 
-std::shared_ptr<project_editor> project_editor::make_shared(
-    url const &editing_file_url, url const &db_file_url, ae::file_info const &file_info,
-    std::shared_ptr<player_for_project_editor> const &player,
-    std::shared_ptr<action_controller> const &action_controller) {
+std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_file_url, url const &db_file_url,
+                                                            ae::file_info const &file_info,
+                                                            std::shared_ptr<player_for_project_editor> const &player,
+                                                            std::shared_ptr<action_controller> const &action_controller,
+                                                            std::shared_ptr<dialog_presenter> const &dialog_presenter) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
-                       database::make_shared(db_file_url), action_controller);
+                       database::make_shared(db_file_url), action_controller, dialog_presenter);
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
@@ -478,7 +507,8 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
     std::shared_ptr<database_for_project_editor> const &database,
-    std::shared_ptr<action_controller> const &action_controller) {
-    return std::shared_ptr<project_editor>(
-        new project_editor{editing_file_url, file_info, player, file_track, marker_pool, database, action_controller});
+    std::shared_ptr<action_controller> const &action_controller,
+    std::shared_ptr<dialog_presenter> const &dialog_presenter) {
+    return std::shared_ptr<project_editor>(new project_editor{
+        editing_file_url, file_info, player, file_track, marker_pool, database, action_controller, dialog_presenter});
 }

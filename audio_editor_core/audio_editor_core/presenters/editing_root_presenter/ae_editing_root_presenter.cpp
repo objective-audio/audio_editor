@@ -158,6 +158,11 @@ bool editing_root_presenter::is_redo_button_enabled() const {
     return editor ? editor->can_redo() : false;
 }
 
+bool editing_root_presenter::is_export_button_enabled() const {
+    auto const editor = this->_project_editor.lock();
+    return editor ? editor->can_select_file_for_export() : false;
+}
+
 playing_line_state_t editing_root_presenter::playing_line_state() const {
     if (auto const editor = this->_project_editor.lock()) {
         if (editor->is_scrolling()) {
@@ -261,5 +266,8 @@ bool editing_root_presenter::responds_to_action(action const action) {
             return editor->can_undo();
         case action::redo:
             return editor->can_redo();
+
+        case action::select_file_for_export:
+            return editor->can_select_file_for_export();
     }
 }

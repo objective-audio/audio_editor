@@ -14,7 +14,7 @@ struct project final : project_for_project_pool {
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
         std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &,
         std::shared_ptr<zooming_for_project> const &, std::shared_ptr<scrolling_for_project> const &,
-        std::shared_ptr<ae::action_controller> const &);
+        std::shared_ptr<ae::action_controller> const &, std::shared_ptr<ae::dialog_presenter> const &);
 
     [[nodiscard]] std::string const &identifier() const override;
     [[nodiscard]] url const &file_url() const override;
@@ -24,6 +24,7 @@ struct project final : project_for_project_pool {
     [[nodiscard]] std::shared_ptr<zooming_for_project> const &zooming() const override;
     [[nodiscard]] std::shared_ptr<scrolling_for_project> const &scrolling() const override;
     [[nodiscard]] std::shared_ptr<ae::action_controller> const &action_controller() const override;
+    [[nodiscard]] std::shared_ptr<ae::dialog_presenter> const &dialog_presenter() const override;
 
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
@@ -44,6 +45,7 @@ struct project final : project_for_project_pool {
     std::shared_ptr<zooming_for_project> const _zooming;
     std::shared_ptr<scrolling_for_project> const _scrolling;
     std::shared_ptr<ae::action_controller> const _action_controller;
+    std::shared_ptr<ae::dialog_presenter> const _dialog_presenter;
 
     observing::value::holder_ptr<project_state> const _state;
 
@@ -54,7 +56,7 @@ struct project final : project_for_project_pool {
             std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
             std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &,
             std::shared_ptr<zooming_for_project> const &, std::shared_ptr<scrolling_for_project> const &,
-            std::shared_ptr<ae::action_controller> const &);
+            std::shared_ptr<ae::action_controller> const &, std::shared_ptr<ae::dialog_presenter> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;

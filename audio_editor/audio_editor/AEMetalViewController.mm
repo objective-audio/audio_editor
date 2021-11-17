@@ -3,6 +3,7 @@
 //
 
 #import "AEMetalViewController.h"
+#import <UniformTypeIdentifiers/UTCoreTypes.h>
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
@@ -27,11 +28,31 @@ using namespace yas::ae;
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
     self->_ui_root = ui_root::make_shared(standard, project_id);
 
-    self->_action_controller = app::global()->project_pool()->project_for_id(project_id)->action_controller();
+    auto const &project = app::global()->project_pool()->project_for_id(project_id);
+    self->_action_controller = project->action_controller();
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
                         event_manager:standard->event_manager()];
+
+    project->dialog_presenter()
+        ->observe_event([weak_controller = self->_action_controller](dialog_event const &event) {
+            auto const panel = [NSSavePanel savePanel];
+            panel.canCreateDirectories = YES;
+            panel.extensionHidden = NO;
+            panel.allowedContentTypes = @[UTTypeAudio];
+
+            if ([panel runModal] == NSModalResponseOK) {
+                auto const path = to_string((__bridge CFStringRef)panel.URL.path);
+                auto const export_url = url::file_url(path);
+
+                if (auto const controller = weak_controller.lock()) {
+                    controller->export_to_file(export_url);
+                }
+            }
+        })
+        .end()
+        ->add_to(self->_pool);
 }
 
 - (IBAction)togglePlay:(NSMenuItem *)sender {
@@ -166,6 +187,12 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)exportToFile:(id)sender {
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::select_file_for_export);
+    }
+}
+
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -221,6 +248,8 @@ using namespace yas::ae;
         return action::undo;
     } else if (selector == @selector(redo:)) {
         return action::redo;
+    } else if (selector == @selector(exportToFile:)) {
+        return action::select_file_for_export;
     }
 
     return std::nullopt;
@@ -272,6 +301,8 @@ using namespace yas::ae;
             return @selector(undo:);
         case action::redo:
             return @selector(redo:);
+        case action::select_file_for_export:
+            return @selector(exportToFile:);
     }
 }
 
