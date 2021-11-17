@@ -117,13 +117,6 @@ struct project_editor_stub final : project_editor_for_project {
         return false;
     }
 
-    std::optional<proc::frame_index_t> previous_edge() const override {
-        return std::nullopt;
-    }
-    std::optional<proc::frame_index_t> next_edge() const override {
-        return std::nullopt;
-    }
-
     std::map<proc::frame_index_t, marker> const &markers() const override {
         return ae::empty_markers;
     }

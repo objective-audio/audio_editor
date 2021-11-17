@@ -62,9 +62,6 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_export_to_file() const;
     void export_to_file(url const &);
 
-    [[nodiscard]] std::optional<proc::frame_index_t> previous_edge() const override;
-    [[nodiscard]] std::optional<proc::frame_index_t> next_edge() const override;
-
     [[nodiscard]] std::map<proc::frame_index_t, marker> const &markers() const override;
     [[nodiscard]] file_track_module_map_t const &modules() const override;
 
@@ -110,5 +107,8 @@ struct project_editor final : project_editor_for_project {
     project_editor(project_editor &&) = delete;
     project_editor &operator=(project_editor const &) = delete;
     project_editor &operator=(project_editor &&) = delete;
+
+    [[nodiscard]] std::optional<proc::frame_index_t> _previous_edge() const;
+    [[nodiscard]] std::optional<proc::frame_index_t> _next_edge() const;
 };
 }  // namespace yas::ae

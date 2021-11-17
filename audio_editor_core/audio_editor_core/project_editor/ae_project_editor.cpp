@@ -282,21 +282,21 @@ void project_editor::nudge_next() {
 }
 
 bool project_editor::can_jump_to_previous_edge() const {
-    return this->previous_edge().has_value();
+    return this->_previous_edge().has_value();
 }
 
 bool project_editor::can_jump_to_next_edge() const {
-    return this->next_edge().has_value();
+    return this->_next_edge().has_value();
 }
 
 void project_editor::jump_to_previous_edge() {
-    if (auto const edge = this->previous_edge()) {
+    if (auto const edge = this->_previous_edge()) {
         this->_player->seek(edge.value());
     }
 }
 
 void project_editor::jump_to_next_edge() {
-    if (auto const edge = this->next_edge()) {
+    if (auto const edge = this->_next_edge()) {
         this->_player->seek(edge.value());
     }
 }
@@ -439,7 +439,7 @@ void project_editor::export_to_file(url const &export_url){
 #warning todo
 }
 
-std::optional<proc::frame_index_t> project_editor::previous_edge() const {
+std::optional<proc::frame_index_t> project_editor::_previous_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->_file_track->previous_edge(current_frame);
     auto const marker_pool_edge = this->_marker_pool->previous_edge(current_frame);
@@ -455,7 +455,7 @@ std::optional<proc::frame_index_t> project_editor::previous_edge() const {
     }
 }
 
-std::optional<proc::frame_index_t> project_editor::next_edge() const {
+std::optional<proc::frame_index_t> project_editor::_next_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->file_track()->next_edge(current_frame);
     auto const marker_pool_edge = this->marker_pool()->next_edge(current_frame);
