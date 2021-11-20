@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_database.h>
+#include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_marker_pool.h>
@@ -21,6 +22,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<file_track_for_project_editor> const &file_track,
                                std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
                                std::shared_ptr<database_for_project_editor> const &database,
+                               std::shared_ptr<exporter_for_project_editor> const &exporter,
                                std::shared_ptr<action_controller> const &action_controller,
                                std::shared_ptr<dialog_presenter> const &dialog_presenter)
     : _editing_file_url(editing_file_url),
@@ -31,6 +33,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _track(proc::track::make_shared()),
       _marker_pool(marker_pool),
       _database(database),
+      _exporter(exporter),
       _action_controller(action_controller),
       _dialog_presenter(dialog_presenter) {
     this->_timeline->insert_track(0, this->_track);
@@ -282,26 +285,30 @@ void project_editor::nudge_next() {
 }
 
 bool project_editor::can_jump_to_previous_edge() const {
-    return this->previous_edge().has_value();
+    return this->_previous_edge().has_value();
 }
 
 bool project_editor::can_jump_to_next_edge() const {
-    return this->next_edge().has_value();
+    return this->_next_edge().has_value();
 }
 
 void project_editor::jump_to_previous_edge() {
-    if (auto const edge = this->previous_edge()) {
+    if (auto const edge = this->_previous_edge()) {
         this->_player->seek(edge.value());
     }
 }
 
 void project_editor::jump_to_next_edge() {
-    if (auto const edge = this->next_edge()) {
+    if (auto const edge = this->_next_edge()) {
         this->_player->seek(edge.value());
     }
 }
 
 bool project_editor::can_split() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
     auto const &file_track = this->file_track();
     auto const current_frame = this->_player->current_frame();
     return file_track->splittable_module_at(current_frame).has_value();
@@ -335,6 +342,10 @@ void project_editor::drop_tail_and_offset() {
 }
 
 bool project_editor::can_erase() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
     auto const current_frame = this->_player->current_frame();
     return this->file_track()->module_at(current_frame).has_value();
 }
@@ -349,6 +360,10 @@ void project_editor::erase_and_offset() {
 }
 
 bool project_editor::can_insert_marker() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
     auto const current_frame = this->_player->current_frame();
     return this->marker_pool()->markers().count(current_frame) == 0;
 }
@@ -395,6 +410,10 @@ void project_editor::go_to_marker(std::size_t const marker_idx) {
 }
 
 bool project_editor::can_undo() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
     return this->database()->can_undo();
 }
 
@@ -407,6 +426,10 @@ void project_editor::undo() {
 }
 
 bool project_editor::can_redo() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
     return this->database()->can_redo();
 }
 
@@ -431,15 +454,27 @@ void project_editor::select_file_for_export() {
 }
 
 bool project_editor::can_export_to_file() const {
-#warning todo
-    return false;
+    if (!this->_can_editing()) {
+        return false;
+    }
+
+    return this->_file_track->modules().size() > 0;
 }
 
-void project_editor::export_to_file(url const &export_url){
-#warning todo
+void project_editor::export_to_file(url const &export_url) {
+    if (!this->can_export_to_file()) {
+        return;
+    }
+
+    this->_player->set_playing(false);
+
+    exporting_format const format{.sample_rate = this->_file_info.sample_rate,
+                                  .pcm_format = audio::pcm_format::float32,
+                                  .channel_count = this->_file_info.channel_count};
+    this->_exporter->begin(export_url, this->_timeline, format);
 }
 
-std::optional<proc::frame_index_t> project_editor::previous_edge() const {
+std::optional<proc::frame_index_t> project_editor::_previous_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->_file_track->previous_edge(current_frame);
     auto const marker_pool_edge = this->_marker_pool->previous_edge(current_frame);
@@ -455,7 +490,7 @@ std::optional<proc::frame_index_t> project_editor::previous_edge() const {
     }
 }
 
-std::optional<proc::frame_index_t> project_editor::next_edge() const {
+std::optional<proc::frame_index_t> project_editor::_next_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->file_track()->next_edge(current_frame);
     auto const marker_pool_edge = this->marker_pool()->next_edge(current_frame);
@@ -492,13 +527,18 @@ observing::syncable project_editor::observe_marker_pool_event(
     return this->_marker_pool->observe_event(std::move(handler));
 }
 
+bool project_editor::_can_editing() const {
+    return !this->_exporter->is_exporting();
+}
+
 std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_file_url, url const &db_file_url,
                                                             ae::file_info const &file_info,
                                                             std::shared_ptr<player_for_project_editor> const &player,
                                                             std::shared_ptr<action_controller> const &action_controller,
                                                             std::shared_ptr<dialog_presenter> const &dialog_presenter) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
-                       database::make_shared(db_file_url), action_controller, dialog_presenter);
+                       database::make_shared(db_file_url), exporter::make_shared(), action_controller,
+                       dialog_presenter);
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
@@ -507,8 +547,10 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
     std::shared_ptr<database_for_project_editor> const &database,
+    std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<action_controller> const &action_controller,
     std::shared_ptr<dialog_presenter> const &dialog_presenter) {
-    return std::shared_ptr<project_editor>(new project_editor{
-        editing_file_url, file_info, player, file_track, marker_pool, database, action_controller, dialog_presenter});
+    return std::shared_ptr<project_editor>(new project_editor{editing_file_url, file_info, player, file_track,
+                                                              marker_pool, database, exporter, action_controller,
+                                                              dialog_presenter});
 }
