@@ -9,13 +9,19 @@
 namespace yas::ae::db_constants {
 namespace module_name {
     static std::string const entity = "module";
-    static std::string const file_frame = "file_frame";
-    static std::string const range_frame = "range_frame";
-    static std::string const range_length = "range_length";
+
+    namespace attribute {
+        static std::string const file_frame = "file_frame";
+        static std::string const range_frame = "range_frame";
+        static std::string const range_length = "range_length";
+    }  // namespace attribute
 }  // namespace module_name
 
 namespace marker_name {
     static std::string const entity = "marker";
-    static std::string const frame = "frame";
+
+    namespace attribute {
+        static std::string const frame = "frame";
+    }
 }  // namespace marker_name
 }  // namespace yas::ae::db_constants
