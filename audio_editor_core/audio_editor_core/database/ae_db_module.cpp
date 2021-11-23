@@ -14,17 +14,17 @@ db_module::db_module(db::object_ptr const &object) : _object(object) {
 }
 
 db_module db_module::create(db::manager_ptr const &manager, ae::file_module const &file_module) {
-    auto object = manager->create_object(db_constants::module::entity_name);
-    object->set_attribute_value(db_constants::module::file_frame_name, db::value{file_module.file_frame});
-    object->set_attribute_value(db_constants::module::range_frame_name, db::value{file_module.range.frame});
-    object->set_attribute_value(db_constants::module::range_length_name, db::value{file_module.range.length});
+    auto object = manager->create_object(db_constants::module_name::entity);
+    object->set_attribute_value(db_constants::module_name::file_frame, db::value{file_module.file_frame});
+    object->set_attribute_value(db_constants::module_name::range_frame, db::value{file_module.range.frame});
+    object->set_attribute_value(db_constants::module_name::range_length, db::value{file_module.range.length});
     return db_module{std::move(object)};
 }
 
 std::optional<file_module> db_module::file_module() const {
-    auto const file_frame_value = this->_object->attribute_value(db_constants::module::file_frame_name);
-    auto const range_frame_value = this->_object->attribute_value(db_constants::module::range_frame_name);
-    auto const range_length_value = this->_object->attribute_value(db_constants::module::range_length_name);
+    auto const file_frame_value = this->_object->attribute_value(db_constants::module_name::file_frame);
+    auto const range_frame_value = this->_object->attribute_value(db_constants::module_name::range_frame);
+    auto const range_length_value = this->_object->attribute_value(db_constants::module_name::range_length);
 
     if (file_frame_value && range_frame_value && range_length_value) {
         if (auto const range_length = static_cast<proc::length_t>(range_length_value.get<db::integer>());

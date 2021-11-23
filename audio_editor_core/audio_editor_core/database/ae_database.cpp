@@ -154,7 +154,7 @@ void database::_revert(db::integer::type const revert_id) {
         db::no_cancellation,
         [] {
             return db::to_fetch_option(
-                db::select_option{.table = db_constants::module::entity_name,
+                db::select_option{.table = db_constants::module_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
         [weak_db = this->_weak_database](db::manager_vector_result_t result) mutable {
@@ -166,8 +166,8 @@ void database::_revert(db::integer::type const revert_id) {
 
                 db_modules_map modules;
 
-                if (result_objects.contains(db_constants::module::entity_name)) {
-                    auto const &objects = result_objects.at(db_constants::module::entity_name);
+                if (result_objects.contains(db_constants::module_name::entity)) {
+                    auto const &objects = result_objects.at(db_constants::module_name::entity);
                     for (auto const &object : objects) {
                         db_module module{object};
                         if (auto const file_module = module.file_module()) {
@@ -184,7 +184,7 @@ void database::_revert(db::integer::type const revert_id) {
         db::no_cancellation,
         [] {
             return db::to_fetch_option(
-                db::select_option{.table = db_constants::marker::entity_name,
+                db::select_option{.table = db_constants::marker_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
         [weak_db = this->_weak_database](db::manager_vector_result_t result) mutable {
@@ -196,8 +196,8 @@ void database::_revert(db::integer::type const revert_id) {
 
                 db_markers_map markers;
 
-                if (result_objects.contains(db_constants::marker::entity_name)) {
-                    auto const &objects = result_objects.at(db_constants::marker::entity_name);
+                if (result_objects.contains(db_constants::marker_name::entity)) {
+                    auto const &objects = result_objects.at(db_constants::marker_name::entity);
                     for (auto const &object : objects) {
                         db_marker db_marker{object};
                         if (auto const marker = db_marker.marker()) {
