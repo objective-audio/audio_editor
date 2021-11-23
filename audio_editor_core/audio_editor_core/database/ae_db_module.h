@@ -9,7 +9,7 @@
 namespace yas::ae {
 class file_module;
 
-struct db_module {
+struct db_module final {
     explicit db_module(db::object_ptr const &);
 
     [[nodiscard]] static db_module create(db::manager_ptr const &, file_module const &);
