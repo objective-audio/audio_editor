@@ -48,5 +48,7 @@ struct file_track final : file_track_for_project_editor {
     file_track(file_track &&) = delete;
     file_track &operator=(file_track const &) = delete;
     file_track &operator=(file_track &&) = delete;
+
+    void _move_modules_after(proc::frame_index_t const frame, proc::frame_index_t const offset);
 };
 }  // namespace yas::ae
