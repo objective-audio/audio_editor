@@ -116,6 +116,15 @@ struct project_editor_stub final : project_editor_for_project {
     bool can_select_file_for_export() const override {
         return false;
     }
+    bool can_cut() const override {
+        return false;
+    }
+    bool can_copy() const override {
+        return false;
+    }
+    bool can_paste() const override {
+        return false;
+    }
 
     std::map<proc::frame_index_t, marker> const &markers() const override {
         return ae::empty_markers;

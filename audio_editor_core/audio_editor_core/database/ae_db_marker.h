@@ -9,7 +9,7 @@
 namespace yas::ae {
 class marker;
 
-struct db_marker {
+struct db_marker final {
     db_marker(db::object_ptr const &);
 
     [[nodiscard]] static db_marker create(db::manager_ptr const &, marker const &);

@@ -104,15 +104,7 @@ void file_track::erase_and_offset_at(proc::frame_index_t const frame) {
         proc::frame_index_t const offset = -int64_t(module.range.length);
 
         this->erase_module_and_notify(module);
-
-        auto const copied_modules = this->_modules;
-        for (auto const &pair : copied_modules) {
-            if (frame <= pair.first.frame) {
-                auto const &moving_module = pair.second;
-                this->erase_module_and_notify(moving_module);
-                this->insert_module_and_notify(moving_module.offset(offset));
-            }
-        }
+        this->_move_modules_after(frame, offset);
     }
 }
 
@@ -139,15 +131,7 @@ void file_track::drop_head_and_offset_at(proc::frame_index_t const frame) {
 
         this->erase_module_and_notify(module);
         this->insert_module_and_notify(module.head_dropped(frame).value());
-
-        auto const copied_modules = this->_modules;
-        for (auto const &pair : copied_modules) {
-            if (frame <= pair.first.frame) {
-                auto const &moving_module = pair.second;
-                this->erase_module_and_notify(moving_module);
-                this->insert_module_and_notify(moving_module.offset(offset));
-            }
-        }
+        this->_move_modules_after(frame, offset);
     }
 }
 
@@ -159,14 +143,7 @@ void file_track::drop_tail_and_offset_at(proc::frame_index_t const frame) {
         this->erase_module_and_notify(module);
         this->insert_module_and_notify(module.tail_dropped(frame).value());
 
-        auto const copied_modules = this->_modules;
-        for (auto const &pair : copied_modules) {
-            if (frame <= pair.first.frame) {
-                auto const &moving_module = pair.second;
-                this->erase_module_and_notify(moving_module);
-                this->insert_module_and_notify(moving_module.offset(offset));
-            }
-        }
+        this->_move_modules_after(frame, offset);
     }
 }
 
@@ -197,6 +174,24 @@ void file_track::move_modules(std::set<proc::time::range> const &ranges, proc::f
 
     for (auto const &moving_module : moving_modules) {
         this->overwrite_module(moving_module);
+    }
+}
+
+void file_track::split_and_insert_module_and_offset(file_module const &module) {
+    this->split_at(module.range.frame);
+
+    this->_move_modules_after(module.range.frame, module.range.length);
+    this->insert_module_and_notify(module);
+}
+
+void file_track::_move_modules_after(proc::frame_index_t const frame, proc::frame_index_t const offset) {
+    auto const copied_modules = this->_modules;
+    for (auto const &pair : copied_modules) {
+        if (frame <= pair.first.frame) {
+            auto const &moving_module = pair.second;
+            this->erase_module_and_notify(moving_module);
+            this->insert_module_and_notify(moving_module.offset(offset));
+        }
     }
 }
 

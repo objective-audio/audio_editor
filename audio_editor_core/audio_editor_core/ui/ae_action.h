@@ -29,5 +29,8 @@ enum class action {
     undo,
     redo,
     select_file_for_export,
+    cut,
+    copy,
+    paste,
 };
 }  // namespace yas::ae
