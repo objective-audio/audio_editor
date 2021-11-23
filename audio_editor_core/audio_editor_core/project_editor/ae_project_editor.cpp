@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_marker_pool.h>
+#include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
@@ -21,6 +22,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<player_for_project_editor> const &player,
                                std::shared_ptr<file_track_for_project_editor> const &file_track,
                                std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
+                               std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
                                std::shared_ptr<database_for_project_editor> const &database,
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
                                std::shared_ptr<action_controller> const &action_controller,
@@ -32,6 +34,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _timeline(proc::timeline::make_shared()),
       _track(proc::track::make_shared()),
       _marker_pool(marker_pool),
+      _pasteboard(pasteboard),
       _database(database),
       _exporter(exporter),
       _action_controller(action_controller),
@@ -217,6 +220,15 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     break;
                 case action::select_file_for_export:
                     this->select_file_for_export();
+                    break;
+                case action::cut:
+                    this->cut();
+                    break;
+                case action::copy:
+                    this->copy();
+                    break;
+                case action::paste:
+                    this->paste();
                     break;
             }
         })
@@ -474,6 +486,84 @@ void project_editor::export_to_file(url const &export_url) {
     this->_exporter->begin(export_url, this->_timeline, format);
 }
 
+bool project_editor::can_cut() const {
+    return this->can_copy();
+}
+
+void project_editor::cut() {
+    if (!this->can_cut()) {
+        return;
+    }
+
+    this->copy();
+
+    auto const current_frame = this->_player->current_frame();
+    this->file_track()->erase_and_offset_at(current_frame);
+}
+
+bool project_editor::can_copy() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
+    auto const &file_track = this->file_track();
+    auto const current_frame = this->_player->current_frame();
+    return file_track->module_at(current_frame).has_value();
+}
+
+void project_editor::copy() {
+    if (!this->can_copy()) {
+        return;
+    }
+
+    auto const &file_track = this->file_track();
+    auto const current_frame = this->_player->current_frame();
+    if (auto const file_module = file_track->module_at(current_frame)) {
+        auto const &value = file_module.value();
+        this->_pasteboard->set_file_module({.file_frame = value.file_frame, .length = value.range.length});
+    }
+}
+
+bool project_editor::can_paste() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
+    if (!this->_pasteboard->file_module().has_value()) {
+        return false;
+    }
+
+    auto const &file_track = this->file_track();
+    auto const current_frame = this->_player->current_frame();
+
+    if (file_track->modules().empty()) {
+        // moduleが何もなければペーストできる
+        return true;
+    } else if (file_track->module_at(current_frame).has_value()) {
+        // 今いるframeの場所にmoduleがあればペーストできる
+        return true;
+    } else if (file_track->module_at(current_frame - 1).has_value()) {
+        // 今あるmoduleのピッタリ後ろならペーストできる
+        return true;
+    }
+
+    return false;
+}
+
+void project_editor::paste() {
+    if (!this->can_paste()) {
+        return;
+    }
+
+    if (auto const module = this->_pasteboard->file_module()) {
+        auto const module_value = module.value();
+        auto const current_frame = this->_player->current_frame();
+
+        this->_file_track->split_and_insert_module_and_offset(
+            {.file_frame = module_value.file_frame, .range = {current_frame, module_value.length}});
+    }
+}
+
 std::optional<proc::frame_index_t> project_editor::_previous_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->_file_track->previous_edge(current_frame);
@@ -537,8 +627,8 @@ std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_f
                                                             std::shared_ptr<action_controller> const &action_controller,
                                                             std::shared_ptr<dialog_presenter> const &dialog_presenter) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
-                       database::make_shared(db_file_url), exporter::make_shared(), action_controller,
-                       dialog_presenter);
+                       pasteboard::make_shared(), database::make_shared(db_file_url), exporter::make_shared(),
+                       action_controller, dialog_presenter);
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
@@ -546,11 +636,12 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<player_for_project_editor> const &player,
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
+    std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<action_controller> const &action_controller,
     std::shared_ptr<dialog_presenter> const &dialog_presenter) {
     return std::shared_ptr<project_editor>(new project_editor{editing_file_url, file_info, player, file_track,
-                                                              marker_pool, database, exporter, action_controller,
-                                                              dialog_presenter});
+                                                              marker_pool, pasteboard, database, exporter,
+                                                              action_controller, dialog_presenter});
 }

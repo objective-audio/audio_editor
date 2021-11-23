@@ -10,8 +10,7 @@
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
-
-#include <memory>
+#include <audio_editor_core/ae_pasteboard_types.h>
 
 namespace yas::proc {
 class timeline;
@@ -65,6 +64,7 @@ struct file_track_for_project_editor {
     virtual void drop_tail_and_offset_at(proc::frame_index_t const) = 0;
     virtual void overwrite_module(file_module const &) = 0;
     virtual void move_modules(std::set<proc::time::range> const &, proc::frame_index_t const) = 0;
+    virtual void split_and_insert_module_and_offset(file_module const &) = 0;
 
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(file_track_event const &)> &&) = 0;
 };
@@ -112,5 +112,12 @@ struct exporter_for_project_editor {
     virtual void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &) = 0;
     [[nodiscard]] virtual bool is_exporting() const = 0;
     [[nodiscard]] virtual observing::syncable observe_is_exporting(std::function<void(bool const &)> &&) = 0;
+};
+
+struct pasteboard_for_project_editor {
+    virtual ~pasteboard_for_project_editor() = default;
+
+    virtual std::optional<pasting_file_module> file_module() const = 0;
+    virtual void set_file_module(pasting_file_module const &) = 0;
 };
 }  // namespace yas::ae

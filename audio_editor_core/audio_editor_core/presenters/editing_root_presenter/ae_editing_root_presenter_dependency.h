@@ -46,6 +46,9 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual bool can_undo() const = 0;
     [[nodiscard]] virtual bool can_redo() const = 0;
     [[nodiscard]] virtual bool can_select_file_for_export() const = 0;
+    [[nodiscard]] virtual bool can_cut() const = 0;
+    [[nodiscard]] virtual bool can_copy() const = 0;
+    [[nodiscard]] virtual bool can_paste() const = 0;
 
     [[nodiscard]] virtual std::map<proc::frame_index_t, marker> const &markers() const = 0;
     [[nodiscard]] virtual file_track_module_map_t const &modules() const = 0;

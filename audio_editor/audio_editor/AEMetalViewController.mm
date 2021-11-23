@@ -193,6 +193,24 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)cut:(id)sender {
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::cut);
+    }
+}
+
+- (IBAction)copy:(id)sender {
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::copy);
+    }
+}
+
+- (IBAction)paste:(id)sender {
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::paste);
+    }
+}
+
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -250,6 +268,12 @@ using namespace yas::ae;
         return action::redo;
     } else if (selector == @selector(exportToFile:)) {
         return action::select_file_for_export;
+    } else if (selector == @selector(cut:)) {
+        return action::cut;
+    } else if (selector == @selector(copy:)) {
+        return action::copy;
+    } else if (selector == @selector(paste:)) {
+        return action::paste;
     }
 
     return std::nullopt;
@@ -303,6 +327,12 @@ using namespace yas::ae;
             return @selector(redo:);
         case action::select_file_for_export:
             return @selector(exportToFile:);
+        case action::cut:
+            return @selector(cut:);
+        case action::copy:
+            return @selector(copy:);
+        case action::paste:
+            return @selector(paste:);
     }
 }
 

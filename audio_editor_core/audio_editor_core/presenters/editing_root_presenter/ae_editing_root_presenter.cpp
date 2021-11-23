@@ -269,5 +269,12 @@ bool editing_root_presenter::responds_to_action(action const action) {
 
         case action::select_file_for_export:
             return editor->can_select_file_for_export();
+
+        case action::cut:
+            return editor->can_cut();
+        case action::copy:
+            return editor->can_copy();
+        case action::paste:
+            return editor->can_paste();
     }
 }

@@ -177,6 +177,24 @@ void file_track::move_modules(std::set<proc::time::range> const &ranges, proc::f
     }
 }
 
+void file_track::split_and_insert_module_and_offset(file_module const &module) {
+    this->split_at(module.range.frame);
+
+    this->_move_modules_after(module.range.frame, module.range.length);
+    this->insert_module_and_notify(module);
+}
+
+void file_track::_move_modules_after(proc::frame_index_t const frame, proc::frame_index_t const offset) {
+    auto const copied_modules = this->_modules;
+    for (auto const &pair : copied_modules) {
+        if (frame <= pair.first.frame) {
+            auto const &moving_module = pair.second;
+            this->erase_module_and_notify(moving_module);
+            this->insert_module_and_notify(moving_module.offset(offset));
+        }
+    }
+}
+
 observing::syncable file_track::observe_event(std::function<void(file_track_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }
