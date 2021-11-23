@@ -13,23 +13,23 @@ using namespace yas::ae;
 db::model database_utils::make_model() {
     yas::version version{"0.0.1"};
 
-    db::entity_args module_entity{.name = db_constants::module::entity_name,
-                                  .attributes = {{.name = db_constants::module::file_frame_name,
+    db::entity_args module_entity{.name = db_constants::module_name::entity,
+                                  .attributes = {{.name = db_constants::module_name::file_frame,
                                                   .type = db::attribute_type::integer,
                                                   .default_value = db::value{0},
                                                   .not_null = true},
-                                                 {.name = db_constants::module::range_frame_name,
+                                                 {.name = db_constants::module_name::range_frame,
                                                   .type = db::attribute_type::integer,
                                                   .default_value = db::value{0},
                                                   .not_null = true},
-                                                 {.name = db_constants::module::range_length_name,
+                                                 {.name = db_constants::module_name::range_length,
                                                   .type = db::attribute_type::integer,
                                                   .default_value = db::value{0},
                                                   .not_null = true}},
                                   .relations = {}};
 
-    db::entity_args marker_entity{.name = db_constants::marker::entity_name,
-                                  .attributes = {{.name = db_constants::marker::frame_name,
+    db::entity_args marker_entity{.name = db_constants::marker_name::entity,
+                                  .attributes = {{.name = db_constants::marker_name::frame,
                                                   .type = db::attribute_type::integer,
                                                   .default_value = db::value{0},
                                                   .not_null = true}},
