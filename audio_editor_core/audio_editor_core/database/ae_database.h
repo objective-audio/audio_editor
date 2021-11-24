@@ -28,6 +28,8 @@ struct database final : database_for_project_editor {
     void remove_module(proc::time::range const &) override;
     void add_marker(marker const &) override;
     void remove_marker(proc::frame_index_t const &) override;
+
+    void suspend_saving(std::function<void(void)> &&) override;
     void save() override;
 
     [[nodiscard]] bool can_undo() const override;
