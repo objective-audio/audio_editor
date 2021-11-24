@@ -321,7 +321,7 @@ bool project_editor::can_split() const {
         return false;
     }
 
-    auto const &file_track = this->file_track();
+    auto const &file_track = this->_file_track;
     auto const current_frame = this->_player->current_frame();
     return file_track->splittable_module_at(current_frame).has_value();
 }
@@ -332,7 +332,7 @@ void project_editor::split() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->file_track()->split_at(current_frame);
+    this->_file_track->split_at(current_frame);
 }
 
 void project_editor::drop_head_and_offset() {
@@ -341,7 +341,7 @@ void project_editor::drop_head_and_offset() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->file_track()->drop_head_and_offset_at(current_frame);
+    this->_file_track->drop_head_and_offset_at(current_frame);
 }
 
 void project_editor::drop_tail_and_offset() {
@@ -350,7 +350,7 @@ void project_editor::drop_tail_and_offset() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->file_track()->drop_tail_and_offset_at(current_frame);
+    this->_file_track->drop_tail_and_offset_at(current_frame);
 }
 
 bool project_editor::can_erase() const {
@@ -359,7 +359,7 @@ bool project_editor::can_erase() const {
     }
 
     auto const current_frame = this->_player->current_frame();
-    return this->file_track()->module_at(current_frame).has_value();
+    return this->_file_track->module_at(current_frame).has_value();
 }
 
 void project_editor::erase_and_offset() {
@@ -368,7 +368,7 @@ void project_editor::erase_and_offset() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->file_track()->erase_and_offset_at(current_frame);
+    this->_file_track->erase_and_offset_at(current_frame);
 }
 
 bool project_editor::can_insert_marker() const {
@@ -377,7 +377,7 @@ bool project_editor::can_insert_marker() const {
     }
 
     auto const current_frame = this->_player->current_frame();
-    return this->marker_pool()->markers().count(current_frame) == 0;
+    return this->_marker_pool->markers().count(current_frame) == 0;
 }
 
 void project_editor::insert_marker() {
@@ -386,7 +386,7 @@ void project_editor::insert_marker() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->marker_pool()->insert_marker(marker{.frame = current_frame});
+    this->_marker_pool->insert_marker(marker{.frame = current_frame});
 }
 
 bool project_editor::can_return_to_zero() const {
@@ -402,7 +402,7 @@ void project_editor::return_to_zero() {
 }
 
 bool project_editor::can_go_to_marker(std::size_t const marker_idx) const {
-    auto const &marker_pool = this->marker_pool();
+    auto const &marker_pool = this->_marker_pool;
     if (auto const marker = marker_pool->marker_at(marker_idx)) {
         return this->_player->current_frame() != marker->frame;
     } else {
@@ -415,7 +415,7 @@ void project_editor::go_to_marker(std::size_t const marker_idx) {
         return;
     }
 
-    auto const &marker_pool = this->marker_pool();
+    auto const &marker_pool = this->_marker_pool;
     if (auto const marker = marker_pool->marker_at(marker_idx)) {
         this->_player->seek(marker->frame);
     }
@@ -426,7 +426,7 @@ bool project_editor::can_undo() const {
         return false;
     }
 
-    return this->database()->can_undo();
+    return this->_database->can_undo();
 }
 
 void project_editor::undo() {
@@ -434,7 +434,7 @@ void project_editor::undo() {
         return;
     }
 
-    this->database()->undo();
+    this->_database->undo();
 }
 
 bool project_editor::can_redo() const {
@@ -442,7 +442,7 @@ bool project_editor::can_redo() const {
         return false;
     }
 
-    return this->database()->can_redo();
+    return this->_database->can_redo();
 }
 
 void project_editor::redo() {
@@ -450,7 +450,7 @@ void project_editor::redo() {
         return;
     }
 
-    this->database()->redo();
+    this->_database->redo();
 }
 
 bool project_editor::can_select_file_for_export() const {
@@ -498,7 +498,7 @@ void project_editor::cut() {
     this->copy();
 
     auto const current_frame = this->_player->current_frame();
-    this->file_track()->erase_and_offset_at(current_frame);
+    this->_file_track->erase_and_offset_at(current_frame);
 }
 
 bool project_editor::can_copy() const {
@@ -506,7 +506,7 @@ bool project_editor::can_copy() const {
         return false;
     }
 
-    auto const &file_track = this->file_track();
+    auto const &file_track = this->_file_track;
     auto const current_frame = this->_player->current_frame();
     return file_track->module_at(current_frame).has_value();
 }
@@ -516,7 +516,7 @@ void project_editor::copy() {
         return;
     }
 
-    auto const &file_track = this->file_track();
+    auto const &file_track = this->_file_track;
     auto const current_frame = this->_player->current_frame();
     if (auto const file_module = file_track->module_at(current_frame)) {
         auto const &value = file_module.value();
@@ -533,7 +533,7 @@ bool project_editor::can_paste() const {
         return false;
     }
 
-    auto const &file_track = this->file_track();
+    auto const &file_track = this->_file_track;
     auto const current_frame = this->_player->current_frame();
 
     if (file_track->modules().empty()) {
@@ -582,8 +582,8 @@ std::optional<proc::frame_index_t> project_editor::_previous_edge() const {
 
 std::optional<proc::frame_index_t> project_editor::_next_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
-    auto const file_track_edge = this->file_track()->next_edge(current_frame);
-    auto const marker_pool_edge = this->marker_pool()->next_edge(current_frame);
+    auto const file_track_edge = this->_file_track->next_edge(current_frame);
+    auto const marker_pool_edge = this->_marker_pool->next_edge(current_frame);
 
     if (file_track_edge.has_value() && marker_pool_edge.has_value()) {
         return std::min(file_track_edge.value(), marker_pool_edge.value());
