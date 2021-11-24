@@ -8,7 +8,7 @@
 #include <playing/yas_playing_umbrella.h>
 
 namespace yas::ae {
-enum exporting_error {
+enum class exporting_error {
     remove_file_failed,
     create_file_failed,
     invalid_timeline,

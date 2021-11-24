@@ -5,7 +5,7 @@
 #pragma once
 
 namespace yas::ae {
-enum scrolling_state {
+enum class scrolling_state {
     began,
     changed,
     ended,

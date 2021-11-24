@@ -5,7 +5,7 @@
 #pragma once
 
 namespace yas::ae {
-enum playing_line_state_t {
+enum class playing_line_state_t {
     nothing,
     playing,
     scrolling,
