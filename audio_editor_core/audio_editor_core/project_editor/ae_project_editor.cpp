@@ -60,7 +60,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     }
 
                     this->_timeline->insert_track(0, this->_track);
-                    this->_database->save();
                     break;
                 case file_track_event_type::reverted:
                     this->_timeline->erase_track(0);
@@ -80,7 +79,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                         track->push_back_module(project_editor_utils::make_module(file_module, url, ch_count),
                                                 file_module.range);
                         this->_database->add_module(file_module);
-                        this->_database->save();
                     }
                     break;
                 case file_track_event_type::erased:
@@ -88,7 +86,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                         auto const &file_module = event.module.value();
                         track->erase_modules_for_range(file_module.range);
                         this->_database->remove_module(file_module.range);
-                        this->_database->save();
                     }
                     break;
             }
@@ -104,18 +101,15 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                         for (auto const &pair : event.markers) {
                             this->_database->add_marker(pair.second);
                         }
-                        this->_database->save();
                     }
                     break;
                 case marker_pool_event_type::reverted:
                     break;
                 case marker_pool_event_type::inserted:
                     this->_database->add_marker(event.marker.value());
-                    this->_database->save();
                     break;
                 case marker_pool_event_type::erased:
                     this->_database->remove_marker(event.marker.value().frame);
-                    this->_database->save();
                     break;
             }
         })
@@ -331,8 +325,10 @@ void project_editor::split() {
         return;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    this->_file_track->split_at(current_frame);
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->split_at(current_frame);
+    });
 }
 
 void project_editor::drop_head_and_offset() {
@@ -340,8 +336,10 @@ void project_editor::drop_head_and_offset() {
         return;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    this->_file_track->drop_head_and_offset_at(current_frame);
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->drop_head_and_offset_at(current_frame);
+    });
 }
 
 void project_editor::drop_tail_and_offset() {
@@ -349,8 +347,10 @@ void project_editor::drop_tail_and_offset() {
         return;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    this->_file_track->drop_tail_and_offset_at(current_frame);
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->drop_tail_and_offset_at(current_frame);
+    });
 }
 
 bool project_editor::can_erase() const {
@@ -367,8 +367,10 @@ void project_editor::erase_and_offset() {
         return;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    this->_file_track->erase_and_offset_at(current_frame);
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->erase_and_offset_at(current_frame);
+    });
 }
 
 bool project_editor::can_insert_marker() const {
@@ -385,8 +387,10 @@ void project_editor::insert_marker() {
         return;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    this->_marker_pool->insert_marker(marker{.frame = current_frame});
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_marker_pool->insert_marker(marker{.frame = current_frame});
+    });
 }
 
 bool project_editor::can_return_to_zero() const {
@@ -495,10 +499,12 @@ void project_editor::cut() {
         return;
     }
 
-    this->copy();
+    this->_database->suspend_saving([this] {
+        this->copy();
 
-    auto const current_frame = this->_player->current_frame();
-    this->_file_track->erase_and_offset_at(current_frame);
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->erase_and_offset_at(current_frame);
+    });
 }
 
 bool project_editor::can_copy() const {
@@ -516,12 +522,14 @@ void project_editor::copy() {
         return;
     }
 
-    auto const &file_track = this->_file_track;
-    auto const current_frame = this->_player->current_frame();
-    if (auto const file_module = file_track->module_at(current_frame)) {
-        auto const &value = file_module.value();
-        this->_pasteboard->set_file_module({.file_frame = value.file_frame, .length = value.range.length});
-    }
+    this->_database->suspend_saving([this] {
+        auto const &file_track = this->_file_track;
+        auto const current_frame = this->_player->current_frame();
+        if (auto const file_module = file_track->module_at(current_frame)) {
+            auto const &value = file_module.value();
+            this->_pasteboard->set_file_module({.file_frame = value.file_frame, .length = value.range.length});
+        }
+    });
 }
 
 bool project_editor::can_paste() const {
@@ -559,8 +567,10 @@ void project_editor::paste() {
         auto const module_value = module.value();
         auto const current_frame = this->_player->current_frame();
 
-        this->_file_track->split_and_insert_module_and_offset(
-            {.file_frame = module_value.file_frame, .range = {current_frame, module_value.length}});
+        this->_database->suspend_saving([this, &module_value, &current_frame] {
+            this->_file_track->split_and_insert_module_and_offset(
+                {.file_frame = module_value.file_frame, .range = {current_frame, module_value.length}});
+        });
     }
 }
 
