@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
+#include <cpp_utils/yas_delaying_caller.h>
 #include <cpp_utils/yas_url.h>
 
 namespace yas::db {
@@ -43,6 +44,7 @@ struct database final : database_for_project_editor {
     std::shared_ptr<db::manager> const _manager;
     db_modules_map _modules;
     db_markers_map _markers;
+    delaying_caller _save_caller;
     observing::notifier_ptr<std::nullptr_t> const _reverted_notifier;
 
     observing::canceller_pool _pool;

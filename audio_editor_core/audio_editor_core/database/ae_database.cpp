@@ -63,14 +63,16 @@ void database::remove_marker(proc::frame_index_t const &frame) {
 }
 
 void database::save() {
-    this->_increment_processing_count();
+    this->_save_caller.request([this] {
+        this->_increment_processing_count();
 
-    this->_manager->save(db::no_cancellation,
-                         [weak_db = this->_weak_database](db::manager_map_result_t result) mutable {
-                             if (auto db = weak_db.lock()) {
-                                 db->_decrement_processing_count();
-                             }
-                         });
+        this->_manager->save(db::no_cancellation,
+                             [weak_db = this->_weak_database](db::manager_map_result_t result) mutable {
+                                 if (auto db = weak_db.lock()) {
+                                     db->_decrement_processing_count();
+                                 }
+                             });
+    });
 }
 
 bool database::can_undo() const {
