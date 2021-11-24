@@ -42,27 +42,27 @@ bool database::is_processing() const {
 
 void database::add_module(file_module const &file_module) {
     this->_modules.emplace(file_module.range, db_module::create(this->_manager, file_module));
-    this->save();
+    this->_save();
 }
 
 void database::remove_module(proc::time::range const &range) {
     if (this->_modules.contains(range)) {
         this->_modules.at(range).remove();
         this->_modules.erase(range);
-        this->save();
+        this->_save();
     }
 }
 
 void database::add_marker(marker const &marker) {
     this->_markers.emplace(marker.frame, db_marker::create(this->_manager, marker));
-    this->save();
+    this->_save();
 }
 
 void database::remove_marker(proc::frame_index_t const &frame) {
     if (this->_markers.contains(frame)) {
         this->_markers.at(frame).remove();
         this->_markers.erase(frame);
-        this->save();
+        this->_save();
     }
 }
 
@@ -72,7 +72,7 @@ void database::suspend_saving(std::function<void(void)> &&handler) {
     this->_save_caller.pop();
 }
 
-void database::save() {
+void database::_save() {
     this->_save_caller.request([this] {
         this->_increment_processing_count();
 

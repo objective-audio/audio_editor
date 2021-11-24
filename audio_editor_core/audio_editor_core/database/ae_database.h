@@ -30,7 +30,6 @@ struct database final : database_for_project_editor {
     void remove_marker(proc::frame_index_t const &) override;
 
     void suspend_saving(std::function<void(void)> &&) override;
-    void save() override;
 
     [[nodiscard]] bool can_undo() const override;
     void undo() override;
@@ -60,6 +59,7 @@ struct database final : database_for_project_editor {
     db::integer::type const &_current_save_id() const;
     db::integer::type const &_last_save_id() const;
 
+    void _save();
     void _revert(db::integer::type const revert_id);
 };
 }  // namespace yas::ae
