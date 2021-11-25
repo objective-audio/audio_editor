@@ -53,6 +53,8 @@
 		B6604F872646DE4F003439F1 /* ae_file_module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6604F852646DE4F003439F1 /* ae_file_module.cpp */; };
 		B6604F882646DE4F003439F1 /* ae_file_module.h in Headers */ = {isa = PBXBuildFile; fileRef = B6604F862646DE4F003439F1 /* ae_file_module.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6604F9426477483003439F1 /* ae_file_track_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6604F9226477464003439F1 /* ae_file_track_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6624D4A274A54D3001A7BED /* ae_db_pasting_subject.h in Headers */ = {isa = PBXBuildFile; fileRef = B6624D48274A54D3001A7BED /* ae_db_pasting_subject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6624D4B274A54D3001A7BED /* ae_db_pasting_subject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6624D49274A54D3001A7BED /* ae_db_pasting_subject.cpp */; };
 		B666CDE82634125E00C1693D /* ae_system_url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B666CDE62634125E00C1693D /* ae_system_url.cpp */; };
 		B666CDE92634125E00C1693D /* ae_system_url.h in Headers */ = {isa = PBXBuildFile; fileRef = B666CDE72634125E00C1693D /* ae_system_url.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B666CE0B263424FF00C1693D /* ae_file_importer_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B666CE0A263424FF00C1693D /* ae_file_importer_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -216,6 +218,8 @@
 		B6604F852646DE4F003439F1 /* ae_file_module.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_module.cpp; sourceTree = "<group>"; };
 		B6604F862646DE4F003439F1 /* ae_file_module.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_module.h; sourceTree = "<group>"; };
 		B6604F9226477464003439F1 /* ae_file_track_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_track_types.h; sourceTree = "<group>"; };
+		B6624D48274A54D3001A7BED /* ae_db_pasting_subject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_db_pasting_subject.h; sourceTree = "<group>"; };
+		B6624D49274A54D3001A7BED /* ae_db_pasting_subject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_db_pasting_subject.cpp; sourceTree = "<group>"; };
 		B666CDE62634125E00C1693D /* ae_system_url.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_system_url.cpp; sourceTree = "<group>"; };
 		B666CDE72634125E00C1693D /* ae_system_url.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_system_url.h; sourceTree = "<group>"; };
 		B666CE0A263424FF00C1693D /* ae_file_importer_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_importer_types.h; sourceTree = "<group>"; };
@@ -600,6 +604,8 @@
 				B6BE6B982733BECD0097C99D /* ae_db_marker.h */,
 				B6966F44272EDB2F00A90733 /* ae_db_module.cpp */,
 				B6966F43272EDB2F00A90733 /* ae_db_module.h */,
+				B6624D49274A54D3001A7BED /* ae_db_pasting_subject.cpp */,
+				B6624D48274A54D3001A7BED /* ae_db_pasting_subject.h */,
 				B6966F4D2732319300A90733 /* ae_db_types.h */,
 				B6966F40272E639D00A90733 /* ae_db_utils.cpp */,
 				B6966F3F272E639D00A90733 /* ae_db_utils.h */,
@@ -871,6 +877,7 @@
 				B6813579271EE756009CC0FC /* ae_gesture.h in Headers */,
 				B6CCC48D274B4B1600B563C8 /* ae_pasteboard.h in Headers */,
 				B695726D2737E54100E97EAE /* ae_track_presenter_dependency.h in Headers */,
+				B6624D4A274A54D3001A7BED /* ae_db_pasting_subject.h in Headers */,
 				B657D4D426803C7B0048C6AD /* ae_keyboard_types.h in Headers */,
 				B69C68A32670F5BF00C1083F /* ae_ui_button.h in Headers */,
 				B64DE67F2658B990006FC562 /* ae_ui_editing_root_dependency.h in Headers */,
@@ -1027,6 +1034,7 @@
 				B6604F802646D7DF003439F1 /* ae_file_track.cpp in Sources */,
 				B6B002B8263BC7320013E6D0 /* ae_file_loader.cpp in Sources */,
 				B6EA40DE2641722600BF3D06 /* ae_project_editor.cpp in Sources */,
+				B6624D4B274A54D3001A7BED /* ae_db_pasting_subject.cpp in Sources */,
 				B666CE4C26351D7900C1693D /* ae_project_url.cpp in Sources */,
 				B68C3E762707F1F500888A53 /* ae_track_presenter.cpp in Sources */,
 				B6C3926B2741442400ACFFF4 /* ae_action_controller.cpp in Sources */,

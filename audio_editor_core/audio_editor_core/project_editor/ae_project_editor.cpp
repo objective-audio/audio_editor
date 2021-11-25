@@ -116,6 +116,20 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         .sync()
         ->add_to(this->_pool);
 
+    this->_pasteboard
+        ->observe_event([this](pasteboard_event const &event) {
+            switch (event) {
+                case pasteboard_event::file_module:
+                    this->_database->set_pasting_data(this->_pasteboard->data());
+                    break;
+                case pasteboard_event::fetched:
+                case pasteboard_event::reverted:
+                    break;
+            }
+        })
+        .sync()
+        ->add_to(this->_pool);
+
     this->_database
         ->observe_reverted([this] {
             std::vector<file_module> file_modules;
@@ -137,6 +151,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
             }
 
             this->_marker_pool->revert_markers(std::move(markers));
+
+            this->_pasteboard->revert_data(this->_database->pasting_data());
         })
         .end()
         ->add_to(this->_pool);

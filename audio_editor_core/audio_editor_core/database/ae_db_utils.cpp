@@ -36,7 +36,15 @@ db::model database_utils::make_model() {
                                                   .not_null = true}},
                                   .relations = {}};
 
-    return db::model{db::model_args{.version = std::move(version),
-                                    .entities = {std::move(module_entity), std::move(marker_entity)},
-                                    .indices = {}}};
+    db::entity_args pasting_subject_entity{.name = pasting_subject_name::entity,
+                                           .attributes = {{.name = pasting_subject_name::attribute::data,
+                                                           .type = db::attribute_type::text,
+                                                           .default_value = db::value{""},
+                                                           .not_null = true}},
+                                           .relations = {}};
+
+    return db::model{db::model_args{
+        .version = std::move(version),
+        .entities = {std::move(module_entity), std::move(marker_entity), std::move(pasting_subject_entity)},
+        .indices = {}}};
 }
