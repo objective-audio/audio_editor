@@ -96,7 +96,8 @@ struct database_for_project_editor {
     virtual void remove_module(proc::time::range const &) = 0;
     virtual void add_marker(marker const &) = 0;
     virtual void remove_marker(proc::frame_index_t const &) = 0;
-    virtual void save() = 0;
+
+    virtual void suspend_saving(std::function<void(void)> &&) = 0;
 
     [[nodiscard]] virtual bool can_undo() const = 0;
     virtual void undo() = 0;

@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
+#include <cpp_utils/yas_delaying_caller.h>
 #include <cpp_utils/yas_url.h>
 
 namespace yas::db {
@@ -27,7 +28,8 @@ struct database final : database_for_project_editor {
     void remove_module(proc::time::range const &) override;
     void add_marker(marker const &) override;
     void remove_marker(proc::frame_index_t const &) override;
-    void save() override;
+
+    void suspend_saving(std::function<void(void)> &&) override;
 
     [[nodiscard]] bool can_undo() const override;
     void undo() override;
@@ -43,6 +45,7 @@ struct database final : database_for_project_editor {
     std::shared_ptr<db::manager> const _manager;
     db_modules_map _modules;
     db_markers_map _markers;
+    delaying_caller _save_caller;
     observing::notifier_ptr<std::nullptr_t> const _reverted_notifier;
 
     observing::canceller_pool _pool;
@@ -56,6 +59,7 @@ struct database final : database_for_project_editor {
     db::integer::type const &_current_save_id() const;
     db::integer::type const &_last_save_id() const;
 
+    void _save();
     void _revert(db::integer::type const revert_id);
 };
 }  // namespace yas::ae
