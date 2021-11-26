@@ -6,6 +6,8 @@
 
 #include <processing/yas_processing_time.h>
 
+#include <string>
+
 namespace yas::ae {
 enum class pasteboard_event {
     fetched,
