@@ -36,6 +36,14 @@ db_markers_map const &database::markers() const {
     return this->_markers;
 }
 
+std::string const database::pasting_data() const {
+    if (auto const &subject = this->_pasting_subject) {
+        return subject.value().data();
+    } else {
+        return "";
+    }
+}
+
 bool database::is_processing() const {
     return this->_processing_count > 0;
 }
@@ -51,6 +59,17 @@ void database::remove_module(proc::time::range const &range) {
         this->_modules.erase(range);
         this->_save();
     }
+}
+
+void database::set_pasting_data(std::string const &data) {
+    if (auto const &subject = this->_pasting_subject) {
+        auto subject_value = subject.value();
+        subject_value.remove();
+    }
+
+    this->_pasting_subject.emplace(db_pasting_subject::create(this->_manager, data));
+
+    this->_save();
 }
 
 void database::add_marker(marker const &marker) {
@@ -219,6 +238,31 @@ void database::_revert(db::integer::type const revert_id) {
                 }
 
                 database->_markers = std::move(markers);
+            }
+        });
+
+    this->_manager->fetch_objects(
+        db::no_cancellation,
+        [] {
+            return db::to_fetch_option(
+                db::select_option{.table = db_constants::pasting_subject_name::entity,
+                                  .field_orders = {{db::object_id_field, db::order::ascending}}});
+        },
+        [weak_db = this->_weak_database](db::manager_vector_result_t result) mutable {
+            assert(thread::is_main());
+
+            auto const database = weak_db.lock();
+            if (database && result) {
+                auto const &result_objects = result.value();
+
+                database->_pasting_subject.reset();
+
+                if (result_objects.contains(db_constants::pasting_subject_name::entity)) {
+                    auto const &objects = result_objects.at(db_constants::pasting_subject_name::entity);
+                    if (!objects.empty()) {
+                        database->_pasting_subject.emplace(objects.at(0));
+                    }
+                }
             }
         });
 

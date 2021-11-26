@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_db_pasting_subject.h>
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_exporter_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
@@ -91,9 +92,11 @@ struct database_for_project_editor {
 
     [[nodiscard]] virtual db_modules_map const &modules() const = 0;
     [[nodiscard]] virtual db_markers_map const &markers() const = 0;
+    [[nodiscard]] virtual std::string const pasting_data() const = 0;
 
     virtual void add_module(file_module const &) = 0;
     virtual void remove_module(proc::time::range const &) = 0;
+    virtual void set_pasting_data(std::string const &) = 0;
     virtual void add_marker(marker const &) = 0;
     virtual void remove_marker(proc::frame_index_t const &) = 0;
 
@@ -118,7 +121,12 @@ struct exporter_for_project_editor {
 struct pasteboard_for_project_editor {
     virtual ~pasteboard_for_project_editor() = default;
 
-    virtual std::optional<pasting_file_module> file_module() const = 0;
+    [[nodiscard]] virtual std::optional<pasting_file_module> file_module() const = 0;
     virtual void set_file_module(pasting_file_module const &) = 0;
+
+    [[nodiscard]] virtual std::string const &data() const = 0;
+    virtual void revert_data(std::string const &) = 0;
+
+    [[nodiscard]] virtual observing::syncable observe_event(std::function<void(pasteboard_event const &)> &&) = 0;
 };
 }  // namespace yas::ae

@@ -24,4 +24,12 @@ namespace marker_name {
         static std::string const frame = "frame";
     }
 }  // namespace marker_name
+
+namespace pasting_subject_name {
+    static std::string const entity = "pasting_subject";
+
+    namespace attribute {
+        static std::string const data = "data";
+    }  // namespace attribute
+};     // namespace pasting_subject_name
 }  // namespace yas::ae::db_constants

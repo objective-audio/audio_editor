@@ -7,6 +7,12 @@
 #include <processing/yas_processing_time.h>
 
 namespace yas::ae {
+enum class pasteboard_event {
+    fetched,
+    file_module,
+    reverted,
+};
+
 struct pasting_file_module {
     proc::frame_index_t file_frame;
     proc::length_t length;

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_db_pasting_subject.h>
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_marker.h>
@@ -22,10 +23,12 @@ struct database final : database_for_project_editor {
 
     [[nodiscard]] db_modules_map const &modules() const override;
     [[nodiscard]] db_markers_map const &markers() const override;
+    [[nodiscard]] std::string const pasting_data() const override;
     [[nodiscard]] bool is_processing() const;
 
     void add_module(file_module const &) override;
     void remove_module(proc::time::range const &) override;
+    void set_pasting_data(std::string const &) override;
     void add_marker(marker const &) override;
     void remove_marker(proc::frame_index_t const &) override;
 
@@ -45,6 +48,7 @@ struct database final : database_for_project_editor {
     std::shared_ptr<db::manager> const _manager;
     db_modules_map _modules;
     db_markers_map _markers;
+    std::optional<db_pasting_subject> _pasting_subject = std::nullopt;
     delaying_caller _save_caller;
     observing::notifier_ptr<std::nullptr_t> const _reverted_notifier;
 
