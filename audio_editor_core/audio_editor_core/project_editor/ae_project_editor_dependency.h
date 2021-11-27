@@ -77,6 +77,10 @@ struct marker_pool_for_project_editor {
     virtual void insert_marker(marker const &) = 0;
     virtual void erase_at(proc::frame_index_t const) = 0;
     virtual void erase_marker(marker const &) = 0;
+    virtual void erase_range(proc::time::range const) = 0;
+
+    virtual void move_at(proc::frame_index_t const frame, proc::frame_index_t const new_frame) = 0;
+    virtual void move_offset_from(proc::frame_index_t const from, proc::frame_index_t const offset) = 0;
 
     [[nodiscard]] virtual std::map<proc::frame_index_t, marker> const &markers() const = 0;
     [[nodiscard]] virtual std::optional<marker> marker_at(std::size_t const) const = 0;

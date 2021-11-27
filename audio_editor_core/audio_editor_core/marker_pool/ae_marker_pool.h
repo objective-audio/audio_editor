@@ -14,10 +14,10 @@ struct marker_pool : marker_pool_for_project_editor {
     void insert_marker(marker const &) override;
     void erase_at(proc::frame_index_t const) override;
     void erase_marker(marker const &) override;
-    void erase_range(proc::time::range const);
+    void erase_range(proc::time::range const) override;
 
-    void move_at(proc::frame_index_t const frame, proc::frame_index_t const new_frame);
-    void move_offset_from(proc::frame_index_t const from, proc::frame_index_t const offset);
+    void move_at(proc::frame_index_t const frame, proc::frame_index_t const new_frame) override;
+    void move_offset_from(proc::frame_index_t const from, proc::frame_index_t const offset) override;
 
     marker_map_t const &markers() const override;
     std::optional<marker> marker_at(std::size_t const) const override;
