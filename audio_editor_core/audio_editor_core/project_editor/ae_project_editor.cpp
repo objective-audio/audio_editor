@@ -533,7 +533,11 @@ void project_editor::cut_and_offset() {
         this->copy();
 
         auto const current_frame = this->_player->current_frame();
+        auto const erasing_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->erase_and_offset_at(current_frame);
+        this->_marker_pool->erase_range(erasing_range);
+        auto const offset = -static_cast<proc::frame_index_t>(erasing_range.length);
+        this->_marker_pool->move_offset_from(erasing_range.next_frame(), offset);
     });
 }
 
