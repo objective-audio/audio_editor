@@ -63,7 +63,7 @@ struct project_editor final : project_editor_for_project {
     void export_to_file(url const &);
 
     [[nodiscard]] bool can_cut() const override;
-    void cut();
+    void cut_and_offset();
     [[nodiscard]] bool can_copy() const override;
     void copy();
     [[nodiscard]] bool can_paste() const override;

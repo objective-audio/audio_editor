@@ -232,7 +232,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     this->select_file_for_export();
                     break;
                 case action::cut:
-                    this->cut();
+                    this->cut_and_offset();
                     break;
                 case action::copy:
                     this->copy();
@@ -510,7 +510,7 @@ bool project_editor::can_cut() const {
     return this->can_copy();
 }
 
-void project_editor::cut() {
+void project_editor::cut_and_offset() {
     if (!this->can_cut()) {
         return;
     }
