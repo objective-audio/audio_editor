@@ -29,6 +29,16 @@ void marker_pool::erase_marker(marker const &marker) {
     this->erase_at(marker.frame);
 }
 
+void marker_pool::erase_range(proc::time::range const range) {
+    auto const filtered = filter(this->_markers->elements(), [&range](auto const &pair) {
+        return range.frame <= pair.first && pair.first < range.next_frame();
+    });
+
+    for (auto const &pair : filtered) {
+        this->erase_at(pair.first);
+    }
+}
+
 marker_map_t const &marker_pool::markers() const {
     return this->_markers->elements();
 }

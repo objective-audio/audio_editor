@@ -14,6 +14,7 @@ struct marker_pool : marker_pool_for_project_editor {
     void insert_marker(marker const &) override;
     void erase_at(proc::frame_index_t const) override;
     void erase_marker(marker const &) override;
+    void erase_range(proc::time::range const);
 
     marker_map_t const &markers() const override;
     std::optional<marker> marker_at(std::size_t const) const override;
