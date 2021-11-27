@@ -64,6 +64,44 @@ using namespace yas::ae;
     XCTAssertEqual(pool->markers().at(1), (marker{.frame = 1}));
 }
 
+- (void)test_erase_range {
+    auto const pool = marker_pool::make_shared();
+
+    pool->revert_markers({{.frame = 0}, {.frame = 1}, {.frame = 2}, {.frame = 3}});
+
+    pool->erase_range({1, 2});
+
+    XCTAssertEqual(pool->markers().size(), 2);
+    XCTAssertEqual(pool->markers().at(0), (marker{.frame = 0}));
+    XCTAssertEqual(pool->markers().at(3), (marker{.frame = 3}));
+}
+
+- (void)test_move_marker_at {
+    auto const pool = marker_pool::make_shared();
+
+    pool->revert_markers({{.frame = -1}, {.frame = 0}, {.frame = 1}});
+
+    pool->move_at(0, 2);
+
+    XCTAssertEqual(pool->markers().size(), 3);
+    XCTAssertEqual(pool->markers().at(-1), (marker{.frame = -1}));
+    XCTAssertEqual(pool->markers().at(1), (marker{.frame = 1}));
+    XCTAssertEqual(pool->markers().at(2), (marker{.frame = 2}));
+}
+
+- (void)test_move_offset_from {
+    auto const pool = marker_pool::make_shared();
+
+    pool->revert_markers({{.frame = -1}, {.frame = 0}, {.frame = 1}});
+
+    pool->move_offset_from(0, 2);
+
+    XCTAssertEqual(pool->markers().size(), 3);
+    XCTAssertEqual(pool->markers().at(-1), (marker{.frame = -1}));
+    XCTAssertEqual(pool->markers().at(2), (marker{.frame = 2}));
+    XCTAssertEqual(pool->markers().at(3), (marker{.frame = 3}));
+}
+
 - (void)test_observe {
     auto const pool = marker_pool::make_shared();
 
