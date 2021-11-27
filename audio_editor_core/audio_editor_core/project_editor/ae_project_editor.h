@@ -67,7 +67,7 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_copy() const override;
     void copy();
     [[nodiscard]] bool can_paste() const override;
-    void paste();
+    void paste_and_offset();
 
     [[nodiscard]] std::map<proc::frame_index_t, marker> const &markers() const override;
     [[nodiscard]] file_track_module_map_t const &modules() const override;

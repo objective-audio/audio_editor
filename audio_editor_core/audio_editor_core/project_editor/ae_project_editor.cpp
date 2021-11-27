@@ -238,7 +238,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     this->copy();
                     break;
                 case action::paste:
-                    this->paste();
+                    this->paste_and_offset();
                     break;
             }
         })
@@ -574,7 +574,7 @@ bool project_editor::can_paste() const {
     return false;
 }
 
-void project_editor::paste() {
+void project_editor::paste_and_offset() {
     if (!this->can_paste()) {
         return;
     }
