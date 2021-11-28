@@ -598,12 +598,14 @@ void project_editor::paste_and_offset() {
     }
 
     if (auto const module = this->_pasteboard->file_module()) {
-        auto const module_value = module.value();
-        auto const current_frame = this->_player->current_frame();
+        this->_database->suspend_saving([this, &module] {
+            auto const module_value = module.value();
+            auto const current_frame = this->_player->current_frame();
 
-        this->_database->suspend_saving([this, &module_value, &current_frame] {
             this->_file_track->split_and_insert_module_and_offset(
                 {.file_frame = module_value.file_frame, .range = {current_frame, module_value.length}});
+
+            this->_marker_pool->move_offset_from(current_frame, module_value.length);
         });
     }
 }
