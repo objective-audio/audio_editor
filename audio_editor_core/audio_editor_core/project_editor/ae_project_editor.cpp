@@ -232,13 +232,13 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     this->select_file_for_export();
                     break;
                 case action::cut:
-                    this->cut();
+                    this->cut_and_offset();
                     break;
                 case action::copy:
                     this->copy();
                     break;
                 case action::paste:
-                    this->paste();
+                    this->paste_and_offset();
                     break;
             }
         })
@@ -354,7 +354,12 @@ void project_editor::drop_head_and_offset() {
 
     this->_database->suspend_saving([this] {
         auto const current_frame = this->_player->current_frame();
+        auto const module_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->drop_head_and_offset_at(current_frame);
+        auto const dropping_length = current_frame - module_range.frame;
+        this->_marker_pool->erase_range({module_range.frame, static_cast<proc::length_t>(dropping_length)});
+        auto const offset = -dropping_length;
+        this->_marker_pool->move_offset_from(current_frame, offset);
     });
 }
 
@@ -365,7 +370,12 @@ void project_editor::drop_tail_and_offset() {
 
     this->_database->suspend_saving([this] {
         auto const current_frame = this->_player->current_frame();
+        auto const module_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->drop_tail_and_offset_at(current_frame);
+        auto const dropping_length = module_range.next_frame() - current_frame;
+        this->_marker_pool->erase_range({current_frame, static_cast<proc::length_t>(dropping_length)});
+        auto const offset = -dropping_length;
+        this->_marker_pool->move_offset_from(module_range.next_frame(), offset);
     });
 }
 
@@ -385,7 +395,11 @@ void project_editor::erase_and_offset() {
 
     this->_database->suspend_saving([this] {
         auto const current_frame = this->_player->current_frame();
+        auto const erasing_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->erase_and_offset_at(current_frame);
+        this->_marker_pool->erase_range(erasing_range);
+        auto const offset = -static_cast<proc::frame_index_t>(erasing_range.length);
+        this->_marker_pool->move_offset_from(erasing_range.next_frame(), offset);
     });
 }
 
@@ -510,7 +524,7 @@ bool project_editor::can_cut() const {
     return this->can_copy();
 }
 
-void project_editor::cut() {
+void project_editor::cut_and_offset() {
     if (!this->can_cut()) {
         return;
     }
@@ -519,7 +533,11 @@ void project_editor::cut() {
         this->copy();
 
         auto const current_frame = this->_player->current_frame();
+        auto const erasing_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->erase_and_offset_at(current_frame);
+        this->_marker_pool->erase_range(erasing_range);
+        auto const offset = -static_cast<proc::frame_index_t>(erasing_range.length);
+        this->_marker_pool->move_offset_from(erasing_range.next_frame(), offset);
     });
 }
 
@@ -574,18 +592,20 @@ bool project_editor::can_paste() const {
     return false;
 }
 
-void project_editor::paste() {
+void project_editor::paste_and_offset() {
     if (!this->can_paste()) {
         return;
     }
 
     if (auto const module = this->_pasteboard->file_module()) {
-        auto const module_value = module.value();
-        auto const current_frame = this->_player->current_frame();
+        this->_database->suspend_saving([this, &module] {
+            auto const module_value = module.value();
+            auto const current_frame = this->_player->current_frame();
 
-        this->_database->suspend_saving([this, &module_value, &current_frame] {
             this->_file_track->split_and_insert_module_and_offset(
                 {.file_frame = module_value.file_frame, .range = {current_frame, module_value.length}});
+
+            this->_marker_pool->move_offset_from(current_frame, module_value.length);
         });
     }
 }

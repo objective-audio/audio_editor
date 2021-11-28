@@ -29,6 +29,31 @@ void marker_pool::erase_marker(marker const &marker) {
     this->erase_at(marker.frame);
 }
 
+void marker_pool::erase_range(proc::time::range const range) {
+    auto const filtered = filter(this->_markers->elements(), [&range](auto const &pair) {
+        return range.frame <= pair.first && pair.first < range.next_frame();
+    });
+
+    for (auto const &pair : filtered) {
+        this->erase_at(pair.first);
+    }
+}
+
+void marker_pool::move_at(proc::frame_index_t const frame, proc::frame_index_t const new_frame) {
+    if (this->_markers->contains(frame)) {
+        this->erase_at(frame);
+        this->insert_marker({.frame = new_frame});
+    }
+}
+
+void marker_pool::move_offset_from(proc::frame_index_t const from, proc::frame_index_t const offset) {
+    auto const filtered = filter(this->_markers->elements(), [&from](auto const &pair) { return from <= pair.first; });
+
+    for (auto const &pair : filtered) {
+        this->move_at(pair.first, pair.first + offset);
+    }
+}
+
 marker_map_t const &marker_pool::markers() const {
     return this->_markers->elements();
 }
