@@ -38,6 +38,10 @@ bool identifier::operator==(identifier const &rhs) const {
     }
 }
 
+bool identifier::operator!=(identifier const &rhs) const {
+    return !(*this == rhs);
+}
+
 uintptr_t identifier::raw_value() const {
     if (this->_raw) {
         return reinterpret_cast<uintptr_t>(this->_raw.get());

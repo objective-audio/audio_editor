@@ -16,6 +16,7 @@ struct identifier final {
     identifier &operator=(identifier &&);
 
     bool operator==(identifier const &rhs) const;
+    bool operator!=(identifier const &rhs) const;
 
     uintptr_t raw_value() const;
 
