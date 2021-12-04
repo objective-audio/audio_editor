@@ -15,11 +15,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<track_presenter> const &presenter,
+ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<display_space> const &display_space,
+                   std::shared_ptr<track_presenter> const &presenter,
                    std::shared_ptr<scroll_gesture_controller> const &scroll_gesture_controller,
                    std::shared_ptr<ui_modules> const &modules, std::shared_ptr<ui_markers> const &markers)
     : _standard(standard),
-      _display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
+      _display_space(display_space),
       _presenter(presenter),
       _scroll_gesture_controller(scroll_gesture_controller),
       _root_node(ui::node::make_shared()),
@@ -74,9 +75,11 @@ std::shared_ptr<ui::node> const ui_track::node() const {
 
 std::shared_ptr<ui_track> ui_track::make_shared(std::shared_ptr<ui::standard> const &standard,
                                                 std::string const &project_id) {
+    auto const display_space = display_space::make_shared(standard->view_look()->view_layout_guide()->region());
     auto const presenter = track_presenter::make_shared(project_id);
     auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id);
     auto const modules = ui_modules::make_shared(project_id);
     auto const markers = ui_markers::make_shared(project_id);
-    return std::shared_ptr<ui_track>(new ui_track{standard, presenter, scroll_gestore_controller, modules, markers});
+    return std::shared_ptr<ui_track>(
+        new ui_track{standard, display_space, presenter, scroll_gestore_controller, modules, markers});
 }
