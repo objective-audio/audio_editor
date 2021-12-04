@@ -18,14 +18,16 @@ using namespace yas::ae;
     identifier const id_1{};
     identifier const copied_id_1 = id_1;
 
-    XCTAssertEqual(id_1, copied_id_1);
+    XCTAssertTrue(id_1 == copied_id_1);
+    XCTAssertFalse(id_1 != copied_id_1);
 }
 
 - (void)test_not_equal_other {
     identifier const id_1{};
     identifier const id_2{};
 
-    XCTAssertNotEqual(id_1, id_2);
+    XCTAssertFalse(id_1 == id_2);
+    XCTAssertTrue(id_1 != id_2);
 }
 
 - (void)test_not_equal_moved {
@@ -34,8 +36,11 @@ using namespace yas::ae;
     identifier id_2{};
     identifier moved_id_2 = std::move(id_2);
 
-    XCTAssertNotEqual(id_1, moved_id_1);
-    XCTAssertNotEqual(id_1, id_2);
+    XCTAssertFalse(id_1 == moved_id_1);
+    XCTAssertTrue(id_1 != moved_id_1);
+
+    XCTAssertFalse(id_1 == id_2);
+    XCTAssertTrue(id_1 != id_2);
 }
 
 @end
