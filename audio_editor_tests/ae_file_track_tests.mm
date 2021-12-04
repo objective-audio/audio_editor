@@ -129,13 +129,13 @@ using namespace yas::ae;
     track->revert_modules_and_notify({module1, module2, module3});
 
     XCTAssertEqual(track->module_at(-1), std::nullopt);
-    XCTAssertEqual(track->module_at(0), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(track->module_at(1), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->module_at(2), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertTrue(track->module_at(0).value().is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(track->module_at(1).value().is_equal_location(file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertTrue(track->module_at(2).value().is_equal_location(file_module{.range = {1, 2}, .file_frame = 1}));
     XCTAssertEqual(track->module_at(3), std::nullopt);
-    XCTAssertEqual(track->module_at(4), (file_module{.range = {4, 3}, .file_frame = 4}));
-    XCTAssertEqual(track->module_at(5), (file_module{.range = {4, 3}, .file_frame = 4}));
-    XCTAssertEqual(track->module_at(6), (file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertTrue(track->module_at(4).value().is_equal_location(file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertTrue(track->module_at(5).value().is_equal_location(file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertTrue(track->module_at(6).value().is_equal_location(file_module{.range = {4, 3}, .file_frame = 4}));
     XCTAssertEqual(track->module_at(7), std::nullopt);
 }
 
@@ -150,13 +150,20 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->previous_module_at(-1), std::nullopt);
     XCTAssertEqual(track->previous_module_at(0), std::nullopt);
-    XCTAssertEqual(track->previous_module_at(1), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(track->previous_module_at(2), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(track->previous_module_at(3), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->previous_module_at(4), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->previous_module_at(5), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->previous_module_at(6), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->previous_module_at(7), (file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertTrue(
+        track->previous_module_at(1).value().is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(
+        track->previous_module_at(2).value().is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(
+        track->previous_module_at(3).value().is_equal_location(file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertTrue(
+        track->previous_module_at(4).value().is_equal_location(file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertTrue(
+        track->previous_module_at(5).value().is_equal_location(file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertTrue(
+        track->previous_module_at(6).value().is_equal_location(file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertTrue(
+        track->previous_module_at(7).value().is_equal_location(file_module{.range = {4, 3}, .file_frame = 4}));
 }
 
 - (void)test_next_module_at {
@@ -168,11 +175,11 @@ using namespace yas::ae;
 
     track->revert_modules_and_notify({module1, module2, module3});
 
-    XCTAssertEqual(track->next_module_at(-1), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(track->next_module_at(0), (file_module{.range = {1, 2}, .file_frame = 1}));
-    XCTAssertEqual(track->next_module_at(1), (file_module{.range = {4, 3}, .file_frame = 4}));
-    XCTAssertEqual(track->next_module_at(2), (file_module{.range = {4, 3}, .file_frame = 4}));
-    XCTAssertEqual(track->next_module_at(3), (file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertTrue(track->next_module_at(-1).value().is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(track->next_module_at(0).value().is_equal_location(file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertTrue(track->next_module_at(1).value().is_equal_location(file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertTrue(track->next_module_at(2).value().is_equal_location(file_module{.range = {4, 3}, .file_frame = 4}));
+    XCTAssertTrue(track->next_module_at(3).value().is_equal_location(file_module{.range = {4, 3}, .file_frame = 4}));
     XCTAssertEqual(track->next_module_at(4), std::nullopt);
     XCTAssertEqual(track->next_module_at(5), std::nullopt);
     XCTAssertEqual(track->next_module_at(6), std::nullopt);
@@ -220,19 +227,24 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().count(proc::time::range{0, 1}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{0, 1}).is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
     XCTAssertEqual(track->modules().count(proc::time::range{1, 7}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{1, 7}), (file_module{.range = {1, 7}, .file_frame = 1}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{1, 7}).is_equal_location(file_module{.range = {1, 7}, .file_frame = 1}));
 
     track->split_at(3);
 
     XCTAssertEqual(track->modules().size(), 3);
     XCTAssertEqual(track->modules().count(proc::time::range{0, 1}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{0, 1}).is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
     XCTAssertEqual(track->modules().count(proc::time::range{1, 2}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{1, 2}), (file_module{.range = {1, 2}, .file_frame = 1}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{1, 2}).is_equal_location(file_module{.range = {1, 2}, .file_frame = 1}));
     XCTAssertEqual(track->modules().count(proc::time::range{3, 5}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{3, 5}), (file_module{.range = {3, 5}, .file_frame = 3}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{3, 5}).is_equal_location(file_module{.range = {3, 5}, .file_frame = 3}));
 }
 
 - (void)test_erase_at {
@@ -247,9 +259,11 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().count(proc::time::range{0, 2}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{0, 2}), (file_module{.range = {0, 2}, .file_frame = 0}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{0, 2}).is_equal_location(file_module{.range = {0, 2}, .file_frame = 0}));
     XCTAssertEqual(track->modules().count(proc::time::range{4, 2}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{4, 2}), (file_module{.range = {4, 2}, .file_frame = 4}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{4, 2}).is_equal_location(file_module{.range = {4, 2}, .file_frame = 4}));
 }
 
 - (void)test_erase_and_offset_at {
@@ -264,9 +278,11 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().count(proc::time::range{0, 2}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{0, 2}), (file_module{.range = {0, 2}, .file_frame = 0}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{0, 2}).is_equal_location(file_module{.range = {0, 2}, .file_frame = 0}));
     XCTAssertEqual(track->modules().count(proc::time::range{2, 2}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{2, 2}), (file_module{.range = {2, 2}, .file_frame = 4}));
+    XCTAssertTrue(
+        track->modules().at(proc::time::range{2, 2}).is_equal_location(file_module{.range = {2, 2}, .file_frame = 4}));
 }
 
 - (void)test_drop_head_at {
@@ -288,7 +304,9 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count(proc::time::range{11, 3}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{11, 3}), (file_module{.range = {11, 3}, .file_frame = 101}));
+    XCTAssertTrue(track->modules()
+                      .at(proc::time::range{11, 3})
+                      .is_equal_location(file_module{.range = {11, 3}, .file_frame = 101}));
 }
 
 - (void)test_drop_tail_at {
@@ -310,7 +328,9 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count(proc::time::range{10, 3}), 1);
-    XCTAssertEqual(track->modules().at(proc::time::range{10, 3}), (file_module{.range = {10, 3}, .file_frame = 100}));
+    XCTAssertTrue(track->modules()
+                      .at(proc::time::range{10, 3})
+                      .is_equal_location(file_module{.range = {10, 3}, .file_frame = 100}));
 }
 
 - (void)test_drop_head_and_offset_at {
@@ -326,9 +346,9 @@ using namespace yas::ae;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(modules.at(proc::time::range{1, 1}), (file_module{.range = {1, 1}, .file_frame = 2}));
-    XCTAssertEqual(modules.at(proc::time::range{3, 3}), (file_module{.range = {3, 3}, .file_frame = 4}));
+    XCTAssertTrue(modules.at(proc::time::range{0, 1}).is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(modules.at(proc::time::range{1, 1}).is_equal_location(file_module{.range = {1, 1}, .file_frame = 2}));
+    XCTAssertTrue(modules.at(proc::time::range{3, 3}).is_equal_location(file_module{.range = {3, 3}, .file_frame = 4}));
 }
 
 - (void)test_drop_tail_and_offset {
@@ -344,9 +364,9 @@ using namespace yas::ae;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(modules.at(proc::time::range{1, 1}), (file_module{.range = {1, 1}, .file_frame = 1}));
-    XCTAssertEqual(modules.at(proc::time::range{3, 3}), (file_module{.range = {3, 3}, .file_frame = 4}));
+    XCTAssertTrue(modules.at(proc::time::range{0, 1}).is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(modules.at(proc::time::range{1, 1}).is_equal_location(file_module{.range = {1, 1}, .file_frame = 1}));
+    XCTAssertTrue(modules.at(proc::time::range{3, 3}).is_equal_location(file_module{.range = {3, 3}, .file_frame = 4}));
 }
 
 - (void)test_overwrite_module_middle_cropped {
@@ -360,9 +380,10 @@ using namespace yas::ae;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(proc::time::range{0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(modules.at(proc::time::range{1, 2}), (file_module{.range = {1, 2}, .file_frame = 100}));
-    XCTAssertEqual(modules.at(proc::time::range{3, 1}), (file_module{.range = {3, 1}, .file_frame = 3}));
+    XCTAssertTrue(modules.at(proc::time::range{0, 1}).is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(
+        modules.at(proc::time::range{1, 2}).is_equal_location(file_module{.range = {1, 2}, .file_frame = 100}));
+    XCTAssertTrue(modules.at(proc::time::range{3, 1}).is_equal_location(file_module{.range = {3, 1}, .file_frame = 3}));
 }
 
 - (void)test_overwrite_module_edge_cropped {
@@ -377,9 +398,10 @@ using namespace yas::ae;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(proc::time::range{0, 2}), (file_module{.range = {0, 2}, .file_frame = 0}));
-    XCTAssertEqual(modules.at(proc::time::range{2, 2}), (file_module{.range = {2, 2}, .file_frame = 200}));
-    XCTAssertEqual(modules.at(proc::time::range{4, 2}), (file_module{.range = {4, 2}, .file_frame = 4}));
+    XCTAssertTrue(modules.at(proc::time::range{0, 2}).is_equal_location(file_module{.range = {0, 2}, .file_frame = 0}));
+    XCTAssertTrue(
+        modules.at(proc::time::range{2, 2}).is_equal_location(file_module{.range = {2, 2}, .file_frame = 200}));
+    XCTAssertTrue(modules.at(proc::time::range{4, 2}).is_equal_location(file_module{.range = {4, 2}, .file_frame = 4}));
 }
 
 - (void)test_move_one_module {
@@ -393,13 +415,13 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count({1, 1}), 1);
-    XCTAssertEqual(track->modules().at({1, 1}), (file_module{.range = {1, 1}, .file_frame = 0}));
+    XCTAssertTrue(track->modules().at({1, 1}).is_equal_location(file_module{.range = {1, 1}, .file_frame = 0}));
 
     track->move_modules({{1, 1}}, -2);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count({-1, 1}), 1);
-    XCTAssertEqual(track->modules().at({-1, 1}), (file_module{.range = {-1, 1}, .file_frame = 0}));
+    XCTAssertTrue(track->modules().at({-1, 1}).is_equal_location(file_module{.range = {-1, 1}, .file_frame = 0}));
 }
 
 - (void)test_move_many_modules {
@@ -415,11 +437,11 @@ using namespace yas::ae;
 
     XCTAssertEqual(track->modules().size(), 3);
     XCTAssertEqual(track->modules().count({0, 1}), 1);
-    XCTAssertEqual(track->modules().at({0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(track->modules().at({0, 1}).is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
     XCTAssertEqual(track->modules().count({2, 1}), 1);
-    XCTAssertEqual(track->modules().at({2, 1}), (file_module{.range = {2, 1}, .file_frame = 1}));
+    XCTAssertTrue(track->modules().at({2, 1}).is_equal_location(file_module{.range = {2, 1}, .file_frame = 1}));
     XCTAssertEqual(track->modules().count({3, 1}), 1);
-    XCTAssertEqual(track->modules().at({3, 1}), (file_module{.range = {3, 1}, .file_frame = 2}));
+    XCTAssertTrue(track->modules().at({3, 1}).is_equal_location(file_module{.range = {3, 1}, .file_frame = 2}));
 }
 
 - (void)test_move_cropped {
@@ -438,9 +460,9 @@ using namespace yas::ae;
     XCTAssertEqual(track->modules().count({0, 1}), 1);
     XCTAssertEqual(track->modules().count({1, 2}), 1);
     XCTAssertEqual(track->modules().count({3, 1}), 1);
-    XCTAssertEqual(track->modules().at({0, 1}), (file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(track->modules().at({1, 2}), (file_module{.range = {1, 2}, .file_frame = 4}));
-    XCTAssertEqual(track->modules().at({3, 1}), (file_module{.range = {3, 1}, .file_frame = 3}));
+    XCTAssertTrue(track->modules().at({0, 1}).is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
+    XCTAssertTrue(track->modules().at({1, 2}).is_equal_location(file_module{.range = {1, 2}, .file_frame = 4}));
+    XCTAssertTrue(track->modules().at({3, 1}).is_equal_location(file_module{.range = {3, 1}, .file_frame = 3}));
 }
 
 @end
