@@ -3,6 +3,7 @@
 //
 
 #include "ae_ui_track.h"
+#include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_track_presenter.h>
@@ -18,6 +19,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
                    std::shared_ptr<scroll_gesture_controller> const &scroll_gesture_controller,
                    std::shared_ptr<ui_modules> const &modules, std::shared_ptr<ui_markers> const &markers)
     : _standard(standard),
+      _display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
       _presenter(presenter),
       _scroll_gesture_controller(scroll_gesture_controller),
       _root_node(ui::node::make_shared()),
@@ -44,6 +46,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
                                  ui_track_constants::height};
             this->_modules->set_scale(scale);
             this->_markers->set_scale(scale);
+            this->_display_space->set_scale(scale);
         })
         .sync()
         ->add_to(this->_pool);
