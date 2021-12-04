@@ -16,6 +16,10 @@ struct identifier final {
     identifier &operator=(identifier &&);
 
     bool operator==(identifier const &rhs) const;
+    bool operator!=(identifier const &rhs) const;
+    bool operator<(identifier const &) const;
+
+    uintptr_t raw_value() const;
 
    private:
     std::shared_ptr<std::nullptr_t> _raw;

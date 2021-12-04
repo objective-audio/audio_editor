@@ -9,12 +9,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-bool file_module::operator==(file_module const &rhs) const {
+bool file_module::is_equal_location(file_module const &rhs) const {
     return this->range == rhs.range && this->file_frame == rhs.file_frame;
-}
-
-bool file_module::operator!=(file_module const &rhs) const {
-    return !(*this == rhs);
 }
 
 std::optional<file_module> file_module::head_dropped(proc::frame_index_t const frame) const {

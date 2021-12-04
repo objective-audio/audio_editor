@@ -34,7 +34,7 @@ std::vector<marker_location> markers_presenter::marker_locations() const {
 
             return to_vector<marker_location>(markers, [&sample_rate](auto const &pair) {
                 double const position = static_cast<double>(pair.first) / static_cast<double>(sample_rate);
-                return marker_location{static_cast<float>(position)};
+                return marker_location{.identifier = pair.second.identifier, .x = static_cast<float>(position)};
             });
         }
     }
