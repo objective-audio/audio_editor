@@ -157,7 +157,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         .end()
         ->add_to(this->_pool);
 
-    this->_file_track->insert_module_and_notify(file_module{proc::time::range{0, file_info.length}, 0});
+    this->_file_track->insert_module_and_notify(
+        file_module{.range = proc::time::range{0, file_info.length}, .file_frame = 0});
 
     action_controller
         ->observe_action([this](action const &action) {
