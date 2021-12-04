@@ -12,7 +12,7 @@
 
 namespace yas::ae {
 struct file_module {
-    ae::identifier identifier;
+    identifier identifier;
     proc::time::range range;
     proc::frame_index_t file_frame;
 
