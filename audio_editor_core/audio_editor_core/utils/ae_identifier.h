@@ -17,6 +17,8 @@ struct identifier final {
 
     bool operator==(identifier const &rhs) const;
 
+    uintptr_t raw_value() const;
+
    private:
     std::shared_ptr<std::nullptr_t> _raw;
 };
