@@ -35,7 +35,7 @@ std::vector<module_location> modules_presenter::module_locations() const {
             return to_vector<module_location>(modules, [&sample_rate](auto const &pair) {
                 float const x = static_cast<double>(pair.second.range.frame) / static_cast<double>(sample_rate);
                 float const width = static_cast<double>(pair.second.range.length) / static_cast<double>(sample_rate);
-                return module_location{x, width};
+                return module_location{pair.second.identifier, x, width};
             });
         }
     }
