@@ -16,8 +16,6 @@ struct file_module {
     proc::time::range range;
     proc::frame_index_t file_frame;
 
-    bool operator==(file_module const &rhs) const;
-    bool operator!=(file_module const &rhs) const;
     bool is_equal_location(file_module const &rhs) const;
 
     std::optional<file_module> head_dropped(proc::frame_index_t const) const;

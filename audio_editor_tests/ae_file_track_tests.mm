@@ -3,8 +3,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <audio_editor_core/ae_identifier.h>
 #import <audio_editor_core/audio_editor_core_umbrella.h>
-#import <processing/yas_processing_umbrella.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -25,21 +25,21 @@ using namespace yas::ae;
     track->insert_module_and_notify(module1);
 
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().at(module1.range), module1);
+    XCTAssertEqual(track->modules().at(module1.range).identifier, module1.identifier);
 
     file_module const module2{.range = {4, 3}, .file_frame = 4};
 
     track->insert_module_and_notify(module2);
 
     XCTAssertEqual(track->modules().size(), 2);
-    XCTAssertEqual(track->modules().at(module2.range), module2);
+    XCTAssertEqual(track->modules().at(module2.range).identifier, module2.identifier);
 
     file_module const module3{.range = {-2, 2}, .file_frame = 7};
 
     track->insert_module_and_notify(module3);
 
     XCTAssertEqual(track->modules().size(), 3);
-    XCTAssertEqual(track->modules().at(module3.range), module3);
+    XCTAssertEqual(track->modules().at(module3.range).identifier, module3.identifier);
 
     auto iterator = track->modules().begin();
     XCTAssertEqual(iterator->first, module3.range);
@@ -100,14 +100,14 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, file_track_event_type::inserted);
     XCTAssertEqual(called.at(1).modules.size(), 3);
-    XCTAssertEqual(called.at(1).module, module3);
+    XCTAssertEqual(called.at(1).module.value().identifier, module3.identifier);
 
     track->erase_module_and_notify(module1);
 
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2).type, file_track_event_type::erased);
     XCTAssertEqual(called.at(2).modules.size(), 2);
-    XCTAssertEqual(called.at(2).module, module1);
+    XCTAssertEqual(called.at(2).module.value().identifier, module1.identifier);
 
     track->revert_modules_and_notify({module2});
 

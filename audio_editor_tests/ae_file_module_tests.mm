@@ -14,20 +14,6 @@ using namespace yas::ae;
 
 @implementation ae_file_module_tests
 
-- (void)test_is_equal {
-    identifier const identifier1;
-    identifier const identifier2;
-    file_module const module_1a{.identifier = identifier1, .range = {1, 3}, .file_frame = 10};
-    file_module const module_1b{.identifier = identifier1, .range = {1, 3}, .file_frame = 10};
-    file_module const module_2{.identifier = identifier2, .range = {1, 3}, .file_frame = 10};
-
-    XCTAssertTrue(module_1a == module_1b);
-    XCTAssertFalse(module_1a != module_1b);
-
-    XCTAssertFalse(module_1a == module_2);
-    XCTAssertTrue(module_1a != module_2);
-}
-
 - (void)test_head_dropped {
     file_module const module{.range = {1, 3}, .file_frame = 10};
 
