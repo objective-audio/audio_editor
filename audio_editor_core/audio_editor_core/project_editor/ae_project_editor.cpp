@@ -247,6 +247,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         ->add_to(this->_pool);
 
     action_controller->observe_export([this](url const &url) { this->export_to_file(url); }).end()->add_to(this->_pool);
+
+    this->_player->begin_rendering();
 }
 
 ae::file_info const &project_editor::file_info() const {
