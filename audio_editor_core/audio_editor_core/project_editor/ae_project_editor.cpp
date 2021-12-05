@@ -353,8 +353,10 @@ void project_editor::drop_head_and_offset() {
         return;
     }
 
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
+    auto const current_frame = this->_player->current_frame();
+    auto const seek_frame = this->_file_track->module_at(current_frame).value().range.frame;
+
+    this->_database->suspend_saving([this, &current_frame] {
         auto const module_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->drop_head_and_offset_at(current_frame);
         auto const dropping_length = current_frame - module_range.frame;
@@ -362,6 +364,8 @@ void project_editor::drop_head_and_offset() {
         auto const offset = -dropping_length;
         this->_marker_pool->move_offset_from(current_frame, offset);
     });
+
+    this->_player->seek(seek_frame);
 }
 
 void project_editor::drop_tail_and_offset() {
