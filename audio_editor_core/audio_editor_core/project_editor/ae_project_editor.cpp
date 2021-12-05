@@ -247,6 +247,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         ->add_to(this->_pool);
 
     action_controller->observe_export([this](url const &url) { this->export_to_file(url); }).end()->add_to(this->_pool);
+
+    this->_player->begin_rendering();
 }
 
 ae::file_info const &project_editor::file_info() const {
@@ -353,8 +355,10 @@ void project_editor::drop_head_and_offset() {
         return;
     }
 
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
+    auto const current_frame = this->_player->current_frame();
+    auto const seek_frame = this->_file_track->module_at(current_frame).value().range.frame;
+
+    this->_database->suspend_saving([this, &current_frame] {
         auto const module_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->drop_head_and_offset_at(current_frame);
         auto const dropping_length = current_frame - module_range.frame;
@@ -362,6 +366,8 @@ void project_editor::drop_head_and_offset() {
         auto const offset = -dropping_length;
         this->_marker_pool->move_offset_from(current_frame, offset);
     });
+
+    this->_player->seek(seek_frame);
 }
 
 void project_editor::drop_tail_and_offset() {
@@ -394,6 +400,9 @@ void project_editor::erase_and_offset() {
         return;
     }
 
+    auto const current_frame = this->_player->current_frame();
+    auto const previous_module = this->_file_track->previous_module_at(current_frame);
+
     this->_database->suspend_saving([this] {
         auto const current_frame = this->_player->current_frame();
         auto const erasing_range = this->_file_track->module_at(current_frame)->range;
@@ -402,6 +411,10 @@ void project_editor::erase_and_offset() {
         auto const offset = -static_cast<proc::frame_index_t>(erasing_range.length);
         this->_marker_pool->move_offset_from(erasing_range.next_frame(), offset);
     });
+
+    if (auto const &module = previous_module) {
+        this->_player->seek(module->range.next_frame());
+    }
 }
 
 bool project_editor::can_insert_marker() const {

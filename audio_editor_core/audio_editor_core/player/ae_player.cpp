@@ -38,6 +38,10 @@ player::player(std::shared_ptr<playing::coordinator> const &coordinator, std::st
         ->add_to(this->_pool);
 }
 
+void player::begin_rendering() {
+    this->_coordinator->set_rendering(true);
+}
+
 void player::set_timeline(proc::timeline_ptr const &time_line, playing::sample_rate_t const sample_rate,
                           audio::pcm_format const pcm_format) {
     this->_coordinator->set_timeline(time_line, this->_identifier);

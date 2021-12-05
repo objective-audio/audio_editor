@@ -27,6 +27,7 @@ struct file_loader_for_project_editor {
 struct player_for_project_editor {
     virtual ~player_for_project_editor() = default;
 
+    virtual void begin_rendering() = 0;
     virtual void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,
                               audio::pcm_format const) = 0;
     virtual void reset_timeline() = 0;
