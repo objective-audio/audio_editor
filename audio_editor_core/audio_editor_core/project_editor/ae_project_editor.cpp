@@ -398,6 +398,9 @@ void project_editor::erase_and_offset() {
         return;
     }
 
+    auto const current_frame = this->_player->current_frame();
+    auto const previous_module = this->_file_track->previous_module_at(current_frame);
+
     this->_database->suspend_saving([this] {
         auto const current_frame = this->_player->current_frame();
         auto const erasing_range = this->_file_track->module_at(current_frame)->range;
@@ -406,6 +409,10 @@ void project_editor::erase_and_offset() {
         auto const offset = -static_cast<proc::frame_index_t>(erasing_range.length);
         this->_marker_pool->move_offset_from(erasing_range.next_frame(), offset);
     });
+
+    if (auto const &module = previous_module) {
+        this->_player->seek(module->range.next_frame());
+    }
 }
 
 bool project_editor::can_insert_marker() const {
