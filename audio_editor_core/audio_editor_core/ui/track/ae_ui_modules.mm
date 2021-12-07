@@ -4,6 +4,7 @@
 
 #include "ae_ui_modules.h"
 #include <audio_editor_core/ae_common_utils.h>
+#include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_module_location.h>
 #include <audio_editor_core/ae_modules_presenter.h>
 
@@ -37,13 +38,27 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter)
 
     this->_set_rect_count(0);
 
-    presenter->observe_modules([this](auto const &locations) { this->set_locations(locations); })
+    presenter
+        ->observe_locations([this](module_location_pool_event const &event) {
+            switch (event.type) {
+                case module_location_pool_event_type::fetched:
+                case module_location_pool_event_type::replaced:
+                    this->set_locations(event.locations);
+                    break;
+                case module_location_pool_event_type::updated:
+                    this->update_locations(event.locations.size(), event.erased, event.inserted);
+                    break;
+            }
+        })
         .sync()
         ->add_to(this->_pool);
+
+    //    display_space->observe_region([this](auto const &) {}).end()->add_to(this->_pool);
 }
 
-std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id) {
-    auto const presenter = modules_presenter::make_shared(project_id);
+std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id,
+                                                    std::shared_ptr<display_space> const &display_space) {
+    auto const presenter = modules_presenter::make_shared(project_id, display_space);
     return std::shared_ptr<ui_modules>(new ui_modules{presenter});
 }
 
@@ -55,7 +70,7 @@ void ui_modules::set_scale(ui::size const &scale) {
     this->_node->set_scale(scale);
 }
 
-void ui_modules::set_locations(std::vector<module_location> const &locations) {
+void ui_modules::set_locations(std::vector<std::optional<module_location>> const &locations) {
     this->_set_rect_count(locations.size());
 
     this->_vertex_data->write([&locations](std::vector<ui::vertex2d_t> &vertices) {
@@ -65,8 +80,34 @@ void ui_modules::set_locations(std::vector<module_location> const &locations) {
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
             auto const &location = locations.at(idx);
-            vertex_rects[idx].set_position(
-                ui::region{.origin = {.x = location.x, .y = 0.0f}, .size = {.width = location.width, .height = 1.0f}});
+
+            if (location.has_value()) {
+                auto const &value = location.value();
+                vertex_rects[idx].set_position(
+                    ui::region{.origin = {.x = value.x, .y = 0.0f}, .size = {.width = value.width, .height = 1.0f}});
+            } else {
+                vertex_rects[idx].set_position(ui::region::zero());
+            }
+        }
+    });
+}
+
+void ui_modules::update_locations(std::size_t const count,
+                                  std::vector<std::pair<std::size_t, module_location>> const &erased,
+                                  std::vector<std::pair<std::size_t, module_location>> const &inserted) {
+    this->_set_rect_count(count);
+
+    this->_vertex_data->write([&erased, &inserted](std::vector<ui::vertex2d_t> &vertices) {
+        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+
+        for (auto const &pair : erased) {
+            vertex_rects[pair.first].set_position(ui::region::zero());
+        }
+
+        for (auto const &pair : inserted) {
+            auto const &value = pair.second;
+            vertex_rects[pair.first].set_position(
+                ui::region{.origin = {.x = value.x, .y = 0.0f}, .size = {.width = value.width, .height = 1.0f}});
         }
     });
 }
