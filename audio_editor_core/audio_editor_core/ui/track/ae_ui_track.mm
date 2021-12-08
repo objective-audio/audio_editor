@@ -84,7 +84,7 @@ std::shared_ptr<ui_track> ui_track::make_shared(std::shared_ptr<ui::standard> co
     auto const display_space = display_space::make_shared(standard->view_look()->view_layout_guide()->region());
     auto const presenter = track_presenter::make_shared(project_id);
     auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id);
-    auto const modules = ui_modules::make_shared(project_id, display_space);
+    auto const modules = ui_modules::make_shared(project_id, standard, display_space);
     auto const markers = ui_markers::make_shared(project_id);
     return std::shared_ptr<ui_track>(
         new ui_track{standard, display_space, presenter, scroll_gestore_controller, modules, markers});

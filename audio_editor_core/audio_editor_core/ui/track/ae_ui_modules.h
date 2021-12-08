@@ -29,7 +29,7 @@ struct ui_modules {
     void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, module_location>> const &erased,
                           std::vector<std::pair<std::size_t, module_location>> const &inserted);
 
-    static std::shared_ptr<ui_modules> make_shared(std::string const &project_id,
+    static std::shared_ptr<ui_modules> make_shared(std::string const &project_id, std::shared_ptr<ui::standard> const &,
                                                    std::shared_ptr<display_space> const &);
 
    private:
@@ -47,7 +47,7 @@ struct ui_modules {
 
     observing::canceller_pool _pool;
 
-    ui_modules(std::shared_ptr<modules_presenter> const &);
+    ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<ui::standard> const &);
 
     void _remake_data_if_needed(std::size_t const);
     void _set_rect_count(std::size_t const);

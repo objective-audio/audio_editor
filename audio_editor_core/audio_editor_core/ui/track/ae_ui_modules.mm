@@ -22,7 +22,8 @@ void ui_modules::line_index2d_rect::set_all(ui::index2d_t const first) {
     this->v[5] = this->v[6] = first + 2;
 }
 
-ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter)
+ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
+                       std::shared_ptr<ui::standard> const &standard)
     : _presenter(presenter),
       _node(ui::node::make_shared()),
       _triangle_node(ui::node::make_shared()),
@@ -53,13 +54,17 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter)
         .sync()
         ->add_to(this->_pool);
 
-    //    display_space->observe_region([this](auto const &) {}).end()->add_to(this->_pool);
+    standard->renderer()
+        ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
+        .end()
+        ->add_to(this->_pool);
 }
 
 std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id,
+                                                    std::shared_ptr<ui::standard> const &standard,
                                                     std::shared_ptr<display_space> const &display_space) {
     auto const presenter = modules_presenter::make_shared(project_id, display_space);
-    return std::shared_ptr<ui_modules>(new ui_modules{presenter});
+    return std::shared_ptr<ui_modules>(new ui_modules{presenter, standard});
 }
 
 std::shared_ptr<ui::node> const &ui_modules::node() const {
