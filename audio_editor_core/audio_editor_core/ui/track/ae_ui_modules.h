@@ -9,6 +9,7 @@
 namespace yas::ae {
 class module_location;
 class modules_presenter;
+class display_space;
 
 struct ui_modules {
     using vertex2d_rect = ui::vertex2d_rect;
@@ -24,9 +25,12 @@ struct ui_modules {
     std::shared_ptr<ui::node> const &node() const;
 
     void set_scale(ui::size const &);
-    void set_locations(std::vector<module_location> const &);
+    void set_locations(std::vector<std::optional<module_location>> const &);
+    void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, module_location>> const &erased,
+                          std::vector<std::pair<std::size_t, module_location>> const &inserted);
 
-    static std::shared_ptr<ui_modules> make_shared(std::string const &project_id);
+    static std::shared_ptr<ui_modules> make_shared(std::string const &project_id,
+                                                   std::shared_ptr<display_space> const &);
 
    private:
     std::shared_ptr<modules_presenter> const _presenter;

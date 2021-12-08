@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include <ui/yas_ui_umbrella.h>
+#include <observing/yas_observing_umbrella.h>
+#include <ui/yas_ui_types.h>
 
 namespace yas::ae {
 struct display_space final {
