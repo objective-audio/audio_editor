@@ -28,26 +28,32 @@ std::shared_ptr<modules_presenter> modules_presenter::make_shared(
 modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_presenter> const &editor,
                                      std::shared_ptr<display_space> const &display_space)
     : _project_editor(editor), _display_space(display_space), _location_pool(module_location_pool::make_shared()) {
+    auto const sample_rate = editor->file_info().sample_rate;
+
     editor
-        ->observe_file_track_event([this,
-                                    sample_rate = editor->file_info().sample_rate](file_track_event const &event) {
+        ->observe_file_track_event([this, sample_rate](file_track_event const &event) {
             switch (event.type) {
                 case file_track_event_type::any:
-                case file_track_event_type::reverted: {
-                    auto const locations = to_vector<module_location>(event.modules, [&sample_rate](auto const &pair) {
-                        return module_location::make(pair.second.identifier, pair.second.range, sample_rate);
-                    });
-                    this->_location_pool->update_all(locations);
-                } break;
+                case file_track_event_type::reverted:
+                    this->_update_all(true);
+                    break;
                 case file_track_event_type::erased:
                     this->_location_pool->erase(event.module.value().identifier);
                     break;
-                case file_track_event_type::inserted:
+                case file_track_event_type::inserted: {
                     auto const &module = event.module.value();
-                    this->_location_pool->insert(module_location::make(module.identifier, module.range, sample_rate));
-                    break;
+                    auto const space_range = this->_space_range();
+                    if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
+                        this->_location_pool->insert(
+                            module_location::make(module.identifier, module.range, sample_rate));
+                    }
+                } break;
             }
         })
+        .sync()
+        ->add_to(this->_canceller_pool);
+
+    display_space->observe_region([this](ui::region const &region) { this->_update_all(true); })
         .sync()
         ->add_to(this->_canceller_pool);
 }
@@ -59,4 +65,54 @@ std::vector<std::optional<module_location>> const &modules_presenter::locations(
 observing::syncable modules_presenter::observe_locations(
     std::function<void(module_location_pool_event const &)> &&handler) {
     return this->_location_pool->observe_event(std::move(handler));
+}
+
+void modules_presenter::update_if_needed() {
+    this->_update_all(false);
+}
+
+std::optional<proc::time::range> modules_presenter::_space_range() const {
+    if (auto const editor = this->_project_editor.lock()) {
+        auto const sample_rate = editor->file_info().sample_rate;
+        auto const region = this->_display_space->region();
+        auto const current_frame = editor->current_frame();
+        auto const min_edge_frame =
+            current_frame + static_cast<proc::frame_index_t>(std::floor(region.left() * sample_rate));
+        auto const max_edge_frame =
+            current_frame + static_cast<proc::frame_index_t>(std::ceil(region.right() * sample_rate));
+        return proc::time::range{min_edge_frame, static_cast<proc::length_t>(max_edge_frame - min_edge_frame)};
+    } else {
+        return std::nullopt;
+    }
+}
+
+void modules_presenter::_update_all(bool const force) {
+    auto const space_range = this->_space_range();
+    auto const editor = this->_project_editor.lock();
+    if (editor && space_range.has_value()) {
+        auto const current_frame = editor->current_frame();
+        if (space_range == this->_last_space_range && current_frame == this->_last_frame && !force) {
+            return;
+        }
+
+        auto const &space_range_value = space_range.value();
+
+        std::vector<file_module> modules;
+
+        for (auto const &module : editor->modules()) {
+            if (module.first.is_overlap(space_range_value)) {
+                modules.emplace_back(module.second);
+            }
+        }
+
+        auto const locations =
+            to_vector<module_location>(modules, [sample_rate = editor->file_info().sample_rate](auto const &module) {
+                return module_location::make(module.identifier, module.range, sample_rate);
+            });
+
+        this->_location_pool->update_all(locations);
+
+        this->_last_frame = current_frame;
+        this->_last_space_range = space_range;
+    }
 }
