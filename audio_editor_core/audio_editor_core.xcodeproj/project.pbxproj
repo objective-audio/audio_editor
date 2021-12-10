@@ -392,8 +392,10 @@
 			isa = PBXGroup;
 			children = (
 				B6693E58268814D2004C8F50 /* ae_action.h */,
-				B6813578271EE756009CC0FC /* ae_gesture.h */,
+				B666F1792759CCEA0040D306 /* ae_display_space.h */,
+				B666F17A2759CCEA0040D306 /* ae_display_space.mm */,
 				B6097BC0272535FE008A6D57 /* ae_gesture.cpp */,
+				B6813578271EE756009CC0FC /* ae_gesture.h */,
 				B657D4D326803C7B0048C6AD /* ae_keyboard_types.h */,
 				B657D4D526806DA90048C6AD /* ae_keyboard_utils.cpp */,
 				B657D4D626806DA90048C6AD /* ae_keyboard_utils.h */,
@@ -742,8 +744,6 @@
 		B6C3A58827102CA700514B94 /* track */ = {
 			isa = PBXGroup;
 			children = (
-				B666F1792759CCEA0040D306 /* ae_display_space.h */,
-				B666F17A2759CCEA0040D306 /* ae_display_space.mm */,
 				B666F18A275C93530040D306 /* ae_module_location_pool.cpp */,
 				B666F189275C93530040D306 /* ae_module_location_pool.h */,
 				B666F18D275C95750040D306 /* ae_module_location_types.h */,
