@@ -35,7 +35,7 @@ modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_
             switch (event.type) {
                 case file_track_event_type::any:
                 case file_track_event_type::reverted:
-                    this->_update_all(true);
+                    this->_update_all_locations(true);
                     break;
                 case file_track_event_type::erased:
                     this->_location_pool->erase(event.module.value().identifier);
@@ -53,7 +53,7 @@ modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_
         .sync()
         ->add_to(this->_canceller_pool);
 
-    display_space->observe_region([this](ui::region const &region) { this->_update_all(true); })
+    display_space->observe_region([this](ui::region const &region) { this->_update_all_locations(true); })
         .sync()
         ->add_to(this->_canceller_pool);
 }
@@ -68,25 +68,20 @@ observing::syncable modules_presenter::observe_locations(
 }
 
 void modules_presenter::update_if_needed() {
-    this->_update_all(false);
+    this->_update_all_locations(false);
 }
 
 std::optional<proc::time::range> modules_presenter::_space_range() const {
     if (auto const editor = this->_project_editor.lock()) {
         auto const sample_rate = editor->file_info().sample_rate;
-        auto const region = this->_display_space->region();
         auto const current_frame = editor->current_frame();
-        auto const min_edge_frame =
-            current_frame + static_cast<proc::frame_index_t>(std::floor(region.left() * sample_rate));
-        auto const max_edge_frame =
-            current_frame + static_cast<proc::frame_index_t>(std::ceil(region.right() * sample_rate));
-        return proc::time::range{min_edge_frame, static_cast<proc::length_t>(max_edge_frame - min_edge_frame)};
+        return this->_display_space->frame_range(sample_rate, current_frame);
     } else {
         return std::nullopt;
     }
 }
 
-void modules_presenter::_update_all(bool const force) {
+void modules_presenter::_update_all_locations(bool const force) {
     auto const space_range = this->_space_range();
     auto const editor = this->_project_editor.lock();
     if (editor && space_range.has_value()) {

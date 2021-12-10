@@ -4,12 +4,10 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_module_location.h>
-#include <audio_editor_core/ae_module_location_types.h>
+#include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_modules_presenter_dependency.h>
 
 namespace yas::ae {
-class module_location_pool;
 class display_space;
 
 struct modules_presenter {
@@ -41,6 +39,6 @@ struct modules_presenter {
     modules_presenter &operator=(modules_presenter &&) = delete;
 
     std::optional<proc::time::range> _space_range() const;
-    void _update_all(bool const force);
+    void _update_all_locations(bool const force);
 };
 }  // namespace yas::ae
