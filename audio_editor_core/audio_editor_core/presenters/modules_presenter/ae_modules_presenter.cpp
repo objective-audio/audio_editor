@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
+#include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -53,7 +54,7 @@ modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_
         .sync()
         ->add_to(this->_canceller_pool);
 
-    display_space->observe_region([this](ui::region const &region) { this->_update_all_locations(true); })
+    display_space->observe([this](display_space_event const &event) { this->_update_all_locations(true); })
         .sync()
         ->add_to(this->_canceller_pool);
 }
@@ -84,25 +85,24 @@ std::optional<proc::time::range> modules_presenter::_space_range() const {
 void modules_presenter::_update_all_locations(bool const force) {
     auto const space_range = this->_space_range();
     auto const editor = this->_project_editor.lock();
+
     if (editor && space_range.has_value()) {
         auto const current_frame = editor->current_frame();
+
         if (space_range == this->_last_space_range && current_frame == this->_last_frame && !force) {
             return;
         }
 
         auto const &space_range_value = space_range.value();
 
-        std::vector<file_module> modules;
-
-        for (auto const &module : editor->modules()) {
-            if (module.first.is_overlap(space_range_value)) {
-                modules.emplace_back(module.second);
-            }
-        }
-
-        auto const locations =
-            to_vector<module_location>(modules, [sample_rate = editor->file_info().sample_rate](auto const &module) {
-                return module_location::make(module.identifier, module.range, sample_rate);
+        auto const locations = filter_map<module_location>(
+            editor->modules(), [&space_range_value, sample_rate = editor->file_info().sample_rate](auto const &module) {
+                if (module.first.is_overlap(space_range_value)) {
+                    return std::make_optional(
+                        module_location::make(module.second.identifier, module.second.range, sample_rate));
+                } else {
+                    return std::optional<module_location>(std::nullopt);
+                }
             });
 
         this->_location_pool->update_all(locations);

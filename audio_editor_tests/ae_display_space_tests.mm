@@ -55,13 +55,25 @@ using namespace yas::ae;
 - (void)test_observe {
     auto const space = display_space::make_shared(ui::region::zero());
 
-    std::vector<ui::region> called;
+    struct called_event {
+        display_space_event_source source;
+        ui::region region;
+        ui::size scale;
+    };
+
+    std::vector<called_event> called;
 
     auto const canceller =
-        space->observe_region([&called](ui::region const &region) { called.emplace_back(region); }).sync();
+        space
+            ->observe([&called](display_space_event const &event) {
+                called.emplace_back(called_event{.source = event.source, .region = event.region, .scale = event.scale});
+            })
+            .sync();
 
     XCTAssertEqual(called.size(), 1);
-    XCTAssertTrue(called.at(0) == ui::region::zero());
+    XCTAssertTrue(called.at(0).source == display_space_event_source::fetched);
+    XCTAssertTrue(called.at(0).region == ui::region::zero());
+    XCTAssertTrue(called.at(0).scale == (ui::size{1.0f, 1.0f}));
 
     space->set_view_region(ui::region::zero());
     XCTAssertEqual(called.size(), 1);
@@ -70,14 +82,19 @@ using namespace yas::ae;
     space->set_view_region(view_region);
 
     XCTAssertEqual(called.size(), 2);
-    XCTAssertTrue(called.at(1) == view_region);
+
+    XCTAssertTrue(called.at(1).source == display_space_event_source::view);
+    XCTAssertTrue(called.at(1).region == view_region);
+    XCTAssertTrue(called.at(1).scale == (ui::size{1.0f, 1.0f}));
 
     auto const scale = ui::size{2.0, 4.0};
     space->set_scale(scale);
 
     XCTAssertEqual(called.size(), 3);
+    XCTAssertTrue(called.at(2).source == display_space_event_source::scale);
     auto const expected_region = ui::region{.size = {.width = 0.5, .height = 0.25}};
-    XCTAssertTrue(called.at(2) == expected_region);
+    XCTAssertTrue(called.at(2).region == expected_region);
+    XCTAssertTrue(called.at(2).scale == scale);
 
     canceller->cancel();
 }
