@@ -23,7 +23,7 @@ resource_pool<Resource>::resource_pool() {
 template <typename Resource>
 void resource_pool<Resource>::replace_all(std::vector<Resource> const &locations) {
     this->_locations.clear();
-    this->_locations = to_vector<std::optional<Resource>>(locations, [](auto const &location) { return location; });
+    this->_locations = map<std::optional<Resource>>(locations, [](auto const &location) { return location; });
 
     this->_fetcher->push({.type = resource_pool_event_type::replaced, .locations = this->_locations});
 }
