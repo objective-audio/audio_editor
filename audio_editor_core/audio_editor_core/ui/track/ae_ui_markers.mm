@@ -38,10 +38,10 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
             switch (event.type) {
                 case marker_location_pool_event_type::fetched:
                 case marker_location_pool_event_type::replaced:
-                    this->set_locations(event.locations);
+                    this->set_locations(event.elements);
                     break;
                 case marker_location_pool_event_type::updated:
-                    this->update_locations(event.locations.size(), event.erased, event.inserted);
+                    this->update_locations(event.elements.size(), event.erased, event.inserted);
                     break;
             }
         })

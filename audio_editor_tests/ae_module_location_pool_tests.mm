@@ -17,7 +17,7 @@ using namespace yas::ae;
 - (void)test_initial {
     auto const pool = module_location_pool::make_shared();
 
-    XCTAssertEqual(pool->locations().size(), 0);
+    XCTAssertEqual(pool->elements().size(), 0);
 }
 
 - (void)test_replace_all {
@@ -38,7 +38,7 @@ using namespace yas::ae;
     {
         pool->replace_all({{.identifier = id_0}, {.identifier = id_1}, {.identifier = id_2}});
 
-        auto const locations = pool->locations();
+        auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
         XCTAssertEqual(locations.at(0).value().identifier, id_0);
         XCTAssertEqual(locations.at(1).value().identifier, id_1);
@@ -54,7 +54,7 @@ using namespace yas::ae;
     {
         pool->replace_all({{.identifier = id_3}, {.identifier = id_4}});
 
-        auto const locations = pool->locations();
+        auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
         XCTAssertEqual(locations.at(0).value().identifier, id_3);
         XCTAssertEqual(locations.at(1).value().identifier, id_4);
@@ -86,7 +86,7 @@ using namespace yas::ae;
     {
         pool->update_all({{.identifier = id_0}, {.identifier = id_2}});
 
-        auto const locations = pool->locations();
+        auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
         XCTAssertEqual(locations.at(0).value().identifier, id_0);
         XCTAssertEqual(locations.at(1).value().identifier, id_2);
@@ -104,7 +104,7 @@ using namespace yas::ae;
     {
         pool->update_all({{.identifier = id_0}, {.identifier = id_1}, {.identifier = id_2}});
 
-        auto const locations = pool->locations();
+        auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
         XCTAssertEqual(locations.at(0).value().identifier, id_0);
         XCTAssertEqual(locations.at(1).value().identifier, id_2);
@@ -121,7 +121,7 @@ using namespace yas::ae;
     {
         pool->update_all({{.identifier = id_1}, {.identifier = id_2}});
 
-        auto const locations = pool->locations();
+        auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
         XCTAssertFalse(locations.at(0).has_value());
         XCTAssertEqual(locations.at(1).value().identifier, id_2);
@@ -137,7 +137,7 @@ using namespace yas::ae;
 
     {
         pool->update_all({{.identifier = id_1}, {.identifier = id_2}, {.identifier = id_3}, {.identifier = id_4}});
-        auto const locations = pool->locations();
+        auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
         XCTAssertEqual(locations.at(0).value().identifier, id_3);
         XCTAssertEqual(locations.at(1).value().identifier, id_2);
@@ -156,7 +156,7 @@ using namespace yas::ae;
 
     {
         pool->update_all({{.identifier = id_1}, {.identifier = id_4}, {.identifier = id_5}});
-        auto const locations = pool->locations();
+        auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
         XCTAssertEqual(locations.at(0).value().identifier, id_5);
         XCTAssertFalse(locations.at(1).has_value());
@@ -198,7 +198,7 @@ using namespace yas::ae;
     {
         pool->erase(id_1);
 
-        auto const &locations = pool->locations();
+        auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
         XCTAssertEqual(locations.at(0).value().identifier, id_0);
         XCTAssertFalse(locations.at(1).has_value());
@@ -235,12 +235,12 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0).type, module_location_pool_event_type::fetched);
 
-    XCTAssertEqual(pool->locations().size(), 0);
+    XCTAssertEqual(pool->elements().size(), 0);
 
     {
         pool->insert({.identifier = id_0});
 
-        auto const &locations = pool->locations();
+        auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 1);
         XCTAssertEqual(locations.at(0).value().identifier, id_0);
 
@@ -255,7 +255,7 @@ using namespace yas::ae;
     {
         pool->insert({.identifier = id_0});
 
-        XCTAssertEqual(pool->locations().size(), 1);
+        XCTAssertEqual(pool->elements().size(), 1);
 
         XCTAssertEqual(called.size(), 2);
     }
@@ -263,7 +263,7 @@ using namespace yas::ae;
     {
         pool->insert({.identifier = id_1});
 
-        auto const &locations = pool->locations();
+        auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
         XCTAssertEqual(locations.at(0).value().identifier, id_0);
         XCTAssertEqual(locations.at(1).value().identifier, id_1);
@@ -278,7 +278,7 @@ using namespace yas::ae;
 
     {
         pool->erase(id_0);
-        auto const &locations = pool->locations();
+        auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
         XCTAssertFalse(locations.at(0).has_value());
         XCTAssertEqual(locations.at(1).value().identifier, id_1);
@@ -292,7 +292,7 @@ using namespace yas::ae;
     {
         pool->insert({.identifier = id_2});
 
-        auto const &locations = pool->locations();
+        auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
         XCTAssertEqual(locations.at(0).value().identifier, id_2);
         XCTAssertEqual(locations.at(1).value().identifier, id_1);
