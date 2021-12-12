@@ -69,7 +69,7 @@ markers_presenter::markers_presenter(std::shared_ptr<project_editor_for_markers_
 }
 
 std::vector<std::optional<marker_location>> markers_presenter::locations() const {
-    return this->_location_pool->locations();
+    return this->_location_pool->elements();
 }
 
 observing::syncable markers_presenter::observe_locations(

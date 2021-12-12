@@ -60,7 +60,7 @@ modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_
 }
 
 std::vector<std::optional<module_location>> const &modules_presenter::locations() const {
-    return this->_location_pool->locations();
+    return this->_location_pool->elements();
 }
 
 observing::syncable modules_presenter::observe_locations(

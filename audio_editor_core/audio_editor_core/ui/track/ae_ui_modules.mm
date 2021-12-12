@@ -44,10 +44,10 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
             switch (event.type) {
                 case module_location_pool_event_type::fetched:
                 case module_location_pool_event_type::replaced:
-                    this->set_locations(event.locations);
+                    this->set_locations(event.elements);
                     break;
                 case module_location_pool_event_type::updated:
-                    this->update_locations(event.locations.size(), event.erased, event.inserted);
+                    this->update_locations(event.elements.size(), event.erased, event.inserted);
                     break;
             }
         })
