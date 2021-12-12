@@ -19,6 +19,8 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
       _root_node(ui::node::make_shared()),
       _vertex_data(ui::static_mesh_vertex_data::make_shared(3)),
       _index_data(ui::static_mesh_index_data::make_shared(3)) {
+    this->_root_node->set_batch(ui::batch::make_shared());
+
     this->_vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
         float const half_width = -5.0f;
         float const height = 10.0f;
