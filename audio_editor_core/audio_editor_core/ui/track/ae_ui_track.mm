@@ -46,7 +46,6 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
             ui::size const scale{static_cast<float>(value * ui_track_constants::width_per_sec),
                                  ui_track_constants::height};
             this->_modules->set_scale(scale);
-            this->_markers->set_scale(scale);
             this->_display_space->set_scale(scale);
         })
         .sync()
@@ -85,7 +84,7 @@ std::shared_ptr<ui_track> ui_track::make_shared(std::shared_ptr<ui::standard> co
     auto const presenter = track_presenter::make_shared(project_id);
     auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id);
     auto const modules = ui_modules::make_shared(project_id, standard, display_space);
-    auto const markers = ui_markers::make_shared(project_id);
+    auto const markers = ui_markers::make_shared(project_id, standard, display_space);
     return std::shared_ptr<ui_track>(
         new ui_track{standard, display_space, presenter, scroll_gestore_controller, modules, markers});
 }

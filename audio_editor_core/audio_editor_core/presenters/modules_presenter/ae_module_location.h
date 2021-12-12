@@ -14,6 +14,7 @@ struct module_location {
     float x;
     float width;
 
-    static module_location make(ae::identifier const &, proc::time::range const &, uint32_t const sample_rate);
+    [[nodiscard]] static module_location make(ae::identifier const &, proc::time::range const &,
+                                              uint32_t const sample_rate);
 };
 }  // namespace yas::ae

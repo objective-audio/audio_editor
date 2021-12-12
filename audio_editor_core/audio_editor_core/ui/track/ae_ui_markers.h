@@ -9,20 +9,22 @@
 
 namespace yas::ae {
 class markers_presenter;
+class display_space;
 
 struct ui_markers {
     std::shared_ptr<ui::node> const &node() const;
 
-    void set_scale(ui::size const &);
-    void set_locations(std::vector<marker_location> const &);
+    void set_locations(std::vector<std::optional<marker_location>> const &);
+    void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, marker_location>> const &erased,
+                          std::vector<std::pair<std::size_t, marker_location>> const &inserted);
 
-    static std::shared_ptr<ui_markers> make_shared(std::string const &project_id);
+    static std::shared_ptr<ui_markers> make_shared(std::string const &project_id, std::shared_ptr<ui::standard> const &,
+                                                   std::shared_ptr<display_space> const &);
 
    private:
     std::shared_ptr<markers_presenter> const _presenter;
 
     ui::size _scale;
-    std::vector<marker_location> _locations;
 
     std::shared_ptr<ui::node> const _root_node;
     std::vector<std::shared_ptr<ui::node>> _sub_nodes;
@@ -31,8 +33,8 @@ struct ui_markers {
 
     observing::canceller_pool _pool;
 
-    ui_markers(std::shared_ptr<markers_presenter> const &);
+    ui_markers(std::shared_ptr<markers_presenter> const &, std::shared_ptr<ui::standard> const &);
 
-    void _update_sub_nodes();
+    void _set_count(std::size_t const);
 };
 }  // namespace yas::ae

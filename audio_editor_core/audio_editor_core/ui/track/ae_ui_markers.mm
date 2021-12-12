@@ -13,7 +13,8 @@ namespace yas::ae::ui_markers_constants {
 static std::size_t const reserving_interval = 10;
 }
 
-ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter)
+ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
+                       std::shared_ptr<ui::standard> const &standard)
     : _presenter(presenter),
       _root_node(ui::node::make_shared()),
       _vertex_data(ui::static_mesh_vertex_data::make_shared(3)),
@@ -32,59 +33,98 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter)
         indices[2] = 2;
     });
 
-    this->_presenter->observe_markers([this](auto const &locations) { this->set_locations(locations); })
+    this->_presenter
+        ->observe_locations([this](marker_location_pool_event const &event) {
+            switch (event.type) {
+                case marker_location_pool_event_type::fetched:
+                case marker_location_pool_event_type::replaced:
+                    this->set_locations(event.locations);
+                    break;
+                case marker_location_pool_event_type::updated:
+                    this->update_locations(event.locations.size(), event.erased, event.inserted);
+                    break;
+            }
+        })
         .sync()
+        ->add_to(this->_pool);
+
+    standard->renderer()
+        ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
+        .end()
         ->add_to(this->_pool);
 }
 
-std::shared_ptr<ui_markers> ui_markers::make_shared(std::string const &project_id) {
-    auto const presenter = markers_presenter::make_shared(project_id);
-    return std::shared_ptr<ui_markers>(new ui_markers{presenter});
+std::shared_ptr<ui_markers> ui_markers::make_shared(std::string const &project_id,
+                                                    std::shared_ptr<ui::standard> const &standard,
+                                                    std::shared_ptr<display_space> const &display_space) {
+    auto const presenter = markers_presenter::make_shared(project_id, display_space);
+    return std::shared_ptr<ui_markers>(new ui_markers{presenter, standard});
 }
 
 std::shared_ptr<ui::node> const &ui_markers::node() const {
     return this->_root_node;
 }
 
-void ui_markers::set_scale(ui::size const &scale) {
-    this->_scale = scale;
-    this->_update_sub_nodes();
+void ui_markers::set_locations(std::vector<std::optional<marker_location>> const &locations) {
+    this->_set_count(locations.size());
+
+    auto each = make_fast_each(locations.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto const &location = locations.at(idx);
+        auto const &node = this->_sub_nodes.at(idx);
+        if (location.has_value()) {
+            auto const &location_value = location.value();
+            node->set_is_enabled(true);
+            node->set_position(location_value.point);
+        } else {
+            node->set_is_enabled(false);
+        }
+    }
 }
 
-void ui_markers::set_locations(std::vector<marker_location> const &locations) {
-    this->_locations = locations;
-    this->_update_sub_nodes();
+void ui_markers::update_locations(std::size_t const count,
+                                  std::vector<std::pair<std::size_t, marker_location>> const &erased,
+                                  std::vector<std::pair<std::size_t, marker_location>> const &inserted) {
+    this->_set_count(count);
+
+    for (auto const &pair : erased) {
+        auto const &idx = pair.first;
+        if (idx < count) {
+            this->_sub_nodes.at(idx)->set_is_enabled(false);
+        }
+    }
+
+    for (auto const &pair : inserted) {
+        auto const &idx = pair.first;
+        auto const &location = pair.second;
+        auto const &node = this->_sub_nodes.at(idx);
+        node->set_is_enabled(true);
+        node->set_position(location.point);
+    }
 }
 
-void ui_markers::_update_sub_nodes() {
-    auto const node_count = this->_sub_nodes.size();
-    auto const location_count = this->_locations.size();
+void ui_markers::_set_count(std::size_t const location_count) {
+    auto const prev_node_count = this->_sub_nodes.size();
 
-    if (node_count < location_count) {
+    if (prev_node_count < location_count) {
         this->_sub_nodes.reserve(
             common_utils::reserving_count(location_count, ui_markers_constants::reserving_interval));
 
-        auto each = make_fast_each(location_count - node_count);
+        auto each = make_fast_each(location_count - prev_node_count);
         while (yas_each_next(each)) {
             auto node = ui::node::make_shared();
             node->set_mesh(ui::mesh::make_shared({}, this->_vertex_data, this->_index_data, nullptr));
+            node->set_is_enabled(false);
             this->_root_node->add_sub_node(node);
             this->_sub_nodes.emplace_back(std::move(node));
         }
-    } else if (location_count < node_count) {
-        auto each = make_fast_each(node_count - location_count);
+    } else if (location_count < prev_node_count) {
+        auto each = make_fast_each(prev_node_count - location_count);
         while (yas_each_next(each)) {
-            auto const idx = node_count - 1 - yas_each_index(each);
+            auto const idx = prev_node_count - 1 - yas_each_index(each);
             this->_sub_nodes.at(idx)->remove_from_super_node();
         }
         this->_sub_nodes.resize(location_count);
-    }
-
-    auto each = make_fast_each(location_count);
-    while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &location = this->_locations.at(idx);
-        auto const &node = this->_sub_nodes.at(idx);
-        node->set_position({location.x * this->_scale.width, this->_scale.height});
     }
 }
