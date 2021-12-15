@@ -89,7 +89,7 @@ void ui_modules::set_locations(std::vector<std::optional<module_location>> const
             if (location.has_value()) {
                 auto const &value = location.value();
                 vertex_rects[idx].set_position(
-                    ui::region{.origin = {.x = value.x, .y = 0.0f}, .size = {.width = value.width, .height = 1.0f}});
+                    ui::region{.origin = {.x = value.x, .y = -0.5f}, .size = {.width = value.width, .height = 1.0f}});
             } else {
                 vertex_rects[idx].set_position(ui::region::zero());
             }
@@ -112,7 +112,7 @@ void ui_modules::update_locations(std::size_t const count,
         for (auto const &pair : inserted) {
             auto const &value = pair.second;
             vertex_rects[pair.first].set_position(
-                ui::region{.origin = {.x = value.x, .y = 0.0f}, .size = {.width = value.width, .height = 1.0f}});
+                ui::region{.origin = {.x = value.x, .y = -0.5f}, .size = {.width = value.width, .height = 1.0f}});
         }
     });
 }
