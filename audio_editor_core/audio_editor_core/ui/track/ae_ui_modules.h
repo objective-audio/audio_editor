@@ -10,6 +10,7 @@ namespace yas::ae {
 class module_location;
 class modules_presenter;
 class display_space;
+class ui_module_waveforms;
 
 struct ui_modules final {
     using vertex2d_rect = ui::vertex2d_rect;
@@ -34,6 +35,7 @@ struct ui_modules final {
 
    private:
     std::shared_ptr<modules_presenter> const _presenter;
+    std::shared_ptr<ui_module_waveforms> const _waveforms;
     std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::node> const _triangle_node;
     std::shared_ptr<ui::node> const _line_node;
