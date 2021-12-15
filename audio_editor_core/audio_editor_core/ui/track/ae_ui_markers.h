@@ -11,7 +11,7 @@ namespace yas::ae {
 class markers_presenter;
 class display_space;
 
-struct ui_markers {
+struct ui_markers final {
     std::shared_ptr<ui::node> const &node() const;
 
     void set_locations(std::vector<std::optional<marker_location>> const &);

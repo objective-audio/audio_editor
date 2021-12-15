@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_module_location.h>
 #include <audio_editor_core/ae_modules_presenter.h>
+#include <audio_editor_core/ae_ui_module_waveforms.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -25,12 +26,14 @@ void ui_modules::line_index2d_rect::set_all(ui::index2d_t const first) {
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                        std::shared_ptr<ui::standard> const &standard)
     : _presenter(presenter),
+      _waveforms(ui_module_waveforms::make_shared()),
       _node(ui::node::make_shared()),
       _triangle_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
       _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = true}, nullptr, nullptr, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
     this->_node->add_sub_node(this->_triangle_node);
+    this->_node->add_sub_node(this->_waveforms->node());
     this->_node->add_sub_node(this->_line_node);
 
     this->_triangle_node->set_mesh(this->_triangle_mesh);
@@ -89,12 +92,14 @@ void ui_modules::set_locations(std::vector<std::optional<module_location>> const
             if (location.has_value()) {
                 auto const &value = location.value();
                 vertex_rects[idx].set_position(
-                    ui::region{.origin = {.x = value.x, .y = 0.0f}, .size = {.width = value.width, .height = 1.0f}});
+                    ui::region{.origin = {.x = value.x, .y = -0.5f}, .size = {.width = value.width, .height = 1.0f}});
             } else {
                 vertex_rects[idx].set_position(ui::region::zero());
             }
         }
     });
+
+    this->_waveforms->set_locations(locations);
 }
 
 void ui_modules::update_locations(std::size_t const count,
@@ -112,9 +117,11 @@ void ui_modules::update_locations(std::size_t const count,
         for (auto const &pair : inserted) {
             auto const &value = pair.second;
             vertex_rects[pair.first].set_position(
-                ui::region{.origin = {.x = value.x, .y = 0.0f}, .size = {.width = value.width, .height = 1.0f}});
+                ui::region{.origin = {.x = value.x, .y = -0.5f}, .size = {.width = value.width, .height = 1.0f}});
         }
     });
+
+    this->_waveforms->update_locations(count, erased, inserted);
 }
 
 void ui_modules::_remake_data_if_needed(std::size_t const max_count) {

@@ -3,10 +3,13 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <audio_editor_core/ae_module_location.h>
 #include <audio_editor_core/ae_module_location_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
+
+static proc::time::range const dummy_range{0, 1};
 
 @interface ae_module_location_pool_tests : XCTestCase
 
@@ -36,7 +39,9 @@ using namespace yas::ae;
     identifier id_2;
 
     {
-        pool->replace_all({{.identifier = id_0}, {.identifier = id_1}, {.identifier = id_2}});
+        pool->replace_all({{.identifier = id_0, .range = dummy_range},
+                           {.identifier = id_1, .range = dummy_range},
+                           {.identifier = id_2, .range = dummy_range}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -52,7 +57,7 @@ using namespace yas::ae;
     identifier id_4;
 
     {
-        pool->replace_all({{.identifier = id_3}, {.identifier = id_4}});
+        pool->replace_all({{.identifier = id_3, .range = dummy_range}, {.identifier = id_4, .range = dummy_range}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
@@ -84,7 +89,7 @@ using namespace yas::ae;
     identifier id_5;
 
     {
-        pool->update_all({{.identifier = id_0}, {.identifier = id_2}});
+        pool->update_all({{.identifier = id_0, .range = dummy_range}, {.identifier = id_2, .range = dummy_range}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
@@ -102,7 +107,9 @@ using namespace yas::ae;
     }
 
     {
-        pool->update_all({{.identifier = id_0}, {.identifier = id_1}, {.identifier = id_2}});
+        pool->update_all({{.identifier = id_0, .range = dummy_range},
+                          {.identifier = id_1, .range = dummy_range},
+                          {.identifier = id_2, .range = dummy_range}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -119,7 +126,7 @@ using namespace yas::ae;
     }
 
     {
-        pool->update_all({{.identifier = id_1}, {.identifier = id_2}});
+        pool->update_all({{.identifier = id_1, .range = dummy_range}, {.identifier = id_2, .range = dummy_range}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -136,7 +143,10 @@ using namespace yas::ae;
     }
 
     {
-        pool->update_all({{.identifier = id_1}, {.identifier = id_2}, {.identifier = id_3}, {.identifier = id_4}});
+        pool->update_all({{.identifier = id_1, .range = dummy_range},
+                          {.identifier = id_2, .range = dummy_range},
+                          {.identifier = id_3, .range = dummy_range},
+                          {.identifier = id_4, .range = dummy_range}});
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
         XCTAssertEqual(locations.at(0).value().identifier, id_3);
@@ -155,7 +165,9 @@ using namespace yas::ae;
     }
 
     {
-        pool->update_all({{.identifier = id_1}, {.identifier = id_4}, {.identifier = id_5}});
+        pool->update_all({{.identifier = id_1, .range = dummy_range},
+                          {.identifier = id_4, .range = dummy_range},
+                          {.identifier = id_5, .range = dummy_range}});
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
         XCTAssertEqual(locations.at(0).value().identifier, id_5);
@@ -187,7 +199,9 @@ using namespace yas::ae;
     identifier id_2;
     identifier id_3;
 
-    pool->replace_all({{.identifier = id_0}, {.identifier = id_1}, {.identifier = id_2}});
+    pool->replace_all({{.identifier = id_0, .range = dummy_range},
+                       {.identifier = id_1, .range = dummy_range},
+                       {.identifier = id_2, .range = dummy_range}});
 
     auto canceller =
         pool->observe_event([&called](module_location_pool_event const &event) { called.emplace_back(event); }).sync();
@@ -238,7 +252,7 @@ using namespace yas::ae;
     XCTAssertEqual(pool->elements().size(), 0);
 
     {
-        pool->insert({.identifier = id_0});
+        pool->insert({.identifier = id_0, .range = dummy_range});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 1);
@@ -253,7 +267,7 @@ using namespace yas::ae;
     }
 
     {
-        pool->insert({.identifier = id_0});
+        pool->insert({.identifier = id_0, .range = dummy_range});
 
         XCTAssertEqual(pool->elements().size(), 1);
 
@@ -261,7 +275,7 @@ using namespace yas::ae;
     }
 
     {
-        pool->insert({.identifier = id_1});
+        pool->insert({.identifier = id_1, .range = dummy_range});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
@@ -290,7 +304,7 @@ using namespace yas::ae;
     }
 
     {
-        pool->insert({.identifier = id_2});
+        pool->insert({.identifier = id_2, .range = dummy_range});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);

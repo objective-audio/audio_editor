@@ -13,6 +13,7 @@ struct module_location {
     identifier identifier;  // file_moduleからコピーする
     float x;
     float width;
+    proc::time::range range;
 
     [[nodiscard]] static module_location make(ae::identifier const &, proc::time::range const &,
                                               uint32_t const sample_rate);
