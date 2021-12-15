@@ -11,7 +11,7 @@ class module_location;
 class modules_presenter;
 class display_space;
 
-struct ui_modules {
+struct ui_modules final {
     using vertex2d_rect = ui::vertex2d_rect;
     using triangle_index2d_rect = ui::index2d_rect;
     struct line_index2d_rect {
