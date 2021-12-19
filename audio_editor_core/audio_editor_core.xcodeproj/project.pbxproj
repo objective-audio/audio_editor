@@ -14,6 +14,7 @@
 		B605EA702657E5530031B177 /* ae_ui_editing_root.mm in Sources */ = {isa = PBXBuildFile; fileRef = B605EA6E2657E5530031B177 /* ae_ui_editing_root.mm */; };
 		B605EA712657E5530031B177 /* ae_ui_editing_root.h in Headers */ = {isa = PBXBuildFile; fileRef = B605EA6F2657E5530031B177 /* ae_ui_editing_root.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B606EB042747EDCF006C3DD2 /* ae_exporter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B606EB032747EDCF006C3DD2 /* ae_exporter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B607E7AE276EDEC00048F75C /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B607E7AD276EDEC00048F75C /* Accelerate.framework */; };
 		B6097BC1272535FE008A6D57 /* ae_gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6097BC0272535FE008A6D57 /* ae_gesture.cpp */; };
 		B6169BD62743D0C400589393 /* ae_dialog_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD42743D0C400589393 /* ae_dialog_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD72743D0C400589393 /* ae_dialog_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */; };
@@ -195,6 +196,7 @@
 		B605EA6E2657E5530031B177 /* ae_ui_editing_root.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_editing_root.mm; sourceTree = "<group>"; };
 		B605EA6F2657E5530031B177 /* ae_ui_editing_root.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_editing_root.h; sourceTree = "<group>"; };
 		B606EB032747EDCF006C3DD2 /* ae_exporter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_exporter_types.h; sourceTree = "<group>"; };
+		B607E7AD276EDEC00048F75C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		B6097BC0272535FE008A6D57 /* ae_gesture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_gesture.cpp; sourceTree = "<group>"; };
 		B6169BD42743D0C400589393 /* ae_dialog_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_dialog_presenter.h; sourceTree = "<group>"; };
 		B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_dialog_presenter.cpp; sourceTree = "<group>"; };
@@ -378,6 +380,7 @@
 				B6A997942629B72E00DAC3FE /* processing.framework in Frameworks */,
 				B6A9978C2629B72E00DAC3FE /* db.framework in Frameworks */,
 				B64DE6852658C099006FC562 /* Metal.framework in Frameworks */,
+				B607E7AE276EDEC00048F75C /* Accelerate.framework in Frameworks */,
 				B666CE1726342AD200C1693D /* CoreFoundation.framework in Frameworks */,
 				B6A997902629B72E00DAC3FE /* observing.framework in Frameworks */,
 				B6A9978A2629B72E00DAC3FE /* cpp_utils.framework in Frameworks */,
@@ -738,6 +741,7 @@
 		B6A9977F2629B72E00DAC3FE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B607E7AD276EDEC00048F75C /* Accelerate.framework */,
 				B64DE6842658C099006FC562 /* Metal.framework */,
 				B666CE1626342AD200C1693D /* CoreFoundation.framework */,
 				B6A997802629B72E00DAC3FE /* audio.framework */,
