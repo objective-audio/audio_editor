@@ -6,6 +6,7 @@
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_module_location.h>
+#include <audio_editor_core/ae_module_waveforms_presenter.h>
 #include <audio_editor_core/ae_modules_presenter.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
 
@@ -24,9 +25,10 @@ void ui_modules::line_index2d_rect::set_all(ui::index2d_t const first) {
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
-                       std::shared_ptr<ui::standard> const &standard)
+                       std::shared_ptr<ui::standard> const &standard,
+                       std::shared_ptr<ui_module_waveforms> const &waveforms)
     : _presenter(presenter),
-      _waveforms(ui_module_waveforms::make_shared()),
+      _waveforms(waveforms),
       _node(ui::node::make_shared()),
       _triangle_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
@@ -66,8 +68,11 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id,
                                                     std::shared_ptr<ui::standard> const &standard,
                                                     std::shared_ptr<display_space> const &display_space) {
-    auto const presenter = modules_presenter::make_shared(project_id, display_space);
-    return std::shared_ptr<ui_modules>(new ui_modules{presenter, standard});
+    auto const location_pool = module_location_pool::make_shared();
+    auto const modules_presenter = modules_presenter::make_shared(project_id, display_space, location_pool);
+    auto const waveforms_presenter = module_waveforms_presenter::make_shared(project_id, location_pool);
+    auto const waveforms = ui_module_waveforms::make_shared(waveforms_presenter);
+    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, standard, waveforms});
 }
 
 std::shared_ptr<ui::node> const &ui_modules::node() const {
@@ -75,7 +80,9 @@ std::shared_ptr<ui::node> const &ui_modules::node() const {
 }
 
 void ui_modules::set_scale(ui::size const &scale) {
-    this->_node->set_scale(scale);
+    this->_triangle_node->set_scale(scale);
+    this->_line_node->set_scale(scale);
+    this->_waveforms->set_scale(scale);
 }
 
 void ui_modules::set_locations(std::vector<std::optional<module_location>> const &locations) {
@@ -98,8 +105,6 @@ void ui_modules::set_locations(std::vector<std::optional<module_location>> const
             }
         }
     });
-
-    this->_waveforms->set_locations(locations);
 }
 
 void ui_modules::update_locations(std::size_t const count,
@@ -120,8 +125,6 @@ void ui_modules::update_locations(std::size_t const count,
                 ui::region{.origin = {.x = value.x, .y = -0.5f}, .size = {.width = value.width, .height = 1.0f}});
         }
     });
-
-    this->_waveforms->update_locations(count, erased, inserted);
 }
 
 void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
