@@ -5,18 +5,14 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_location.h>
+#include <audio_editor_core/ae_waveform_mesh_importer_types.h>
 #include <cpp_utils/yas_task_queue.h>
 #include <observing/yas_observing_umbrella.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
 struct waveform_mesh_importer final {
-    struct event {
-        std::size_t index;
-        identifier identifier;
-        std::shared_ptr<ui::static_mesh_vertex_data> mesh_vertex_data;
-        std::shared_ptr<ui::static_mesh_index_data> mesh_index_data;
-    };
+    using event = waveform_mesh_importer_event;
 
     [[nodiscard]] static std::shared_ptr<waveform_mesh_importer> make_shared();
 
