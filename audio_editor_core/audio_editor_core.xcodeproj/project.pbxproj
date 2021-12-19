@@ -104,6 +104,7 @@
 		B695A3892764D87E004CB28F /* ae_display_space_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B695A3882764D87E004CB28F /* ae_display_space_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B695A38D27658C6C004CB28F /* ae_ui_module_waveforms.h in Headers */ = {isa = PBXBuildFile; fileRef = B695A38B27658C6C004CB28F /* ae_ui_module_waveforms.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B695A38E27658C6C004CB28F /* ae_ui_module_waveforms.mm in Sources */ = {isa = PBXBuildFile; fileRef = B695A38C27658C6C004CB28F /* ae_ui_module_waveforms.mm */; };
+		B69607A6276D9B1F002B2BE0 /* ae_waveform_mesh_importer_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B69607A5276D9B1A002B2BE0 /* ae_waveform_mesh_importer_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6966F33272CEF9100A90733 /* ae_editing_root_presenter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6966F32272CEF9100A90733 /* ae_editing_root_presenter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6966F37272E4D8400A90733 /* ae_database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6966F35272E4D8400A90733 /* ae_database.cpp */; };
 		B6966F38272E4D8400A90733 /* ae_database.h in Headers */ = {isa = PBXBuildFile; fileRef = B6966F36272E4D8400A90733 /* ae_database.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -284,6 +285,7 @@
 		B695A3882764D87E004CB28F /* ae_display_space_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_display_space_types.h; sourceTree = "<group>"; };
 		B695A38B27658C6C004CB28F /* ae_ui_module_waveforms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_module_waveforms.h; sourceTree = "<group>"; };
 		B695A38C27658C6C004CB28F /* ae_ui_module_waveforms.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_module_waveforms.mm; sourceTree = "<group>"; };
+		B69607A5276D9B1A002B2BE0 /* ae_waveform_mesh_importer_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_waveform_mesh_importer_types.h; sourceTree = "<group>"; };
 		B6966F32272CEF9100A90733 /* ae_editing_root_presenter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_editing_root_presenter_types.h; sourceTree = "<group>"; };
 		B6966F35272E4D8400A90733 /* ae_database.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_database.cpp; sourceTree = "<group>"; };
 		B6966F36272E4D8400A90733 /* ae_database.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_database.h; sourceTree = "<group>"; };
@@ -606,6 +608,7 @@
 		B675F93B2765CB84002FE285 /* waveform_mesh_importer */ = {
 			isa = PBXGroup;
 			children = (
+				B69607A5276D9B1A002B2BE0 /* ae_waveform_mesh_importer_types.h */,
 				B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */,
 				B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */,
 			);
@@ -920,6 +923,7 @@
 				B60204D6263AAEC600CFC752 /* ae_editing_root_presenter.h in Headers */,
 				B668BE56263068050021AD20 /* ae_app_presenter_types.h in Headers */,
 				B69708F22639B0390045E975 /* ae_file_importer_resource.h in Headers */,
+				B69607A6276D9B1F002B2BE0 /* ae_waveform_mesh_importer_types.h in Headers */,
 				B6D1B3EC26480D7F002CE49E /* ae_project_editor_maker.h in Headers */,
 				B629D7722717101300EE379A /* ae_ui_markers.h in Headers */,
 				B6BE6BA1273681090097C99D /* ae_window_presenter_dependency.h in Headers */,
