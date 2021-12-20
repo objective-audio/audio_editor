@@ -49,7 +49,8 @@ struct ui_modules final {
 
     observing::canceller_pool _pool;
 
-    ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<ui::standard> const &);
+    ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<ui::standard> const &,
+               std::shared_ptr<ui_module_waveforms> const &);
 
     void _remake_data_if_needed(std::size_t const);
     void _set_rect_count(std::size_t const);

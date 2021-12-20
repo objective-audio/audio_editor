@@ -61,6 +61,10 @@ project_state const &project::state() const {
     return this->_state->value();
 }
 
+std::shared_ptr<project_url_for_project> const &project::project_url() const {
+    return this->_project_url;
+}
+
 std::shared_ptr<player_for_project> const &project::player() const {
     return this->_player;
 }

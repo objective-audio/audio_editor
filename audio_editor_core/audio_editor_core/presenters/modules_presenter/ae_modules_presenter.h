@@ -12,9 +12,11 @@ class display_space;
 
 struct modules_presenter {
     [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(std::string const &project_id,
-                                                                        std::shared_ptr<display_space> const &);
+                                                                        std::shared_ptr<display_space> const &,
+                                                                        std::shared_ptr<module_location_pool> const &);
     [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(
-        std::shared_ptr<project_editor_for_modules_presenter> const &, std::shared_ptr<display_space> const &);
+        std::shared_ptr<project_editor_for_modules_presenter> const &, std::shared_ptr<display_space> const &,
+        std::shared_ptr<module_location_pool> const &);
 
     [[nodiscard]] std::vector<std::optional<module_location>> const &locations() const;
     [[nodiscard]] observing::syncable observe_locations(std::function<void(module_location_pool_event const &)> &&);
@@ -31,7 +33,7 @@ struct modules_presenter {
     std::optional<proc::time::range> _last_space_range = std::nullopt;
 
     modules_presenter(std::shared_ptr<project_editor_for_modules_presenter> const &,
-                      std::shared_ptr<display_space> const &);
+                      std::shared_ptr<display_space> const &, std::shared_ptr<module_location_pool> const &);
 
     modules_presenter(modules_presenter const &) = delete;
     modules_presenter(modules_presenter &&) = delete;

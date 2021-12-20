@@ -19,6 +19,7 @@ struct project final : project_for_project_pool {
     [[nodiscard]] std::string const &identifier() const override;
     [[nodiscard]] url const &file_url() const override;
     [[nodiscard]] project_state const &state() const override;
+    [[nodiscard]] std::shared_ptr<project_url_for_project> const &project_url() const override;
     [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
     [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const override;
     [[nodiscard]] std::shared_ptr<zooming_for_project> const &zooming() const override;

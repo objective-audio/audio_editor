@@ -18,6 +18,7 @@ struct project_for_project_pool : project_for_window_presenter,
     virtual ~project_for_project_pool() = default;
 
     [[nodiscard]] virtual std::string const &identifier() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<project_url_for_project> const &project_url() const = 0;
     [[nodiscard]] virtual std::shared_ptr<project_editor_for_project> const &editor() const = 0;
     [[nodiscard]] virtual std::shared_ptr<zooming_for_project> const &zooming() const = 0;
     [[nodiscard]] virtual std::shared_ptr<scrolling_for_project> const &scrolling() const = 0;

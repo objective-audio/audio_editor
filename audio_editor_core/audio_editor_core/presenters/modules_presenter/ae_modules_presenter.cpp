@@ -14,21 +14,23 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<modules_presenter> modules_presenter::make_shared(std::string const &project_id,
-                                                                  std::shared_ptr<display_space> const &display_space) {
+std::shared_ptr<modules_presenter> modules_presenter::make_shared(
+    std::string const &project_id, std::shared_ptr<display_space> const &display_space,
+    std::shared_ptr<module_location_pool> const &location_pool) {
     auto const project = app::global()->project_pool()->project_for_id(project_id);
-    return make_shared(project->editor(), display_space);
+    return make_shared(project->editor(), display_space, location_pool);
 }
 
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(
     std::shared_ptr<project_editor_for_modules_presenter> const &editor,
-    std::shared_ptr<display_space> const &display_space) {
-    return std::shared_ptr<modules_presenter>(new modules_presenter{editor, display_space});
+    std::shared_ptr<display_space> const &display_space, std::shared_ptr<module_location_pool> const &location_pool) {
+    return std::shared_ptr<modules_presenter>(new modules_presenter{editor, display_space, location_pool});
 }
 
 modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_presenter> const &editor,
-                                     std::shared_ptr<display_space> const &display_space)
-    : _project_editor(editor), _display_space(display_space), _location_pool(module_location_pool::make_shared()) {
+                                     std::shared_ptr<display_space> const &display_space,
+                                     std::shared_ptr<module_location_pool> const &location_pool)
+    : _project_editor(editor), _display_space(display_space), _location_pool(location_pool) {
     auto const sample_rate = editor->file_info().sample_rate;
 
     editor

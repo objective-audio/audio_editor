@@ -18,6 +18,11 @@ struct project_stub : project_for_project_pool {
         return this->identifier_value;
     }
 
+    std::shared_ptr<project_url_for_project> const &project_url() const override {
+        static std::shared_ptr<project_url_for_project> const _value = nullptr;
+        return _value;
+    }
+
     std::shared_ptr<project_editor_for_project> const &editor() const override {
         static std::shared_ptr<project_editor_for_project> const _value = nullptr;
         return _value;
