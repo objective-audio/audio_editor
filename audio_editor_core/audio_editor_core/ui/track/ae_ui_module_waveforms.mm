@@ -57,7 +57,7 @@ std::shared_ptr<ui::node> const &ui_module_waveforms::node() {
 }
 
 void ui_module_waveforms::set_scale(ui::size const &scale) {
-    this->_node->set_scale({.width = 1.0f, .height = scale.height});
+    this->_node->set_scale({.width = 1.0f, .height = scale.height * 0.5f});
 
     if (this->_width_per_sec != scale.width) {
         this->_width_per_sec = scale.width;
