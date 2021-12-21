@@ -41,16 +41,20 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
             auto const file_result = audio::file::make_opened({.file_url = url});
             if (file_result) {
                 double const mesh_width = location.width * width_per_sec;
-                uint32_t const floored_mesh_width = static_cast<uint32_t>(mesh_width);
-                uint32_t const vertex_count = floored_mesh_width * ui::vertex2d_rect::vector_count;
-                uint32_t const index_count = floored_mesh_width * ui::index2d_rect::vector_count;
+                uint32_t const floored_mesh_width = static_cast<uint32_t>(std::floor(mesh_width));
+                uint32_t const ceiled_mesh_width = static_cast<uint32_t>(std::ceil(mesh_width));
+                bool const has_fraction = floored_mesh_width != ceiled_mesh_width;
+                uint32_t const rect_count = floored_mesh_width + (has_fraction ? 1 : 0);
+                uint32_t const vertex_count = rect_count * ui::vertex2d_rect::vector_count;
+                uint32_t const index_count = rect_count * ui::index2d_rect::vector_count;
 
                 vertex_data = ui::static_mesh_vertex_data::make_shared(vertex_count);
                 index_data = ui::static_mesh_index_data::make_shared(index_count);
 
                 auto const &file = file_result.value();
 
-                vertex_data->write_once([&file, &location, &mesh_width, &task](std::vector<ui::vertex2d_t> &vec) {
+                vertex_data->write_once([&file, &location, &mesh_width, &floored_mesh_width,
+                                         &task](std::vector<ui::vertex2d_t> &vec) {
                     auto *const vertex_rects_data = (ui::vertex2d_rect *)vec.data();
                     std::size_t const vertex_rects_size = vec.size() / ui::vertex2d_rect::vector_count;
                     bool is_cancelled = false;
@@ -65,9 +69,18 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                     float max = 0.0f;
                     float min = 0.0f;
                     auto file_head_frame = 0;
-                    double const file_frame_rate = static_cast<double>(location.range.length) / mesh_width;
                     uint32_t vertex_rect_idx = 0;
-                    uint32_t next_file_frame = static_cast<uint32_t>(file_frame_rate);
+                    uint32_t next_file_frame =
+                        static_cast<uint32_t>(static_cast<double>(location.range.length) / mesh_width);
+
+                    auto const set_data = [&mesh_width, &floored_mesh_width, &vertex_rects_data](
+                                              uint32_t const vertex_rect_idx, float const max, float const min) {
+                        float const width =
+                            (floored_mesh_width == vertex_rect_idx) ? (mesh_width - floored_mesh_width) : 1.0f;
+                        vertex_rects_data[vertex_rect_idx].set_position(
+                            ui::region{.origin = {.x = static_cast<float>(vertex_rect_idx), .y = min},
+                                       .size = {.width = width, .height = max - min}});
+                    };
 
                     while (file_head_frame < location.range.length) {
                         if (task.is_canceled()) {
@@ -101,17 +114,15 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
                             if ((file_head_frame + buffer_head_frame) == next_file_frame) {
                                 if (vertex_rect_idx < vertex_rects_size) {
-                                    vertex_rects_data[vertex_rect_idx].set_position(
-                                        ui::region{.origin = {.x = static_cast<float>(vertex_rect_idx), .y = min},
-                                                   .size = {.width = 1.0f, .height = max - min}});
+                                    set_data(vertex_rect_idx, max, min);
                                 } else {
                                     is_cancelled = true;
                                     break;
                                 }
 
                                 vertex_rect_idx += 1;
-                                next_file_frame =
-                                    static_cast<uint32_t>(static_cast<double>(vertex_rect_idx + 1) * file_frame_rate);
+                                next_file_frame = static_cast<uint32_t>(
+                                    static_cast<double>((vertex_rect_idx + 1) * location.range.length) / mesh_width);
                                 max = min = 0.0f;
                             }
                         }
@@ -123,12 +134,8 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                         file_head_frame += buffer.frame_length();
                     }
 
-                    if (!is_cancelled) {
-                        if (vertex_rect_idx < vertex_rects_size) {
-                            vertex_rects_data[vertex_rect_idx].set_position(
-                                ui::region{.origin = {.x = static_cast<float>(vertex_rect_idx), .y = min},
-                                           .size = {.width = 1.0f, .height = max - min}});
-                        }
+                    if (vertex_rect_idx < vertex_rects_size) {
+                        set_data(vertex_rect_idx, max, min);
                     }
                 });
 
