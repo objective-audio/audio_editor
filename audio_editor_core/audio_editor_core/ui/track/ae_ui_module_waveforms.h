@@ -20,7 +20,7 @@ struct ui_module_waveforms final {
 
     void set_scale(ui::size const &);
 
-    void set_locations(std::vector<std::optional<module_location>> const &);
+    void set_locations(std::vector<std::optional<module_location>> const &, bool const clear_mesh_nodes);
     void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, module_location>> const &erased,
                           std::vector<std::pair<std::size_t, module_location>> const &inserted);
 
