@@ -55,7 +55,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presen
             switch (event.type) {
                 case module_location_pool_event_type::fetched:
                 case module_location_pool_event_type::replaced:
-                    this->set_locations(event.elements);
+                    this->set_locations(event.elements, true);
                     break;
                 case module_location_pool_event_type::updated:
                     this->update_locations(event.elements.size(), event.erased, event.inserted);
@@ -75,7 +75,7 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
 
     if (this->_width_per_sec != scale.width) {
         this->_width_per_sec = scale.width;
-        this->set_locations(this->_presenter->locations());
+        this->set_locations(this->_presenter->locations(), false);
 
         if (auto const scale = this->_waveform_scale()) {
             for (auto const &sub_node : this->_node->sub_nodes()) {
@@ -85,7 +85,8 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
     }
 }
 
-void ui_module_waveforms::set_locations(std::vector<std::optional<module_location>> const &locations) {
+void ui_module_waveforms::set_locations(std::vector<std::optional<module_location>> const &locations,
+                                        bool const clear_mesh_nodes) {
     if (!this->_width_per_sec.has_value()) {
         this->_resize_sub_nodes(0);
         return;
@@ -103,7 +104,9 @@ void ui_module_waveforms::set_locations(std::vector<std::optional<module_locatio
         auto const &location = locations.at(idx);
         auto const &sub_node = sub_nodes.at(idx);
 
-        sub_node->remove_all_sub_nodes();
+        if (clear_mesh_nodes) {
+            sub_node->remove_all_sub_nodes();
+        }
 
         if (location.has_value()) {
             sub_node->set_is_enabled(true);
