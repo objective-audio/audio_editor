@@ -23,13 +23,23 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presen
     : _presenter(presenter), _node(ui::node::make_shared()) {
     this->_presenter
         ->observe_mesh_importer([this](waveform_mesh_importer_event const &event) {
-            auto const &sub_nodes = this->_node->children();
+            auto const &sub_nodes = this->_node->sub_nodes();
             if (event.index < sub_nodes.size()) {
                 auto const &sub_node = sub_nodes.at(event.index);
                 if (sub_node->is_enabled()) {
-                    auto const &mesh = sub_node->mesh();
-                    mesh->set_vertex_data(event.vertex_data);
-                    mesh->set_index_data(event.lines_index_data);
+                    sub_node->remove_all_sub_nodes();
+
+                    auto each = make_fast_each(event.datas.size());
+                    while (yas_each_next(each)) {
+                        auto const &idx = yas_each_index(each);
+                        auto const mesh_node = ui::node::make_shared();
+                        auto const mesh = ui::mesh::make_shared();
+                        mesh->set_primitive_type(ui::primitive_type::triangle);
+                        mesh->set_vertex_data(event.datas.at(idx).vertex_data);
+                        mesh->set_index_data(event.datas.at(idx).index_data);
+                        mesh_node->set_mesh(mesh);
+                        sub_node->add_sub_node(mesh_node);
+                    }
                 }
             }
         })
@@ -75,16 +85,15 @@ void ui_module_waveforms::set_locations(std::vector<std::optional<module_locatio
 
     this->_resize_sub_nodes(locations.size());
 
-    auto const sub_nodes = this->_node->children();
+    auto const sub_nodes = this->_node->sub_nodes();
 
     auto each = make_fast_each(locations.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
         auto const &location = locations.at(idx);
         auto const &sub_node = sub_nodes.at(idx);
-        auto const &mesh = sub_node->mesh();
-        mesh->set_vertex_data(nullptr);
-        mesh->set_index_data(nullptr);
+
+        sub_node->remove_all_sub_nodes();
 
         if (location.has_value()) {
             sub_node->set_is_enabled(true);
@@ -114,11 +123,9 @@ void ui_module_waveforms::update_locations(std::size_t const count,
         auto const &idx = pair.first;
         auto const &location = pair.second;
 
-        if (idx < this->_node->children().size()) {
-            auto const &sub_node = this->_node->children().at(idx);
-            auto const &mesh = sub_node->mesh();
-            mesh->set_vertex_data(nullptr);
-            mesh->set_index_data(nullptr);
+        if (idx < this->_node->sub_nodes().size()) {
+            auto const &sub_node = this->_node->sub_nodes().at(idx);
+            sub_node->remove_all_sub_nodes();
             sub_node->set_is_enabled(false);
         }
 
@@ -130,12 +137,10 @@ void ui_module_waveforms::update_locations(std::size_t const count,
         auto const &pair = inserted.at(yas_each_index(each));
         auto const &idx = pair.first;
 
-        if (idx < this->_node->children().size()) {
+        if (idx < this->_node->sub_nodes().size()) {
             auto const &location = pair.second;
-            auto const &sub_node = this->_node->children().at(idx);
-            auto const &mesh = sub_node->mesh();
-            mesh->set_vertex_data(nullptr);
-            mesh->set_index_data(nullptr);
+            auto const &sub_node = this->_node->sub_nodes().at(idx);
+            sub_node->remove_all_sub_nodes();
             sub_node->set_is_enabled(true);
             sub_node->set_position({.x = location.x * width_per_sec, .y = 0.0f});
             this->_presenter->import(idx, location, width_per_sec);
@@ -144,23 +149,20 @@ void ui_module_waveforms::update_locations(std::size_t const count,
 }
 
 void ui_module_waveforms::_resize_sub_nodes(std::size_t const count) {
-    auto const &prev_count = this->_node->children().size();
+    auto const &prev_count = this->_node->sub_nodes().size();
 
     if (prev_count < count) {
         auto each = make_fast_each(count - prev_count);
         while (yas_each_next(each)) {
             auto const node = ui::node::make_shared();
             node->set_is_enabled(false);
-            auto const mesh = ui::mesh::make_shared();
-            mesh->set_primitive_type(ui::primitive_type::triangle);
-            node->set_mesh(mesh);
             this->_node->add_sub_node(node);
         }
     } else if (prev_count > count) {
         auto each = make_fast_each(prev_count - count);
         while (yas_each_next(each)) {
             auto const idx = prev_count - yas_each_index(each) - 1;
-            this->_node->children().at(idx)->remove_from_super_node();
+            this->_node->sub_nodes().at(idx)->remove_from_super_node();
         }
     }
 }
