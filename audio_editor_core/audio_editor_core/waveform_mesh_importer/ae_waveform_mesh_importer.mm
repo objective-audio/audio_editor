@@ -39,7 +39,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
             auto const file_result = audio::file::make_opened({.file_url = url});
             if (file_result) {
-                uint32_t const mesh_width_interval = waveform_mesh_importer_event::max_unit_data_rect_count;
+                uint32_t const mesh_width_interval = waveform_mesh_importer_event::data_unit_max_rect_count;
                 double const mesh_width = location.width * width_per_sec;
                 uint32_t const floored_mesh_width = static_cast<uint32_t>(std::floor(mesh_width));
                 uint32_t const ceiled_mesh_width = static_cast<uint32_t>(std::ceil(mesh_width));
