@@ -34,7 +34,11 @@ using namespace yas::ae;
 - (void)windowDidLoad {
     [super windowDidLoad];
 
-    [self.window setFrame:self.window.screen.visibleFrame display:NO];
+    auto const visible_frame = self.window.screen.visibleFrame;
+    auto const height = std::min(CGRectGetHeight(visible_frame), 300.0);
+    auto const frame = CGRectMake(CGRectGetMinX(visible_frame), CGRectGetMaxY(visible_frame) - height,
+                                  CGRectGetWidth(visible_frame), height);
+    [self.window setFrame:frame display:NO];
 }
 
 - (BOOL)windowShouldClose:(NSWindow *)sender {
