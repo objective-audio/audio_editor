@@ -41,15 +41,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
         .end()
         ->add_to(this->_pool);
 
-    presenter
-        ->observe_zooming_scale([this](double const &value) {
-            ui::size const scale{static_cast<float>(value * ui_track_constants::width_per_sec),
-                                 ui_track_constants::height};
-            this->_modules->set_scale(scale);
-            this->_display_space->set_scale(scale);
-        })
-        .sync()
-        ->add_to(this->_pool);
+    presenter->observe_zooming_scale([this](double const &) { this->_update_scale(); }).sync()->add_to(this->_pool);
 
     this->_standard->event_manager()
         ->observe([this](std::shared_ptr<ui::event> const &event) {
@@ -69,7 +61,10 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
 
     standard->view_look()
         ->view_layout_guide()
-        ->observe([this](ui::region const &region) { this->_display_space->set_view_region(region); })
+        ->observe([this](ui::region const &region) {
+            this->_display_space->set_view_region(region);
+            this->_update_scale();
+        })
         .sync()
         ->add_to(this->_pool);
 }
@@ -87,4 +82,13 @@ std::shared_ptr<ui_track> ui_track::make_shared(std::shared_ptr<ui::standard> co
     auto const markers = ui_markers::make_shared(project_id, standard, display_space);
     return std::shared_ptr<ui_track>(
         new ui_track{standard, display_space, presenter, scroll_gestore_controller, modules, markers});
+}
+
+void ui_track::_update_scale() {
+    float const width = this->_presenter->zooming_scale() * ui_track_constants::width_per_sec;
+    float const height = std::ceil(this->_standard->view_look()->view_size().height * 0.8);
+
+    ui::size const scale{width, height};
+    this->_modules->set_scale(scale);
+    this->_display_space->set_scale(scale);
 }

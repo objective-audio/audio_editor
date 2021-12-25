@@ -35,5 +35,7 @@ struct ui_track final {
     ui_track(std::shared_ptr<ui::standard> const &, std::shared_ptr<display_space> const &,
              std::shared_ptr<track_presenter> const &, std::shared_ptr<scroll_gesture_controller> const &,
              std::shared_ptr<ui_modules> const &, std::shared_ptr<ui_markers> const &);
+
+    void _update_scale();
 };
 }  // namespace yas::ae
