@@ -9,9 +9,16 @@
 
 namespace yas::ae {
 struct waveform_mesh_importer_event {
+    static uint32_t const max_unit_data_rect_count = 512;
+
     std::size_t index;
     identifier identifier;
-    std::shared_ptr<ui::static_mesh_vertex_data> vertex_data;
-    std::shared_ptr<ui::static_mesh_index_data> lines_index_data;
+
+    struct data {
+        std::shared_ptr<ui::mesh_vertex_data> vertex_data;
+        std::shared_ptr<ui::mesh_index_data> index_data;
+    };
+
+    std::vector<data> datas;
 };
 }  // namespace yas::ae
