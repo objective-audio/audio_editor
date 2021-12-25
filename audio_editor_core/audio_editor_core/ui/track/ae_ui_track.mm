@@ -42,7 +42,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
         ->add_to(this->_pool);
 
     presenter
-        ->observe_scale([this](double const &value) {
+        ->observe_zooming_scale([this](double const &value) {
             ui::size const scale{static_cast<float>(value * ui_track_constants::width_per_sec),
                                  ui_track_constants::height};
             this->_modules->set_scale(scale);
