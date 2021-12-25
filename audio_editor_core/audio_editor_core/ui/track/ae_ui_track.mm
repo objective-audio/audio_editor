@@ -34,7 +34,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
     standard->renderer()
         ->observe_will_render([this](auto const &) {
             auto const time = this->_presenter->current_position();
-            auto const scale = this->_presenter->scale();
+            auto const scale = this->_presenter->zooming_scale();
             float const x = -time * ui_track_constants::width_per_sec * scale;
             this->_time_node->set_position(ui::point{x, 0.0f});
         })
@@ -57,7 +57,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
                 auto const &scroll_event = event->get<ui::scroll>();
                 gesture_state const state = to_gesture_state(event->phase());
 
-                auto const sec_width = ui_track_constants::width_per_sec * this->_presenter->scale();
+                auto const sec_width = ui_track_constants::width_per_sec * this->_presenter->zooming_scale();
                 auto const delta_time = -scroll_event.deltaX() / sec_width;
 
                 this->_scroll_gesture_controller->handle_gesture(

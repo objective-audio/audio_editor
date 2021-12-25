@@ -38,7 +38,7 @@ float track_presenter::current_position() const {
     return 0.0;
 }
 
-double track_presenter::scale() const {
+double track_presenter::zooming_scale() const {
     if (auto const zooming = this->_zooming.lock()) {
         return zooming->scale();
     } else {
