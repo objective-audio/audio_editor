@@ -37,6 +37,10 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presen
                         mesh->set_primitive_type(ui::primitive_type::triangle);
                         mesh->set_vertex_data(event.datas.at(idx).vertex_data);
                         mesh->set_index_data(event.datas.at(idx).index_data);
+
+                        float const hue = float(idx % 6) / 6.0f;
+                        mesh_node->set_color(ui::hsb_color(hue, 1.0f, 1.0f));
+
                         mesh_node->set_mesh(mesh);
                         sub_node->add_sub_node(mesh_node);
                     }
@@ -72,6 +76,12 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
     if (this->_width_per_sec != scale.width) {
         this->_width_per_sec = scale.width;
         this->set_locations(this->_presenter->locations());
+
+        if (auto const scale = this->_waveform_scale()) {
+            for (auto const &sub_node : this->_node->sub_nodes()) {
+                sub_node->set_scale(scale.value());
+            }
+        }
     }
 }
 
@@ -152,10 +162,17 @@ void ui_module_waveforms::_resize_sub_nodes(std::size_t const count) {
     auto const &prev_count = this->_node->sub_nodes().size();
 
     if (prev_count < count) {
+        auto const scale = this->_waveform_scale();
+
         auto each = make_fast_each(count - prev_count);
         while (yas_each_next(each)) {
             auto const node = ui::node::make_shared();
             node->set_is_enabled(false);
+
+            if (scale.has_value()) {
+                node->set_scale(scale.value());
+            }
+
             this->_node->add_sub_node(node);
         }
     } else if (prev_count > count) {
@@ -164,5 +181,14 @@ void ui_module_waveforms::_resize_sub_nodes(std::size_t const count) {
             auto const idx = prev_count - yas_each_index(each) - 1;
             this->_node->sub_nodes().at(idx)->remove_from_super_node();
         }
+    }
+}
+
+std::optional<ui::size> ui_module_waveforms::_waveform_scale() const {
+    if (this->_width_per_sec.has_value()) {
+        float const width_per_sec = this->_width_per_sec.value();
+        return ui::size{.width = width_per_sec, .height = 1.0f};
+    } else {
+        return std::nullopt;
     }
 }

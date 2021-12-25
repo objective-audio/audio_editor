@@ -39,8 +39,9 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
             auto const file_result = audio::file::make_opened({.file_url = url});
             if (file_result) {
-                uint32_t const mesh_width_interval = waveform_mesh_importer_event::max_unit_data_rect_count;
+                uint32_t const mesh_width_interval = waveform_mesh_importer_event::data_unit_max_rect_count;
                 double const mesh_width = location.width * width_per_sec;
+                double const sec_per_width = 1.0 / width_per_sec;
                 uint32_t const floored_mesh_width = static_cast<uint32_t>(std::floor(mesh_width));
                 uint32_t const ceiled_mesh_width = static_cast<uint32_t>(std::ceil(mesh_width));
                 bool const has_fraction = floored_mesh_width != ceiled_mesh_width;
@@ -84,15 +85,15 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                 uint32_t vertex_rect_idx = 0;
 
                 auto const write_handler = [&max, &min, &vertex_rect_idx, &mesh_width_interval, &mesh_width,
-                                            &floored_mesh_width](std::vector<ui::vertex2d_t> &vec) {
+                                            &floored_mesh_width, &sec_per_width](std::vector<ui::vertex2d_t> &vec) {
                     auto *vertex_rects_data = (ui::vertex2d_rect *)vec.data();
-                    float const width =
-                        (floored_mesh_width == vertex_rect_idx) ? (mesh_width - floored_mesh_width) : 1.0f;
+                    double const width =
+                        (floored_mesh_width == vertex_rect_idx) ? (mesh_width - floored_mesh_width) : 1.0;
                     uint32_t const rect_idx = vertex_rect_idx % mesh_width_interval;
                     if ((rect_idx * ui::vertex2d_rect::vector_count) < vec.size()) {
-                        vertex_rects_data[rect_idx].set_position(
-                            ui::region{.origin = {.x = static_cast<float>(vertex_rect_idx), .y = min},
-                                       .size = {.width = width, .height = max - min}});
+                        vertex_rects_data[rect_idx].set_position(ui::region{
+                            .origin = {.x = static_cast<float>(vertex_rect_idx * sec_per_width), .y = min},
+                            .size = {.width = static_cast<float>(width * sec_per_width), .height = max - min}});
                     } else {
                         assert(0);
                     }

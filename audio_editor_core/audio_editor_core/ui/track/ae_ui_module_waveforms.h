@@ -34,5 +34,6 @@ struct ui_module_waveforms final {
     ui_module_waveforms(std::shared_ptr<module_waveforms_presenter> const &);
 
     void _resize_sub_nodes(std::size_t const);
+    std::optional<ui::size> _waveform_scale() const;
 };
 }  // namespace yas::ae
