@@ -38,7 +38,7 @@ float track_presenter::current_position() const {
     return 0.0;
 }
 
-double track_presenter::scale() const {
+double track_presenter::zooming_scale() const {
     if (auto const zooming = this->_zooming.lock()) {
         return zooming->scale();
     } else {
@@ -46,7 +46,7 @@ double track_presenter::scale() const {
     }
 }
 
-observing::syncable track_presenter::observe_scale(std::function<void(double const &)> &&handler) {
+observing::syncable track_presenter::observe_zooming_scale(std::function<void(double const &)> &&handler) {
     if (auto const zooming = this->_zooming.lock()) {
         return zooming->observe_scale(std::move(handler));
     }

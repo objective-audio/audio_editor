@@ -13,8 +13,8 @@ struct track_presenter {
         std::shared_ptr<project_editor_for_track_presenter> const &,
         std::shared_ptr<zooming_for_track_presenter> const &);
 
-    [[nodiscard]] double scale() const;
-    [[nodiscard]] observing::syncable observe_scale(std::function<void(double const &)> &&);
+    [[nodiscard]] double zooming_scale() const;
+    [[nodiscard]] observing::syncable observe_zooming_scale(std::function<void(double const &)> &&);
 
     [[nodiscard]] float current_position() const;
 
