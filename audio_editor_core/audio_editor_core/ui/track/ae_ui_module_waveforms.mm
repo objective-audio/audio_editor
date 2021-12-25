@@ -37,6 +37,10 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presen
                         mesh->set_primitive_type(ui::primitive_type::triangle);
                         mesh->set_vertex_data(event.datas.at(idx).vertex_data);
                         mesh->set_index_data(event.datas.at(idx).index_data);
+
+                        float const hue = float(idx % 6) / 6.0f;
+                        mesh_node->set_color(ui::hsb_color(hue, 1.0f, 1.0f));
+
                         mesh_node->set_mesh(mesh);
                         sub_node->add_sub_node(mesh_node);
                     }
