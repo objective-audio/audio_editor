@@ -104,6 +104,7 @@ static proc::time::range const dummy_range{0, 1};
         XCTAssertEqual(called.at(1).inserted.at(1).first, 1);
         XCTAssertEqual(called.at(1).inserted.at(1).second.identifier, id_2);
         XCTAssertEqual(called.at(1).erased.size(), 0);
+        XCTAssertEqual(called.at(1).replaced.size(), 0);
     }
 
     {
@@ -123,6 +124,7 @@ static proc::time::range const dummy_range{0, 1};
         XCTAssertEqual(called.at(2).inserted.at(0).first, 2);
         XCTAssertEqual(called.at(2).inserted.at(0).second.identifier, id_1);
         XCTAssertEqual(called.at(2).erased.size(), 0);
+        XCTAssertEqual(called.at(2).replaced.size(), 0);
     }
 
     {
@@ -140,6 +142,7 @@ static proc::time::range const dummy_range{0, 1};
         XCTAssertEqual(called.at(3).erased.size(), 1);
         XCTAssertEqual(called.at(3).erased.at(0).first, 0);
         XCTAssertEqual(called.at(3).erased.at(0).second.identifier, id_0);
+        XCTAssertEqual(called.at(3).replaced.size(), 0);
     }
 
     {
@@ -162,11 +165,14 @@ static proc::time::range const dummy_range{0, 1};
         XCTAssertEqual(called.at(4).inserted.at(1).first, 3);
         XCTAssertEqual(called.at(4).inserted.at(1).second.identifier, id_4);
         XCTAssertEqual(called.at(4).erased.size(), 0);
+        XCTAssertEqual(called.at(4).replaced.size(), 0);
     }
 
     {
+        proc::time::range const other_range{0, 2};
+
         pool->update_all({{.identifier = id_1, .range = dummy_range},
-                          {.identifier = id_4, .range = dummy_range},
+                          {.identifier = id_4, .range = other_range},
                           {.identifier = id_5, .range = dummy_range}});
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
@@ -185,6 +191,10 @@ static proc::time::range const dummy_range{0, 1};
         XCTAssertEqual(called.at(5).erased.at(0).second.identifier, id_3);
         XCTAssertEqual(called.at(5).erased.at(1).first, 1);
         XCTAssertEqual(called.at(5).erased.at(1).second.identifier, id_2);
+        XCTAssertEqual(called.at(5).replaced.size(), 1);
+        XCTAssertEqual(called.at(5).replaced.at(0).first, 3);
+        XCTAssertEqual(called.at(5).replaced.at(0).second.identifier, id_4);
+        XCTAssertEqual(called.at(5).replaced.at(0).second.range, other_range);
     }
 
     canceller->cancel();
