@@ -43,8 +43,8 @@ markers_presenter::markers_presenter(std::shared_ptr<project_editor_for_markers_
                     auto const &marker = event.marker.value();
                     if (auto const space_range = this->_space_range();
                         space_range.has_value() && space_range.value().is_contain(marker.frame)) {
-                        this->_location_pool->insert(marker_location::make(marker.identifier, marker.frame, sample_rate,
-                                                                           this->_display_space->scale()));
+                        this->_location_pool->insert(marker_location::make_value(
+                            marker.identifier, marker.frame, sample_rate, this->_display_space->scale()));
                     }
                     break;
             }
@@ -110,7 +110,7 @@ void markers_presenter::_update_all_locations(update_type const type) {
                                 scale = this->_display_space->scale()](auto const &pair) {
                 if (space_range_value.is_contain(pair.second.frame)) {
                     return std::make_optional(
-                        marker_location::make(pair.second.identifier, pair.second.frame, sample_rate, scale));
+                        marker_location::make_value(pair.second.identifier, pair.second.frame, sample_rate, scale));
                 } else {
                     return std::optional<marker_location>(std::nullopt);
                 }

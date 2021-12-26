@@ -16,7 +16,7 @@ pasteboard::pasteboard()
 }
 
 std::optional<pasting_file_module> pasteboard::file_module() const {
-    return pasting_file_module::make(this->_data);
+    return pasting_file_module::make_value(this->_data);
 }
 
 void pasteboard::set_file_module(pasting_file_module const &module) {

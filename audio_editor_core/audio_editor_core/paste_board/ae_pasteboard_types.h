@@ -21,7 +21,7 @@ struct pasting_file_module {
 
     std::string data() const;
 
-    static std::optional<pasting_file_module> make(std::string const &);
+    static std::optional<pasting_file_module> make_value(std::string const &);
 };
 }  // namespace yas::ae
 

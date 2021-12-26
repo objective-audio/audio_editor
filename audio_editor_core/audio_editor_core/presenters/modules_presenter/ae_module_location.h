@@ -15,7 +15,16 @@ struct module_location {
     float width;
     proc::time::range range;
 
-    [[nodiscard]] static module_location make(ae::identifier const &, proc::time::range const &,
-                                              uint32_t const sample_rate);
+    [[nodiscard]] static module_location make_value(ae::identifier const &, proc::time::range const &,
+                                                    uint32_t const sample_rate);
+
+    bool operator==(module_location const &rhs) const {
+        return this->identifier == rhs.identifier && this->x == rhs.x && this->width == rhs.width &&
+               this->range == rhs.range;
+    }
+
+    bool operator!=(module_location const &rhs) const {
+        return !(*this == rhs);
+    }
 };
 }  // namespace yas::ae
