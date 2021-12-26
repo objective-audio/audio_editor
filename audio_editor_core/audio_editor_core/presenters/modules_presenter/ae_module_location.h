@@ -33,9 +33,7 @@ struct module_location {
 
     bool operator==(module_location const &rhs) const {
         return this->identifier == rhs.identifier && this->x == rhs.x && this->width == rhs.width &&
-               this->range == rhs.range &&
-               std::equal(this->mesh_elements.begin(), this->mesh_elements.end(), rhs.mesh_elements.begin(),
-                          rhs.mesh_elements.end());
+               this->range == rhs.range && equal(this->mesh_elements, rhs.mesh_elements);
     }
 
     bool operator!=(module_location const &rhs) const {
