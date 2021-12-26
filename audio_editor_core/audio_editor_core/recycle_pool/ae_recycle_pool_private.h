@@ -31,14 +31,21 @@ void recycle_pool<Element>::replace_all(std::vector<Element> const &elements) {
 template <typename Element>
 void recycle_pool<Element>::update_all(std::vector<Element> const &elements) {
     std::vector<std::pair<std::size_t, Element>> inserted;
+    std::vector<std::pair<std::size_t, Element>> replaced;
 
     // 元のelementsに無いものをinsertedに保持。indexはまだ
     for (auto const &element : elements) {
-        auto const contains = contains_if(this->_elements, [&element](auto const &prev) {
+        auto const contains_index = index(this->_elements, [&element](auto const &prev) {
             return prev.has_value() && prev.value().identifier == element.identifier;
         });
 
-        if (!contains) {
+        if (contains_index.has_value()) {
+            auto const &idx = contains_index.value();
+            if (this->_elements.at(idx) != element) {
+                replaced.emplace_back(idx, element);
+                this->_elements.at(idx) = element;
+            }
+        } else {
             inserted.emplace_back(0, element);
         }
     }
@@ -84,10 +91,11 @@ void recycle_pool<Element>::update_all(std::vector<Element> const &elements) {
     }
 
     // 変更があれば通知
-    if (!inserted.empty() || !erased.empty()) {
+    if (!inserted.empty() || !replaced.empty() || !erased.empty()) {
         this->_fetcher->push({.type = recycle_pool_event_type::updated,
                               .elements = this->_elements,
                               .inserted = std::move(inserted),
+                              .replaced = std::move(replaced),
                               .erased = std::move(erased)});
     }
 }

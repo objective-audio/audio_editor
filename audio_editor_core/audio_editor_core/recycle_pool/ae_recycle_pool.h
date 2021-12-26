@@ -19,6 +19,7 @@ struct recycle_pool_event {
     recycle_pool_event_type type;
     std::vector<std::optional<Element>> const &elements;    // fetched, replaced
     std::vector<std::pair<std::size_t, Element>> inserted;  // updated
+    std::vector<std::pair<std::size_t, Element>> replaced;  // updated
     std::vector<std::pair<std::size_t, Element>> erased;    // updated
 };
 
