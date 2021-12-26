@@ -32,7 +32,7 @@
 		B632197E2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B632197D2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B633290027094C1D0047E45F /* ae_ui_root_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B63328FF27094C1D0047E45F /* ae_ui_root_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B64504AE2719C4D9009E05D6 /* ae_module_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AD2719C4D9009E05D6 /* ae_module_location.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B64504B02719C4E4009E05D6 /* ae_marker_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AF2719C4E4009E05D6 /* ae_marker_location.h */; };
+		B64504B02719C4E4009E05D6 /* ae_marker_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AF2719C4E4009E05D6 /* ae_marker_location.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B64504B3271A7316009E05D6 /* ae_markers_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504B1271A7316009E05D6 /* ae_markers_presenter.h */; };
 		B64504B4271A7316009E05D6 /* ae_markers_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B64504B2271A7316009E05D6 /* ae_markers_presenter.cpp */; };
 		B64504BA271A94D2009E05D6 /* ae_modules_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504B8271A94D2009E05D6 /* ae_modules_presenter.h */; };
