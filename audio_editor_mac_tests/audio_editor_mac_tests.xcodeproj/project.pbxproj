@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B61E3236264ACAC9000DB2B1 /* ae_file_module_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B61E3235264ACAC9000DB2B1 /* ae_file_module_tests.mm */; };
 		B61E3242264ACD42000DB2B1 /* ae_file_module_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B61E3241264ACD42000DB2B1 /* ae_file_module_utils_tests.mm */; };
+		B64A4F7F2777FCCD00A959DD /* ae_module_location_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64A4F7E2777FCCD00A959DD /* ae_module_location_tests.mm */; };
 		B64E2121263C44A300B1BF51 /* ae_file_loader_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */; };
 		B64E94FF2653F29F0056F511 /* ae_marker_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64E94FE2653F29F0056F511 /* ae_marker_pool_tests.mm */; };
 		B6604F8E26476FD5003439F1 /* ae_file_track_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6604F8D26476FD5003439F1 /* ae_file_track_tests.mm */; };
@@ -42,6 +43,7 @@
 /* Begin PBXFileReference section */
 		B61E3235264ACAC9000DB2B1 /* ae_file_module_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_module_tests.mm; path = ../../audio_editor_tests/ae_file_module_tests.mm; sourceTree = "<group>"; };
 		B61E3241264ACD42000DB2B1 /* ae_file_module_utils_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_module_utils_tests.mm; path = ../../audio_editor_tests/ae_file_module_utils_tests.mm; sourceTree = "<group>"; };
+		B64A4F7E2777FCCD00A959DD /* ae_module_location_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_module_location_tests.mm; path = ../../audio_editor_tests/ae_module_location_tests.mm; sourceTree = "<group>"; };
 		B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_loader_tests.mm; path = ../../audio_editor_tests/ae_file_loader_tests.mm; sourceTree = "<group>"; };
 		B64E94FE2653F29F0056F511 /* ae_marker_pool_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_marker_pool_tests.mm; path = ../../audio_editor_tests/ae_marker_pool_tests.mm; sourceTree = "<group>"; };
 		B6604F8D26476FD5003439F1 /* ae_file_track_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_track_tests.mm; path = ../../audio_editor_tests/ae_file_track_tests.mm; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				B666F17D275A50B90040D306 /* ae_display_space_tests.mm */,
 				B666F187275B059F0040D306 /* ae_identifier_tests.mm */,
 				B666F18F275C9C5A0040D306 /* ae_module_location_pool_tests.mm */,
+				B64A4F7E2777FCCD00A959DD /* ae_module_location_tests.mm */,
 				B66909F7262A7CD600E86353 /* Info.plist */,
 			);
 			path = audio_editor_mac_tests;
@@ -248,6 +251,7 @@
 				B69CF573262AC98D007A0A75 /* ae_project_tests.mm in Sources */,
 				B6604F8E26476FD5003439F1 /* ae_file_track_tests.mm in Sources */,
 				B6E77A822750912700B6521E /* ae_pasting_file_module_tests.mm in Sources */,
+				B64A4F7F2777FCCD00A959DD /* ae_module_location_tests.mm in Sources */,
 				B6BEFE98267DD76B002B6894 /* ae_editing_root_presenter_utils_tests.mm in Sources */,
 				B64E94FF2653F29F0056F511 /* ae_marker_pool_tests.mm in Sources */,
 				B666F188275B059F0040D306 /* ae_identifier_tests.mm in Sources */,
