@@ -22,13 +22,13 @@ using namespace yas::ae;
 }
 
 - (void)test_make {
-    auto const module = pasting_file_module::make("file_frame=10,kind=file_module,length=20");
+    auto const module = pasting_file_module::make_value("file_frame=10,kind=file_module,length=20");
 
     XCTAssertTrue(module.has_value());
     XCTAssertEqual(module.value().file_frame, 10);
     XCTAssertEqual(module.value().length, 20);
 
-    XCTAssertFalse(pasting_file_module::make("").has_value());
+    XCTAssertFalse(pasting_file_module::make_value("").has_value());
 }
 
 - (void)test_to_string {

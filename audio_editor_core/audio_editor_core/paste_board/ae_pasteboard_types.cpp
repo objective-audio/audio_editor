@@ -18,7 +18,7 @@ std::string pasting_file_module::data() const {
     return pasteboard_utils::to_data_string(map);
 }
 
-std::optional<pasting_file_module> pasting_file_module::make(std::string const &data) {
+std::optional<pasting_file_module> pasting_file_module::make_value(std::string const &data) {
     auto const map = pasteboard_utils::to_data_map(data);
 
     if (map.contains(file_module_key::kind) && map.at(file_module_key::kind) == file_module_kind::value &&
