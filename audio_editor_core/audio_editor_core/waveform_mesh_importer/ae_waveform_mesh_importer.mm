@@ -72,7 +72,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                 auto const &file = file_result.value();
                 auto const &format = file->processing_format();
                 auto const frames_per_sec = static_cast<uint32_t>(format.sample_rate());
-                file->set_file_frame_position(static_cast<uint32_t>(location.range.frame));
+                file->set_file_frame_position(static_cast<uint32_t>(location.file_frame));
 
                 audio::pcm_buffer buffer{format, frames_per_sec};
 
