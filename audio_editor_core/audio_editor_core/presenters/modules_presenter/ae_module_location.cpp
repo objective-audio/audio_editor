@@ -8,8 +8,8 @@ using namespace yas;
 using namespace yas::ae;
 
 module_location module_location::make_value(ae::identifier const &identifier, proc::time::range const &range,
-                                            uint32_t const sample_rate) {
+                                            proc::frame_index_t const file_frame, uint32_t const sample_rate) {
     float const x = static_cast<double>(range.frame) / static_cast<double>(sample_rate);
     float const width = static_cast<double>(range.length) / static_cast<double>(sample_rate);
-    return module_location{identifier, x, width, range};
+    return module_location{.identifier = identifier, .x = x, .width = width, .range = range, .file_frame = file_frame};
 }
