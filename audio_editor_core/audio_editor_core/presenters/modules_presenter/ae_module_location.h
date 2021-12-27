@@ -15,13 +15,8 @@ struct module_location {
     struct mesh_element {
         proc::time::range range;
 
-        bool operator==(mesh_element const &rhs) const {
-            return this->range == rhs.range;
-        }
-
-        bool operator!=(mesh_element const &rhs) const {
-            return !(*this == rhs);
-        }
+        bool operator==(mesh_element const &rhs) const;
+        bool operator!=(mesh_element const &rhs) const;
     };
 
     identifier identifier;  // file_moduleからコピーする
@@ -37,14 +32,7 @@ struct module_location {
     [[nodiscard]] static module_location make_value(file_module const &, uint32_t const sample_rate,
                                                     proc::time::range const &space_range, float const width_per_sec);
 
-    bool operator==(module_location const &rhs) const {
-        return this->identifier == rhs.identifier && this->x == rhs.x && this->width == rhs.width &&
-               this->range == rhs.range && this->file_frame == rhs.file_frame &&
-               equal(this->mesh_elements, rhs.mesh_elements);
-    }
-
-    bool operator!=(module_location const &rhs) const {
-        return !(*this == rhs);
-    }
+    bool operator==(module_location const &rhs) const;
+    bool operator!=(module_location const &rhs) const;
 };
 }  // namespace yas::ae
