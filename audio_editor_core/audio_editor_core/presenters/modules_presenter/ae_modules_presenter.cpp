@@ -47,7 +47,8 @@ modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_
                     auto const &module = event.module.value();
                     auto const space_range = this->_space_range();
                     if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
-                        this->_location_pool->insert(module_location::make_value(module, sample_rate));
+                        this->_location_pool->insert(module_location::make_value(
+                            module, sample_rate, space_range.value(), this->_display_space->scale().width));
                     }
                 } break;
             }
@@ -95,11 +96,14 @@ void modules_presenter::_update_all_locations(bool const force) {
         }
 
         auto const &space_range_value = space_range.value();
+        auto const scale = this->_display_space->scale().width;
 
         auto const locations = filter_map<module_location>(
-            editor->modules(), [&space_range_value, sample_rate = editor->file_info().sample_rate](auto const &module) {
+            editor->modules(),
+            [&space_range_value, sample_rate = editor->file_info().sample_rate, &scale](auto const &module) {
                 if (module.first.is_overlap(space_range_value)) {
-                    return std::make_optional(module_location::make_value(module.second, sample_rate));
+                    return std::make_optional(
+                        module_location::make_value(module.second, sample_rate, space_range_value, scale));
                 } else {
                     return std::optional<module_location>(std::nullopt);
                 }

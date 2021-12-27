@@ -32,8 +32,10 @@ struct module_location {
     std::vector<std::optional<mesh_element>> mesh_elements;
 
     [[nodiscard]] static module_location make_value(ae::identifier const &, proc::time::range const &,
-                                                    proc::frame_index_t const file_frame, uint32_t const sample_rate);
-    [[nodiscard]] static module_location make_value(file_module const &, uint32_t const sample_rate);
+                                                    proc::frame_index_t const file_frame, uint32_t const sample_rate,
+                                                    std::vector<std::optional<mesh_element>> const &mesh_elements);
+    [[nodiscard]] static module_location make_value(file_module const &, uint32_t const sample_rate,
+                                                    proc::time::range const &space_range, float const width_per_sec);
 
     bool operator==(module_location const &rhs) const {
         return this->identifier == rhs.identifier && this->x == rhs.x && this->width == rhs.width &&
