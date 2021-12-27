@@ -20,8 +20,8 @@ struct module_location {
     };
 
     identifier identifier;  // file_moduleからコピーする
-    float x;
-    float width;
+    float _x;
+    float _width;
     proc::time::range range;
     proc::frame_index_t file_frame;
     std::vector<std::optional<mesh_element>> mesh_elements;
@@ -31,6 +31,9 @@ struct module_location {
                                                     std::vector<std::optional<mesh_element>> const &mesh_elements);
     [[nodiscard]] static module_location make_value(file_module const &, uint32_t const sample_rate,
                                                     proc::time::range const &space_range, float const width_per_sec);
+
+    float x() const;
+    float width() const;
 
     bool operator==(module_location const &rhs) const;
     bool operator!=(module_location const &rhs) const;
