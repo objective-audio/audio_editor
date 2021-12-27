@@ -20,10 +20,9 @@ struct module_location {
     };
 
     identifier identifier;  // file_moduleからコピーする
-    float _x;
-    float _width;
     proc::time::range range;
     proc::frame_index_t file_frame;
+    uint32_t sample_rate;
     std::vector<std::optional<mesh_element>> mesh_elements;
 
     [[nodiscard]] static module_location make_value(ae::identifier const &, proc::time::range const &,
