@@ -13,6 +13,8 @@ class file_module;
 
 struct module_location {
     struct mesh_element {
+        static uint32_t const max_length = 32;
+
         proc::time::range range;
 
         bool operator==(mesh_element const &rhs) const;
