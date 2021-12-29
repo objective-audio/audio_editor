@@ -17,12 +17,7 @@ struct marker_location {
     [[nodiscard]] static marker_location make_value(ae::identifier const &, proc::frame_index_t const &frame,
                                                     uint32_t const sample_rate, ui::size const &scale);
 
-    bool operator==(marker_location const &rhs) const {
-        return this->identifier == rhs.identifier && this->point == rhs.point && this->x == rhs.x;
-    }
-
-    bool operator!=(marker_location const &rhs) const {
-        return !(*this == rhs);
-    }
+    bool operator==(marker_location const &rhs) const;
+    bool operator!=(marker_location const &rhs) const;
 };
 }  // namespace yas::ae

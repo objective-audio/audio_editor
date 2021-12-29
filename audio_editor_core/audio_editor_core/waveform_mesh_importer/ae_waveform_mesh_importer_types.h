@@ -9,8 +9,6 @@
 
 namespace yas::ae {
 struct waveform_mesh_importer_event {
-    static uint32_t const data_unit_max_rect_count = 32;
-
     std::size_t index;
     identifier identifier;
 

@@ -110,7 +110,7 @@ void ui_module_waveforms::set_locations(std::vector<std::optional<module_locatio
 
         if (location.has_value()) {
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.value().x * width_per_sec, .y = 0.0f});
+            sub_node->set_position({.x = location.value().x() * width_per_sec, .y = 0.0f});
             this->_presenter->import(idx, location.value(), width_per_sec);
         } else {
             sub_node->set_is_enabled(false);
@@ -155,7 +155,7 @@ void ui_module_waveforms::update_locations(std::size_t const count,
             auto const &sub_node = this->_node->sub_nodes().at(idx);
             sub_node->remove_all_sub_nodes();
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.x * width_per_sec, .y = 0.0f});
+            sub_node->set_position({.x = location.x() * width_per_sec, .y = 0.0f});
             this->_presenter->import(idx, location, width_per_sec);
         }
     }

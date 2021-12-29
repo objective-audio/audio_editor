@@ -9,37 +9,34 @@
 #include <processing/yas_processing_umbrella.h>
 
 namespace yas::ae {
+class file_module;
+
 struct module_location {
     struct mesh_element {
+        static uint32_t const max_length = 32;
+
         proc::time::range range;
 
-        bool operator==(mesh_element const &rhs) const {
-            return this->range == rhs.range;
-        }
-
-        bool operator!=(mesh_element const &rhs) const {
-            return !(*this == rhs);
-        }
+        bool operator==(mesh_element const &rhs) const;
+        bool operator!=(mesh_element const &rhs) const;
     };
 
     identifier identifier;  // file_moduleからコピーする
-    float x;
-    float width;
     proc::time::range range;
     proc::frame_index_t file_frame;
+    uint32_t sample_rate;
     std::vector<std::optional<mesh_element>> mesh_elements;
 
     [[nodiscard]] static module_location make_value(ae::identifier const &, proc::time::range const &,
-                                                    proc::frame_index_t const file_frame, uint32_t const sample_rate);
+                                                    proc::frame_index_t const file_frame, uint32_t const sample_rate,
+                                                    std::vector<std::optional<mesh_element>> const &mesh_elements);
+    [[nodiscard]] static module_location make_value(file_module const &, uint32_t const sample_rate,
+                                                    proc::time::range const &space_range, float const width_per_sec);
 
-    bool operator==(module_location const &rhs) const {
-        return this->identifier == rhs.identifier && this->x == rhs.x && this->width == rhs.width &&
-               this->range == rhs.range && this->file_frame == rhs.file_frame &&
-               equal(this->mesh_elements, rhs.mesh_elements);
-    }
+    float x() const;
+    float width() const;
 
-    bool operator!=(module_location const &rhs) const {
-        return !(*this == rhs);
-    }
+    bool operator==(module_location const &rhs) const;
+    bool operator!=(module_location const &rhs) const;
 };
 }  // namespace yas::ae
