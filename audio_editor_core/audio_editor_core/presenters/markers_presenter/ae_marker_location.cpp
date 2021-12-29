@@ -14,3 +14,11 @@ marker_location marker_location::make_value(ae::identifier const &identifier, pr
                            .x = static_cast<float>(position),
                            .point = {.x = static_cast<float>(position * scale.width), .y = scale.height}};
 }
+
+bool marker_location::operator==(marker_location const &rhs) const {
+    return this->identifier == rhs.identifier && this->point == rhs.point && this->x == rhs.x;
+}
+
+bool marker_location::operator!=(marker_location const &rhs) const {
+    return !(*this == rhs);
+}
