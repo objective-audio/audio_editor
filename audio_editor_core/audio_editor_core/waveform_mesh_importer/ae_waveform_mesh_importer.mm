@@ -65,22 +65,22 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                     auto const &mesh_element = location.mesh_elements.at(data_idx);
 
                     if (!mesh_element.has_value()) {
-                        auto const mesh_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(0);
-                        auto const mesh_index_data = ui::dynamic_mesh_index_data::make_shared(0);
-                        datas.emplace_back(waveform_mesh_importer_event::data{mesh_vertex_data, mesh_index_data});
+                        datas.emplace_back(waveform_mesh_importer_event::data{nullptr, nullptr});
                         continue;
                     }
 
                     auto const rect_count = location.mesh_elements.at(data_idx).value().rect_count;
+
+                    if (rect_count == 0) {
+                        datas.emplace_back(waveform_mesh_importer_event::data{nullptr, nullptr});
+                        continue;
+                    }
+
                     uint32_t const vertex_count = rect_count * ui::vertex2d_rect::vector_count;
                     uint32_t const index_count = rect_count * ui::index2d_rect::vector_count;
 
                     auto const mesh_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(vertex_count);
                     auto const mesh_index_data = ui::dynamic_mesh_index_data::make_shared(index_count);
-
-                    if (rect_count == 0) {
-                        continue;
-                    }
 
                     mesh_index_data->write([](std::vector<ui::index2d_t> &vector) {
                         if (vector.size() == 0) {
