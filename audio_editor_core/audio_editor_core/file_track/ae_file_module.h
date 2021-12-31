@@ -27,3 +27,5 @@ struct file_module {
 namespace yas {
 std::string to_string(ae::file_module const &);
 }
+
+std::ostream &operator<<(std::ostream &os, yas::ae::file_module const &value);

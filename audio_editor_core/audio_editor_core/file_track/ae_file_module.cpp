@@ -40,3 +40,8 @@ std::string yas::to_string(ae::file_module const &file_module) {
     return std::string{"{file_frame:" + std::to_string(file_module.file_frame) +
                        ", range:" + to_string(file_module.range) + "}"};
 }
+
+std::ostream &operator<<(std::ostream &os, yas::ae::file_module const &value) {
+    os << to_string(value);
+    return os;
+}
