@@ -58,7 +58,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presen
                     this->set_locations(event.elements, true);
                     break;
                 case module_location_pool_event_type::updated:
-                    this->update_locations(event.elements.size(), event.erased, event.inserted);
+                    this->update_locations(event.elements.size(), event.erased, event.inserted, event.replaced);
                     break;
             }
         })
@@ -74,8 +74,13 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
     this->_node->set_scale({.width = 1.0f, .height = scale.height * 0.5f});
 
     if (this->_width_per_sec != scale.width) {
+        bool const prev_null = !this->_width_per_sec.has_value();
+
         this->_width_per_sec = scale.width;
-        this->set_locations(this->_presenter->locations(), false);
+
+        if (prev_null) {
+            this->set_locations(this->_presenter->locations(), false);
+        }
 
         if (auto const scale = this->_waveform_scale()) {
             for (auto const &sub_node : this->_node->sub_nodes()) {
@@ -91,8 +96,6 @@ void ui_module_waveforms::set_locations(std::vector<std::optional<module_locatio
         this->_resize_sub_nodes(0);
         return;
     }
-
-    auto const width_per_sec = this->_width_per_sec.value();
 
     this->_resize_sub_nodes(locations.size());
 
@@ -110,8 +113,8 @@ void ui_module_waveforms::set_locations(std::vector<std::optional<module_locatio
 
         if (location.has_value()) {
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.value().x() * width_per_sec, .y = 0.0f});
-            this->_presenter->import(idx, location.value(), width_per_sec);
+            sub_node->set_position({.x = location.value().x() * location.value().width_per_sec, .y = 0.0f});
+            this->_presenter->import(idx, location.value());
         } else {
             sub_node->set_is_enabled(false);
         }
@@ -120,13 +123,12 @@ void ui_module_waveforms::set_locations(std::vector<std::optional<module_locatio
 
 void ui_module_waveforms::update_locations(std::size_t const count,
                                            std::vector<std::pair<std::size_t, module_location>> const &erased,
-                                           std::vector<std::pair<std::size_t, module_location>> const &inserted) {
+                                           std::vector<std::pair<std::size_t, module_location>> const &inserted,
+                                           std::vector<std::pair<std::size_t, module_location>> const &replaced) {
     if (!this->_width_per_sec.has_value()) {
         this->_resize_sub_nodes(0);
         return;
     }
-
-    auto const width_per_sec = this->_width_per_sec.value();
 
     this->_resize_sub_nodes(count);
 
@@ -145,6 +147,20 @@ void ui_module_waveforms::update_locations(std::size_t const count,
         this->_presenter->cancel_import(location.identifier);
     }
 
+    each = make_fast_each(replaced.size());
+    while (yas_each_next(each)) {
+        auto const &pair = replaced.at(yas_each_index(each));
+        auto const &idx = pair.first;
+
+        if (idx < this->_node->sub_nodes().size()) {
+            auto const &location = pair.second;
+            auto const &sub_node = this->_node->sub_nodes().at(idx);
+            sub_node->set_is_enabled(true);
+            sub_node->set_position({.x = location.x() * location.width_per_sec, .y = 0.0f});
+            this->_presenter->import(idx, location);
+        }
+    }
+
     each = make_fast_each(inserted.size());
     while (yas_each_next(each)) {
         auto const &pair = inserted.at(yas_each_index(each));
@@ -155,8 +171,8 @@ void ui_module_waveforms::update_locations(std::size_t const count,
             auto const &sub_node = this->_node->sub_nodes().at(idx);
             sub_node->remove_all_sub_nodes();
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.x() * width_per_sec, .y = 0.0f});
-            this->_presenter->import(idx, location, width_per_sec);
+            sub_node->set_position({.x = location.x() * location.width_per_sec, .y = 0.0f});
+            this->_presenter->import(idx, location);
         }
     }
 }

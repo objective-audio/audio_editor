@@ -16,7 +16,7 @@ struct waveform_mesh_importer final {
 
     [[nodiscard]] static std::shared_ptr<waveform_mesh_importer> make_shared(url const &);
 
-    void import(std::size_t const, module_location const &, float const width_per_sec);
+    void import(std::size_t const, module_location const &);
     void cancel(identifier const &);
     void cancel_all();
 

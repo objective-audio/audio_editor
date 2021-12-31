@@ -53,3 +53,12 @@ uintptr_t identifier::raw_value() const {
         return 0;
     }
 }
+
+std::string yas::to_string(ae::identifier const &identifier) {
+    return std::to_string(identifier.raw_value());
+}
+
+std::ostream &operator<<(std::ostream &os, yas::ae::identifier const &value) {
+    os << yas::to_string(value);
+    return os;
+}

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 namespace yas::ae {
 struct identifier final {
@@ -25,3 +26,9 @@ struct identifier final {
     std::shared_ptr<std::nullptr_t> _raw;
 };
 }  // namespace yas::ae
+
+namespace yas {
+std::string to_string(ae::identifier const &);
+}  // namespace yas
+
+std::ostream &operator<<(std::ostream &os, yas::ae::identifier const &value);

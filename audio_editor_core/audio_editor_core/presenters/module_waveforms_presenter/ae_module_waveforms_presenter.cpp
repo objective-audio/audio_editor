@@ -24,9 +24,8 @@ module_waveforms_presenter::module_waveforms_presenter(url const &url,
     : _mesh_importer(waveform_mesh_importer::make_shared(url)), _location_pool(location_pool) {
 }
 
-void module_waveforms_presenter::import(std::size_t const idx, module_location const &location,
-                                        float const width_per_sec) {
-    this->_mesh_importer->import(idx, location, width_per_sec);
+void module_waveforms_presenter::import(std::size_t const idx, module_location const &location) {
+    this->_mesh_importer->import(idx, location);
 }
 
 void module_waveforms_presenter::cancel_import(identifier const &identifier) {

@@ -14,7 +14,7 @@ struct module_waveforms_presenter final {
     [[nodiscard]] static std::shared_ptr<module_waveforms_presenter> make_shared(
         std::string const &project_id, std::shared_ptr<module_location_pool> const &);
 
-    void import(std::size_t const, module_location const &, float const width_per_sec);
+    void import(std::size_t const, module_location const &);
     void cancel_import(identifier const &);
     observing::endable observe_mesh_importer(std::function<void(waveform_mesh_importer_event const &)> &&);
 
