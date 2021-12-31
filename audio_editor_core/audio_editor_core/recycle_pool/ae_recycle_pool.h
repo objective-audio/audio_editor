@@ -44,4 +44,10 @@ struct recycle_pool final {
 };
 }  // namespace yas::ae
 
+namespace yas {
+std::string to_string(ae::recycle_pool_event_type const &);
+}  // namespace yas
+
+std::ostream &operator<<(std::ostream &os, yas::ae::recycle_pool_event_type const &value);
+
 #include <audio_editor_core/ae_recycle_pool_private.h>
