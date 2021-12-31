@@ -55,7 +55,13 @@ module_location module_location::make_value(file_module const &file_module, uint
         auto const next_frame = std::min(static_cast<uint32_t>(next_position), total_length);
         auto const range = proc::time::range{current_frame, next_frame - current_frame};
 
-        mesh_elements.emplace_back(mesh_element{.rect_count = rect_count, .range = range});
+        auto const offset_range = range.offset(file_module.range.frame);
+        if (offset_range.intersected(space_range)) {
+            mesh_elements.emplace_back(mesh_element{.rect_count = rect_count, .range = range});
+        } else {
+            mesh_elements.emplace_back(std::nullopt);
+        }
+
         current_frame = next_frame;
     }
 
