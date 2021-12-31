@@ -89,9 +89,9 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
                         auto *const index_rects_data = (ui::index2d_rect *)vector.data();
                         std::size_t const index_rects_size = vector.size() / ui::index2d_rect::vector_count;
-                        auto each = make_fast_each(index_rects_size);
-                        while (yas_each_next(each)) {
-                            auto const &rect_idx = yas_each_index(each);
+                        auto local_each = make_fast_each(index_rects_size);
+                        while (yas_each_next(local_each)) {
+                            auto const &rect_idx = yas_each_index(local_each);
                             uint32_t const rect_head_idx =
                                 static_cast<uint32_t>(rect_idx * ui::vertex2d_rect::vector_count);
                             index_rects_data[rect_idx].set_all(rect_head_idx);
@@ -115,7 +115,6 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
                     float max = 0.0f;
                     float min = 0.0f;
-                    uint32_t file_head_frame = 0;
 
                     uint32_t next_file_frame =
                         static_cast<uint32_t>(static_cast<double>(mesh_element_value.range.length) /
@@ -138,6 +137,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                         }
                     };
 
+                    uint32_t file_head_frame = 0;
                     while (file_head_frame < location.range.length) {
                         if (task.is_canceled()) {
                             is_cancelled = true;
@@ -149,11 +149,15 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                             break;
                         }
 
+                        auto const &buffer_frame_length = buffer.frame_length();
+                        if (buffer_frame_length == 0) {
+                            is_cancelled = true;
+                            break;
+                        }
+
                         auto const *const data = buffer.data_ptr_at_index<float>(0);
 
                         uint32_t buffer_head_frame = 0;
-                        auto const &buffer_frame_length = buffer.frame_length();
-
                         while (buffer_head_frame < buffer_frame_length) {
                             auto const process_length =
                                 std::min((buffer_frame_length - buffer_head_frame),
