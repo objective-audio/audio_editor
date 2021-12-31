@@ -44,6 +44,7 @@
 		B64E9FC92650EDC800758FE8 /* ae_marker_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B64E9FC72650EDC800758FE8 /* ae_marker_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B64E9FD02650EE2C00758FE8 /* ae_marker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B64E9FCE2650EE2C00758FE8 /* ae_marker.cpp */; };
 		B64E9FD12650EE2C00758FE8 /* ae_marker.h in Headers */ = {isa = PBXBuildFile; fileRef = B64E9FCF2650EE2C00758FE8 /* ae_marker.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B655310F277D5F62004C6AC8 /* ae_recycle_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B655310E277D5F62004C6AC8 /* ae_recycle_pool.cpp */; };
 		B657D4D1268037720048C6AD /* ae_keyboard.mm in Sources */ = {isa = PBXBuildFile; fileRef = B657D4CF268037720048C6AD /* ae_keyboard.mm */; };
 		B657D4D2268037720048C6AD /* ae_keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = B657D4D0268037720048C6AD /* ae_keyboard.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B657D4D426803C7B0048C6AD /* ae_keyboard_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B657D4D326803C7B0048C6AD /* ae_keyboard_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -228,6 +229,7 @@
 		B64E9FC72650EDC800758FE8 /* ae_marker_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_marker_pool.h; sourceTree = "<group>"; };
 		B64E9FCE2650EE2C00758FE8 /* ae_marker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_marker.cpp; sourceTree = "<group>"; };
 		B64E9FCF2650EE2C00758FE8 /* ae_marker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_marker.h; sourceTree = "<group>"; };
+		B655310E277D5F62004C6AC8 /* ae_recycle_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_recycle_pool.cpp; sourceTree = "<group>"; };
 		B657D4CF268037720048C6AD /* ae_keyboard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_keyboard.mm; sourceTree = "<group>"; };
 		B657D4D0268037720048C6AD /* ae_keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_keyboard.h; sourceTree = "<group>"; };
 		B657D4D326803C7B0048C6AD /* ae_keyboard_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_keyboard_types.h; sourceTree = "<group>"; };
@@ -657,6 +659,7 @@
 			isa = PBXGroup;
 			children = (
 				B6DBC36C276382FB001AF1D3 /* ae_recycle_pool_private.h */,
+				B655310E277D5F62004C6AC8 /* ae_recycle_pool.cpp */,
 				B6DBC368276382A5001AF1D3 /* ae_recycle_pool.h */,
 			);
 			path = recycle_pool;
@@ -1087,6 +1090,7 @@
 				B6CCC492274BC38100B563C8 /* ae_pasteboard_types.cpp in Sources */,
 				B6169BD72743D0C400589393 /* ae_dialog_presenter.cpp in Sources */,
 				B68C3E8127088FF000888A53 /* ae_root_presenter.cpp in Sources */,
+				B655310F277D5F62004C6AC8 /* ae_recycle_pool.cpp in Sources */,
 				B6BE6B9B2733BECD0097C99D /* ae_db_marker.cpp in Sources */,
 				B657D4D1268037720048C6AD /* ae_keyboard.mm in Sources */,
 				B6966F37272E4D8400A90733 /* ae_database.cpp in Sources */,
