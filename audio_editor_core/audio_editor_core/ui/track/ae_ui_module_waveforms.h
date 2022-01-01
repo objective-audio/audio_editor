@@ -28,7 +28,7 @@ struct ui_module_waveforms final {
    private:
     std::shared_ptr<module_waveforms_presenter> const _presenter;
     std::shared_ptr<ui::node> const _node;
-    std::optional<float> _width_per_sec = std::nullopt;
+    std::optional<float> _scale = std::nullopt;
 
     observing::canceller_pool _pool;
 
