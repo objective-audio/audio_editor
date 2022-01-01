@@ -12,7 +12,7 @@ marker_location marker_location::make_value(ae::identifier const &identifier, pr
     double const position = static_cast<double>(frame) / static_cast<double>(sample_rate);
     return marker_location{.identifier = identifier,
                            .x = static_cast<float>(position),
-                           .point = {.x = static_cast<float>(position * scale.width), .y = scale.height}};
+                           .point = {.x = static_cast<float>(position * scale.width), .y = scale.height * 0.5f}};
 }
 
 bool marker_location::operator==(marker_location const &rhs) const {
