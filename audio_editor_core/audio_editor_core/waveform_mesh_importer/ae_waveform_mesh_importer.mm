@@ -38,8 +38,8 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
             auto const file_result = audio::file::make_opened({.file_url = url});
             if (file_result) {
-                auto const &width_per_sec = location.width_per_sec;
-                double const rect_width = 1.0 / width_per_sec;
+                auto const &scale = location.scale;
+                double const rect_width = 1.0 / scale;
 
                 struct dynamic_data {
                     std::shared_ptr<ui::dynamic_mesh_vertex_data> vertex_data;

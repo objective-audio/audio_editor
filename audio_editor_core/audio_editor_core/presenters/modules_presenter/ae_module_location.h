@@ -22,19 +22,19 @@ struct module_location {
         bool operator!=(mesh_element const &rhs) const;
     };
 
-    identifier identifier;  // file_moduleからコピーする
-    proc::time::range range;
+    identifier identifier;    // file_moduleより
+    proc::time::range range;  // track内の位置
     proc::frame_index_t file_frame;
     uint32_t sample_rate;
     std::vector<std::optional<mesh_element>> mesh_elements;
-    float width_per_sec;
+    float scale;
 
     [[nodiscard]] static module_location make_value(ae::identifier const &, proc::time::range const &,
                                                     proc::frame_index_t const file_frame, uint32_t const sample_rate,
                                                     std::vector<std::optional<mesh_element>> const &mesh_elements,
-                                                    float const width_per_sec);
+                                                    float const scale);
     [[nodiscard]] static module_location make_value(file_module const &, uint32_t const sample_rate,
-                                                    proc::time::range const &space_range, float const width_per_sec);
+                                                    proc::time::range const &space_range, float const scale);
 
     float x() const;
     float width() const;
