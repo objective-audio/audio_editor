@@ -5,5 +5,5 @@
 #pragma once
 
 namespace yas::ae::ui_track_constants {
-float constexpr width_per_sec = 100.0f;
+float constexpr standard_width_per_sec = 100.0f;
 }  // namespace yas::ae::ui_track_constants
