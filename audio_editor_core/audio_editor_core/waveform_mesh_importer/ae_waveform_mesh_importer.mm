@@ -52,12 +52,9 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
                 audio::pcm_buffer buffer{format, frames_per_sec};
 
-                bool is_cancelled = false;
-
                 auto each = make_fast_each(location.mesh_elements.size());
                 while (yas_each_next(each)) {
                     if (task.is_canceled()) {
-                        is_cancelled = true;
                         break;
                     }
 
@@ -140,22 +137,21 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                     uint32_t file_head_frame = 0;
                     while (file_head_frame < location.range.length) {
                         if (task.is_canceled()) {
-                            is_cancelled = true;
                             break;
                         }
 
                         if (auto result = file->read_into_buffer(buffer); !result) {
-                            is_cancelled = true;
                             break;
                         }
 
                         auto const &buffer_frame_length = buffer.frame_length();
                         if (buffer_frame_length == 0) {
-                            is_cancelled = true;
                             break;
                         }
 
                         auto const *const data = buffer.data_ptr_at_index<float>(0);
+
+                        bool is_cancelled = false;
 
                         uint32_t buffer_head_frame = 0;
                         while (buffer_head_frame < buffer_frame_length) {
