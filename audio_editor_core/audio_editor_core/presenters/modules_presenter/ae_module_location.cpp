@@ -20,22 +20,22 @@ bool module_location::mesh_element::operator!=(mesh_element const &rhs) const {
 module_location module_location::make_value(ae::identifier const &identifier, proc::time::range const &range,
                                             proc::frame_index_t const file_frame, uint32_t const sample_rate,
                                             std::vector<std::optional<mesh_element>> const &mesh_elements,
-                                            float const width_per_sec) {
+                                            float const scale) {
     return module_location{.identifier = identifier,
                            .sample_rate = sample_rate,
                            .range = range,
                            .file_frame = file_frame,
                            .mesh_elements = mesh_elements,
-                           .width_per_sec = width_per_sec};
+                           .scale = scale};
 }
 
 module_location module_location::make_value(file_module const &file_module, uint32_t const sample_rate,
-                                            proc::time::range const &space_range, float const width_per_sec) {
+                                            proc::time::range const &space_range, float const scale) {
     std::vector<std::optional<mesh_element>> mesh_elements;
 
     uint32_t const mesh_width_interval = module_location::mesh_element::max_length;
     double const width = static_cast<double>(file_module.range.length) / static_cast<double>(sample_rate);
-    double const total_mesh_width = width * width_per_sec;
+    double const total_mesh_width = width * scale;
     uint32_t const floored_mesh_width = static_cast<uint32_t>(std::floor(total_mesh_width));
     uint32_t const ceiled_mesh_width = static_cast<uint32_t>(std::ceil(total_mesh_width));
     bool const has_fraction = floored_mesh_width != ceiled_mesh_width;
@@ -66,7 +66,7 @@ module_location module_location::make_value(file_module const &file_module, uint
     }
 
     return make_value(file_module.identifier, file_module.range, file_module.file_frame, sample_rate, mesh_elements,
-                      width_per_sec);
+                      scale);
 }
 
 float module_location::x() const {
@@ -97,7 +97,7 @@ std::optional<float> module_location::element_offset_x(std::size_t const idx) co
 
 bool module_location::operator==(module_location const &rhs) const {
     return this->identifier == rhs.identifier && this->sample_rate == rhs.sample_rate && this->range == rhs.range &&
-           this->file_frame == rhs.file_frame && this->width_per_sec == rhs.width_per_sec &&
+           this->file_frame == rhs.file_frame && this->scale == rhs.scale &&
            equal(this->mesh_elements, rhs.mesh_elements);
 }
 

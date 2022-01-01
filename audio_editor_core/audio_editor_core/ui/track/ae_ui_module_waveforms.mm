@@ -73,10 +73,10 @@ std::shared_ptr<ui::node> const &ui_module_waveforms::node() {
 void ui_module_waveforms::set_scale(ui::size const &scale) {
     this->_node->set_scale({.width = 1.0f, .height = scale.height * 0.5f});
 
-    if (this->_width_per_sec != scale.width) {
-        bool const prev_null = !this->_width_per_sec.has_value();
+    if (this->_scale != scale.width) {
+        bool const prev_null = !this->_scale.has_value();
 
-        this->_width_per_sec = scale.width;
+        this->_scale = scale.width;
 
         if (prev_null) {
             this->set_locations(this->_presenter->locations(), false);
@@ -92,7 +92,7 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
 
 void ui_module_waveforms::set_locations(std::vector<std::optional<module_location>> const &locations,
                                         bool const clear_mesh_nodes) {
-    if (!this->_width_per_sec.has_value()) {
+    if (!this->_scale.has_value()) {
         this->_resize_sub_nodes(0);
         return;
     }
@@ -113,7 +113,7 @@ void ui_module_waveforms::set_locations(std::vector<std::optional<module_locatio
 
         if (location.has_value()) {
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.value().x() * location.value().width_per_sec, .y = 0.0f});
+            sub_node->set_position({.x = location.value().x() * location.value().scale, .y = 0.0f});
             this->_presenter->import(idx, location.value());
         } else {
             sub_node->set_is_enabled(false);
@@ -125,7 +125,7 @@ void ui_module_waveforms::update_locations(std::size_t const count,
                                            std::vector<std::pair<std::size_t, module_location>> const &erased,
                                            std::vector<std::pair<std::size_t, module_location>> const &inserted,
                                            std::vector<std::pair<std::size_t, module_location>> const &replaced) {
-    if (!this->_width_per_sec.has_value()) {
+    if (!this->_scale.has_value()) {
         this->_resize_sub_nodes(0);
         return;
     }
@@ -156,7 +156,7 @@ void ui_module_waveforms::update_locations(std::size_t const count,
             auto const &location = pair.second;
             auto const &sub_node = this->_node->sub_nodes().at(idx);
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.x() * location.width_per_sec, .y = 0.0f});
+            sub_node->set_position({.x = location.x() * location.scale, .y = 0.0f});
             this->_presenter->import(idx, location);
         }
     }
@@ -171,7 +171,7 @@ void ui_module_waveforms::update_locations(std::size_t const count,
             auto const &sub_node = this->_node->sub_nodes().at(idx);
             sub_node->remove_all_sub_nodes();
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.x() * location.width_per_sec, .y = 0.0f});
+            sub_node->set_position({.x = location.x() * location.scale, .y = 0.0f});
             this->_presenter->import(idx, location);
         }
     }
@@ -204,9 +204,9 @@ void ui_module_waveforms::_resize_sub_nodes(std::size_t const count) {
 }
 
 std::optional<ui::size> ui_module_waveforms::_waveform_scale() const {
-    if (this->_width_per_sec.has_value()) {
-        float const width_per_sec = this->_width_per_sec.value();
-        return ui::size{.width = width_per_sec, .height = 1.0f};
+    if (this->_scale.has_value()) {
+        float const scale = this->_scale.value();
+        return ui::size{.width = scale, .height = 1.0f};
     } else {
         return std::nullopt;
     }

@@ -38,8 +38,8 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
             auto const file_result = audio::file::make_opened({.file_url = url});
             if (file_result) {
-                auto const &width_per_sec = location.width_per_sec;
-                double const sec_per_width = 1.0 / width_per_sec;
+                auto const &scale = location.scale;
+                double const rect_width = 1.0 / scale;
 
                 struct dynamic_data {
                     std::shared_ptr<ui::dynamic_mesh_vertex_data> vertex_data;
@@ -119,16 +119,16 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
                     uint32_t vertex_rect_idx = 0;
 
-                    auto const write_handler = [&max, &min, &vertex_rect_idx, &sec_per_width,
+                    auto const write_handler = [&max, &min, &vertex_rect_idx, &rect_width,
                                                 &mesh_element_head_x_value](std::vector<ui::vertex2d_t> &vec) {
                         auto *vertex_rects_data = (ui::vertex2d_rect *)vec.data();
                         // moduleの終わりのはみ出る部分を調整したい
                         if ((vertex_rect_idx * ui::vertex2d_rect::vector_count) < vec.size()) {
                             vertex_rects_data[vertex_rect_idx].set_position(
                                 ui::region{.origin = {.x = mesh_element_head_x_value +
-                                                           static_cast<float>(vertex_rect_idx * sec_per_width),
+                                                           static_cast<float>(vertex_rect_idx * rect_width),
                                                       .y = min},
-                                           .size = {.width = static_cast<float>(sec_per_width), .height = max - min}});
+                                           .size = {.width = static_cast<float>(rect_width), .height = max - min}});
                         } else {
                             assert(0);
                         }
