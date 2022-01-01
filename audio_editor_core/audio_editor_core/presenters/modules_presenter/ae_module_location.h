@@ -16,13 +16,13 @@ struct module_location {
         static uint32_t const max_length = 512;
 
         uint32_t rect_count;
-        proc::time::range range;
+        proc::time::range range;  // module_location内の位置
 
         bool operator==(mesh_element const &rhs) const;
         bool operator!=(mesh_element const &rhs) const;
     };
 
-    identifier identifier;    // file_moduleより
+    identifier identifier;    // file_moduleと同じID
     proc::time::range range;  // track内の位置
     proc::frame_index_t file_frame;
     uint32_t sample_rate;
