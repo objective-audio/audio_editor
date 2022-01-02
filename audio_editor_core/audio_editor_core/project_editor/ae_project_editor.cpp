@@ -323,6 +323,16 @@ bool project_editor::can_jump_to_next_edge() const {
     return this->_next_edge().has_value();
 }
 
+bool project_editor::can_jump_to_beginnig() const {
+#warning todo moduleがあり、かつ、その頭の位置でなければtrue
+    return false;
+}
+
+bool project_editor::can_jump_to_end() const {
+#warning todo moduleがあり、かつ、その最後の位置でなければtrue
+    return false;
+}
+
 void project_editor::jump_to_previous_edge() {
     if (auto const edge = this->_previous_edge()) {
         this->_player->seek(edge.value());
