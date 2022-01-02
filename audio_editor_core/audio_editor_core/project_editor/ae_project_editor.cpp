@@ -324,12 +324,20 @@ bool project_editor::can_jump_to_next_edge() const {
 }
 
 bool project_editor::can_jump_to_beginnig() const {
-#warning todo moduleがあり、かつ、その頭の位置でなければtrue
+    if (auto const edge = this->_first_edge().has_value()) {
+        if (edge != this->_player->current_frame()) {
+            return true;
+        }
+    }
     return false;
 }
 
 bool project_editor::can_jump_to_end() const {
-#warning todo moduleがあり、かつ、その最後の位置でなければtrue
+    if (auto const edge = this->_last_edge().has_value()) {
+        if (edge != this->_player->current_frame()) {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -346,11 +354,15 @@ void project_editor::jump_to_next_edge() {
 }
 
 void project_editor::jump_to_beginning() {
-#warning todo
+    if (auto const edge = this->_first_edge()) {
+        this->_player->seek(edge.value());
+    }
 }
 
 void project_editor::jump_to_end() {
-#warning todo
+    if (auto const edge = this->_last_edge()) {
+        this->_player->seek(edge.value());
+    }
 }
 
 bool project_editor::can_split() const {
@@ -678,6 +690,22 @@ std::optional<proc::frame_index_t> project_editor::_next_edge() const {
     } else {
         return std::nullopt;
     }
+}
+
+std::optional<proc::frame_index_t> project_editor::_first_edge() const {
+    auto const iterator = this->_file_track->modules().cbegin();
+    if (iterator != this->_file_track->modules().cend()) {
+        return iterator->first.frame;
+    }
+    return std::nullopt;
+}
+
+std::optional<proc::frame_index_t> project_editor::_last_edge() const {
+    auto const iterator = this->_file_track->modules().crbegin();
+    if (iterator != this->_file_track->modules().crend()) {
+        return iterator->first.next_frame();
+    }
+    return std::nullopt;
 }
 
 std::map<proc::frame_index_t, marker> const &project_editor::markers() const {

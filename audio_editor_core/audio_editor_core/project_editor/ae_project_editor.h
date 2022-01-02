@@ -126,6 +126,8 @@ struct project_editor final : project_editor_for_project {
 
     [[nodiscard]] std::optional<proc::frame_index_t> _previous_edge() const;
     [[nodiscard]] std::optional<proc::frame_index_t> _next_edge() const;
+    [[nodiscard]] std::optional<proc::frame_index_t> _first_edge() const;
+    [[nodiscard]] std::optional<proc::frame_index_t> _last_edge() const;
     [[nodiscard]] bool _can_editing() const;
 };
 }  // namespace yas::ae
