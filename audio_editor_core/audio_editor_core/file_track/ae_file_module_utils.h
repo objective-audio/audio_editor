@@ -9,6 +9,8 @@
 
 namespace yas::ae::file_module_utils {
 std::optional<file_module> module(file_track_module_map_t const &, proc::frame_index_t const);
+std::optional<file_module> first_module(file_track_module_map_t const &);
+std::optional<file_module> last_module(file_track_module_map_t const &);
 std::optional<file_module> previous_module(file_track_module_map_t const &, proc::frame_index_t const);
 std::optional<file_module> next_module(file_track_module_map_t const &, proc::frame_index_t const);
 
