@@ -227,6 +227,10 @@ bool editing_root_presenter::responds_to_action(action const action) {
             return editor->can_jump_to_previous_edge();
         case action::jump_next:
             return editor->can_jump_to_next_edge();
+        case action::jump_to_beginning:
+            return editor->can_jump_to_beginnig();
+        case action::jump_to_end:
+            return editor->can_jump_to_end();
 
         case action::drop_head_and_offset:
             return editor->can_split();

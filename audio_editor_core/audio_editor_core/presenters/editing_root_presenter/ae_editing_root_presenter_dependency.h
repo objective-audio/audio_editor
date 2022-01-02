@@ -38,6 +38,8 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual bool can_nudge() const = 0;
     [[nodiscard]] virtual bool can_jump_to_previous_edge() const = 0;
     [[nodiscard]] virtual bool can_jump_to_next_edge() const = 0;
+    [[nodiscard]] virtual bool can_jump_to_beginnig() const = 0;
+    [[nodiscard]] virtual bool can_jump_to_end() const = 0;
     [[nodiscard]] virtual bool can_split() const = 0;
     [[nodiscard]] virtual bool can_erase() const = 0;
     [[nodiscard]] virtual bool can_insert_marker() const = 0;

@@ -92,6 +92,12 @@ struct project_editor_stub final : project_editor_for_project {
     bool can_jump_to_next_edge() const override {
         return false;
     }
+    bool can_jump_to_beginnig() const override {
+        return false;
+    }
+    bool can_jump_to_end() const override {
+        return false;
+    }
     bool can_split() const override {
         return false;
     }

@@ -178,6 +178,12 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action::jump_next:
                     this->jump_to_next_edge();
                     break;
+                case action::jump_to_beginning:
+                    this->jump_to_beginning();
+                    break;
+                case action::jump_to_end:
+                    this->jump_to_end();
+                    break;
                 case action::drop_head_and_offset:
                     this->drop_head_and_offset();
                     break;
@@ -317,6 +323,24 @@ bool project_editor::can_jump_to_next_edge() const {
     return this->_next_edge().has_value();
 }
 
+bool project_editor::can_jump_to_beginnig() const {
+    if (auto const edge = this->_first_edge().has_value()) {
+        if (edge != this->_player->current_frame()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool project_editor::can_jump_to_end() const {
+    if (auto const edge = this->_last_edge().has_value()) {
+        if (edge != this->_player->current_frame()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void project_editor::jump_to_previous_edge() {
     if (auto const edge = this->_previous_edge()) {
         this->_player->seek(edge.value());
@@ -325,6 +349,18 @@ void project_editor::jump_to_previous_edge() {
 
 void project_editor::jump_to_next_edge() {
     if (auto const edge = this->_next_edge()) {
+        this->_player->seek(edge.value());
+    }
+}
+
+void project_editor::jump_to_beginning() {
+    if (auto const edge = this->_first_edge()) {
+        this->_player->seek(edge.value());
+    }
+}
+
+void project_editor::jump_to_end() {
+    if (auto const edge = this->_last_edge()) {
         this->_player->seek(edge.value());
     }
 }
@@ -651,6 +687,22 @@ std::optional<proc::frame_index_t> project_editor::_next_edge() const {
         return file_track_edge.value();
     } else if (marker_pool_edge.has_value()) {
         return marker_pool_edge.value();
+    } else {
+        return std::nullopt;
+    }
+}
+
+std::optional<proc::frame_index_t> project_editor::_first_edge() const {
+    if (auto const module = this->_file_track->first_module()) {
+        return module.value().range.frame;
+    } else {
+        return std::nullopt;
+    }
+}
+
+std::optional<proc::frame_index_t> project_editor::_last_edge() const {
+    if (auto const module = this->_file_track->last_module()) {
+        return module.value().range.next_frame();
     } else {
         return std::nullopt;
     }

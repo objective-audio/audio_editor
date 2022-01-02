@@ -85,6 +85,18 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)jumpToBeginning:(NSMenuItem *)sender {
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::jump_to_beginning);
+    }
+}
+
+- (IBAction)jumpToEnd:(NSMenuItem *)sender {
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::jump_to_end);
+    }
+}
+
 - (IBAction)dropHeadAndOffset:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
         controller->handle_action(action::drop_head_and_offset);
@@ -232,6 +244,10 @@ using namespace yas::ae;
         return action::jump_previous;
     } else if (selector == @selector(jumpNext:)) {
         return action::jump_next;
+    } else if (selector == @selector(jumpToBeginning:)) {
+        return action::jump_to_beginning;
+    } else if (selector == @selector(jumpToEnd:)) {
+        return action::jump_to_end;
     } else if (selector == @selector(dropHeadAndOffset:)) {
         return action::drop_head_and_offset;
     } else if (selector == @selector(split:)) {
@@ -291,6 +307,10 @@ using namespace yas::ae;
             return @selector(jumpPrevious:);
         case action::jump_next:
             return @selector(jumpNext:);
+        case action::jump_to_beginning:
+            return @selector(jumpToBeginning:);
+        case action::jump_to_end:
+            return @selector(jumpToEnd:);
         case action::drop_head_and_offset:
             return @selector(dropHeadAndOffset:);
         case action::split:

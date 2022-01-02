@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -352,16 +352,26 @@
                                                 <action selector="nudgeNext:" target="Ady-hI-5gd" id="HWB-JC-WGu"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Jump Previous" keyEquivalent="" id="6gq-aS-lqI">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        <menuItem title="Jump Previous" keyEquivalent="" id="6gq-aS-lqI">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                             <connections>
                                                 <action selector="jumpPrevious:" target="Ady-hI-5gd" id="HTZ-jZ-X9L"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Jump Next" keyEquivalent="" id="oXG-5i-J63">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        <menuItem title="Jump Next" keyEquivalent="" id="oXG-5i-J63">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                             <connections>
                                                 <action selector="jumpNext:" target="Ady-hI-5gd" id="bE6-jN-FEn"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Jump To Beginning" keyEquivalent="" id="GWX-E9-ziM">
+                                            <connections>
+                                                <action selector="jumpToBeginning:" target="Ady-hI-5gd" id="aT3-24-uyW"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Jump To End" keyEquivalent="" id="jlN-3t-0OH">
+                                            <connections>
+                                                <action selector="jumpToEnd:" target="Ady-hI-5gd" id="Ymz-BP-Me5"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Drop Head and Offset" keyEquivalent="a" id="eb1-1v-ryf">

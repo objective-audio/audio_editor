@@ -17,6 +17,22 @@ std::optional<file_module> file_module_utils::module(file_track_module_map_t con
     return std::nullopt;
 }
 
+std::optional<file_module> file_module_utils::first_module(file_track_module_map_t const &modules) {
+    auto const iterator = modules.cbegin();
+    if (iterator != modules.cend()) {
+        return iterator->second;
+    }
+    return std::nullopt;
+}
+
+std::optional<file_module> file_module_utils::last_module(file_track_module_map_t const &modules) {
+    auto const iterator = modules.crbegin();
+    if (iterator != modules.crend()) {
+        return iterator->second;
+    }
+    return std::nullopt;
+}
+
 std::optional<file_module> file_module_utils::previous_module(file_track_module_map_t const &modules,
                                                               proc::frame_index_t const frame) {
     auto it = modules.rbegin();

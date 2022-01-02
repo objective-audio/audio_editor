@@ -31,8 +31,12 @@ struct project_editor final : project_editor_for_project {
 
     [[nodiscard]] bool can_jump_to_previous_edge() const override;
     [[nodiscard]] bool can_jump_to_next_edge() const override;
+    [[nodiscard]] bool can_jump_to_beginnig() const override;
+    [[nodiscard]] bool can_jump_to_end() const override;
     void jump_to_previous_edge();
     void jump_to_next_edge();
+    void jump_to_beginning();
+    void jump_to_end();
 
     [[nodiscard]] bool can_split() const override;
     void split();
@@ -122,6 +126,8 @@ struct project_editor final : project_editor_for_project {
 
     [[nodiscard]] std::optional<proc::frame_index_t> _previous_edge() const;
     [[nodiscard]] std::optional<proc::frame_index_t> _next_edge() const;
+    [[nodiscard]] std::optional<proc::frame_index_t> _first_edge() const;
+    [[nodiscard]] std::optional<proc::frame_index_t> _last_edge() const;
     [[nodiscard]] bool _can_editing() const;
 };
 }  // namespace yas::ae
