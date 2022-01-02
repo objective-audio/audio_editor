@@ -53,6 +53,14 @@ std::optional<file_module> file_track::splittable_module_at(proc::frame_index_t 
     return file_module_utils::splittable_module(this->_modules, frame);
 }
 
+std::optional<file_module> file_track::first_module() const {
+    return file_module_utils::first_module(this->_modules);
+}
+
+std::optional<file_module> file_track::last_module() const {
+    return file_module_utils::last_module(this->_modules);
+}
+
 std::optional<proc::frame_index_t> file_track::next_edge(proc::frame_index_t const frame) const {
     if (auto const &module = this->module_at(frame); module.has_value()) {
         return module->range.next_frame();

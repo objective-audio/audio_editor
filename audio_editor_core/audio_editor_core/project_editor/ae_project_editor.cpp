@@ -693,19 +693,19 @@ std::optional<proc::frame_index_t> project_editor::_next_edge() const {
 }
 
 std::optional<proc::frame_index_t> project_editor::_first_edge() const {
-    auto const iterator = this->_file_track->modules().cbegin();
-    if (iterator != this->_file_track->modules().cend()) {
-        return iterator->first.frame;
+    if (auto const module = this->_file_track->first_module()) {
+        return module.value().range.frame;
+    } else {
+        return std::nullopt;
     }
-    return std::nullopt;
 }
 
 std::optional<proc::frame_index_t> project_editor::_last_edge() const {
-    auto const iterator = this->_file_track->modules().crbegin();
-    if (iterator != this->_file_track->modules().crend()) {
-        return iterator->first.next_frame();
+    if (auto const module = this->_file_track->last_module()) {
+        return module.value().range.next_frame();
+    } else {
+        return std::nullopt;
     }
-    return std::nullopt;
 }
 
 std::map<proc::frame_index_t, marker> const &project_editor::markers() const {

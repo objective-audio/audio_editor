@@ -55,6 +55,8 @@ struct file_track_for_project_editor {
     [[nodiscard]] virtual std::optional<file_module> previous_module_at(proc::frame_index_t const) const = 0;
     [[nodiscard]] virtual std::optional<file_module> next_module_at(proc::frame_index_t const) const = 0;
     [[nodiscard]] virtual std::optional<file_module> splittable_module_at(proc::frame_index_t const) const = 0;
+    [[nodiscard]] virtual std::optional<file_module> first_module() const = 0;
+    [[nodiscard]] virtual std::optional<file_module> last_module() const = 0;
     [[nodiscard]] virtual std::optional<proc::frame_index_t> next_edge(proc::frame_index_t const) const = 0;
     [[nodiscard]] virtual std::optional<proc::frame_index_t> previous_edge(proc::frame_index_t const) const = 0;
     virtual void split_at(proc::frame_index_t const) = 0;
