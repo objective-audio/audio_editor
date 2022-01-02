@@ -178,6 +178,12 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action::jump_next:
                     this->jump_to_next_edge();
                     break;
+                case action::jump_to_beginning:
+#warning todo
+                    break;
+                case action::jump_to_end:
+#warning todo
+                    break;
                 case action::drop_head_and_offset:
                     this->drop_head_and_offset();
                     break;

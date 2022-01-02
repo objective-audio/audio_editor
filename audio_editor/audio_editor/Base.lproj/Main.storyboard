@@ -364,6 +364,16 @@
                                                 <action selector="jumpNext:" target="Ady-hI-5gd" id="bE6-jN-FEn"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Jump To Beginning" keyEquivalent="" id="GWX-E9-ziM">
+                                            <connections>
+                                                <action selector="jumpToBeginning:" target="Ady-hI-5gd" id="aT3-24-uyW"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Jump To End" keyEquivalent="" id="jlN-3t-0OH">
+                                            <connections>
+                                                <action selector="jumpToEnd:" target="Ady-hI-5gd" id="Ymz-BP-Me5"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Drop Head and Offset" keyEquivalent="a" id="eb1-1v-ryf">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>

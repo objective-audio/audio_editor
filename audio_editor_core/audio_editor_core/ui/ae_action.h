@@ -11,6 +11,8 @@ enum class action {
     nudge_next,
     jump_previous,
     jump_next,
+    jump_to_beginning,
+    jump_to_end,
     drop_head_and_offset,
     split,
     drop_tail_and_offset,
