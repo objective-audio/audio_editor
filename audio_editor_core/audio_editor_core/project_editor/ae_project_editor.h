@@ -35,6 +35,8 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_jump_to_end() const override;
     void jump_to_previous_edge();
     void jump_to_next_edge();
+    void jump_to_beginning();
+    void jump_to_end();
 
     [[nodiscard]] bool can_split() const override;
     void split();

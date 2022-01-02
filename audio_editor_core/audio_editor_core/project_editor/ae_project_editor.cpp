@@ -179,10 +179,10 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     this->jump_to_next_edge();
                     break;
                 case action::jump_to_beginning:
-#warning todo
+                    this->jump_to_beginning();
                     break;
                 case action::jump_to_end:
-#warning todo
+                    this->jump_to_end();
                     break;
                 case action::drop_head_and_offset:
                     this->drop_head_and_offset();
@@ -343,6 +343,14 @@ void project_editor::jump_to_next_edge() {
     if (auto const edge = this->_next_edge()) {
         this->_player->seek(edge.value());
     }
+}
+
+void project_editor::jump_to_beginning() {
+#warning todo
+}
+
+void project_editor::jump_to_end() {
+#warning todo
 }
 
 bool project_editor::can_split() const {
