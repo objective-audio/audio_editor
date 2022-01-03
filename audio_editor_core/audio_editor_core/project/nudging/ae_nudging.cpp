@@ -30,3 +30,20 @@ void nudging::set_unit_count(uint32_t const count) {
 uint32_t nudging::unit_count() const {
     return this->_unit_count;
 }
+
+uint32_t nudging::sample_count() const {
+    return this->_sample_count_for_kind() * this->_unit_count;
+}
+
+uint32_t nudging::_sample_count_for_kind() const {
+    switch (this->kind()) {
+        case nudging_kind::sample:
+            return 1;
+        case nudging_kind::milisecond:
+            return this->_sample_rate / 1000;
+        case nudging_kind::second:
+            return this->_sample_rate;
+        case nudging_kind::minute:
+            return this->_sample_rate * 60;
+    }
+}

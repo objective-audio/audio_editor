@@ -18,11 +18,15 @@ struct nudging final : nudging_for_project_editor {
     void set_unit_count(uint32_t const);
     uint32_t unit_count() const;
 
+    uint32_t sample_count() const;
+
    private:
     proc::sample_rate_t const _sample_rate;
     nudging_kind _kind;
     uint32_t _unit_count;
 
     nudging(proc::sample_rate_t const);
+
+    uint32_t _sample_count_for_kind() const;
 };
 }  // namespace yas::ae
