@@ -49,4 +49,8 @@ void pinch_gesture_controller::handle_modifier(modifier_event_state const &state
             this->_is_modified = false;
             break;
     }
+
+    if (auto const zooming = this->_zooming.lock()) {
+        zooming->end();
+    }
 }
