@@ -12,5 +12,6 @@ struct keyboard_for_ui_root {
     virtual ~keyboard_for_ui_root() = default;
 
     [[nodiscard]] virtual observing::endable observe_key(std::function<void(ae::key const &)> &&) = 0;
+    [[nodiscard]] virtual observing::endable observe_modifier(std::function<void(ae::modifier_event const &)> &&) = 0;
 };
 }  // namespace yas::ae
