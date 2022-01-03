@@ -39,16 +39,16 @@ float track_presenter::current_position() const {
 }
 
 double track_presenter::horizontal_zooming_scale() const {
-    if (auto const horizontal_zooming = this->_horizontal_zooming.lock()) {
-        return horizontal_zooming->scale();
+    if (auto const zooming = this->_horizontal_zooming.lock()) {
+        return zooming->scale();
     } else {
         return 1.0;
     }
 }
 
 observing::syncable track_presenter::observe_horizontal_zooming_scale(std::function<void(double const &)> &&handler) {
-    if (auto const horizontal_zooming = this->_horizontal_zooming.lock()) {
-        return horizontal_zooming->observe_scale(std::move(handler));
+    if (auto const zooming = this->_horizontal_zooming.lock()) {
+        return zooming->observe_scale(std::move(handler));
     }
     return observing::syncable{};
 }
