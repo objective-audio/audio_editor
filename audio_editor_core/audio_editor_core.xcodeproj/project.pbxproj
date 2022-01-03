@@ -16,6 +16,9 @@
 		B606EB042747EDCF006C3DD2 /* ae_exporter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B606EB032747EDCF006C3DD2 /* ae_exporter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B607E7AE276EDEC00048F75C /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B607E7AD276EDEC00048F75C /* Accelerate.framework */; };
 		B6097BC1272535FE008A6D57 /* ae_gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6097BC0272535FE008A6D57 /* ae_gesture.cpp */; };
+		B61262F92782FC560019B364 /* ae_nudging_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262F72782FC560019B364 /* ae_nudging_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B61262FC2782FF030019B364 /* ae_nudging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FA2782FF030019B364 /* ae_nudging.cpp */; };
+		B61262FD2782FF030019B364 /* ae_nudging.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FB2782FF030019B364 /* ae_nudging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD62743D0C400589393 /* ae_dialog_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD42743D0C400589393 /* ae_dialog_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD72743D0C400589393 /* ae_dialog_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */; };
 		B6169BD92743D91400589393 /* ae_dialog_presenter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD82743D91400589393 /* ae_dialog_presenter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -201,6 +204,9 @@
 		B606EB032747EDCF006C3DD2 /* ae_exporter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_exporter_types.h; sourceTree = "<group>"; };
 		B607E7AD276EDEC00048F75C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		B6097BC0272535FE008A6D57 /* ae_gesture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_gesture.cpp; sourceTree = "<group>"; };
+		B61262F72782FC560019B364 /* ae_nudging_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_types.h; sourceTree = "<group>"; };
+		B61262FA2782FF030019B364 /* ae_nudging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudging.cpp; sourceTree = "<group>"; };
+		B61262FB2782FF030019B364 /* ae_nudging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging.h; sourceTree = "<group>"; };
 		B6169BD42743D0C400589393 /* ae_dialog_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_dialog_presenter.h; sourceTree = "<group>"; };
 		B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_dialog_presenter.cpp; sourceTree = "<group>"; };
 		B6169BD82743D91400589393 /* ae_dialog_presenter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_dialog_presenter_types.h; sourceTree = "<group>"; };
@@ -446,6 +452,16 @@
 				B6C3A58827102CA700514B94 /* track */,
 			);
 			path = ui;
+			sourceTree = "<group>";
+		};
+		B61262F52782FC310019B364 /* nudging */ = {
+			isa = PBXGroup;
+			children = (
+				B61262F72782FC560019B364 /* ae_nudging_types.h */,
+				B61262FA2782FF030019B364 /* ae_nudging.cpp */,
+				B61262FB2782FF030019B364 /* ae_nudging.h */,
+			);
+			path = nudging;
 			sourceTree = "<group>";
 		};
 		B6169BD32743D0B400589393 /* dialog_presenter */ = {
@@ -704,6 +720,7 @@
 				B666CE4B26351D7900C1693D /* ae_project_url.h */,
 				B69CF55F262AC49C007A0A75 /* ae_project.cpp */,
 				B69CF560262AC49C007A0A75 /* ae_project.h */,
+				B61262F52782FC310019B364 /* nudging */,
 				B62D8FA52723CE5100779D42 /* scrolling */,
 				B62D8FA42723CE4D00779D42 /* zooming */,
 			);
@@ -730,7 +747,6 @@
 		B6A997432629B34E00DAC3FE /* audio_editor_core */ = {
 			isa = PBXGroup;
 			children = (
-				B675F93B2765CB84002FE285 /* waveform_mesh_importer */,
 				B6A997BE2629C0AA00DAC3FE /* app */,
 				B6A997612629B41B00DAC3FE /* audio_editor_core_umbrella.h */,
 				B6A997442629B34E00DAC3FE /* audio_editor_core.h */,
@@ -751,6 +767,7 @@
 				B695A38A27657A6E004CB28F /* recycle_pool */,
 				B605EA6D2657E51B0031B177 /* ui */,
 				B666CDE52634124100C1693D /* utils */,
+				B675F93B2765CB84002FE285 /* waveform_mesh_importer */,
 			);
 			path = audio_editor_core;
 			sourceTree = "<group>";
@@ -907,6 +924,7 @@
 				B6DBC3642763474E001AF1D3 /* ae_marker_location_pool.h in Headers */,
 				B69708EB2639A15E0045E975 /* ae_file_importer.h in Headers */,
 				B64E94F82652B7660056F511 /* ae_marker_pool_types.h in Headers */,
+				B61262F92782FC560019B364 /* ae_nudging_types.h in Headers */,
 				B6BDCCFB273A9FA400B6560C /* ae_root_presenter_dependency.h in Headers */,
 				B632197E2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h in Headers */,
 				B6C3926A2741442400ACFFF4 /* ae_action_controller.h in Headers */,
@@ -989,6 +1007,7 @@
 				B681357C271EF1FA009CC0FC /* ae_pinch_gesture_controller.h in Headers */,
 				B6966F41272E639D00A90733 /* ae_db_utils.h in Headers */,
 				B6B563C6271BD3FD0003ED60 /* ae_common_utils.h in Headers */,
+				B61262FD2782FF030019B364 /* ae_nudging.h in Headers */,
 				B6BDCCF82739636C00B6560C /* ae_project_maker.h in Headers */,
 				B6966F33272CEF9100A90733 /* ae_editing_root_presenter_types.h in Headers */,
 				B605EA712657E5530031B177 /* ae_ui_editing_root.h in Headers */,
@@ -1084,6 +1103,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B69708EA2639A15E0045E975 /* ae_file_importer.cpp in Sources */,
+				B61262FC2782FF030019B364 /* ae_nudging.cpp in Sources */,
 				B60204F6263ABBC400CFC752 /* ae_editing_root_presenter_utils.cpp in Sources */,
 				B6BDCCF92739636C00B6560C /* ae_project_maker.cpp in Sources */,
 				B6CCC48E274B4B1600B563C8 /* ae_pasteboard.cpp in Sources */,
