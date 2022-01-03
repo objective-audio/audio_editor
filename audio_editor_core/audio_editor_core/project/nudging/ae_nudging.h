@@ -13,12 +13,12 @@ struct nudging final : nudging_for_project_editor {
     [[nodiscard]] static std::shared_ptr<nudging> make_shared(proc::sample_rate_t const);
 
     void set_kind(nudging_kind const);
-    nudging_kind kind() const;
+    [[nodiscard]] nudging_kind kind() const;
 
     void set_unit_count(uint32_t const);
-    uint32_t unit_count() const;
+    [[nodiscard]] uint32_t unit_count() const;
 
-    uint32_t sample_count() const;
+    [[nodiscard]] uint32_t sample_count() const override;
 
    private:
     proc::sample_rate_t const _sample_rate;
