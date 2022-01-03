@@ -77,6 +77,10 @@ std::shared_ptr<zooming_for_project> const &project::horizontal_zooming() const 
     return this->_horizontal_zooming;
 }
 
+std::shared_ptr<zooming_for_project> const &project::vertical_zooming() const {
+    return this->_vertical_zooming;
+}
+
 std::shared_ptr<scrolling_for_project> const &project::scrolling() const {
     return this->_scrolling;
 }
