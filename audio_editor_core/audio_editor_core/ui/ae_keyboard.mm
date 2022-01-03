@@ -15,13 +15,23 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
             switch (event->type()) {
                 case ui::event_type::modifier: {
                     auto const modifier_event = event->get<ui::modifier>();
+                    auto const flags = modifier_event.flag();
 
                     switch (event->phase()) {
                         case ui::event_phase::began: {
-                            this->_modifiers.insert(modifier_event.flag());
+                            if (!this->_modifiers.contains(flags)) {
+                                this->_modifiers.insert(flags);
+                                this->_modifier_notifier->notify({.state = ae::modifier_event_state::began,
+                                                                  .modifier = keyboard_utils::to_modifier(flags)});
+                            }
                         } break;
+
                         case ui::event_phase::ended: {
-                            this->_modifiers.erase(modifier_event.flag());
+                            if (this->_modifiers.contains(flags)) {
+                                this->_modifiers.erase(modifier_event.flag());
+                                this->_modifier_notifier->notify({.state = ae::modifier_event_state::ended,
+                                                                  .modifier = keyboard_utils::to_modifier(flags)});
+                            }
                         } break;
 
                         default:
