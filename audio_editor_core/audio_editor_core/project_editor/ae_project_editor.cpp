@@ -26,7 +26,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<database_for_project_editor> const &database,
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
                                std::shared_ptr<action_controller> const &action_controller,
-                               std::shared_ptr<dialog_presenter> const &dialog_presenter)
+                               std::shared_ptr<dialog_presenter> const &dialog_presenter,
+                               std::shared_ptr<nudging_for_project_editor> const &nudging)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),
@@ -38,7 +39,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _database(database),
       _exporter(exporter),
       _action_controller(action_controller),
-      _dialog_presenter(dialog_presenter) {
+      _dialog_presenter(dialog_presenter),
+      _nudging(nudging) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -303,7 +305,8 @@ void project_editor::nudge_previous() {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    this->_player->seek(current_frame - 1);
+    frame_index_t const diff = this->_nudging->unit_sample_count();
+    this->_player->seek(current_frame - diff);
 }
 
 void project_editor::nudge_next() {
@@ -312,7 +315,8 @@ void project_editor::nudge_next() {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    this->_player->seek(current_frame + 1);
+    frame_index_t const diff = this->_nudging->unit_sample_count();
+    this->_player->seek(current_frame + diff);
 }
 
 bool project_editor::can_jump_to_previous_edge() const {
@@ -733,14 +737,15 @@ bool project_editor::_can_editing() const {
     return !this->_exporter->is_exporting();
 }
 
-std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_file_url, url const &db_file_url,
-                                                            ae::file_info const &file_info,
-                                                            std::shared_ptr<player_for_project_editor> const &player,
-                                                            std::shared_ptr<action_controller> const &action_controller,
-                                                            std::shared_ptr<dialog_presenter> const &dialog_presenter) {
+std::shared_ptr<project_editor> project_editor::make_shared(
+    url const &editing_file_url, url const &db_file_url, ae::file_info const &file_info,
+    std::shared_ptr<player_for_project_editor> const &player,
+    std::shared_ptr<action_controller> const &action_controller,
+    std::shared_ptr<dialog_presenter> const &dialog_presenter,
+    std::shared_ptr<nudging_for_project_editor> const &nudging) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
                        pasteboard::make_shared(), database::make_shared(db_file_url), exporter::make_shared(),
-                       action_controller, dialog_presenter);
+                       action_controller, dialog_presenter, nudging);
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
@@ -752,8 +757,9 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<action_controller> const &action_controller,
-    std::shared_ptr<dialog_presenter> const &dialog_presenter) {
+    std::shared_ptr<dialog_presenter> const &dialog_presenter,
+    std::shared_ptr<nudging_for_project_editor> const &nudging) {
     return std::shared_ptr<project_editor>(new project_editor{editing_file_url, file_info, player, file_track,
                                                               marker_pool, pasteboard, database, exporter,
-                                                              action_controller, dialog_presenter});
+                                                              action_controller, dialog_presenter, nudging});
 }
