@@ -34,14 +34,19 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
     standard->renderer()
         ->observe_will_render([this](auto const &) {
             auto const time = this->_presenter->current_position();
-            auto const scale = this->_presenter->zooming_scale();
+            auto const scale = this->_presenter->horizontal_zooming_scale();
             float const x = -time * ui_track_constants::standard_width_per_sec * scale;
             this->_time_node->set_position(ui::point{x, 0.0f});
         })
         .end()
         ->add_to(this->_pool);
 
-    presenter->observe_zooming_scale([this](double const &) { this->_update_scale(); }).sync()->add_to(this->_pool);
+    presenter->observe_horizontal_zooming_scale([this](double const &) { this->_update_scale(); })
+        .sync()
+        ->add_to(this->_pool);
+    presenter->observe_vertical_zooming_scale([this](double const &) { this->_update_scale(); })
+        .sync()
+        ->add_to(this->_pool);
 
     this->_standard->event_manager()
         ->observe([this](std::shared_ptr<ui::event> const &event) {
@@ -49,7 +54,8 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
                 auto const &scroll_event = event->get<ui::scroll>();
                 gesture_state const state = to_gesture_state(event->phase());
 
-                auto const sec_width = ui_track_constants::standard_width_per_sec * this->_presenter->zooming_scale();
+                auto const sec_width =
+                    ui_track_constants::standard_width_per_sec * this->_presenter->horizontal_zooming_scale();
                 auto const delta_time = -scroll_event.deltaX() / sec_width;
 
                 this->_scroll_gesture_controller->handle_gesture(
@@ -85,8 +91,8 @@ std::shared_ptr<ui_track> ui_track::make_shared(std::shared_ptr<ui::standard> co
 }
 
 void ui_track::_update_scale() {
-    float const width = this->_presenter->zooming_scale() * ui_track_constants::standard_width_per_sec;
-    float const height = std::ceil(this->_standard->view_look()->view_size().height * 0.8);
+    float const width = this->_presenter->horizontal_zooming_scale() * ui_track_constants::standard_width_per_sec;
+    float const height = std::ceil(this->_presenter->vertical_zooming_scale() * ui_track_constants::standard_height);
 
     ui::size const scale{width, height};
     this->_modules->set_scale(scale);

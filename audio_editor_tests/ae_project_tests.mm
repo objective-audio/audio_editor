@@ -206,13 +206,15 @@ struct scrolling_stub final : scrolling_for_project {
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
     auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
-    auto const zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const horizontal_zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const vertical_zooming = std::make_shared<test_utils::zooming_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const action_controller = ae::action_controller::make_shared();
     auto const dialog_presenter = ae::dialog_presenter::make_shared();
 
-    auto project = project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, player,
-                                        editor_maker, zooming, scrolling, action_controller, dialog_presenter);
+    auto project =
+        project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, player, editor_maker,
+                             horizontal_zooming, vertical_zooming, scrolling, action_controller, dialog_presenter);
 
     XCTAssertTrue(project != nullptr);
     XCTAssertEqual(project->file_url(), file_url);
@@ -225,7 +227,8 @@ struct scrolling_stub final : scrolling_for_project {
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
     auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
-    auto const zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const horizontal_zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const vertical_zooming = std::make_shared<test_utils::zooming_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const action_controller = ae::action_controller::make_shared();
     auto const dialog_presenter = ae::dialog_presenter::make_shared();
@@ -242,9 +245,9 @@ struct scrolling_stub final : scrolling_for_project {
         return false;
     };
 
-    auto const project =
-        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, player,
-                             editor_maker, zooming, scrolling, action_controller, dialog_presenter);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              player, editor_maker, horizontal_zooming, vertical_zooming, scrolling,
+                                              action_controller, dialog_presenter);
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -260,7 +263,8 @@ struct scrolling_stub final : scrolling_for_project {
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
     auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
-    auto const zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const horizontal_zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const vertical_zooming = std::make_shared<test_utils::zooming_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const action_controller = ae::action_controller::make_shared();
     auto const dialog_presenter = ae::dialog_presenter::make_shared();
@@ -268,9 +272,9 @@ struct scrolling_stub final : scrolling_for_project {
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
-    auto const project =
-        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, player,
-                             editor_maker, zooming, scrolling, action_controller, dialog_presenter);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              player, editor_maker, horizontal_zooming, vertical_zooming, scrolling,
+                                              action_controller, dialog_presenter);
 
     std::vector<project_state> called;
 
@@ -316,7 +320,8 @@ struct scrolling_stub final : scrolling_for_project {
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
     auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
-    auto const zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const horizontal_zooming = std::make_shared<test_utils::zooming_stub>();
+    auto const vertical_zooming = std::make_shared<test_utils::zooming_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const action_controller = ae::action_controller::make_shared();
     auto const dialog_presenter = ae::dialog_presenter::make_shared();
@@ -324,9 +329,9 @@ struct scrolling_stub final : scrolling_for_project {
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
-    auto const project =
-        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, player,
-                             editor_maker, zooming, scrolling, action_controller, dialog_presenter);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              player, editor_maker, horizontal_zooming, vertical_zooming, scrolling,
+                                              action_controller, dialog_presenter);
 
     std::vector<project_state> called;
 
