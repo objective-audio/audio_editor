@@ -26,18 +26,20 @@ pinch_gesture_controller::pinch_gesture_controller(
 }
 
 void pinch_gesture_controller::handle_gesture(pinch_gesture const &gesture) {
-    if (auto const horizontal_zooming = this->_horizontal_zooming.lock()) {
+    auto const &current_zooming = this->_is_modified ? this->_vertical_zooming : this->_horizontal_zooming;
+
+    if (auto const zooming = current_zooming.lock()) {
         switch (gesture.state) {
             case gesture_state::began:
-                horizontal_zooming->begin();
-                horizontal_zooming->set_magnification(gesture.magnification);
+                zooming->begin();
+                zooming->set_magnification(gesture.magnification);
                 break;
             case gesture_state::changed:
-                horizontal_zooming->set_magnification(gesture.magnification);
+                zooming->set_magnification(gesture.magnification);
                 break;
             case gesture_state::ended:
-                horizontal_zooming->set_magnification(gesture.magnification);
-                horizontal_zooming->end();
+                zooming->set_magnification(gesture.magnification);
+                zooming->end();
                 break;
         }
     }
@@ -53,7 +55,11 @@ void pinch_gesture_controller::handle_modifier(modifier_event_state const &state
             break;
     }
 
-    if (auto const horizontal_zooming = this->_horizontal_zooming.lock()) {
-        horizontal_zooming->end();
+    if (auto const zooming = this->_horizontal_zooming.lock()) {
+        zooming->end();
+    }
+
+    if (auto const zooming = this->_vertical_zooming.lock()) {
+        zooming->end();
     }
 }
