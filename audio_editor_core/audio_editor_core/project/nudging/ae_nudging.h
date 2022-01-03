@@ -18,7 +18,7 @@ struct nudging final : nudging_for_project_editor {
     void set_unit_count(uint32_t const);
     [[nodiscard]] uint32_t unit_count() const;
 
-    [[nodiscard]] uint32_t sample_count() const override;
+    [[nodiscard]] uint32_t unit_sample_count() const override;
 
    private:
     proc::sample_rate_t const _sample_rate;

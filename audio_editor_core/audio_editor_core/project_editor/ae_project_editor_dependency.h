@@ -140,6 +140,6 @@ struct pasteboard_for_project_editor {
 struct nudging_for_project_editor {
     virtual ~nudging_for_project_editor() = default;
 
-    [[nodiscard]] virtual uint32_t sample_count() const = 0;
+    [[nodiscard]] virtual uint32_t unit_sample_count() const = 0;
 };
 }  // namespace yas::ae

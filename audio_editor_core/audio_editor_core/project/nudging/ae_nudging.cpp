@@ -31,7 +31,7 @@ uint32_t nudging::unit_count() const {
     return this->_unit_count;
 }
 
-uint32_t nudging::sample_count() const {
+uint32_t nudging::unit_sample_count() const {
     return this->_sample_count_for_kind() * this->_unit_count;
 }
 
