@@ -4,6 +4,8 @@
 
 #include "ae_nudging.h"
 
+#include <audio_editor_core/ae_nudging_utils.h>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -33,18 +35,5 @@ uint32_t nudging::unit_count() const {
 }
 
 uint32_t nudging::unit_sample_count() const {
-    return this->_sample_count_for_kind() * this->_unit_count;
-}
-
-uint32_t nudging::_sample_count_for_kind() const {
-    switch (this->kind()) {
-        case nudging_kind::sample:
-            return 1;
-        case nudging_kind::milisecond:
-            return this->_sample_rate / 1000;
-        case nudging_kind::second:
-            return this->_sample_rate;
-        case nudging_kind::minute:
-            return this->_sample_rate * 60;
-    }
+    return nudging_utils::to_sample_count(this->_kind, this->_sample_rate) * this->_unit_count;
 }

@@ -19,6 +19,8 @@
 		B61262F92782FC560019B364 /* ae_nudging_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262F72782FC560019B364 /* ae_nudging_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B61262FC2782FF030019B364 /* ae_nudging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FA2782FF030019B364 /* ae_nudging.cpp */; };
 		B61262FD2782FF030019B364 /* ae_nudging.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FB2782FF030019B364 /* ae_nudging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6126300278329410019B364 /* ae_nudging_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FE278329410019B364 /* ae_nudging_utils.cpp */; };
+		B6126301278329410019B364 /* ae_nudging_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FF278329410019B364 /* ae_nudging_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD62743D0C400589393 /* ae_dialog_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD42743D0C400589393 /* ae_dialog_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD72743D0C400589393 /* ae_dialog_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */; };
 		B6169BD92743D91400589393 /* ae_dialog_presenter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD82743D91400589393 /* ae_dialog_presenter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -207,6 +209,8 @@
 		B61262F72782FC560019B364 /* ae_nudging_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_types.h; sourceTree = "<group>"; };
 		B61262FA2782FF030019B364 /* ae_nudging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudging.cpp; sourceTree = "<group>"; };
 		B61262FB2782FF030019B364 /* ae_nudging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging.h; sourceTree = "<group>"; };
+		B61262FE278329410019B364 /* ae_nudging_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudging_utils.cpp; sourceTree = "<group>"; };
+		B61262FF278329410019B364 /* ae_nudging_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_utils.h; sourceTree = "<group>"; };
 		B6169BD42743D0C400589393 /* ae_dialog_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_dialog_presenter.h; sourceTree = "<group>"; };
 		B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_dialog_presenter.cpp; sourceTree = "<group>"; };
 		B6169BD82743D91400589393 /* ae_dialog_presenter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_dialog_presenter_types.h; sourceTree = "<group>"; };
@@ -458,6 +462,8 @@
 			isa = PBXGroup;
 			children = (
 				B61262F72782FC560019B364 /* ae_nudging_types.h */,
+				B61262FE278329410019B364 /* ae_nudging_utils.cpp */,
+				B61262FF278329410019B364 /* ae_nudging_utils.h */,
 				B61262FA2782FF030019B364 /* ae_nudging.cpp */,
 				B61262FB2782FF030019B364 /* ae_nudging.h */,
 			);
@@ -969,6 +975,7 @@
 				B6BE6BA1273681090097C99D /* ae_window_presenter_dependency.h in Headers */,
 				B695A3892764D87E004CB28F /* ae_display_space_types.h in Headers */,
 				B6CCC490274BC16C00B563C8 /* ae_pasteboard_types.h in Headers */,
+				B6126301278329410019B364 /* ae_nudging_utils.h in Headers */,
 				B6C3A58627102C9800514B94 /* ae_ui_modules.h in Headers */,
 				B62D8FA32723CE3E00779D42 /* ae_scrolling_types.h in Headers */,
 				B666F17B2759CCEA0040D306 /* ae_display_space.h in Headers */,
@@ -1130,6 +1137,7 @@
 				B6DBC36F2764447D001AF1D3 /* ae_marker_location.cpp in Sources */,
 				B6A55ECC266C81980039E56F /* ae_ui_layout_utils.cpp in Sources */,
 				B64504BB271A94D2009E05D6 /* ae_modules_presenter.cpp in Sources */,
+				B6126300278329410019B364 /* ae_nudging_utils.cpp in Sources */,
 				B64E9FD02650EE2C00758FE8 /* ae_marker.cpp in Sources */,
 				B64504B4271A7316009E05D6 /* ae_markers_presenter.cpp in Sources */,
 				B69607A4276CA022002B2BE0 /* ae_module_waveforms_presenter.cpp in Sources */,

@@ -26,7 +26,5 @@ struct nudging final : nudging_for_project_editor {
     uint32_t _unit_count;
 
     nudging(proc::sample_rate_t const);
-
-    uint32_t _sample_count_for_kind() const;
 };
 }  // namespace yas::ae
