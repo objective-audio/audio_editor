@@ -305,7 +305,8 @@ void project_editor::nudge_previous() {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    this->_player->seek(current_frame - 1);
+    frame_index_t const diff = this->_nudging->unit_sample_count();
+    this->_player->seek(current_frame - diff);
 }
 
 void project_editor::nudge_next() {
@@ -314,7 +315,8 @@ void project_editor::nudge_next() {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    this->_player->seek(current_frame + 1);
+    frame_index_t const diff = this->_nudging->unit_sample_count();
+    this->_player->seek(current_frame + diff);
 }
 
 bool project_editor::can_jump_to_previous_edge() const {
