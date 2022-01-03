@@ -89,6 +89,7 @@ std::shared_ptr<ui_track> ui_track::make_shared(std::shared_ptr<ui::standard> co
 
 void ui_track::_update_scale() {
     float const width = this->_presenter->horizontal_zooming_scale() * ui_track_constants::standard_width_per_sec;
+#warning todo
     float const height = std::ceil(this->_standard->view_look()->view_size().height * 0.8);
 
     ui::size const scale{width, height};
