@@ -11,7 +11,12 @@ namespace yas::ae {
 struct nudging final : nudging_for_project_editor {
     [[nodiscard]] static std::shared_ptr<nudging> make_shared();
 
+    void set_kind(nudging_kind const);
+    nudging_kind kind() const;
+
    private:
+    nudging_kind _kind;
+
     nudging();
 };
 }  // namespace yas::ae
