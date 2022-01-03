@@ -28,7 +28,7 @@ struct project_stub : project_for_project_pool {
         return _value;
     }
 
-    std::shared_ptr<zooming_for_project> const &zooming() const override {
+    std::shared_ptr<zooming_for_project> const &horizontal_zooming() const override {
         static std::shared_ptr<zooming_for_project> const _value = nullptr;
         return _value;
     }

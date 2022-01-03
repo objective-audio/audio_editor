@@ -22,7 +22,7 @@ struct project final : project_for_project_pool {
     [[nodiscard]] std::shared_ptr<project_url_for_project> const &project_url() const override;
     [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
     [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const override;
-    [[nodiscard]] std::shared_ptr<zooming_for_project> const &zooming() const override;
+    [[nodiscard]] std::shared_ptr<zooming_for_project> const &horizontal_zooming() const override;
     [[nodiscard]] std::shared_ptr<scrolling_for_project> const &scrolling() const override;
     [[nodiscard]] std::shared_ptr<ae::action_controller> const &action_controller() const override;
     [[nodiscard]] std::shared_ptr<ae::dialog_presenter> const &dialog_presenter() const override;
@@ -43,7 +43,7 @@ struct project final : project_for_project_pool {
     std::shared_ptr<player_for_project> const _player;
     std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
     std::shared_ptr<project_editor_for_project> _editor = nullptr;
-    std::shared_ptr<zooming_for_project> const _zooming;
+    std::shared_ptr<zooming_for_project> const _horizontal_zooming;
     std::shared_ptr<scrolling_for_project> const _scrolling;
     std::shared_ptr<ae::action_controller> const _action_controller;
     std::shared_ptr<ae::dialog_presenter> const _dialog_presenter;

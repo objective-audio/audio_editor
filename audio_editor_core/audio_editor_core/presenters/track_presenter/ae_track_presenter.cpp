@@ -15,18 +15,18 @@ using namespace yas::ae;
 
 std::shared_ptr<track_presenter> track_presenter::make_shared(std::string const &project_id) {
     auto const project = app::global()->project_pool()->project_for_id(project_id);
-    return make_shared(project->editor(), project->zooming());
+    return make_shared(project->editor(), project->horizontal_zooming());
 }
 
 std::shared_ptr<track_presenter> track_presenter::make_shared(
     std::shared_ptr<project_editor_for_track_presenter> const &editor,
-    std::shared_ptr<zooming_for_track_presenter> const &zooming) {
-    return std::shared_ptr<track_presenter>(new track_presenter{editor, zooming});
+    std::shared_ptr<zooming_for_track_presenter> const &horizontal_zooming) {
+    return std::shared_ptr<track_presenter>(new track_presenter{editor, horizontal_zooming});
 }
 
 track_presenter::track_presenter(std::shared_ptr<project_editor_for_track_presenter> const &editor,
-                                 std::shared_ptr<zooming_for_track_presenter> const &zooming)
-    : _project_editor(editor), _zooming(zooming) {
+                                 std::shared_ptr<zooming_for_track_presenter> const &horizontal_zooming)
+    : _project_editor(editor), _horizontal_zooming(horizontal_zooming) {
 }
 
 float track_presenter::current_position() const {
@@ -38,17 +38,17 @@ float track_presenter::current_position() const {
     return 0.0;
 }
 
-double track_presenter::zooming_scale() const {
-    if (auto const zooming = this->_zooming.lock()) {
-        return zooming->scale();
+double track_presenter::horizontal_zooming_scale() const {
+    if (auto const horizontal_zooming = this->_horizontal_zooming.lock()) {
+        return horizontal_zooming->scale();
     } else {
         return 1.0;
     }
 }
 
-observing::syncable track_presenter::observe_zooming_scale(std::function<void(double const &)> &&handler) {
-    if (auto const zooming = this->_zooming.lock()) {
-        return zooming->observe_scale(std::move(handler));
+observing::syncable track_presenter::observe_horizontal_zooming_scale(std::function<void(double const &)> &&handler) {
+    if (auto const horizontal_zooming = this->_horizontal_zooming.lock()) {
+        return horizontal_zooming->observe_scale(std::move(handler));
     }
     return observing::syncable{};
 }

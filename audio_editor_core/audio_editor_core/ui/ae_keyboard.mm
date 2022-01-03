@@ -9,7 +9,9 @@ using namespace yas;
 using namespace yas::ae;
 
 keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
-    : _event_manager(manager), _key_notifier(observing::notifier<ae::key>::make_shared()), _modifier_notifier(observing::notifier<ae::modifier_event>::make_shared()) {
+    : _event_manager(manager),
+      _key_notifier(observing::notifier<ae::key>::make_shared()),
+      _modifier_notifier(observing::notifier<ae::modifier_event>::make_shared()) {
     this->_event_manager
         ->observe([this](std::shared_ptr<ui::event> const &event) {
             switch (event->type()) {

@@ -15,26 +15,27 @@ using namespace yas::ae;
 
 std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(std::string const &project_id) {
     auto const project = app::global()->project_pool()->project_for_id(project_id);
-    return std::shared_ptr<pinch_gesture_controller>(new pinch_gesture_controller{project->zooming()});
+    return std::shared_ptr<pinch_gesture_controller>(new pinch_gesture_controller{project->horizontal_zooming()});
 }
 
-pinch_gesture_controller::pinch_gesture_controller(std::shared_ptr<zooming_for_pinch_gesture_controller> const &zooming)
-    : _zooming(zooming) {
+pinch_gesture_controller::pinch_gesture_controller(
+    std::shared_ptr<zooming_for_pinch_gesture_controller> const &horizontal_zooming)
+    : _horizontal_zooming(horizontal_zooming) {
 }
 
 void pinch_gesture_controller::handle_gesture(pinch_gesture const &gesture) {
-    if (auto const zooming = this->_zooming.lock()) {
+    if (auto const horizontal_zooming = this->_horizontal_zooming.lock()) {
         switch (gesture.state) {
             case gesture_state::began:
-                zooming->begin();
-                zooming->set_magnification(gesture.magnification);
+                horizontal_zooming->begin();
+                horizontal_zooming->set_magnification(gesture.magnification);
                 break;
             case gesture_state::changed:
-                zooming->set_magnification(gesture.magnification);
+                horizontal_zooming->set_magnification(gesture.magnification);
                 break;
             case gesture_state::ended:
-                zooming->set_magnification(gesture.magnification);
-                zooming->end();
+                horizontal_zooming->set_magnification(gesture.magnification);
+                horizontal_zooming->end();
                 break;
         }
     }
@@ -50,7 +51,7 @@ void pinch_gesture_controller::handle_modifier(modifier_event_state const &state
             break;
     }
 
-    if (auto const zooming = this->_zooming.lock()) {
-        zooming->end();
+    if (auto const horizontal_zooming = this->_horizontal_zooming.lock()) {
+        horizontal_zooming->end();
     }
 }
