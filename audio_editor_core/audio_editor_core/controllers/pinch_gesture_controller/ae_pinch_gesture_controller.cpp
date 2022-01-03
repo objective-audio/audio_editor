@@ -15,12 +15,14 @@ using namespace yas::ae;
 
 std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(std::string const &project_id) {
     auto const project = app::global()->project_pool()->project_for_id(project_id);
-    return std::shared_ptr<pinch_gesture_controller>(new pinch_gesture_controller{project->horizontal_zooming()});
+    return std::shared_ptr<pinch_gesture_controller>(
+        new pinch_gesture_controller{project->horizontal_zooming(), project->vertical_zooming()});
 }
 
 pinch_gesture_controller::pinch_gesture_controller(
-    std::shared_ptr<zooming_for_pinch_gesture_controller> const &horizontal_zooming)
-    : _horizontal_zooming(horizontal_zooming) {
+    std::shared_ptr<zooming_for_pinch_gesture_controller> const &horizontal_zooming,
+    std::shared_ptr<zooming_for_pinch_gesture_controller> const &vertical_zooming)
+    : _horizontal_zooming(horizontal_zooming), _vertical_zooming(vertical_zooming) {
 }
 
 void pinch_gesture_controller::handle_gesture(pinch_gesture const &gesture) {

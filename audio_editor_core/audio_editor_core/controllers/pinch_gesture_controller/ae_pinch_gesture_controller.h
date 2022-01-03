@@ -19,9 +19,11 @@ struct pinch_gesture_controller {
 
    private:
     std::weak_ptr<zooming_for_pinch_gesture_controller> const _horizontal_zooming;
+    std::weak_ptr<zooming_for_pinch_gesture_controller> const _vertical_zooming;
     bool _is_modified = false;
 
-    pinch_gesture_controller(std::shared_ptr<zooming_for_pinch_gesture_controller> const &horizontal_zooming);
+    pinch_gesture_controller(std::shared_ptr<zooming_for_pinch_gesture_controller> const &horizontal_zooming,
+                             std::shared_ptr<zooming_for_pinch_gesture_controller> const &vertical_zooming);
 
     pinch_gesture_controller(pinch_gesture_controller const &) = delete;
     pinch_gesture_controller(pinch_gesture_controller &&) = delete;
