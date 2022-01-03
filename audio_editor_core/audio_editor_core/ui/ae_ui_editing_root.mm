@@ -249,7 +249,7 @@ void ui_editing_root::_setup_observing() {
         ->add_to(this->_pool);
 
     this->_keyboard
-        ->observe([this](ae::key const &key) {
+        ->observe_key([this](ae::key const &key) {
             if (auto const controller = this->_action_controller.lock()) {
                 controller->handle_action(ui_editing_root_utils::to_action(key));
             }

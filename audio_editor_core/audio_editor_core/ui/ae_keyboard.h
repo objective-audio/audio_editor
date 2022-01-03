@@ -12,7 +12,7 @@
 
 namespace yas::ae {
 struct keyboard : keyboard_for_ui_root {
-    [[nodiscard]] observing::endable observe(std::function<void(ae::key const &)> &&) override;
+    [[nodiscard]] observing::endable observe_key(std::function<void(ae::key const &)> &&) override;
 
     [[nodiscard]] static std::shared_ptr<keyboard> make_shared(std::shared_ptr<ui::event_manager> const &);
 

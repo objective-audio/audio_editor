@@ -49,7 +49,7 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
         ->add_to(this->_pool);
 }
 
-observing::endable keyboard::observe(std::function<void(ae::key const &)> &&handler) {
+observing::endable keyboard::observe_key(std::function<void(ae::key const &)> &&handler) {
     return this->_notifier->observe(std::move(handler));
 }
 
