@@ -49,7 +49,7 @@ double track_presenter::horizontal_zooming_scale() const {
 }
 
 double track_presenter::vertical_zooming_scale() const {
-    if (auto const zooming = this->_horizontal_zooming.lock()) {
+    if (auto const zooming = this->_vertical_zooming.lock()) {
         return zooming->scale();
     } else {
         return 1.0;
@@ -58,6 +58,13 @@ double track_presenter::vertical_zooming_scale() const {
 
 observing::syncable track_presenter::observe_horizontal_zooming_scale(std::function<void(double const &)> &&handler) {
     if (auto const zooming = this->_horizontal_zooming.lock()) {
+        return zooming->observe_scale(std::move(handler));
+    }
+    return observing::syncable{};
+}
+
+observing::syncable track_presenter::observe_vertical_zooming_scale(std::function<void(double const &)> &&handler) {
+    if (auto const zooming = this->_vertical_zooming.lock()) {
         return zooming->observe_scale(std::move(handler));
     }
     return observing::syncable{};

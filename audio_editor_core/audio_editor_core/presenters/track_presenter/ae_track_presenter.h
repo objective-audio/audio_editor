@@ -17,6 +17,7 @@ struct track_presenter {
     [[nodiscard]] double horizontal_zooming_scale() const;
     [[nodiscard]] double vertical_zooming_scale() const;
     [[nodiscard]] observing::syncable observe_horizontal_zooming_scale(std::function<void(double const &)> &&);
+    [[nodiscard]] observing::syncable observe_vertical_zooming_scale(std::function<void(double const &)> &&);
 
     [[nodiscard]] float current_position() const;
 
