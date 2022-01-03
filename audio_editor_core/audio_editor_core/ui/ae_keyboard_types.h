@@ -34,4 +34,14 @@ enum class modifier {
     help,
     function,
 };
+
+enum class modifier_event_state {
+    began,
+    ended,
+};
+
+struct modifier_event {
+    modifier_event_state state;
+    modifier modifier;
+};
 }  // namespace yas::ae

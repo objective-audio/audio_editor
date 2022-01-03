@@ -53,7 +53,7 @@ observing::endable keyboard::observe_key(std::function<void(ae::key const &)> &&
     return this->_key_notifier->observe(std::move(handler));
 }
 
-observing::endable keyboard::observe_modifier(std::function<void(ae::modifier const &)> &&handler) {
+observing::endable keyboard::observe_modifier(std::function<void(ae::modifier_event const &)> &&handler) {
     return this->_modifier_notifier->observe(std::move(handler));
 }
 
