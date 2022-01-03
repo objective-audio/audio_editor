@@ -136,4 +136,8 @@ struct pasteboard_for_project_editor {
 
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(pasteboard_event const &)> &&) = 0;
 };
+
+struct nudging_for_project_editor {
+    virtual ~nudging_for_project_editor() = default;
+};
 }  // namespace yas::ae

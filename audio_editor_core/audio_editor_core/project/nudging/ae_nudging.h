@@ -5,11 +5,10 @@
 #pragma once
 
 #include <audio_editor_core/ae_nudging_types.h>
-
-#include <memory>
+#include <audio_editor_core/ae_project_editor_dependency.h>
 
 namespace yas::ae {
-struct nudging final {
+struct nudging final : nudging_for_project_editor {
     [[nodiscard]] static std::shared_ptr<nudging> make_shared();
 
    private:
