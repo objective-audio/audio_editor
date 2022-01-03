@@ -256,6 +256,19 @@ void ui_editing_root::_setup_observing() {
         })
         .end()
         ->add_to(this->_pool);
+    this->_keyboard
+        ->observe_modifier([this](ae::modifier_event const &event) {
+            switch (event.modifier) {
+                case ae::modifier::command:
+                    this->_pinch_gesture_controller->handle_modifier(event.state);
+                    break;
+
+                default:
+                    break;
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
 
     this->_standard->event_manager()
         ->observe([this](std::shared_ptr<ui::event> const &event) {
