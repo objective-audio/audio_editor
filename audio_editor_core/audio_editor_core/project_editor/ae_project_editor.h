@@ -82,17 +82,16 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] observing::syncable observe_marker_pool_event(
         std::function<void(marker_pool_event const &)> &&) override;
 
-    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(url const &editing_file_url, url const &db_url,
-                                                                     ae::file_info const &,
-                                                                     std::shared_ptr<player_for_project_editor> const &,
-                                                                     std::shared_ptr<action_controller> const &,
-                                                                     std::shared_ptr<dialog_presenter> const &);
+    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
+        url const &editing_file_url, url const &db_url, ae::file_info const &,
+        std::shared_ptr<player_for_project_editor> const &, std::shared_ptr<action_controller> const &,
+        std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &);
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
         std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
         std::shared_ptr<pasteboard_for_project_editor> const &, std::shared_ptr<database_for_project_editor> const &,
         std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<action_controller> const &,
-        std::shared_ptr<dialog_presenter> const &);
+        std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &);
 
    private:
     url const _editing_file_url;
@@ -105,6 +104,7 @@ struct project_editor final : project_editor_for_project {
     std::shared_ptr<exporter_for_project_editor> const _exporter;
     std::shared_ptr<action_controller> const _action_controller;
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
+    std::shared_ptr<nudging_for_project_editor> const _nudging;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
@@ -117,7 +117,7 @@ struct project_editor final : project_editor_for_project {
                    std::shared_ptr<pasteboard_for_project_editor> const &,
                    std::shared_ptr<database_for_project_editor> const &,
                    std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<action_controller> const &,
-                   std::shared_ptr<dialog_presenter> const &);
+                   std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;
