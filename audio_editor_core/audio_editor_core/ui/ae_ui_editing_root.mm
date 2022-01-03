@@ -259,7 +259,7 @@ void ui_editing_root::_setup_observing() {
     this->_keyboard
         ->observe_modifier([this](ae::modifier_event const &event) {
             switch (event.modifier) {
-                case ae::modifier::command:
+                case ae::modifier::shift:
                     this->_pinch_gesture_controller->handle_modifier(event.state);
                     break;
 
