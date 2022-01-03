@@ -23,4 +23,15 @@ enum class key {
     num_8,
     num_9,
 };
-}
+
+enum class modifier {
+    alpha_shift,
+    shift,
+    control,
+    alternate,
+    command,
+    numeric_pad,
+    help,
+    function,
+};
+}  // namespace yas::ae

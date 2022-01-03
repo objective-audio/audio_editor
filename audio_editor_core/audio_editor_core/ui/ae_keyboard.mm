@@ -9,7 +9,7 @@ using namespace yas;
 using namespace yas::ae;
 
 keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
-    : _event_manager(manager), _notifier(observing::notifier<ae::key>::make_shared()) {
+    : _event_manager(manager), _key_notifier(observing::notifier<ae::key>::make_shared()), _modifier_notifier(observing::notifier<ae::modifier_event>::make_shared()) {
     this->_event_manager
         ->observe([this](std::shared_ptr<ui::event> const &event) {
             switch (event->type()) {
@@ -33,7 +33,7 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
                     if (event->phase() == ui::event_phase::ended && this->_modifiers.empty()) {
                         auto const key_event = event->get<ui::key>();
                         if (auto const key = keyboard_utils::to_key(key_event.key_code())) {
-                            this->_notifier->notify(key.value());
+                            this->_key_notifier->notify(key.value());
                         }
                     }
                 } break;
@@ -50,7 +50,11 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
 }
 
 observing::endable keyboard::observe_key(std::function<void(ae::key const &)> &&handler) {
-    return this->_notifier->observe(std::move(handler));
+    return this->_key_notifier->observe(std::move(handler));
+}
+
+observing::endable keyboard::observe_modifier(std::function<void(ae::modifier const &)> &&handler) {
+    return this->_modifier_notifier->observe(std::move(handler));
 }
 
 std::shared_ptr<keyboard> keyboard::make_shared(std::shared_ptr<ui::event_manager> const &manager) {
