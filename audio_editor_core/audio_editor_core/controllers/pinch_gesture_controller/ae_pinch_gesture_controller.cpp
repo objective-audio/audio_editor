@@ -39,3 +39,14 @@ void pinch_gesture_controller::handle_gesture(pinch_gesture const &gesture) {
         }
     }
 }
+
+void pinch_gesture_controller::handle_modifier(modifier_event_state const &state) {
+    switch (state) {
+        case modifier_event_state::began:
+            this->_is_modified = true;
+            break;
+        case modifier_event_state::ended:
+            this->_is_modified = false;
+            break;
+    }
+}

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_gesture.h>
+#include <audio_editor_core/ae_keyboard_types.h>
 #include <audio_editor_core/ae_pinch_gesture_controller_dependency.h>
 
 #include <memory>
@@ -14,9 +15,11 @@ struct pinch_gesture_controller {
     [[nodiscard]] static std::shared_ptr<pinch_gesture_controller> make_shared(std::string const &project_id);
 
     void handle_gesture(pinch_gesture const &);
+    void handle_modifier(modifier_event_state const &);
 
    private:
     std::weak_ptr<zooming_for_pinch_gesture_controller> const _zooming;
+    bool _is_modified = false;
 
     pinch_gesture_controller(std::shared_ptr<zooming_for_pinch_gesture_controller> const &);
 
