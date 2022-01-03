@@ -24,6 +24,7 @@ nudging_kind nudging::kind() const {
 }
 
 void nudging::set_unit_count(uint32_t const count) {
+    assert(count > 0);
     this->_unit_count = count;
 }
 
