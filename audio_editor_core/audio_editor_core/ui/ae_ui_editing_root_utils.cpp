@@ -19,6 +19,8 @@ action ui_editing_root_utils::to_action(key const key) {
             return action::split;
         case key::d:
             return action::drop_tail_and_offset;
+        case key::r:
+            return action::rotate_nudging_kind;
         case key::num_0:
             return action::return_to_zero;
         case key::num_1:

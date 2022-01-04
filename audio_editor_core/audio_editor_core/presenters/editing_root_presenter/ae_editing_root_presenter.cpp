@@ -103,6 +103,14 @@ std::string editing_root_presenter::time_text() const {
     }
 }
 
+std::string editing_root_presenter::nudge_text() const {
+    if (auto const editor = this->_project_editor.lock()) {
+        return editing_root_presenter_utils::nudge_text(editor->nudging_kind());
+    } else {
+        return editing_root_presenter_utils::empty_text();
+    }
+}
+
 bool editing_root_presenter::is_play_button_enabled() const {
     auto const project = this->_project.lock();
     return project != nullptr;
@@ -163,6 +171,10 @@ bool editing_root_presenter::is_export_button_enabled() const {
     return editor ? editor->can_select_file_for_export() : false;
 }
 
+bool editing_root_presenter::is_nudge_button_enabled() const {
+    return true;
+}
+
 playing_line_state_t editing_root_presenter::playing_line_state() const {
     if (auto const editor = this->_project_editor.lock()) {
         if (editor->is_scrolling()) {
@@ -208,6 +220,16 @@ observing::syncable editing_root_presenter::observe_marker_pool_text(
         [handler = std::move(handler), this](auto const &event) { handler(this->marker_pool_text()); });
 }
 
+observing::syncable editing_root_presenter::observe_nudging_text(std::function<void(std::string const &)> &&handler) {
+    if (auto const editor = this->_project_editor.lock()) {
+        return editor->observe_nudging_kind([handler = std::move(handler)](ae::nudging_kind const &kind) {
+            handler(editing_root_presenter_utils::nudge_text(kind));
+        });
+    } else {
+        return observing::syncable{};
+    }
+}
+
 bool editing_root_presenter::responds_to_action(action const action) {
     auto const project = this->_project.lock();
     auto const editor = this->_project_editor.lock();
@@ -222,6 +244,8 @@ bool editing_root_presenter::responds_to_action(action const action) {
             return editor->can_nudge();
         case action::nudge_next:
             return editor->can_nudge();
+        case action::rotate_nudging_kind:
+            return true;
 
         case action::jump_previous:
             return editor->can_jump_to_previous_edge();

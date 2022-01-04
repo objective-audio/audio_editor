@@ -174,6 +174,9 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action::nudge_next:
                     this->nudge_next();
                     break;
+                case action::rotate_nudging_kind:
+                    this->rotate_nudging_kind();
+                    break;
                 case action::jump_previous:
                     this->jump_to_previous_edge();
                     break;
@@ -317,6 +320,24 @@ void project_editor::nudge_next() {
     frame_index_t const current_frame = this->_player->current_frame();
     frame_index_t const diff = this->_nudging->unit_sample_count();
     this->_player->seek(current_frame + diff);
+}
+
+nudging_kind project_editor::nudging_kind() const {
+    return this->_nudging->kind();
+}
+
+void project_editor::rotate_nudging_kind() {
+    switch (this->_nudging->kind()) {
+        case nudging_kind::sample:
+            this->_nudging->set_kind(nudging_kind::milisecond);
+            break;
+        case nudging_kind::milisecond:
+            this->_nudging->set_kind(nudging_kind::second);
+            break;
+        case nudging_kind::second:
+            this->_nudging->set_kind(nudging_kind::sample);
+            break;
+    }
 }
 
 bool project_editor::can_jump_to_previous_edge() const {
@@ -731,6 +752,10 @@ observing::syncable project_editor::observe_file_track_event(std::function<void(
 observing::syncable project_editor::observe_marker_pool_event(
     std::function<void(marker_pool_event const &)> &&handler) {
     return this->_marker_pool->observe_event(std::move(handler));
+}
+
+observing::syncable project_editor::observe_nudging_kind(std::function<void(ae::nudging_kind const &)> &&handler) {
+    return this->_nudging->observe_kind(std::move(handler));
 }
 
 bool project_editor::_can_editing() const {

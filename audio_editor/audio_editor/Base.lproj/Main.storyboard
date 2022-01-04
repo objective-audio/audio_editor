@@ -352,6 +352,12 @@
                                                 <action selector="nudgeNext:" target="Ady-hI-5gd" id="HWB-JC-WGu"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Rotate Nudging Kind" keyEquivalent="r" id="m8e-vo-cnU">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="rotateNudgingKind:" target="Ady-hI-5gd" id="vPj-pv-Rbk"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Jump Previous" keyEquivalent="" id="6gq-aS-lqI">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                             <connections>

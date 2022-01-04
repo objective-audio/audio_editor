@@ -73,6 +73,12 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)rotateNudgingKind:(NSMenuItem *)sender {
+    if (auto const controller = self->_action_controller.lock()) {
+        controller->handle_action(action::rotate_nudging_kind);
+    }
+}
+
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
         controller->handle_action(action::jump_previous);
@@ -240,6 +246,8 @@ using namespace yas::ae;
         return action::nudge_previous;
     } else if (selector == @selector(nudgeNext:)) {
         return action::nudge_next;
+    } else if (selector == @selector(rotateNudgingKind:)) {
+        return action::rotate_nudging_kind;
     } else if (selector == @selector(jumpPrevious:)) {
         return action::jump_previous;
     } else if (selector == @selector(jumpNext:)) {
@@ -303,6 +311,8 @@ using namespace yas::ae;
             return @selector(nudgePrevious:);
         case action::nudge_next:
             return @selector(nudgeNext:);
+        case action::rotate_nudging_kind:
+            return @selector(rotateNudgingKind:);
         case action::jump_previous:
             return @selector(jumpPrevious:);
         case action::jump_next:

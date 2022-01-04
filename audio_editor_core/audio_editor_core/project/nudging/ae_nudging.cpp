@@ -14,15 +14,21 @@ std::shared_ptr<nudging> nudging::make_shared(proc::sample_rate_t const sample_r
 }
 
 nudging::nudging(proc::sample_rate_t const sample_rate)
-    : _sample_rate(sample_rate), _kind(nudging_kind::sample), _unit_count(1) {
+    : _sample_rate(sample_rate),
+      _kind(observing::value::holder<nudging_kind>::make_shared(nudging_kind::sample)),
+      _unit_count(1) {
 }
 
 void nudging::set_kind(nudging_kind const kind) {
-    this->_kind = kind;
+    this->_kind->set_value(kind);
 }
 
 nudging_kind nudging::kind() const {
-    return this->_kind;
+    return this->_kind->value();
+}
+
+observing::syncable nudging::observe_kind(std::function<void(nudging_kind const &)> &&handler) {
+    return this->_kind->observe(std::move(handler));
 }
 
 void nudging::set_unit_count(uint32_t const count) {
@@ -35,5 +41,5 @@ uint32_t nudging::unit_count() const {
 }
 
 uint32_t nudging::unit_sample_count() const {
-    return nudging_utils::to_sample_count(this->_kind, this->_sample_rate) * this->_unit_count;
+    return nudging_utils::to_sample_count(this->_kind->value(), this->_sample_rate) * this->_unit_count;
 }

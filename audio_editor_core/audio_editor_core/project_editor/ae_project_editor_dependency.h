@@ -11,6 +11,7 @@
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
+#include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
 
 namespace yas::proc {
@@ -139,6 +140,10 @@ struct pasteboard_for_project_editor {
 
 struct nudging_for_project_editor {
     virtual ~nudging_for_project_editor() = default;
+
+    virtual void set_kind(nudging_kind const) = 0;
+    [[nodiscard]] virtual nudging_kind kind() const = 0;
+    [[nodiscard]] virtual observing::syncable observe_kind(std::function<void(nudging_kind const &)> &&) = 0;
 
     [[nodiscard]] virtual uint32_t unit_sample_count() const = 0;
 };

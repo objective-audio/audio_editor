@@ -9,6 +9,7 @@ enum class action {
     toggle_play,
     nudge_previous,
     nudge_next,
+    rotate_nudging_kind,
     jump_previous,
     jump_next,
     jump_to_beginning,

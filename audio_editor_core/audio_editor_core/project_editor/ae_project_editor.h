@@ -28,6 +28,8 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_nudge() const override;
     void nudge_previous();
     void nudge_next();
+    [[nodiscard]] ae::nudging_kind nudging_kind() const override;
+    void rotate_nudging_kind();
 
     [[nodiscard]] bool can_jump_to_previous_edge() const override;
     [[nodiscard]] bool can_jump_to_next_edge() const override;
@@ -81,6 +83,7 @@ struct project_editor final : project_editor_for_project {
         std::function<void(file_track_event const &)> &&) override;
     [[nodiscard]] observing::syncable observe_marker_pool_event(
         std::function<void(marker_pool_event const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_nudging_kind(std::function<void(ae::nudging_kind const &)> &&) override;
 
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         url const &editing_file_url, url const &db_url, ae::file_info const &,
