@@ -10,6 +10,7 @@ enum class action {
     nudge_previous,
     nudge_next,
     rotate_nudging_kind,
+    rotate_timing_fragment,
     jump_previous,
     jump_next,
     jump_to_beginning,

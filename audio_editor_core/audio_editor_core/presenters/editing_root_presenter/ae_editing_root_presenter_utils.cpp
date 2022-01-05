@@ -150,17 +150,32 @@ std::string editing_root_presenter_utils::time_text(int64_t const frame, uint32_
 
 std::string editing_root_presenter_utils::nudge_kind_text(nudging_kind const kind) {
     switch (kind) {
-        case nudging_kind::sample:
-            return "sample";
-        case nudging_kind::milisecond:
-            return "ms";
+        case nudging_kind::fragment:
+            return "fragment";
         case nudging_kind::second:
             return "sec";
+        case nudging_kind::minute:
+            return "min";
     }
 }
 
 std::string editing_root_presenter_utils::nudge_text(nudging_kind const kind) {
     return "nudge\n" + nudge_kind_text(kind);
+}
+
+std::string editing_root_presenter_utils::timing_fragment_text(timing_fragment const fragment) {
+    switch (fragment) {
+        case timing_fragment::sample:
+            return "sample";
+        case timing_fragment::milisecond:
+            return "ms";
+        case timing_fragment::frame30:
+            return "30fps";
+    }
+}
+
+std::string editing_root_presenter_utils::timing_text(timing_fragment const fragment) {
+    return "timing\n" + timing_fragment_text(fragment);
 }
 
 observing::fetcher_ptr<file_track_event> editing_root_presenter_utils::make_file_track_fetcher(

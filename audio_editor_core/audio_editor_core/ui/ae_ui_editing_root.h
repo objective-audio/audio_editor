@@ -40,6 +40,7 @@ struct ui_editing_root final {
     std::shared_ptr<ui_button> const _jump_previous_button;
     std::shared_ptr<ui_button> const _jump_next_button;
     std::shared_ptr<ui_button> const _nudge_button;
+    std::shared_ptr<ui_button> const _timing_button;
     std::shared_ptr<ui_button> const _insert_marker_button;
     std::shared_ptr<ui_button> const _undo_button;
     std::shared_ptr<ui_button> const _redo_button;

@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -19,9 +20,10 @@ project_editor_maker::project_editor_maker(std::shared_ptr<player_for_project_ed
 std::shared_ptr<project_editor_for_project> project_editor_maker::make(url const &editing_file_url,
                                                                        url const &db_file_url,
                                                                        file_info const &file_info) const {
-    auto const nudging = nudging::make_shared(file_info.sample_rate);
+    auto const timing = timing::make_shared(file_info.sample_rate);
+    auto const nudging = nudging::make_shared(timing);
     return project_editor::make_shared(editing_file_url, db_file_url, file_info, this->_player,
-                                       this->_action_controller, this->_dialog_presenter, nudging);
+                                       this->_action_controller, this->_dialog_presenter, nudging, timing);
 }
 
 std::shared_ptr<project_editor_maker> project_editor_maker::make_shared(

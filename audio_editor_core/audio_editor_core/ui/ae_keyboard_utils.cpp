@@ -20,6 +20,8 @@ std::optional<key> keyboard_utils::to_key(uint16_t const key_code) {
             return key::s;
         case 2:
             return key::d;
+        case 3:
+            return key::f;
         case 15:
             return key::r;
 
