@@ -15,7 +15,5 @@ uint32_t nudging_utils::to_sample_count(nudging_kind const kind, uint32_t const 
             return sample_rate / 1000;
         case nudging_kind::second:
             return sample_rate;
-        case nudging_kind::minute:
-            return sample_rate * 60;
     }
 }

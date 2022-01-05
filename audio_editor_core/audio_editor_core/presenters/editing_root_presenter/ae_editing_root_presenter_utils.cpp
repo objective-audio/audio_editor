@@ -148,6 +148,21 @@ std::string editing_root_presenter_utils::time_text(int64_t const frame, uint32_
     return stream.str();
 }
 
+std::string editing_root_presenter_utils::nudge_kind_text(nudging_kind const kind) {
+    switch (kind) {
+        case nudging_kind::sample:
+            return "sample";
+        case nudging_kind::milisecond:
+            return "ms";
+        case nudging_kind::second:
+            return "sec";
+    }
+}
+
+std::string editing_root_presenter_utils::nudge_text(nudging_kind const kind) {
+    return "nudge\n" + nudge_kind_text(kind);
+}
+
 observing::fetcher_ptr<file_track_event> editing_root_presenter_utils::make_file_track_fetcher(
     std::shared_ptr<project_editor_for_editing_root_presenter> const &editor) {
     return observing::fetcher<file_track_event>::make_shared([weak_editor = to_weak(editor)] {

@@ -6,14 +6,16 @@
 
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
+#include <observing/yas_observing_umbrella.h>
 #include <processing/yas_processing_common_types.h>
 
 namespace yas::ae {
 struct nudging final : nudging_for_project_editor {
     [[nodiscard]] static std::shared_ptr<nudging> make_shared(proc::sample_rate_t const);
 
-    void set_kind(nudging_kind const);
-    [[nodiscard]] nudging_kind kind() const;
+    void set_kind(nudging_kind const) override;
+    [[nodiscard]] nudging_kind kind() const override;
+    [[nodiscard]] observing::syncable observe_kind(std::function<void(nudging_kind const &)> &&) override;
 
     void set_unit_count(uint32_t const);
     [[nodiscard]] uint32_t unit_count() const;
@@ -22,7 +24,7 @@ struct nudging final : nudging_for_project_editor {
 
    private:
     proc::sample_rate_t const _sample_rate;
-    nudging_kind _kind;
+    observing::value::holder_ptr<nudging_kind> const _kind;
     uint32_t _unit_count;
 
     nudging(proc::sample_rate_t const);

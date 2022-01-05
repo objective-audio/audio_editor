@@ -86,6 +86,9 @@ struct project_editor_stub final : project_editor_for_project {
     bool can_nudge() const override {
         return false;
     }
+    ae::nudging_kind nudging_kind() const override {
+        return nudging_kind::sample;
+    }
     bool can_jump_to_previous_edge() const override {
         return false;
     }
@@ -146,6 +149,10 @@ struct project_editor_stub final : project_editor_for_project {
         return observing::syncable{};
     }
     observing::syncable observe_marker_pool_event(std::function<void(marker_pool_event const &)> &&) override {
+        return observing::syncable{};
+    }
+
+    observing::syncable observe_nudging_kind(std::function<void(ae::nudging_kind const &)> &&) override {
         return observing::syncable{};
     }
 };

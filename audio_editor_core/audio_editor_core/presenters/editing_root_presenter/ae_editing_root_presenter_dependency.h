@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_file_track_types.h>
+#include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_project_types.h>
 #include <observing/yas_observing_umbrella.h>
 #include <processing/yas_processing_common_types.h>
@@ -36,6 +37,7 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual bool is_scrolling() const = 0;
 
     [[nodiscard]] virtual bool can_nudge() const = 0;
+    [[nodiscard]] virtual nudging_kind nudging_kind() const = 0;
     [[nodiscard]] virtual bool can_jump_to_previous_edge() const = 0;
     [[nodiscard]] virtual bool can_jump_to_next_edge() const = 0;
     [[nodiscard]] virtual bool can_jump_to_beginnig() const = 0;
@@ -60,5 +62,7 @@ struct project_editor_for_editing_root_presenter {
         std::function<void(file_track_event const &)> &&) = 0;
     [[nodiscard]] virtual observing::syncable observe_marker_pool_event(
         std::function<void(marker_pool_event const &)> &&) = 0;
+    [[nodiscard]] virtual observing::syncable observe_nudging_kind(
+        std::function<void(ae::nudging_kind const &)> &&) = 0;
 };
 }  // namespace yas::ae

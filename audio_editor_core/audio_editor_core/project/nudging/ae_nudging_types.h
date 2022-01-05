@@ -9,6 +9,5 @@ enum class nudging_kind {
     sample,
     milisecond,
     second,
-    minute,
 };
 }
