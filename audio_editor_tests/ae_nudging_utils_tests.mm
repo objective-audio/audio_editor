@@ -23,9 +23,6 @@ using namespace yas::ae;
 
     XCTAssertEqual(nudging_utils::to_sample_count(nudging_kind::second, 48000), 48000);
     XCTAssertEqual(nudging_utils::to_sample_count(nudging_kind::second, 96000), 96000);
-
-    XCTAssertEqual(nudging_utils::to_sample_count(nudging_kind::minute, 48000), 2880000);
-    XCTAssertEqual(nudging_utils::to_sample_count(nudging_kind::minute, 96000), 5760000);
 }
 
 @end
