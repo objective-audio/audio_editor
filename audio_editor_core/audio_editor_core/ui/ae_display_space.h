@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_display_space_types.h>
 #include <observing/yas_observing_umbrella.h>
-#include <processing/yas_processing_time.h>
 
 namespace yas::ae {
 struct display_space final {
@@ -20,7 +20,7 @@ struct display_space final {
 
     ui::size const &scale() const;
 
-    proc::time::range frame_range(uint32_t const sample_rate, proc::frame_index_t const current_frame) const;
+    time::range frame_range(uint32_t const sample_rate, frame_index_t const current_frame) const;
 
    private:
     ui::region _region;

@@ -36,8 +36,8 @@ struct player_for_project_editor {
     virtual void set_playing(bool const) = 0;
     [[nodiscard]] virtual bool is_playing() const = 0;
 
-    virtual void seek(proc::frame_index_t const) = 0;
-    [[nodiscard]] virtual proc::frame_index_t current_frame() const = 0;
+    virtual void seek(frame_index_t const) = 0;
+    [[nodiscard]] virtual frame_index_t current_frame() const = 0;
     virtual bool is_scrolling() const = 0;
 
     [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;
@@ -52,23 +52,23 @@ struct file_track_for_project_editor {
     virtual void insert_module_and_notify(file_module const &) = 0;
     virtual void erase_module_and_notify(file_module const &) = 0;
 
-    [[nodiscard]] virtual std::optional<file_module> module_at(proc::frame_index_t const) const = 0;
-    [[nodiscard]] virtual std::optional<file_module> previous_module_at(proc::frame_index_t const) const = 0;
-    [[nodiscard]] virtual std::optional<file_module> next_module_at(proc::frame_index_t const) const = 0;
-    [[nodiscard]] virtual std::optional<file_module> splittable_module_at(proc::frame_index_t const) const = 0;
+    [[nodiscard]] virtual std::optional<file_module> module_at(frame_index_t const) const = 0;
+    [[nodiscard]] virtual std::optional<file_module> previous_module_at(frame_index_t const) const = 0;
+    [[nodiscard]] virtual std::optional<file_module> next_module_at(frame_index_t const) const = 0;
+    [[nodiscard]] virtual std::optional<file_module> splittable_module_at(frame_index_t const) const = 0;
     [[nodiscard]] virtual std::optional<file_module> first_module() const = 0;
     [[nodiscard]] virtual std::optional<file_module> last_module() const = 0;
-    [[nodiscard]] virtual std::optional<proc::frame_index_t> next_edge(proc::frame_index_t const) const = 0;
-    [[nodiscard]] virtual std::optional<proc::frame_index_t> previous_edge(proc::frame_index_t const) const = 0;
-    virtual void split_at(proc::frame_index_t const) = 0;
-    virtual void erase_at(proc::frame_index_t const) = 0;
-    virtual void erase_and_offset_at(proc::frame_index_t const) = 0;
-    virtual void drop_head_at(proc::frame_index_t const) = 0;
-    virtual void drop_tail_at(proc::frame_index_t const) = 0;
-    virtual void drop_head_and_offset_at(proc::frame_index_t const) = 0;
-    virtual void drop_tail_and_offset_at(proc::frame_index_t const) = 0;
+    [[nodiscard]] virtual std::optional<frame_index_t> next_edge(frame_index_t const) const = 0;
+    [[nodiscard]] virtual std::optional<frame_index_t> previous_edge(frame_index_t const) const = 0;
+    virtual void split_at(frame_index_t const) = 0;
+    virtual void erase_at(frame_index_t const) = 0;
+    virtual void erase_and_offset_at(frame_index_t const) = 0;
+    virtual void drop_head_at(frame_index_t const) = 0;
+    virtual void drop_tail_at(frame_index_t const) = 0;
+    virtual void drop_head_and_offset_at(frame_index_t const) = 0;
+    virtual void drop_tail_and_offset_at(frame_index_t const) = 0;
     virtual void overwrite_module(file_module const &) = 0;
-    virtual void move_modules(std::set<proc::time::range> const &, proc::frame_index_t const) = 0;
+    virtual void move_modules(std::set<time::range> const &, frame_index_t const) = 0;
     virtual void split_and_insert_module_and_offset(file_module const &) = 0;
 
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(file_track_event const &)> &&) = 0;
@@ -79,18 +79,18 @@ struct marker_pool_for_project_editor {
 
     virtual void revert_markers(std::vector<marker> &&) = 0;
     virtual void insert_marker(marker const &) = 0;
-    virtual void erase_at(proc::frame_index_t const) = 0;
+    virtual void erase_at(frame_index_t const) = 0;
     virtual void erase_marker(marker const &) = 0;
-    virtual void erase_range(proc::time::range const) = 0;
+    virtual void erase_range(time::range const) = 0;
 
-    virtual void move_at(proc::frame_index_t const frame, proc::frame_index_t const new_frame) = 0;
-    virtual void move_offset_from(proc::frame_index_t const from, proc::frame_index_t const offset) = 0;
+    virtual void move_at(frame_index_t const frame, frame_index_t const new_frame) = 0;
+    virtual void move_offset_from(frame_index_t const from, frame_index_t const offset) = 0;
 
-    [[nodiscard]] virtual std::map<proc::frame_index_t, marker> const &markers() const = 0;
+    [[nodiscard]] virtual std::map<frame_index_t, marker> const &markers() const = 0;
     [[nodiscard]] virtual std::optional<marker> marker_at(std::size_t const) const = 0;
 
-    [[nodiscard]] virtual std::optional<proc::frame_index_t> next_edge(proc::frame_index_t const) const = 0;
-    [[nodiscard]] virtual std::optional<proc::frame_index_t> previous_edge(proc::frame_index_t const) const = 0;
+    [[nodiscard]] virtual std::optional<frame_index_t> next_edge(frame_index_t const) const = 0;
+    [[nodiscard]] virtual std::optional<frame_index_t> previous_edge(frame_index_t const) const = 0;
 
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) = 0;
 };
@@ -103,10 +103,10 @@ struct database_for_project_editor {
     [[nodiscard]] virtual std::string const pasting_data() const = 0;
 
     virtual void add_module(file_module const &) = 0;
-    virtual void remove_module(proc::time::range const &) = 0;
+    virtual void remove_module(time::range const &) = 0;
     virtual void set_pasting_data(std::string const &) = 0;
     virtual void add_marker(marker const &) = 0;
-    virtual void remove_marker(proc::frame_index_t const &) = 0;
+    virtual void remove_marker(frame_index_t const &) = 0;
 
     virtual void suspend_saving(std::function<void(void)> &&) = 0;
 

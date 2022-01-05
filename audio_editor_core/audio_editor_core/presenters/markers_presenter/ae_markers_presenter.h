@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_marker_location_pool.h>
 #include <audio_editor_core/ae_markers_presenter_dependency.h>
-#include <processing/yas_processing_time.h>
 
 namespace yas::ae {
 class display_space;
@@ -28,8 +27,8 @@ struct markers_presenter {
     std::shared_ptr<marker_location_pool> const _location_pool;
     observing::canceller_pool _canceller_pool;
 
-    std::optional<proc::frame_index_t> _last_frame = std::nullopt;
-    std::optional<proc::time::range> _last_space_range = std::nullopt;
+    std::optional<frame_index_t> _last_frame = std::nullopt;
+    std::optional<time::range> _last_space_range = std::nullopt;
 
     markers_presenter(std::shared_ptr<project_editor_for_markers_presenter> const &,
                       std::shared_ptr<display_space> const &);
@@ -39,7 +38,7 @@ struct markers_presenter {
     markers_presenter &operator=(markers_presenter const &) = delete;
     markers_presenter &operator=(markers_presenter &&) = delete;
 
-    [[nodiscard]] std::optional<proc::time::range> _space_range() const;
+    [[nodiscard]] std::optional<time::range> _space_range() const;
 
     enum class update_type {
         replace,            // 全て更新。scaleが変わったので強制的に全て置き換える

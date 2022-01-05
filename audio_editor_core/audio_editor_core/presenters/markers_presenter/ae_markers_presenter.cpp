@@ -81,7 +81,7 @@ void markers_presenter::update_if_needed() {
     this->_update_all_locations(update_type::update_if_changed);
 }
 
-std::optional<proc::time::range> markers_presenter::_space_range() const {
+std::optional<time::range> markers_presenter::_space_range() const {
     if (auto const editor = this->_project_editor.lock()) {
         auto const sample_rate = editor->file_info().sample_rate;
         auto const current_frame = editor->current_frame();

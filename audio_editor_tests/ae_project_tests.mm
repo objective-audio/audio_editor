@@ -73,7 +73,7 @@ struct project_editor_stub final : project_editor_for_project {
         return file_info_value;
     }
 
-    proc::frame_index_t current_frame() const override {
+    frame_index_t current_frame() const override {
         return 0;
     }
     bool is_playing() const override {
@@ -135,7 +135,7 @@ struct project_editor_stub final : project_editor_for_project {
         return false;
     }
 
-    std::map<proc::frame_index_t, marker> const &markers() const override {
+    std::map<frame_index_t, marker> const &markers() const override {
         return ae::empty_markers;
     }
     file_track_module_map_t const &modules() const override {

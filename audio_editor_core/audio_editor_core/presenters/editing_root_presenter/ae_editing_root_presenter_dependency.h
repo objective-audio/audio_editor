@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_project_types.h>
 #include <observing/yas_observing_umbrella.h>
-#include <processing/yas_processing_common_types.h>
 
 namespace yas::ae {
 class player_for_project_editor;
@@ -32,7 +31,7 @@ struct project_editor_for_editing_root_presenter {
 
     [[nodiscard]] virtual ae::file_info const &file_info() const = 0;
 
-    [[nodiscard]] virtual proc::frame_index_t current_frame() const = 0;
+    [[nodiscard]] virtual frame_index_t current_frame() const = 0;
     [[nodiscard]] virtual bool is_playing() const = 0;
     [[nodiscard]] virtual bool is_scrolling() const = 0;
 
@@ -54,7 +53,7 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual bool can_copy() const = 0;
     [[nodiscard]] virtual bool can_paste() const = 0;
 
-    [[nodiscard]] virtual std::map<proc::frame_index_t, marker> const &markers() const = 0;
+    [[nodiscard]] virtual std::map<frame_index_t, marker> const &markers() const = 0;
     [[nodiscard]] virtual file_track_module_map_t const &modules() const = 0;
 
     [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;

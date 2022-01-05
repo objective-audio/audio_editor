@@ -5,6 +5,8 @@
 #include "ae_module_location.h"
 
 #include <audio_editor_core/ae_file_module.h>
+#include <cpp_utils/yas_fast_each.h>
+#include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -17,8 +19,8 @@ bool module_location::mesh_element::operator!=(mesh_element const &rhs) const {
     return !(*this == rhs);
 }
 
-module_location module_location::make_value(ae::identifier const &identifier, proc::time::range const &range,
-                                            proc::frame_index_t const file_frame, uint32_t const sample_rate,
+module_location module_location::make_value(ae::identifier const &identifier, time::range const &range,
+                                            frame_index_t const file_frame, uint32_t const sample_rate,
                                             std::vector<std::optional<mesh_element>> const &mesh_elements,
                                             float const scale) {
     return module_location{.identifier = identifier,
@@ -30,7 +32,7 @@ module_location module_location::make_value(ae::identifier const &identifier, pr
 }
 
 module_location module_location::make_value(file_module const &file_module, uint32_t const sample_rate,
-                                            proc::time::range const &space_range, float const scale) {
+                                            time::range const &space_range, float const scale) {
     std::vector<std::optional<mesh_element>> mesh_elements;
 
     uint32_t const mesh_width_interval = module_location::mesh_element::max_length;
@@ -53,7 +55,7 @@ module_location module_location::make_value(file_module const &file_module, uint
         double const next_position = static_cast<double>((idx + 1) * mesh_width_interval) / total_mesh_width *
                                      static_cast<double>(file_module.range.length);
         auto const next_frame = std::min(static_cast<uint32_t>(next_position), total_length);
-        auto const range = proc::time::range{current_frame, next_frame - current_frame};
+        auto const range = time::range{current_frame, next_frame - current_frame};
 
         auto const offset_range = range.offset(file_module.range.frame);
         if (offset_range.intersected(space_range)) {

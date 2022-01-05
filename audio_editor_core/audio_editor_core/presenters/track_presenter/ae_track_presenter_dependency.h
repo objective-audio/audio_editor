@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
-#include <audio_editor_core/ae_player_types.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {

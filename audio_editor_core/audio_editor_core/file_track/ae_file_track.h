@@ -16,24 +16,24 @@ struct file_track final : file_track_for_project_editor {
     void insert_module_and_notify(file_module const &) override;
     void erase_module_and_notify(file_module const &) override;
 
-    std::optional<file_module> module_at(proc::frame_index_t const) const override;
-    std::optional<file_module> previous_module_at(proc::frame_index_t const) const override;
-    std::optional<file_module> next_module_at(proc::frame_index_t const) const override;
-    std::optional<file_module> splittable_module_at(proc::frame_index_t const) const override;
+    std::optional<file_module> module_at(frame_index_t const) const override;
+    std::optional<file_module> previous_module_at(frame_index_t const) const override;
+    std::optional<file_module> next_module_at(frame_index_t const) const override;
+    std::optional<file_module> splittable_module_at(frame_index_t const) const override;
     std::optional<file_module> first_module() const override;
     std::optional<file_module> last_module() const override;
-    std::optional<proc::frame_index_t> next_edge(proc::frame_index_t const) const override;
-    std::optional<proc::frame_index_t> previous_edge(proc::frame_index_t const) const override;
+    std::optional<frame_index_t> next_edge(frame_index_t const) const override;
+    std::optional<frame_index_t> previous_edge(frame_index_t const) const override;
 
-    void split_at(proc::frame_index_t const) override;
-    void erase_at(proc::frame_index_t const) override;
-    void erase_and_offset_at(proc::frame_index_t const) override;
-    void drop_head_at(proc::frame_index_t const) override;
-    void drop_tail_at(proc::frame_index_t const) override;
-    void drop_head_and_offset_at(proc::frame_index_t const) override;
-    void drop_tail_and_offset_at(proc::frame_index_t const) override;
+    void split_at(frame_index_t const) override;
+    void erase_at(frame_index_t const) override;
+    void erase_and_offset_at(frame_index_t const) override;
+    void drop_head_at(frame_index_t const) override;
+    void drop_tail_at(frame_index_t const) override;
+    void drop_head_and_offset_at(frame_index_t const) override;
+    void drop_tail_and_offset_at(frame_index_t const) override;
     void overwrite_module(file_module const &) override;
-    void move_modules(std::set<proc::time::range> const &, proc::frame_index_t const offset) override;
+    void move_modules(std::set<time::range> const &, frame_index_t const offset) override;
     void split_and_insert_module_and_offset(file_module const &) override;
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&) override;
@@ -52,6 +52,6 @@ struct file_track final : file_track_for_project_editor {
     file_track &operator=(file_track const &) = delete;
     file_track &operator=(file_track &&) = delete;
 
-    void _move_modules_after(proc::frame_index_t const frame, proc::frame_index_t const offset);
+    void _move_modules_after(frame_index_t const frame, frame_index_t const offset);
 };
 }  // namespace yas::ae

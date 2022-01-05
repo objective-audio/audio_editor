@@ -63,7 +63,7 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
                 }
             }
 
-            std::optional<proc::time::range> total_range{std::nullopt};
+            std::optional<time::range> total_range{std::nullopt};
 
             if (result) {
                 total_range = timeline->total_range();
@@ -79,7 +79,7 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
 
                 timeline->process(total_range.value(), proc::sync_source{format.sample_rate, slice_length},
                                   [&file, &buffer, &result, ch_count = format.channel_count](
-                                      proc::time::range const &current_range, proc::stream const &stream) mutable {
+                                      time::range const &current_range, proc::stream const &stream) mutable {
                                       buffer.reset_buffer();
                                       buffer.set_frame_length(static_cast<uint32_t>(current_range.length));
 
@@ -94,7 +94,7 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
                                           auto const &events = channel.filtered_events<float, proc::signal_event>();
 
                                           for (auto const &pair : events) {
-                                              proc::time::range const &range = pair.first;
+                                              time::range const &range = pair.first;
                                               std::shared_ptr<proc::signal_event> const &signal = pair.second;
                                               float const *signal_data = signal->data<float>();
 

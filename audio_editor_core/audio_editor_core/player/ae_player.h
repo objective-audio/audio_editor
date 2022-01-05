@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_player_dependency.h>
-#include <audio_editor_core/ae_player_types.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 

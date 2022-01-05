@@ -32,7 +32,7 @@ std::optional<file_module> db_module::file_module() const {
             range_length > 0) {
             auto const file_frame = file_frame_value.get<db::integer>();
             auto const range_frame = range_frame_value.get<db::integer>();
-            return ae::file_module{.range = proc::time::range{range_frame, range_length}, .file_frame = file_frame};
+            return ae::file_module{.range = time::range{range_frame, range_length}, .file_frame = file_frame};
         }
     }
 

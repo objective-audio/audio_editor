@@ -53,7 +53,7 @@ void database::add_module(file_module const &file_module) {
     this->_save();
 }
 
-void database::remove_module(proc::time::range const &range) {
+void database::remove_module(time::range const &range) {
     if (this->_modules.contains(range)) {
         this->_modules.at(range).remove();
         this->_modules.erase(range);
@@ -77,7 +77,7 @@ void database::add_marker(marker const &marker) {
     this->_save();
 }
 
-void database::remove_marker(proc::frame_index_t const &frame) {
+void database::remove_marker(frame_index_t const &frame) {
     if (this->_markers.contains(frame)) {
         this->_markers.at(frame).remove();
         this->_markers.erase(frame);

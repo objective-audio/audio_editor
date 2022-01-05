@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_db_pasting_subject.h>
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
@@ -27,10 +28,10 @@ struct database final : database_for_project_editor {
     [[nodiscard]] bool is_processing() const;
 
     void add_module(file_module const &) override;
-    void remove_module(proc::time::range const &) override;
+    void remove_module(time::range const &) override;
     void set_pasting_data(std::string const &) override;
     void add_marker(marker const &) override;
-    void remove_marker(proc::frame_index_t const &) override;
+    void remove_marker(frame_index_t const &) override;
 
     void suspend_saving(std::function<void(void)> &&) override;
 

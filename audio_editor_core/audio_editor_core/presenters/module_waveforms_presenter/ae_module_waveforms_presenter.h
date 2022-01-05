@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
+#include <cpp_utils/yas_url.h>
 
 namespace yas::ae {
 class waveform_mesh_importer;

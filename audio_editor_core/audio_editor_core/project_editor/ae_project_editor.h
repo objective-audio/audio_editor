@@ -18,7 +18,7 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const;
     [[nodiscard]] std::shared_ptr<database_for_project_editor> const &database() const;
 
-    [[nodiscard]] proc::frame_index_t current_frame() const override;
+    [[nodiscard]] frame_index_t current_frame() const override;
 
     void set_playing(bool const);
     [[nodiscard]] bool is_playing() const override;
@@ -75,7 +75,7 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_paste() const override;
     void paste_and_offset();
 
-    [[nodiscard]] std::map<proc::frame_index_t, marker> const &markers() const override;
+    [[nodiscard]] std::map<frame_index_t, marker> const &markers() const override;
     [[nodiscard]] file_track_module_map_t const &modules() const override;
 
     [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
@@ -127,10 +127,10 @@ struct project_editor final : project_editor_for_project {
     project_editor &operator=(project_editor const &) = delete;
     project_editor &operator=(project_editor &&) = delete;
 
-    [[nodiscard]] std::optional<proc::frame_index_t> _previous_edge() const;
-    [[nodiscard]] std::optional<proc::frame_index_t> _next_edge() const;
-    [[nodiscard]] std::optional<proc::frame_index_t> _first_edge() const;
-    [[nodiscard]] std::optional<proc::frame_index_t> _last_edge() const;
+    [[nodiscard]] std::optional<frame_index_t> _previous_edge() const;
+    [[nodiscard]] std::optional<frame_index_t> _next_edge() const;
+    [[nodiscard]] std::optional<frame_index_t> _first_edge() const;
+    [[nodiscard]] std::optional<frame_index_t> _last_edge() const;
     [[nodiscard]] bool _can_editing() const;
 };
 }  // namespace yas::ae

@@ -9,11 +9,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<nudging> nudging::make_shared(proc::sample_rate_t const sample_rate) {
+std::shared_ptr<nudging> nudging::make_shared(sample_rate_t const sample_rate) {
     return std::shared_ptr<nudging>(new nudging{sample_rate});
 }
 
-nudging::nudging(proc::sample_rate_t const sample_rate)
+nudging::nudging(sample_rate_t const sample_rate)
     : _sample_rate(sample_rate),
       _kind(observing::value::holder<nudging_kind>::make_shared(nudging_kind::sample)),
       _unit_count(1) {
