@@ -74,7 +74,7 @@ void modules_presenter::update_if_needed() {
     this->_update_all_locations(false);
 }
 
-std::optional<proc::time::range> modules_presenter::_space_range() const {
+std::optional<time::range> modules_presenter::_space_range() const {
     if (auto const editor = this->_project_editor.lock()) {
         auto const sample_rate = editor->file_info().sample_rate;
         auto const current_frame = editor->current_frame();

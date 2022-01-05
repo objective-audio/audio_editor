@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::optional<file_module> file_module_utils::module(file_track_module_map_t const &modules,
-                                                     proc::frame_index_t const frame) {
+                                                     frame_index_t const frame) {
     for (auto const &pair : modules) {
         if (pair.first.is_contain(frame)) {
             return pair.second;
@@ -34,7 +34,7 @@ std::optional<file_module> file_module_utils::last_module(file_track_module_map_
 }
 
 std::optional<file_module> file_module_utils::previous_module(file_track_module_map_t const &modules,
-                                                              proc::frame_index_t const frame) {
+                                                              frame_index_t const frame) {
     auto it = modules.rbegin();
 
     while (it != modules.rend()) {
@@ -49,7 +49,7 @@ std::optional<file_module> file_module_utils::previous_module(file_track_module_
 }
 
 std::optional<file_module> file_module_utils::next_module(file_track_module_map_t const &modules,
-                                                          proc::frame_index_t const frame) {
+                                                          frame_index_t const frame) {
     for (auto const &pair : modules) {
         if (frame < pair.first.frame) {
             return pair.second;
@@ -59,12 +59,12 @@ std::optional<file_module> file_module_utils::next_module(file_track_module_map_
     return std::nullopt;
 }
 
-bool file_module_utils::can_split_time_range(proc::time::range const &range, proc::frame_index_t const frame) {
+bool file_module_utils::can_split_time_range(time::range const &range, frame_index_t const frame) {
     return range.is_contain(frame) && range.frame != frame;
 }
 
 std::optional<file_module> file_module_utils::splittable_module(file_track_module_map_t const &modules,
-                                                                proc::frame_index_t const frame) {
+                                                                frame_index_t const frame) {
     for (auto const &pair : modules) {
         if (can_split_time_range(pair.second.range, frame)) {
             return pair.second;
@@ -74,7 +74,7 @@ std::optional<file_module> file_module_utils::splittable_module(file_track_modul
 }
 
 std::vector<file_module> file_module_utils::overlapped_modules(file_track_module_map_t const &modules,
-                                                               proc::time::range const &range) {
+                                                               time::range const &range) {
     auto const next_frame = range.next_frame();
 
     std::vector<file_module> result;

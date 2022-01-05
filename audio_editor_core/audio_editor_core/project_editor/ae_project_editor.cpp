@@ -160,7 +160,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         ->add_to(this->_pool);
 
     this->_file_track->insert_module_and_notify(
-        file_module{.range = proc::time::range{0, file_info.length}, .file_frame = 0});
+        file_module{.range = time::range{0, file_info.length}, .file_frame = 0});
 
     action_controller
         ->observe_action([this](action const &action) {
@@ -282,7 +282,7 @@ std::shared_ptr<database_for_project_editor> const &project_editor::database() c
     return this->_database;
 }
 
-proc::frame_index_t project_editor::current_frame() const {
+frame_index_t project_editor::current_frame() const {
     return this->_player->current_frame();
 }
 
@@ -469,7 +469,7 @@ void project_editor::erase_and_offset() {
         auto const erasing_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->erase_and_offset_at(current_frame);
         this->_marker_pool->erase_range(erasing_range);
-        auto const offset = -static_cast<proc::frame_index_t>(erasing_range.length);
+        auto const offset = -static_cast<frame_index_t>(erasing_range.length);
         this->_marker_pool->move_offset_from(erasing_range.next_frame(), offset);
     });
 
@@ -611,7 +611,7 @@ void project_editor::cut_and_offset() {
         auto const erasing_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->erase_and_offset_at(current_frame);
         this->_marker_pool->erase_range(erasing_range);
-        auto const offset = -static_cast<proc::frame_index_t>(erasing_range.length);
+        auto const offset = -static_cast<frame_index_t>(erasing_range.length);
         this->_marker_pool->move_offset_from(erasing_range.next_frame(), offset);
     });
 }
@@ -685,7 +685,7 @@ void project_editor::paste_and_offset() {
     }
 }
 
-std::optional<proc::frame_index_t> project_editor::_previous_edge() const {
+std::optional<frame_index_t> project_editor::_previous_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->_file_track->previous_edge(current_frame);
     auto const marker_pool_edge = this->_marker_pool->previous_edge(current_frame);
@@ -701,7 +701,7 @@ std::optional<proc::frame_index_t> project_editor::_previous_edge() const {
     }
 }
 
-std::optional<proc::frame_index_t> project_editor::_next_edge() const {
+std::optional<frame_index_t> project_editor::_next_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->_file_track->next_edge(current_frame);
     auto const marker_pool_edge = this->_marker_pool->next_edge(current_frame);
@@ -717,7 +717,7 @@ std::optional<proc::frame_index_t> project_editor::_next_edge() const {
     }
 }
 
-std::optional<proc::frame_index_t> project_editor::_first_edge() const {
+std::optional<frame_index_t> project_editor::_first_edge() const {
     if (auto const module = this->_file_track->first_module()) {
         return module.value().range.frame;
     } else {
@@ -725,7 +725,7 @@ std::optional<proc::frame_index_t> project_editor::_first_edge() const {
     }
 }
 
-std::optional<proc::frame_index_t> project_editor::_last_edge() const {
+std::optional<frame_index_t> project_editor::_last_edge() const {
     if (auto const module = this->_file_track->last_module()) {
         return module.value().range.next_frame();
     } else {
@@ -733,7 +733,7 @@ std::optional<proc::frame_index_t> project_editor::_last_edge() const {
     }
 }
 
-std::map<proc::frame_index_t, marker> const &project_editor::markers() const {
+std::map<frame_index_t, marker> const &project_editor::markers() const {
     return this->_marker_pool->markers();
 }
 

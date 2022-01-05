@@ -17,8 +17,8 @@ using namespace yas::ae;
 - (void)test_equal {
     identifier const id_1;
     identifier const id_2;
-    proc::frame_index_t const frame_1 = 1;
-    proc::frame_index_t const frame_2 = 2;
+    frame_index_t const frame_1 = 1;
+    frame_index_t const frame_2 = 2;
     uint32_t const sample_rate_1 = 1;
     uint32_t const sample_rate_2 = 2;
     ui::size const scale_1{.width = 1.0f, .height = 1.0f};

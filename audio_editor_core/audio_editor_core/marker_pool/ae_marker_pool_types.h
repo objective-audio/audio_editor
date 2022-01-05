@@ -5,12 +5,11 @@
 #pragma once
 
 #include <audio_editor_core/ae_marker.h>
-#include <processing/yas_processing_common_types.h>
 
 #include <map>
 
 namespace yas::ae {
-using marker_map_t = std::map<proc::frame_index_t, ae::marker>;
+using marker_map_t = std::map<frame_index_t, ae::marker>;
 
 static marker_map_t const empty_markers;
 

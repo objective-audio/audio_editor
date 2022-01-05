@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <processing/yas_processing_time.h>
+#include <audio_editor_core/ae_common_types.h>
 
 #include <string>
 
@@ -16,7 +16,7 @@ enum class pasteboard_event {
 };
 
 struct pasting_file_module {
-    proc::frame_index_t file_frame;
+    frame_index_t file_frame;
     proc::length_t length;
 
     std::string data() const;

@@ -29,8 +29,8 @@ struct modules_presenter {
     std::shared_ptr<module_location_pool> _location_pool;
     observing::canceller_pool _canceller_pool;
 
-    std::optional<proc::frame_index_t> _last_frame = std::nullopt;
-    std::optional<proc::time::range> _last_space_range = std::nullopt;
+    std::optional<frame_index_t> _last_frame = std::nullopt;
+    std::optional<time::range> _last_space_range = std::nullopt;
 
     modules_presenter(std::shared_ptr<project_editor_for_modules_presenter> const &,
                       std::shared_ptr<display_space> const &, std::shared_ptr<module_location_pool> const &);
@@ -40,7 +40,7 @@ struct modules_presenter {
     modules_presenter &operator=(modules_presenter const &) = delete;
     modules_presenter &operator=(modules_presenter &&) = delete;
 
-    std::optional<proc::time::range> _space_range() const;
+    std::optional<time::range> _space_range() const;
     void _update_all_locations(bool const force);
 };
 }  // namespace yas::ae

@@ -9,7 +9,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-static proc::time::range const dummy_range{0, 1};
+static time::range const dummy_range{0, 1};
 
 @interface ae_module_location_pool_tests : XCTestCase
 
@@ -169,7 +169,7 @@ static proc::time::range const dummy_range{0, 1};
     }
 
     {
-        proc::time::range const other_range{0, 2};
+        time::range const other_range{0, 2};
 
         pool->update_all({{.identifier = id_1, .range = dummy_range},
                           {.identifier = id_4, .range = other_range},
