@@ -358,6 +358,12 @@
                                                 <action selector="rotateNudgingKind:" target="Ady-hI-5gd" id="vPj-pv-Rbk"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Rotate Timing Fragment" keyEquivalent="f" id="LyT-0z-zfY">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="rotateTimingFragment:" target="Ady-hI-5gd" id="pij-o1-IQs"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Jump Previous" keyEquivalent="" id="6gq-aS-lqI">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                             <connections>
