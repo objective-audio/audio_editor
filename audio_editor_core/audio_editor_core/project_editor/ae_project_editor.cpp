@@ -27,7 +27,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
                                std::shared_ptr<action_controller> const &action_controller,
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
-                               std::shared_ptr<nudging_for_project_editor> const &nudging)
+                               std::shared_ptr<nudging_for_project_editor> const &nudging,
+                               std::shared_ptr<timing_for_project_editor> const &timing)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),
@@ -40,7 +41,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _exporter(exporter),
       _action_controller(action_controller),
       _dialog_presenter(dialog_presenter),
-      _nudging(nudging) {
+      _nudging(nudging),
+      _timing(timing) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -176,6 +178,9 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     break;
                 case action::rotate_nudging_kind:
                     this->rotate_nudging_kind();
+                    break;
+                case action::rotate_timing_fragment:
+                    this->rotate_timing_fragment();
                     break;
                 case action::jump_previous:
                     this->jump_to_previous_edge();
@@ -328,14 +333,32 @@ nudging_kind project_editor::nudging_kind() const {
 
 void project_editor::rotate_nudging_kind() {
     switch (this->_nudging->kind()) {
-        case nudging_kind::sample:
-            this->_nudging->set_kind(nudging_kind::milisecond);
-            break;
-        case nudging_kind::milisecond:
+        case nudging_kind::fragment:
             this->_nudging->set_kind(nudging_kind::second);
             break;
         case nudging_kind::second:
-            this->_nudging->set_kind(nudging_kind::sample);
+            this->_nudging->set_kind(nudging_kind::minute);
+            break;
+        case nudging_kind::minute:
+            this->_nudging->set_kind(nudging_kind::fragment);
+            break;
+    }
+}
+
+ae::timing_fragment project_editor::timing_fragment() const {
+    return this->_timing->fragment();
+}
+
+void project_editor::rotate_timing_fragment() {
+    switch (this->_timing->fragment()) {
+        case timing_fragment::sample:
+            this->_timing->set_fragment(timing_fragment::milisecond);
+            break;
+        case timing_fragment::milisecond:
+            this->_timing->set_fragment(timing_fragment::frame30);
+            break;
+        case timing_fragment::frame30:
+            this->_timing->set_fragment(timing_fragment::sample);
             break;
     }
 }
@@ -758,19 +781,25 @@ observing::syncable project_editor::observe_nudging_kind(std::function<void(ae::
     return this->_nudging->observe_kind(std::move(handler));
 }
 
+observing::syncable project_editor::observe_timing_fragment(
+    std::function<void(ae::timing_fragment const &)> &&handler) {
+    return this->_timing->observe_fragment(std::move(handler));
+}
+
 bool project_editor::_can_editing() const {
     return !this->_exporter->is_exporting();
 }
 
-std::shared_ptr<project_editor> project_editor::make_shared(
-    url const &editing_file_url, url const &db_file_url, ae::file_info const &file_info,
-    std::shared_ptr<player_for_project_editor> const &player,
-    std::shared_ptr<action_controller> const &action_controller,
-    std::shared_ptr<dialog_presenter> const &dialog_presenter,
-    std::shared_ptr<nudging_for_project_editor> const &nudging) {
+std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_file_url, url const &db_file_url,
+                                                            ae::file_info const &file_info,
+                                                            std::shared_ptr<player_for_project_editor> const &player,
+                                                            std::shared_ptr<action_controller> const &action_controller,
+                                                            std::shared_ptr<dialog_presenter> const &dialog_presenter,
+                                                            std::shared_ptr<nudging_for_project_editor> const &nudging,
+                                                            std::shared_ptr<timing_for_project_editor> const &timing) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
                        pasteboard::make_shared(), database::make_shared(db_file_url), exporter::make_shared(),
-                       action_controller, dialog_presenter, nudging);
+                       action_controller, dialog_presenter, nudging, timing);
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
@@ -783,8 +812,9 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<action_controller> const &action_controller,
     std::shared_ptr<dialog_presenter> const &dialog_presenter,
-    std::shared_ptr<nudging_for_project_editor> const &nudging) {
+    std::shared_ptr<nudging_for_project_editor> const &nudging,
+    std::shared_ptr<timing_for_project_editor> const &timing) {
     return std::shared_ptr<project_editor>(new project_editor{editing_file_url, file_info, player, file_track,
                                                               marker_pool, pasteboard, database, exporter,
-                                                              action_controller, dialog_presenter, nudging});
+                                                              action_controller, dialog_presenter, nudging, timing});
 }

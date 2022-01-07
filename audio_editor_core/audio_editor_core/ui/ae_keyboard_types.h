@@ -10,6 +10,7 @@ enum class key {
     a,
     s,
     d,
+    f,
     r,
     del,
 

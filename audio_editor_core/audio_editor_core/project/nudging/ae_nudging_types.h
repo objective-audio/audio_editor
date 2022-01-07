@@ -6,8 +6,8 @@
 
 namespace yas::ae {
 enum class nudging_kind {
-    sample,
-    milisecond,
+    fragment,
     second,
+    minute,
 };
 }

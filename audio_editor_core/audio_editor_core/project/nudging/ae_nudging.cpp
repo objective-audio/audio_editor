@@ -9,13 +9,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<nudging> nudging::make_shared(sample_rate_t const sample_rate) {
-    return std::shared_ptr<nudging>(new nudging{sample_rate});
+std::shared_ptr<nudging> nudging::make_shared(std::shared_ptr<timing_for_nudging> const &timing) {
+    return std::shared_ptr<nudging>(new nudging{timing});
 }
 
-nudging::nudging(sample_rate_t const sample_rate)
-    : _sample_rate(sample_rate),
-      _kind(observing::value::holder<nudging_kind>::make_shared(nudging_kind::sample)),
+nudging::nudging(std::shared_ptr<timing_for_nudging> const &timing)
+    : _timing(timing),
+      _kind(observing::value::holder<nudging_kind>::make_shared(nudging_kind::fragment)),
       _unit_count(1) {
 }
 
@@ -41,5 +41,5 @@ uint32_t nudging::unit_count() const {
 }
 
 uint32_t nudging::unit_sample_count() const {
-    return nudging_utils::to_sample_count(this->_kind->value(), this->_sample_rate) * this->_unit_count;
+    return nudging_utils::to_sample_count(this->_kind->value(), this->_timing) * this->_unit_count;
 }
