@@ -254,6 +254,8 @@ using namespace yas::ae;
         return action::nudge_next;
     } else if (selector == @selector(rotateNudgingKind:)) {
         return action::rotate_nudging_kind;
+    } else if (selector == @selector(rotateTimingFragment:)) {
+        return action::rotate_timing_fragment;
     } else if (selector == @selector(jumpPrevious:)) {
         return action::jump_previous;
     } else if (selector == @selector(jumpNext:)) {
