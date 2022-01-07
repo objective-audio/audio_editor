@@ -18,6 +18,7 @@ using namespace yas::ae;
     auto const scrolling = scrolling::make_shared();
 
     XCTAssertFalse(scrolling->is_began());
+    XCTAssertTrue(scrolling->is_enabled());
 }
 
 - (void)test_observe {
@@ -56,6 +57,43 @@ using namespace yas::ae;
     scrolling->end();
 
     XCTAssertEqual(called.size(), 4);
+
+    canceller->cancel();
+}
+
+- (void)test_is_enabled {
+    auto const scrolling = scrolling::make_shared();
+
+    std::vector<scrolling_event> called;
+
+    auto const canceller =
+        scrolling->observe([&called](scrolling_event const &event) { called.emplace_back(event); }).end();
+
+    scrolling->begin();
+
+    XCTAssertTrue(scrolling->is_began());
+    XCTAssertEqual(called.size(), 1);
+    XCTAssertEqual(called.at(0).state, scrolling_state::began);
+
+    scrolling->set_is_enabled(false);
+
+    XCTAssertFalse(scrolling->is_began());
+    XCTAssertEqual(called.size(), 2);
+    XCTAssertEqual(called.at(1).state, scrolling_state::ended);
+
+    scrolling->begin();
+    scrolling->set_delta_time(1.0);
+
+    XCTAssertFalse(scrolling->is_began());
+    XCTAssertEqual(called.size(), 2);
+
+    scrolling->set_is_enabled(true);
+
+    scrolling->begin();
+
+    XCTAssertTrue(scrolling->is_began());
+    XCTAssertEqual(called.size(), 3);
+    XCTAssertEqual(called.at(2).state, scrolling_state::began);
 
     canceller->cancel();
 }
