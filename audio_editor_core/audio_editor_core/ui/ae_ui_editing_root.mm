@@ -13,27 +13,28 @@
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_ui_editing_root_utils.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
+#include <audio_editor_core/ae_ui_time.h>
 #include <audio_editor_core/ae_ui_track.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
+                                 std::shared_ptr<ui::texture> const &texture,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
                                  std::shared_ptr<action_controller> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
-                                 std::shared_ptr<ui_track> const &track)
+                                 std::shared_ptr<ui_track> const &track, std::shared_ptr<ui_time> const &time)
     : _presenter(presenter),
       _action_controller(action_controller),
       _pinch_gesture_controller(pinch_gesture_controller),
       _standard(standard),
-      _texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
       _keyboard(ae::keyboard::make_shared(standard->event_manager())),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",
            .font_size = 14.0f,
            .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"},
-          _texture)),
+          texture)),
       _play_button(ui_button::make_shared(this->_font_atlas, standard)),
       _split_button(ui_button::make_shared(this->_font_atlas, standard)),
       _drop_head_and_offset_button(ui_button::make_shared(this->_font_atlas, standard)),
@@ -61,14 +62,13 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
       _file_info_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
-      _player_strings(ui::strings::make_shared(
-          {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
       _file_track_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
       _marker_pool_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
       _track(track),
-      _playing_line(ui::rect_plane::make_shared(1)) {
+      _playing_line(ui::rect_plane::make_shared(1)),
+      _time(time) {
     standard->view_look()->background()->set_color({.v = 0.2f});
 
     this->_file_info_strings->set_text(presenter->file_info_text());
@@ -116,11 +116,11 @@ void ui_editing_root::_setup_node_hierarchie() {
 
     root_node->add_sub_node(this->_status_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
-    root_node->add_sub_node(this->_player_strings->rect_plane()->node());
     root_node->add_sub_node(this->_file_track_strings->rect_plane()->node());
     root_node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
 
     root_node->add_sub_node(this->_playing_line->node());
+    root_node->add_sub_node(this->_time->node());
 }
 
 void ui_editing_root::_setup_observing() {
@@ -154,7 +154,6 @@ void ui_editing_root::_setup_observing() {
 
     this->_standard->renderer()
         ->observe_will_render([this](auto const &) {
-            this->_player_strings->set_text(this->_presenter->player_text());
             this->_update_buttons_enabled();
 
             this->_playing_line->node()->set_color(
@@ -321,8 +320,6 @@ void ui_editing_root::_setup_layout() {
     auto const status_actual_source = this->_status_strings->actual_layout_source();
     auto const &file_info_preferred_guide = this->_file_info_strings->preferred_layout_guide();
     auto const file_info_actual_source = this->_file_info_strings->actual_layout_source();
-    auto const &player_preferred_guide = this->_player_strings->preferred_layout_guide();
-    auto const player_actual_source = this->_player_strings->actual_layout_source();
     auto const &file_track_preferred_guide = this->_file_track_strings->preferred_layout_guide();
     auto const file_track_actual_source = this->_file_track_strings->actual_layout_source();
     auto const &marker_pool_preferred_guide = this->_marker_pool_strings->preferred_layout_guide();
@@ -379,27 +376,13 @@ void ui_editing_root::_setup_layout() {
         .sync()
         ->add_to(this->_pool);
 
-    // player_strings
-
-    ui::layout(safe_area_h_guide, player_preferred_guide->horizontal_range(),
-               ui_layout_utils::constant(ui::range_insets::zero()))
-        .sync()
-        ->add_to(this->_pool);
-    ui::layout(file_info_actual_source->layout_vertical_range_source()->layout_min_value_source(),
-               player_preferred_guide->top(), ui_layout_utils::constant(0.0f))
-        .sync()
-        ->add_to(this->_pool);
-    ui::layout(player_preferred_guide->top(), player_preferred_guide->bottom(), ui_layout_utils::constant(0.0f))
-        .sync()
-        ->add_to(this->_pool);
-
     // file_track_strings
 
     ui::layout(safe_area_h_guide, file_track_preferred_guide->horizontal_range(),
                ui_layout_utils::constant(ui::range_insets::zero()))
         .sync()
         ->add_to(this->_pool);
-    ui::layout(player_actual_source->layout_vertical_range_source()->layout_min_value_source(),
+    ui::layout(file_info_actual_source->layout_vertical_range_source()->layout_min_value_source(),
                file_track_preferred_guide->top(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
@@ -432,6 +415,13 @@ void ui_editing_root::_setup_layout() {
         })
         .sync()
         ->add_to(this->_pool);
+
+    // time
+
+    ui::layout(this->_standard->view_look()->view_layout_guide()->top(), this->_time->top_guide(),
+               ui_layout_utils::constant(0.0f))
+        .sync()
+        ->add_to(this->_pool);
 }
 
 void ui_editing_root::_update_buttons_enabled() {
@@ -455,10 +445,12 @@ void ui_editing_root::_update_buttons_enabled() {
 
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::shared_ptr<ui::standard> const &standard,
                                                               std::string const &project_id) {
+    auto const texture = ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look());
     auto const presenter = editing_root_presenter::make_shared(project_id);
     auto const action_controller = app::global()->project_pool()->project_for_id(project_id)->action_controller();
     auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
     auto const ui_track = ui_track::make_shared(standard, project_id);
-    return std::shared_ptr<ui_editing_root>(
-        new ui_editing_root{standard, presenter, action_controller, pinch_gesture_controller, ui_track});
+    auto const ui_time = ui_time::make_shared(standard, texture, project_id);
+    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, texture, presenter, action_controller,
+                                                                pinch_gesture_controller, ui_track, ui_time});
 }

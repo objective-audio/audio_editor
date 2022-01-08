@@ -18,11 +18,9 @@ struct editing_root_presenter final {
     [[nodiscard]] std::string const &project_id() const;
     [[nodiscard]] std::string state_text() const;
     [[nodiscard]] std::string file_info_text() const;
-    [[nodiscard]] std::string player_text() const;
     [[nodiscard]] std::string play_button_text() const;
     [[nodiscard]] std::string file_track_text() const;
     [[nodiscard]] std::string marker_pool_text() const;
-    [[nodiscard]] std::string time_text() const;
     [[nodiscard]] std::string nudge_text() const;
     [[nodiscard]] std::string timing_text() const;
 

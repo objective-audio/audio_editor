@@ -63,14 +63,6 @@ std::string editing_root_presenter::file_info_text() const {
     }
 }
 
-std::string editing_root_presenter::player_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::player_text(editor->current_frame(), editor->file_info().sample_rate);
-    } else {
-        return editing_root_presenter_utils::empty_text();
-    }
-}
-
 std::string editing_root_presenter::play_button_text() const {
     if (auto const editor = this->_project_editor.lock()) {
         return editing_root_presenter_utils::play_button_text(editor->is_playing());
@@ -90,14 +82,6 @@ std::string editing_root_presenter::file_track_text() const {
 std::string editing_root_presenter::marker_pool_text() const {
     if (auto const editor = this->_project_editor.lock()) {
         return editing_root_presenter_utils::marker_pool_text(editor->markers());
-    } else {
-        return editing_root_presenter_utils::empty_text();
-    }
-}
-
-std::string editing_root_presenter::time_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::time_text(editor->current_frame(), editor->file_info().sample_rate);
     } else {
         return editing_root_presenter_utils::empty_text();
     }

@@ -43,11 +43,6 @@ std::string editing_root_presenter_utils::label_text(std::optional<file_info> co
     }
 }
 
-std::string editing_root_presenter_utils::player_text(frame_index_t const frame, uint32_t const sample_rate) {
-    std::string const time = time_text(frame, sample_rate);
-    return time + " [" + std::to_string(frame) + "]";
-}
-
 std::string editing_root_presenter_utils::play_button_text(bool const is_playing) {
     return is_playing ? "played" : "paused";
 }

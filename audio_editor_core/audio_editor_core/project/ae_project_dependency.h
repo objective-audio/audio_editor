@@ -14,6 +14,7 @@
 #include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
+#include <audio_editor_core/ae_time_presenter_dependency.h>
 #include <audio_editor_core/ae_track_presenter_dependency.h>
 #include <cpp_utils/yas_url.h>
 
@@ -53,7 +54,8 @@ struct player_for_project {
 struct project_editor_for_project : project_editor_for_editing_root_presenter,
                                     project_editor_for_markers_presenter,
                                     project_editor_for_modules_presenter,
-                                    project_editor_for_track_presenter {
+                                    project_editor_for_track_presenter,
+                                    project_editor_for_time_presenter {
     virtual ~project_editor_for_project() = default;
 };
 
