@@ -198,6 +198,8 @@ struct scrolling_stub final : scrolling_for_project {
     bool is_began() const override {
         return false;
     }
+    void set_is_enabled(bool const) override {
+    }
 
     observing::endable observe(std::function<void(scrolling_event const &)> &&) override {
         return observing::endable{};
