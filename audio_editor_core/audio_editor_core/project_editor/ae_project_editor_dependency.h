@@ -13,7 +13,7 @@
 #include <audio_editor_core/ae_marker_pool_types.h>
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
-#include <audio_editor_core/ae_timing_fragment.h>
+#include <audio_editor_core/ae_timing_fraction.h>
 
 namespace yas::proc {
 class timeline;
@@ -152,9 +152,9 @@ struct nudging_for_project_editor {
 struct timing_for_project_editor {
     virtual ~timing_for_project_editor() = default;
 
-    virtual void set_fragment(timing_fragment const) = 0;
-    [[nodiscard]] virtual timing_fragment fragment() const = 0;
-    [[nodiscard]] virtual observing::syncable observe_fragment(std::function<void(timing_fragment const &)> &&) = 0;
+    virtual void set_fraction(timing_fraction const) = 0;
+    [[nodiscard]] virtual timing_fraction fraction() const = 0;
+    [[nodiscard]] virtual observing::syncable observe_fraction(std::function<void(timing_fraction const &)> &&) = 0;
 
     [[nodiscard]] virtual uint32_t unit_sample_count() const = 0;
 };

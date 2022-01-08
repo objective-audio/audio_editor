@@ -15,7 +15,7 @@ std::shared_ptr<nudging> nudging::make_shared(std::shared_ptr<timing_for_nudging
 
 nudging::nudging(std::shared_ptr<timing_for_nudging> const &timing)
     : _timing(timing),
-      _kind(observing::value::holder<nudging_kind>::make_shared(nudging_kind::fragment)),
+      _kind(observing::value::holder<nudging_kind>::make_shared(nudging_kind::fraction)),
       _unit_count(1) {
 }
 

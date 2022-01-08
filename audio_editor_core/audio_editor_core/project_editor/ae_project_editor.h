@@ -31,8 +31,8 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] ae::nudging_kind nudging_kind() const override;
     void rotate_nudging_kind();
 
-    [[nodiscard]] ae::timing_fragment timing_fragment() const override;
-    void rotate_timing_fragment();
+    [[nodiscard]] ae::timing_fraction timing_fraction() const override;
+    void rotate_timing_fraction();
 
     [[nodiscard]] bool can_jump_to_previous_edge() const override;
     [[nodiscard]] bool can_jump_to_next_edge() const override;
@@ -87,8 +87,8 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] observing::syncable observe_marker_pool_event(
         std::function<void(marker_pool_event const &)> &&) override;
     [[nodiscard]] observing::syncable observe_nudging_kind(std::function<void(ae::nudging_kind const &)> &&) override;
-    [[nodiscard]] observing::syncable observe_timing_fragment(
-        std::function<void(ae::timing_fragment const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_timing_fraction(
+        std::function<void(ae::timing_fraction const &)> &&) override;
 
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         url const &editing_file_url, url const &db_url, ae::file_info const &,

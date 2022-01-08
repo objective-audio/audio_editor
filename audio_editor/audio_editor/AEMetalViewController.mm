@@ -79,9 +79,9 @@ using namespace yas::ae;
     }
 }
 
-- (IBAction)rotateTimingFragment:(NSMenuItem *)sender {
+- (IBAction)rotateTimingFraction:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::rotate_timing_fragment);
+        controller->handle_action(action::rotate_timing_fraction);
     }
 }
 
@@ -254,8 +254,8 @@ using namespace yas::ae;
         return action::nudge_next;
     } else if (selector == @selector(rotateNudgingKind:)) {
         return action::rotate_nudging_kind;
-    } else if (selector == @selector(rotateTimingFragment:)) {
-        return action::rotate_timing_fragment;
+    } else if (selector == @selector(rotateTimingFraction:)) {
+        return action::rotate_timing_fraction;
     } else if (selector == @selector(jumpPrevious:)) {
         return action::jump_previous;
     } else if (selector == @selector(jumpNext:)) {
@@ -321,8 +321,8 @@ using namespace yas::ae;
             return @selector(nudgeNext:);
         case action::rotate_nudging_kind:
             return @selector(rotateNudgingKind:);
-        case action::rotate_timing_fragment:
-            return @selector(rotateTimingFragment:);
+        case action::rotate_timing_fraction:
+            return @selector(rotateTimingFraction:);
         case action::jump_previous:
             return @selector(jumpPrevious:);
         case action::jump_next:

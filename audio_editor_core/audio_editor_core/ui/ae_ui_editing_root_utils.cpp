@@ -22,7 +22,7 @@ action ui_editing_root_utils::to_action(key const key) {
         case key::r:
             return action::rotate_nudging_kind;
         case key::f:
-            return action::rotate_timing_fragment;
+            return action::rotate_timing_fraction;
         case key::num_0:
             return action::return_to_zero;
         case key::num_1:

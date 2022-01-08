@@ -179,8 +179,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action::rotate_nudging_kind:
                     this->rotate_nudging_kind();
                     break;
-                case action::rotate_timing_fragment:
-                    this->rotate_timing_fragment();
+                case action::rotate_timing_fraction:
+                    this->rotate_timing_fraction();
                     break;
                 case action::jump_previous:
                     this->jump_to_previous_edge();
@@ -333,32 +333,32 @@ nudging_kind project_editor::nudging_kind() const {
 
 void project_editor::rotate_nudging_kind() {
     switch (this->_nudging->kind()) {
-        case nudging_kind::fragment:
+        case nudging_kind::fraction:
             this->_nudging->set_kind(nudging_kind::second);
             break;
         case nudging_kind::second:
             this->_nudging->set_kind(nudging_kind::minute);
             break;
         case nudging_kind::minute:
-            this->_nudging->set_kind(nudging_kind::fragment);
+            this->_nudging->set_kind(nudging_kind::fraction);
             break;
     }
 }
 
-ae::timing_fragment project_editor::timing_fragment() const {
-    return this->_timing->fragment();
+ae::timing_fraction project_editor::timing_fraction() const {
+    return this->_timing->fraction();
 }
 
-void project_editor::rotate_timing_fragment() {
-    switch (this->_timing->fragment()) {
-        case timing_fragment::sample:
-            this->_timing->set_fragment(timing_fragment::milisecond);
+void project_editor::rotate_timing_fraction() {
+    switch (this->_timing->fraction()) {
+        case timing_fraction::sample:
+            this->_timing->set_fraction(timing_fraction::milisecond);
             break;
-        case timing_fragment::milisecond:
-            this->_timing->set_fragment(timing_fragment::frame30);
+        case timing_fraction::milisecond:
+            this->_timing->set_fraction(timing_fraction::frame30);
             break;
-        case timing_fragment::frame30:
-            this->_timing->set_fragment(timing_fragment::sample);
+        case timing_fraction::frame30:
+            this->_timing->set_fraction(timing_fraction::sample);
             break;
     }
 }
@@ -781,9 +781,9 @@ observing::syncable project_editor::observe_nudging_kind(std::function<void(ae::
     return this->_nudging->observe_kind(std::move(handler));
 }
 
-observing::syncable project_editor::observe_timing_fragment(
-    std::function<void(ae::timing_fragment const &)> &&handler) {
-    return this->_timing->observe_fragment(std::move(handler));
+observing::syncable project_editor::observe_timing_fraction(
+    std::function<void(ae::timing_fraction const &)> &&handler) {
+    return this->_timing->observe_fraction(std::move(handler));
 }
 
 bool project_editor::_can_editing() const {
