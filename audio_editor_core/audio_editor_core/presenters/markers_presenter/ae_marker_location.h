@@ -9,7 +9,7 @@
 #include <ui/yas_ui_types.h>
 
 namespace yas::ae {
-struct marker_location {
+struct marker_location final {
     identifier identifier;  // markerからコピーする
     ui::point point;
     float x;

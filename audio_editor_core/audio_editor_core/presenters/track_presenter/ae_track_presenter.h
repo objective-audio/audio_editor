@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_track_presenter_dependency.h>
 
 namespace yas::ae {
-struct track_presenter {
+struct track_presenter final {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::string const &project_id);
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(
         std::shared_ptr<project_editor_for_track_presenter> const &,

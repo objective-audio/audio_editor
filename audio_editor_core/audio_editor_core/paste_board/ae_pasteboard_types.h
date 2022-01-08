@@ -15,7 +15,7 @@ enum class pasteboard_event {
     reverted,
 };
 
-struct pasting_file_module {
+struct pasting_file_module final {
     frame_index_t file_frame;
     proc::length_t length;
 

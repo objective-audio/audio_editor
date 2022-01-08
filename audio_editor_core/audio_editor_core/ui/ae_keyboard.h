@@ -11,7 +11,7 @@
 #include <unordered_set>
 
 namespace yas::ae {
-struct keyboard : keyboard_for_ui_root {
+struct keyboard final : keyboard_for_ui_root {
     [[nodiscard]] observing::endable observe_key(std::function<void(ae::key const &)> &&) override;
     [[nodiscard]] observing::endable observe_modifier(std::function<void(ae::modifier_event const &)> &&) override;
 

@@ -10,7 +10,7 @@
 namespace yas::ae {
 class display_space;
 
-struct modules_presenter {
+struct modules_presenter final {
     [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(std::string const &project_id,
                                                                         std::shared_ptr<display_space> const &,
                                                                         std::shared_ptr<module_location_pool> const &);

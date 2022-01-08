@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_identifier.h>
 
 namespace yas::ae {
-struct marker {
+struct marker final {
     identifier identifier;
     frame_index_t frame;
 };

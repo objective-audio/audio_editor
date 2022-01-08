@@ -10,7 +10,7 @@
 #include <memory>
 
 namespace yas::ae {
-struct scroll_gesture_controller {
+struct scroll_gesture_controller final {
     [[nodiscard]] static std::shared_ptr<scroll_gesture_controller> make_shared(std::string const &project_id);
 
     void handle_gesture(scroll_gesture const &);

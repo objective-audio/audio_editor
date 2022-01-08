@@ -19,7 +19,7 @@ enum class exporting_error {
 
 using exporting_result = result<std::nullptr_t, exporting_error>;
 
-struct exporting_format {
+struct exporting_format final {
     playing::sample_rate_t sample_rate;
     audio::pcm_format pcm_format;
     uint32_t channel_count;

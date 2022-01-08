@@ -15,7 +15,7 @@ enum class recycle_pool_event_type {
 };
 
 template <typename Element>
-struct recycle_pool_event {
+struct recycle_pool_event final {
     recycle_pool_event_type type;
     std::vector<std::optional<Element>> const &elements;    // fetched, replaced
     std::vector<std::pair<std::size_t, Element>> inserted;  // updated

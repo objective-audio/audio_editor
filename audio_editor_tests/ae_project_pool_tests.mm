@@ -9,7 +9,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::test_utils {
-struct project_stub : project_for_project_pool {
+struct project_stub final : project_for_project_pool {
     url file_url_value{""};
     std::string identifier_value;
     observing::notifier_ptr<project_event> const event_notifier = observing::notifier<project_event>::make_shared();
@@ -79,7 +79,7 @@ struct project_stub : project_for_project_pool {
     }
 };
 
-struct project_maker_stub : project_maker_for_project_pool {
+struct project_maker_stub final : project_maker_for_project_pool {
     std::function<std::string(void)> generate_handler = [] { return ""; };
 
     std::shared_ptr<project_for_project_pool> make(url const &file_url) override {

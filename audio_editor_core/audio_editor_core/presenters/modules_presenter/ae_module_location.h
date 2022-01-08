@@ -10,8 +10,8 @@
 namespace yas::ae {
 class file_module;
 
-struct module_location {
-    struct mesh_element {
+struct module_location final {
+    struct mesh_element final {
         static uint32_t const max_length = 512;
 
         uint32_t rect_count;

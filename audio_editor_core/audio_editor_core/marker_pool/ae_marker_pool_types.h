@@ -20,7 +20,7 @@ enum class marker_pool_event_type {
     erased,
 };
 
-struct marker_pool_event {
+struct marker_pool_event final {
     marker_pool_event_type type;
     std::optional<ae::marker> marker{std::nullopt};
     marker_map_t const &markers;

@@ -11,7 +11,7 @@
 #include <memory>
 
 namespace yas::ae {
-struct pinch_gesture_controller {
+struct pinch_gesture_controller final {
     [[nodiscard]] static std::shared_ptr<pinch_gesture_controller> make_shared(std::string const &project_id);
 
     void handle_gesture(pinch_gesture const &);

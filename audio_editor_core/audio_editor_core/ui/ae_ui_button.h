@@ -7,7 +7,7 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-struct ui_button {
+struct ui_button final {
     void set_text(std::string const &);
     void set_enabled(bool const);
 

@@ -11,7 +11,7 @@ enum class scrolling_state {
     ended,
 };
 
-struct scrolling_event {
+struct scrolling_event final {
     scrolling_state state;
     double delta_time;
 };
