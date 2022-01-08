@@ -18,7 +18,6 @@ namespace yas::ae::editing_root_presenter_utils {
 std::string const &empty_text();
 std::string label_text(project_state const &state);
 std::string label_text(std::optional<file_info> const &file_info);
-std::string player_text(frame_index_t const frame, uint32_t const sample_rate);
 std::string play_button_text(bool const);
 std::string file_track_text(file_track_module_map_t const &);
 std::string marker_pool_text(marker_map_t const &);
