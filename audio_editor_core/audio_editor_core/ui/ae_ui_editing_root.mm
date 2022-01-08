@@ -269,7 +269,7 @@ void ui_editing_root::_setup_observing() {
     this->_timing_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::rotate_timing_fragment);
+                controller->handle_action(action::rotate_timing_fraction);
             }
         })
         .end()

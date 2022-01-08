@@ -97,7 +97,7 @@ std::string editing_root_presenter::nudge_text() const {
 
 std::string editing_root_presenter::timing_text() const {
     if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::timing_text(editor->timing_fragment());
+        return editing_root_presenter_utils::timing_text(editor->timing_fraction());
     } else {
         return editing_root_presenter_utils::empty_text();
     }
@@ -228,8 +228,8 @@ observing::syncable editing_root_presenter::observe_nudging_text(std::function<v
 
 observing::syncable editing_root_presenter::observe_timing_text(std::function<void(std::string const &)> &&handler) {
     if (auto const editor = this->_project_editor.lock()) {
-        return editor->observe_timing_fragment([handler = std::move(handler)](ae::timing_fragment const &fragment) {
-            handler(editing_root_presenter_utils::timing_text(fragment));
+        return editor->observe_timing_fraction([handler = std::move(handler)](ae::timing_fraction const &fraction) {
+            handler(editing_root_presenter_utils::timing_text(fraction));
         });
         return observing::syncable{};
     } else {
@@ -253,7 +253,7 @@ bool editing_root_presenter::responds_to_action(action const action) {
             return editor->can_nudge();
         case action::rotate_nudging_kind:
             return true;
-        case action::rotate_timing_fragment:
+        case action::rotate_timing_fraction:
             return true;
 
         case action::jump_previous:

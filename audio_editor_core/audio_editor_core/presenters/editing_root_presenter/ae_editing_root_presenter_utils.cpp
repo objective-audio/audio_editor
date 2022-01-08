@@ -145,8 +145,8 @@ std::string editing_root_presenter_utils::time_text(int64_t const frame, uint32_
 
 std::string editing_root_presenter_utils::nudge_kind_text(nudging_kind const kind) {
     switch (kind) {
-        case nudging_kind::fragment:
-            return "fragment";
+        case nudging_kind::fraction:
+            return "fraction";
         case nudging_kind::second:
             return "sec";
         case nudging_kind::minute:
@@ -158,19 +158,19 @@ std::string editing_root_presenter_utils::nudge_text(nudging_kind const kind) {
     return "nudge\n" + nudge_kind_text(kind);
 }
 
-std::string editing_root_presenter_utils::timing_fragment_text(timing_fragment const fragment) {
-    switch (fragment) {
-        case timing_fragment::sample:
+std::string editing_root_presenter_utils::timing_fraction_text(timing_fraction const fraction) {
+    switch (fraction) {
+        case timing_fraction::sample:
             return "sample";
-        case timing_fragment::milisecond:
+        case timing_fraction::milisecond:
             return "ms";
-        case timing_fragment::frame30:
+        case timing_fraction::frame30:
             return "30fps";
     }
 }
 
-std::string editing_root_presenter_utils::timing_text(timing_fragment const fragment) {
-    return "timing\n" + timing_fragment_text(fragment);
+std::string editing_root_presenter_utils::timing_text(timing_fraction const fraction) {
+    return "timing\n" + timing_fraction_text(fraction);
 }
 
 observing::fetcher_ptr<file_track_event> editing_root_presenter_utils::make_file_track_fetcher(

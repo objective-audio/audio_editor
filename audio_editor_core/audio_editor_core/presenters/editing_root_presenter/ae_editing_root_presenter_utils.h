@@ -25,8 +25,8 @@ int after_point_digits(uint32_t const sample_rate);
 std::string time_text(int64_t const frame, uint32_t const sample_rate);
 std::string nudge_kind_text(nudging_kind const);
 std::string nudge_text(nudging_kind const);
-std::string timing_fragment_text(timing_fragment const);
-std::string timing_text(timing_fragment const);
+std::string timing_fraction_text(timing_fraction const);
+std::string timing_text(timing_fraction const);
 
 observing::fetcher_ptr<file_track_event> make_file_track_fetcher(
     std::shared_ptr<project_editor_for_editing_root_presenter> const &);
