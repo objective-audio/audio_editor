@@ -42,7 +42,7 @@ enum class modifier_event_state {
     ended,
 };
 
-struct modifier_event {
+struct modifier_event final {
     modifier_event_state state;
     modifier modifier;
 };

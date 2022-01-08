@@ -699,8 +699,8 @@
 		B69607A0276C9F91002B2BE0 /* module_waveforms_presenter */ = {
 			isa = PBXGroup;
 			children = (
-				B69607A1276CA022002B2BE0 /* ae_module_waveforms_presenter.h */,
 				B69607A2276CA022002B2BE0 /* ae_module_waveforms_presenter.cpp */,
+				B69607A1276CA022002B2BE0 /* ae_module_waveforms_presenter.h */,
 			);
 			path = module_waveforms_presenter;
 			sourceTree = "<group>";

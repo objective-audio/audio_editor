@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_root_presenter_dependency.h>
 
 namespace yas::ae {
-struct root_presenter {
+struct root_presenter final {
     [[nodiscard]] static std::shared_ptr<root_presenter> make_shared(std::string const &project_id);
 
     [[nodiscard]] observing::syncable observe_is_editing(std::function<void(bool const &)> &&);

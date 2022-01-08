@@ -10,7 +10,7 @@
 #include <string>
 
 namespace yas::ae {
-struct file_module {
+struct file_module final {
     identifier identifier;
     time::range range;
     frame_index_t file_frame;

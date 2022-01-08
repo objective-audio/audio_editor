@@ -10,7 +10,7 @@
 namespace yas::ae {
 class display_space;
 
-struct markers_presenter {
+struct markers_presenter final {
     [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(std::string const &project_id,
                                                                         std::shared_ptr<display_space> const &);
     [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(

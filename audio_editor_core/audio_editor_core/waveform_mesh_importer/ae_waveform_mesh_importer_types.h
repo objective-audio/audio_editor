@@ -8,11 +8,11 @@
 #include <ui/yas_ui_types.h>
 
 namespace yas::ae {
-struct waveform_mesh_importer_event {
+struct waveform_mesh_importer_event final {
     std::size_t index;
     identifier identifier;
 
-    struct data {
+    struct data final {
         std::shared_ptr<ui::mesh_vertex_data> vertex_data;
         std::shared_ptr<ui::mesh_index_data> index_data;
     };

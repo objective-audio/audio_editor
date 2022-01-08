@@ -9,7 +9,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct marker_pool : marker_pool_for_project_editor {
+struct marker_pool final : marker_pool_for_project_editor {
     void revert_markers(std::vector<marker> &&) override;
     void insert_marker(marker const &) override;
     void erase_at(frame_index_t const) override;

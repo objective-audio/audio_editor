@@ -13,12 +13,12 @@ enum class gesture_state {
     ended,
 };
 
-struct pinch_gesture {
+struct pinch_gesture final {
     gesture_state state;
     double magnification;
 };
 
-struct scroll_gesture {
+struct scroll_gesture final {
     gesture_state state;
     double delta_time;
 };

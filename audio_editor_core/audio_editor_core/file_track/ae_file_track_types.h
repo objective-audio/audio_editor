@@ -20,7 +20,7 @@ enum class file_track_event_type {
     erased,
 };
 
-struct file_track_event {
+struct file_track_event final {
     file_track_event_type type;
     std::optional<file_module> module{std::nullopt};  // inserted, erased
     file_track_module_map_t const &modules;

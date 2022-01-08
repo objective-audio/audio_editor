@@ -41,7 +41,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                 auto const &scale = location.scale;
                 double const rect_width = 1.0 / scale;
 
-                struct dynamic_data {
+                struct dynamic_data final {
                     std::shared_ptr<ui::dynamic_mesh_vertex_data> vertex_data;
                     std::shared_ptr<ui::dynamic_mesh_index_data> index_data;
                 };
