@@ -11,8 +11,10 @@
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
+#include <audio_editor_core/ae_nudging_dependency.h>
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
+#include <audio_editor_core/ae_time_presenter_dependency.h>
 #include <audio_editor_core/ae_timing_fraction.h>
 
 namespace yas::proc {
@@ -149,7 +151,7 @@ struct nudging_for_project_editor {
     [[nodiscard]] virtual uint32_t unit_sample_count() const = 0;
 };
 
-struct timing_for_project_editor {
+struct timing_for_project_editor : timing_for_nudging, timing_for_time_presenter {
     virtual ~timing_for_project_editor() = default;
 
     virtual void set_fraction(timing_fraction const) = 0;

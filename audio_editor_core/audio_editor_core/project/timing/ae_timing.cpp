@@ -4,6 +4,9 @@
 
 #include "ae_timing.h"
 
+#include <audio_editor_core/ae_timing_utils.h>
+#include <playing/yas_playing_math.h>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -33,12 +36,16 @@ observing::syncable timing::observe_fraction(std::function<void(timing_fraction 
 }
 
 uint32_t timing::unit_sample_count() const {
-    switch (this->_fraction->value()) {
-        case timing_fraction::sample:
-            return 1;
-        case timing_fraction::milisecond:
-            return this->_sample_rate / 1000;
-        case timing_fraction::frame30:
-            return this->_sample_rate / 30;
-    }
+    return this->_sample_rate / timing_utils::to_dividing_unit(this->_fraction->value(), this->_sample_rate);
+}
+
+uint32_t timing::fraction_digits() const {
+    return timing_utils::to_fraction_digits(this->_fraction->value(), this->_sample_rate);
+}
+
+uint32_t timing::fraction_value(frame_index_t const frame) const {
+    auto const mod_frame = std::abs(frame) % this->_sample_rate;
+    auto const dividing = timing_utils::to_dividing_unit(this->_fraction->value(), this->_sample_rate);
+    double const rate = static_cast<double>(mod_frame) / static_cast<double>(this->_sample_rate);
+    return static_cast<uint32_t>(rate * dividing);
 }

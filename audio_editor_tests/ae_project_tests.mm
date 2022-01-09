@@ -72,6 +72,10 @@ struct project_editor_stub final : project_editor_for_project {
     ae::file_info const &file_info() const override {
         return file_info_value;
     }
+    std::shared_ptr<timing_for_project_editor> const &timing() const override {
+        static std::shared_ptr<timing_for_project_editor> const _null = nullptr;
+        return _null;
+    }
 
     frame_index_t current_frame() const override {
         return 0;

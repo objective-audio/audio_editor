@@ -57,6 +57,8 @@ struct project_editor_for_project : project_editor_for_editing_root_presenter,
                                     project_editor_for_track_presenter,
                                     project_editor_for_time_presenter {
     virtual ~project_editor_for_project() = default;
+
+    [[nodiscard]] virtual std::shared_ptr<timing_for_project_editor> const &timing() const = 0;
 };
 
 struct project_editor_maker_for_project {

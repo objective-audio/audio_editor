@@ -15,16 +15,20 @@ using namespace yas::ae;
 
 std::shared_ptr<time_presenter> time_presenter::make_shared(std::string const project_id) {
     auto const project_editor = app::global()->project_pool()->project_for_id(project_id)->editor();
-    return std::shared_ptr<time_presenter>(new time_presenter{project_editor});
+    return std::shared_ptr<time_presenter>(new time_presenter{project_editor, project_editor->timing()});
 }
 
-time_presenter::time_presenter(std::shared_ptr<project_editor_for_time_presenter> const &project_editor)
-    : _project_editor(project_editor) {
+time_presenter::time_presenter(std::shared_ptr<project_editor_for_time_presenter> const &project_editor,
+                               std::shared_ptr<timing_for_time_presenter> const &timing)
+    : _project_editor(project_editor), _timing(timing) {
 }
 
 std::string time_presenter::time_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return time_presenter_utils::time_text(editor->current_frame(), editor->file_info().sample_rate);
+    auto const editor = this->_project_editor.lock();
+    auto const timing = this->_timing.lock();
+
+    if (editor && timing) {
+        return time_presenter_utils::time_text(editor->current_frame(), timing);
     } else {
         return "";
     }

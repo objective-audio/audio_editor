@@ -17,7 +17,9 @@ struct time_presenter final {
 
    private:
     std::weak_ptr<project_editor_for_time_presenter> _project_editor;
+    std::weak_ptr<timing_for_time_presenter> _timing;
 
-    time_presenter(std::shared_ptr<project_editor_for_time_presenter> const &);
+    time_presenter(std::shared_ptr<project_editor_for_time_presenter> const &,
+                   std::shared_ptr<timing_for_time_presenter> const &);
 };
 }  // namespace yas::ae

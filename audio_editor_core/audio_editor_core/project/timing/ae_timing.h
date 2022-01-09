@@ -6,11 +6,12 @@
 
 #include <audio_editor_core/ae_nudging_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
+#include <audio_editor_core/ae_time_presenter_dependency.h>
 #include <audio_editor_core/ae_timing_fraction.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct timing final : timing_for_project_editor, timing_for_nudging {
+struct timing final : timing_for_project_editor {
     [[nodiscard]] static std::shared_ptr<timing> make_shared(sample_rate_t const);
 
     [[nodiscard]] sample_rate_t sample_rate() const override;
@@ -20,6 +21,9 @@ struct timing final : timing_for_project_editor, timing_for_nudging {
     [[nodiscard]] observing::syncable observe_fraction(std::function<void(timing_fraction const &)> &&) override;
 
     [[nodiscard]] uint32_t unit_sample_count() const override;
+
+    [[nodiscard]] uint32_t fraction_digits() const override;
+    [[nodiscard]] uint32_t fraction_value(frame_index_t const frame) const override;
 
    private:
     sample_rate_t const _sample_rate;
