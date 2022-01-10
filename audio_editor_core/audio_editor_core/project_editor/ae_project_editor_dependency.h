@@ -15,7 +15,7 @@
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
 #include <audio_editor_core/ae_time_presenter_dependency.h>
-#include <audio_editor_core/ae_timing_fraction.h>
+#include <audio_editor_core/ae_timing_types.h>
 
 namespace yas::proc {
 class timeline;

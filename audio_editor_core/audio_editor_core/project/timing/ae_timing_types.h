@@ -1,5 +1,5 @@
 //
-//  ae_timing_fraction.h
+//  ae_timing_types.h
 //
 
 #pragma once

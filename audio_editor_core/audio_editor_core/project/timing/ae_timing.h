@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_nudging_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <audio_editor_core/ae_time_presenter_dependency.h>
-#include <audio_editor_core/ae_timing_fraction.h>
+#include <audio_editor_core/ae_timing_types.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {

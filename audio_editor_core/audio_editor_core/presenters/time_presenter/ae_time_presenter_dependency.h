@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
-#include <audio_editor_core/ae_timing_fraction.h>
+#include <audio_editor_core/ae_timing_types.h>
 
 namespace yas::ae {
 struct timing_for_time_presenter {
