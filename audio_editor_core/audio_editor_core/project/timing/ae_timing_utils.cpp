@@ -9,18 +9,18 @@
 using namespace yas;
 using namespace yas::ae;
 
-uint32_t timing_utils::to_fraction_digits(timing_fraction const fraction, sample_rate_t const sample_rate) {
-    auto const unit = to_dividing_unit(fraction, sample_rate);
+uint32_t timing_utils::to_fraction_digits(timing_fraction_kind const kind, sample_rate_t const sample_rate) {
+    auto const unit = to_fraction_unit(kind, sample_rate);
     return math::fraction_digits(unit);
 }
 
-uint32_t timing_utils::to_dividing_unit(timing_fraction const fraction, sample_rate_t const sample_rate) {
-    switch (fraction) {
-        case timing_fraction::sample:
+uint32_t timing_utils::to_fraction_unit(timing_fraction_kind const kind, sample_rate_t const sample_rate) {
+    switch (kind) {
+        case timing_fraction_kind::sample:
             return sample_rate;
-        case timing_fraction::milisecond:
+        case timing_fraction_kind::milisecond:
             return 1000;
-        case timing_fraction::frame30:
+        case timing_fraction_kind::frame30:
             return 30;
     }
 }

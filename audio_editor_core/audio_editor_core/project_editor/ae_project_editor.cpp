@@ -349,20 +349,20 @@ void project_editor::rotate_nudging_kind() {
     }
 }
 
-ae::timing_fraction project_editor::timing_fraction() const {
-    return this->_timing->fraction();
+ae::timing_fraction_kind project_editor::timing_fraction_kind() const {
+    return this->_timing->fraction_kind();
 }
 
 void project_editor::rotate_timing_fraction() {
-    switch (this->_timing->fraction()) {
-        case timing_fraction::sample:
-            this->_timing->set_fraction(timing_fraction::milisecond);
+    switch (this->_timing->fraction_kind()) {
+        case timing_fraction_kind::sample:
+            this->_timing->set_fraction_kind(timing_fraction_kind::milisecond);
             break;
-        case timing_fraction::milisecond:
-            this->_timing->set_fraction(timing_fraction::frame30);
+        case timing_fraction_kind::milisecond:
+            this->_timing->set_fraction_kind(timing_fraction_kind::frame30);
             break;
-        case timing_fraction::frame30:
-            this->_timing->set_fraction(timing_fraction::sample);
+        case timing_fraction_kind::frame30:
+            this->_timing->set_fraction_kind(timing_fraction_kind::sample);
             break;
     }
 }
@@ -786,7 +786,7 @@ observing::syncable project_editor::observe_nudging_kind(std::function<void(ae::
 }
 
 observing::syncable project_editor::observe_timing_fraction(
-    std::function<void(ae::timing_fraction const &)> &&handler) {
+    std::function<void(ae::timing_fraction_kind const &)> &&handler) {
     return this->_timing->observe_fraction(std::move(handler));
 }
 

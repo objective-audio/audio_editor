@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
-#include <audio_editor_core/ae_timing_fraction.h>
+#include <audio_editor_core/ae_timing_types.h>
 
 namespace yas::ae {
 struct timing_for_time_presenter {
@@ -14,7 +14,7 @@ struct timing_for_time_presenter {
 
     [[nodiscard]] virtual sample_rate_t sample_rate() const = 0;
 
-    [[nodiscard]] virtual timing_fraction fraction() const = 0;
+    [[nodiscard]] virtual timing_fraction_kind fraction_kind() const = 0;
     [[nodiscard]] virtual uint32_t fraction_digits() const = 0;
     [[nodiscard]] virtual uint32_t fraction_value(frame_index_t const frame) const = 0;
 };

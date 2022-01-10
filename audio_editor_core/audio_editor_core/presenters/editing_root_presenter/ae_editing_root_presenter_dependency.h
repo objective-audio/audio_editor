@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_project_types.h>
-#include <audio_editor_core/ae_timing_fraction.h>
+#include <audio_editor_core/ae_timing_types.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
@@ -38,7 +38,7 @@ struct project_editor_for_editing_root_presenter {
 
     [[nodiscard]] virtual bool can_nudge() const = 0;
     [[nodiscard]] virtual nudging_kind nudging_kind() const = 0;
-    [[nodiscard]] virtual timing_fraction timing_fraction() const = 0;
+    [[nodiscard]] virtual timing_fraction_kind timing_fraction_kind() const = 0;
     [[nodiscard]] virtual bool can_jump_to_previous_edge() const = 0;
     [[nodiscard]] virtual bool can_jump_to_next_edge() const = 0;
     [[nodiscard]] virtual bool can_jump_to_beginnig() const = 0;
@@ -66,6 +66,6 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual observing::syncable observe_nudging_kind(
         std::function<void(ae::nudging_kind const &)> &&) = 0;
     [[nodiscard]] virtual observing::syncable observe_timing_fraction(
-        std::function<void(ae::timing_fraction const &)> &&) = 0;
+        std::function<void(ae::timing_fraction_kind const &)> &&) = 0;
 };
 }  // namespace yas::ae

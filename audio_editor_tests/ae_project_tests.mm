@@ -93,8 +93,8 @@ struct project_editor_stub final : project_editor_for_project {
     ae::nudging_kind nudging_kind() const override {
         return nudging_kind::fraction;
     }
-    ae::timing_fraction timing_fraction() const override {
-        return timing_fraction::sample;
+    ae::timing_fraction_kind timing_fraction_kind() const override {
+        return timing_fraction_kind::sample;
     }
     bool can_jump_to_previous_edge() const override {
         return false;
@@ -161,7 +161,7 @@ struct project_editor_stub final : project_editor_for_project {
     observing::syncable observe_nudging_kind(std::function<void(ae::nudging_kind const &)> &&) override {
         return observing::syncable{};
     }
-    observing::syncable observe_timing_fraction(std::function<void(ae::timing_fraction const &)> &&) override {
+    observing::syncable observe_timing_fraction(std::function<void(ae::timing_fraction_kind const &)> &&) override {
         return observing::syncable{};
     }
 };

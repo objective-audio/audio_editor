@@ -18,34 +18,34 @@ using namespace yas::ae;
     auto const timing = timing::make_shared(48000);
 
     XCTAssertEqual(timing->sample_rate(), 48000);
-    XCTAssertEqual(timing->fraction(), timing_fraction::sample);
+    XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::sample);
 }
 
 - (void)test_set_fraction {
     auto const timing = timing::make_shared(48000);
 
-    std::vector<timing_fraction> called;
+    std::vector<timing_fraction_kind> called;
 
     auto canceller =
-        timing->observe_fraction([&called](timing_fraction const &fraction) { called.emplace_back(fraction); }).sync();
+        timing->observe_fraction([&called](timing_fraction_kind const &kind) { called.emplace_back(kind); }).sync();
 
     XCTAssertEqual(called.size(), 1);
-    XCTAssertEqual(called.at(0), timing_fraction::sample);
-    XCTAssertEqual(timing->fraction(), timing_fraction::sample);
+    XCTAssertEqual(called.at(0), timing_fraction_kind::sample);
+    XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::sample);
     XCTAssertEqual(timing->unit_sample_count(), 1);
 
-    timing->set_fraction(timing_fraction::milisecond);
+    timing->set_fraction_kind(timing_fraction_kind::milisecond);
 
     XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1), timing_fraction::milisecond);
-    XCTAssertEqual(timing->fraction(), timing_fraction::milisecond);
+    XCTAssertEqual(called.at(1), timing_fraction_kind::milisecond);
+    XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::milisecond);
     XCTAssertEqual(timing->unit_sample_count(), 48);
 
-    timing->set_fraction(timing_fraction::frame30);
+    timing->set_fraction_kind(timing_fraction_kind::frame30);
 
     XCTAssertEqual(called.size(), 3);
-    XCTAssertEqual(called.at(2), timing_fraction::frame30);
-    XCTAssertEqual(timing->fraction(), timing_fraction::frame30);
+    XCTAssertEqual(called.at(2), timing_fraction_kind::frame30);
+    XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::frame30);
     XCTAssertEqual(timing->unit_sample_count(), 1600);
 
     canceller->cancel();
@@ -54,7 +54,7 @@ using namespace yas::ae;
 - (void)test_fraction_value_of_sample {
     auto const timing = timing::make_shared(48000);
 
-    timing->set_fraction(timing_fraction::sample);
+    timing->set_fraction_kind(timing_fraction_kind::sample);
 
     XCTAssertEqual(timing->fraction_value(0), 0);
     XCTAssertEqual(timing->fraction_value(1), 1);
@@ -68,7 +68,7 @@ using namespace yas::ae;
 - (void)test_fraction_value_of_milisecond {
     auto const timing = timing::make_shared(48000);
 
-    timing->set_fraction(timing_fraction::milisecond);
+    timing->set_fraction_kind(timing_fraction_kind::milisecond);
 
     XCTAssertEqual(timing->fraction_value(0), 0);
     XCTAssertEqual(timing->fraction_value(1), 0);
@@ -86,7 +86,7 @@ using namespace yas::ae;
 - (void)test_fraction_value_of_frame30 {
     auto const timing = timing::make_shared(48000);
 
-    timing->set_fraction(timing_fraction::frame30);
+    timing->set_fraction_kind(timing_fraction_kind::frame30);
 
     XCTAssertEqual(timing->fraction_value(0), 0);
     XCTAssertEqual(timing->fraction_value(1), 0);

@@ -158,19 +158,19 @@ std::string editing_root_presenter_utils::nudge_text(nudging_kind const kind) {
     return "nudge\n" + nudge_kind_text(kind);
 }
 
-std::string editing_root_presenter_utils::timing_fraction_text(timing_fraction const fraction) {
-    switch (fraction) {
-        case timing_fraction::sample:
+std::string editing_root_presenter_utils::timing_fraction_text(timing_fraction_kind const kind) {
+    switch (kind) {
+        case timing_fraction_kind::sample:
             return "sample";
-        case timing_fraction::milisecond:
+        case timing_fraction_kind::milisecond:
             return "ms";
-        case timing_fraction::frame30:
+        case timing_fraction_kind::frame30:
             return "30fps";
     }
 }
 
-std::string editing_root_presenter_utils::timing_text(timing_fraction const fraction) {
-    return "timing\n" + timing_fraction_text(fraction);
+std::string editing_root_presenter_utils::timing_text(timing_fraction_kind const kind) {
+    return "timing\n" + timing_fraction_text(kind);
 }
 
 observing::fetcher_ptr<file_track_event> editing_root_presenter_utils::make_file_track_fetcher(
