@@ -36,7 +36,7 @@ observing::syncable timing::observe_fraction(std::function<void(timing_fraction_
 }
 
 uint32_t timing::unit_sample_count() const {
-    return this->_sample_rate / timing_utils::to_dividing_unit(this->_fraction->value(), this->_sample_rate);
+    return this->_sample_rate / timing_utils::to_fraction_unit(this->_fraction->value(), this->_sample_rate);
 }
 
 uint32_t timing::fraction_digits() const {
@@ -45,7 +45,7 @@ uint32_t timing::fraction_digits() const {
 
 uint32_t timing::fraction_value(frame_index_t const frame) const {
     auto const mod_frame = std::abs(frame) % this->_sample_rate;
-    auto const dividing = timing_utils::to_dividing_unit(this->_fraction->value(), this->_sample_rate);
+    auto const dividing = timing_utils::to_fraction_unit(this->_fraction->value(), this->_sample_rate);
     double const rate = static_cast<double>(mod_frame) / static_cast<double>(this->_sample_rate);
     return static_cast<uint32_t>(rate * dividing);
 }

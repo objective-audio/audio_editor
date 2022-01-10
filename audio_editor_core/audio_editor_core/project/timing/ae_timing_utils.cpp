@@ -10,11 +10,11 @@ using namespace yas;
 using namespace yas::ae;
 
 uint32_t timing_utils::to_fraction_digits(timing_fraction_kind const kind, sample_rate_t const sample_rate) {
-    auto const unit = to_dividing_unit(kind, sample_rate);
+    auto const unit = to_fraction_unit(kind, sample_rate);
     return math::fraction_digits(unit);
 }
 
-uint32_t timing_utils::to_dividing_unit(timing_fraction_kind const kind, sample_rate_t const sample_rate) {
+uint32_t timing_utils::to_fraction_unit(timing_fraction_kind const kind, sample_rate_t const sample_rate) {
     switch (kind) {
         case timing_fraction_kind::sample:
             return sample_rate;

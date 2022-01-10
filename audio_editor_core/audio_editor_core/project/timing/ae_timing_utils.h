@@ -9,5 +9,5 @@
 
 namespace yas::ae::timing_utils {
 uint32_t to_fraction_digits(timing_fraction_kind const, sample_rate_t const);
-uint32_t to_dividing_unit(timing_fraction_kind const, sample_rate_t const);
+uint32_t to_fraction_unit(timing_fraction_kind const, sample_rate_t const);
 }  // namespace yas::ae::timing_utils
