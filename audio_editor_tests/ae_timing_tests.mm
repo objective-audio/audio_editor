@@ -27,8 +27,7 @@ using namespace yas::ae;
     std::vector<timing_fraction_kind> called;
 
     auto canceller =
-        timing->observe_fraction([&called](timing_fraction_kind const &fraction) { called.emplace_back(fraction); })
-            .sync();
+        timing->observe_fraction([&called](timing_fraction_kind const &kind) { called.emplace_back(kind); }).sync();
 
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), timing_fraction_kind::sample);

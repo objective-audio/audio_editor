@@ -23,8 +23,8 @@ sample_rate_t timing::sample_rate() const {
     return this->_sample_rate;
 }
 
-void timing::set_fraction_kind(timing_fraction_kind const fraction) {
-    this->_fraction->set_value(fraction);
+void timing::set_fraction_kind(timing_fraction_kind const kind) {
+    this->_fraction->set_value(kind);
 }
 
 timing_fraction_kind timing::fraction_kind() const {
