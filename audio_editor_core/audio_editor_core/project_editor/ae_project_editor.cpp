@@ -287,6 +287,10 @@ std::shared_ptr<database_for_project_editor> const &project_editor::database() c
     return this->_database;
 }
 
+std::shared_ptr<timing_for_project_editor> const &project_editor::timing() const {
+    return this->_timing;
+}
+
 frame_index_t project_editor::current_frame() const {
     return this->_player->current_frame();
 }

@@ -418,7 +418,7 @@ void ui_editing_root::_setup_layout() {
 
     // time
 
-    ui::layout(this->_standard->view_look()->view_layout_guide()->top(), this->_time->top_guide(),
+    ui::layout(this->_standard->view_look()->view_layout_guide()->top(), this->_time->top_layout_target(),
                ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);

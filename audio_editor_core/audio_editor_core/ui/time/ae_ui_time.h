@@ -14,7 +14,7 @@ struct ui_time final {
                                                               std::shared_ptr<ui::texture> const &,
                                                               std::string const &project_id);
 
-    std::shared_ptr<ui::layout_value_guide> const &top_guide() const;
+    std::shared_ptr<ui::layout_value_target> top_layout_target() const;
     std::shared_ptr<ui::node> const &node() const;
 
    private:
@@ -23,7 +23,7 @@ struct ui_time final {
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
     std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::rect_plane> const _bg;
-    std::shared_ptr<ui::strings> const _strings;
+    std::shared_ptr<ui::strings> const _time_strings;
 
     observing::canceller_pool _pool;
 

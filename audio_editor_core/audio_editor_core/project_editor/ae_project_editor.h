@@ -17,6 +17,7 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] std::shared_ptr<file_track_for_project_editor> const &file_track() const;
     [[nodiscard]] std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const;
     [[nodiscard]] std::shared_ptr<database_for_project_editor> const &database() const;
+    [[nodiscard]] std::shared_ptr<timing_for_project_editor> const &timing() const override;
 
     [[nodiscard]] frame_index_t current_frame() const override;
 

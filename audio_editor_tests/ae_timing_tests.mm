@@ -51,4 +51,54 @@ using namespace yas::ae;
     canceller->cancel();
 }
 
+- (void)test_fraction_value_of_sample {
+    auto const timing = timing::make_shared(48000);
+
+    timing->set_fraction(timing_fraction::sample);
+
+    XCTAssertEqual(timing->fraction_value(0), 0);
+    XCTAssertEqual(timing->fraction_value(1), 1);
+    XCTAssertEqual(timing->fraction_value(47999), 47999);
+    XCTAssertEqual(timing->fraction_value(48000), 0);
+    XCTAssertEqual(timing->fraction_value(-1), 1);
+    XCTAssertEqual(timing->fraction_value(-47999), 47999);
+    XCTAssertEqual(timing->fraction_value(-48000), 0);
+}
+
+- (void)test_fraction_value_of_milisecond {
+    auto const timing = timing::make_shared(48000);
+
+    timing->set_fraction(timing_fraction::milisecond);
+
+    XCTAssertEqual(timing->fraction_value(0), 0);
+    XCTAssertEqual(timing->fraction_value(1), 0);
+    XCTAssertEqual(timing->fraction_value(47), 0);
+    XCTAssertEqual(timing->fraction_value(48), 1);
+    XCTAssertEqual(timing->fraction_value(47999), 999);
+    XCTAssertEqual(timing->fraction_value(48000), 0);
+    XCTAssertEqual(timing->fraction_value(-1), 0);
+    XCTAssertEqual(timing->fraction_value(-47), 0);
+    XCTAssertEqual(timing->fraction_value(-48), 1);
+    XCTAssertEqual(timing->fraction_value(-47999), 999);
+    XCTAssertEqual(timing->fraction_value(-48000), 0);
+}
+
+- (void)test_fraction_value_of_frame30 {
+    auto const timing = timing::make_shared(48000);
+
+    timing->set_fraction(timing_fraction::frame30);
+
+    XCTAssertEqual(timing->fraction_value(0), 0);
+    XCTAssertEqual(timing->fraction_value(1), 0);
+    XCTAssertEqual(timing->fraction_value(1599), 0);
+    XCTAssertEqual(timing->fraction_value(1600), 1);
+    XCTAssertEqual(timing->fraction_value(47999), 29);
+    XCTAssertEqual(timing->fraction_value(48000), 0);
+    XCTAssertEqual(timing->fraction_value(-1), 0);
+    XCTAssertEqual(timing->fraction_value(-1599), 0);
+    XCTAssertEqual(timing->fraction_value(-1600), 1);
+    XCTAssertEqual(timing->fraction_value(-47999), 29);
+    XCTAssertEqual(timing->fraction_value(-48000), 0);
+}
+
 @end
