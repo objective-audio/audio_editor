@@ -19,7 +19,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
                  std::shared_ptr<time_presenter> const &presenter)
     : _presenter(presenter),
       _font_atlas(ui::font_atlas::make_shared(
-          {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:"}, texture)),
+          {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
       _top_guide(ui::layout_value_guide::make_shared()),
       _node(ui::node::make_shared()),
       _bg(ui::rect_plane::make_shared(1)),

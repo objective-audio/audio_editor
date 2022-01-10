@@ -34,6 +34,7 @@
 		B6690A11262A7D4100E86353 /* processing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A10262A7D4100E86353 /* processing.framework */; };
 		B6690A13262A7D4100E86353 /* ui.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6690A12262A7D4100E86353 /* ui.framework */; };
 		B66F4772278BFBB100CB724C /* ae_math_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66F4771278BFBB100CB724C /* ae_math_tests.mm */; };
+		B66F4774278C32C000CB724C /* ae_time_presenter_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66F4773278C32C000CB724C /* ae_time_presenter_utils_tests.mm */; };
 		B69708F72639B1060045E975 /* ae_file_importer_resource_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B69708F62639B1060045E975 /* ae_file_importer_resource_tests.mm */; };
 		B69708FD263A5FCA0045E975 /* ae_file_importer_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B69708FC263A5FCA0045E975 /* ae_file_importer_tests.mm */; };
 		B69C68A52672615800C1083F /* ae_ui_layout_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B69C68A42672615800C1083F /* ae_ui_layout_utils_tests.mm */; };
@@ -78,6 +79,7 @@
 		B6690A10262A7D4100E86353 /* processing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = processing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6690A12262A7D4100E86353 /* ui.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ui.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66F4771278BFBB100CB724C /* ae_math_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_math_tests.mm; path = ../../audio_editor_tests/ae_math_tests.mm; sourceTree = "<group>"; };
+		B66F4773278C32C000CB724C /* ae_time_presenter_utils_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_time_presenter_utils_tests.mm; path = ../../audio_editor_tests/ae_time_presenter_utils_tests.mm; sourceTree = "<group>"; };
 		B69708F62639B1060045E975 /* ae_file_importer_resource_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_importer_resource_tests.mm; path = ../../audio_editor_tests/ae_file_importer_resource_tests.mm; sourceTree = "<group>"; };
 		B69708FC263A5FCA0045E975 /* ae_file_importer_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_importer_tests.mm; path = ../../audio_editor_tests/ae_file_importer_tests.mm; sourceTree = "<group>"; };
 		B69C68A42672615800C1083F /* ae_ui_layout_utils_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_ui_layout_utils_tests.mm; path = ../../audio_editor_tests/ae_ui_layout_utils_tests.mm; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				B64E94FE2653F29F0056F511 /* ae_marker_pool_tests.mm */,
 				B69C68A42672615800C1083F /* ae_ui_layout_utils_tests.mm */,
 				B6BEFE97267DD76B002B6894 /* ae_editing_root_presenter_utils_tests.mm */,
+				B66F4773278C32C000CB724C /* ae_time_presenter_utils_tests.mm */,
 				B6B563CA271BD5A00003ED60 /* ae_common_utils_tests.mm */,
 				B6E77A7F275090DF00B6521E /* ae_pasteboard_tests.mm */,
 				B6E77A812750912700B6521E /* ae_pasting_file_module_tests.mm */,
@@ -274,6 +277,7 @@
 				B6A1237C27883C4100F31B31 /* ae_timing_tests.mm in Sources */,
 				B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */,
 				B6A1237A27883B6000F31B31 /* ae_nudging_test_utils.cpp in Sources */,
+				B66F4774278C32C000CB724C /* ae_time_presenter_utils_tests.mm in Sources */,
 				B666F17E275A50B90040D306 /* ae_display_space_tests.mm in Sources */,
 				B666CE1B26342B4100C1693D /* ae_test_utils.cpp in Sources */,
 				B66F4772278BFBB100CB724C /* ae_math_tests.mm in Sources */,

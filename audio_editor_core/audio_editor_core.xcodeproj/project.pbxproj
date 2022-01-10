@@ -144,7 +144,7 @@
 		B6A12387278947A200F31B31 /* ae_time_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A12385278947A200F31B31 /* ae_time_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A12388278947A200F31B31 /* ae_time_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6A12386278947A200F31B31 /* ae_time_presenter.cpp */; };
 		B6A1238A278980DA00F31B31 /* ae_time_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A12389278980D800F31B31 /* ae_time_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B6A1238D2789848B00F31B31 /* ae_time_presenter_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A1238B2789848B00F31B31 /* ae_time_presenter_utils.h */; };
+		B6A1238D2789848B00F31B31 /* ae_time_presenter_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A1238B2789848B00F31B31 /* ae_time_presenter_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A1238E2789848B00F31B31 /* ae_time_presenter_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6A1238C2789848B00F31B31 /* ae_time_presenter_utils.cpp */; };
 		B6A55ECB266C81980039E56F /* ae_ui_layout_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A55EC9266C81960039E56F /* ae_ui_layout_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A55ECC266C81980039E56F /* ae_ui_layout_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6A55ECA266C81980039E56F /* ae_ui_layout_utils.cpp */; };
