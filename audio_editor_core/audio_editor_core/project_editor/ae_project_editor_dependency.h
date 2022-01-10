@@ -154,9 +154,10 @@ struct nudging_for_project_editor {
 struct timing_for_project_editor : timing_for_nudging, timing_for_time_presenter {
     virtual ~timing_for_project_editor() = default;
 
-    virtual void set_fraction(timing_fraction const) = 0;
-    [[nodiscard]] virtual timing_fraction fraction() const = 0;
-    [[nodiscard]] virtual observing::syncable observe_fraction(std::function<void(timing_fraction const &)> &&) = 0;
+    virtual void set_fraction_kind(timing_fraction_kind const) = 0;
+    [[nodiscard]] virtual timing_fraction_kind fraction_kind() const = 0;
+    [[nodiscard]] virtual observing::syncable observe_fraction(
+        std::function<void(timing_fraction_kind const &)> &&) = 0;
 
     [[nodiscard]] virtual uint32_t unit_sample_count() const = 0;
 };

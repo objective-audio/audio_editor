@@ -16,22 +16,22 @@ std::shared_ptr<timing> timing::make_shared(sample_rate_t const sample_rate) {
 
 timing::timing(sample_rate_t const sample_rate)
     : _sample_rate(sample_rate),
-      _fraction(observing::value::holder<timing_fraction>::make_shared(timing_fraction::sample)) {
+      _fraction(observing::value::holder<timing_fraction_kind>::make_shared(timing_fraction_kind::sample)) {
 }
 
 sample_rate_t timing::sample_rate() const {
     return this->_sample_rate;
 }
 
-void timing::set_fraction(timing_fraction const fraction) {
+void timing::set_fraction_kind(timing_fraction_kind const fraction) {
     this->_fraction->set_value(fraction);
 }
 
-timing_fraction timing::fraction() const {
+timing_fraction_kind timing::fraction_kind() const {
     return this->_fraction->value();
 }
 
-observing::syncable timing::observe_fraction(std::function<void(timing_fraction const &)> &&handler) {
+observing::syncable timing::observe_fraction(std::function<void(timing_fraction_kind const &)> &&handler) {
     return this->_fraction->observe(std::move(handler));
 }
 

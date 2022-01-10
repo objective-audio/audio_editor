@@ -97,7 +97,7 @@ std::string editing_root_presenter::nudge_text() const {
 
 std::string editing_root_presenter::timing_text() const {
     if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::timing_text(editor->timing_fraction());
+        return editing_root_presenter_utils::timing_text(editor->timing_fraction_kind());
     } else {
         return editing_root_presenter_utils::empty_text();
     }
@@ -228,9 +228,10 @@ observing::syncable editing_root_presenter::observe_nudging_text(std::function<v
 
 observing::syncable editing_root_presenter::observe_timing_text(std::function<void(std::string const &)> &&handler) {
     if (auto const editor = this->_project_editor.lock()) {
-        return editor->observe_timing_fraction([handler = std::move(handler)](ae::timing_fraction const &fraction) {
-            handler(editing_root_presenter_utils::timing_text(fraction));
-        });
+        return editor->observe_timing_fraction(
+            [handler = std::move(handler)](ae::timing_fraction_kind const &fraction) {
+                handler(editing_root_presenter_utils::timing_text(fraction));
+            });
         return observing::syncable{};
     } else {
         return observing::syncable{};

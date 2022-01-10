@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_common_types.h>
 
 namespace yas::ae {
-enum class timing_fraction {
+enum class timing_fraction_kind {
     sample,
     milisecond,
     frame30,

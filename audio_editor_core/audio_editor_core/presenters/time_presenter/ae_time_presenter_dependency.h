@@ -14,7 +14,7 @@ struct timing_for_time_presenter {
 
     [[nodiscard]] virtual sample_rate_t sample_rate() const = 0;
 
-    [[nodiscard]] virtual timing_fraction fraction() const = 0;
+    [[nodiscard]] virtual timing_fraction_kind fraction_kind() const = 0;
     [[nodiscard]] virtual uint32_t fraction_digits() const = 0;
     [[nodiscard]] virtual uint32_t fraction_value(frame_index_t const frame) const = 0;
 };
