@@ -14,11 +14,11 @@ using namespace yas::ae;
 
 @implementation ae_timing_tests
 
-- (void)test_initial {
-    auto const timing = timing::make_shared(48000);
-
-    XCTAssertEqual(timing->sample_rate(), 48000);
-    XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::sample);
+- (void)test_sample_rate {
+    XCTAssertEqual(timing::make_shared(1)->sample_rate(), 1);
+    XCTAssertEqual(timing::make_shared(44100)->sample_rate(), 44100);
+    XCTAssertEqual(timing::make_shared(48000)->sample_rate(), 48000);
+    XCTAssertEqual(timing::make_shared(96000)->sample_rate(), 96000);
 }
 
 - (void)test_set_fraction {
@@ -99,6 +99,22 @@ using namespace yas::ae;
     XCTAssertEqual(timing->fraction_value(-1600), 1);
     XCTAssertEqual(timing->fraction_value(-47999), 29);
     XCTAssertEqual(timing->fraction_value(-48000), 0);
+}
+
+- (void)test_fraction_digits {
+    auto const timing = timing::make_shared(48000);
+
+    timing->set_fraction_kind(timing_fraction_kind::sample);
+
+    XCTAssertEqual(timing->fraction_digits(), 5);
+
+    timing->set_fraction_kind(timing_fraction_kind::milisecond);
+
+    XCTAssertEqual(timing->fraction_digits(), 3);
+
+    timing->set_fraction_kind(timing_fraction_kind::frame30);
+
+    XCTAssertEqual(timing->fraction_digits(), 2);
 }
 
 @end
