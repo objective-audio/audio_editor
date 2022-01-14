@@ -14,37 +14,51 @@
 using namespace yas;
 using namespace yas::ae;
 
-time_components time_presenter_utils::time_components(frame_index_t const frame,
-                                                      std::shared_ptr<timing_for_time_presenter> const &timing) {
-    sample_rate_t const sample_rate = timing->sample_rate();
-    frame_index_t const abs_frame = std::abs(frame);
+std::string time_presenter_utils::to_sign_string(ae::timing_components const &components) {
+    return components.is_minus ? "-" : "+";
+}
 
-    auto const fraction = timing->fraction_value(frame);
-    auto const sec = static_cast<uint32_t>(playing::math::floor_int(abs_frame, sample_rate) / sample_rate);
-    auto const min = sec / 60;
+std::string time_presenter_utils::to_hours_string(ae::timing_components const &components) {
+    std::stringstream stream;
+    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.hours);
+    return stream.str();
+}
 
-    return ae::time_components{.is_minus = frame < 0,
-                               .hours = static_cast<uint8_t>(min / 60),
-                               .minutes = static_cast<uint8_t>(playing::math::mod_int(min, 60)),
-                               .seconds = static_cast<uint8_t>(playing::math::mod_int(sec, 60)),
-                               .fraction = fraction,
-                               .fraction_digits = timing->fraction_digits()};
+std::string time_presenter_utils::to_minutes_string(ae::timing_components const &components) {
+    std::stringstream stream;
+    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.minutes);
+    return stream.str();
+}
+
+std::string time_presenter_utils::to_seconds_string(ae::timing_components const &components) {
+    std::stringstream stream;
+    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.seconds);
+    return stream.str();
+}
+
+std::string time_presenter_utils::to_fraction_string(ae::timing_components const &components,
+                                                     uint32_t const fraction_digits) {
+    std::stringstream stream;
+    if (fraction_digits > 0) {
+        stream << std::setfill('0') << std::right << std::setw(fraction_digits) << components.fraction;
+    }
+    return stream.str();
 }
 
 std::string time_presenter_utils::time_text(frame_index_t const frame,
                                             std::shared_ptr<timing_for_time_presenter> const &timing) {
-    auto const components = time_components(frame, timing);
+    auto const components = timing->components(frame);
 
     std::stringstream stream;
 
-    stream << components.sign_string();
-    stream << components.hours_string();
+    stream << to_sign_string(components);
+    stream << to_hours_string(components);
     stream << ":";
-    stream << components.minutes_string();
+    stream << to_minutes_string(components);
     stream << ":";
-    stream << components.seconds_string();
+    stream << to_seconds_string(components);
 
-    auto const fraction_string = components.fraction_string();
+    auto const fraction_string = to_fraction_string(components, timing->fraction_digits());
 
     if (!fraction_string.empty()) {
         stream << ".";

@@ -148,17 +148,15 @@ struct nudging_for_project_editor {
     [[nodiscard]] virtual nudging_kind kind() const = 0;
     [[nodiscard]] virtual observing::syncable observe_kind(std::function<void(nudging_kind const &)> &&) = 0;
 
-    [[nodiscard]] virtual uint32_t unit_sample_count() const = 0;
+    [[nodiscard]] virtual frame_index_t next_frame(frame_index_t const) const = 0;
+    [[nodiscard]] virtual frame_index_t previous_frame(frame_index_t const) const = 0;
 };
 
 struct timing_for_project_editor : timing_for_nudging, timing_for_time_presenter {
     virtual ~timing_for_project_editor() = default;
 
     virtual void set_fraction_kind(timing_fraction_kind const) = 0;
-    [[nodiscard]] virtual timing_fraction_kind fraction_kind() const = 0;
     [[nodiscard]] virtual observing::syncable observe_fraction(
         std::function<void(timing_fraction_kind const &)> &&) = 0;
-
-    [[nodiscard]] virtual uint32_t unit_sample_count() const = 0;
 };
 }  // namespace yas::ae

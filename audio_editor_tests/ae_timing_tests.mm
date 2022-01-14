@@ -32,73 +32,99 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), timing_fraction_kind::sample);
     XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::sample);
-    XCTAssertEqual(timing->unit_sample_count(), 1);
 
     timing->set_fraction_kind(timing_fraction_kind::milisecond);
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), timing_fraction_kind::milisecond);
     XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::milisecond);
-    XCTAssertEqual(timing->unit_sample_count(), 48);
 
     timing->set_fraction_kind(timing_fraction_kind::frame30);
 
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2), timing_fraction_kind::frame30);
     XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::frame30);
-    XCTAssertEqual(timing->unit_sample_count(), 1600);
 
     canceller->cancel();
 }
 
-- (void)test_fraction_value_of_sample {
+- (void)test_components_fraction_of_sample {
     auto const timing = timing::make_shared(48000);
 
     timing->set_fraction_kind(timing_fraction_kind::sample);
 
-    XCTAssertEqual(timing->fraction_value(0), 0);
-    XCTAssertEqual(timing->fraction_value(1), 1);
-    XCTAssertEqual(timing->fraction_value(47999), 47999);
-    XCTAssertEqual(timing->fraction_value(48000), 0);
-    XCTAssertEqual(timing->fraction_value(-1), 1);
-    XCTAssertEqual(timing->fraction_value(-47999), 47999);
-    XCTAssertEqual(timing->fraction_value(-48000), 0);
+    XCTAssertEqual(timing->components(0),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(1),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 1}));
+    XCTAssertEqual(timing->components(47999),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 47999}));
+    XCTAssertEqual(timing->components(48000),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 1, .fraction = 0}));
+    XCTAssertEqual(timing->components(-1),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 1}));
+    XCTAssertEqual(timing->components(-47999),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 47999}));
+    XCTAssertEqual(timing->components(-48000),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 1, .fraction = 0}));
 }
 
-- (void)test_fraction_value_of_milisecond {
+- (void)test_components_fraction_of_milisecond {
     auto const timing = timing::make_shared(48000);
 
     timing->set_fraction_kind(timing_fraction_kind::milisecond);
 
-    XCTAssertEqual(timing->fraction_value(0), 0);
-    XCTAssertEqual(timing->fraction_value(1), 0);
-    XCTAssertEqual(timing->fraction_value(47), 0);
-    XCTAssertEqual(timing->fraction_value(48), 1);
-    XCTAssertEqual(timing->fraction_value(47999), 999);
-    XCTAssertEqual(timing->fraction_value(48000), 0);
-    XCTAssertEqual(timing->fraction_value(-1), 0);
-    XCTAssertEqual(timing->fraction_value(-47), 0);
-    XCTAssertEqual(timing->fraction_value(-48), 1);
-    XCTAssertEqual(timing->fraction_value(-47999), 999);
-    XCTAssertEqual(timing->fraction_value(-48000), 0);
+    XCTAssertEqual(timing->components(0),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(1),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(47),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(48),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 1}));
+    XCTAssertEqual(timing->components(47999),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 999}));
+    XCTAssertEqual(timing->components(48000),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 1, .fraction = 0}));
+    XCTAssertEqual(timing->components(-1),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(-47),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(-48),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 1}));
+    XCTAssertEqual(timing->components(-47999),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 999}));
+    XCTAssertEqual(timing->components(-48000),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 1, .fraction = 0}));
 }
 
-- (void)test_fraction_value_of_frame30 {
+- (void)test_components_fraction_of_frame30 {
     auto const timing = timing::make_shared(48000);
 
     timing->set_fraction_kind(timing_fraction_kind::frame30);
 
-    XCTAssertEqual(timing->fraction_value(0), 0);
-    XCTAssertEqual(timing->fraction_value(1), 0);
-    XCTAssertEqual(timing->fraction_value(1599), 0);
-    XCTAssertEqual(timing->fraction_value(1600), 1);
-    XCTAssertEqual(timing->fraction_value(47999), 29);
-    XCTAssertEqual(timing->fraction_value(48000), 0);
-    XCTAssertEqual(timing->fraction_value(-1), 0);
-    XCTAssertEqual(timing->fraction_value(-1599), 0);
-    XCTAssertEqual(timing->fraction_value(-1600), 1);
-    XCTAssertEqual(timing->fraction_value(-47999), 29);
-    XCTAssertEqual(timing->fraction_value(-48000), 0);
+    XCTAssertEqual(timing->components(0),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(1),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(1599),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(1600),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 1}));
+    XCTAssertEqual(timing->components(47999),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 29}));
+    XCTAssertEqual(timing->components(48000),
+                   (timing_components{.is_minus = false, .hours = 0, .minutes = 0, .seconds = 1, .fraction = 0}));
+    XCTAssertEqual(timing->components(-1),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(-1599),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 0}));
+    XCTAssertEqual(timing->components(-1600),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 1}));
+    XCTAssertEqual(timing->components(-47999),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 0, .fraction = 29}));
+    XCTAssertEqual(timing->components(-48000),
+                   (timing_components{.is_minus = true, .hours = 0, .minutes = 0, .seconds = 1, .fraction = 0}));
 }
 
 - (void)test_fraction_digits {
@@ -115,6 +141,29 @@ using namespace yas::ae;
     timing->set_fraction_kind(timing_fraction_kind::frame30);
 
     XCTAssertEqual(timing->fraction_digits(), 2);
+}
+
+- (void)test_frame {
+    auto const timing = timing::make_shared(10000);
+
+    timing->set_fraction_kind(timing_fraction_kind::sample);
+
+    {
+        auto const frame = timing->frame({.is_minus = false, .hours = 1, .minutes = 2, .seconds = 3, .fraction = 4});
+
+        XCTAssertEqual(frame, ((10000 * 60 * 60) + (10000 * 60 * 2) + (10000 * 3) + 4));
+    }
+
+    XCTAssertEqual(timing->frame(timing->components(76821058)), 76821058);
+    XCTAssertEqual(timing->frame(timing->components(-76821058)), -76821058);
+
+    timing->set_fraction_kind(timing_fraction_kind::milisecond);
+
+    XCTAssertEqual(timing->frame(timing->components(76821058)), 76821050);
+
+    timing->set_fraction_kind(timing_fraction_kind::frame30);
+
+    XCTAssertEqual(timing->frame(timing->components(76821058)), 76821000);
 }
 
 @end

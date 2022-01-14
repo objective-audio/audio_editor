@@ -317,8 +317,8 @@ void project_editor::nudge_previous() {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    frame_index_t const diff = this->_nudging->unit_sample_count();
-    this->_player->seek(current_frame - diff);
+    frame_index_t const prev_frame = this->_nudging->previous_frame(current_frame);
+    this->_player->seek(prev_frame);
 }
 
 void project_editor::nudge_next() {
@@ -327,8 +327,8 @@ void project_editor::nudge_next() {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    frame_index_t const diff = this->_nudging->unit_sample_count();
-    this->_player->seek(current_frame + diff);
+    frame_index_t const next_frame = this->_nudging->next_frame(current_frame);
+    this->_player->seek(next_frame);
 }
 
 nudging_kind project_editor::nudging_kind() const {

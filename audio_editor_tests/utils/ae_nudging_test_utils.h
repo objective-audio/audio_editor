@@ -9,11 +9,16 @@
 namespace yas::ae::test_utils {
 struct timing_stub final : timing_for_nudging {
     sample_rate_t sample_rate_value = 0;
-    uint32_t unit_sample_count_value = 0;
+    timing_components components_value;
+    timing_components adding_value;
+    frame_index_t frame_value;
 
-    timing_stub(sample_rate_t const sample_rate, uint32_t const unit_sample_count);
+    timing_stub(sample_rate_t const sample_rate);
 
     sample_rate_t sample_rate() const override;
-    uint32_t unit_sample_count() const override;
+
+    timing_components components(frame_index_t const) const override;
+    timing_components adding(timing_components const &, timing_components const &) const override;
+    frame_index_t frame(timing_components const &) const override;
 };
 }  // namespace yas::ae::test_utils

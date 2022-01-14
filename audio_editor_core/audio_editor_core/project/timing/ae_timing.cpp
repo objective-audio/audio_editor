@@ -16,7 +16,7 @@ std::shared_ptr<timing> timing::make_shared(sample_rate_t const sample_rate) {
 
 timing::timing(sample_rate_t const sample_rate)
     : _sample_rate(sample_rate),
-      _fraction(observing::value::holder<timing_fraction_kind>::make_shared(timing_fraction_kind::sample)) {
+      _fraction_kind(observing::value::holder<timing_fraction_kind>::make_shared(timing_fraction_kind::sample)) {
 }
 
 sample_rate_t timing::sample_rate() const {
@@ -24,28 +24,29 @@ sample_rate_t timing::sample_rate() const {
 }
 
 void timing::set_fraction_kind(timing_fraction_kind const kind) {
-    this->_fraction->set_value(kind);
+    this->_fraction_kind->set_value(kind);
 }
 
 timing_fraction_kind timing::fraction_kind() const {
-    return this->_fraction->value();
+    return this->_fraction_kind->value();
 }
 
 observing::syncable timing::observe_fraction(std::function<void(timing_fraction_kind const &)> &&handler) {
-    return this->_fraction->observe(std::move(handler));
+    return this->_fraction_kind->observe(std::move(handler));
 }
 
-uint32_t timing::unit_sample_count() const {
-    return this->_sample_rate / timing_utils::to_fraction_unit(this->_fraction->value(), this->_sample_rate);
+timing_components timing::components(frame_index_t const frame) const {
+    return timing_utils::to_components(frame, this->_fraction_kind->value(), this->_sample_rate);
+}
+
+timing_components timing::adding(timing_components const &lhs, timing_components const &rhs) const {
+    return timing_utils::adding(lhs, rhs, this->_fraction_kind->value(), this->_sample_rate);
 }
 
 uint32_t timing::fraction_digits() const {
-    return timing_utils::to_fraction_digits(this->_fraction->value(), this->_sample_rate);
+    return timing_utils::to_fraction_digits(this->_fraction_kind->value(), this->_sample_rate);
 }
 
-uint32_t timing::fraction_value(frame_index_t const frame) const {
-    auto const mod_frame = std::abs(frame) % this->_sample_rate;
-    auto const dividing = timing_utils::to_fraction_unit(this->_fraction->value(), this->_sample_rate);
-    double const rate = static_cast<double>(mod_frame) / static_cast<double>(this->_sample_rate);
-    return static_cast<uint32_t>(rate * dividing);
+frame_index_t timing::frame(timing_components const &components) const {
+    return timing_utils::to_frame(components, this->_fraction_kind->value(), this->_sample_rate);
 }

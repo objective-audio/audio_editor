@@ -7,13 +7,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-uint32_t nudging_utils::to_sample_count(nudging_kind const kind, std::shared_ptr<timing_for_nudging> const &timing) {
-    switch (kind) {
-        case nudging_kind::fraction:
-            return timing->unit_sample_count();
-        case nudging_kind::second:
-            return timing->sample_rate();
+timing_components nudging_utils::offset_components(bool const is_previous, nudging_kind const nudging_kind) {
+    switch (nudging_kind) {
         case nudging_kind::minute:
-            return timing->sample_rate() * 60;
+            return {.is_minus = is_previous, .minutes = 1};
+        case nudging_kind::second:
+            return {.is_minus = is_previous, .seconds = 1};
+        case nudging_kind::fraction:
+            return {.is_minus = is_previous, .fraction = 1};
     }
 }
