@@ -98,9 +98,9 @@ timing_components timing_utils::adding(timing_components const &lhs, timing_comp
         auto const abs_lhs = lhs.abs();
         auto const abs_rhs = rhs.abs();
 
-        bool const lhs_less_than_rhs = abs_lhs < abs_rhs;
-        auto const &smaller = lhs_less_than_rhs ? abs_lhs : abs_rhs;
-        auto const &larger = lhs_less_than_rhs ? abs_rhs : abs_lhs;
+        bool const is_lhs_smaller = abs_lhs < abs_rhs;
+        auto const &smaller = is_lhs_smaller ? abs_lhs : abs_rhs;
+        auto const &larger = is_lhs_smaller ? abs_rhs : abs_lhs;
 
         int64_t fraction = static_cast<int64_t>(larger.fraction) - static_cast<int64_t>(smaller.fraction);
         int16_t seconds = static_cast<int16_t>(larger.seconds) - static_cast<int16_t>(smaller.seconds);
@@ -124,7 +124,7 @@ timing_components timing_utils::adding(timing_components const &lhs, timing_comp
 
         assert(hours >= 0);
 
-        return timing_components{.is_minus = lhs_less_than_rhs ? rhs.is_minus : lhs.is_minus,
+        return timing_components{.is_minus = is_lhs_smaller ? rhs.is_minus : lhs.is_minus,
                                  .hours = static_cast<uint8_t>(hours),
                                  .minutes = static_cast<uint8_t>(minutes),
                                  .seconds = static_cast<uint8_t>(seconds),
