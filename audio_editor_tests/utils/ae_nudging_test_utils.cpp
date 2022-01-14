@@ -6,15 +6,23 @@
 
 using namespace yas;
 using namespace yas::ae;
+using namespace yas::ae::test_utils;
 
-test_utils::timing_stub::timing_stub(sample_rate_t const sample_rate, uint32_t const unit_sample_count)
-    : sample_rate_value(sample_rate), unit_sample_count_value(unit_sample_count) {
+timing_stub::timing_stub(sample_rate_t const sample_rate) : sample_rate_value(sample_rate) {
 }
 
-sample_rate_t test_utils::timing_stub::sample_rate() const {
+sample_rate_t timing_stub::sample_rate() const {
     return sample_rate_value;
 }
 
-uint32_t test_utils::timing_stub::unit_sample_count() const {
-    return unit_sample_count_value;
+timing_components timing_stub::components(frame_index_t const) const {
+    return this->components_value;
+}
+
+timing_components timing_stub::adding(timing_components const &, timing_components const &) const {
+    return this->adding_value;
+}
+
+frame_index_t timing_stub::frame(timing_components const &) const {
+    return this->frame_value;
 }

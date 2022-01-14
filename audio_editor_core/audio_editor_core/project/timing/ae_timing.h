@@ -20,14 +20,15 @@ struct timing final : timing_for_project_editor {
     [[nodiscard]] timing_fraction_kind fraction_kind() const override;
     [[nodiscard]] observing::syncable observe_fraction(std::function<void(timing_fraction_kind const &)> &&) override;
 
-    [[nodiscard]] uint32_t unit_sample_count() const override;
-
+    [[nodiscard]] timing_components components(frame_index_t const) const override;
+    [[nodiscard]] timing_components adding(timing_components const &, timing_components const &) const override;
     [[nodiscard]] uint32_t fraction_digits() const override;
-    [[nodiscard]] uint32_t fraction_value(frame_index_t const frame) const override;
+
+    [[nodiscard]] frame_index_t frame(timing_components const &) const override;
 
    private:
     sample_rate_t const _sample_rate;
-    observing::value::holder_ptr<timing_fraction_kind> const _fraction;
+    observing::value::holder_ptr<timing_fraction_kind> const _fraction_kind;
 
     timing(sample_rate_t const);
 };

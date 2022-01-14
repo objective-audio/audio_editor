@@ -15,8 +15,8 @@ struct timing_for_time_presenter {
     [[nodiscard]] virtual sample_rate_t sample_rate() const = 0;
 
     [[nodiscard]] virtual timing_fraction_kind fraction_kind() const = 0;
+    [[nodiscard]] virtual timing_components components(frame_index_t const) const = 0;
     [[nodiscard]] virtual uint32_t fraction_digits() const = 0;
-    [[nodiscard]] virtual uint32_t fraction_value(frame_index_t const frame) const = 0;
 };
 
 struct project_editor_for_time_presenter {

@@ -20,7 +20,8 @@ struct nudging final : nudging_for_project_editor {
     void set_unit_count(uint32_t const);
     [[nodiscard]] uint32_t unit_count() const;
 
-    [[nodiscard]] uint32_t unit_sample_count() const override;
+    [[nodiscard]] frame_index_t next_frame(frame_index_t const) const override;
+    [[nodiscard]] frame_index_t previous_frame(frame_index_t const) const override;
 
    private:
     std::shared_ptr<timing_for_nudging> const _timing;

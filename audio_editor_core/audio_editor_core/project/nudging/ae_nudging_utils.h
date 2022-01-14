@@ -6,9 +6,10 @@
 
 #include <audio_editor_core/ae_nudging_dependency.h>
 #include <audio_editor_core/ae_nudging_types.h>
+#include <audio_editor_core/ae_timing_types.h>
 
 #include <cstdint>
 
 namespace yas::ae::nudging_utils {
-uint32_t to_sample_count(nudging_kind const, std::shared_ptr<timing_for_nudging> const &);
-}
+timing_components offset_components(bool const is_previous, nudging_kind const);
+}  // namespace yas::ae::nudging_utils

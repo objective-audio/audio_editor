@@ -15,15 +15,20 @@ using namespace yas::ae;
 
 @implementation ae_nudging_utils_tests
 
-- (void)test_to_sample_count {
-    auto const timing48000 = std::make_shared<test_utils::timing_stub>(48000, 1);
-    auto const timing96000 = std::make_shared<test_utils::timing_stub>(96000, 1);
+- (void)test_offset_components {
+    XCTAssertEqual(nudging_utils::offset_components(false, nudging_kind::minute),
+                   (timing_components{.is_minus = false, .minutes = 1}));
+    XCTAssertEqual(nudging_utils::offset_components(false, nudging_kind::second),
+                   (timing_components{.is_minus = false, .seconds = 1}));
+    XCTAssertEqual(nudging_utils::offset_components(false, nudging_kind::fraction),
+                   (timing_components{.is_minus = false, .fraction = 1}));
 
-    XCTAssertEqual(nudging_utils::to_sample_count(nudging_kind::fraction, timing48000), 1);
-    XCTAssertEqual(nudging_utils::to_sample_count(nudging_kind::fraction, timing96000), 1);
-
-    XCTAssertEqual(nudging_utils::to_sample_count(nudging_kind::second, timing48000), 48000);
-    XCTAssertEqual(nudging_utils::to_sample_count(nudging_kind::second, timing96000), 96000);
+    XCTAssertEqual(nudging_utils::offset_components(true, nudging_kind::minute),
+                   (timing_components{.is_minus = true, .minutes = 1}));
+    XCTAssertEqual(nudging_utils::offset_components(true, nudging_kind::second),
+                   (timing_components{.is_minus = true, .seconds = 1}));
+    XCTAssertEqual(nudging_utils::offset_components(true, nudging_kind::fraction),
+                   (timing_components{.is_minus = true, .fraction = 1}));
 }
 
 @end
