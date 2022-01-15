@@ -7,13 +7,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-timing_components nudging_utils::offset_components(bool const is_previous, nudging_kind const nudging_kind) {
+timing_components nudging_utils::offset_components(bool const is_previous, uint32_t const count,
+                                                   nudging_kind const nudging_kind) {
     switch (nudging_kind) {
         case nudging_kind::minute:
-            return {.is_minus = is_previous, .minutes = 1};
+            return {.is_minus = is_previous, .minutes = static_cast<uint8_t>(count)};
         case nudging_kind::second:
-            return {.is_minus = is_previous, .seconds = 1};
+            return {.is_minus = is_previous, .seconds = static_cast<uint8_t>(count)};
         case nudging_kind::fraction:
-            return {.is_minus = is_previous, .fraction = 1};
+            return {.is_minus = is_previous, .fraction = count};
     }
 }

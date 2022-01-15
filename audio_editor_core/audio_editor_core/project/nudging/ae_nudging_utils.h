@@ -11,5 +11,5 @@
 #include <cstdint>
 
 namespace yas::ae::nudging_utils {
-timing_components offset_components(bool const is_previous, nudging_kind const);
+timing_components offset_components(bool const is_previous, uint32_t const count, nudging_kind const);
 }  // namespace yas::ae::nudging_utils

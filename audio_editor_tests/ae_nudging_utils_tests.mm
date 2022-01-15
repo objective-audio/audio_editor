@@ -16,19 +16,19 @@ using namespace yas::ae;
 @implementation ae_nudging_utils_tests
 
 - (void)test_offset_components {
-    XCTAssertEqual(nudging_utils::offset_components(false, nudging_kind::minute),
+    XCTAssertEqual(nudging_utils::offset_components(false, 1, nudging_kind::minute),
                    (timing_components{.is_minus = false, .minutes = 1}));
-    XCTAssertEqual(nudging_utils::offset_components(false, nudging_kind::second),
-                   (timing_components{.is_minus = false, .seconds = 1}));
-    XCTAssertEqual(nudging_utils::offset_components(false, nudging_kind::fraction),
-                   (timing_components{.is_minus = false, .fraction = 1}));
+    XCTAssertEqual(nudging_utils::offset_components(false, 10, nudging_kind::second),
+                   (timing_components{.is_minus = false, .seconds = 10}));
+    XCTAssertEqual(nudging_utils::offset_components(false, 100, nudging_kind::fraction),
+                   (timing_components{.is_minus = false, .fraction = 100}));
 
-    XCTAssertEqual(nudging_utils::offset_components(true, nudging_kind::minute),
+    XCTAssertEqual(nudging_utils::offset_components(true, 1, nudging_kind::minute),
                    (timing_components{.is_minus = true, .minutes = 1}));
-    XCTAssertEqual(nudging_utils::offset_components(true, nudging_kind::second),
-                   (timing_components{.is_minus = true, .seconds = 1}));
-    XCTAssertEqual(nudging_utils::offset_components(true, nudging_kind::fraction),
-                   (timing_components{.is_minus = true, .fraction = 1}));
+    XCTAssertEqual(nudging_utils::offset_components(true, 10, nudging_kind::second),
+                   (timing_components{.is_minus = true, .seconds = 10}));
+    XCTAssertEqual(nudging_utils::offset_components(true, 100, nudging_kind::fraction),
+                   (timing_components{.is_minus = true, .fraction = 100}));
 }
 
 @end

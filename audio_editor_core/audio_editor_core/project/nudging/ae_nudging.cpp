@@ -42,14 +42,14 @@ uint32_t nudging::unit_count() const {
 
 frame_index_t nudging::next_frame(frame_index_t const frame) const {
     auto const current = this->_timing->components(frame);
-    auto const offset = nudging_utils::offset_components(false, this->_kind->value());
+    auto const offset = nudging_utils::offset_components(false, this->_unit_count, this->_kind->value());
     auto const next = this->_timing->adding(current, offset);
     return this->_timing->frame(next);
 }
 
 frame_index_t nudging::previous_frame(frame_index_t const frame) const {
     auto const current = this->_timing->components(frame);
-    auto const offset = nudging_utils::offset_components(true, this->_kind->value());
+    auto const offset = nudging_utils::offset_components(true, this->_unit_count, this->_kind->value());
     auto const next = this->_timing->adding(current, offset);
     return this->_timing->frame(next);
 }
