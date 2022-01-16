@@ -9,7 +9,7 @@
 namespace yas::ae::test_utils {
 struct timing_stub final : timing_for_nudging {
     sample_rate_t sample_rate_value = 0;
-    timing_components components_value{{.fraction_unit_count = 30}};
+    timing_components components_value{{.fraction_unit_size = 30}};
     frame_index_t frame_value;
 
     timing_stub(sample_rate_t const sample_rate);

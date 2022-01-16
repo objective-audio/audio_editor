@@ -12,7 +12,7 @@ using namespace yas::ae;
 
 uint32_t timing_utils::to_fraction_digits(timing_fraction_kind const kind, sample_rate_t const sample_rate) {
     auto const unit = to_fraction_unit(kind, sample_rate);
-    return math::to_digits(unit);
+    return math::to_decimal_digits(unit);
 }
 
 uint32_t timing_utils::to_fraction_unit(timing_fraction_kind const kind, sample_rate_t const sample_rate) {
@@ -47,7 +47,7 @@ timing_components timing_utils::to_components(frame_index_t const frame, timing_
                                   .minutes = static_cast<uint8_t>(playing::math::mod_int(min, 60)),
                                   .seconds = static_cast<uint8_t>(playing::math::mod_int(sec, 60)),
                                   .fraction = fraction,
-                                  .fraction_unit_count = fraction_unit}};
+                                  .fraction_unit_size = fraction_unit}};
 }
 
 frame_index_t timing_utils::to_frame(timing_components const &components, timing_fraction_kind const kind,

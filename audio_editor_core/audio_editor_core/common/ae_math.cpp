@@ -10,12 +10,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-uint32_t math::to_digits(uint32_t const fraction_size) {
-    if (fraction_size == 0) {
+uint32_t math::to_decimal_digits(uint32_t const size) {
+    if (size == 0) {
         throw std::invalid_argument("ae::math::to_digits - size is zero.");
     }
 
-    uint32_t value = fraction_size - 1;
+    uint32_t value = size - 1;
     uint32_t digits = 0;
 
     while (value != 0) {
