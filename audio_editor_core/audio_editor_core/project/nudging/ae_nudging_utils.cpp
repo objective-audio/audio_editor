@@ -11,10 +11,10 @@ timing_components nudging_utils::offset_components(bool const is_previous, uint3
                                                    nudging_kind const nudging_kind) {
     switch (nudging_kind) {
         case nudging_kind::minute:
-            return {.is_minus = is_previous, .minutes = static_cast<uint8_t>(count)};
+            return {{.is_minus = is_previous, .minutes = static_cast<uint8_t>(count)}};
         case nudging_kind::second:
-            return {.is_minus = is_previous, .seconds = static_cast<uint8_t>(count)};
+            return {{.is_minus = is_previous, .seconds = static_cast<uint8_t>(count)}};
         case nudging_kind::fraction:
-            return {.is_minus = is_previous, .fraction = count};
+            return {{.is_minus = is_previous, .fraction = count}};
     }
 }
