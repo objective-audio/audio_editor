@@ -787,7 +787,7 @@ observing::syncable project_editor::observe_nudging_kind(std::function<void(ae::
 
 observing::syncable project_editor::observe_timing_fraction(
     std::function<void(ae::timing_fraction_kind const &)> &&handler) {
-    return this->_timing->observe_fraction(std::move(handler));
+    return this->_timing->observe_fraction_kind(std::move(handler));
 }
 
 bool project_editor::_can_editing() const {

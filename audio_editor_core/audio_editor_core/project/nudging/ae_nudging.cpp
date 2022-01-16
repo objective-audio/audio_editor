@@ -31,12 +31,12 @@ observing::syncable nudging::observe_kind(std::function<void(nudging_kind const 
     return this->_kind->observe(std::move(handler));
 }
 
-void nudging::set_unit_count(uint32_t const count) {
+void nudging::set_offset_count(uint32_t const count) {
     assert(count > 0);
     this->_unit_count = count;
 }
 
-uint32_t nudging::unit_count() const {
+uint32_t nudging::offset_count() const {
     return this->_unit_count;
 }
 
@@ -44,7 +44,7 @@ frame_index_t nudging::next_frame(frame_index_t const frame) const {
     auto const current = this->_timing->components(frame);
     auto const offset =
         nudging_utils::offset_components(false, this->_unit_count, this->_kind->value(), current.fraction_unit_count());
-    auto const next = this->_timing->adding(current, offset);
+    auto const next = current.adding(offset);
     return this->_timing->frame(next);
 }
 
@@ -52,6 +52,6 @@ frame_index_t nudging::previous_frame(frame_index_t const frame) const {
     auto const current = this->_timing->components(frame);
     auto const offset =
         nudging_utils::offset_components(true, this->_unit_count, this->_kind->value(), current.fraction_unit_count());
-    auto const next = this->_timing->adding(current, offset);
+    auto const next = current.adding(offset);
     return this->_timing->frame(next);
 }

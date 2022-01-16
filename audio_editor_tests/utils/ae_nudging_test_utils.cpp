@@ -19,10 +19,6 @@ timing_components timing_stub::components(frame_index_t const) const {
     return this->components_value;
 }
 
-timing_components timing_stub::adding(timing_components const &, timing_components const &) const {
-    return this->adding_value;
-}
-
 frame_index_t timing_stub::frame(timing_components const &) const {
     return this->frame_value;
 }

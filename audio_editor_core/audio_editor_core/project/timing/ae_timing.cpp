@@ -31,16 +31,12 @@ timing_fraction_kind timing::fraction_kind() const {
     return this->_fraction_kind->value();
 }
 
-observing::syncable timing::observe_fraction(std::function<void(timing_fraction_kind const &)> &&handler) {
+observing::syncable timing::observe_fraction_kind(std::function<void(timing_fraction_kind const &)> &&handler) {
     return this->_fraction_kind->observe(std::move(handler));
 }
 
 timing_components timing::components(frame_index_t const frame) const {
     return timing_utils::to_components(frame, this->_fraction_kind->value(), this->_sample_rate);
-}
-
-timing_components timing::adding(timing_components const &lhs, timing_components const &rhs) const {
-    return timing_utils::adding(lhs, rhs, this->_fraction_kind->value(), this->_sample_rate);
 }
 
 uint32_t timing::fraction_digits() const {

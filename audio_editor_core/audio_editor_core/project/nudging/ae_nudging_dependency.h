@@ -14,7 +14,6 @@ struct timing_for_nudging {
     [[nodiscard]] virtual sample_rate_t sample_rate() const = 0;
 
     [[nodiscard]] virtual timing_components components(frame_index_t const) const = 0;
-    [[nodiscard]] virtual timing_components adding(timing_components const &, timing_components const &) const = 0;
     [[nodiscard]] virtual frame_index_t frame(timing_components const &) const = 0;
 };
 }  // namespace yas::ae
