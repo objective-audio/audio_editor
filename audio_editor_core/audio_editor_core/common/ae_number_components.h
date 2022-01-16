@@ -29,6 +29,7 @@ struct number_components final {
 
     void set_unit_value(uint32_t const value, std::size_t const idx);
     [[nodiscard]] uint32_t unit_value(std::size_t const) const;
+    [[nodiscard]] uint32_t unit_count(std::size_t const) const;
 
     bool is_zero() const;
     number_components abs() const;

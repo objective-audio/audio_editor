@@ -37,6 +37,7 @@ timing_components timing_utils::to_components(frame_index_t const frame, timing_
                                               sample_rate_t const sample_rate) {
     frame_index_t const abs_frame = std::abs(frame);
 
+    auto const fraction_unit = to_fraction_unit(kind, sample_rate);
     auto const fraction = to_fraction_value(frame, kind, sample_rate);
     auto const sec = static_cast<uint32_t>(playing::math::floor_int(abs_frame, sample_rate) / sample_rate);
     auto const min = sec / 60;
@@ -45,7 +46,8 @@ timing_components timing_utils::to_components(frame_index_t const frame, timing_
                                   .hours = static_cast<uint8_t>(min / 60),
                                   .minutes = static_cast<uint8_t>(playing::math::mod_int(min, 60)),
                                   .seconds = static_cast<uint8_t>(playing::math::mod_int(sec, 60)),
-                                  .fraction = fraction}};
+                                  .fraction = fraction,
+                                  .fraction_unit_count = fraction_unit}};
 }
 
 frame_index_t timing_utils::to_frame(timing_components const &components, timing_fraction_kind const kind,
@@ -93,7 +95,8 @@ timing_components timing_utils::adding(timing_components const &lhs, timing_comp
                                   .hours = static_cast<uint8_t>(hours),
                                   .minutes = static_cast<uint8_t>(minutes),
                                   .seconds = static_cast<uint8_t>(seconds),
-                                  .fraction = static_cast<uint32_t>(fraction)}};
+                                  .fraction = static_cast<uint32_t>(fraction),
+                                  .fraction_unit_count = unit}};
     } else {
         auto const abs_lhs = lhs.abs();
         auto const abs_rhs = rhs.abs();
@@ -128,6 +131,7 @@ timing_components timing_utils::adding(timing_components const &lhs, timing_comp
                                   .hours = static_cast<uint8_t>(hours),
                                   .minutes = static_cast<uint8_t>(minutes),
                                   .seconds = static_cast<uint8_t>(seconds),
-                                  .fraction = static_cast<uint32_t>(fraction)}};
+                                  .fraction = static_cast<uint32_t>(fraction),
+                                  .fraction_unit_count = unit}};
     }
 }
