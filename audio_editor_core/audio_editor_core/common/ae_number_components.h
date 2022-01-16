@@ -14,7 +14,7 @@ namespace yas::ae {
 struct number_components final {
     struct unit final {
         uint32_t value = 0;
-        uint32_t const count;
+        uint32_t const size;
 
         bool operator==(unit const &rhs) const;
         bool operator!=(unit const &rhs) const;
@@ -25,11 +25,11 @@ struct number_components final {
     void set_is_minus(bool const);
     [[nodiscard]] bool is_minus() const;
 
-    [[nodiscard]] std::size_t units_count() const;
+    [[nodiscard]] std::size_t size() const;
 
     void set_unit_value(uint32_t const value, std::size_t const idx);
     [[nodiscard]] uint32_t unit_value(std::size_t const) const;
-    [[nodiscard]] uint32_t unit_count(std::size_t const) const;
+    [[nodiscard]] uint32_t unit_size(std::size_t const) const;
 
     bool is_zero() const;
     number_components abs() const;

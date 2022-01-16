@@ -26,7 +26,7 @@ struct nudging final : nudging_for_project_editor {
    private:
     std::shared_ptr<timing_for_nudging> const _timing;
     observing::value::holder_ptr<nudging_kind> const _kind;
-    uint32_t _unit_count;
+    uint32_t _offset_count;
 
     nudging(std::shared_ptr<timing_for_nudging> const &);
 };

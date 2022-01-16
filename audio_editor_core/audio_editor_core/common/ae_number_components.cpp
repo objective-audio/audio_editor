@@ -10,7 +10,7 @@ using namespace yas;
 using namespace yas::ae;
 
 bool number_components::unit::operator==(unit const &rhs) const {
-    return this->value == rhs.value && this->count == rhs.count;
+    return this->value == rhs.value && this->size == rhs.size;
 }
 
 bool number_components::unit::operator!=(unit const &rhs) const {
@@ -29,10 +29,10 @@ number_components::number_components(bool const is_minus, std::vector<unit> &&un
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
         auto const &unit = this->_units.at(idx);
-        if (idx < last_idx || unit.count > 0) {
-            if (unit.count == 0) {
+        if (idx < last_idx || unit.size > 0) {
+            if (unit.size == 0) {
                 throw std::invalid_argument("count is zero.");
-            } else if (unit.value >= unit.count) {
+            } else if (unit.value >= unit.size) {
                 throw std::invalid_argument("value exceeds count.");
             }
         }
@@ -47,13 +47,13 @@ bool number_components::is_minus() const {
     return this->_is_minus;
 }
 
-std::size_t number_components::units_count() const {
+std::size_t number_components::size() const {
     return this->_units.size();
 }
 
 void number_components::set_unit_value(uint32_t const value, std::size_t const idx) {
     auto &unit = this->_units.at(idx);
-    if (unit.count == 0 || value < unit.count) {
+    if (unit.size == 0 || value < unit.size) {
         unit.value = value;
     } else {
         throw std::overflow_error("value exceeds count.");
@@ -64,8 +64,8 @@ uint32_t number_components::unit_value(std::size_t const idx) const {
     return this->_units.at(idx).value;
 }
 
-uint32_t number_components::unit_count(std::size_t const idx) const {
-    return this->_units.at(idx).count;
+uint32_t number_components::unit_size(std::size_t const idx) const {
+    return this->_units.at(idx).size;
 }
 
 bool number_components::is_zero() const {
@@ -95,7 +95,7 @@ bool number_components::is_equal_structure(number_components const &rhs) const {
     auto each = make_fast_each(this->_units.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
-        if (this->_units.at(idx).count != rhs._units.at(idx).count) {
+        if (this->_units.at(idx).size != rhs._units.at(idx).size) {
             return false;
         }
     }
@@ -186,10 +186,10 @@ number_components number_components::adding(number_components const &rhs) const 
             uint64_t const value =
                 static_cast<uint64_t>(lhs_unit.value) + static_cast<uint64_t>(rhs._units.at(idx).value) + carry_over;
 
-            uint32_t const unit_value = static_cast<uint32_t>((lhs_unit.count > 0) ? (value % lhs_unit.count) : value);
-            units.emplace_back(unit{.count = lhs_unit.count, .value = unit_value});
+            uint32_t const unit_value = static_cast<uint32_t>((lhs_unit.size > 0) ? (value % lhs_unit.size) : value);
+            units.emplace_back(unit{.size = lhs_unit.size, .value = unit_value});
 
-            carry_over = (lhs_unit.count > 0) ? value / lhs_unit.count : 0;
+            carry_over = (lhs_unit.size > 0) ? value / lhs_unit.size : 0;
         }
 
         return number_components{this->_is_minus, std::move(units)};
@@ -212,9 +212,9 @@ number_components number_components::adding(number_components const &rhs) const 
             int64_t const value = static_cast<int64_t>(larger_unit.value) -
                                   static_cast<int64_t>(smaller._units.at(idx).value) + carry_over;
 
-            uint32_t const unit_value = static_cast<uint32_t>(
-                (value < 0 && larger_unit.count > 0) ? larger_unit.count - std::abs(value) : value);
-            units.emplace_back(unit{.count = larger_unit.count, .value = unit_value});
+            uint32_t const unit_value =
+                static_cast<uint32_t>((value < 0 && larger_unit.size > 0) ? larger_unit.size - std::abs(value) : value);
+            units.emplace_back(unit{.size = larger_unit.size, .value = unit_value});
 
             carry_over = (value < 0) ? -1 : 0;
         }
