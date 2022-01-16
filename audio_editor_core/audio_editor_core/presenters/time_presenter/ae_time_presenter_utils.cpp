@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_math.h>
+#include <cpp_utils/yas_fast_each.h>
 #include <playing/yas_playing_math.h>
 
 #include <iomanip>
@@ -18,30 +19,16 @@ std::string time_presenter_utils::to_sign_string(ae::timing_components const &co
     return components.is_minus() ? "-" : "+";
 }
 
-std::string time_presenter_utils::to_hours_string(ae::timing_components const &components) {
+std::string time_presenter_utils::to_string(number_components::unit const &unit) {
     std::stringstream stream;
-    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.hours());
-    return stream.str();
-}
 
-std::string time_presenter_utils::to_minutes_string(ae::timing_components const &components) {
-    std::stringstream stream;
-    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.minutes());
-    return stream.str();
-}
-
-std::string time_presenter_utils::to_seconds_string(ae::timing_components const &components) {
-    std::stringstream stream;
-    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.seconds());
-    return stream.str();
-}
-
-std::string time_presenter_utils::to_fraction_string(ae::timing_components const &components,
-                                                     uint32_t const fraction_digits) {
-    std::stringstream stream;
-    if (fraction_digits > 0) {
-        stream << std::setfill('0') << std::right << std::setw(fraction_digits) << components.fraction();
+    if (unit.size > 0) {
+        auto const digits = math::to_decimal_digits(unit.size);
+        stream << std::setfill('0') << std::right << std::setw(digits) << unit.value;
+    } else {
+        stream << unit.value;
     }
+
     return stream.str();
 }
 
@@ -52,17 +39,19 @@ std::string time_presenter_utils::time_text(frame_index_t const frame,
     std::stringstream stream;
 
     stream << to_sign_string(components);
-    stream << to_hours_string(components);
-    stream << ":";
-    stream << to_minutes_string(components);
-    stream << ":";
-    stream << to_seconds_string(components);
 
-    auto const fraction_string = to_fraction_string(components, timing->fraction_digits());
+    auto const &raw_components = components.raw_components();
+    auto each = make_fast_each(raw_components.size());
+    while (yas_each_next(each)) {
+        auto const &idx = raw_components.size() - yas_each_index(each) - 1;
 
-    if (!fraction_string.empty()) {
-        stream << ".";
-        stream << fraction_string;
+        stream << to_string(raw_components.raw_unit(idx));
+
+        if (idx > 1) {
+            stream << ":";
+        } else if (idx == 1) {
+            stream << ".";
+        }
     }
 
     return stream.str();

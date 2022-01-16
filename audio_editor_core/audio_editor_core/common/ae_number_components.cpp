@@ -60,6 +60,10 @@ void number_components::set_unit_value(uint32_t const value, std::size_t const i
     }
 }
 
+number_components::unit const &number_components::raw_unit(std::size_t const idx) const {
+    return this->_units.at(idx);
+}
+
 uint32_t number_components::unit_value(std::size_t const idx) const {
     return this->_units.at(idx).value;
 }

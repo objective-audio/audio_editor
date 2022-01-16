@@ -21,8 +21,8 @@ timing_components::timing_components(number_components const &components) : _com
         throw std::invalid_argument("minutes unit count is not equal 60.");
     }
 
-    if (components.unit_size(to_index(timing_unit_kind::hours)) != 0) {
-        throw std::invalid_argument("hours unit count is not equal 0.");
+    if (components.unit_size(to_index(timing_unit_kind::hours)) != 100) {
+        throw std::invalid_argument("hours unit count is not equal 100.");
     }
 }
 
@@ -31,7 +31,7 @@ timing_components::timing_components(args const &args)
                          {{.size = args.fraction_unit_size, .value = args.fraction},
                           {.size = 60, .value = args.seconds},
                           {.size = 60, .value = args.minutes},
-                          {.value = args.hours}}}) {
+                          {.size = 100, .value = args.hours}}}) {
 }
 
 number_components const &timing_components::raw_components() const {

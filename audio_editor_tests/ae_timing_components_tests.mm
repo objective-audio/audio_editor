@@ -19,7 +19,7 @@ using namespace yas::ae;
                                               {{.size = 10000, .value = 6789},
                                                {.size = 60, .value = 45},
                                                {.size = 60, .value = 23},
-                                               {.size = 0, .value = 1}}};
+                                               {.size = 100, .value = 1}}};
 
     timing_components const components{number_components};
 
@@ -48,7 +48,7 @@ using namespace yas::ae;
                                                                    {{.size = 10000, .value = 6789},
                                                                     {.size = 60, .value = 45},
                                                                     {.size = 60, .value = 23},
-                                                                    {.size = 0, .value = 1}}}));
+                                                                    {.size = 100, .value = 1}}}));
 }
 
 - (void)test_timing_components_is_zero {
