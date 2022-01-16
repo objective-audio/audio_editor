@@ -33,9 +33,11 @@ struct timing_components {
         uint32_t fraction_unit_count;
     };
 
+    timing_components(number_components const &);
     timing_components(args const &);
 
     bool is_minus() const;
+    uint32_t value(timing_unit_kind const) const;
     uint8_t hours() const;
     uint8_t minutes() const;
     uint8_t seconds() const;
@@ -48,6 +50,8 @@ struct timing_components {
     bool operator==(timing_components const &rhs) const;
     bool operator!=(timing_components const &rhs) const;
     bool operator<(timing_components const &) const;
+
+    timing_components adding(timing_components const &) const;
 
    private:
     number_components _components;

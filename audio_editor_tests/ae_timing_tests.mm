@@ -21,13 +21,14 @@ using namespace yas::ae;
     XCTAssertEqual(timing::make_shared(96000)->sample_rate(), 96000);
 }
 
-- (void)test_set_fraction {
+- (void)test_set_fraction_kind {
     auto const timing = timing::make_shared(48000);
 
     std::vector<timing_fraction_kind> called;
 
     auto canceller =
-        timing->observe_fraction([&called](timing_fraction_kind const &kind) { called.emplace_back(kind); }).sync();
+        timing->observe_fraction_kind([&called](timing_fraction_kind const &kind) { called.emplace_back(kind); })
+            .sync();
 
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), timing_fraction_kind::sample);

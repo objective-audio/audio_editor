@@ -17,8 +17,8 @@ struct nudging final : nudging_for_project_editor {
     [[nodiscard]] nudging_kind kind() const override;
     [[nodiscard]] observing::syncable observe_kind(std::function<void(nudging_kind const &)> &&) override;
 
-    void set_unit_count(uint32_t const);
-    [[nodiscard]] uint32_t unit_count() const;
+    void set_offset_count(uint32_t const);
+    [[nodiscard]] uint32_t offset_count() const;
 
     [[nodiscard]] frame_index_t next_frame(frame_index_t const) const override;
     [[nodiscard]] frame_index_t previous_frame(frame_index_t const) const override;

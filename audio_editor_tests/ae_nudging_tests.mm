@@ -20,7 +20,7 @@ using namespace yas::ae;
     auto const nudging = nudging::make_shared(timing);
 
     XCTAssertEqual(nudging->kind(), nudging_kind::fraction);
-    XCTAssertEqual(nudging->unit_count(), 1);
+    XCTAssertEqual(nudging->offset_count(), 1);
 }
 
 - (void)test_set_kind {
@@ -38,15 +38,15 @@ using namespace yas::ae;
     XCTAssertEqual(nudging->kind(), nudging_kind::minute);
 }
 
-- (void)test_set_unit_count {
+- (void)test_set_offset_count {
     auto const timing = std::make_shared<test_utils::timing_stub>(48000);
     auto const nudging = nudging::make_shared(timing);
 
-    XCTAssertEqual(nudging->unit_count(), 1);
+    XCTAssertEqual(nudging->offset_count(), 1);
 
-    nudging->set_unit_count(2);
+    nudging->set_offset_count(2);
 
-    XCTAssertEqual(nudging->unit_count(), 2);
+    XCTAssertEqual(nudging->offset_count(), 2);
 }
 
 @end

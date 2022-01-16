@@ -18,10 +18,10 @@ struct timing final : timing_for_project_editor {
 
     void set_fraction_kind(timing_fraction_kind const) override;
     [[nodiscard]] timing_fraction_kind fraction_kind() const override;
-    [[nodiscard]] observing::syncable observe_fraction(std::function<void(timing_fraction_kind const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_fraction_kind(
+        std::function<void(timing_fraction_kind const &)> &&) override;
 
     [[nodiscard]] timing_components components(frame_index_t const) const override;
-    [[nodiscard]] timing_components adding(timing_components const &, timing_components const &) const override;
     [[nodiscard]] uint32_t fraction_digits() const override;
 
     [[nodiscard]] frame_index_t frame(timing_components const &) const override;
