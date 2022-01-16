@@ -9,56 +9,55 @@ using namespace yas;
 using namespace yas::ae;
 
 timing_components::timing_components(args const &args)
-    : _is_minus(args.is_minus),
-      _hours(args.hours),
-      _minutes(args.minutes),
-      _seconds(args.seconds),
-      _fraction(args.fraction) {
+    : _components(args.is_minus, {{.count = args.fraction_unit_count, .value = args.fraction},
+                                  {.count = 60, .value = args.seconds},
+                                  {.count = 60, .value = args.minutes},
+                                  {.value = args.hours}}) {
 }
 
 bool timing_components::is_minus() const {
-    return this->_is_minus;
+    return this->_components.is_minus();
 }
 
 uint8_t timing_components::hours() const {
-    return this->_hours;
+    return this->_components.unit_value(to_index(timing_unit_kind::hours));
 }
 
 uint8_t timing_components::minutes() const {
-    return this->_minutes;
+    return this->_components.unit_value(to_index(timing_unit_kind::minutes));
 }
 
 uint8_t timing_components::seconds() const {
-    return this->_seconds;
+    return this->_components.unit_value(to_index(timing_unit_kind::seconds));
 }
 
 uint32_t timing_components::fraction() const {
-    return this->_fraction;
+    return this->_components.unit_value(to_index(timing_unit_kind::fraction));
+}
+
+uint32_t timing_components::fraction_unit_count() const {
+    return this->_components.unit_count(to_index(timing_unit_kind::fraction));
 }
 
 bool timing_components::is_zero() const {
-    return this->_hours == 0 && this->_minutes == 0 && this->_seconds == 0 && this->_fraction == 0;
+    return this->_components.is_zero();
 }
 
 timing_components timing_components::abs() const {
     if (this->is_minus()) {
         return {{.is_minus = false,
-                 .hours = this->_hours,
-                 .minutes = this->_minutes,
-                 .seconds = this->_seconds,
-                 .fraction = this->_fraction}};
+                 .hours = this->hours(),
+                 .minutes = this->minutes(),
+                 .seconds = this->seconds(),
+                 .fraction = this->fraction(),
+                 .fraction_unit_count = this->fraction_unit_count()}};
     } else {
         return *this;
     }
 }
 
 bool timing_components::operator==(timing_components const &rhs) const {
-    if (this->is_zero() && rhs.is_zero()) {
-        return true;
-    } else {
-        return this->is_minus() == rhs.is_minus() && this->_hours == rhs._hours && this->_minutes == rhs._minutes &&
-               this->_seconds == rhs._seconds && this->_fraction == rhs._fraction;
-    }
+    return this->_components == rhs._components;
 }
 
 bool timing_components::operator!=(timing_components const &rhs) const {
@@ -66,39 +65,11 @@ bool timing_components::operator!=(timing_components const &rhs) const {
 }
 
 bool timing_components::operator<(timing_components const &rhs) const {
-    if (this->is_minus() && !rhs.is_minus()) {
-        return true;
-    } else if (!this->is_minus() && rhs.is_minus()) {
-        return false;
-    }
+    return this->_components < rhs._components;
+}
 
-    bool is_minus = this->is_minus();
-
-    if (this->_hours < rhs._hours) {
-        return !is_minus;
-    } else if (this->_hours > rhs._hours) {
-        return is_minus;
-    }
-
-    if (this->_minutes < rhs._minutes) {
-        return !is_minus;
-    } else if (this->_minutes > rhs._minutes) {
-        return is_minus;
-    }
-
-    if (this->_seconds < rhs._seconds) {
-        return !is_minus;
-    } else if (this->_seconds > rhs._seconds) {
-        return is_minus;
-    }
-
-    if (this->_fraction < rhs._fraction) {
-        return !is_minus;
-    } else if (this->_fraction > rhs._fraction) {
-        return is_minus;
-    }
-
-    return false;
+std::size_t yas::to_index(timing_unit_kind const kind) {
+    return static_cast<std::underlying_type_t<timing_unit_kind>>(kind);
 }
 
 std::string yas::to_string(ae::timing_components const &components) {

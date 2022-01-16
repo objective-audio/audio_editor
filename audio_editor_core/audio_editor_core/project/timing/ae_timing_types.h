@@ -16,7 +16,7 @@ enum class timing_fraction_kind {
     frame30,
 };
 
-enum class timing_unit_kind : uint32_t {
+enum class timing_unit_kind : std::size_t {
     fraction = 0,
     seconds = 1,
     minutes = 2,
@@ -30,6 +30,7 @@ struct timing_components {
         uint8_t minutes = 0;
         uint8_t seconds = 0;
         uint32_t fraction = 0;
+        uint32_t fraction_unit_count;
     };
 
     timing_components(args const &);
@@ -39,6 +40,7 @@ struct timing_components {
     uint8_t minutes() const;
     uint8_t seconds() const;
     uint32_t fraction() const;
+    uint32_t fraction_unit_count() const;
 
     bool is_zero() const;
     timing_components abs() const;
@@ -48,16 +50,14 @@ struct timing_components {
     bool operator<(timing_components const &) const;
 
    private:
-    bool _is_minus = false;
-    uint8_t _hours = 0;
-    uint8_t _minutes = 0;
-    uint8_t _seconds = 0;
-    uint32_t _fraction = 0;
+    number_components _components;
 };
 }  // namespace yas::ae
 
 namespace yas {
+std::size_t to_index(ae::timing_unit_kind const);
+
 std::string to_string(ae::timing_components const &);
-}
+}  // namespace yas
 
 std::ostream &operator<<(std::ostream &, yas::ae::timing_components const &);

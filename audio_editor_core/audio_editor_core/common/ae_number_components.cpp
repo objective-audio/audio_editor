@@ -64,6 +64,10 @@ uint32_t number_components::unit_value(std::size_t const idx) const {
     return this->_units.at(idx).value;
 }
 
+uint32_t number_components::unit_count(std::size_t const idx) const {
+    return this->_units.at(idx).count;
+}
+
 bool number_components::is_zero() const {
     for (auto const &unit : this->_units) {
         if (unit.value != 0) {
