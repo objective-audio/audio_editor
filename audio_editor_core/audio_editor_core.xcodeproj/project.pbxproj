@@ -210,6 +210,8 @@
 		B6EA40DF2641722600BF3D06 /* ae_project_editor.h in Headers */ = {isa = PBXBuildFile; fileRef = B6EA40DD2641722600BF3D06 /* ae_project_editor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6EA40E32641742300BF3D06 /* ae_project_editor_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6EA40E22641742300BF3D06 /* ae_project_editor_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6F3E065264287C90067E53A /* ae_player_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F3E064264287C90067E53A /* ae_player_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6F5264A27925EAD00688339 /* ae_number_components.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6F5264827925EAD00688339 /* ae_number_components.cpp */; };
+		B6F5264B27925EAD00688339 /* ae_number_components.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F5264927925EAD00688339 /* ae_number_components.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -418,6 +420,8 @@
 		B6EA40DD2641722600BF3D06 /* ae_project_editor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_editor.h; sourceTree = "<group>"; };
 		B6EA40E22641742300BF3D06 /* ae_project_editor_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_editor_dependency.h; sourceTree = "<group>"; };
 		B6F3E064264287C90067E53A /* ae_player_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_player_dependency.h; sourceTree = "<group>"; };
+		B6F5264827925EAD00688339 /* ae_number_components.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_number_components.cpp; sourceTree = "<group>"; };
+		B6F5264927925EAD00688339 /* ae_number_components.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_number_components.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -894,6 +898,8 @@
 				B6EA40D326411CE900BF3D06 /* ae_common_types.h */,
 				B68A2CFD278BD20900071E9D /* ae_math.cpp */,
 				B68A2CFE278BD20900071E9D /* ae_math.h */,
+				B6F5264827925EAD00688339 /* ae_number_components.cpp */,
+				B6F5264927925EAD00688339 /* ae_number_components.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -1013,6 +1019,7 @@
 				B6DBC3642763474E001AF1D3 /* ae_marker_location_pool.h in Headers */,
 				B69708EB2639A15E0045E975 /* ae_file_importer.h in Headers */,
 				B64E94F82652B7660056F511 /* ae_marker_pool_types.h in Headers */,
+				B6F5264B27925EAD00688339 /* ae_number_components.h in Headers */,
 				B61262F92782FC560019B364 /* ae_nudging_types.h in Headers */,
 				B6BDCCFB273A9FA400B6560C /* ae_root_presenter_dependency.h in Headers */,
 				B632197E2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h in Headers */,
@@ -1204,6 +1211,7 @@
 				B60204F6263ABBC400CFC752 /* ae_editing_root_presenter_utils.cpp in Sources */,
 				B6BDCCF92739636C00B6560C /* ae_project_maker.cpp in Sources */,
 				B6CCC48E274B4B1600B563C8 /* ae_pasteboard.cpp in Sources */,
+				B6F5264A27925EAD00688339 /* ae_number_components.cpp in Sources */,
 				B68A2CFF278BD20900071E9D /* ae_math.cpp in Sources */,
 				B6CCC492274BC38100B563C8 /* ae_pasteboard_types.cpp in Sources */,
 				B6169BD72743D0C400589393 /* ae_dialog_presenter.cpp in Sources */,
