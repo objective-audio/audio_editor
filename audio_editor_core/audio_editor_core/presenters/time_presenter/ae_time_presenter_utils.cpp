@@ -15,24 +15,24 @@ using namespace yas;
 using namespace yas::ae;
 
 std::string time_presenter_utils::to_sign_string(ae::timing_components const &components) {
-    return components.is_minus ? "-" : "+";
+    return components.is_minus() ? "-" : "+";
 }
 
 std::string time_presenter_utils::to_hours_string(ae::timing_components const &components) {
     std::stringstream stream;
-    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.hours);
+    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.hours());
     return stream.str();
 }
 
 std::string time_presenter_utils::to_minutes_string(ae::timing_components const &components) {
     std::stringstream stream;
-    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.minutes);
+    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.minutes());
     return stream.str();
 }
 
 std::string time_presenter_utils::to_seconds_string(ae::timing_components const &components) {
     std::stringstream stream;
-    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.seconds);
+    stream << std::setfill('0') << std::right << std::setw(2) << static_cast<uint16_t>(components.seconds());
     return stream.str();
 }
 
@@ -40,7 +40,7 @@ std::string time_presenter_utils::to_fraction_string(ae::timing_components const
                                                      uint32_t const fraction_digits) {
     std::stringstream stream;
     if (fraction_digits > 0) {
-        stream << std::setfill('0') << std::right << std::setw(fraction_digits) << components.fraction;
+        stream << std::setfill('0') << std::right << std::setw(fraction_digits) << components.fraction();
     }
     return stream.str();
 }
