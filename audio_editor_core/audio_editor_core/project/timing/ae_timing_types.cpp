@@ -46,22 +46,6 @@ uint32_t timing_components::value(timing_unit_kind const kind) const {
     return this->_components.unit(to_index(kind)).value;
 }
 
-uint8_t timing_components::hours() const {
-    return this->value(timing_unit_kind::hours);
-}
-
-uint8_t timing_components::minutes() const {
-    return this->value(timing_unit_kind::minutes);
-}
-
-uint8_t timing_components::seconds() const {
-    return this->value(timing_unit_kind::seconds);
-}
-
-uint32_t timing_components::fraction() const {
-    return this->value(timing_unit_kind::fraction);
-}
-
 std::size_t timing_components::fraction_unit_size() const {
     return this->_components.unit(to_index(timing_unit_kind::fraction)).size;
 }
@@ -73,10 +57,10 @@ bool timing_components::is_zero() const {
 timing_components timing_components::abs() const {
     if (this->is_minus()) {
         return {{.is_minus = false,
-                 .hours = this->hours(),
-                 .minutes = this->minutes(),
-                 .seconds = this->seconds(),
-                 .fraction = this->fraction(),
+                 .hours = static_cast<uint8_t>(this->value(timing_unit_kind::hours)),
+                 .minutes = static_cast<uint8_t>(this->value(timing_unit_kind::minutes)),
+                 .seconds = static_cast<uint8_t>(this->value(timing_unit_kind::seconds)),
+                 .fraction = static_cast<uint32_t>(this->value(timing_unit_kind::fraction)),
                  .fraction_unit_size = this->fraction_unit_size()}};
     } else {
         return *this;
@@ -104,10 +88,12 @@ std::size_t yas::to_index(timing_unit_kind const kind) {
 }
 
 std::string yas::to_string(ae::timing_components const &components) {
-    return "{is_minus:" + std::to_string(components.is_minus()) + ", hours:" + std::to_string(components.hours()) +
-           ", minutes:" + std::to_string(components.minutes()) + ", seconds:" + std::to_string(components.seconds()) +
-           ", fraction:" + std::to_string(components.fraction()) + "" +
-           std::to_string(components.fraction_unit_size()) + "}";
+    return "{is_minus:" + std::to_string(components.is_minus()) +
+           ", hours:" + std::to_string(components.value(timing_unit_kind::hours)) +
+           ", minutes:" + std::to_string(components.value(timing_unit_kind::minutes)) +
+           ", seconds:" + std::to_string(components.value(timing_unit_kind::seconds)) +
+           ", fraction:" + std::to_string(components.value(timing_unit_kind::fraction)) +
+           ", fraction_unit_size:" + std::to_string(components.fraction_unit_size()) + "}";
 }
 
 std::ostream &operator<<(std::ostream &os, yas::ae::timing_components const &value) {

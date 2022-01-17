@@ -52,11 +52,11 @@ timing_components timing_utils::to_components(frame_index_t const frame, timing_
 
 frame_index_t timing_utils::to_frame(timing_components const &components, timing_fraction_kind const kind,
                                      sample_rate_t const sample_rate) {
-    frame_index_t frame = static_cast<frame_index_t>(components.hours()) * 60 * 60 * sample_rate;
-    frame += static_cast<frame_index_t>(components.minutes()) * 60 * sample_rate;
-    frame += static_cast<frame_index_t>(components.seconds()) * sample_rate;
+    frame_index_t frame = static_cast<frame_index_t>(components.value(timing_unit_kind::hours)) * 60 * 60 * sample_rate;
+    frame += static_cast<frame_index_t>(components.value(timing_unit_kind::minutes)) * 60 * sample_rate;
+    frame += static_cast<frame_index_t>(components.value(timing_unit_kind::seconds)) * sample_rate;
 
-    frame += static_cast<uint64_t>(components.fraction()) * static_cast<uint64_t>(sample_rate) /
+    frame += static_cast<uint64_t>(components.value(timing_unit_kind::fraction)) * static_cast<uint64_t>(sample_rate) /
              static_cast<uint64_t>(to_fraction_unit(kind, sample_rate));
 
     if (components.is_minus()) {

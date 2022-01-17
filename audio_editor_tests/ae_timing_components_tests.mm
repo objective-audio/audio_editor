@@ -24,10 +24,10 @@ using namespace yas::ae;
     timing_components const components{number_components};
 
     XCTAssertTrue(components.is_minus());
-    XCTAssertEqual(components.hours(), 1);
-    XCTAssertEqual(components.minutes(), 23);
-    XCTAssertEqual(components.seconds(), 45);
-    XCTAssertEqual(components.fraction(), 6789);
+    XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+    XCTAssertEqual(components.value(timing_unit_kind::minutes), 23);
+    XCTAssertEqual(components.value(timing_unit_kind::seconds), 45);
+    XCTAssertEqual(components.value(timing_unit_kind::fraction), 6789);
     XCTAssertEqual(components.fraction_unit_size(), 10000);
 
     XCTAssertEqual(components.raw_components(), number_components);
@@ -38,10 +38,10 @@ using namespace yas::ae;
         {.is_minus = true, .hours = 1, .minutes = 23, .seconds = 45, .fraction = 6789, .fraction_unit_size = 10000}};
 
     XCTAssertTrue(components.is_minus());
-    XCTAssertEqual(components.hours(), 1);
-    XCTAssertEqual(components.minutes(), 23);
-    XCTAssertEqual(components.seconds(), 45);
-    XCTAssertEqual(components.fraction(), 6789);
+    XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+    XCTAssertEqual(components.value(timing_unit_kind::minutes), 23);
+    XCTAssertEqual(components.value(timing_unit_kind::seconds), 45);
+    XCTAssertEqual(components.value(timing_unit_kind::fraction), 6789);
     XCTAssertEqual(components.fraction_unit_size(), 10000);
 
     XCTAssertEqual(components.raw_components(), (number_components{true,
