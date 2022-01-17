@@ -18,15 +18,15 @@ using namespace yas::ae;
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 55}}};
 
-    std::vector<number_components::unit> const expected_units{
+    std::vector<number_components_unit> const expected_units{
         {.size = 2, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 55}};
 
     XCTAssertFalse(components.is_minus());
 
     XCTAssertEqual(components.size(), 3);
-    XCTAssertEqual(components.unit_value(0), 1);
-    XCTAssertEqual(components.unit_value(1), 5);
-    XCTAssertEqual(components.unit_value(2), 55);
+    XCTAssertEqual(components.unit(0).value, 1);
+    XCTAssertEqual(components.unit(1).value, 5);
+    XCTAssertEqual(components.unit(2).value, 55);
 }
 
 - (void)test_constructor_throws {
@@ -52,27 +52,27 @@ using namespace yas::ae;
 - (void)test_set_unit_value {
     number_components components{false, {{.size = 2}, {.size = 10}, {.size = 0}}};
 
-    XCTAssertEqual(components.unit_value(0), 0);
-    XCTAssertEqual(components.unit_value(1), 0);
-    XCTAssertEqual(components.unit_value(2), 0);
+    XCTAssertEqual(components.unit(0).value, 0);
+    XCTAssertEqual(components.unit(1).value, 0);
+    XCTAssertEqual(components.unit(2).value, 0);
 
     XCTAssertNoThrow(components.set_unit_value(1, 0));
-    XCTAssertEqual(components.unit_value(0), 1);
+    XCTAssertEqual(components.unit(0).value, 1);
     XCTAssertThrows(components.set_unit_value(2, 0));
-    XCTAssertEqual(components.unit_value(0), 1);
+    XCTAssertEqual(components.unit(0).value, 1);
 
     XCTAssertNoThrow(components.set_unit_value(1, 1));
-    XCTAssertEqual(components.unit_value(1), 1);
+    XCTAssertEqual(components.unit(1).value, 1);
     XCTAssertNoThrow(components.set_unit_value(9, 1));
-    XCTAssertEqual(components.unit_value(1), 9);
+    XCTAssertEqual(components.unit(1).value, 9);
     XCTAssertThrows(components.set_unit_value(10, 1));
-    XCTAssertEqual(components.unit_value(1), 9);
+    XCTAssertEqual(components.unit(1).value, 9);
 
     // 最後のsizeは0なので制限なし
     XCTAssertNoThrow(components.set_unit_value(1, 2));
-    XCTAssertEqual(components.unit_value(2), 1);
+    XCTAssertEqual(components.unit(2).value, 1);
     XCTAssertNoThrow(components.set_unit_value(99999, 2));
-    XCTAssertEqual(components.unit_value(2), 99999);
+    XCTAssertEqual(components.unit(2).value, 99999);
 
     XCTAssertThrows(components.set_unit_value(0, 3));
 }

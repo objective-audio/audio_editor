@@ -10,7 +10,7 @@
 
 namespace yas::ae::time_presenter_utils {
 std::string to_sign_string(timing_components const &);
-std::string to_string(number_components::unit const &);
+std::string to_string(number_components_unit const &);
 
 std::string time_text(frame_index_t const frame, std::shared_ptr<timing_for_time_presenter> const &);
 }  // namespace yas::ae::time_presenter_utils
