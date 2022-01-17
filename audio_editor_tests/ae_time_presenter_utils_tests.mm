@@ -50,8 +50,8 @@ using namespace yas::ae;
     {
         auto const timing = timing::make_shared(1);
 
-        XCTAssertEqual(time_presenter_utils::time_text(0, timing), "+00:00:00");
-        XCTAssertEqual(time_presenter_utils::time_text(1, timing), "+00:00:01");
+        XCTAssertEqual(time_presenter_utils::time_text(0, timing), "+00:00:00.0");
+        XCTAssertEqual(time_presenter_utils::time_text(1, timing), "+00:00:01.0");
     }
 
     {
