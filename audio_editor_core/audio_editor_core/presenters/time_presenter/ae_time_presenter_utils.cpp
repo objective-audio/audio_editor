@@ -19,7 +19,7 @@ std::string time_presenter_utils::to_sign_string(ae::timing_components const &co
     return components.is_minus() ? "-" : "+";
 }
 
-std::string time_presenter_utils::to_string(number_components::unit const &unit) {
+std::string time_presenter_utils::to_string(number_components_unit const &unit) {
     std::stringstream stream;
 
     if (unit.size > 0) {
@@ -45,7 +45,7 @@ std::string time_presenter_utils::time_text(frame_index_t const frame,
     while (yas_each_next(each)) {
         auto const &idx = raw_components.size() - yas_each_index(each) - 1;
 
-        stream << to_string(raw_components.raw_unit(idx));
+        stream << to_string(raw_components.unit(idx));
 
         if (idx > 1) {
             stream << ":";

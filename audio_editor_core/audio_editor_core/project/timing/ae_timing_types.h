@@ -30,7 +30,7 @@ struct timing_components {
         uint8_t minutes = 0;
         uint8_t seconds = 0;
         uint32_t fraction = 0;
-        uint32_t fraction_unit_size;
+        std::size_t fraction_unit_size;
     };
 
     timing_components(number_components const &);
@@ -44,7 +44,7 @@ struct timing_components {
     uint8_t minutes() const;
     uint8_t seconds() const;
     uint32_t fraction() const;
-    uint32_t fraction_unit_size() const;
+    std::size_t fraction_unit_size() const;
 
     bool is_zero() const;
     timing_components abs() const;

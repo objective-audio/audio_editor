@@ -9,15 +9,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-bool number_components::unit::operator==(unit const &rhs) const {
+bool number_components_unit::operator==(number_components_unit const &rhs) const {
     return this->value == rhs.value && this->size == rhs.size;
 }
 
-bool number_components::unit::operator!=(unit const &rhs) const {
+bool number_components_unit::operator!=(number_components_unit const &rhs) const {
     return !(*this == rhs);
 }
 
-number_components::number_components(bool const is_minus, std::vector<unit> &&units)
+number_components::number_components(bool const is_minus, std::vector<number_components_unit> &&units)
     : _is_minus(is_minus), _units(std::move(units)) {
     if (this->_units.size() == 0) {
         throw std::invalid_argument("units is empty.");
@@ -60,16 +60,8 @@ void number_components::set_unit_value(uint32_t const value, std::size_t const i
     }
 }
 
-number_components::unit const &number_components::raw_unit(std::size_t const idx) const {
+number_components_unit const &number_components::unit(std::size_t const idx) const {
     return this->_units.at(idx);
-}
-
-uint32_t number_components::unit_value(std::size_t const idx) const {
-    return this->_units.at(idx).value;
-}
-
-uint32_t number_components::unit_size(std::size_t const idx) const {
-    return this->_units.at(idx).size;
 }
 
 bool number_components::is_zero() const {
@@ -180,7 +172,7 @@ number_components number_components::adding(number_components const &rhs) const 
     }
 
     if (this->_is_minus == rhs._is_minus) {
-        std::vector<unit> units;
+        std::vector<number_components_unit> units;
         uint64_t carry_over = 0;
 
         auto each = make_fast_each(this->_units.size());
@@ -191,7 +183,7 @@ number_components number_components::adding(number_components const &rhs) const 
                 static_cast<uint64_t>(lhs_unit.value) + static_cast<uint64_t>(rhs._units.at(idx).value) + carry_over;
 
             uint32_t const unit_value = static_cast<uint32_t>((lhs_unit.size > 0) ? (value % lhs_unit.size) : value);
-            units.emplace_back(unit{.size = lhs_unit.size, .value = unit_value});
+            units.emplace_back(number_components_unit{.size = lhs_unit.size, .value = unit_value});
 
             carry_over = (lhs_unit.size > 0) ? value / lhs_unit.size : 0;
         }
@@ -205,7 +197,7 @@ number_components number_components::adding(number_components const &rhs) const 
         auto const &smaller = is_lhs_smaller ? abs_lhs : abs_rhs;
         auto const &larger = is_lhs_smaller ? abs_rhs : abs_lhs;
 
-        std::vector<unit> units;
+        std::vector<number_components_unit> units;
         int64_t carry_over = 0;
 
         auto each = make_fast_each(this->_units.size());
@@ -218,7 +210,7 @@ number_components number_components::adding(number_components const &rhs) const 
 
             uint32_t const unit_value =
                 static_cast<uint32_t>((value < 0 && larger_unit.size > 0) ? larger_unit.size - std::abs(value) : value);
-            units.emplace_back(unit{.size = larger_unit.size, .value = unit_value});
+            units.emplace_back(number_components_unit{.size = larger_unit.size, .value = unit_value});
 
             carry_over = (value < 0) ? -1 : 0;
         }

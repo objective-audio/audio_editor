@@ -13,15 +13,15 @@ timing_components::timing_components(number_components const &components) : _com
         throw std::invalid_argument("units count is not equal 4.");
     }
 
-    if (components.unit_size(to_index(timing_unit_kind::seconds)) != 60) {
+    if (components.unit(to_index(timing_unit_kind::seconds)).size != 60) {
         throw std::invalid_argument("seconds unit count is not equal 60.");
     }
 
-    if (components.unit_size(to_index(timing_unit_kind::minutes)) != 60) {
+    if (components.unit(to_index(timing_unit_kind::minutes)).size != 60) {
         throw std::invalid_argument("minutes unit count is not equal 60.");
     }
 
-    if (components.unit_size(to_index(timing_unit_kind::hours)) != 100) {
+    if (components.unit(to_index(timing_unit_kind::hours)).size != 100) {
         throw std::invalid_argument("hours unit count is not equal 100.");
     }
 }
@@ -43,7 +43,7 @@ bool timing_components::is_minus() const {
 }
 
 uint32_t timing_components::value(timing_unit_kind const kind) const {
-    return this->_components.unit_value(to_index(kind));
+    return this->_components.unit(to_index(kind)).value;
 }
 
 uint8_t timing_components::hours() const {
@@ -62,8 +62,8 @@ uint32_t timing_components::fraction() const {
     return this->value(timing_unit_kind::fraction);
 }
 
-uint32_t timing_components::fraction_unit_size() const {
-    return this->_components.unit_size(to_index(timing_unit_kind::fraction));
+std::size_t timing_components::fraction_unit_size() const {
+    return this->_components.unit(to_index(timing_unit_kind::fraction)).size;
 }
 
 bool timing_components::is_zero() const {
