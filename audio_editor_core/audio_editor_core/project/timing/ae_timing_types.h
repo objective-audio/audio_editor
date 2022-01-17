@@ -40,10 +40,6 @@ struct timing_components {
 
     bool is_minus() const;
     uint32_t value(timing_unit_kind const) const;
-    uint8_t hours() const;
-    uint8_t minutes() const;
-    uint8_t seconds() const;
-    uint32_t fraction() const;
     std::size_t fraction_unit_size() const;
 
     bool is_zero() const;
