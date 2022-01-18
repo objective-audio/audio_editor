@@ -53,6 +53,11 @@ struct project_stub final : project_for_project_pool {
         return _value;
     }
 
+    std::shared_ptr<ae::action_router> const &action_router() const override {
+        static std::shared_ptr<ae::action_router> const _value = nullptr;
+        return _value;
+    }
+
     [[nodiscard]] url const &file_url() const override {
         return this->file_url_value;
     }

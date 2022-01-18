@@ -4,20 +4,29 @@
 
 #include "ae_action_controller.h"
 
+#include <audio_editor_core/ae_action_router.h>
+
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<action_controller> action_controller::make_shared() {
-    return std::shared_ptr<action_controller>(new action_controller{});
+std::shared_ptr<action_controller> action_controller::make_shared(std::shared_ptr<action_router> const &router) {
+    return std::shared_ptr<action_controller>(new action_controller{router});
 }
 
-action_controller::action_controller()
-    : _action_notifier(observing::notifier<action>::make_shared()),
+action_controller::action_controller(std::shared_ptr<action_router> const &router)
+    : _router(router),
+      _action_notifier(observing::notifier<action>::make_shared()),
       _export_notifier(observing::notifier<url>::make_shared()) {
 }
 
 void action_controller::handle_action(action const action) {
     this->_action_notifier->notify(action);
+}
+
+void action_controller::handle_key(ae::key const key) {
+    if (auto const action = this->_router->to_action(key)) {
+        this->handle_action(action.value());
+    }
 }
 
 void action_controller::export_to_file(url const &url) {
