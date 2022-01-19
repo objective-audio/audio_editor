@@ -30,6 +30,10 @@ std::optional<ae::action> action_normal_routing::to_action(ae::key const key) {
             return action::rotate_nudging_kind;
         case key::f:
             return action::rotate_timing_fraction;
+        case key::equal:
+            return action::begin_time_editing;
+        case key::esc:
+            return std::nullopt;
         case key::num_0:
             return action::return_to_zero;
         case key::num_1:
@@ -50,5 +54,15 @@ std::optional<ae::action> action_normal_routing::to_action(ae::key const key) {
             return action::go_to_marker_8;
         case key::num_9:
             return action::go_to_marker_9;
+    }
+}
+
+bool action_normal_routing::responds_to_action(ae::action const action) {
+    switch (action) {
+        case ae::action::cancel_time_editing:
+            return false;
+
+        default:
+            return true;
     }
 }

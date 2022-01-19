@@ -43,6 +43,10 @@ observing::syncable action_router::observe_kind(std::function<void(action_routin
     return this->_kind->observe(std::move(handler));
 }
 
-std::optional<ae::action> action_router::to_action(ae::key const key) {
+std::optional<ae::action> action_router::to_action(ae::key const key) const {
     return this->_routing->to_action(key);
+}
+
+bool action_router::responds_to_action(ae::action const action) const {
+    return this->_routing->responds_to_action(action);
 }

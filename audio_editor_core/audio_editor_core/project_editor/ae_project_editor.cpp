@@ -4,6 +4,7 @@
 
 #include "ae_project_editor.h"
 
+#include <audio_editor_core/ae_action_router.h>
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_exporter.h>
@@ -12,6 +13,7 @@
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
+#include <audio_editor_core/ae_time_editor_maker.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
 
@@ -28,7 +30,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<action_controller> const &action_controller,
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<nudging_for_project_editor> const &nudging,
-                               std::shared_ptr<timing_for_project_editor> const &timing)
+                               std::shared_ptr<timing_for_project_editor> const &timing,
+                               std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),
@@ -42,7 +45,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _action_controller(action_controller),
       _dialog_presenter(dialog_presenter),
       _nudging(nudging),
-      _timing(timing) {
+      _timing(timing),
+      _time_editor_maker(time_editor_maker) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -257,6 +261,42 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action::paste:
                     this->paste_and_offset();
                     break;
+                case action::begin_time_editing:
+                    this->begin_time_editing();
+                    break;
+                case action::cancel_time_editing:
+                    this->cancel_time_editing();
+                    break;
+                case action::input_time_0:
+                    this->input_time_number(0);
+                    break;
+                case action::input_time_1:
+                    this->input_time_number(1);
+                    break;
+                case action::input_time_2:
+                    this->input_time_number(2);
+                    break;
+                case action::input_time_3:
+                    this->input_time_number(3);
+                    break;
+                case action::input_time_4:
+                    this->input_time_number(4);
+                    break;
+                case action::input_time_5:
+                    this->input_time_number(5);
+                    break;
+                case action::input_time_6:
+                    this->input_time_number(6);
+                    break;
+                case action::input_time_7:
+                    this->input_time_number(7);
+                    break;
+                case action::input_time_8:
+                    this->input_time_number(8);
+                    break;
+                case action::input_time_9:
+                    this->input_time_number(9);
+                    break;
             }
         })
         .end()
@@ -289,6 +329,10 @@ std::shared_ptr<database_for_project_editor> const &project_editor::database() c
 
 std::shared_ptr<timing_for_project_editor> const &project_editor::timing() const {
     return this->_timing;
+}
+
+std::shared_ptr<time_editor_for_project_editor> const &project_editor::time_editor() const {
+    return this->_time_editor;
 }
 
 frame_index_t project_editor::current_frame() const {
@@ -712,6 +756,42 @@ void project_editor::paste_and_offset() {
     }
 }
 
+bool project_editor::can_begin_time_editing() const {
+    return this->_time_editor == nullptr;
+}
+
+bool project_editor::can_end_time_editing() const {
+    return this->_time_editor != nullptr;
+}
+
+void project_editor::begin_time_editing() {
+    if (!this->can_begin_time_editing()) {
+        return;
+    }
+
+    this->_action_controller->router()->set_kind(action_routing_kind::time);
+    this->_time_editor = this->_time_editor_maker->make();
+}
+
+void project_editor::cancel_time_editing() {
+    if (!this->can_end_time_editing()) {
+        return;
+    }
+
+    this->_time_editor = nullptr;
+    this->_action_controller->router()->set_kind(action_routing_kind::normal);
+}
+
+bool project_editor::can_input_time_number() const {
+    return this->_time_editor != nullptr;
+}
+
+void project_editor::input_time_number(uint32_t const number) {
+    if (this->_time_editor) {
+        this->_time_editor->input_number(number);
+    }
+}
+
 std::optional<frame_index_t> project_editor::_previous_edge() const {
     frame_index_t const current_frame = this->_player->current_frame();
     auto const file_track_edge = this->_file_track->previous_edge(current_frame);
@@ -803,7 +883,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_f
                                                             std::shared_ptr<timing_for_project_editor> const &timing) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
                        pasteboard::make_shared(), database::make_shared(db_file_url), exporter::make_shared(),
-                       action_controller, dialog_presenter, nudging, timing);
+                       action_controller, dialog_presenter, nudging, timing, time_editor_maker::make_shared());
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
@@ -817,8 +897,9 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<action_controller> const &action_controller,
     std::shared_ptr<dialog_presenter> const &dialog_presenter,
     std::shared_ptr<nudging_for_project_editor> const &nudging,
-    std::shared_ptr<timing_for_project_editor> const &timing) {
-    return std::shared_ptr<project_editor>(new project_editor{editing_file_url, file_info, player, file_track,
-                                                              marker_pool, pasteboard, database, exporter,
-                                                              action_controller, dialog_presenter, nudging, timing});
+    std::shared_ptr<timing_for_project_editor> const &timing,
+    std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker) {
+    return std::shared_ptr<project_editor>(
+        new project_editor{editing_file_url, file_info, player, file_track, marker_pool, pasteboard, database, exporter,
+                           action_controller, dialog_presenter, nudging, timing, time_editor_maker});
 }

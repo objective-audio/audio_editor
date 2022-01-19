@@ -20,6 +20,10 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::space;
         } else if (key_code == 51) {
             return key::del;
+        } else if (key_code == 53) {
+            return key::esc;
+        } else if (chara == "=") {
+            return key::equal;
         } else if (lower_chara == "a") {
             return key::a;
         } else if (lower_chara == "s") {
@@ -50,6 +54,13 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::num_8;
         } else if (chara == "9") {
             return key::num_9;
+        }
+    }
+
+    auto const shift_modifier_only = (modifiers.size() == 1) && modifiers.contains(ae::modifier::shift);
+    if (shift_modifier_only) {
+        if (chara == "=") {
+            return key::equal;
         }
     }
 

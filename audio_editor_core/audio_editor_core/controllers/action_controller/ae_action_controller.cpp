@@ -19,8 +19,14 @@ action_controller::action_controller(std::shared_ptr<action_router> const &route
       _export_notifier(observing::notifier<url>::make_shared()) {
 }
 
+std::shared_ptr<action_router> const &action_controller::router() const {
+    return this->_router;
+}
+
 void action_controller::handle_action(action const action) {
-    this->_action_notifier->notify(action);
+    if (this->_router->responds_to_action(action)) {
+        this->_action_notifier->notify(action);
+    }
 }
 
 void action_controller::handle_key(ae::key const key) {

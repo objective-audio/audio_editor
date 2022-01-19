@@ -13,7 +13,8 @@ struct editing_root_presenter final {
     [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(std::string const &project_id);
     [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(
         std::shared_ptr<project_for_editing_root_presenter> const &,
-        std::shared_ptr<project_editor_for_editing_root_presenter> const &);
+        std::shared_ptr<project_editor_for_editing_root_presenter> const &,
+        std::shared_ptr<action_router_for_editing_root_presenter> const &);
 
     [[nodiscard]] std::string const &project_id() const;
     [[nodiscard]] std::string state_text() const;
@@ -53,12 +54,14 @@ struct editing_root_presenter final {
    private:
     std::weak_ptr<project_for_editing_root_presenter> _project;
     std::weak_ptr<project_editor_for_editing_root_presenter> _project_editor;
+    std::weak_ptr<action_router_for_editing_root_presenter> _action_router;
     observing::fetcher_ptr<file_track_event> const _file_track_event_fetcher;
     observing::fetcher_ptr<marker_pool_event> const _marker_pool_event_fetcher;
     observing::canceller_pool _pool;
 
     editing_root_presenter(std::shared_ptr<project_for_editing_root_presenter> const &,
-                           std::shared_ptr<project_editor_for_editing_root_presenter> const &);
+                           std::shared_ptr<project_editor_for_editing_root_presenter> const &,
+                           std::shared_ptr<action_router_for_editing_root_presenter> const &);
 
     editing_root_presenter(editing_root_presenter const &) = delete;
     editing_root_presenter(editing_root_presenter &&) = delete;

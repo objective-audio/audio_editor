@@ -18,6 +18,7 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] std::shared_ptr<marker_pool_for_project_editor> const &marker_pool() const;
     [[nodiscard]] std::shared_ptr<database_for_project_editor> const &database() const;
     [[nodiscard]] std::shared_ptr<timing_for_project_editor> const &timing() const override;
+    [[nodiscard]] std::shared_ptr<time_editor_for_project_editor> const &time_editor() const;
 
     [[nodiscard]] frame_index_t current_frame() const override;
 
@@ -79,6 +80,13 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_paste() const override;
     void paste_and_offset();
 
+    [[nodiscard]] bool can_begin_time_editing() const override;
+    [[nodiscard]] bool can_end_time_editing() const override;
+    [[nodiscard]] bool can_input_time_number() const;
+    void begin_time_editing();
+    void cancel_time_editing();
+    void input_time_number(uint32_t const);
+
     [[nodiscard]] std::map<frame_index_t, marker> const &markers() const override;
     [[nodiscard]] file_track_module_map_t const &modules() const override;
 
@@ -102,7 +110,8 @@ struct project_editor final : project_editor_for_project {
         std::shared_ptr<pasteboard_for_project_editor> const &, std::shared_ptr<database_for_project_editor> const &,
         std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<action_controller> const &,
         std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &,
-        std::shared_ptr<timing_for_project_editor> const &);
+        std::shared_ptr<timing_for_project_editor> const &,
+        std::shared_ptr<time_editor_maker_for_project_editor> const &);
 
    private:
     url const _editing_file_url;
@@ -117,6 +126,8 @@ struct project_editor final : project_editor_for_project {
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
     std::shared_ptr<nudging_for_project_editor> const _nudging;
     std::shared_ptr<timing_for_project_editor> const _timing;
+    std::shared_ptr<time_editor_maker_for_project_editor> const _time_editor_maker;
+    std::shared_ptr<time_editor_for_project_editor> _time_editor;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
@@ -130,7 +141,8 @@ struct project_editor final : project_editor_for_project {
                    std::shared_ptr<database_for_project_editor> const &,
                    std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<action_controller> const &,
                    std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &,
-                   std::shared_ptr<timing_for_project_editor> const &);
+                   std::shared_ptr<timing_for_project_editor> const &,
+                   std::shared_ptr<time_editor_maker_for_project_editor> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

@@ -43,6 +43,10 @@
 		B6370CC02796FCAA00449D03 /* ae_action_normal_routing.h in Headers */ = {isa = PBXBuildFile; fileRef = B6370CBE2796FCAA00449D03 /* ae_action_normal_routing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6370CC32796FCC800449D03 /* ae_action_time_routing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6370CC12796FCC800449D03 /* ae_action_time_routing.cpp */; };
 		B6370CC42796FCC800449D03 /* ae_action_time_routing.h in Headers */ = {isa = PBXBuildFile; fileRef = B6370CC22796FCC800449D03 /* ae_action_time_routing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6370CC92798524B00449D03 /* ae_time_editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6370CC72798524B00449D03 /* ae_time_editor.cpp */; };
+		B6370CCA2798524B00449D03 /* ae_time_editor.h in Headers */ = {isa = PBXBuildFile; fileRef = B6370CC82798524B00449D03 /* ae_time_editor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6370CCD2798531500449D03 /* ae_time_editor_maker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6370CCB2798531500449D03 /* ae_time_editor_maker.cpp */; };
+		B6370CCE2798531500449D03 /* ae_time_editor_maker.h in Headers */ = {isa = PBXBuildFile; fileRef = B6370CCC2798531500449D03 /* ae_time_editor_maker.h */; };
 		B64504AE2719C4D9009E05D6 /* ae_module_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AD2719C4D9009E05D6 /* ae_module_location.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B64504B02719C4E4009E05D6 /* ae_marker_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AF2719C4E4009E05D6 /* ae_marker_location.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B64504B3271A7316009E05D6 /* ae_markers_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504B1271A7316009E05D6 /* ae_markers_presenter.h */; };
@@ -258,6 +262,10 @@
 		B6370CBE2796FCAA00449D03 /* ae_action_normal_routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_action_normal_routing.h; sourceTree = "<group>"; };
 		B6370CC12796FCC800449D03 /* ae_action_time_routing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_action_time_routing.cpp; sourceTree = "<group>"; };
 		B6370CC22796FCC800449D03 /* ae_action_time_routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_action_time_routing.h; sourceTree = "<group>"; };
+		B6370CC72798524B00449D03 /* ae_time_editor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_time_editor.cpp; sourceTree = "<group>"; };
+		B6370CC82798524B00449D03 /* ae_time_editor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_editor.h; sourceTree = "<group>"; };
+		B6370CCB2798531500449D03 /* ae_time_editor_maker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_time_editor_maker.cpp; sourceTree = "<group>"; };
+		B6370CCC2798531500449D03 /* ae_time_editor_maker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_editor_maker.h; sourceTree = "<group>"; };
 		B64504AD2719C4D9009E05D6 /* ae_module_location.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_module_location.h; sourceTree = "<group>"; };
 		B64504AF2719C4E4009E05D6 /* ae_marker_location.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_marker_location.h; sourceTree = "<group>"; };
 		B64504B1271A7316009E05D6 /* ae_markers_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_markers_presenter.h; sourceTree = "<group>"; };
@@ -610,6 +618,17 @@
 			path = routing;
 			sourceTree = "<group>";
 		};
+		B6370CC62798522100449D03 /* time_editor */ = {
+			isa = PBXGroup;
+			children = (
+				B6370CCB2798531500449D03 /* ae_time_editor_maker.cpp */,
+				B6370CCC2798531500449D03 /* ae_time_editor_maker.h */,
+				B6370CC72798524B00449D03 /* ae_time_editor.cpp */,
+				B6370CC82798524B00449D03 /* ae_time_editor.h */,
+			);
+			path = time_editor;
+			sourceTree = "<group>";
+		};
 		B64504B5271A7322009E05D6 /* markers_presenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -868,6 +887,7 @@
 				B634FDB7263C2C0B0096E69F /* presenters */,
 				B69CF55E262AC48D007A0A75 /* project */,
 				B6EA40DB2641721100BF3D06 /* project_editor */,
+				B6370CC62798522100449D03 /* time_editor */,
 				B668BE22262F32870021AD20 /* project_pool */,
 				B695A38A27657A6E004CB28F /* recycle_pool */,
 				B605EA6D2657E51B0031B177 /* ui */,
@@ -1055,6 +1075,7 @@
 				B6B002BF263BC8880013E6D0 /* ae_file_loader_types.h in Headers */,
 				B66F4770278BEAE000CB724C /* ae_timing_utils.h in Headers */,
 				B6DBC3642763474E001AF1D3 /* ae_marker_location_pool.h in Headers */,
+				B6370CCA2798524B00449D03 /* ae_time_editor.h in Headers */,
 				B6370CC42796FCC800449D03 /* ae_action_time_routing.h in Headers */,
 				B69708EB2639A15E0045E975 /* ae_file_importer.h in Headers */,
 				B64E94F82652B7660056F511 /* ae_marker_pool_types.h in Headers */,
@@ -1093,6 +1114,7 @@
 				B6A12381278932B900F31B31 /* ae_ui_time.h in Headers */,
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
 				B64E9FD12650EE2C00758FE8 /* ae_marker.h in Headers */,
+				B6370CCE2798531500449D03 /* ae_time_editor_maker.h in Headers */,
 				B666CE4D26351D7900C1693D /* ae_project_url.h in Headers */,
 				B668BE0D262DCC260021AD20 /* ae_app_types.h in Headers */,
 				B6B9736127006FF500E1BD12 /* ae_ui_button_utils.h in Headers */,
@@ -1262,6 +1284,7 @@
 				B657D4D1268037720048C6AD /* ae_keyboard.mm in Sources */,
 				B6966F37272E4D8400A90733 /* ae_database.cpp in Sources */,
 				B6370CB927966FE300449D03 /* ae_action_router.cpp in Sources */,
+				B6370CCD2798531500449D03 /* ae_time_editor_maker.cpp in Sources */,
 				B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */,
 				B6D1B3EB26480D7F002CE49E /* ae_project_editor_maker.cpp in Sources */,
 				B64E9FC82650EDC800758FE8 /* ae_marker_pool.cpp in Sources */,
@@ -1285,6 +1308,7 @@
 				B64504B4271A7316009E05D6 /* ae_markers_presenter.cpp in Sources */,
 				B69607A4276CA022002B2BE0 /* ae_module_waveforms_presenter.cpp in Sources */,
 				B666CE352634FC8300C1693D /* ae_uuid_generator.cpp in Sources */,
+				B6370CC92798524B00449D03 /* ae_time_editor.cpp in Sources */,
 				B6C3A58727102C9800514B94 /* ae_ui_modules.mm in Sources */,
 				B66F476F278BEAE000CB724C /* ae_timing_utils.cpp in Sources */,
 				B6C9A727264047B100585FDF /* ae_player.cpp in Sources */,

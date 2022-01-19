@@ -11,12 +11,12 @@
 
 namespace yas::ae {
 struct project_editor_maker final : project_editor_maker_for_project {
+    [[nodiscard]] static std::shared_ptr<project_editor_maker> make_shared(
+        std::shared_ptr<player_for_project_editor> const &, std::shared_ptr<action_controller> const &,
+        std::shared_ptr<dialog_presenter> const &);
+
     [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &editing_file_url, url const &db_file_url,
                                                                    file_info const &) const override;
-
-    static std::shared_ptr<project_editor_maker> make_shared(std::shared_ptr<player_for_project_editor> const &,
-                                                             std::shared_ptr<action_controller> const &,
-                                                             std::shared_ptr<dialog_presenter> const &);
 
    private:
     std::shared_ptr<player_for_project_editor> const _player;
