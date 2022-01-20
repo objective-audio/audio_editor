@@ -43,9 +43,10 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
                 } break;
 
                 case ui::event_type::key: {
-                    if (event->phase() == ui::event_phase::ended && this->_modifiers.empty()) {
+                    auto const phase = event->phase();
+                    if (phase == ui::event_phase::began || phase == ui::event_phase::changed) {
                         auto const key_event = event->get<ui::key>();
-                        if (auto const key = keyboard_utils::to_key(key_event.key_code())) {
+                        if (auto const key = keyboard_utils::to_key(key_event, this->_modifiers)) {
                             this->_key_notifier->notify(key.value());
                         }
                     }

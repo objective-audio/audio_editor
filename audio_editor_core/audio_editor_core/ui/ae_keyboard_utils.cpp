@@ -7,8 +7,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::optional<key> keyboard_utils::to_key(uint16_t const key_code) {
-    switch (key_code) {
+std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
+                                          std::unordered_set<ae::modifier> const &modifiers) {
+    switch (event.key_code()) {
         case 49:
             return key::space;
         case 51:
