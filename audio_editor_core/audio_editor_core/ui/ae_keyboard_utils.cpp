@@ -4,52 +4,56 @@
 
 #include "ae_keyboard_utils.h"
 
+#include <cpp_utils/yas_stl_utils.h>
+
 using namespace yas;
 using namespace yas::ae;
 
 std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
                                           std::unordered_set<ae::modifier> const &modifiers) {
-    switch (event.key_code()) {
-        case 49:
+    auto const &chara = event.characters();
+    auto const lower_chara = to_lower(chara);
+    auto const key_code = event.key_code();
+
+    if (modifiers.size() == 0) {
+        if (chara == " ") {
             return key::space;
-        case 51:
+        } else if (key_code == 51) {
             return key::del;
-
-        case 0:
+        } else if (lower_chara == "a") {
             return key::a;
-        case 1:
+        } else if (lower_chara == "s") {
             return key::s;
-        case 2:
+        } else if (lower_chara == "d") {
             return key::d;
-        case 3:
+        } else if (lower_chara == "f") {
             return key::f;
-        case 15:
+        } else if (lower_chara == "r") {
             return key::r;
-
-        case 29:
+        } else if (chara == "0") {
             return key::num_0;
-        case 18:
+        } else if (chara == "1") {
             return key::num_1;
-        case 19:
+        } else if (chara == "2") {
             return key::num_2;
-        case 20:
+        } else if (chara == "3") {
             return key::num_3;
-        case 21:
+        } else if (chara == "4") {
             return key::num_4;
-        case 23:
+        } else if (chara == "5") {
             return key::num_5;
-        case 22:
+        } else if (chara == "6") {
             return key::num_6;
-        case 26:
+        } else if (chara == "7") {
             return key::num_7;
-        case 28:
+        } else if (chara == "8") {
             return key::num_8;
-        case 25:
+        } else if (chara == "9") {
             return key::num_9;
-
-        default:
-            return std::nullopt;
+        }
     }
+
+    return std::nullopt;
 }
 
 ae::modifier keyboard_utils::to_modifier(ui::modifier_flags const flag) {
