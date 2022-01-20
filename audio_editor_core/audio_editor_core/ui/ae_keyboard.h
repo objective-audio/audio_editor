@@ -19,7 +19,7 @@ struct keyboard final : keyboard_for_ui_root {
 
    private:
     std::shared_ptr<ui::event_manager> const _event_manager;
-    std::unordered_set<ui::modifier_flags> _modifiers;
+    std::unordered_set<ae::modifier> _modifiers;
     observing::notifier_ptr<ae::key> const _key_notifier;
     observing::notifier_ptr<ae::modifier_event> const _modifier_notifier;
     observing::canceller_pool _pool;
