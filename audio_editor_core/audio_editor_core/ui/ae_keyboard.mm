@@ -18,21 +18,22 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
                 case ui::event_type::modifier: {
                     auto const modifier_event = event->get<ui::modifier>();
                     auto const flags = modifier_event.flag();
+                    auto const modifier = keyboard_utils::to_modifier(flags);
 
                     switch (event->phase()) {
                         case ui::event_phase::began: {
-                            if (!this->_modifiers.contains(flags)) {
-                                this->_modifiers.insert(flags);
-                                this->_modifier_notifier->notify({.state = ae::modifier_event_state::began,
-                                                                  .modifier = keyboard_utils::to_modifier(flags)});
+                            if (!this->_modifiers.contains(modifier)) {
+                                this->_modifiers.insert(modifier);
+                                this->_modifier_notifier->notify(
+                                    {.state = ae::modifier_event_state::began, .modifier = modifier});
                             }
                         } break;
 
                         case ui::event_phase::ended: {
-                            if (this->_modifiers.contains(flags)) {
-                                this->_modifiers.erase(modifier_event.flag());
-                                this->_modifier_notifier->notify({.state = ae::modifier_event_state::ended,
-                                                                  .modifier = keyboard_utils::to_modifier(flags)});
+                            if (this->_modifiers.contains(modifier)) {
+                                this->_modifiers.erase(modifier);
+                                this->_modifier_notifier->notify(
+                                    {.state = ae::modifier_event_state::ended, .modifier = modifier});
                             }
                         } break;
 
@@ -42,9 +43,10 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
                 } break;
 
                 case ui::event_type::key: {
-                    if (event->phase() == ui::event_phase::ended && this->_modifiers.empty()) {
+                    auto const phase = event->phase();
+                    if (phase == ui::event_phase::began || phase == ui::event_phase::changed) {
                         auto const key_event = event->get<ui::key>();
-                        if (auto const key = keyboard_utils::to_key(key_event.key_code())) {
+                        if (auto const key = keyboard_utils::to_key(key_event, this->_modifiers)) {
                             this->_key_notifier->notify(key.value());
                         }
                     }
