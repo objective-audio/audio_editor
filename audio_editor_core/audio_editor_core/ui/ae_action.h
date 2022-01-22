@@ -36,5 +36,18 @@ enum class action {
     cut,
     copy,
     paste,
+
+    begin_time_editing,
+    cancel_time_editing,
+    input_time_0,
+    input_time_1,
+    input_time_2,
+    input_time_3,
+    input_time_4,
+    input_time_5,
+    input_time_6,
+    input_time_7,
+    input_time_8,
+    input_time_9,
 };
 }  // namespace yas::ae

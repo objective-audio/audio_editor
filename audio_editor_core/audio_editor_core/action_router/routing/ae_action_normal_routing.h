@@ -13,6 +13,7 @@ struct action_normal_routing : action_routing {
     [[nodiscard]] static std::shared_ptr<action_normal_routing> make_shared();
 
     [[nodiscard]] std::optional<ae::action> to_action(ae::key const) override;
+    [[nodiscard]] bool responds_to_action(ae::action const) override;
 
    private:
     action_normal_routing();

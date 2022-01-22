@@ -159,4 +159,16 @@ struct timing_for_project_editor : timing_for_nudging, timing_for_time_presenter
     [[nodiscard]] virtual observing::syncable observe_fraction_kind(
         std::function<void(timing_fraction_kind const &)> &&) = 0;
 };
+
+struct time_editor_for_project_editor {
+    virtual ~time_editor_for_project_editor() = default;
+
+    virtual void input_number(uint32_t const) = 0;
+};
+
+struct time_editor_maker_for_project_editor {
+    virtual ~time_editor_maker_for_project_editor() = default;
+
+    [[nodiscard]] virtual std::shared_ptr<time_editor_for_project_editor> make() const = 0;
+};
 }  // namespace yas::ae

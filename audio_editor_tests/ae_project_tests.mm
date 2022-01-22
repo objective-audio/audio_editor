@@ -141,6 +141,12 @@ struct project_editor_stub final : project_editor_for_project {
     bool can_paste() const override {
         return false;
     }
+    bool can_begin_time_editing() const override {
+        return false;
+    }
+    bool can_end_time_editing() const override {
+        return false;
+    }
 
     std::map<frame_index_t, marker> const &markers() const override {
         return ae::empty_markers;

@@ -13,6 +13,8 @@ enum class key {
     f,
     r,
     del,
+    equal,
+    esc,
 
     num_0,
     num_1,

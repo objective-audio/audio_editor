@@ -15,6 +15,8 @@ class action_router;
 struct action_controller final {
     [[nodiscard]] static std::shared_ptr<action_controller> make_shared(std::shared_ptr<action_router> const &);
 
+    [[nodiscard]] std::shared_ptr<action_router> const &router() const;
+
     void handle_action(action const);
     void handle_key(ae::key const);
     void export_to_file(url const &);

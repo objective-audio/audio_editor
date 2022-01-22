@@ -13,6 +13,7 @@ struct action_time_routing : action_routing {
     [[nodiscard]] static std::shared_ptr<action_time_routing> make_shared();
 
     [[nodiscard]] std::optional<ae::action> to_action(ae::key const) override;
+    [[nodiscard]] bool responds_to_action(ae::action const) override;
 
    private:
     action_time_routing();

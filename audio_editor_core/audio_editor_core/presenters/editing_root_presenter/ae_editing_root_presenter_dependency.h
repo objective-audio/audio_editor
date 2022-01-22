@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_nudging_types.h>
@@ -17,6 +18,12 @@ class file_track_for_project_editor;
 class marker_pool_for_project_editor;
 class marker;
 class marker_pool_event;
+
+struct action_router_for_editing_root_presenter {
+    virtual ~action_router_for_editing_root_presenter() = default;
+
+    [[nodiscard]] virtual bool responds_to_action(ae::action const) const = 0;
+};
 
 struct project_for_editing_root_presenter {
     virtual ~project_for_editing_root_presenter() = default;
@@ -54,6 +61,8 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual bool can_cut() const = 0;
     [[nodiscard]] virtual bool can_copy() const = 0;
     [[nodiscard]] virtual bool can_paste() const = 0;
+    [[nodiscard]] virtual bool can_begin_time_editing() const = 0;
+    [[nodiscard]] virtual bool can_end_time_editing() const = 0;
 
     [[nodiscard]] virtual std::map<frame_index_t, marker> const &markers() const = 0;
     [[nodiscard]] virtual file_track_module_map_t const &modules() const = 0;

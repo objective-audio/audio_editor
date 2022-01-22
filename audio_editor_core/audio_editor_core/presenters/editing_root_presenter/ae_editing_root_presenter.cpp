@@ -13,10 +13,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-editing_root_presenter::editing_root_presenter(std::shared_ptr<project_for_editing_root_presenter> const &project,
-                                               std::shared_ptr<project_editor_for_editing_root_presenter> const &editor)
+editing_root_presenter::editing_root_presenter(
+    std::shared_ptr<project_for_editing_root_presenter> const &project,
+    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
+    std::shared_ptr<action_router_for_editing_root_presenter> const &action_router)
     : _project(project),
       _project_editor(editor),
+      _action_router(action_router),
       _file_track_event_fetcher(editing_root_presenter_utils::make_file_track_fetcher(editor)),
       _marker_pool_event_fetcher(editing_root_presenter_utils::make_marker_pool_fetcher(editor)) {
     editor->observe_file_track_event([this](auto const &event) { this->_file_track_event_fetcher->push(event); })
@@ -30,13 +33,14 @@ editing_root_presenter::editing_root_presenter(std::shared_ptr<project_for_editi
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
     auto const project = app::global()->project_pool()->project_for_id(project_id);
-    return make_shared(project, project->editor());
+    return make_shared(project, project->editor(), project->action_router());
 }
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
     std::shared_ptr<project_for_editing_root_presenter> const &project,
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor) {
-    return std::shared_ptr<editing_root_presenter>(new editing_root_presenter{project, editor});
+    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
+    std::shared_ptr<action_router_for_editing_root_presenter> const &action_router) {
+    return std::shared_ptr<editing_root_presenter>(new editing_root_presenter{project, editor, action_router});
 }
 
 std::string const &editing_root_presenter::project_id() const {
@@ -240,7 +244,12 @@ observing::syncable editing_root_presenter::observe_timing_text(std::function<vo
 bool editing_root_presenter::responds_to_action(action const action) {
     auto const project = this->_project.lock();
     auto const editor = this->_project_editor.lock();
-    if (!project || !editor) {
+    auto const router = this->_action_router.lock();
+    if (!project || !editor || !router) {
+        return false;
+    }
+
+    if (!router->responds_to_action(action)) {
         return false;
     }
 
@@ -313,5 +322,21 @@ bool editing_root_presenter::responds_to_action(action const action) {
             return editor->can_copy();
         case action::paste:
             return editor->can_paste();
+
+        case action::cancel_time_editing:
+            return editor->can_end_time_editing();
+        case action::begin_time_editing:
+            return editor->can_begin_time_editing();
+        case action::input_time_0:
+        case action::input_time_1:
+        case action::input_time_2:
+        case action::input_time_3:
+        case action::input_time_4:
+        case action::input_time_5:
+        case action::input_time_6:
+        case action::input_time_7:
+        case action::input_time_8:
+        case action::input_time_9:
+            return false;
     }
 }
