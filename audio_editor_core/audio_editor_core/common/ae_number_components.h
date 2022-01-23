@@ -22,12 +22,11 @@ struct number_components_unit final {
 struct number_components final {
     number_components(bool const is_minus, std::vector<number_components_unit> &&units);
 
-    void set_is_minus(bool const);
     [[nodiscard]] bool is_minus() const;
 
+    [[nodiscard]] std::vector<number_components_unit> const &units() const;
     [[nodiscard]] std::size_t size() const;
 
-    void set_unit_value(uint32_t const value, std::size_t const idx);
     [[nodiscard]] number_components_unit const &unit(std::size_t const) const;
 
     bool is_zero() const;
@@ -39,6 +38,8 @@ struct number_components final {
     bool operator!=(number_components const &rhs) const;
     bool operator<(number_components const &rhs) const;
 
+    number_components is_minus_replaced(bool const) const;
+    number_components unit_value_replaced(uint32_t const value, std::size_t const idx) const;
     number_components adding(number_components const &) const;
 
    private:
