@@ -11,19 +11,33 @@ using namespace yas::ae;
 
 std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
                                           std::unordered_set<ae::modifier> const &modifiers) {
+    static std::unordered_set<ae::modifier> const shift_modifiers{ae::modifier::shift};
+    static std::unordered_set<ae::modifier> const function_and_numeric_modifiers{ae::modifier::function,
+                                                                                 ae::modifier::numeric_pad};
+
     auto const &chara = event.characters();
     auto const lower_chara = to_lower(chara);
     auto const key_code = event.key_code();
 
-    if (modifiers.size() == 0) {
-        if (chara == " ") {
-            return key::space;
-        } else if (key_code == 51) {
+    bool const empty_modifiers = modifiers.size() == 0;
+
+    if (empty_modifiers) {
+        if (key_code == 51) {
             return key::del;
         } else if (key_code == 53) {
             return key::esc;
+        } else if (key_code == 36) {
+            return key::ret;
+        } else if (key_code == 48) {
+            return key::tab;
+        } else if (chara == " ") {
+            return key::space;
         } else if (chara == "=") {
             return key::equal;
+        } else if (chara == "+") {
+            return key::plus;
+        } else if (chara == "-") {
+            return key::hyphen;
         } else if (lower_chara == "a") {
             return key::a;
         } else if (lower_chara == "s") {
@@ -57,10 +71,23 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
         }
     }
 
-    auto const shift_modifier_only = (modifiers.size() == 1) && modifiers.contains(ae::modifier::shift);
-    if (shift_modifier_only) {
-        if (chara == "=") {
+    if (modifiers == shift_modifiers) {
+        if (key_code == 48) {
+            return key::shift_tab;
+        } else if (chara == "=") {
             return key::equal;
+        } else if (chara == "+") {
+            return key::plus;
+        } else if (chara == "-") {
+            return key::hyphen;
+        }
+    }
+
+    if (modifiers == function_and_numeric_modifiers) {
+        if (key_code == 123) {
+            return key::left;
+        } else if (key_code == 124) {
+            return key::right;
         }
     }
 

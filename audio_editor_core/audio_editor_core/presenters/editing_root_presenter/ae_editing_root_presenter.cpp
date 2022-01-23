@@ -327,6 +327,9 @@ bool editing_root_presenter::responds_to_action(action const action) {
             return editor->can_end_time_editing();
         case action::begin_time_editing:
             return editor->can_begin_time_editing();
+        case action::finish_time_editing:
+        case action::move_to_previous_time_unit:
+        case action::move_to_next_time_unit:
         case action::input_time_0:
         case action::input_time_1:
         case action::input_time_2:
@@ -337,6 +340,9 @@ bool editing_root_presenter::responds_to_action(action const action) {
         case action::input_time_7:
         case action::input_time_8:
         case action::input_time_9:
+        case action::delete_time:
+        case action::change_time_sign_to_plus:
+        case action::change_time_sign_to_minus:
             return false;
     }
 }

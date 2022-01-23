@@ -15,6 +15,13 @@ enum class key {
     del,
     equal,
     esc,
+    left,
+    right,
+    plus,
+    hyphen,
+    ret,
+    tab,
+    shift_tab,
 
     num_0,
     num_1,

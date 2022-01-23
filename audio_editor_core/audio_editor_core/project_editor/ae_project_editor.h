@@ -84,8 +84,14 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_end_time_editing() const override;
     [[nodiscard]] bool can_input_time_number() const;
     void begin_time_editing();
+    void finish_time_editing();
     void cancel_time_editing();
     void input_time_number(uint32_t const);
+    void delete_time_number();
+    void move_to_previous_time_unit();
+    void move_to_next_time_unit();
+    void change_time_sign_to_plus();
+    void change_time_sign_to_minus();
 
     [[nodiscard]] std::map<frame_index_t, marker> const &markers() const override;
     [[nodiscard]] file_track_module_map_t const &modules() const override;
@@ -132,6 +138,7 @@ struct project_editor final : project_editor_for_project {
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
     observing::canceller_pool _pool;
+    observing::cancellable_ptr _time_editing_canceller;
 
     project_editor(url const &editing_file_url, ae::file_info const &,
                    std::shared_ptr<player_for_project_editor> const &,

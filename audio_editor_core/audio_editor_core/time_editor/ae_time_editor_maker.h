@@ -10,7 +10,7 @@ namespace yas::ae {
 struct time_editor_maker final : time_editor_maker_for_project_editor {
     [[nodiscard]] static std::shared_ptr<time_editor_maker> make_shared();
 
-    [[nodiscard]] std::shared_ptr<time_editor_for_project_editor> make() const override;
+    [[nodiscard]] std::shared_ptr<time_editor_for_project_editor> make(number_components const &) const override;
 
    private:
     time_editor_maker();

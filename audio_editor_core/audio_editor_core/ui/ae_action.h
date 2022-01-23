@@ -38,7 +38,10 @@ enum class action {
     paste,
 
     begin_time_editing,
+    finish_time_editing,
     cancel_time_editing,
+    move_to_next_time_unit,
+    move_to_previous_time_unit,
     input_time_0,
     input_time_1,
     input_time_2,
@@ -49,5 +52,8 @@ enum class action {
     input_time_7,
     input_time_8,
     input_time_9,
+    delete_time,
+    change_time_sign_to_plus,
+    change_time_sign_to_minus,
 };
 }  // namespace yas::ae

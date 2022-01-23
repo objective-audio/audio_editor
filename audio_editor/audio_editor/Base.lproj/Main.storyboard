@@ -388,13 +388,13 @@ DQ
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Qad-bp-2aF"/>
-                                        <menuItem title="Nudge Previous" keyEquivalent="" id="XfT-aA-Bsv">
+                                        <menuItem title="Nudge Previous" id="XfT-aA-Bsv">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="nudgePrevious:" target="Ady-hI-5gd" id="GUc-aJ-Zd5"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Nudge Next" keyEquivalent="" id="8Ov-Wa-tqQ">
+                                        <menuItem title="Nudge Next" id="8Ov-Wa-tqQ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="nudgeNext:" target="Ady-hI-5gd" id="HWB-JC-WGu"/>

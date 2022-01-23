@@ -261,11 +261,21 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action::paste:
                     this->paste_and_offset();
                     break;
+
                 case action::begin_time_editing:
                     this->begin_time_editing();
                     break;
+                case action::finish_time_editing:
+                    this->finish_time_editing();
+                    break;
                 case action::cancel_time_editing:
                     this->cancel_time_editing();
+                    break;
+                case action::move_to_previous_time_unit:
+                    this->move_to_previous_time_unit();
+                    break;
+                case action::move_to_next_time_unit:
+                    this->move_to_next_time_unit();
                     break;
                 case action::input_time_0:
                     this->input_time_number(0);
@@ -296,6 +306,15 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     break;
                 case action::input_time_9:
                     this->input_time_number(9);
+                    break;
+                case action::delete_time:
+                    this->delete_time_number();
+                    break;
+                case action::change_time_sign_to_plus:
+                    this->change_time_sign_to_plus();
+                    break;
+                case action::change_time_sign_to_minus:
+                    this->change_time_sign_to_minus();
                     break;
             }
         })
@@ -770,16 +789,38 @@ void project_editor::begin_time_editing() {
     }
 
     this->_action_controller->router()->set_kind(action_routing_kind::time);
-    this->_time_editor = this->_time_editor_maker->make();
+
+    auto const current_frame = this->current_frame();
+    auto const components = this->_timing->components(current_frame);
+
+    this->_time_editor = this->_time_editor_maker->make(components.raw_components());
+
+    this->_time_editor
+        ->observe_event([this](time_editor_event const &) {
+            if (auto const components = this->_time_editor->finalized_components()) {
+                auto const frame = this->_timing->frame(timing_components{components.value()});
+                this->_player->seek(frame);
+            }
+
+            this->_time_editor = nullptr;
+            this->_action_controller->router()->set_kind(action_routing_kind::normal);
+            this->_time_editing_canceller->cancel();
+            this->_time_editing_canceller = nullptr;
+        })
+        .end()
+        ->set_to(this->_time_editing_canceller);
+}
+
+void project_editor::finish_time_editing() {
+    if (this->_time_editor) {
+        this->_time_editor->finish();
+    }
 }
 
 void project_editor::cancel_time_editing() {
-    if (!this->can_end_time_editing()) {
-        return;
+    if (this->_time_editor) {
+        this->_time_editor->cancel();
     }
-
-    this->_time_editor = nullptr;
-    this->_action_controller->router()->set_kind(action_routing_kind::normal);
 }
 
 bool project_editor::can_input_time_number() const {
@@ -789,6 +830,36 @@ bool project_editor::can_input_time_number() const {
 void project_editor::input_time_number(uint32_t const number) {
     if (this->_time_editor) {
         this->_time_editor->input_number(number);
+    }
+}
+
+void project_editor::delete_time_number() {
+    if (this->_time_editor) {
+        this->_time_editor->delete_number();
+    }
+}
+
+void project_editor::move_to_previous_time_unit() {
+    if (this->_time_editor) {
+        this->_time_editor->move_to_previous_unit();
+    }
+}
+
+void project_editor::move_to_next_time_unit() {
+    if (this->_time_editor) {
+        this->_time_editor->move_to_next_unit();
+    }
+}
+
+void project_editor::change_time_sign_to_plus() {
+    if (this->_time_editor) {
+        this->_time_editor->change_sign_to_plus();
+    }
+}
+
+void project_editor::change_time_sign_to_minus() {
+    if (this->_time_editor) {
+        this->_time_editor->change_sign_to_minus();
     }
 }
 
