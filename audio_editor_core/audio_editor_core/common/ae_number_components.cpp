@@ -39,25 +39,16 @@ number_components::number_components(bool const is_minus, std::vector<number_com
     }
 }
 
-void number_components::set_is_minus(bool const is_minus) {
-    this->_is_minus = is_minus;
-}
-
 bool number_components::is_minus() const {
     return this->_is_minus;
 }
 
-std::size_t number_components::size() const {
-    return this->_units.size();
+std::vector<number_components_unit> const &number_components::units() const {
+    return this->_units;
 }
 
-void number_components::set_unit_value(uint32_t const value, std::size_t const idx) {
-    auto &unit = this->_units.at(idx);
-    if (unit.size == 0 || value < unit.size) {
-        unit.value = value;
-    } else {
-        throw std::overflow_error("value exceeds count.");
-    }
+std::size_t number_components::size() const {
+    return this->_units.size();
 }
 
 number_components_unit const &number_components::unit(std::size_t const idx) const {
@@ -75,9 +66,7 @@ bool number_components::is_zero() const {
 
 number_components number_components::abs() const {
     if (this->_is_minus) {
-        auto components = *this;
-        components.set_is_minus(false);
-        return components;
+        return this->is_minus_replaced(false);
     } else {
         return *this;
     }
@@ -158,6 +147,34 @@ bool number_components::operator<(number_components const &rhs) const {
     }
 
     return false;
+}
+
+number_components number_components::is_minus_replaced(bool const is_minus) const {
+    if (this->_is_minus == is_minus) {
+        return *this;
+    } else {
+        auto copied = *this;
+        copied._is_minus = is_minus;
+        return copied;
+    }
+}
+
+number_components number_components::unit_value_replaced(uint32_t const value, std::size_t const idx) const {
+    auto const &unit = this->_units.at(idx);
+    if (unit.value == value) {
+        return *this;
+    } else {
+        auto copied = *this;
+
+        auto &copied_unit = copied._units.at(idx);
+        if (copied_unit.size == 0 || value < copied_unit.size) {
+            copied_unit.value = value;
+        } else {
+            throw std::overflow_error("value exceeds count.");
+        }
+
+        return copied;
+    }
 }
 
 number_components number_components::adding(number_components const &rhs) const {

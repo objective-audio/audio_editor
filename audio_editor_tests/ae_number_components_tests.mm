@@ -4,6 +4,7 @@
 
 #import <XCTest/XCTest.h>
 #include <audio_editor_core/ae_number_components.h>
+#include <optional>
 
 using namespace yas;
 using namespace yas::ae;
@@ -27,6 +28,7 @@ using namespace yas::ae;
     XCTAssertEqual(components.unit(0).value, 1);
     XCTAssertEqual(components.unit(1).value, 5);
     XCTAssertEqual(components.unit(2).value, 55);
+    XCTAssertEqual(components.units(), expected_units);
 }
 
 - (void)test_constructor_throws {
@@ -39,42 +41,94 @@ using namespace yas::ae;
                     @"最後のindexじゃ無いのにsizeが0");
 }
 
-- (void)test_set_is_minus {
-    number_components components{false, {{.size = 2}}};
+- (void)test_is_minus_replaced {
+    {
+        number_components const source{false, {{.size = 2}}};
 
-    XCTAssertFalse(components.is_minus());
+        {
+            auto const replaced = source.is_minus_replaced(true);
 
-    components.set_is_minus(true);
+            XCTAssertFalse(source.is_minus());
+            XCTAssertTrue(replaced.is_minus());
+            XCTAssertEqual(source.units(), replaced.units());
+        }
 
-    XCTAssertTrue(components.is_minus());
+        {
+            auto const replaced = source.is_minus_replaced(false);
+
+            XCTAssertFalse(source.is_minus());
+            XCTAssertFalse(replaced.is_minus());
+            XCTAssertEqual(source.units(), replaced.units());
+        }
+    }
+
+    {
+        number_components const source{true, {{.size = 2}}};
+
+        {
+            auto const replaced = source.is_minus_replaced(true);
+
+            XCTAssertTrue(source.is_minus());
+            XCTAssertTrue(replaced.is_minus());
+            XCTAssertEqual(source.units(), replaced.units());
+        }
+
+        {
+            auto const replaced = source.is_minus_replaced(false);
+
+            XCTAssertTrue(source.is_minus());
+            XCTAssertFalse(replaced.is_minus());
+            XCTAssertEqual(source.units(), replaced.units());
+        }
+    }
 }
 
-- (void)test_set_unit_value {
-    number_components components{false, {{.size = 2}, {.size = 10}, {.size = 0}}};
+- (void)test_unit_value_replaced {
+    number_components const source{false, {{.size = 2}, {.size = 10}, {.size = 0}}};
 
-    XCTAssertEqual(components.unit(0).value, 0);
-    XCTAssertEqual(components.unit(1).value, 0);
-    XCTAssertEqual(components.unit(2).value, 0);
+    XCTAssertEqual(source.unit(0).value, 0);
+    XCTAssertEqual(source.unit(1).value, 0);
+    XCTAssertEqual(source.unit(2).value, 0);
 
-    XCTAssertNoThrow(components.set_unit_value(1, 0));
-    XCTAssertEqual(components.unit(0).value, 1);
-    XCTAssertThrows(components.set_unit_value(2, 0));
-    XCTAssertEqual(components.unit(0).value, 1);
+    std::optional<number_components> replaced = std::nullopt;
 
-    XCTAssertNoThrow(components.set_unit_value(1, 1));
-    XCTAssertEqual(components.unit(1).value, 1);
-    XCTAssertNoThrow(components.set_unit_value(9, 1));
-    XCTAssertEqual(components.unit(1).value, 9);
-    XCTAssertThrows(components.set_unit_value(10, 1));
-    XCTAssertEqual(components.unit(1).value, 9);
+    XCTAssertNoThrow(replaced = source.unit_value_replaced(1, 0));
+    XCTAssertTrue(replaced.has_value());
+    XCTAssertEqual(replaced->unit(0).value, 1);
 
-    // 最後のsizeは0なので制限なし
-    XCTAssertNoThrow(components.set_unit_value(1, 2));
-    XCTAssertEqual(components.unit(2).value, 1);
-    XCTAssertNoThrow(components.set_unit_value(99999, 2));
-    XCTAssertEqual(components.unit(2).value, 99999);
+    replaced = std::nullopt;
 
-    XCTAssertThrows(components.set_unit_value(0, 3));
+    XCTAssertThrows(replaced = source.unit_value_replaced(2, 0));
+    XCTAssertFalse(replaced.has_value());
+
+    replaced = std::nullopt;
+
+    XCTAssertNoThrow(replaced = source.unit_value_replaced(1, 1));
+    XCTAssertTrue(replaced.has_value());
+    XCTAssertEqual(replaced->unit(1).value, 1);
+
+    replaced = std::nullopt;
+
+    XCTAssertNoThrow(replaced = source.unit_value_replaced(9, 1));
+    XCTAssertTrue(replaced.has_value());
+    XCTAssertEqual(replaced->unit(1).value, 9);
+
+    replaced = std::nullopt;
+
+    XCTAssertThrows(replaced = source.unit_value_replaced(10, 1));
+    XCTAssertFalse(replaced.has_value());
+
+    replaced = std::nullopt;
+
+    XCTAssertNoThrow(replaced = source.unit_value_replaced(1, 2));
+    XCTAssertTrue(replaced.has_value());
+    XCTAssertEqual(replaced->unit(2).value, 1);
+
+    replaced = std::nullopt;
+
+    XCTAssertNoThrow(replaced = source.unit_value_replaced(99999, 2));
+    XCTAssertTrue(replaced.has_value());
+    XCTAssertEqual(replaced->unit(2).value, 99999);
 }
 
 - (void)test_is_zero {
