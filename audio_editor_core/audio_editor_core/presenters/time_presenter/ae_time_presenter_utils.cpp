@@ -23,7 +23,7 @@ std::string time_presenter_utils::to_string(number_components_unit const &unit) 
     std::stringstream stream;
 
     if (unit.size > 0) {
-        auto const digits = math::to_decimal_digits(unit.size);
+        auto const digits = math::decimal_digits_from_size(unit.size);
         stream << std::setfill('0') << std::right << std::setw(digits) << unit.value;
     } else {
         stream << unit.value;

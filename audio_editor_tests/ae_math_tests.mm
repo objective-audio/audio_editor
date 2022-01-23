@@ -14,21 +14,27 @@ using namespace yas::ae;
 
 @implementation ae_math_tests
 
-- (void)test_to_decimal_digits {
-    XCTAssertEqual(math::to_decimal_digits(1), 0);
-    XCTAssertEqual(math::to_decimal_digits(2), 1);
-    XCTAssertEqual(math::to_decimal_digits(9), 1);
-    XCTAssertEqual(math::to_decimal_digits(10), 1);
-    XCTAssertEqual(math::to_decimal_digits(11), 2);
-    XCTAssertEqual(math::to_decimal_digits(19), 2);
-    XCTAssertEqual(math::to_decimal_digits(20), 2);
-    XCTAssertEqual(math::to_decimal_digits(21), 2);
-    XCTAssertEqual(math::to_decimal_digits(99), 2);
-    XCTAssertEqual(math::to_decimal_digits(100), 2);
-    XCTAssertEqual(math::to_decimal_digits(101), 3);
-    XCTAssertEqual(math::to_decimal_digits(999), 3);
-    XCTAssertEqual(math::to_decimal_digits(1000), 3);
-    XCTAssertEqual(math::to_decimal_digits(1001), 4);
+- (void)test_decimal_digits_from_size {
+    XCTAssertEqual(math::decimal_digits_from_size(1), 0);
+    XCTAssertEqual(math::decimal_digits_from_size(2), 1);
+    XCTAssertEqual(math::decimal_digits_from_size(9), 1);
+    XCTAssertEqual(math::decimal_digits_from_size(10), 1);
+    XCTAssertEqual(math::decimal_digits_from_size(11), 2);
+    XCTAssertEqual(math::decimal_digits_from_size(19), 2);
+    XCTAssertEqual(math::decimal_digits_from_size(20), 2);
+    XCTAssertEqual(math::decimal_digits_from_size(21), 2);
+    XCTAssertEqual(math::decimal_digits_from_size(99), 2);
+    XCTAssertEqual(math::decimal_digits_from_size(100), 2);
+    XCTAssertEqual(math::decimal_digits_from_size(101), 3);
+    XCTAssertEqual(math::decimal_digits_from_size(999), 3);
+    XCTAssertEqual(math::decimal_digits_from_size(1000), 3);
+    XCTAssertEqual(math::decimal_digits_from_size(1001), 4);
+}
+
+- (void)test_decimal_max_size_of_digits {
+    XCTAssertEqual(math::decimal_max_size_of_digits(1), 10);
+    XCTAssertEqual(math::decimal_max_size_of_digits(2), 100);
+    XCTAssertEqual(math::decimal_max_size_of_digits(3), 1000);
 }
 
 @end
