@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_number_components.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <audio_editor_core/ae_time_editor_types.h>
+#include <audio_editor_core/ae_time_presenter_dependency.h>
 
 namespace yas::ae {
 struct time_editor final : time_editor_for_project_editor {
@@ -28,8 +29,8 @@ struct time_editor final : time_editor_for_project_editor {
     void finish() override;
     void cancel() override;
 
-    [[nodiscard]] std::size_t unit_index() const;
-    [[nodiscard]] number_components editing_components() const;
+    [[nodiscard]] std::size_t unit_index() const override;
+    [[nodiscard]] number_components editing_components() const override;
     [[nodiscard]] std::optional<number_components> finalized_components() const override;
 
     [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&);

@@ -163,7 +163,7 @@ struct timing_for_project_editor : timing_for_nudging, timing_for_time_presenter
     [[nodiscard]] virtual timing_components components(frame_index_t const) const = 0;
 };
 
-struct time_editor_for_project_editor {
+struct time_editor_for_project_editor : time_editor_for_time_presenter {
     virtual ~time_editor_for_project_editor() = default;
 
     [[nodiscard]] virtual bool can_input_number() const = 0;

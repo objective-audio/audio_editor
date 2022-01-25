@@ -18,6 +18,9 @@ struct time_presenter final {
    private:
     std::weak_ptr<project_editor_for_time_presenter> _project_editor;
     std::weak_ptr<timing_for_time_presenter> _timing;
+    std::weak_ptr<time_editor_for_time_presenter> _time_editor;
+
+    observing::canceller_pool _pool;
 
     time_presenter(std::shared_ptr<project_editor_for_time_presenter> const &,
                    std::shared_ptr<timing_for_time_presenter> const &);

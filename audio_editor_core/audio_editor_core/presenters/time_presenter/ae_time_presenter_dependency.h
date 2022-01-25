@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_timing_types.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct timing_for_time_presenter {
@@ -19,9 +20,19 @@ struct timing_for_time_presenter {
     [[nodiscard]] virtual uint32_t fraction_digits() const = 0;
 };
 
+struct time_editor_for_time_presenter {
+    virtual ~time_editor_for_time_presenter() = default;
+
+    [[nodiscard]] virtual std::size_t unit_index() const = 0;
+    [[nodiscard]] virtual number_components editing_components() const = 0;
+};
+
 struct project_editor_for_time_presenter {
     virtual ~project_editor_for_time_presenter() = default;
 
     [[nodiscard]] virtual frame_index_t current_frame() const = 0;
+
+    [[nodiscard]] virtual observing::syncable observe_time_editor_for_time_presenter(
+        std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&) = 0;
 };
 }  // namespace yas::ae

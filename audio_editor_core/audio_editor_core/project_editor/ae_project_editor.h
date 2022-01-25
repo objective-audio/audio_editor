@@ -104,6 +104,8 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] observing::syncable observe_nudging_kind(std::function<void(ae::nudging_kind const &)> &&) override;
     [[nodiscard]] observing::syncable observe_timing_fraction(
         std::function<void(ae::timing_fraction_kind const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_time_editor_for_time_presenter(
+        std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&) override;
 
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         url const &editing_file_url, url const &db_url, ae::file_info const &,
@@ -133,7 +135,7 @@ struct project_editor final : project_editor_for_project {
     std::shared_ptr<nudging_for_project_editor> const _nudging;
     std::shared_ptr<timing_for_project_editor> const _timing;
     std::shared_ptr<time_editor_maker_for_project_editor> const _time_editor_maker;
-    std::shared_ptr<time_editor_for_project_editor> _time_editor;
+    observing::value::holder_ptr<std::shared_ptr<time_editor_for_project_editor>> const _time_editor;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
