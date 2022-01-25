@@ -170,6 +170,10 @@ struct project_editor_stub final : project_editor_for_project {
     observing::syncable observe_timing_fraction(std::function<void(ae::timing_fraction_kind const &)> &&) override {
         return observing::syncable{};
     }
+    observing::syncable observe_time_editor_for_time_presenter(
+        std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&) override {
+        return observing::syncable{};
+    }
 };
 
 struct project_editor_maker_stub final : project_editor_maker_for_project {
