@@ -8,6 +8,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace yas::ae {
@@ -47,3 +48,9 @@ struct number_components final {
     std::vector<number_components_unit> _units;
 };
 }  // namespace yas::ae
+
+namespace yas {
+std::string to_string(ae::number_components const &);
+}
+
+std::ostream &operator<<(std::ostream &os, yas::ae::number_components const &);

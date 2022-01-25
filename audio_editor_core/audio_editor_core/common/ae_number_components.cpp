@@ -5,6 +5,7 @@
 #include "ae_number_components.h"
 
 #include <cpp_utils/yas_fast_each.h>
+#include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -234,4 +235,22 @@ number_components number_components::adding(number_components const &rhs) const 
 
         return number_components{is_lhs_smaller ? rhs._is_minus : this->_is_minus, std::move(units)};
     }
+}
+
+std::string yas::to_string(ae::number_components const &components) {
+    std::vector<std::string> strings;
+
+    strings.emplace_back("{is_minus:" + std::to_string(components.is_minus()) + "}");
+
+    for (auto const &unit : components.units()) {
+        std::string unit_str = "{size:" + std::to_string(unit.size) + ", value:" + std::to_string(unit.value) + "}";
+        strings.emplace_back(std::move(unit_str));
+    }
+
+    return "{" + joined(strings, ", ") + "}";
+}
+
+std::ostream &operator<<(std::ostream &os, yas::ae::number_components const &components) {
+    os << yas::to_string(components);
+    return os;
 }
