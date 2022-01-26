@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_index_range.h>
 #include <audio_editor_core/ae_time_presenter_dependency.h>
 
 #include <string>
@@ -13,4 +14,6 @@ std::string to_sign_string(number_components const &);
 std::string to_string(number_components_unit const &);
 
 std::string time_text(number_components const &);
+
+index_range to_time_text_range(number_components const &, std::size_t const unit_idx);
 }  // namespace yas::ae::time_presenter_utils

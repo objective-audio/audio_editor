@@ -52,3 +52,29 @@ std::string time_presenter_utils::time_text(number_components const &components)
 
     return stream.str();
 }
+
+index_range time_presenter_utils::to_time_text_range(number_components const &components,
+                                                     std::size_t const target_unit_idx) {
+    if (target_unit_idx >= components.size()) {
+        throw std::out_of_range("out of range target_unit_idx.");
+    }
+
+    // sign
+    std::size_t text_idx = 1;
+
+    auto each = make_fast_each(components.size());
+    while (yas_each_next(each)) {
+        auto const unit_idx = components.size() - yas_each_index(each) - 1;
+        auto const &unit = components.unit(unit_idx);
+        auto const digits = math::decimal_digits_from_size(unit.size);
+
+        if (unit_idx == target_unit_idx) {
+            return index_range{.index = text_idx, .length = digits};
+        }
+
+        // digits + separator
+        text_idx += digits + 1;
+    }
+
+    throw std::runtime_error("unreachable.");
+}
