@@ -31,4 +31,13 @@ using namespace yas::ae;
     XCTAssertEqual(time_presenter_utils::time_text(minus_components), "-01:32:54.987");
 }
 
+- (void)test_to_time_text_range {
+    number_components const components{false, {{.size = 48000}, {.size = 60}, {.size = 60}, {.size = 99}}};
+
+    XCTAssertEqual(time_presenter_utils::to_time_text_range(components, 0), (index_range{.index = 10, .length = 5}));
+    XCTAssertEqual(time_presenter_utils::to_time_text_range(components, 1), (index_range{.index = 7, .length = 2}));
+    XCTAssertEqual(time_presenter_utils::to_time_text_range(components, 2), (index_range{.index = 4, .length = 2}));
+    XCTAssertEqual(time_presenter_utils::to_time_text_range(components, 3), (index_range{.index = 1, .length = 2}));
+}
+
 @end
