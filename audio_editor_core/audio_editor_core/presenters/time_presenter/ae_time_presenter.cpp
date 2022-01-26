@@ -27,13 +27,15 @@ time_presenter::time_presenter(std::shared_ptr<project_editor_for_time_presenter
 }
 
 std::string time_presenter::time_text() const {
-    auto const editor = this->_project_editor.lock();
-
     if (auto const time_editor = this->_time_editor.lock()) {
         return time_presenter_utils::time_text(time_editor->editing_components());
-    } else if (auto const timing = this->_timing.lock()) {
-        return time_presenter_utils::time_text(timing->components(editor->current_frame()).raw_components());
     } else {
-        return "";
+        auto const editor = this->_project_editor.lock();
+        auto const timing = this->_timing.lock();
+        if (editor && timing) {
+            return time_presenter_utils::time_text(timing->components(editor->current_frame()).raw_components());
+        } else {
+            return "";
+        }
     }
 }
