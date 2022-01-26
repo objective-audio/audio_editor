@@ -15,7 +15,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::string time_presenter_utils::to_sign_string(ae::timing_components const &components) {
+std::string time_presenter_utils::to_sign_string(ae::number_components const &components) {
     return components.is_minus() ? "-" : "+";
 }
 
@@ -32,20 +32,16 @@ std::string time_presenter_utils::to_string(number_components_unit const &unit) 
     return stream.str();
 }
 
-std::string time_presenter_utils::time_text(frame_index_t const frame,
-                                            std::shared_ptr<timing_for_time_presenter> const &timing) {
-    auto const components = timing->components(frame);
-
+std::string time_presenter_utils::time_text(number_components const &components) {
     std::stringstream stream;
 
     stream << to_sign_string(components);
 
-    auto const &raw_components = components.raw_components();
-    auto each = make_fast_each(raw_components.size());
+    auto each = make_fast_each(components.size());
     while (yas_each_next(each)) {
-        auto const &idx = raw_components.size() - yas_each_index(each) - 1;
+        auto const &idx = components.size() - yas_each_index(each) - 1;
 
-        stream << to_string(raw_components.unit(idx));
+        stream << to_string(components.unit(idx));
 
         if (idx > 1) {
             stream << ":";

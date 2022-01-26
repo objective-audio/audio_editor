@@ -46,7 +46,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _dialog_presenter(dialog_presenter),
       _nudging(nudging),
       _timing(timing),
-      _time_editor_maker(time_editor_maker) {
+      _time_editor_maker(time_editor_maker),
+      _time_editor(observing::value::holder<std::shared_ptr<time_editor_for_project_editor>>::make_shared(nullptr)) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -351,7 +352,7 @@ std::shared_ptr<timing_for_project_editor> const &project_editor::timing() const
 }
 
 std::shared_ptr<time_editor_for_project_editor> const &project_editor::time_editor() const {
-    return this->_time_editor;
+    return this->_time_editor->value();
 }
 
 frame_index_t project_editor::current_frame() const {
@@ -776,11 +777,11 @@ void project_editor::paste_and_offset() {
 }
 
 bool project_editor::can_begin_time_editing() const {
-    return this->_time_editor == nullptr;
+    return this->_time_editor->value() == nullptr;
 }
 
 bool project_editor::can_end_time_editing() const {
-    return this->_time_editor != nullptr;
+    return this->_time_editor->value() != nullptr;
 }
 
 void project_editor::begin_time_editing() {
@@ -793,16 +794,16 @@ void project_editor::begin_time_editing() {
     auto const current_frame = this->current_frame();
     auto const components = this->_timing->components(current_frame);
 
-    this->_time_editor = this->_time_editor_maker->make(components.raw_components());
+    this->_time_editor->set_value(this->_time_editor_maker->make(components.raw_components()));
 
-    this->_time_editor
+    this->_time_editor->value()
         ->observe_event([this](time_editor_event const &) {
-            if (auto const components = this->_time_editor->finalized_components()) {
+            if (auto const components = this->_time_editor->value()->finalized_components()) {
                 auto const frame = this->_timing->frame(timing_components{components.value()});
                 this->_player->seek(frame);
             }
 
-            this->_time_editor = nullptr;
+            this->_time_editor->set_value(nullptr);
             this->_action_controller->router()->set_kind(action_routing_kind::normal);
             this->_time_editing_canceller->cancel();
             this->_time_editing_canceller = nullptr;
@@ -812,54 +813,54 @@ void project_editor::begin_time_editing() {
 }
 
 void project_editor::finish_time_editing() {
-    if (this->_time_editor) {
-        this->_time_editor->finish();
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->finish();
     }
 }
 
 void project_editor::cancel_time_editing() {
-    if (this->_time_editor) {
-        this->_time_editor->cancel();
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->cancel();
     }
 }
 
 bool project_editor::can_input_time_number() const {
-    return this->_time_editor != nullptr;
+    return this->_time_editor->value() != nullptr;
 }
 
 void project_editor::input_time_number(uint32_t const number) {
-    if (this->_time_editor) {
-        this->_time_editor->input_number(number);
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->input_number(number);
     }
 }
 
 void project_editor::delete_time_number() {
-    if (this->_time_editor) {
-        this->_time_editor->delete_number();
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->delete_number();
     }
 }
 
 void project_editor::move_to_previous_time_unit() {
-    if (this->_time_editor) {
-        this->_time_editor->move_to_previous_unit();
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->move_to_previous_unit();
     }
 }
 
 void project_editor::move_to_next_time_unit() {
-    if (this->_time_editor) {
-        this->_time_editor->move_to_next_unit();
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->move_to_next_unit();
     }
 }
 
 void project_editor::change_time_sign_to_plus() {
-    if (this->_time_editor) {
-        this->_time_editor->change_sign_to_plus();
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->change_sign_to_plus();
     }
 }
 
 void project_editor::change_time_sign_to_minus() {
-    if (this->_time_editor) {
-        this->_time_editor->change_sign_to_minus();
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->change_sign_to_minus();
     }
 }
 
@@ -939,6 +940,11 @@ observing::syncable project_editor::observe_nudging_kind(std::function<void(ae::
 observing::syncable project_editor::observe_timing_fraction(
     std::function<void(ae::timing_fraction_kind const &)> &&handler) {
     return this->_timing->observe_fraction_kind(std::move(handler));
+}
+
+observing::syncable project_editor::observe_time_editor_for_time_presenter(
+    std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&handler) {
+    return this->_time_editor->observe([handler = std::move(handler)](auto const &editor) { handler(editor); });
 }
 
 bool project_editor::_can_editing() const {
