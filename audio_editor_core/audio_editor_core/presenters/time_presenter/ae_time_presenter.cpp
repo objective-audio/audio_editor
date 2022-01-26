@@ -39,3 +39,11 @@ std::string time_presenter::time_text() const {
         }
     }
 }
+
+std::optional<index_range> time_presenter::editing_time_text_range() const {
+    if (auto const time_editor = this->_time_editor.lock()) {
+        return time_presenter_utils::to_time_text_range(time_editor->editing_components(), time_editor->unit_index());
+    } else {
+        return std::nullopt;
+    }
+}
