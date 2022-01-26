@@ -38,6 +38,8 @@ using namespace yas::ae;
     XCTAssertEqual(time_presenter_utils::to_time_text_range(components, 1), (index_range{.index = 7, .length = 2}));
     XCTAssertEqual(time_presenter_utils::to_time_text_range(components, 2), (index_range{.index = 4, .length = 2}));
     XCTAssertEqual(time_presenter_utils::to_time_text_range(components, 3), (index_range{.index = 1, .length = 2}));
+
+    XCTAssertThrows(time_presenter_utils::to_time_text_range(components, 4));
 }
 
 @end
