@@ -25,6 +25,8 @@ struct time_editor_for_time_presenter {
 
     [[nodiscard]] virtual std::size_t unit_index() const = 0;
     [[nodiscard]] virtual number_components editing_components() const = 0;
+
+    [[nodiscard]] virtual observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&) = 0;
 };
 
 struct project_editor_for_time_presenter {

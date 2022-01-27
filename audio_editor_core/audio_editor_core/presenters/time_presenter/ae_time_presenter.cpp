@@ -21,7 +21,23 @@ std::shared_ptr<time_presenter> time_presenter::make_shared(std::string const pr
 time_presenter::time_presenter(std::shared_ptr<project_editor_for_time_presenter> const &project_editor,
                                std::shared_ptr<timing_for_time_presenter> const &timing)
     : _project_editor(project_editor), _timing(timing) {
-    project_editor->observe_time_editor_for_time_presenter([this](auto const &editor) { this->_time_editor = editor; })
+    this->_range_fetcher =
+        observing::fetcher<std::optional<index_range>>::make_shared([this] { return this->editing_time_text_range(); });
+
+    project_editor
+        ->observe_time_editor_for_time_presenter(
+            [this, cancellable = observing::cancellable_ptr{nullptr}](
+                std::shared_ptr<time_editor_for_time_presenter> const &editor) mutable {
+                this->_time_editor = editor;
+
+                if (editor) {
+                    cancellable =
+                        editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
+                } else {
+                    cancellable = nullptr;
+                    this->_range_fetcher->push();
+                }
+            })
         .sync()
         ->add_to(this->_pool);
 }
@@ -46,4 +62,9 @@ std::optional<index_range> time_presenter::editing_time_text_range() const {
     } else {
         return std::nullopt;
     }
+}
+
+observing::syncable time_presenter::observe_editing_time_text_range(
+    std::function<void(std::optional<index_range> const &)> &&handler) {
+    return this->_range_fetcher->observe(std::move(handler));
 }
