@@ -17,13 +17,6 @@ namespace yas::ae::ui_modules_constants {
 static std::size_t const reserving_interval = 100;
 }
 
-void ui_modules::line_index2d_rect::set_all(ui::index2d_t const first) {
-    this->v[0] = this->v[7] = first;
-    this->v[1] = this->v[2] = first + 1;
-    this->v[3] = this->v[4] = first + 3;
-    this->v[5] = this->v[6] = first + 2;
-}
-
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                        std::shared_ptr<ui::standard> const &standard,
                        std::shared_ptr<ui_module_waveforms> const &waveforms)
