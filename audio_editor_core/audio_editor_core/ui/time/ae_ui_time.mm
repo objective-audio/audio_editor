@@ -55,11 +55,19 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
         .sync()
         ->add_to(this->_pool);
 
+    // 最初の同期は次のobserve_editing_time_text_rangeに任せてend
+    this->_time_strings
+        ->observe_actual_cell_regions(
+            [this](const std::vector<ui::region> &cell_regions) { this->_update_editing_frame(); })
+        .end()
+        ->add_to(this->_pool);
+
+    this->_presenter->observe_editing_time_text_range([this](auto const &) { this->_update_editing_frame(); })
+        .sync()
+        ->add_to(this->_pool);
+
     standard->renderer()
-        ->observe_will_render([this](auto const &) {
-            this->_time_strings->set_text(this->_presenter->time_text());
-            this->_update_editing_frame();
-        })
+        ->observe_will_render([this](auto const &) { this->_time_strings->set_text(this->_presenter->time_text()); })
         .end()
         ->add_to(this->_pool);
 }
@@ -73,7 +81,6 @@ std::shared_ptr<ui::node> const &ui_time::node() const {
 }
 
 void ui_time::_update_editing_frame() {
-    // editing中で、unit_idxとactual_cell_regionsが変わった時だけ呼ぶ？
     if (auto const range = this->_presenter->editing_time_text_range()) {
         auto const &range_value = range.value();
 
