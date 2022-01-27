@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_ui_types.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -13,16 +14,6 @@ class display_space;
 class ui_module_waveforms;
 
 struct ui_modules final {
-    using vertex2d_rect = ui::vertex2d_rect;
-    using triangle_index2d_rect = ui::index2d_rect;
-    struct line_index2d_rect final {
-        static std::size_t constexpr vector_count = 8;
-
-        ui::index2d_t v[vector_count];
-
-        void set_all(ui::index2d_t const first);
-    };
-
     std::shared_ptr<ui::node> const &node() const;
 
     void set_scale(ui::size const &);
