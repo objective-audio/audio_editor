@@ -23,8 +23,8 @@ struct ui_time final {
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
     std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::rect_plane> const _bg;
-    std::shared_ptr<ui::strings> const _time_strings;
     std::shared_ptr<ui::rect_plane> const _editing_frame;
+    std::shared_ptr<ui::strings> const _time_strings;
 
     observing::canceller_pool _pool;
 

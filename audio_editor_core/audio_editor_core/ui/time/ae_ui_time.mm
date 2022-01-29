@@ -25,30 +25,21 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
       _top_guide(ui::layout_value_guide::make_shared()),
       _node(ui::node::make_shared()),
       _bg(ui::rect_plane::make_shared(1)),
-      _time_strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, _font_atlas)),
-      _editing_frame(ui::rect_plane::make_shared(ui::rect_plane_data::make_shared(
-          ui::dynamic_mesh_vertex_data::make_shared(vertex2d_rect::vector_count),
-          ui::dynamic_mesh_index_data::make_shared(line_index2d_rect::vector_count)))) {
+      _editing_frame(ui::rect_plane::make_shared(1)),
+      _time_strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, _font_atlas)) {
     this->_node->add_sub_node(this->_bg->node());
-    this->_node->add_sub_node(this->_time_strings->rect_plane()->node());
     this->_node->add_sub_node(this->_editing_frame->node());
+    this->_node->add_sub_node(this->_time_strings->rect_plane()->node());
 
     this->_bg->node()->set_color(ui::black_color());
     this->_bg->node()->set_alpha(0.5f);
 
-    auto const &editing_frame_data = this->_editing_frame->data();
-    editing_frame_data->set_rect_position({.origin = {0.0f, 0.0f}, .size = {1.0f, 1.0f}}, 0);
-    editing_frame_data->dynamic_index_data()->write([](std::vector<ui::index2d_t> &indices) {
-        assert(indices.size() == line_index2d_rect::vector_count);
-        auto *index_rects = (line_index2d_rect *)indices.data();
-        index_rects[0].set_all(0);
-    });
-
-    auto const &editing_node = this->_editing_frame->node();
-    editing_node->mesh()->set_primitive_type(ui::primitive_type::line);
-    editing_node->set_is_enabled(false);
+    this->_editing_frame->data()->set_rect_position({.origin = {0.0f, 0.0f}, .size = {1.0f, 1.0f}}, 0);
+    this->_editing_frame->node()->set_is_enabled(false);
 
     this->_node->attach_y_layout_guide(*this->_top_guide);
+
+    this->_time_strings->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
     this->_time_strings->actual_layout_source()
         ->observe_layout_region([this](ui::region const &region) { this->_bg->data()->set_rect_position(region, 0); })
@@ -84,6 +75,8 @@ void ui_time::_update_editing_frame() {
     if (auto const range = this->_presenter->editing_time_text_range()) {
         auto const &range_value = range.value();
 
+        this->_time_strings->set_attributes({{.range = range_value, .color = ui::black_color()}});
+
         std::optional<ui::region> region = std::nullopt;
 
         auto each = make_fast_each(range_value.index, range_value.index + range_value.length);
@@ -111,6 +104,8 @@ void ui_time::_update_editing_frame() {
 
             return;
         }
+    } else {
+        this->_time_strings->set_attributes({});
     }
 
     this->_editing_frame->node()->set_is_enabled(false);
