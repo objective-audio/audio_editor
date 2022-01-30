@@ -79,14 +79,20 @@ bool time_editor::can_move_to_previous_unit() const {
     return this->_unit_idx->value() < (this->_commited_components.size() - 1);
 }
 
+void time_editor::set_unit_idx(std::size_t const idx) {
+    if (this->_unit_idx->value() != idx && idx < this->_original_components.size()) {
+        this->_commit_unit_value();
+
+        this->_unit_idx->set_value(idx);
+    }
+}
+
 void time_editor::move_to_next_unit() {
     if (!this->can_move_to_next_unit()) {
         return;
     }
 
-    this->_commit_unit_value();
-
-    this->_unit_idx->set_value(this->_unit_idx->value() - 1);
+    this->set_unit_idx(this->_unit_idx->value() - 1);
 }
 
 void time_editor::move_to_previous_unit() {
@@ -94,9 +100,7 @@ void time_editor::move_to_previous_unit() {
         return;
     }
 
-    this->_commit_unit_value();
-
-    this->_unit_idx->set_value(this->_unit_idx->value() + 1);
+    this->set_unit_idx(this->_unit_idx->value() + 1);
 }
 
 void time_editor::change_sign_to_plus() {

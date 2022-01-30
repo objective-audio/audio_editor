@@ -20,6 +20,7 @@ struct time_editor final : time_editor_for_project_editor {
 
     [[nodiscard]] bool can_move_to_next_unit() const override;
     [[nodiscard]] bool can_move_to_previous_unit() const override;
+    void set_unit_idx(std::size_t const);
     void move_to_next_unit() override;
     void move_to_previous_unit() override;
 
