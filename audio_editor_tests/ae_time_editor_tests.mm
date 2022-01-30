@@ -146,6 +146,32 @@ using namespace yas::ae;
     auto canceller = editor->observe_unit_index([&called](std::size_t const &idx) { called.push_back(idx); }).sync();
 
     XCTAssertEqual(editor->unit_index(), 2);
+    XCTAssertEqual(called.size(), 1);
+    XCTAssertEqual(called.at(0), 2);
+
+    editor->input_number(1);
+    editor->set_unit_idx(0);
+
+    number_components const expected_components{
+        false, {{.size = 10, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 1}}};
+    XCTAssertEqual(editor->editing_components(), expected_components);
+
+    XCTAssertEqual(editor->unit_index(), 0);
+    XCTAssertEqual(called.size(), 2);
+    XCTAssertEqual(called.at(1), 0);
+}
+
+- (void)test_move_to_next_previous {
+    number_components const components{false,
+                                       {{.size = 2, .value = 1}, {.size = 8, .value = 5}, {.size = 76, .value = 55}}};
+
+    auto const editor = time_editor::make_shared(components);
+
+    std::vector<std::size_t> called;
+
+    auto canceller = editor->observe_unit_index([&called](std::size_t const &idx) { called.push_back(idx); }).sync();
+
+    XCTAssertEqual(editor->unit_index(), 2);
     XCTAssertFalse(editor->can_move_to_previous_unit());
     XCTAssertTrue(editor->can_move_to_next_unit());
     XCTAssertEqual(called.size(), 1);
