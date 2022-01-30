@@ -79,12 +79,13 @@ using namespace yas::ae;
                          .sync();
 
     XCTAssertTrue(editor->can_input_number());
-    XCTAssertFalse(editor->can_delete_number());
+    XCTAssertTrue(editor->can_delete_number());
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(
         called.at(0),
         (number_components{false, {{.size = 10, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 55}}}));
 
+    // 未編集から一桁目を入力
     editor->input_number(1);
 
     number_components const expected_components_1{
@@ -95,6 +96,7 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), expected_components_1);
 
+    // 二桁目を入力
     editor->input_number(2);
 
     number_components const expected_components_2{
@@ -105,6 +107,7 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2), expected_components_2);
 
+    // 許容範囲が二桁なので三桁目は無視
     editor->input_number(3);
 
     XCTAssertEqual(editor->editing_components(), expected_components_2);
@@ -112,6 +115,7 @@ using namespace yas::ae;
     XCTAssertTrue(editor->can_delete_number());
     XCTAssertEqual(called.size(), 3);
 
+    // 三桁目は無視されたので、削除は二桁目
     editor->delete_number();
 
     number_components const expected_components_3{
@@ -122,15 +126,49 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 4);
     XCTAssertEqual(called.at(3), expected_components_3);
 
+    // 一桁目を削除
     editor->delete_number();
 
     number_components const expected_components_4{
-        false, {{.size = 10, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 55}}};
+        false, {{.size = 10, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 0}}};
     XCTAssertEqual(editor->editing_components(), expected_components_4);
     XCTAssertTrue(editor->can_input_number());
     XCTAssertFalse(editor->can_delete_number());
     XCTAssertEqual(called.size(), 5);
     XCTAssertEqual(called.at(4), expected_components_4);
+
+    // unitを移動
+    editor->set_unit_idx(1);
+
+    number_components const expected_components_5{
+        false, {{.size = 10, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 0}}};
+    XCTAssertEqual(editor->editing_components(), expected_components_5);
+    XCTAssertTrue(editor->can_input_number());
+    XCTAssertTrue(editor->can_delete_number());
+    XCTAssertEqual(called.size(), 6);
+    XCTAssertEqual(called.at(5), expected_components_5);
+
+    // 未編集から削除
+    editor->delete_number();
+
+    number_components const expected_components_6{
+        false, {{.size = 10, .value = 1}, {.size = 10, .value = 0}, {.size = 100, .value = 0}}};
+    XCTAssertEqual(editor->editing_components(), expected_components_6);
+    XCTAssertTrue(editor->can_input_number());
+    XCTAssertFalse(editor->can_delete_number());
+    XCTAssertEqual(called.size(), 7);
+    XCTAssertEqual(called.at(6), expected_components_6);
+
+    // 0から入力
+    editor->input_number(1);
+
+    number_components const expected_components_7{
+        false, {{.size = 10, .value = 1}, {.size = 10, .value = 1}, {.size = 100, .value = 0}}};
+    XCTAssertEqual(editor->editing_components(), expected_components_7);
+    XCTAssertFalse(editor->can_input_number());
+    XCTAssertTrue(editor->can_delete_number());
+    XCTAssertEqual(called.size(), 8);
+    XCTAssertEqual(called.at(7), expected_components_7);
 
     canceller->cancel();
 }
@@ -235,22 +273,10 @@ using namespace yas::ae;
     editor->move_to_next_unit();
     XCTAssertEqual(editor->unit_index(), 1);
 
+    // 12を入力するが、sizeを超えているので最大値の10に切り捨てられる
     editor->input_number(1);
     editor->input_number(2);
     editor->move_to_next_unit();
-
-    XCTAssertEqual(
-        editor->editing_components(),
-        (number_components{false, {{.size = 10, .value = 1}, {.size = 100, .value = 10}, {.size = 100, .value = 55}}}));
-
-    editor->move_to_previous_unit();
-    editor->input_number(3);
-
-    XCTAssertEqual(
-        editor->editing_components(),
-        (number_components{false, {{.size = 10, .value = 1}, {.size = 100, .value = 3}, {.size = 100, .value = 55}}}));
-
-    editor->delete_number();
 
     XCTAssertEqual(
         editor->editing_components(),
