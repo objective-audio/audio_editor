@@ -10,6 +10,8 @@
 using namespace yas;
 using namespace yas::ae;
 
+static std::vector<std::string> const _zero_string_vector{"0"};
+
 std::shared_ptr<time_editor> time_editor::make_shared(number_components const &components) {
     return std::shared_ptr<time_editor>(new time_editor{components});
 }
@@ -31,7 +33,12 @@ bool time_editor::can_input_number() const {
 
     auto const &unit = this->_commited_components.unit(this->_unit_idx->value());
     auto const digits = math::decimal_digits_from_size(unit.size);
-    return this->_unit_numbers.size() < digits;
+
+    if (this->_unit_numbers == _zero_string_vector && digits > 0) {
+        return true;
+    } else {
+        return this->_unit_numbers.size() < digits;
+    }
 }
 
 bool time_editor::can_delete_number() const {
@@ -39,7 +46,7 @@ bool time_editor::can_delete_number() const {
         return false;
     }
 
-    return this->_unit_numbers.size() > 0;
+    return this->_unit_numbers != _zero_string_vector;
 }
 
 void time_editor::input_number(uint32_t const number) {
@@ -49,17 +56,28 @@ void time_editor::input_number(uint32_t const number) {
 
     assert(number < 10);
 
+    if (this->_unit_numbers == _zero_string_vector) {
+        this->_unit_numbers.clear();
+    }
+
     this->_unit_numbers.emplace_back(std::to_string(number));
+
     this->_components_fetcher->push();
 }
 
 void time_editor::delete_number() {
-#warning todo 何も無い時に呼んだら0を入れたい？
     if (!this->can_delete_number()) {
         return;
     }
 
-    this->_unit_numbers.pop_back();
+    if (this->_unit_numbers.size() > 0) {
+        this->_unit_numbers.pop_back();
+    }
+
+    if (this->_unit_numbers.size() == 0) {
+        this->_unit_numbers.emplace_back("0");
+    }
+
     this->_components_fetcher->push();
 }
 
@@ -79,14 +97,20 @@ bool time_editor::can_move_to_previous_unit() const {
     return this->_unit_idx->value() < (this->_commited_components.size() - 1);
 }
 
+void time_editor::set_unit_idx(std::size_t const idx) {
+    if (this->_unit_idx->value() != idx && idx < this->_original_components.size()) {
+        this->_commit_unit_value();
+
+        this->_unit_idx->set_value(idx);
+    }
+}
+
 void time_editor::move_to_next_unit() {
     if (!this->can_move_to_next_unit()) {
         return;
     }
 
-    this->_commit_unit_value();
-
-    this->_unit_idx->set_value(this->_unit_idx->value() - 1);
+    this->set_unit_idx(this->_unit_idx->value() - 1);
 }
 
 void time_editor::move_to_previous_unit() {
@@ -94,9 +118,7 @@ void time_editor::move_to_previous_unit() {
         return;
     }
 
-    this->_commit_unit_value();
-
-    this->_unit_idx->set_value(this->_unit_idx->value() + 1);
+    this->set_unit_idx(this->_unit_idx->value() + 1);
 }
 
 void time_editor::change_sign_to_plus() {
