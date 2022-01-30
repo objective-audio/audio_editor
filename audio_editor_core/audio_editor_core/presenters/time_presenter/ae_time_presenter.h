@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_index_range.h>
 #include <audio_editor_core/ae_time_presenter_dependency.h>
+#include <cpp_utils/yas_index_range.h>
 
 #include <memory>
 #include <optional>
