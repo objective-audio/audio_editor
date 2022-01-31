@@ -165,7 +165,7 @@ void ui_editing_root::_setup_observing() {
     this->_play_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::toggle_play);
+                controller->handle_action(action_kind::toggle_play);
             }
         })
         .end()
@@ -173,7 +173,7 @@ void ui_editing_root::_setup_observing() {
     this->_split_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::split);
+                controller->handle_action(action_kind::split);
             }
         })
         .end()
@@ -181,7 +181,7 @@ void ui_editing_root::_setup_observing() {
     this->_drop_head_and_offset_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::drop_head_and_offset);
+                controller->handle_action(action_kind::drop_head_and_offset);
             }
         })
         .end()
@@ -189,7 +189,7 @@ void ui_editing_root::_setup_observing() {
     this->_drop_tail_and_offset_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::drop_tail_and_offset);
+                controller->handle_action(action_kind::drop_tail_and_offset);
             }
         })
         .end()
@@ -197,7 +197,7 @@ void ui_editing_root::_setup_observing() {
     this->_erase_and_offset_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::erase_and_offset);
+                controller->handle_action(action_kind::erase_and_offset);
             }
         })
         .end()
@@ -205,7 +205,7 @@ void ui_editing_root::_setup_observing() {
     this->_zero_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::return_to_zero);
+                controller->handle_action(action_kind::return_to_zero);
             }
         })
         .end()
@@ -213,7 +213,7 @@ void ui_editing_root::_setup_observing() {
     this->_jump_previous_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::jump_previous);
+                controller->handle_action(action_kind::jump_previous);
             }
         })
         .end()
@@ -221,7 +221,7 @@ void ui_editing_root::_setup_observing() {
     this->_jump_next_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::jump_next);
+                controller->handle_action(action_kind::jump_next);
             }
         })
         .end()
@@ -229,7 +229,7 @@ void ui_editing_root::_setup_observing() {
     this->_insert_marker_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::insert_marker);
+                controller->handle_action(action_kind::insert_marker);
             }
         })
         .end()
@@ -237,7 +237,7 @@ void ui_editing_root::_setup_observing() {
     this->_undo_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::undo);
+                controller->handle_action(action_kind::undo);
             }
         })
         .end()
@@ -245,7 +245,7 @@ void ui_editing_root::_setup_observing() {
     this->_redo_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::redo);
+                controller->handle_action(action_kind::redo);
             }
         })
         .end()
@@ -253,7 +253,7 @@ void ui_editing_root::_setup_observing() {
     this->_export_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::select_file_for_export);
+                controller->handle_action(action_kind::select_file_for_export);
             }
         })
         .end()
@@ -261,7 +261,7 @@ void ui_editing_root::_setup_observing() {
     this->_nudge_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::rotate_nudging_kind);
+                controller->handle_action(action_kind::rotate_nudging_kind);
             }
         })
         .end()
@@ -269,7 +269,7 @@ void ui_editing_root::_setup_observing() {
     this->_timing_button
         ->observe_tapped([this] {
             if (auto const controller = this->_action_controller.lock()) {
-                controller->handle_action(action::rotate_timing_fraction);
+                controller->handle_action(action_kind::rotate_timing_fraction);
             }
         })
         .end()

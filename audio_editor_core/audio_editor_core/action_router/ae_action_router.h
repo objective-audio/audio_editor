@@ -22,7 +22,7 @@ struct action_router final : action_router_for_editing_root_presenter {
     [[nodiscard]] observing::syncable observe_kind(std::function<void(action_routing_kind const &)> &&);
 
     [[nodiscard]] std::optional<ae::action> to_action(ae::key const) const;
-    [[nodiscard]] bool responds_to_action(ae::action const) const override;
+    [[nodiscard]] bool responds_to_action(ae::action_kind const) const override;
 
    private:
     observing::value::holder_ptr<action_routing_kind> const _kind;

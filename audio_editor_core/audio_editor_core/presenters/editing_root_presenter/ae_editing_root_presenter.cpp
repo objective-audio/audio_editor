@@ -249,100 +249,75 @@ bool editing_root_presenter::responds_to_action(action const action) {
         return false;
     }
 
-    if (!router->responds_to_action(action)) {
+    if (!router->responds_to_action(action.kind)) {
         return false;
     }
 
-    switch (action) {
-        case action::toggle_play:
+    switch (action.kind) {
+        case action_kind::toggle_play:
             return true;
-        case action::nudge_previous:
+        case action_kind::nudge_previous:
             return editor->can_nudge();
-        case action::nudge_next:
+        case action_kind::nudge_next:
             return editor->can_nudge();
-        case action::rotate_nudging_kind:
+        case action_kind::rotate_nudging_kind:
             return true;
-        case action::rotate_timing_fraction:
+        case action_kind::rotate_timing_fraction:
             return true;
 
-        case action::jump_previous:
+        case action_kind::jump_previous:
             return editor->can_jump_to_previous_edge();
-        case action::jump_next:
+        case action_kind::jump_next:
             return editor->can_jump_to_next_edge();
-        case action::jump_to_beginning:
+        case action_kind::jump_to_beginning:
             return editor->can_jump_to_beginnig();
-        case action::jump_to_end:
+        case action_kind::jump_to_end:
             return editor->can_jump_to_end();
 
-        case action::drop_head_and_offset:
+        case action_kind::drop_head_and_offset:
             return editor->can_split();
-        case action::split:
+        case action_kind::split:
             return editor->can_split();
-        case action::drop_tail_and_offset:
+        case action_kind::drop_tail_and_offset:
             return editor->can_split();
 
-        case action::erase_and_offset:
+        case action_kind::erase_and_offset:
             return editor->can_erase();
 
-        case action::insert_marker:
+        case action_kind::insert_marker:
             return editor->can_insert_marker();
 
-        case action::return_to_zero:
+        case action_kind::return_to_zero:
             return editor->can_return_to_zero();
-        case action::go_to_marker_1:
-            return editor->can_go_to_marker(0);
-        case action::go_to_marker_2:
-            return editor->can_go_to_marker(1);
-        case action::go_to_marker_3:
-            return editor->can_go_to_marker(2);
-        case action::go_to_marker_4:
-            return editor->can_go_to_marker(3);
-        case action::go_to_marker_5:
-            return editor->can_go_to_marker(4);
-        case action::go_to_marker_6:
-            return editor->can_go_to_marker(5);
-        case action::go_to_marker_7:
-            return editor->can_go_to_marker(6);
-        case action::go_to_marker_8:
-            return editor->can_go_to_marker(7);
-        case action::go_to_marker_9:
-            return editor->can_go_to_marker(8);
+        case action_kind::go_to_marker:
+            return editor->can_go_to_marker(std::stoi(action.value));
 
-        case action::undo:
+        case action_kind::undo:
             return editor->can_undo();
-        case action::redo:
+        case action_kind::redo:
             return editor->can_redo();
 
-        case action::select_file_for_export:
+        case action_kind::select_file_for_export:
             return editor->can_select_file_for_export();
 
-        case action::cut:
+        case action_kind::cut:
             return editor->can_cut();
-        case action::copy:
+        case action_kind::copy:
             return editor->can_copy();
-        case action::paste:
+        case action_kind::paste:
             return editor->can_paste();
 
-        case action::cancel_time_editing:
+        case action_kind::cancel_time_editing:
             return editor->can_end_time_editing();
-        case action::begin_time_editing:
+        case action_kind::begin_time_editing:
             return editor->can_begin_time_editing();
-        case action::finish_time_editing:
-        case action::move_to_previous_time_unit:
-        case action::move_to_next_time_unit:
-        case action::input_time_0:
-        case action::input_time_1:
-        case action::input_time_2:
-        case action::input_time_3:
-        case action::input_time_4:
-        case action::input_time_5:
-        case action::input_time_6:
-        case action::input_time_7:
-        case action::input_time_8:
-        case action::input_time_9:
-        case action::delete_time:
-        case action::change_time_sign_to_plus:
-        case action::change_time_sign_to_minus:
+        case action_kind::finish_time_editing:
+        case action_kind::move_to_previous_time_unit:
+        case action_kind::move_to_next_time_unit:
+        case action_kind::input_time:
+        case action_kind::delete_time:
+        case action_kind::change_time_sign_to_plus:
+        case action_kind::change_time_sign_to_minus:
             return false;
     }
 }

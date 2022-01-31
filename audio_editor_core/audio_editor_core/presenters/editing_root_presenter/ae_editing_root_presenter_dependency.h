@@ -22,7 +22,7 @@ class marker_pool_event;
 struct action_router_for_editing_root_presenter {
     virtual ~action_router_for_editing_root_presenter() = default;
 
-    [[nodiscard]] virtual bool responds_to_action(ae::action const) const = 0;
+    [[nodiscard]] virtual bool responds_to_action(ae::action_kind const) const = 0;
 };
 
 struct project_for_editing_root_presenter {

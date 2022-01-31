@@ -171,150 +171,99 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
 
     action_controller
         ->observe_action([this](action const &action) {
-            switch (action) {
-                case action::toggle_play:
+            switch (action.kind) {
+                case action_kind::toggle_play:
                     this->set_playing(!this->is_playing());
                     break;
-                case action::nudge_previous:
+                case action_kind::nudge_previous:
                     this->nudge_previous();
                     break;
-                case action::nudge_next:
+                case action_kind::nudge_next:
                     this->nudge_next();
                     break;
-                case action::rotate_nudging_kind:
+                case action_kind::rotate_nudging_kind:
                     this->rotate_nudging_kind();
                     break;
-                case action::rotate_timing_fraction:
+                case action_kind::rotate_timing_fraction:
                     this->rotate_timing_fraction();
                     break;
-                case action::jump_previous:
+                case action_kind::jump_previous:
                     this->jump_to_previous_edge();
                     break;
-                case action::jump_next:
+                case action_kind::jump_next:
                     this->jump_to_next_edge();
                     break;
-                case action::jump_to_beginning:
+                case action_kind::jump_to_beginning:
                     this->jump_to_beginning();
                     break;
-                case action::jump_to_end:
+                case action_kind::jump_to_end:
                     this->jump_to_end();
                     break;
-                case action::drop_head_and_offset:
+                case action_kind::drop_head_and_offset:
                     this->drop_head_and_offset();
                     break;
-                case action::split:
+                case action_kind::split:
                     this->split();
                     break;
-                case action::drop_tail_and_offset:
+                case action_kind::drop_tail_and_offset:
                     this->drop_tail_and_offset();
                     break;
-                case action::erase_and_offset:
+                case action_kind::erase_and_offset:
                     this->erase_and_offset();
                     break;
-                case action::insert_marker:
+                case action_kind::insert_marker:
                     this->insert_marker();
                     break;
-                case action::return_to_zero:
+                case action_kind::return_to_zero:
                     this->return_to_zero();
                     break;
-                case action::go_to_marker_1:
-                    this->go_to_marker(0);
+                case action_kind::go_to_marker:
+                    this->go_to_marker(std::stoi(action.value));
                     break;
-                case action::go_to_marker_2:
-                    this->go_to_marker(1);
-                    break;
-                case action::go_to_marker_3:
-                    this->go_to_marker(2);
-                    break;
-                case action::go_to_marker_4:
-                    this->go_to_marker(3);
-                    break;
-                case action::go_to_marker_5:
-                    this->go_to_marker(4);
-                    break;
-                case action::go_to_marker_6:
-                    this->go_to_marker(5);
-                    break;
-                case action::go_to_marker_7:
-                    this->go_to_marker(6);
-                    break;
-                case action::go_to_marker_8:
-                    this->go_to_marker(7);
-                    break;
-                case action::go_to_marker_9:
-                    this->go_to_marker(8);
-                    break;
-                case action::undo:
+                case action_kind::undo:
                     this->undo();
                     break;
-                case action::redo:
+                case action_kind::redo:
                     this->redo();
                     break;
-                case action::select_file_for_export:
+                case action_kind::select_file_for_export:
                     this->select_file_for_export();
                     break;
-                case action::cut:
+                case action_kind::cut:
                     this->cut_and_offset();
                     break;
-                case action::copy:
+                case action_kind::copy:
                     this->copy();
                     break;
-                case action::paste:
+                case action_kind::paste:
                     this->paste_and_offset();
                     break;
 
-                case action::begin_time_editing:
+                case action_kind::begin_time_editing:
                     this->begin_time_editing();
                     break;
-                case action::finish_time_editing:
+                case action_kind::finish_time_editing:
                     this->finish_time_editing();
                     break;
-                case action::cancel_time_editing:
+                case action_kind::cancel_time_editing:
                     this->cancel_time_editing();
                     break;
-                case action::move_to_previous_time_unit:
+                case action_kind::move_to_previous_time_unit:
                     this->move_to_previous_time_unit();
                     break;
-                case action::move_to_next_time_unit:
+                case action_kind::move_to_next_time_unit:
                     this->move_to_next_time_unit();
                     break;
-                case action::input_time_0:
-                    this->input_time_number(0);
+                case action_kind::input_time:
+                    this->input_time_number(std::stoi(action.value));
                     break;
-                case action::input_time_1:
-                    this->input_time_number(1);
-                    break;
-                case action::input_time_2:
-                    this->input_time_number(2);
-                    break;
-                case action::input_time_3:
-                    this->input_time_number(3);
-                    break;
-                case action::input_time_4:
-                    this->input_time_number(4);
-                    break;
-                case action::input_time_5:
-                    this->input_time_number(5);
-                    break;
-                case action::input_time_6:
-                    this->input_time_number(6);
-                    break;
-                case action::input_time_7:
-                    this->input_time_number(7);
-                    break;
-                case action::input_time_8:
-                    this->input_time_number(8);
-                    break;
-                case action::input_time_9:
-                    this->input_time_number(9);
-                    break;
-                case action::delete_time:
+                case action_kind::delete_time:
                     this->delete_time_number();
                     break;
-                case action::change_time_sign_to_plus:
+                case action_kind::change_time_sign_to_plus:
                     this->change_time_sign_to_plus();
                     break;
-                case action::change_time_sign_to_minus:
+                case action_kind::change_time_sign_to_minus:
                     this->change_time_sign_to_minus();
                     break;
             }
