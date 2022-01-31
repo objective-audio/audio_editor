@@ -266,6 +266,9 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action_kind::change_time_sign_to_minus:
                     this->change_time_sign_to_minus();
                     break;
+                case action_kind::select_time_unit:
+                    this->select_time_unit(std::stoi(action.value));
+                    break;
             }
         })
         .end()
@@ -810,6 +813,14 @@ void project_editor::change_time_sign_to_plus() {
 void project_editor::change_time_sign_to_minus() {
     if (auto const &editor = this->_time_editor->value()) {
         editor->change_sign_to_minus();
+    }
+}
+
+void project_editor::select_time_unit(std::size_t const unit_idx) {
+    this->begin_time_editing();
+
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->set_unit_idx(unit_idx);
     }
 }
 

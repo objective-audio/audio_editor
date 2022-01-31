@@ -173,6 +173,7 @@ struct time_editor_for_project_editor : time_editor_for_time_presenter {
 
     [[nodiscard]] virtual bool can_move_to_next_unit() const = 0;
     [[nodiscard]] virtual bool can_move_to_previous_unit() const = 0;
+    virtual void set_unit_idx(std::size_t const) = 0;
     virtual void move_to_next_unit() = 0;
     virtual void move_to_previous_unit() = 0;
 

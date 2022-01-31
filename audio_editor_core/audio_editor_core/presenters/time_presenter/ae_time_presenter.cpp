@@ -56,6 +56,33 @@ std::string time_presenter::time_text() const {
     }
 }
 
+std::vector<index_range> time_presenter::time_text_unit_ranges() const {
+    if (auto const timing = this->_timing.lock()) {
+        auto const components = timing->components(0).raw_components();
+
+        std::vector<index_range> ranges;
+        ranges.reserve(components.size());
+
+        auto each = make_fast_each(components.size());
+        while (yas_each_next(each)) {
+            auto const &idx = yas_each_index(each);
+            ranges.emplace_back(time_presenter_utils::to_time_text_range(components, idx));
+        }
+
+        return ranges;
+    } else {
+        return {};
+    }
+}
+
+std::optional<std::size_t> time_presenter::editing_unit_idx() const {
+    if (auto const time_editor = this->_time_editor.lock()) {
+        return time_editor->unit_index();
+    } else {
+        return std::nullopt;
+    }
+}
+
 std::optional<index_range> time_presenter::editing_time_text_range() const {
     if (auto const time_editor = this->_time_editor.lock()) {
         return time_presenter_utils::to_time_text_range(time_editor->editing_components(), time_editor->unit_index());

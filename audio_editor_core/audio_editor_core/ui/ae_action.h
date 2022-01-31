@@ -40,6 +40,7 @@ enum class action_kind {
     delete_time,
     change_time_sign_to_plus,
     change_time_sign_to_minus,
+    select_time_unit,
 };
 
 struct action {

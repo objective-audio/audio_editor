@@ -75,6 +75,7 @@ bool action_time_routing::responds_to_action(ae::action_kind const kind) {
         case action_kind::delete_time:
         case action_kind::change_time_sign_to_plus:
         case action_kind::change_time_sign_to_minus:
+        case action_kind::select_time_unit:
             return true;
 
         case action_kind::toggle_play:

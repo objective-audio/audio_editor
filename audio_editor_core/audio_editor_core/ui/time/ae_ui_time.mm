@@ -3,6 +3,9 @@
 //
 
 #include "ae_ui_time.h"
+#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_time_presenter.h>
 #include <audio_editor_core/ae_ui_types.h>
 #include <cpp_utils/yas_fast_each.h>
@@ -14,28 +17,31 @@ std::shared_ptr<ui_time> ui_time::make_shared(std::shared_ptr<ui::standard> cons
                                               std::shared_ptr<ui::texture> const &texture,
                                               std::string const &project_id) {
     auto const presenter = time_presenter::make_shared(project_id);
-    return std::shared_ptr<ui_time>(new ui_time{standard, texture, presenter});
+    auto const action_controller = app::global()->project_pool()->project_for_id(project_id)->action_controller();
+    return std::shared_ptr<ui_time>(new ui_time{standard, texture, presenter, action_controller});
 }
 
 ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::texture> const &texture,
-                 std::shared_ptr<time_presenter> const &presenter)
+                 std::shared_ptr<time_presenter> const &presenter,
+                 std::shared_ptr<action_controller> const &action_controller)
     : _presenter(presenter),
+      _action_controller(action_controller),
+      _standard(standard),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
       _top_guide(ui::layout_value_guide::make_shared()),
       _node(ui::node::make_shared()),
       _bg(ui::rect_plane::make_shared(1)),
-      _editing_frame(ui::rect_plane::make_shared(1)),
+      _buttons_root_node(ui::node::make_shared()),
       _time_strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, _font_atlas)) {
     this->_node->add_sub_node(this->_bg->node());
-    this->_node->add_sub_node(this->_editing_frame->node());
+    this->_node->add_sub_node(this->_buttons_root_node);
     this->_node->add_sub_node(this->_time_strings->rect_plane()->node());
 
     this->_bg->node()->set_color(ui::black_color());
     this->_bg->node()->set_alpha(0.5f);
 
-    this->_editing_frame->data()->set_rect_position({.origin = {0.0f, 0.0f}, .size = {1.0f, 1.0f}}, 0);
-    this->_editing_frame->node()->set_is_enabled(false);
+    this->_resize_buttons();
 
     this->_node->attach_y_layout_guide(*this->_top_guide);
 
@@ -46,14 +52,13 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
         .sync()
         ->add_to(this->_pool);
 
-    // 最初の同期は次のobserve_editing_time_text_rangeに任せてend
     this->_time_strings
         ->observe_actual_cell_regions(
-            [this](const std::vector<ui::region> &cell_regions) { this->_update_editing_frame(); })
+            [this](const std::vector<ui::region> &cell_regions) { this->_update_button_positions(); })
         .end()
         ->add_to(this->_pool);
 
-    this->_presenter->observe_editing_time_text_range([this](auto const &) { this->_update_editing_frame(); })
+    this->_presenter->observe_editing_time_text_range([this](auto const &) { this->_update_unit_states(); })
         .sync()
         ->add_to(this->_pool);
 
@@ -71,42 +76,126 @@ std::shared_ptr<ui::node> const &ui_time::node() const {
     return this->_node;
 }
 
-void ui_time::_update_editing_frame() {
-    if (auto const range = this->_presenter->editing_time_text_range()) {
-        auto const &range_value = range.value();
-
-        this->_time_strings->set_attributes({{.range = range_value, .color = ui::black_color()}});
-
-        std::optional<ui::region> region = std::nullopt;
-
-        auto each = make_fast_each(range_value.index, range_value.index + range_value.length);
-        while (yas_each_next(each)) {
-            auto const &idx = yas_each_index(each);
-            auto const &cell_regions = this->_time_strings->actual_cell_regions();
-
-            if (idx < cell_regions.size()) {
-                auto const &cell_region = cell_regions.at(idx);
-
-                if (region.has_value()) {
-                    region = region.value().combined(cell_region);
-                } else {
-                    region = cell_region;
-                }
-            }
-        }
-
-        if (region.has_value()) {
-            auto const &region_value = region.value();
-            this->_editing_frame->node()->set_position(region_value.origin);
-            this->_editing_frame->node()->set_scale(region_value.size);
-
-            this->_editing_frame->node()->set_is_enabled(true);
-
-            return;
-        }
-    } else {
-        this->_time_strings->set_attributes({});
+void ui_time::_resize_buttons() {
+    auto const standard = this->_standard.lock();
+    if (!standard) {
+        return;
     }
 
-    this->_editing_frame->node()->set_is_enabled(false);
+    auto const size = this->_presenter->time_text_unit_ranges().size();
+
+    if (size < this->_button_elements.size()) {
+        auto each = make_fast_each(size, this->_button_elements.size());
+        while (yas_each_next(each)) {
+            auto const &idx = yas_each_index(each);
+            this->_button_elements.at(idx).button->rect_plane()->node()->remove_from_super_node();
+        }
+
+        this->_button_elements.resize(size);
+    } else if (this->_button_elements.size() < size) {
+        auto const adding_count = size - this->_button_elements.size();
+        auto each = make_fast_each(adding_count);
+        while (yas_each_next(each)) {
+            auto const &idx = yas_each_index(each);
+            auto button = ui::button::make_shared(ui::region{.origin = ui::point::zero(), .size = {1.0f, 1.0f}}, 2,
+                                                  standard->event_manager(), standard->detector());
+
+            auto const &data = button->rect_plane()->data();
+            data->set_rect_color(ui::white_color(), 0.0f, to_rect_index(0, false));
+            data->set_rect_color(ui::white_color(), 0.5f, to_rect_index(0, true));
+            data->set_rect_color(ui::white_color(), 1.0f, to_rect_index(1, false));
+            data->set_rect_color(ui::white_color(), 0.5f, to_rect_index(1, true));
+
+            button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
+
+            auto canceller =
+                button
+                    ->observe([this, idx](auto const &context) {
+                        switch (context.method) {
+                            case ui::button::method::ended: {
+                                if (auto const controller = this->_action_controller.lock()) {
+                                    controller->handle_action({action_kind::select_time_unit, std::to_string(idx)});
+                                }
+                            } break;
+                            default:
+                                break;
+                        }
+                    })
+                    .end();
+
+            this->_buttons_root_node->add_sub_node(button->rect_plane()->node());
+
+            this->_button_elements.emplace_back(
+                button_element{.button = std::move(button), .canceller = std::move(canceller)});
+        }
+    }
+}
+
+void ui_time::_update_button_positions() {
+    auto const ranges = this->_presenter->time_text_unit_ranges();
+
+    auto each = make_fast_each(ranges.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+
+        if (idx >= this->_button_elements.size()) {
+            break;
+        }
+
+        auto const &node = this->_button_elements.at(idx).button->rect_plane()->node();
+        auto const &range = ranges.at(idx);
+
+        if (auto const region = this->_button_region(range)) {
+            auto const &region_value = region.value();
+            node->set_position(region_value.origin);
+            node->set_scale(region_value.size);
+            node->set_is_enabled(true);
+        } else {
+            node->set_is_enabled(false);
+        }
+    }
+}
+
+std::optional<ui::region> ui_time::_button_region(index_range const &range) const {
+    std::optional<ui::region> region = std::nullopt;
+
+    auto each = make_fast_each(range.index, range.index + range.length);
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto const &cell_regions = this->_time_strings->actual_cell_regions();
+
+        if (idx < cell_regions.size()) {
+            auto const &cell_region = cell_regions.at(idx);
+
+            if (region.has_value()) {
+                region = region.value().combined(cell_region);
+            } else {
+                region = cell_region;
+            }
+        }
+    }
+
+    return region;
+}
+
+void ui_time::_update_unit_states() {
+    auto const editing_unit_idx = this->_presenter->editing_unit_idx();
+    auto const ranges = this->_presenter->time_text_unit_ranges();
+
+    std::vector<ui::strings_attribute> attributes;
+
+    auto each = make_fast_each(this->_button_elements.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto const &button = this->_button_elements.at(idx).button;
+
+        if (idx == editing_unit_idx && idx < ranges.size()) {
+            attributes.emplace_back(ui::strings_attribute{.range = ranges.at(idx), .color = ui::black_color()});
+            button->set_state_index(1);
+        } else {
+            button->set_state_index(0);
+        }
+    }
+
+    this->_time_strings->set_attributes(std::move(attributes));
 }
