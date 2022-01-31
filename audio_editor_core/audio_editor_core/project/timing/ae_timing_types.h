@@ -36,20 +36,20 @@ struct timing_components {
     timing_components(number_components const &);
     timing_components(args const &);
 
-    number_components const &raw_components() const;
+    [[nodiscard]] number_components const &raw_components() const;
 
-    bool is_minus() const;
-    uint32_t value(timing_unit_kind const) const;
-    std::size_t fraction_unit_size() const;
+    [[nodiscard]] bool is_minus() const;
+    [[nodiscard]] uint32_t value(timing_unit_kind const) const;
+    [[nodiscard]] std::size_t fraction_unit_size() const;
 
-    bool is_zero() const;
-    timing_components abs() const;
+    [[nodiscard]] bool is_zero() const;
+    [[nodiscard]] timing_components abs() const;
 
     bool operator==(timing_components const &rhs) const;
     bool operator!=(timing_components const &rhs) const;
     bool operator<(timing_components const &) const;
 
-    timing_components adding(timing_components const &) const;
+    [[nodiscard]] timing_components adding(timing_components const &) const;
 
    private:
     number_components _components;
