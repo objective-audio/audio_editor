@@ -57,181 +57,181 @@ using namespace yas::ae;
 
 - (IBAction)togglePlay:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::toggle_play);
+        controller->handle_action(action_kind::toggle_play);
     }
 }
 
 - (IBAction)nudgePrevious:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::nudge_previous);
+        controller->handle_action(action_kind::nudge_previous);
     }
 }
 
 - (IBAction)nudgeNext:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::nudge_next);
+        controller->handle_action(action_kind::nudge_next);
     }
 }
 
 - (IBAction)rotateNudgingKind:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::rotate_nudging_kind);
+        controller->handle_action(action_kind::rotate_nudging_kind);
     }
 }
 
 - (IBAction)rotateTimingFraction:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::rotate_timing_fraction);
+        controller->handle_action(action_kind::rotate_timing_fraction);
     }
 }
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::jump_previous);
+        controller->handle_action(action_kind::jump_previous);
     }
 }
 
 - (IBAction)jumpNext:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::jump_next);
+        controller->handle_action(action_kind::jump_next);
     }
 }
 
 - (IBAction)jumpToBeginning:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::jump_to_beginning);
+        controller->handle_action(action_kind::jump_to_beginning);
     }
 }
 
 - (IBAction)jumpToEnd:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::jump_to_end);
+        controller->handle_action(action_kind::jump_to_end);
     }
 }
 
 - (IBAction)dropHeadAndOffset:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::drop_head_and_offset);
+        controller->handle_action(action_kind::drop_head_and_offset);
     }
 }
 
 - (IBAction)split:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::split);
+        controller->handle_action(action_kind::split);
     }
 }
 
 - (IBAction)dropTailAndOffset:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::drop_tail_and_offset);
+        controller->handle_action(action_kind::drop_tail_and_offset);
     }
 }
 
 - (IBAction)erase:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::erase_and_offset);
+        controller->handle_action(action_kind::erase_and_offset);
     }
 }
 
 - (IBAction)insertMarker:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::insert_marker);
+        controller->handle_action(action_kind::insert_marker);
     }
 }
 
 - (IBAction)returnToZero:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::return_to_zero);
+        controller->handle_action(action_kind::return_to_zero);
     }
 }
 
 - (IBAction)goToMarker1:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_1);
+        controller->handle_action({action_kind::go_to_marker, "0"});
     }
 }
 
 - (IBAction)goToMarker2:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_2);
+        controller->handle_action({action_kind::go_to_marker, "1"});
     }
 }
 
 - (IBAction)goToMarker3:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_3);
+        controller->handle_action({action_kind::go_to_marker, "2"});
     }
 }
 
 - (IBAction)goToMarker4:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_4);
+        controller->handle_action({action_kind::go_to_marker, "3"});
     }
 }
 
 - (IBAction)goToMarker5:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_5);
+        controller->handle_action({action_kind::go_to_marker, "4"});
     }
 }
 
 - (IBAction)goToMarker6:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_6);
+        controller->handle_action({action_kind::go_to_marker, "5"});
     }
 }
 
 - (IBAction)goToMarker7:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_7);
+        controller->handle_action({action_kind::go_to_marker, "6"});
     }
 }
 
 - (IBAction)goToMarker8:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_8);
+        controller->handle_action({action_kind::go_to_marker, "7"});
     }
 }
 
 - (IBAction)goToMarker9:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::go_to_marker_9);
+        controller->handle_action({action_kind::go_to_marker, "8"});
     }
 }
 
 - (IBAction)undo:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::undo);
+        controller->handle_action(action_kind::undo);
     }
 }
 
 - (IBAction)redo:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::redo);
+        controller->handle_action(action_kind::redo);
     }
 }
 
 - (IBAction)exportToFile:(id)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::select_file_for_export);
+        controller->handle_action(action_kind::select_file_for_export);
     }
 }
 
 - (IBAction)cut:(id)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::cut);
+        controller->handle_action(action_kind::cut);
     }
 }
 
 - (IBAction)copy:(id)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::copy);
+        controller->handle_action(action_kind::copy);
     }
 }
 
 - (IBAction)paste:(id)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action::paste);
+        controller->handle_action(action_kind::paste);
     }
 }
 
@@ -247,65 +247,65 @@ using namespace yas::ae;
 
 - (std::optional<action>)actionForSelector:(SEL)selector {
     if (selector == @selector(togglePlay:)) {
-        return action::toggle_play;
+        return action_kind::toggle_play;
     } else if (selector == @selector(nudgePrevious:)) {
-        return action::nudge_previous;
+        return action_kind::nudge_previous;
     } else if (selector == @selector(nudgeNext:)) {
-        return action::nudge_next;
+        return action_kind::nudge_next;
     } else if (selector == @selector(rotateNudgingKind:)) {
-        return action::rotate_nudging_kind;
+        return action_kind::rotate_nudging_kind;
     } else if (selector == @selector(rotateTimingFraction:)) {
-        return action::rotate_timing_fraction;
+        return action_kind::rotate_timing_fraction;
     } else if (selector == @selector(jumpPrevious:)) {
-        return action::jump_previous;
+        return action_kind::jump_previous;
     } else if (selector == @selector(jumpNext:)) {
-        return action::jump_next;
+        return action_kind::jump_next;
     } else if (selector == @selector(jumpToBeginning:)) {
-        return action::jump_to_beginning;
+        return action_kind::jump_to_beginning;
     } else if (selector == @selector(jumpToEnd:)) {
-        return action::jump_to_end;
+        return action_kind::jump_to_end;
     } else if (selector == @selector(dropHeadAndOffset:)) {
-        return action::drop_head_and_offset;
+        return action_kind::drop_head_and_offset;
     } else if (selector == @selector(split:)) {
-        return action::split;
+        return action_kind::split;
     } else if (selector == @selector(dropTailAndOffset:)) {
-        return action::drop_tail_and_offset;
+        return action_kind::drop_tail_and_offset;
     } else if (selector == @selector(erase:)) {
-        return action::erase_and_offset;
+        return action_kind::erase_and_offset;
     } else if (selector == @selector(insertMarker:)) {
-        return action::insert_marker;
+        return action_kind::insert_marker;
     } else if (selector == @selector(returnToZero:)) {
-        return action::return_to_zero;
+        return action_kind::return_to_zero;
     } else if (selector == @selector(goToMarker1:)) {
-        return action::go_to_marker_1;
+        return action{action_kind::go_to_marker, "0"};
     } else if (selector == @selector(goToMarker2:)) {
-        return action::go_to_marker_2;
+        return action{action_kind::go_to_marker, "1"};
     } else if (selector == @selector(goToMarker3:)) {
-        return action::go_to_marker_3;
+        return action{action_kind::go_to_marker, "2"};
     } else if (selector == @selector(goToMarker4:)) {
-        return action::go_to_marker_4;
+        return action{action_kind::go_to_marker, "3"};
     } else if (selector == @selector(goToMarker5:)) {
-        return action::go_to_marker_5;
+        return action{action_kind::go_to_marker, "4"};
     } else if (selector == @selector(goToMarker6:)) {
-        return action::go_to_marker_6;
+        return action{action_kind::go_to_marker, "5"};
     } else if (selector == @selector(goToMarker7:)) {
-        return action::go_to_marker_7;
+        return action{action_kind::go_to_marker, "6"};
     } else if (selector == @selector(goToMarker8:)) {
-        return action::go_to_marker_8;
+        return action{action_kind::go_to_marker, "7"};
     } else if (selector == @selector(goToMarker9:)) {
-        return action::go_to_marker_9;
+        return action{action_kind::go_to_marker, "8"};
     } else if (selector == @selector(undo:)) {
-        return action::undo;
+        return action_kind::undo;
     } else if (selector == @selector(redo:)) {
-        return action::redo;
+        return action_kind::redo;
     } else if (selector == @selector(exportToFile:)) {
-        return action::select_file_for_export;
+        return action_kind::select_file_for_export;
     } else if (selector == @selector(cut:)) {
-        return action::cut;
+        return action_kind::cut;
     } else if (selector == @selector(copy:)) {
-        return action::copy;
+        return action_kind::copy;
     } else if (selector == @selector(paste:)) {
-        return action::paste;
+        return action_kind::paste;
     }
 
     return std::nullopt;

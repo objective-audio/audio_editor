@@ -4,8 +4,10 @@
 
 #pragma once
 
+#include <string>
+
 namespace yas::ae {
-enum class action {
+enum class action_kind {
     toggle_play,
     nudge_previous,
     nudge_next,
@@ -21,15 +23,7 @@ enum class action {
     erase_and_offset,
     insert_marker,
     return_to_zero,
-    go_to_marker_1,
-    go_to_marker_2,
-    go_to_marker_3,
-    go_to_marker_4,
-    go_to_marker_5,
-    go_to_marker_6,
-    go_to_marker_7,
-    go_to_marker_8,
-    go_to_marker_9,
+    go_to_marker,
     undo,
     redo,
     select_file_for_export,
@@ -42,18 +36,20 @@ enum class action {
     cancel_time_editing,
     move_to_next_time_unit,
     move_to_previous_time_unit,
-    input_time_0,
-    input_time_1,
-    input_time_2,
-    input_time_3,
-    input_time_4,
-    input_time_5,
-    input_time_6,
-    input_time_7,
-    input_time_8,
-    input_time_9,
+    input_time,
     delete_time,
     change_time_sign_to_plus,
     change_time_sign_to_minus,
+};
+
+struct action {
+    action_kind kind;
+    std::string value;
+
+    action(action_kind const kind) : action(kind, "") {
+    }
+
+    action(action_kind const kind, std::string const &value) : kind(kind), value(value) {
+    }
 };
 }  // namespace yas::ae

@@ -23,8 +23,8 @@ std::shared_ptr<action_router> const &action_controller::router() const {
     return this->_router;
 }
 
-void action_controller::handle_action(action const action) {
-    if (this->_router->responds_to_action(action)) {
+void action_controller::handle_action(action const &action) {
+    if (this->_router->responds_to_action(action.kind)) {
         this->_action_notifier->notify(action);
     }
 }

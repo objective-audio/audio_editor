@@ -17,7 +17,7 @@ struct action_controller final {
 
     [[nodiscard]] std::shared_ptr<action_router> const &router() const;
 
-    void handle_action(action const);
+    void handle_action(action const &);
     void handle_key(ae::key const);
     void export_to_file(url const &);
 

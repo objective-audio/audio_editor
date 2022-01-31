@@ -14,6 +14,6 @@ struct action_routing {
     virtual ~action_routing() = default;
 
     [[nodiscard]] virtual std::optional<ae::action> to_action(ae::key const) = 0;
-    [[nodiscard]] virtual bool responds_to_action(ae::action const) = 0;
+    [[nodiscard]] virtual bool responds_to_action(ae::action_kind const) = 0;
 };
 }  // namespace yas::ae

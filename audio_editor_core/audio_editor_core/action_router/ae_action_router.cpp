@@ -45,12 +45,12 @@ observing::syncable action_router::observe_kind(std::function<void(action_routin
 
 std::optional<ae::action> action_router::to_action(ae::key const key) const {
     auto action = this->_routing->to_action(key);
-    if (action.has_value() && !this->_routing->responds_to_action(action.value())) {
+    if (action.has_value() && !this->_routing->responds_to_action(action.value().kind)) {
         throw std::runtime_error("action_router - not responds to action.");
     }
     return action;
 }
 
-bool action_router::responds_to_action(ae::action const action) const {
-    return this->_routing->responds_to_action(action);
+bool action_router::responds_to_action(ae::action_kind const kind) const {
+    return this->_routing->responds_to_action(kind);
 }
