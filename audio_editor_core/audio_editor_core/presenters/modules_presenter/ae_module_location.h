@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
-#include <audio_editor_core/ae_identifier.h>
+#include <cpp_utils/yas_identifier.h>
 
 namespace yas::ae {
 class file_module;
@@ -28,7 +28,7 @@ struct module_location final {
     std::vector<std::optional<mesh_element>> mesh_elements;
     float scale;
 
-    [[nodiscard]] static module_location make_value(ae::identifier const &, time::range const &,
+    [[nodiscard]] static module_location make_value(yas::identifier const &, time::range const &,
                                                     frame_index_t const file_frame, uint32_t const sample_rate,
                                                     std::vector<std::optional<mesh_element>> const &mesh_elements,
                                                     float const scale);

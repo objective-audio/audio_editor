@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_identifier.h>
+#include <cpp_utils/yas_identifier.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
