@@ -17,6 +17,8 @@ enum class key {
     esc,
     left,
     right,
+    up,
+    down,
     plus,
     hyphen,
     ret,

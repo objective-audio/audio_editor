@@ -63,6 +63,8 @@ std::optional<ae::action> action_normal_routing::to_action(ae::key const key) {
         case key::ret:
         case key::tab:
         case key::shift_tab:
+        case key::up:
+        case key::down:
             return std::nullopt;
     }
 }
@@ -101,6 +103,8 @@ bool action_normal_routing::responds_to_action(ae::action_kind const kind) {
         case action_kind::move_to_previous_time_unit:
         case action_kind::input_time:
         case action_kind::delete_time:
+        case action_kind::increment_time:
+        case action_kind::decrement_time:
         case action_kind::change_time_sign_to_plus:
         case action_kind::change_time_sign_to_minus:
             return false;

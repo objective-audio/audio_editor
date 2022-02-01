@@ -168,8 +168,12 @@ struct time_editor_for_project_editor : time_editor_for_time_presenter {
 
     [[nodiscard]] virtual bool can_input_number() const = 0;
     [[nodiscard]] virtual bool can_delete_number() const = 0;
+    [[nodiscard]] virtual bool can_increment_number() const = 0;
+    [[nodiscard]] virtual bool can_decrement_number() const = 0;
     virtual void input_number(uint32_t const) = 0;
     virtual void delete_number() = 0;
+    virtual void increment_number() = 0;
+    virtual void decrement_number() = 0;
 
     [[nodiscard]] virtual bool can_move_to_next_unit() const = 0;
     [[nodiscard]] virtual bool can_move_to_previous_unit() const = 0;

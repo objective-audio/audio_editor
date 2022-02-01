@@ -49,6 +49,18 @@ bool time_editor::can_delete_number() const {
     return this->_unit_numbers != _zero_string_vector;
 }
 
+bool time_editor::can_increment_number() const {
+    auto const components = this->editing_components();
+    auto const &unit = components.unit(this->_unit_idx->value());
+    return unit.value < (unit.size - 1);
+}
+
+bool time_editor::can_decrement_number() const {
+    auto const components = this->editing_components();
+    auto const &unit = components.unit(this->_unit_idx->value());
+    return unit.value > 0;
+}
+
 void time_editor::input_number(uint32_t const number) {
     if (!this->can_input_number()) {
         return;
@@ -79,6 +91,28 @@ void time_editor::delete_number() {
     }
 
     this->_components_fetcher->push();
+}
+
+void time_editor::increment_number() {
+    if (!this->can_increment_number()) {
+        return;
+    }
+
+    auto const components = this->editing_components();
+    auto const &unit = components.unit(this->_unit_idx->value());
+
+    this->_update_unit_numbers(unit.value + 1);
+}
+
+void time_editor::decrement_number() {
+    if (!this->can_decrement_number()) {
+        return;
+    }
+
+    auto const components = this->editing_components();
+    auto const &unit = components.unit(this->_unit_idx->value());
+
+    this->_update_unit_numbers(unit.value - 1);
 }
 
 bool time_editor::can_move_to_next_unit() const {
@@ -259,4 +293,18 @@ bool time_editor::_is_ended() const {
         case state::editing:
             return false;
     }
+}
+
+void time_editor::_update_unit_numbers(uint32_t const value) {
+    this->_unit_numbers.clear();
+
+    auto const string = std::to_string(value);
+
+    auto each = make_fast_each(string.length());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        this->_unit_numbers.emplace_back(string.substr(idx, 1));
+    }
+
+    this->_components_fetcher->push();
 }

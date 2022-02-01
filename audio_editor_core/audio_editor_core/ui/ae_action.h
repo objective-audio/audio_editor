@@ -38,6 +38,8 @@ enum class action_kind {
     move_to_previous_time_unit,
     input_time,
     delete_time,
+    increment_time,
+    decrement_time,
     change_time_sign_to_plus,
     change_time_sign_to_minus,
     select_time_unit,
