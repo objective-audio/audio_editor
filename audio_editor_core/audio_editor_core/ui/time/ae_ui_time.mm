@@ -31,15 +31,34 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
       _top_guide(ui::layout_value_guide::make_shared()),
       _node(ui::node::make_shared()),
-      _bg(ui::rect_plane::make_shared(1)),
+      _bg_button(
+          ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard->event_manager(), standard->detector())),
       _buttons_root_node(ui::node::make_shared()),
       _time_strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, _font_atlas)) {
-    this->_node->add_sub_node(this->_bg->node());
+    this->_node->add_sub_node(this->_bg_button->rect_plane()->node());
     this->_node->add_sub_node(this->_buttons_root_node);
     this->_node->add_sub_node(this->_time_strings->rect_plane()->node());
 
-    this->_bg->node()->set_color(ui::black_color());
-    this->_bg->node()->set_alpha(0.5f);
+    auto const &bg_plane = this->_bg_button->rect_plane();
+    bg_plane->node()->mesh()->set_use_mesh_color(true);
+    auto const bg_data = bg_plane->data();
+    bg_data->set_rect_color(ui::black_color(), 0.5f, to_rect_index(0, false));
+    bg_data->set_rect_color(ui::white_color(), 0.5f, to_rect_index(0, true));
+
+    this->_bg_button
+        ->observe([this](auto const &context) {
+            switch (context.method) {
+                case ui::button::method::ended:
+                    if (auto const controller = this->_action_controller.lock()) {
+                        controller->handle_action({action_kind::begin_time_editing});
+                    }
+                    break;
+                default:
+                    break;
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
 
     this->_resize_buttons();
 
@@ -48,7 +67,11 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
     this->_time_strings->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
     this->_time_strings->actual_layout_source()
-        ->observe_layout_region([this](ui::region const &region) { this->_bg->data()->set_rect_position(region, 0); })
+        ->observe_layout_region([this](ui::region const &region) {
+            auto const &node = this->_bg_button->rect_plane()->node();
+            node->set_position(region.origin);
+            node->set_scale(region.size);
+        })
         .sync()
         ->add_to(this->_pool);
 
