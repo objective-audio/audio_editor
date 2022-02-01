@@ -10,6 +10,10 @@ using namespace yas::ae;
 identifier::identifier() : _raw(std::make_shared<std::nullptr_t>(nullptr)) {
 }
 
+identifier::~identifier() {
+    this->_raw = nullptr;
+}
+
 identifier::identifier(identifier const &other) {
     this->_raw = other._raw;
 }

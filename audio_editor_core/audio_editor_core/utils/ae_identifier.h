@@ -10,6 +10,7 @@
 namespace yas::ae {
 struct identifier final {
     identifier();
+    ~identifier();
 
     identifier(identifier const &);
     identifier(identifier &&);
