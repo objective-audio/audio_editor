@@ -316,6 +316,8 @@ bool editing_root_presenter::responds_to_action(action const action) {
         case action_kind::move_to_next_time_unit:
         case action_kind::input_time:
         case action_kind::delete_time:
+        case action_kind::increment_time:
+        case action_kind::decrement_time:
         case action_kind::change_time_sign_to_plus:
         case action_kind::change_time_sign_to_minus:
         case action_kind::select_time_unit:

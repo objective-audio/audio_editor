@@ -88,6 +88,10 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::left;
         } else if (key_code == 124) {
             return key::right;
+        } else if (key_code == 125) {
+            return key::down;
+        } else if (key_code == 126) {
+            return key::up;
         }
     }
 

@@ -15,8 +15,12 @@ struct time_editor final : time_editor_for_project_editor {
 
     [[nodiscard]] bool can_input_number() const override;
     [[nodiscard]] bool can_delete_number() const override;
+    [[nodiscard]] bool can_increment_number() const override;
+    [[nodiscard]] bool can_decrement_number() const override;
     void input_number(uint32_t const) override;
     void delete_number() override;
+    void increment_number() override;
+    void decrement_number() override;
 
     [[nodiscard]] bool can_move_to_next_unit() const override;
     [[nodiscard]] bool can_move_to_previous_unit() const override;
@@ -61,5 +65,7 @@ struct time_editor final : time_editor_for_project_editor {
     void _commit_unit_value();
 
     bool _is_ended() const;
+
+    void _update_unit_numbers(uint32_t const);
 };
 }  // namespace yas::ae

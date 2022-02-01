@@ -88,6 +88,8 @@ struct project_editor final : project_editor_for_project {
     void cancel_time_editing();
     void input_time_number(uint32_t const);
     void delete_time_number();
+    void increment_time_number();
+    void decrement_time_number();
     void move_to_previous_time_unit();
     void move_to_next_time_unit();
     void change_time_sign_to_plus();

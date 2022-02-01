@@ -260,6 +260,12 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action_kind::delete_time:
                     this->delete_time_number();
                     break;
+                case action_kind::increment_time:
+                    this->increment_time_number();
+                    break;
+                case action_kind::decrement_time:
+                    this->decrement_time_number();
+                    break;
                 case action_kind::change_time_sign_to_plus:
                     this->change_time_sign_to_plus();
                     break;
@@ -789,6 +795,18 @@ void project_editor::input_time_number(uint32_t const number) {
 void project_editor::delete_time_number() {
     if (auto const &editor = this->_time_editor->value()) {
         editor->delete_number();
+    }
+}
+
+void project_editor::increment_time_number() {
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->increment_number();
+    }
+}
+
+void project_editor::decrement_time_number() {
+    if (auto const &editor = this->_time_editor->value()) {
+        editor->decrement_number();
     }
 }
 
