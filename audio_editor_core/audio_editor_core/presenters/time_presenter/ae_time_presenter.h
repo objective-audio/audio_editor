@@ -16,6 +16,8 @@ struct time_presenter final {
     [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(std::string const project_id);
 
     [[nodiscard]] std::string time_text() const;
+    [[nodiscard]] std::vector<index_range> time_text_unit_ranges() const;
+    [[nodiscard]] std::optional<std::size_t> editing_unit_idx() const;
     [[nodiscard]] std::optional<index_range> editing_time_text_range() const;
 
     [[nodiscard]] observing::syncable observe_editing_time_text_range(

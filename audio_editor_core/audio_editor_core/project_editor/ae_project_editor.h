@@ -92,6 +92,7 @@ struct project_editor final : project_editor_for_project {
     void move_to_next_time_unit();
     void change_time_sign_to_plus();
     void change_time_sign_to_minus();
+    void select_time_unit(std::size_t const);
 
     [[nodiscard]] std::map<frame_index_t, marker> const &markers() const override;
     [[nodiscard]] file_track_module_map_t const &modules() const override;

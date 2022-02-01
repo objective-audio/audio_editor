@@ -8,6 +8,7 @@
 
 namespace yas::ae {
 class time_presenter;
+class action_controller;
 
 struct ui_time final {
     [[nodiscard]] static std::shared_ptr<ui_time> make_shared(std::shared_ptr<ui::standard> const &,
@@ -18,19 +19,30 @@ struct ui_time final {
     std::shared_ptr<ui::node> const &node() const;
 
    private:
+    struct button_element {
+        std::shared_ptr<ui::button> button;
+        observing::cancellable_ptr canceller;
+    };
+
     std::shared_ptr<time_presenter> const _presenter;
+    std::weak_ptr<action_controller> const _action_controller;
+    std::weak_ptr<ui::standard> const _standard;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
     std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::rect_plane> const _bg;
-    std::shared_ptr<ui::rect_plane> const _editing_frame;
+    std::shared_ptr<ui::node> const _buttons_root_node;
+    std::vector<button_element> _button_elements;
     std::shared_ptr<ui::strings> const _time_strings;
 
     observing::canceller_pool _pool;
 
     ui_time(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::texture> const &,
-            std::shared_ptr<time_presenter> const &);
+            std::shared_ptr<time_presenter> const &, std::shared_ptr<action_controller> const &);
 
-    void _update_editing_frame();
+    void _resize_buttons();
+    void _update_button_positions();
+    std::optional<ui::region> _button_region(index_range const &) const;
+    void _update_unit_states();
 };
 }  // namespace yas::ae

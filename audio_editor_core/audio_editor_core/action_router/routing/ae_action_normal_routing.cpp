@@ -92,6 +92,7 @@ bool action_normal_routing::responds_to_action(ae::action_kind const kind) {
         case action_kind::copy:
         case action_kind::paste:
         case action_kind::begin_time_editing:
+        case action_kind::select_time_unit:
             return true;
 
         case action_kind::finish_time_editing:
