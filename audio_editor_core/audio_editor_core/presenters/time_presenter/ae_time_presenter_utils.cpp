@@ -78,3 +78,14 @@ index_range time_presenter_utils::to_time_text_range(number_components const &co
 
     throw std::runtime_error("unreachable.");
 }
+
+std::size_t time_presenter_utils::to_unit_index(ae::nudging_kind const kind) {
+    switch (kind) {
+        case nudging_kind::fraction:
+            return 0;
+        case nudging_kind::second:
+            return 1;
+        case nudging_kind::minute:
+            return 2;
+    }
+}

@@ -17,11 +17,13 @@ struct time_presenter final {
 
     [[nodiscard]] std::string time_text() const;
     [[nodiscard]] std::vector<index_range> time_text_unit_ranges() const;
-    [[nodiscard]] std::optional<std::size_t> editing_unit_idx() const;
+    [[nodiscard]] std::optional<std::size_t> editing_unit_index() const;
     [[nodiscard]] std::optional<index_range> editing_time_text_range() const;
-
     [[nodiscard]] observing::syncable observe_editing_time_text_range(
         std::function<void(std::optional<index_range> const &)> &&);
+
+    [[nodiscard]] std::optional<std::size_t> nudging_unit_index() const;
+    [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&);
 
    private:
     std::weak_ptr<project_editor_for_time_presenter> _project_editor;

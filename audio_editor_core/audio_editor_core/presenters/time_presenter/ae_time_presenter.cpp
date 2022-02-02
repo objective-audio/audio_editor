@@ -75,7 +75,7 @@ std::vector<index_range> time_presenter::time_text_unit_ranges() const {
     }
 }
 
-std::optional<std::size_t> time_presenter::editing_unit_idx() const {
+std::optional<std::size_t> time_presenter::editing_unit_index() const {
     if (auto const time_editor = this->_time_editor.lock()) {
         return time_editor->unit_index();
     } else {
@@ -94,4 +94,22 @@ std::optional<index_range> time_presenter::editing_time_text_range() const {
 observing::syncable time_presenter::observe_editing_time_text_range(
     std::function<void(std::optional<index_range> const &)> &&handler) {
     return this->_range_fetcher->observe(std::move(handler));
+}
+
+std::optional<std::size_t> time_presenter::nudging_unit_index() const {
+    if (auto const editor = this->_project_editor.lock()) {
+        return time_presenter_utils::to_unit_index(editor->nudging_kind());
+    } else {
+        return std::nullopt;
+    }
+}
+
+observing::syncable time_presenter::observe_nudging_unit_index(std::function<void(std::size_t const &)> &&handler) {
+    if (auto const editor = this->_project_editor.lock()) {
+        return editor->observe_nudging_kind([handler = std::move(handler)](ae::nudging_kind const &kind) {
+            handler(time_presenter_utils::to_unit_index(kind));
+        });
+    } else {
+        return observing::syncable{};
+    }
 }
