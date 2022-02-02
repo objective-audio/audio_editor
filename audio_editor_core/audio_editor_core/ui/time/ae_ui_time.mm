@@ -202,7 +202,7 @@ std::optional<ui::region> ui_time::_button_region(index_range const &range) cons
 }
 
 void ui_time::_update_unit_states() {
-    auto const editing_unit_idx = this->_presenter->editing_unit_idx();
+    auto const editing_unit_idx = this->_presenter->editing_unit_index();
     auto const ranges = this->_presenter->time_text_unit_ranges();
 
     std::vector<ui::strings_attribute> attributes;

@@ -75,7 +75,7 @@ std::vector<index_range> time_presenter::time_text_unit_ranges() const {
     }
 }
 
-std::optional<std::size_t> time_presenter::editing_unit_idx() const {
+std::optional<std::size_t> time_presenter::editing_unit_index() const {
     if (auto const time_editor = this->_time_editor.lock()) {
         return time_editor->unit_index();
     } else {
