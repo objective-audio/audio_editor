@@ -11,6 +11,6 @@
 #include <cstdint>
 
 namespace yas::ae::nudging_utils {
-timing_components offset_components(bool const is_previous, uint32_t const offset, nudging_kind const,
+timing_components offset_components(bool const is_previous, uint32_t const count, std::size_t const unit_idx,
                                     std::size_t const fraction_unit_size);
 }  // namespace yas::ae::nudging_utils

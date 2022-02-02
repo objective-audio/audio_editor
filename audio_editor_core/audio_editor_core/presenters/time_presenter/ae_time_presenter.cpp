@@ -98,7 +98,7 @@ observing::syncable time_presenter::observe_editing_time_text_range(
 
 std::optional<std::size_t> time_presenter::nudging_unit_index() const {
     if (auto const editor = this->_project_editor.lock()) {
-        return time_presenter_utils::to_unit_index(editor->nudging_kind());
+        return editor->nudging_unit_index();
     } else {
         return std::nullopt;
     }
@@ -106,9 +106,7 @@ std::optional<std::size_t> time_presenter::nudging_unit_index() const {
 
 observing::syncable time_presenter::observe_nudging_unit_index(std::function<void(std::size_t const &)> &&handler) {
     if (auto const editor = this->_project_editor.lock()) {
-        return editor->observe_nudging_kind([handler = std::move(handler)](ae::nudging_kind const &kind) {
-            handler(time_presenter_utils::to_unit_index(kind));
-        });
+        return editor->observe_nudging_unit_index(std::move(handler));
     } else {
         return observing::syncable{};
     }

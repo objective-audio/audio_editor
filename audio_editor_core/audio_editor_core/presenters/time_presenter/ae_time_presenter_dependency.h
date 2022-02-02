@@ -35,11 +35,11 @@ struct project_editor_for_time_presenter {
 
     [[nodiscard]] virtual frame_index_t current_frame() const = 0;
 
-    [[nodiscard]] virtual ae::nudging_kind nudging_kind() const = 0;
+    [[nodiscard]] virtual std::size_t nudging_unit_index() const = 0;
 
     [[nodiscard]] virtual observing::syncable observe_time_editor_for_time_presenter(
         std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&) = 0;
-    [[nodiscard]] virtual observing::syncable observe_nudging_kind(
-        std::function<void(ae::nudging_kind const &)> &&) = 0;
+    [[nodiscard]] virtual observing::syncable observe_nudging_unit_index(
+        std::function<void(std::size_t const &)> &&) = 0;
 };
 }  // namespace yas::ae

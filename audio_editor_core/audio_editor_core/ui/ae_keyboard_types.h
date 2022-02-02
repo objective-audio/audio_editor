@@ -11,7 +11,7 @@ enum class key {
     s,
     d,
     f,
-    r,
+    n,
     del,
     equal,
     esc,

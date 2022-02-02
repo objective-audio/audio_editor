@@ -46,8 +46,8 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::d;
         } else if (lower_chara == "f") {
             return key::f;
-        } else if (lower_chara == "r") {
-            return key::r;
+        } else if (lower_chara == "n") {
+            return key::n;
         } else if (chara == "0") {
             return key::num_0;
         } else if (chara == "1") {

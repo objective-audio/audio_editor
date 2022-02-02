@@ -14,21 +14,25 @@ std::shared_ptr<nudging> nudging::make_shared(std::shared_ptr<timing_for_nudging
 }
 
 nudging::nudging(std::shared_ptr<timing_for_nudging> const &timing)
-    : _timing(timing),
-      _kind(observing::value::holder<nudging_kind>::make_shared(nudging_kind::fraction)),
-      _offset_count(1) {
+    : _timing(timing), _unit_idx(observing::value::holder<std::size_t>::make_shared(0)), _offset_count(1) {
 }
 
-void nudging::set_kind(nudging_kind const kind) {
-    this->_kind->set_value(kind);
+void nudging::rotate_unit_index() {
+    auto const &idx = this->_unit_idx->value();
+    if (idx == 0) {
+        auto const components = this->_timing->components(0).raw_components();
+        this->_unit_idx->set_value(components.size() - 1);
+    } else {
+        this->_unit_idx->set_value(idx - 1);
+    }
 }
 
-nudging_kind nudging::kind() const {
-    return this->_kind->value();
+std::size_t nudging::unit_index() const {
+    return this->_unit_idx->value();
 }
 
-observing::syncable nudging::observe_kind(std::function<void(nudging_kind const &)> &&handler) {
-    return this->_kind->observe(std::move(handler));
+observing::syncable nudging::observe_unit_index(std::function<void(std::size_t const &)> &&handler) {
+    return this->_unit_idx->observe(std::move(handler));
 }
 
 void nudging::set_offset_count(uint32_t const count) {
@@ -42,7 +46,7 @@ uint32_t nudging::offset_count() const {
 
 frame_index_t nudging::next_frame(frame_index_t const frame) const {
     auto const current = this->_timing->components(frame);
-    auto const offset = nudging_utils::offset_components(false, this->_offset_count, this->_kind->value(),
+    auto const offset = nudging_utils::offset_components(false, this->_offset_count, this->_unit_idx->value(),
                                                          current.fraction_unit_size());
     auto const next = current.adding(offset);
     return this->_timing->frame(next);
@@ -50,8 +54,8 @@ frame_index_t nudging::next_frame(frame_index_t const frame) const {
 
 frame_index_t nudging::previous_frame(frame_index_t const frame) const {
     auto const current = this->_timing->components(frame);
-    auto const offset =
-        nudging_utils::offset_components(true, this->_offset_count, this->_kind->value(), current.fraction_unit_size());
+    auto const offset = nudging_utils::offset_components(true, this->_offset_count, this->_unit_idx->value(),
+                                                         current.fraction_unit_size());
     auto const next = current.adding(offset);
     return this->_timing->frame(next);
 }

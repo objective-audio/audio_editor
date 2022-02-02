@@ -19,23 +19,27 @@ using namespace yas::ae;
     auto const timing = std::make_shared<test_utils::timing_stub>(48000);
     auto const nudging = nudging::make_shared(timing);
 
-    XCTAssertEqual(nudging->kind(), nudging_kind::fraction);
+    XCTAssertEqual(nudging->unit_index(), 0);
     XCTAssertEqual(nudging->offset_count(), 1);
 }
 
-- (void)test_set_kind {
+- (void)test_rotate_unit_index {
     auto const timing = std::make_shared<test_utils::timing_stub>(48000);
     auto const nudging = nudging::make_shared(timing);
 
-    XCTAssertEqual(nudging->kind(), nudging_kind::fraction);
+    XCTAssertEqual(nudging->unit_index(), 0);
 
-    nudging->set_kind(nudging_kind::second);
+    nudging->rotate_unit_index();
 
-    XCTAssertEqual(nudging->kind(), nudging_kind::second);
+    XCTAssertEqual(nudging->unit_index(), 3);
 
-    nudging->set_kind(nudging_kind::minute);
+    nudging->rotate_unit_index();
 
-    XCTAssertEqual(nudging->kind(), nudging_kind::minute);
+    XCTAssertEqual(nudging->unit_index(), 2);
+
+    nudging->rotate_unit_index();
+
+    XCTAssertEqual(nudging->unit_index(), 1);
 }
 
 - (void)test_set_offset_count {

@@ -21,8 +21,6 @@ std::string label_text(std::optional<file_info> const &file_info);
 std::string play_button_text(bool const);
 std::string file_track_text(file_track_module_map_t const &);
 std::string marker_pool_text(marker_map_t const &);
-std::string nudge_kind_text(nudging_kind const);
-std::string nudge_text(nudging_kind const);
 std::string timing_fraction_text(timing_fraction_kind const);
 std::string timing_text(timing_fraction_kind const);
 

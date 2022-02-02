@@ -17,6 +17,4 @@ std::string to_string(number_components_unit const &);
 std::string time_text(number_components const &);
 
 index_range to_time_text_range(number_components const &, std::size_t const unit_idx);
-
-std::size_t to_unit_index(ae::nudging_kind const);
 }  // namespace yas::ae::time_presenter_utils
