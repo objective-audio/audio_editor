@@ -4,10 +4,4 @@
 
 #pragma once
 
-namespace yas::ae {
-enum class nudging_kind {
-    fraction,
-    second,
-    minute,
-};
-}
+namespace yas::ae {}

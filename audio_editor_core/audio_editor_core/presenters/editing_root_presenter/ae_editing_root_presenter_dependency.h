@@ -44,7 +44,6 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual bool is_scrolling() const = 0;
 
     [[nodiscard]] virtual bool can_nudge() const = 0;
-    [[nodiscard]] virtual nudging_kind nudging_kind() const = 0;
     [[nodiscard]] virtual timing_fraction_kind timing_fraction_kind() const = 0;
     [[nodiscard]] virtual bool can_jump_to_previous_edge() const = 0;
     [[nodiscard]] virtual bool can_jump_to_next_edge() const = 0;
@@ -72,8 +71,6 @@ struct project_editor_for_editing_root_presenter {
         std::function<void(file_track_event const &)> &&) = 0;
     [[nodiscard]] virtual observing::syncable observe_marker_pool_event(
         std::function<void(marker_pool_event const &)> &&) = 0;
-    [[nodiscard]] virtual observing::syncable observe_nudging_kind(
-        std::function<void(ae::nudging_kind const &)> &&) = 0;
     [[nodiscard]] virtual observing::syncable observe_timing_fraction(
         std::function<void(ae::timing_fraction_kind const &)> &&) = 0;
 };

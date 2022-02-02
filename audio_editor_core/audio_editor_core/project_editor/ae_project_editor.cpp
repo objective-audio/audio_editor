@@ -181,8 +181,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action_kind::nudge_next:
                     this->nudge_next();
                     break;
-                case action_kind::rotate_nudging_kind:
-                    this->rotate_nudging_kind();
+                case action_kind::rotate_nudging_unit_index:
+                    this->rotate_nudging_unit_index();
                     break;
                 case action_kind::rotate_timing_fraction:
                     this->rotate_timing_fraction();
@@ -353,22 +353,12 @@ void project_editor::nudge_next() {
     this->_player->seek(next_frame);
 }
 
-nudging_kind project_editor::nudging_kind() const {
-    return this->_nudging->kind();
+std::size_t project_editor::nudging_unit_index() const {
+    return this->_nudging->unit_index();
 }
 
-void project_editor::rotate_nudging_kind() {
-    switch (this->_nudging->kind()) {
-        case nudging_kind::fraction:
-            this->_nudging->set_kind(nudging_kind::second);
-            break;
-        case nudging_kind::second:
-            this->_nudging->set_kind(nudging_kind::minute);
-            break;
-        case nudging_kind::minute:
-            this->_nudging->set_kind(nudging_kind::fraction);
-            break;
-    }
+void project_editor::rotate_nudging_unit_index() {
+    this->_nudging->rotate_unit_index();
 }
 
 ae::timing_fraction_kind project_editor::timing_fraction_kind() const {
@@ -911,8 +901,8 @@ observing::syncable project_editor::observe_marker_pool_event(
     return this->_marker_pool->observe_event(std::move(handler));
 }
 
-observing::syncable project_editor::observe_nudging_kind(std::function<void(ae::nudging_kind const &)> &&handler) {
-    return this->_nudging->observe_kind(std::move(handler));
+observing::syncable project_editor::observe_nudging_unit_index(std::function<void(std::size_t const &)> &&handler) {
+    return this->_nudging->observe_unit_index(std::move(handler));
 }
 
 observing::syncable project_editor::observe_timing_fraction(

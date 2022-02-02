@@ -145,9 +145,9 @@ struct pasteboard_for_project_editor {
 struct nudging_for_project_editor {
     virtual ~nudging_for_project_editor() = default;
 
-    virtual void set_kind(nudging_kind const) = 0;
-    [[nodiscard]] virtual nudging_kind kind() const = 0;
-    [[nodiscard]] virtual observing::syncable observe_kind(std::function<void(nudging_kind const &)> &&) = 0;
+    virtual void rotate_unit_index() = 0;
+    [[nodiscard]] virtual std::size_t unit_index() const = 0;
+    [[nodiscard]] virtual observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&) = 0;
 
     [[nodiscard]] virtual frame_index_t next_frame(frame_index_t const) const = 0;
     [[nodiscard]] virtual frame_index_t previous_frame(frame_index_t const) const = 0;

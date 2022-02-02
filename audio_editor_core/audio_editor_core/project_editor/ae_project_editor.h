@@ -30,8 +30,8 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_nudge() const override;
     void nudge_previous();
     void nudge_next();
-    [[nodiscard]] ae::nudging_kind nudging_kind() const override;
-    void rotate_nudging_kind();
+    [[nodiscard]] std::size_t nudging_unit_index() const override;
+    void rotate_nudging_unit_index();
 
     [[nodiscard]] ae::timing_fraction_kind timing_fraction_kind() const override;
     void rotate_timing_fraction();
@@ -104,7 +104,7 @@ struct project_editor final : project_editor_for_project {
         std::function<void(file_track_event const &)> &&) override;
     [[nodiscard]] observing::syncable observe_marker_pool_event(
         std::function<void(marker_pool_event const &)> &&) override;
-    [[nodiscard]] observing::syncable observe_nudging_kind(std::function<void(ae::nudging_kind const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&) override;
     [[nodiscard]] observing::syncable observe_timing_fraction(
         std::function<void(ae::timing_fraction_kind const &)> &&) override;
     [[nodiscard]] observing::syncable observe_time_editor_for_time_presenter(

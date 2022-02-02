@@ -81,21 +81,6 @@ std::string editing_root_presenter_utils::marker_pool_text(marker_map_t const &m
     }
 }
 
-std::string editing_root_presenter_utils::nudge_kind_text(nudging_kind const kind) {
-    switch (kind) {
-        case nudging_kind::fraction:
-            return "fraction";
-        case nudging_kind::second:
-            return "sec";
-        case nudging_kind::minute:
-            return "min";
-    }
-}
-
-std::string editing_root_presenter_utils::nudge_text(nudging_kind const kind) {
-    return "nudge\n" + nudge_kind_text(kind);
-}
-
 std::string editing_root_presenter_utils::timing_fraction_text(timing_fraction_kind const kind) {
     switch (kind) {
         case timing_fraction_kind::sample:

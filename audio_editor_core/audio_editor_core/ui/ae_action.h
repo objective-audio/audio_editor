@@ -11,7 +11,7 @@ enum class action_kind {
     toggle_play,
     nudge_previous,
     nudge_next,
-    rotate_nudging_kind,
+    rotate_nudging_unit_index,
     rotate_timing_fraction,
     jump_previous,
     jump_next,

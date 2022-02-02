@@ -93,7 +93,7 @@ std::string editing_root_presenter::marker_pool_text() const {
 
 std::string editing_root_presenter::nudge_text() const {
     if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::nudge_text(editor->nudging_kind());
+        return "nudge";
     } else {
         return editing_root_presenter_utils::empty_text();
     }
@@ -221,13 +221,7 @@ observing::syncable editing_root_presenter::observe_marker_pool_text(
 }
 
 observing::syncable editing_root_presenter::observe_nudging_text(std::function<void(std::string const &)> &&handler) {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editor->observe_nudging_kind([handler = std::move(handler)](ae::nudging_kind const &kind) {
-            handler(editing_root_presenter_utils::nudge_text(kind));
-        });
-    } else {
-        return observing::syncable{};
-    }
+    return observing::syncable{};
 }
 
 observing::syncable editing_root_presenter::observe_timing_text(std::function<void(std::string const &)> &&handler) {
@@ -260,7 +254,7 @@ bool editing_root_presenter::responds_to_action(action const action) {
             return editor->can_nudge();
         case action_kind::nudge_next:
             return editor->can_nudge();
-        case action_kind::rotate_nudging_kind:
+        case action_kind::rotate_nudging_unit_index:
             return true;
         case action_kind::rotate_timing_fraction:
             return true;
