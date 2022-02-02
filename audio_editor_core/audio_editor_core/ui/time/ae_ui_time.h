@@ -33,6 +33,7 @@ struct ui_time final {
     std::shared_ptr<ui::button> const _bg_button;
     std::shared_ptr<ui::node> const _buttons_root_node;
     std::vector<button_element> _button_elements;
+    std::shared_ptr<ui::rect_plane> const _nudge_plane;
     std::shared_ptr<ui::strings> const _time_strings;
 
     observing::canceller_pool _pool;
@@ -44,5 +45,6 @@ struct ui_time final {
     void _update_button_positions();
     std::optional<ui::region> _button_region(index_range const &) const;
     void _update_unit_states();
+    void _update_nudge_position();
 };
 }  // namespace yas::ae

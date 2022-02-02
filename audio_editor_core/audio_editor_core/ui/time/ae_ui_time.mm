@@ -34,9 +34,11 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
       _bg_button(
           ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard->event_manager(), standard->detector())),
       _buttons_root_node(ui::node::make_shared()),
+      _nudge_plane(ui::rect_plane::make_shared(1)),
       _time_strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, _font_atlas)) {
     this->_node->add_sub_node(this->_bg_button->rect_plane()->node());
     this->_node->add_sub_node(this->_buttons_root_node);
+    this->_node->add_sub_node(this->_nudge_plane->node());
     this->_node->add_sub_node(this->_time_strings->rect_plane()->node());
 
     auto const &bg_plane = this->_bg_button->rect_plane();
@@ -62,6 +64,9 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
 
     this->_resize_buttons();
 
+    this->_nudge_plane->data()->set_rect_position(ui::region{.size = {1.0f, 1.0f}}, 0);
+    this->_nudge_plane->node()->set_color(ui::orange_color());
+
     this->_node->attach_y_layout_guide(*this->_top_guide);
 
     this->_time_strings->rect_plane()->node()->mesh()->set_use_mesh_color(true);
@@ -76,12 +81,18 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
         ->add_to(this->_pool);
 
     this->_time_strings
-        ->observe_actual_cell_regions(
-            [this](const std::vector<ui::region> &cell_regions) { this->_update_button_positions(); })
+        ->observe_actual_cell_regions([this](const std::vector<ui::region> &cell_regions) {
+            this->_update_button_positions();
+            this->_update_nudge_position();
+        })
         .end()
         ->add_to(this->_pool);
 
     this->_presenter->observe_editing_time_text_range([this](auto const &) { this->_update_unit_states(); })
+        .sync()
+        ->add_to(this->_pool);
+
+    this->_presenter->observe_nudging_unit_index([this](std::size_t const &) { this->_update_nudge_position(); })
         .sync()
         ->add_to(this->_pool);
 
@@ -221,4 +232,35 @@ void ui_time::_update_unit_states() {
     }
 
     this->_time_strings->set_attributes(std::move(attributes));
+}
+
+void ui_time::_update_nudge_position() {
+    auto const nudging_unit_idx = this->_presenter->nudging_unit_index();
+    auto const &node = this->_nudge_plane->node();
+
+    if (!nudging_unit_idx.has_value()) {
+        node->set_is_enabled(false);
+        return;
+    }
+
+    auto const &idx = nudging_unit_idx.value();
+    auto const ranges = this->_presenter->time_text_unit_ranges();
+
+    if (idx < ranges.size()) {
+        auto const &range = ranges.at(idx);
+
+        auto const region = this->_button_region(range);
+
+        if (region.has_value()) {
+            auto const &region_value = region.value();
+            float const height = 2.0f;
+            node->set_position(ui::point{.x = region_value.left(), .y = region_value.bottom() - height});
+            node->set_scale(ui::size{.width = region_value.size.width, .height = height});
+            node->set_is_enabled(true);
+        } else {
+            node->set_is_enabled(false);
+        }
+    } else {
+        node->set_is_enabled(false);
+    }
 }
