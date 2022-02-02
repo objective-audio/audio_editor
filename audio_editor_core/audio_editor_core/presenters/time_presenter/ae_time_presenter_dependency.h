@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_timing_types.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -34,7 +35,11 @@ struct project_editor_for_time_presenter {
 
     [[nodiscard]] virtual frame_index_t current_frame() const = 0;
 
+    [[nodiscard]] virtual ae::nudging_kind nudging_kind() const = 0;
+
     [[nodiscard]] virtual observing::syncable observe_time_editor_for_time_presenter(
         std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&) = 0;
+    [[nodiscard]] virtual observing::syncable observe_nudging_kind(
+        std::function<void(ae::nudging_kind const &)> &&) = 0;
 };
 }  // namespace yas::ae
