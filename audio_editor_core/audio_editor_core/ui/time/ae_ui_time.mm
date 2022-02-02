@@ -41,6 +41,8 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
     this->_node->add_sub_node(this->_nudge_plane->node());
     this->_node->add_sub_node(this->_time_strings->rect_plane()->node());
 
+    this->_node->set_batch(ui::batch::make_shared());
+
     auto const &bg_plane = this->_bg_button->rect_plane();
     bg_plane->node()->mesh()->set_use_mesh_color(true);
     auto const bg_data = bg_plane->data();
