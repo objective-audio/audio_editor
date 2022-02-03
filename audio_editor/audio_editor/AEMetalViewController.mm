@@ -75,7 +75,7 @@ using namespace yas::ae;
 
 - (IBAction)rotateNudgingKind:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::rotate_nudging_unit_index);
+        controller->handle_action(action_kind::rotate_nudging_next_unit);
     }
 }
 
@@ -253,7 +253,7 @@ using namespace yas::ae;
     } else if (selector == @selector(nudgeNext:)) {
         return action_kind::nudge_next;
     } else if (selector == @selector(rotateNudgingKind:)) {
-        return action_kind::rotate_nudging_unit_index;
+        return action_kind::rotate_nudging_next_unit;
     } else if (selector == @selector(rotateTimingFraction:)) {
         return action_kind::rotate_timing_fraction;
     } else if (selector == @selector(jumpPrevious:)) {

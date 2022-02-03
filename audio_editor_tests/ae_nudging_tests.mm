@@ -29,15 +29,15 @@ using namespace yas::ae;
 
     XCTAssertEqual(nudging->unit_index(), 0);
 
-    nudging->rotate_unit_index();
+    nudging->rotate_next_unit();
 
     XCTAssertEqual(nudging->unit_index(), 3);
 
-    nudging->rotate_unit_index();
+    nudging->rotate_next_unit();
 
     XCTAssertEqual(nudging->unit_index(), 2);
 
-    nudging->rotate_unit_index();
+    nudging->rotate_next_unit();
 
     XCTAssertEqual(nudging->unit_index(), 1);
 }

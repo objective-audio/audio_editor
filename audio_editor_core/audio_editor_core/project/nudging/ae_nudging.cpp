@@ -17,13 +17,23 @@ nudging::nudging(std::shared_ptr<timing_for_nudging> const &timing)
     : _timing(timing), _unit_idx(observing::value::holder<std::size_t>::make_shared(0)), _offset_count(1) {
 }
 
-void nudging::rotate_unit_index() {
+void nudging::rotate_next_unit() {
     auto const &idx = this->_unit_idx->value();
     if (idx == 0) {
         auto const components = this->_timing->components(0).raw_components();
         this->_unit_idx->set_value(components.size() - 1);
     } else {
         this->_unit_idx->set_value(idx - 1);
+    }
+}
+
+void nudging::rotate_previous_unit() {
+    auto const idx = this->_unit_idx->value() + 1;
+    auto const components = this->_timing->components(0).raw_components();
+    if (components.size() <= idx) {
+        this->_unit_idx->set_value(0);
+    } else {
+        this->_unit_idx->set_value(idx);
     }
 }
 

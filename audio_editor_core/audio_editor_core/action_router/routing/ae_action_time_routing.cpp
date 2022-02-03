@@ -64,6 +64,7 @@ std::optional<ae::action> action_time_routing::to_action(ae::key const key) {
         case key::d:
         case key::f:
         case key::n:
+        case key::shift_n:
         case key::t:
             return std::nullopt;
     }
@@ -87,7 +88,8 @@ bool action_time_routing::responds_to_action(ae::action_kind const kind) {
         case action_kind::toggle_play:
         case action_kind::nudge_previous:
         case action_kind::nudge_next:
-        case action_kind::rotate_nudging_unit_index:
+        case action_kind::rotate_nudging_next_unit:
+        case action_kind::rotate_nudging_previous_unit:
         case action_kind::rotate_timing_fraction:
         case action_kind::jump_previous:
         case action_kind::jump_next:

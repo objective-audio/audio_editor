@@ -254,7 +254,8 @@ bool editing_root_presenter::responds_to_action(action const action) {
             return editor->can_nudge();
         case action_kind::nudge_next:
             return editor->can_nudge();
-        case action_kind::rotate_nudging_unit_index:
+        case action_kind::rotate_nudging_next_unit:
+        case action_kind::rotate_nudging_previous_unit:
             return true;
         case action_kind::rotate_timing_fraction:
             return true;
