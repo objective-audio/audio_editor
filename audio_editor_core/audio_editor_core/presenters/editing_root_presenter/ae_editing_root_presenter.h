@@ -19,11 +19,8 @@ struct editing_root_presenter final {
     [[nodiscard]] std::string const &project_id() const;
     [[nodiscard]] std::string state_text() const;
     [[nodiscard]] std::string file_info_text() const;
-    [[nodiscard]] std::string play_button_text() const;
     [[nodiscard]] std::string file_track_text() const;
     [[nodiscard]] std::string marker_pool_text() const;
-    [[nodiscard]] std::string nudge_text() const;
-    [[nodiscard]] std::string timing_text() const;
 
     [[nodiscard]] bool is_play_button_enabled() const;
     [[nodiscard]] bool is_split_button_enabled() const;
@@ -43,11 +40,8 @@ struct editing_root_presenter final {
     [[nodiscard]] playing_line_state_t playing_line_state() const;
 
     [[nodiscard]] observing::syncable observe_state_text(std::function<void(std::string const &)> &&);
-    [[nodiscard]] observing::syncable observe_play_button_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_file_track_text(std::function<void(std::string const &)> &&);
     [[nodiscard]] observing::syncable observe_marker_pool_text(std::function<void(std::string const &)> &&);
-    [[nodiscard]] observing::syncable observe_nudging_text(std::function<void(std::string const &)> &&);
-    [[nodiscard]] observing::syncable observe_timing_text(std::function<void(std::string const &)> &&);
 
     [[nodiscard]] bool responds_to_action(action const);
 

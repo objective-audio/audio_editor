@@ -67,14 +67,6 @@ std::string editing_root_presenter::file_info_text() const {
     }
 }
 
-std::string editing_root_presenter::play_button_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::play_button_text(editor->is_playing());
-    } else {
-        return editing_root_presenter_utils::empty_text();
-    }
-}
-
 std::string editing_root_presenter::file_track_text() const {
     if (auto const editor = this->_project_editor.lock()) {
         return editing_root_presenter_utils::file_track_text(editor->modules());
@@ -86,22 +78,6 @@ std::string editing_root_presenter::file_track_text() const {
 std::string editing_root_presenter::marker_pool_text() const {
     if (auto const editor = this->_project_editor.lock()) {
         return editing_root_presenter_utils::marker_pool_text(editor->markers());
-    } else {
-        return editing_root_presenter_utils::empty_text();
-    }
-}
-
-std::string editing_root_presenter::nudge_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return "nudge";
-    } else {
-        return editing_root_presenter_utils::empty_text();
-    }
-}
-
-std::string editing_root_presenter::timing_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::timing_text(editor->timing_fraction_kind());
     } else {
         return editing_root_presenter_utils::empty_text();
     }
@@ -197,17 +173,6 @@ observing::syncable editing_root_presenter::observe_state_text(std::function<voi
     }
 }
 
-observing::syncable editing_root_presenter::observe_play_button_text(
-    std::function<void(std::string const &)> &&handler) {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editor->observe_is_playing([handler = std::move(handler)](bool const is_playing) {
-            handler(editing_root_presenter_utils::play_button_text(is_playing));
-        });
-    } else {
-        return observing::syncable{};
-    }
-}
-
 observing::syncable editing_root_presenter::observe_file_track_text(
     std::function<void(std::string const &)> &&handler) {
     return this->_file_track_event_fetcher->observe(
@@ -218,21 +183,6 @@ observing::syncable editing_root_presenter::observe_marker_pool_text(
     std::function<void(std::string const &)> &&handler) {
     return this->_marker_pool_event_fetcher->observe(
         [handler = std::move(handler), this](auto const &event) { handler(this->marker_pool_text()); });
-}
-
-observing::syncable editing_root_presenter::observe_nudging_text(std::function<void(std::string const &)> &&handler) {
-    return observing::syncable{};
-}
-
-observing::syncable editing_root_presenter::observe_timing_text(std::function<void(std::string const &)> &&handler) {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editor->observe_timing_fraction([handler = std::move(handler)](ae::timing_fraction_kind const &kind) {
-            handler(editing_root_presenter_utils::timing_text(kind));
-        });
-        return observing::syncable{};
-    } else {
-        return observing::syncable{};
-    }
 }
 
 bool editing_root_presenter::responds_to_action(action const action) {
