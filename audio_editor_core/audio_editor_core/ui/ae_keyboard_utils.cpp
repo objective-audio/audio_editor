@@ -32,8 +32,6 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::tab;
         } else if (chara == " ") {
             return key::space;
-        } else if (chara == "=") {
-            return key::equal;
         } else if (chara == "+") {
             return key::plus;
         } else if (chara == "-") {
@@ -48,6 +46,8 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::f;
         } else if (lower_chara == "n") {
             return key::n;
+        } else if (lower_chara == "t") {
+            return key::t;
         } else if (chara == "0") {
             return key::num_0;
         } else if (chara == "1") {
@@ -74,8 +74,6 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
     if (modifiers == shift_modifiers) {
         if (key_code == 48) {
             return key::shift_tab;
-        } else if (chara == "=") {
-            return key::equal;
         } else if (chara == "+") {
             return key::plus;
         } else if (chara == "-") {
