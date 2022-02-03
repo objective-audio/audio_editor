@@ -64,7 +64,7 @@ std::optional<ae::action> action_time_routing::to_action(ae::key const key) {
         case key::d:
         case key::f:
         case key::n:
-        case key::equal:
+        case key::t:
             return std::nullopt;
     }
 }

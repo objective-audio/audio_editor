@@ -30,7 +30,7 @@ std::optional<ae::action> action_normal_routing::to_action(ae::key const key) {
             return action_kind::rotate_nudging_unit_index;
         case key::f:
             return action_kind::rotate_timing_fraction;
-        case key::equal:
+        case key::t:
             return action_kind::begin_time_editing;
         case key::left:
             return action_kind::nudge_previous;
