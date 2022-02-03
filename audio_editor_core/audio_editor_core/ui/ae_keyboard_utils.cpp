@@ -74,6 +74,8 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
     if (modifiers == shift_modifiers) {
         if (key_code == 48) {
             return key::shift_tab;
+        } else if (lower_chara == "n") {
+            return key::shift_n;
         } else if (chara == "+") {
             return key::plus;
         } else if (chara == "-") {

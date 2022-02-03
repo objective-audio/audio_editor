@@ -12,6 +12,7 @@ enum class key {
     d,
     f,
     n,
+    shift_n,
     t,
     del,
     esc,

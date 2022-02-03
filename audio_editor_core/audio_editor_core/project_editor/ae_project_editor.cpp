@@ -181,8 +181,11 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action_kind::nudge_next:
                     this->nudge_next();
                     break;
-                case action_kind::rotate_nudging_unit_index:
-                    this->rotate_nudging_unit_index();
+                case action_kind::rotate_nudging_next_unit:
+                    this->rotate_nudging_next_unit();
+                    break;
+                case action_kind::rotate_nudging_previous_unit:
+                    this->rotate_nudging_previous_unit();
                     break;
                 case action_kind::rotate_timing_fraction:
                     this->rotate_timing_fraction();
@@ -357,8 +360,12 @@ std::size_t project_editor::nudging_unit_index() const {
     return this->_nudging->unit_index();
 }
 
-void project_editor::rotate_nudging_unit_index() {
-    this->_nudging->rotate_unit_index();
+void project_editor::rotate_nudging_next_unit() {
+    this->_nudging->rotate_next_unit();
+}
+
+void project_editor::rotate_nudging_previous_unit() {
+    this->_nudging->rotate_previous_unit();
 }
 
 ae::timing_fraction_kind project_editor::timing_fraction_kind() const {

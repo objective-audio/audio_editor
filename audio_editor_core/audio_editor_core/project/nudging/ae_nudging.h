@@ -13,7 +13,8 @@ namespace yas::ae {
 struct nudging final : nudging_for_project_editor {
     [[nodiscard]] static std::shared_ptr<nudging> make_shared(std::shared_ptr<timing_for_nudging> const &);
 
-    void rotate_unit_index() override;
+    void rotate_next_unit() override;
+    void rotate_previous_unit() override;
     [[nodiscard]] std::size_t unit_index() const override;
     [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&) override;
 

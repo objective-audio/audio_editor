@@ -31,7 +31,8 @@ struct project_editor final : project_editor_for_project {
     void nudge_previous();
     void nudge_next();
     [[nodiscard]] std::size_t nudging_unit_index() const override;
-    void rotate_nudging_unit_index();
+    void rotate_nudging_next_unit();
+    void rotate_nudging_previous_unit();
 
     [[nodiscard]] ae::timing_fraction_kind timing_fraction_kind() const override;
     void rotate_timing_fraction();
