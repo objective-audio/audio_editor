@@ -31,22 +31,6 @@ struct ui_editing_root final {
     std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<keyboard_for_ui_root> const _keyboard;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
-    std::shared_ptr<ui_button> const _play_button;
-    std::shared_ptr<ui_button> const _split_button;
-    std::shared_ptr<ui_button> const _drop_head_and_offset_button;
-    std::shared_ptr<ui_button> const _drop_tail_and_offset_button;
-    std::shared_ptr<ui_button> const _erase_and_offset_button;
-    std::shared_ptr<ui_button> const _zero_button;
-    std::shared_ptr<ui_button> const _jump_previous_button;
-    std::shared_ptr<ui_button> const _jump_next_button;
-    std::shared_ptr<ui_button> const _nudge_button;
-    std::shared_ptr<ui_button> const _timing_button;
-    std::shared_ptr<ui_button> const _insert_marker_button;
-    std::shared_ptr<ui_button> const _undo_button;
-    std::shared_ptr<ui_button> const _redo_button;
-    std::shared_ptr<ui_button> const _export_button;
-    std::vector<std::shared_ptr<ui_button>> const _buttons;
-    std::shared_ptr<ui::collection_layout> const _button_collection_layout;
     std::shared_ptr<ui::strings> const _status_strings;
     std::shared_ptr<ui::strings> const _file_info_strings;
     std::shared_ptr<ui::strings> const _file_track_strings;
@@ -65,7 +49,5 @@ struct ui_editing_root final {
     void _setup_node_hierarchie();
     void _setup_observing();
     void _setup_layout();
-
-    void _update_buttons_enabled();
 };
 }  // namespace yas::ae
