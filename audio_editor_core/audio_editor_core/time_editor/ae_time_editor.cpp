@@ -261,27 +261,44 @@ std::optional<uint32_t> time_editor::_editing_unit_value() const {
     }
 }
 
-std::optional<uint32_t> time_editor::_commited_unit_value() const {
-    if (auto editing_value = this->_editing_unit_value()) {
-        auto const &original_unit = this->_original_components.unit(this->_unit_idx->value());
-        if (original_unit.size != 0 && original_unit.size <= editing_value.value()) {
-            return original_unit.size - 1;
-        } else {
-            return editing_value;
-        }
-    } else {
-        return std::nullopt;
-    }
-}
-
 void time_editor::_commit_unit_value() {
-#warning todo 超えた分は上のunitに繰り上げたい？
-    if (auto const unit_value = this->_commited_unit_value()) {
-        this->_commited_components =
-            this->_commited_components.unit_value_replaced(unit_value.value(), this->_unit_idx->value());
-        this->_unit_numbers.clear();
-        this->_components_fetcher->push();
+    auto const editing_value = this->_editing_unit_value();
+    if (!editing_value.has_value()) {
+        // 編集されていないので終了
+        return;
     }
+
+    std::size_t idx = this->_unit_idx->value();
+    uint32_t value = editing_value.value();
+
+    while (idx < this->_original_components.size()) {
+        if (this->_unit_idx->value() != idx) {
+            // 繰り上がる値がなければ終了
+            if (value == 0) {
+                break;
+            }
+            // 繰り上がった場合は元の値に足す
+            value += this->_commited_components.unit(idx).value;
+        }
+
+        auto const &original_unit = this->_original_components.unit(idx);
+
+        if (idx == this->_original_components.size() - 1) {
+            // 一番上のunitなら最大値でリミット
+            uint32_t const replacing_value = std::min(value, static_cast<uint32_t>(original_unit.size - 1));
+            this->_commited_components = this->_commited_components.unit_value_replaced(replacing_value, idx);
+        } else {
+            uint32_t const replacing_value = value % original_unit.size;
+            this->_commited_components = this->_commited_components.unit_value_replaced(replacing_value, idx);
+        }
+
+        value = value / original_unit.size;
+
+        ++idx;
+    }
+
+    this->_unit_numbers.clear();
+    this->_components_fetcher->push();
 }
 
 bool time_editor::_is_ended() const {

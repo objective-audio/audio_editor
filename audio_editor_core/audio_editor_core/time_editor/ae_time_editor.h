@@ -61,7 +61,6 @@ struct time_editor final : time_editor_for_project_editor {
     time_editor(number_components const &);
 
     std::optional<uint32_t> _editing_unit_value() const;
-    std::optional<uint32_t> _commited_unit_value() const;
     void _commit_unit_value();
 
     bool _is_ended() const;
