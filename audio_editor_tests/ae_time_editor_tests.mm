@@ -273,14 +273,40 @@ using namespace yas::ae;
     editor->move_to_next_unit();
     XCTAssertEqual(editor->unit_index(), 1);
 
-    // 12を入力するが、sizeを超えているので最大値の10に切り捨てられる
-    editor->input_number(1);
-    editor->input_number(2);
-    editor->move_to_next_unit();
+    {
+        // size内なのでそのままセット
+        editor->input_number(1);
+        editor->input_number(0);
+        editor->move_to_next_unit();
 
-    XCTAssertEqual(
-        editor->editing_components(),
-        (number_components{false, {{.size = 10, .value = 1}, {.size = 100, .value = 10}, {.size = 100, .value = 55}}}));
+        XCTAssertEqual(editor->editing_components(),
+                       (number_components{
+                           false, {{.size = 10, .value = 1}, {.size = 100, .value = 10}, {.size = 100, .value = 55}}}));
+    }
+
+    {
+        // sizeと同じなので繰り上がって0
+        editor->move_to_previous_unit();
+        editor->input_number(1);
+        editor->input_number(1);
+        editor->move_to_next_unit();
+
+        XCTAssertEqual(editor->editing_components(),
+                       (number_components{
+                           false, {{.size = 10, .value = 1}, {.size = 100, .value = 0}, {.size = 100, .value = 56}}}));
+    }
+
+    {
+        // sizeより大きいので繰り上がって余りをセット
+        editor->move_to_previous_unit();
+        editor->input_number(1);
+        editor->input_number(2);
+        editor->move_to_next_unit();
+
+        XCTAssertEqual(editor->editing_components(),
+                       (number_components{
+                           false, {{.size = 10, .value = 1}, {.size = 100, .value = 1}, {.size = 100, .value = 57}}}));
+    }
 }
 
 - (void)test_finish {
