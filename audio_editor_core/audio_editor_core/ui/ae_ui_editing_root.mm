@@ -46,7 +46,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _track(track),
       _playing_line(ui::rect_plane::make_shared(1)),
       _time(time) {
-    standard->view_look()->background()->set_color({.v = 0.2f});
+    standard->view_look()->background()->set_rgb_color({.v = 0.2f});
 
     this->_file_info_strings->set_text(presenter->file_info_text());
 
@@ -92,7 +92,7 @@ void ui_editing_root::_setup_observing() {
 
     this->_standard->renderer()
         ->observe_will_render([this](auto const &) {
-            this->_playing_line->node()->set_color(
+            this->_playing_line->node()->set_rgb_color(
                 ui_editing_root_utils::to_playing_line_color(this->_presenter->playing_line_state()));
         })
         .end()

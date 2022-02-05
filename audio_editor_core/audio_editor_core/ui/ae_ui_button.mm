@@ -15,15 +15,15 @@ ui_button::ui_button(std::shared_ptr<ui::font_atlas> const &font_atlas, std::sha
     this->_button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
     auto const disabled_state_idx = ui_button_utils::to_state_idx(ui_button_state::disabled);
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.1f}, 1.0f),
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::rgb_color{.v = 0.1f}, 1.0f),
                                                         to_rect_index(disabled_state_idx, false));
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.1f}, 1.0f),
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::rgb_color{.v = 0.1f}, 1.0f),
                                                         to_rect_index(disabled_state_idx, true));
 
     auto const enabled_state_idx = ui_button_utils::to_state_idx(ui_button_state::enabled);
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.4f}, 1.0f),
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::rgb_color{.v = 0.4f}, 1.0f),
                                                         to_rect_index(enabled_state_idx, false));
-    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::color{.v = 0.5f}, 1.0f),
+    this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::rgb_color{.v = 0.5f}, 1.0f),
                                                         to_rect_index(enabled_state_idx, true));
 
     this->node()->add_sub_node(this->_strings->rect_plane()->node());

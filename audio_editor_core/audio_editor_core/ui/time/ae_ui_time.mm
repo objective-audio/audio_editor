@@ -67,7 +67,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
     this->_resize_buttons();
 
     this->_nudge_plane->data()->set_rect_position(ui::region{.size = {1.0f, 1.0f}}, 0);
-    this->_nudge_plane->node()->set_color(ui::orange_color());
+    this->_nudge_plane->node()->set_rgb_color(ui::orange_color());
 
     this->_node->attach_y_layout_guide(*this->_top_guide);
 

@@ -33,7 +33,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
     this->_triangle_node->set_mesh(this->_triangle_mesh);
     this->_line_node->set_mesh(this->_line_mesh);
-    this->_line_node->set_color(ui::white_color());
+    this->_line_node->set_rgb_color(ui::white_color());
 
     this->_set_rect_count(0);
 
