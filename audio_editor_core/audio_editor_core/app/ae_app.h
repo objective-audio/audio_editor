@@ -12,6 +12,7 @@ class project_pool;
 class system_url;
 class file_importer;
 class file_loader;
+class color;
 
 struct app final {
     [[nodiscard]] static std::shared_ptr<app> make_shared();
@@ -21,6 +22,7 @@ struct app final {
     [[nodiscard]] std::shared_ptr<system_url> const &system_url() const;
     [[nodiscard]] std::shared_ptr<file_importer> const &file_importer() const;
     [[nodiscard]] std::shared_ptr<file_loader> const &file_loader() const;
+    [[nodiscard]] std::shared_ptr<color> const &color() const;
 
    private:
     worker_ptr const _worker;
@@ -28,6 +30,7 @@ struct app final {
     std::shared_ptr<ae::system_url> const _system_url;
     std::shared_ptr<ae::file_importer> const _file_importer;
     std::shared_ptr<ae::file_loader> const _file_loader;
+    std::shared_ptr<ae::color> const _color;
 
     app();
 
