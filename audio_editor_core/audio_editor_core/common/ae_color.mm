@@ -59,6 +59,14 @@ ui::color color::playing_line_scroling() const {
     return to_color(@"playing_line_playing");
 }
 
+ui::color color::module_frame() const {
+    return to_color(@"module_frame");
+}
+
+ui::color color::waveform() const {
+    return to_color(@"waveform");
+}
+
 ui::color color::time_text() const {
     return to_color(@"time_text");
 }
