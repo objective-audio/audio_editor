@@ -6,7 +6,7 @@
 
 namespace yas::ae {
 enum class playing_line_state_t {
-    nothing,
+    pausing,
     playing,
     scrolling,
 };

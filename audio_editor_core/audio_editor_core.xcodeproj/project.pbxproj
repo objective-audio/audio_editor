@@ -101,6 +101,10 @@
 		B6693E59268814D2004C8F50 /* ae_action.h in Headers */ = {isa = PBXBuildFile; fileRef = B6693E58268814D2004C8F50 /* ae_action.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B66F476F278BEAE000CB724C /* ae_timing_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B66F476D278BEAE000CB724C /* ae_timing_utils.cpp */; };
 		B66F4770278BEAE000CB724C /* ae_timing_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B66F476E278BEAE000CB724C /* ae_timing_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B66F5D6727AE2EA900441616 /* ae_color.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66F5D6527AE2EA900441616 /* ae_color.mm */; };
+		B66F5D6827AE2EA900441616 /* ae_color.h in Headers */ = {isa = PBXBuildFile; fileRef = B66F5D6627AE2EA900441616 /* ae_color.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B66F5D6A27AE2F6600441616 /* audio_editor_core.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B66F5D6927AE2F6600441616 /* audio_editor_core.xcassets */; };
+		B66F5D6C27AE30A600441616 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B66F5D6B27AE30A500441616 /* AppKit.framework */; };
 		B675F93E2765CBB2002FE285 /* ae_waveform_mesh_importer.h in Headers */ = {isa = PBXBuildFile; fileRef = B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B675F93F2765CBB2002FE285 /* ae_waveform_mesh_importer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */; };
 		B6813579271EE756009CC0FC /* ae_gesture.h in Headers */ = {isa = PBXBuildFile; fileRef = B6813578271EE756009CC0FC /* ae_gesture.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -323,6 +327,10 @@
 		B6693E58268814D2004C8F50 /* ae_action.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_action.h; sourceTree = "<group>"; };
 		B66F476D278BEAE000CB724C /* ae_timing_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_timing_utils.cpp; sourceTree = "<group>"; };
 		B66F476E278BEAE000CB724C /* ae_timing_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_timing_utils.h; sourceTree = "<group>"; };
+		B66F5D6527AE2EA900441616 /* ae_color.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_color.mm; sourceTree = "<group>"; };
+		B66F5D6627AE2EA900441616 /* ae_color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_color.h; sourceTree = "<group>"; };
+		B66F5D6927AE2F6600441616 /* audio_editor_core.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = audio_editor_core.xcassets; sourceTree = "<group>"; };
+		B66F5D6B27AE30A500441616 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_waveform_mesh_importer.h; sourceTree = "<group>"; };
 		B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_waveform_mesh_importer.mm; sourceTree = "<group>"; };
 		B6813578271EE756009CC0FC /* ae_gesture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_gesture.h; sourceTree = "<group>"; };
@@ -457,6 +465,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B66F5D6C27AE30A600441616 /* AppKit.framework in Frameworks */,
 				B6A997942629B72E00DAC3FE /* processing.framework in Frameworks */,
 				B6A9978C2629B72E00DAC3FE /* db.framework in Frameworks */,
 				B64DE6852658C099006FC562 /* Metal.framework in Frameworks */,
@@ -909,6 +918,7 @@
 		B6A9977F2629B72E00DAC3FE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B66F5D6B27AE30A500441616 /* AppKit.framework */,
 				B607E7AD276EDEC00048F75C /* Accelerate.framework */,
 				B64DE6842658C099006FC562 /* Metal.framework */,
 				B666CE1626342AD200C1693D /* CoreFoundation.framework */,
@@ -961,6 +971,9 @@
 		B6BF10A22785B7D6000553ED /* common */ = {
 			isa = PBXGroup;
 			children = (
+				B66F5D6627AE2EA900441616 /* ae_color.h */,
+				B66F5D6527AE2EA900441616 /* ae_color.mm */,
+				B66F5D6927AE2F6600441616 /* audio_editor_core.xcassets */,
 				B6EA40D326411CE900BF3D06 /* ae_common_types.h */,
 				B68A2CFD278BD20900071E9D /* ae_math.cpp */,
 				B68A2CFE278BD20900071E9D /* ae_math.h */,
@@ -1131,6 +1144,7 @@
 				B6B9736127006FF500E1BD12 /* ae_ui_button_utils.h in Headers */,
 				B6370CBC2796FA3D00449D03 /* ae_action_router_dependency.h in Headers */,
 				B6966F4E2732319500A90733 /* ae_db_types.h in Headers */,
+				B66F5D6827AE2EA900441616 /* ae_color.h in Headers */,
 				B695A38D27658C6C004CB28F /* ae_ui_module_waveforms.h in Headers */,
 				B60204D6263AAEC600CFC752 /* ae_editing_root_presenter.h in Headers */,
 				B668BE56263068050021AD20 /* ae_app_presenter_types.h in Headers */,
@@ -1249,6 +1263,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B66F5D6A27AE2F6600441616 /* audio_editor_core.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1358,6 +1373,7 @@
 				B629D7732717101300EE379A /* ae_ui_markers.mm in Sources */,
 				B61E323B264ACB8F000DB2B1 /* ae_file_module_utils.cpp in Sources */,
 				B6966F46272EDB2F00A90733 /* ae_db_module.cpp in Sources */,
+				B66F5D6727AE2EA900441616 /* ae_color.mm in Sources */,
 				B6370CC32796FCC800449D03 /* ae_action_time_routing.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

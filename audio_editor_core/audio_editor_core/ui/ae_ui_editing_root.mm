@@ -5,6 +5,7 @@
 #include "ae_ui_editing_root.h"
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_editing_root_presenter.h>
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_keyboard.h>
@@ -20,7 +21,7 @@ using namespace yas;
 using namespace yas::ae;
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
-                                 std::shared_ptr<ui::texture> const &texture,
+                                 std::shared_ptr<ui::texture> const &texture, std::shared_ptr<ae::color> const &color,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
                                  std::shared_ptr<action_controller> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
@@ -29,6 +30,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _action_controller(action_controller),
       _pinch_gesture_controller(pinch_gesture_controller),
       _standard(standard),
+      _color(color),
       _keyboard(ae::keyboard::make_shared(standard->event_manager())),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",
@@ -46,8 +48,6 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _track(track),
       _playing_line(ui::rect_plane::make_shared(1)),
       _time(time) {
-    standard->view_look()->background()->set_rgb_color({.v = 0.2f});
-
     this->_file_info_strings->set_text(presenter->file_info_text());
 
     this->_setup_node_hierarchie();
@@ -92,8 +92,8 @@ void ui_editing_root::_setup_observing() {
 
     this->_standard->renderer()
         ->observe_will_render([this](auto const &) {
-            this->_playing_line->node()->set_rgb_color(
-                ui_editing_root_utils::to_playing_line_color(this->_presenter->playing_line_state()));
+            this->_playing_line->node()->set_color(
+                ui_editing_root_utils::to_playing_line_color(this->_presenter->playing_line_state(), this->_color));
         })
         .end()
         ->add_to(this->_pool);
@@ -131,6 +131,18 @@ void ui_editing_root::_setup_observing() {
             }
         })
         .end()
+        ->add_to(this->_pool);
+
+    this->_standard->view_look()
+        ->observe_appearance([this](auto const &) {
+            auto const &color = this->_color;
+            this->_standard->view_look()->background()->set_color(color->background());
+            this->_status_strings->rect_plane()->node()->set_color(color->debug_text());
+            this->_file_info_strings->rect_plane()->node()->set_color(color->debug_text());
+            this->_file_track_strings->rect_plane()->node()->set_color(color->debug_text());
+            this->_marker_pool_strings->rect_plane()->node()->set_color(color->debug_text());
+        })
+        .sync()
         ->add_to(this->_pool);
 }
 
@@ -224,10 +236,12 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::shared_ptr<ui
                                                               std::string const &project_id) {
     auto const texture = ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look());
     auto const presenter = editing_root_presenter::make_shared(project_id);
-    auto const action_controller = app::global()->project_pool()->project_for_id(project_id)->action_controller();
+    auto const &app = app::global();
+    auto const &color = app->color();
+    auto const action_controller = app->project_pool()->project_for_id(project_id)->action_controller();
     auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
     auto const ui_track = ui_track::make_shared(standard, project_id);
     auto const ui_time = ui_time::make_shared(standard, texture, project_id);
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, texture, presenter, action_controller,
+    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, texture, color, presenter, action_controller,
                                                                 pinch_gesture_controller, ui_track, ui_time});
 }

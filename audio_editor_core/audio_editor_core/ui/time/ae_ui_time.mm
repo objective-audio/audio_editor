@@ -4,6 +4,7 @@
 
 #include "ae_ui_time.h"
 #include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_time_presenter.h>
@@ -17,16 +18,19 @@ std::shared_ptr<ui_time> ui_time::make_shared(std::shared_ptr<ui::standard> cons
                                               std::shared_ptr<ui::texture> const &texture,
                                               std::string const &project_id) {
     auto const presenter = time_presenter::make_shared(project_id);
-    auto const action_controller = app::global()->project_pool()->project_for_id(project_id)->action_controller();
-    return std::shared_ptr<ui_time>(new ui_time{standard, texture, presenter, action_controller});
+    auto const &app = app::global();
+    auto const &color = app->color();
+    auto const &action_controller = app->project_pool()->project_for_id(project_id)->action_controller();
+    return std::shared_ptr<ui_time>(new ui_time{standard, texture, color, presenter, action_controller});
 }
 
 ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::texture> const &texture,
-                 std::shared_ptr<time_presenter> const &presenter,
+                 std::shared_ptr<ae::color> const &color, std::shared_ptr<time_presenter> const &presenter,
                  std::shared_ptr<action_controller> const &action_controller)
     : _presenter(presenter),
       _action_controller(action_controller),
       _standard(standard),
+      _color(color),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
       _top_guide(ui::layout_value_guide::make_shared()),
@@ -45,9 +49,6 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
 
     auto const &bg_plane = this->_bg_button->rect_plane();
     bg_plane->node()->mesh()->set_use_mesh_color(true);
-    auto const bg_data = bg_plane->data();
-    bg_data->set_rect_color(ui::black_color(), 0.5f, to_rect_index(0, false));
-    bg_data->set_rect_color(ui::white_color(), 0.5f, to_rect_index(0, true));
 
     this->_bg_button
         ->observe([this](auto const &context) {
@@ -67,7 +68,6 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
     this->_resize_buttons();
 
     this->_nudge_plane->data()->set_rect_position(ui::region{.size = {1.0f, 1.0f}}, 0);
-    this->_nudge_plane->node()->set_rgb_color(ui::orange_color());
 
     this->_node->attach_y_layout_guide(*this->_top_guide);
 
@@ -90,7 +90,11 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
         .end()
         ->add_to(this->_pool);
 
-    this->_presenter->observe_editing_time_text_range([this](auto const &) { this->_update_unit_states(); })
+    this->_presenter
+        ->observe_editing_time_text_range([this](auto const &) {
+            this->_update_unit_states();
+            this->_update_time_strings_attributes();
+        })
         .sync()
         ->add_to(this->_pool);
 
@@ -101,6 +105,28 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
     standard->renderer()
         ->observe_will_render([this](auto const &) { this->_time_strings->set_text(this->_presenter->time_text()); })
         .end()
+        ->add_to(this->_pool);
+
+    standard->view_look()
+        ->observe_appearance([this](auto const &) {
+            auto const &color = this->_color;
+            auto const &bg_data = this->_bg_button->rect_plane()->data();
+            bg_data->set_rect_color(this->_color->time_bg(), to_rect_index(0, false));
+            bg_data->set_rect_color(this->_color->time_bg_tracking(), to_rect_index(0, true));
+
+            this->_nudge_plane->node()->set_color(color->time_nudging_line());
+
+            for (auto const &element : this->_button_elements) {
+                auto const &data = element.button->rect_plane()->data();
+                data->set_rect_color(this->_color->time_unit(), to_rect_index(0, false));
+                data->set_rect_color(this->_color->time_unit_tracking(), to_rect_index(0, true));
+                data->set_rect_color(this->_color->time_unit_selected(), to_rect_index(1, false));
+                data->set_rect_color(this->_color->time_unit_selected_tracking(), to_rect_index(1, true));
+            }
+
+            this->_update_time_strings_attributes();
+        })
+        .sync()
         ->add_to(this->_pool);
 }
 
@@ -135,12 +161,6 @@ void ui_time::_resize_buttons() {
             auto const &idx = yas_each_index(each);
             auto button = ui::button::make_shared(ui::region{.origin = ui::point::zero(), .size = {1.0f, 1.0f}}, 2,
                                                   standard->event_manager(), standard->detector());
-
-            auto const &data = button->rect_plane()->data();
-            data->set_rect_color(ui::white_color(), 0.0f, to_rect_index(0, false));
-            data->set_rect_color(ui::white_color(), 0.5f, to_rect_index(0, true));
-            data->set_rect_color(ui::white_color(), 1.0f, to_rect_index(1, false));
-            data->set_rect_color(ui::white_color(), 0.5f, to_rect_index(1, true));
 
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
@@ -218,18 +238,33 @@ void ui_time::_update_unit_states() {
     auto const editing_unit_idx = this->_presenter->editing_unit_index();
     auto const ranges = this->_presenter->time_text_unit_ranges();
 
-    std::vector<ui::strings_attribute> attributes;
-
     auto each = make_fast_each(this->_button_elements.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
         auto const &button = this->_button_elements.at(idx).button;
 
         if (idx == editing_unit_idx && idx < ranges.size()) {
-            attributes.emplace_back(ui::strings_attribute{.range = ranges.at(idx), .color = ui::black_color()});
             button->set_state_index(1);
         } else {
             button->set_state_index(0);
+        }
+    }
+}
+
+void ui_time::_update_time_strings_attributes() {
+    auto const editing_unit_idx = this->_presenter->editing_unit_index();
+    auto const ranges = this->_presenter->time_text_unit_ranges();
+
+    std::vector<ui::strings_attribute> attributes;
+    attributes.emplace_back(ui::strings_attribute{.range = std::nullopt, .color = this->_color->time_text()});
+
+    auto each = make_fast_each(this->_button_elements.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+
+        if (idx == editing_unit_idx && idx < ranges.size()) {
+            attributes.emplace_back(
+                ui::strings_attribute{.range = ranges.at(idx), .color = this->_color->time_selected_text()});
         }
     }
 

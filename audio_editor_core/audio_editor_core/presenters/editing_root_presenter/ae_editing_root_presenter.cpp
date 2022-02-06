@@ -92,7 +92,7 @@ playing_line_state_t editing_root_presenter::playing_line_state() const {
         }
     }
 
-    return playing_line_state_t::nothing;
+    return playing_line_state_t::pausing;
 }
 
 observing::syncable editing_root_presenter::observe_state_text(std::function<void(std::string const &)> &&handler) {
