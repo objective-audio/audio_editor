@@ -9,6 +9,7 @@
 namespace yas::ae {
 class time_presenter;
 class action_controller;
+class color;
 
 struct ui_time final {
     [[nodiscard]] static std::shared_ptr<ui_time> make_shared(std::shared_ptr<ui::standard> const &,
@@ -27,6 +28,7 @@ struct ui_time final {
     std::shared_ptr<time_presenter> const _presenter;
     std::weak_ptr<action_controller> const _action_controller;
     std::weak_ptr<ui::standard> const _standard;
+    std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
     std::shared_ptr<ui::node> const _node;
@@ -39,7 +41,8 @@ struct ui_time final {
     observing::canceller_pool _pool;
 
     ui_time(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::texture> const &,
-            std::shared_ptr<time_presenter> const &, std::shared_ptr<action_controller> const &);
+            std::shared_ptr<ae::color> const &, std::shared_ptr<time_presenter> const &,
+            std::shared_ptr<action_controller> const &);
 
     void _resize_buttons();
     void _update_button_positions();
