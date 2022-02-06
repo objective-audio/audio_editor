@@ -22,6 +22,7 @@ using namespace yas::ae;
     XCTAssertNoThrow(color->playing_line_playing());
     XCTAssertNoThrow(color->playing_line_scroling());
     XCTAssertNoThrow(color->module_frame());
+    XCTAssertNoThrow(color->module_bg());
     XCTAssertNoThrow(color->waveform());
     XCTAssertNoThrow(color->time_text());
     XCTAssertNoThrow(color->time_selected_text());

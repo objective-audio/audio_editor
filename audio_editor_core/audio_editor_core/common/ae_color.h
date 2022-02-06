@@ -17,6 +17,7 @@ struct color final {
     ui::color playing_line_scroling() const;
 
     ui::color module_frame() const;
+    ui::color module_bg() const;
     ui::color waveform() const;
 
     ui::color time_text() const;
