@@ -74,7 +74,7 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_i
     auto const location_pool = module_location_pool::make_shared();
     auto const modules_presenter = modules_presenter::make_shared(project_id, display_space, location_pool);
     auto const waveforms_presenter = module_waveforms_presenter::make_shared(project_id, location_pool);
-    auto const waveforms = ui_module_waveforms::make_shared(waveforms_presenter);
+    auto const waveforms = ui_module_waveforms::make_shared(standard, waveforms_presenter);
     auto const &color = app::global()->color();
     return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, standard, color, waveforms});
 }
