@@ -56,7 +56,19 @@ ui::color color::playing_line_playing() const {
 }
 
 ui::color color::playing_line_scroling() const {
-    return to_color(@"playing_line_playing");
+    return to_color(@"playing_line_scrolling");
+}
+
+ui::color color::module_frame() const {
+    return to_color(@"module_frame");
+}
+
+ui::color color::module_bg() const {
+    return to_color(@"module_bg");
+}
+
+ui::color color::waveform() const {
+    return to_color(@"waveform");
 }
 
 ui::color color::time_text() const {

@@ -4,6 +4,7 @@
 
 #include "ae_ui_module_waveforms.h"
 #include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_module_waveforms_presenter.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
@@ -15,12 +16,15 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
-    std::shared_ptr<module_waveforms_presenter> const &presenter) {
-    return std::shared_ptr<ui_module_waveforms>(new ui_module_waveforms{presenter});
+    std::shared_ptr<ui::standard> const &standard, std::shared_ptr<module_waveforms_presenter> const &presenter) {
+    auto const &color = app::global()->color();
+    return std::shared_ptr<ui_module_waveforms>(new ui_module_waveforms{standard, color, presenter});
 }
 
-ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presenter> const &presenter)
-    : _presenter(presenter), _node(ui::node::make_shared()) {
+ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &standard,
+                                         std::shared_ptr<ae::color> const &color,
+                                         std::shared_ptr<module_waveforms_presenter> const &presenter)
+    : _presenter(presenter), _color(color), _node(ui::node::make_shared()) {
     this->_presenter
         ->observe_mesh_importer([this](waveform_mesh_importer_event const &event) {
             auto const &sub_nodes = this->_node->sub_nodes();
@@ -28,6 +32,8 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presen
                 auto const &sub_node = sub_nodes.at(event.index);
                 if (sub_node->is_enabled()) {
                     sub_node->remove_all_sub_nodes();
+
+                    auto const &waveform_color = this->_color->waveform();
 
                     auto each = make_fast_each(event.datas.size());
                     while (yas_each_next(each)) {
@@ -38,8 +44,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presen
                         mesh->set_vertex_data(event.datas.at(idx).vertex_data);
                         mesh->set_index_data(event.datas.at(idx).index_data);
 
-                        float const hue = float(idx % 6) / 6.0f;
-                        mesh_node->set_rgb_color(ui::hsb_color(hue, 1.0f, 1.0f));
+                        mesh_node->set_color(waveform_color);
 
                         mesh_node->set_mesh(mesh);
                         sub_node->add_sub_node(mesh_node);
@@ -63,6 +68,19 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<module_waveforms_presen
             }
         })
         .sync()
+        ->add_to(this->_pool);
+
+    standard->view_look()
+        ->observe_appearance([this](auto const &) {
+            auto const &waveform_color = this->_color->waveform();
+
+            for (auto const &sub_node : this->_node->sub_nodes()) {
+                for (auto const &mesh_node : sub_node->sub_nodes()) {
+                    mesh_node->set_color(waveform_color);
+                }
+            }
+        })
+        .end()
         ->add_to(this->_pool);
 }
 

@@ -3,6 +3,8 @@
 //
 
 #include "ae_ui_modules.h"
+#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_module_location.h>
@@ -18,14 +20,15 @@ static std::size_t const reserving_interval = 100;
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
-                       std::shared_ptr<ui::standard> const &standard,
+                       std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
                        std::shared_ptr<ui_module_waveforms> const &waveforms)
     : _presenter(presenter),
+      _color(color),
       _waveforms(waveforms),
       _node(ui::node::make_shared()),
       _triangle_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
-      _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = true}, nullptr, nullptr, nullptr)),
+      _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
     this->_node->add_sub_node(this->_triangle_node);
     this->_node->add_sub_node(this->_waveforms->node());
@@ -33,7 +36,6 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
     this->_triangle_node->set_mesh(this->_triangle_mesh);
     this->_line_node->set_mesh(this->_line_mesh);
-    this->_line_node->set_rgb_color(ui::white_color());
 
     this->_set_rect_count(0);
 
@@ -56,6 +58,15 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
         .end()
         ->add_to(this->_pool);
+
+    standard->view_look()
+        ->observe_appearance([this](auto const &) {
+            auto const &color = this->_color;
+            this->_line_node->set_color(color->module_frame());
+            this->_triangle_node->set_color(color->module_bg());
+        })
+        .sync()
+        ->add_to(this->_pool);
 }
 
 std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id,
@@ -64,8 +75,9 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_i
     auto const location_pool = module_location_pool::make_shared();
     auto const modules_presenter = modules_presenter::make_shared(project_id, display_space, location_pool);
     auto const waveforms_presenter = module_waveforms_presenter::make_shared(project_id, location_pool);
-    auto const waveforms = ui_module_waveforms::make_shared(waveforms_presenter);
-    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, standard, waveforms});
+    auto const waveforms = ui_module_waveforms::make_shared(standard, waveforms_presenter);
+    auto const &color = app::global()->color();
+    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, standard, color, waveforms});
 }
 
 std::shared_ptr<ui::node> const &ui_modules::node() const {
@@ -138,24 +150,6 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     this->_triangle_index_data =
         ui::dynamic_mesh_index_data::make_shared(max_count * triangle_index2d_rect::vector_count);
     this->_line_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * line_index2d_rect::vector_count);
-
-    this->_vertex_data->write([&max_count](std::vector<ui::vertex2d_t> &vertices) {
-        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
-
-        auto rect_each = make_fast_each(max_count);
-        while (yas_each_next(rect_each)) {
-            auto const &rect_idx = yas_each_index(rect_each);
-            auto &vertex_rect = vertex_rects[rect_idx];
-
-            float const hue = float(rect_idx % 6) / 6.0f;
-            auto const color = ui::hsb_color(hue, 1.0f, 1.0f);
-
-            auto each = make_fast_each(vertex2d_rect::vector_count);
-            while (yas_each_next(each)) {
-                vertex_rect.v[yas_each_index(each)].color = to_float4(color, 0.3f);
-            }
-        }
-    });
 
     this->_triangle_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
         auto *index_rects = (triangle_index2d_rect *)indices.data();
