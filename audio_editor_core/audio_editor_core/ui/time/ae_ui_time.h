@@ -48,6 +48,7 @@ struct ui_time final {
     void _update_button_positions();
     std::optional<ui::region> _button_region(index_range const &) const;
     void _update_unit_states();
+    void _update_time_strings_attributes();
     void _update_nudge_position();
 };
 }  // namespace yas::ae
