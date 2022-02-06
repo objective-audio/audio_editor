@@ -13,7 +13,7 @@ ui::rgb_color ui_editing_root_utils::to_playing_line_color(playing_line_state_t 
             return ui::green_color();
         case playing_line_state_t::scrolling:
             return ui::orange_color();
-        case playing_line_state_t::nothing:
+        case playing_line_state_t::pausing:
             return ui::light_gray_color();
     }
 }
