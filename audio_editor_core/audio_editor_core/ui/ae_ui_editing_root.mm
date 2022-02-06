@@ -48,12 +48,6 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _track(track),
       _playing_line(ui::rect_plane::make_shared(1)),
       _time(time) {
-    standard->view_look()->background()->set_color(color->background());
-    this->_status_strings->rect_plane()->node()->set_color(color->debug_text());
-    this->_file_info_strings->rect_plane()->node()->set_color(color->debug_text());
-    this->_file_track_strings->rect_plane()->node()->set_color(color->debug_text());
-    this->_marker_pool_strings->rect_plane()->node()->set_color(color->debug_text());
-
     this->_file_info_strings->set_text(presenter->file_info_text());
 
     this->_setup_node_hierarchie();
@@ -137,6 +131,18 @@ void ui_editing_root::_setup_observing() {
             }
         })
         .end()
+        ->add_to(this->_pool);
+
+    this->_standard->view_look()
+        ->observe_appearance([this](auto const &) {
+            auto const &color = this->_color;
+            this->_standard->view_look()->background()->set_color(color->background());
+            this->_status_strings->rect_plane()->node()->set_color(color->debug_text());
+            this->_file_info_strings->rect_plane()->node()->set_color(color->debug_text());
+            this->_file_track_strings->rect_plane()->node()->set_color(color->debug_text());
+            this->_marker_pool_strings->rect_plane()->node()->set_color(color->debug_text());
+        })
+        .sync()
         ->add_to(this->_pool);
 }
 
