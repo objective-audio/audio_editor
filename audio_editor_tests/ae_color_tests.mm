@@ -30,6 +30,7 @@ using namespace yas::ae;
     XCTAssertNoThrow(color->time_unit_tracking());
     XCTAssertNoThrow(color->time_unit_selected());
     XCTAssertNoThrow(color->time_unit_selected_tracking());
+    XCTAssertNoThrow(color->debug_text());
 }
 
 @end

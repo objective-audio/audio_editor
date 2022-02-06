@@ -92,3 +92,7 @@ ui::color color::time_unit_selected() const {
 ui::color color::time_unit_selected_tracking() const {
     return to_color(@"time_unit_selected_tracking");
 }
+
+ui::color color::debug_text() const {
+    return to_color(@"debug_text");
+}

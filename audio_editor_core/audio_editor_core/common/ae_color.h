@@ -26,6 +26,8 @@ struct color final {
     ui::color time_unit_selected() const;
     ui::color time_unit_selected_tracking() const;
 
+    ui::color debug_text() const;
+
    private:
     color();
 };

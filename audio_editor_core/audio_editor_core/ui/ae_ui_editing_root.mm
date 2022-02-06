@@ -49,6 +49,10 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _playing_line(ui::rect_plane::make_shared(1)),
       _time(time) {
     standard->view_look()->background()->set_color(color->background());
+    this->_status_strings->rect_plane()->node()->set_color(color->debug_text());
+    this->_file_info_strings->rect_plane()->node()->set_color(color->debug_text());
+    this->_file_track_strings->rect_plane()->node()->set_color(color->debug_text());
+    this->_marker_pool_strings->rect_plane()->node()->set_color(color->debug_text());
 
     this->_file_info_strings->set_text(presenter->file_info_text());
 
