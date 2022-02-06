@@ -12,6 +12,7 @@ class module_location;
 class modules_presenter;
 class display_space;
 class ui_module_waveforms;
+class color;
 
 struct ui_modules final {
     std::shared_ptr<ui::node> const &node() const;
@@ -26,6 +27,7 @@ struct ui_modules final {
 
    private:
     std::shared_ptr<modules_presenter> const _presenter;
+    std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui_module_waveforms> const _waveforms;
     std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::node> const _triangle_node;
@@ -41,7 +43,7 @@ struct ui_modules final {
     observing::canceller_pool _pool;
 
     ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<ui::standard> const &,
-               std::shared_ptr<ui_module_waveforms> const &);
+               std::shared_ptr<ae::color> const &, std::shared_ptr<ui_module_waveforms> const &);
 
     void _remake_data_if_needed(std::size_t const);
     void _set_rect_count(std::size_t const);
