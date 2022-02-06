@@ -56,7 +56,7 @@ ui::color color::playing_line_playing() const {
 }
 
 ui::color color::playing_line_scroling() const {
-    return to_color(@"playing_line_playing");
+    return to_color(@"playing_line_scrolling");
 }
 
 ui::color color::module_frame() const {
