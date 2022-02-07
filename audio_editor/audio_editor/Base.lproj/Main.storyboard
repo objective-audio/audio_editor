@@ -354,38 +354,6 @@ DQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Navigate" id="ec1-Sv-uMZ">
                                     <items>
-                                        <menuItem title="Toggle Play" keyEquivalent=" " id="94p-dH-9Qg">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="togglePlay:" target="Ady-hI-5gd" id="UZ5-h4-67j"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="Qad-bp-2aF"/>
-                                        <menuItem title="Nudge Previous" id="XfT-aA-Bsv">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="nudgePrevious:" target="Ady-hI-5gd" id="GUc-aJ-Zd5"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Nudge Next" id="8Ov-Wa-tqQ">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="nudgeNext:" target="Ady-hI-5gd" id="HWB-JC-WGu"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Rotate Nudging Kind" keyEquivalent="r" id="m8e-vo-cnU">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="rotateNudgingKind:" target="Ady-hI-5gd" id="vPj-pv-Rbk"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Rotate Timing Fraction" keyEquivalent="f" id="LyT-0z-zfY">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="rotateTimingFraction:" target="Ady-hI-5gd" id="pij-o1-IQs"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="hlK-jh-3oq"/>
                                         <menuItem title="Jump Previous" keyEquivalent="" id="6gq-aS-lqI">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                             <connections>
