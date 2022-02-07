@@ -334,33 +334,6 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="smV-R6-mld"/>
-                                        <menuItem title="Drop Head and Offset" keyEquivalent="a" id="eb1-1v-ryf">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="dropHeadAndOffset:" target="Ady-hI-5gd" id="g3R-TU-kGk"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Split" keyEquivalent="s" id="9yX-fx-0lZ">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="split:" target="Ady-hI-5gd" id="PsJ-q9-KlF"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Drop Tail and Offset" keyEquivalent="d" id="QbC-Ih-FdR">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="dropTailAndOffset:" target="Ady-hI-5gd" id="OUc-s7-W9P"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Erase" id="97u-Db-E56">
-                                            <string key="keyEquivalent" base64-UTF8="YES">
-CA
-</string>
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="erase:" target="Ady-hI-5gd" id="osD-hX-GeG"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="Insert Marker" keyEquivalent="m" id="tZZ-Nw-iyd">
                                             <connections>
                                                 <action selector="insertMarker:" target="Ady-hI-5gd" id="WVW-KF-1ks"/>
@@ -381,38 +354,6 @@ DQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Navigate" id="ec1-Sv-uMZ">
                                     <items>
-                                        <menuItem title="Toggle Play" keyEquivalent=" " id="94p-dH-9Qg">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="togglePlay:" target="Ady-hI-5gd" id="UZ5-h4-67j"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="Qad-bp-2aF"/>
-                                        <menuItem title="Nudge Previous" id="XfT-aA-Bsv">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="nudgePrevious:" target="Ady-hI-5gd" id="GUc-aJ-Zd5"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Nudge Next" id="8Ov-Wa-tqQ">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="nudgeNext:" target="Ady-hI-5gd" id="HWB-JC-WGu"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Rotate Nudging Kind" keyEquivalent="r" id="m8e-vo-cnU">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="rotateNudgingKind:" target="Ady-hI-5gd" id="vPj-pv-Rbk"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Rotate Timing Fraction" keyEquivalent="f" id="LyT-0z-zfY">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="rotateTimingFraction:" target="Ady-hI-5gd" id="pij-o1-IQs"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="hlK-jh-3oq"/>
                                         <menuItem title="Jump Previous" keyEquivalent="" id="6gq-aS-lqI">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                             <connections>

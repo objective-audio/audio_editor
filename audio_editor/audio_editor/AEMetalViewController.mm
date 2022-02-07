@@ -55,36 +55,6 @@ using namespace yas::ae;
         ->add_to(self->_pool);
 }
 
-- (IBAction)togglePlay:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::toggle_play);
-    }
-}
-
-- (IBAction)nudgePrevious:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::nudge_previous);
-    }
-}
-
-- (IBAction)nudgeNext:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::nudge_next);
-    }
-}
-
-- (IBAction)rotateNudgingKind:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::rotate_nudging_next_unit);
-    }
-}
-
-- (IBAction)rotateTimingFraction:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::rotate_timing_fraction);
-    }
-}
-
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
         controller->handle_action(action_kind::jump_previous);
@@ -109,30 +79,6 @@ using namespace yas::ae;
     }
 }
 
-- (IBAction)dropHeadAndOffset:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::drop_head_and_offset);
-    }
-}
-
-- (IBAction)split:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::split);
-    }
-}
-
-- (IBAction)dropTailAndOffset:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::drop_tail_and_offset);
-    }
-}
-
-- (IBAction)erase:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::erase_and_offset);
-    }
-}
-
 - (IBAction)insertMarker:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
         controller->handle_action(action_kind::insert_marker);
@@ -142,60 +88,6 @@ using namespace yas::ae;
 - (IBAction)returnToZero:(NSMenuItem *)sender {
     if (auto const controller = self->_action_controller.lock()) {
         controller->handle_action(action_kind::return_to_zero);
-    }
-}
-
-- (IBAction)goToMarker1:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "0"});
-    }
-}
-
-- (IBAction)goToMarker2:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "1"});
-    }
-}
-
-- (IBAction)goToMarker3:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "2"});
-    }
-}
-
-- (IBAction)goToMarker4:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "3"});
-    }
-}
-
-- (IBAction)goToMarker5:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "4"});
-    }
-}
-
-- (IBAction)goToMarker6:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "5"});
-    }
-}
-
-- (IBAction)goToMarker7:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "6"});
-    }
-}
-
-- (IBAction)goToMarker8:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "7"});
-    }
-}
-
-- (IBAction)goToMarker9:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action({action_kind::go_to_marker, "8"});
     }
 }
 
@@ -246,17 +138,7 @@ using namespace yas::ae;
 }
 
 - (std::optional<action>)actionForSelector:(SEL)selector {
-    if (selector == @selector(togglePlay:)) {
-        return action_kind::toggle_play;
-    } else if (selector == @selector(nudgePrevious:)) {
-        return action_kind::nudge_previous;
-    } else if (selector == @selector(nudgeNext:)) {
-        return action_kind::nudge_next;
-    } else if (selector == @selector(rotateNudgingKind:)) {
-        return action_kind::rotate_nudging_next_unit;
-    } else if (selector == @selector(rotateTimingFraction:)) {
-        return action_kind::rotate_timing_fraction;
-    } else if (selector == @selector(jumpPrevious:)) {
+    if (selector == @selector(jumpPrevious:)) {
         return action_kind::jump_previous;
     } else if (selector == @selector(jumpNext:)) {
         return action_kind::jump_next;
@@ -264,36 +146,10 @@ using namespace yas::ae;
         return action_kind::jump_to_beginning;
     } else if (selector == @selector(jumpToEnd:)) {
         return action_kind::jump_to_end;
-    } else if (selector == @selector(dropHeadAndOffset:)) {
-        return action_kind::drop_head_and_offset;
-    } else if (selector == @selector(split:)) {
-        return action_kind::split;
-    } else if (selector == @selector(dropTailAndOffset:)) {
-        return action_kind::drop_tail_and_offset;
-    } else if (selector == @selector(erase:)) {
-        return action_kind::erase_and_offset;
     } else if (selector == @selector(insertMarker:)) {
         return action_kind::insert_marker;
     } else if (selector == @selector(returnToZero:)) {
         return action_kind::return_to_zero;
-    } else if (selector == @selector(goToMarker1:)) {
-        return action{action_kind::go_to_marker, "0"};
-    } else if (selector == @selector(goToMarker2:)) {
-        return action{action_kind::go_to_marker, "1"};
-    } else if (selector == @selector(goToMarker3:)) {
-        return action{action_kind::go_to_marker, "2"};
-    } else if (selector == @selector(goToMarker4:)) {
-        return action{action_kind::go_to_marker, "3"};
-    } else if (selector == @selector(goToMarker5:)) {
-        return action{action_kind::go_to_marker, "4"};
-    } else if (selector == @selector(goToMarker6:)) {
-        return action{action_kind::go_to_marker, "5"};
-    } else if (selector == @selector(goToMarker7:)) {
-        return action{action_kind::go_to_marker, "6"};
-    } else if (selector == @selector(goToMarker8:)) {
-        return action{action_kind::go_to_marker, "7"};
-    } else if (selector == @selector(goToMarker9:)) {
-        return action{action_kind::go_to_marker, "8"};
     } else if (selector == @selector(undo:)) {
         return action_kind::undo;
     } else if (selector == @selector(redo:)) {
