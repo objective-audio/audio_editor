@@ -334,33 +334,6 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="smV-R6-mld"/>
-                                        <menuItem title="Drop Head and Offset" keyEquivalent="a" id="eb1-1v-ryf">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="dropHeadAndOffset:" target="Ady-hI-5gd" id="g3R-TU-kGk"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Split" keyEquivalent="s" id="9yX-fx-0lZ">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="split:" target="Ady-hI-5gd" id="PsJ-q9-KlF"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Drop Tail and Offset" keyEquivalent="d" id="QbC-Ih-FdR">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="dropTailAndOffset:" target="Ady-hI-5gd" id="OUc-s7-W9P"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Erase" id="97u-Db-E56">
-                                            <string key="keyEquivalent" base64-UTF8="YES">
-CA
-</string>
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="erase:" target="Ady-hI-5gd" id="osD-hX-GeG"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="Insert Marker" keyEquivalent="m" id="tZZ-Nw-iyd">
                                             <connections>
                                                 <action selector="insertMarker:" target="Ady-hI-5gd" id="WVW-KF-1ks"/>
