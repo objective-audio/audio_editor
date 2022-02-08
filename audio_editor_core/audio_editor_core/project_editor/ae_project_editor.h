@@ -48,10 +48,13 @@ struct project_editor final : project_editor_for_project {
 
     [[nodiscard]] bool can_split() const override;
     void split();
+    void drop_head();
+    void drop_tail();
     void drop_head_and_offset();
     void drop_tail_and_offset();
 
     [[nodiscard]] bool can_erase() const override;
+    void erase();
     void erase_and_offset();
 
     [[nodiscard]] bool can_insert_marker() const override;

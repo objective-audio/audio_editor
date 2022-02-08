@@ -95,10 +95,10 @@ bool action_time_routing::responds_to_action(ae::action_kind const kind) {
         case action_kind::jump_next:
         case action_kind::jump_to_beginning:
         case action_kind::jump_to_end:
-        case action_kind::drop_head_and_offset:
+        case action_kind::drop_head:
         case action_kind::split:
-        case action_kind::drop_tail_and_offset:
-        case action_kind::erase_and_offset:
+        case action_kind::drop_tail:
+        case action_kind::erase:
         case action_kind::insert_marker:
         case action_kind::return_to_zero:
         case action_kind::go_to_marker:

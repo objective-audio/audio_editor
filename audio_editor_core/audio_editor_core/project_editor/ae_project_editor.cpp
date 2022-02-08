@@ -202,17 +202,17 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action_kind::jump_to_end:
                     this->jump_to_end();
                     break;
-                case action_kind::drop_head_and_offset:
-                    this->drop_head_and_offset();
+                case action_kind::drop_head:
+                    this->drop_head();
                     break;
                 case action_kind::split:
                     this->split();
                     break;
-                case action_kind::drop_tail_and_offset:
-                    this->drop_tail_and_offset();
+                case action_kind::drop_tail:
+                    this->drop_tail();
                     break;
-                case action_kind::erase_and_offset:
-                    this->erase_and_offset();
+                case action_kind::erase:
+                    this->erase();
                     break;
                 case action_kind::insert_marker:
                     this->insert_marker();
@@ -457,6 +457,28 @@ void project_editor::split() {
     });
 }
 
+void project_editor::drop_head() {
+    if (!this->can_split()) {
+        return;
+    }
+
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->drop_head_at(current_frame);
+    });
+}
+
+void project_editor::drop_tail() {
+    if (!this->can_split()) {
+        return;
+    }
+
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->drop_tail_at(current_frame);
+    });
+}
+
 void project_editor::drop_head_and_offset() {
     if (!this->can_split()) {
         return;
@@ -500,6 +522,17 @@ bool project_editor::can_erase() const {
 
     auto const current_frame = this->_player->current_frame();
     return this->_file_track->module_at(current_frame).has_value();
+}
+
+void project_editor::erase() {
+    if (!this->can_erase()) {
+        return;
+    }
+
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->erase_at(current_frame);
+    });
 }
 
 void project_editor::erase_and_offset() {

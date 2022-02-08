@@ -151,14 +151,14 @@ bool editing_root_presenter::responds_to_action(action const action) {
         case action_kind::jump_to_end:
             return editor->can_jump_to_end();
 
-        case action_kind::drop_head_and_offset:
+        case action_kind::drop_head:
             return editor->can_split();
         case action_kind::split:
             return editor->can_split();
-        case action_kind::drop_tail_and_offset:
+        case action_kind::drop_tail:
             return editor->can_split();
 
-        case action_kind::erase_and_offset:
+        case action_kind::erase:
             return editor->can_erase();
 
         case action_kind::insert_marker:
