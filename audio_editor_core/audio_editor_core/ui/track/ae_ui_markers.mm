@@ -3,6 +3,8 @@
 //
 
 #include "ae_ui_markers.h"
+#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_markers_presenter.h>
 
@@ -14,8 +16,9 @@ static std::size_t const reserving_interval = 10;
 }
 
 ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
-                       std::shared_ptr<ui::standard> const &standard)
+                       std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color)
     : _presenter(presenter),
+      _color(color),
       _root_node(ui::node::make_shared()),
       _vertex_data(ui::static_mesh_vertex_data::make_shared(3)),
       _index_data(ui::static_mesh_index_data::make_shared(3)) {
@@ -54,13 +57,25 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
         ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
         .end()
         ->add_to(this->_pool);
+
+    standard->view_look()
+        ->observe_appearance([this](auto const &) {
+            auto const &marker_color = this->_color->marker();
+
+            for (auto const &sub_node : this->_sub_nodes) {
+                sub_node->set_color(marker_color);
+            }
+        })
+        .sync()
+        ->add_to(this->_pool);
 }
 
 std::shared_ptr<ui_markers> ui_markers::make_shared(std::string const &project_id,
                                                     std::shared_ptr<ui::standard> const &standard,
                                                     std::shared_ptr<display_space> const &display_space) {
     auto const presenter = markers_presenter::make_shared(project_id, display_space);
-    return std::shared_ptr<ui_markers>(new ui_markers{presenter, standard});
+    auto const &color = ae::app::global()->color();
+    return std::shared_ptr<ui_markers>(new ui_markers{presenter, standard, color});
 }
 
 std::shared_ptr<ui::node> const &ui_markers::node() const {
@@ -107,6 +122,7 @@ void ui_markers::update_locations(std::size_t const count,
 }
 
 void ui_markers::_set_count(std::size_t const location_count) {
+    auto const &marker_color = this->_color->marker();
     auto const prev_node_count = this->_sub_nodes.size();
 
     if (prev_node_count < location_count) {
@@ -117,6 +133,7 @@ void ui_markers::_set_count(std::size_t const location_count) {
         while (yas_each_next(each)) {
             auto node = ui::node::make_shared();
             node->set_mesh(ui::mesh::make_shared({}, this->_vertex_data, this->_index_data, nullptr));
+            node->set_color(marker_color);
             node->set_is_enabled(false);
             this->_root_node->add_sub_node(node);
             this->_sub_nodes.emplace_back(std::move(node));
