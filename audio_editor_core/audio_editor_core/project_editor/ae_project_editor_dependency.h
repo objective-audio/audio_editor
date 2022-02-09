@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_db_pasting_subject.h>
 #include <audio_editor_core/ae_db_types.h>
+#include <audio_editor_core/ae_edge_editor_types.h>
 #include <audio_editor_core/ae_exporter_types.h>
 #include <audio_editor_core/ae_file_loader_types.h>
 #include <audio_editor_core/ae_file_module.h>
@@ -99,11 +100,22 @@ struct marker_pool_for_project_editor {
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) = 0;
 };
 
+struct edge_editor_for_project_editor {
+    ~edge_editor_for_project_editor() = default;
+
+    [[nodiscard]] virtual ae::edge const &edge() const = 0;
+    virtual void set_edge(ae::edge const &) = 0;
+    virtual void revert_edge(ae::edge const &) = 0;
+
+    [[nodiscard]] virtual observing::syncable observe_event(std::function<void(edge_editor_event const &)> &&) = 0;
+};
+
 struct database_for_project_editor {
     virtual ~database_for_project_editor() = default;
 
     [[nodiscard]] virtual db_modules_map const &modules() const = 0;
     [[nodiscard]] virtual db_markers_map const &markers() const = 0;
+    [[nodiscard]] virtual std::optional<db_edge> const &edge() const = 0;
     [[nodiscard]] virtual std::string const pasting_data() const = 0;
 
     virtual void add_module(file_module const &) = 0;
@@ -111,6 +123,7 @@ struct database_for_project_editor {
     virtual void set_pasting_data(std::string const &) = 0;
     virtual void add_marker(marker const &) = 0;
     virtual void remove_marker(frame_index_t const &) = 0;
+    virtual void set_edge(ae::edge const &) = 0;
 
     virtual void suspend_saving(std::function<void(void)> &&) = 0;
 

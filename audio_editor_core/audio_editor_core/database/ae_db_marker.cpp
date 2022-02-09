@@ -21,7 +21,7 @@ db_marker db_marker::create(db::manager_ptr const &manager, ae::marker const &ma
 }
 
 std::optional<marker> db_marker::marker() const {
-    if (auto const frame_value = this->_object->attribute_value(marker_name::attribute::frame)) {
+    if (auto const &frame_value = this->_object->attribute_value(marker_name::attribute::frame)) {
         return ae::marker{.frame = frame_value.get<db::integer>()};
     }
     return std::nullopt;

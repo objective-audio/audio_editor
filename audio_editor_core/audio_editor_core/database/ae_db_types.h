@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
+#include <audio_editor_core/ae_db_edge.h>
 #include <audio_editor_core/ae_db_marker.h>
 #include <audio_editor_core/ae_db_module.h>
 

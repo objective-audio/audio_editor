@@ -20,7 +20,7 @@ db_pasting_subject db_pasting_subject::create(db::manager_ptr const &manager, st
 }
 
 std::string db_pasting_subject::data() const {
-    if (auto const value = this->_object->attribute_value(pasting_subject_name::attribute::data)) {
+    if (auto const &value = this->_object->attribute_value(pasting_subject_name::attribute::data)) {
         return value.get<db::text>();
     } else {
         return "";

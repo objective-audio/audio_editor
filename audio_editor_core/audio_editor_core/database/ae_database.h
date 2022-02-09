@@ -24,6 +24,7 @@ struct database final : database_for_project_editor {
 
     [[nodiscard]] db_modules_map const &modules() const override;
     [[nodiscard]] db_markers_map const &markers() const override;
+    [[nodiscard]] std::optional<db_edge> const &edge() const override;
     [[nodiscard]] std::string const pasting_data() const override;
     [[nodiscard]] bool is_processing() const;
 
@@ -32,6 +33,7 @@ struct database final : database_for_project_editor {
     void set_pasting_data(std::string const &) override;
     void add_marker(marker const &) override;
     void remove_marker(frame_index_t const &) override;
+    void set_edge(ae::edge const &) override;
 
     void suspend_saving(std::function<void(void)> &&) override;
 
@@ -49,6 +51,7 @@ struct database final : database_for_project_editor {
     std::shared_ptr<db::manager> const _manager;
     db_modules_map _modules;
     db_markers_map _markers;
+    std::optional<db_edge> _edge;
     std::optional<db_pasting_subject> _pasting_subject = std::nullopt;
     delaying_caller _save_caller;
     observing::notifier_ptr<std::nullptr_t> const _reverted_notifier;

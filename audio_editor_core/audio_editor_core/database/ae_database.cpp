@@ -36,6 +36,10 @@ db_markers_map const &database::markers() const {
     return this->_markers;
 }
 
+std::optional<db_edge> const &database::edge() const {
+    return this->_edge;
+}
+
 std::string const database::pasting_data() const {
     if (auto const &subject = this->_pasting_subject) {
         return subject.value().data();
@@ -83,6 +87,16 @@ void database::remove_marker(frame_index_t const &frame) {
         this->_markers.erase(frame);
         this->_save();
     }
+}
+
+void database::set_edge(ae::edge const &edge) {
+    if (this->_edge.has_value()) {
+        this->_edge.value().set(edge);
+    } else {
+        this->_edge.emplace(db_edge::create(this->_manager, edge));
+    }
+
+    this->_save();
 }
 
 void database::suspend_saving(std::function<void(void)> &&handler) {
