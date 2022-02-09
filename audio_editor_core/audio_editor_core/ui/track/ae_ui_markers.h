@@ -10,6 +10,7 @@
 namespace yas::ae {
 class markers_presenter;
 class display_space;
+class color;
 
 struct ui_markers final {
     std::shared_ptr<ui::node> const &node() const;
@@ -23,6 +24,7 @@ struct ui_markers final {
 
    private:
     std::shared_ptr<markers_presenter> const _presenter;
+    std::shared_ptr<ae::color> const _color;
 
     ui::size _scale;
 
@@ -33,7 +35,8 @@ struct ui_markers final {
 
     observing::canceller_pool _pool;
 
-    ui_markers(std::shared_ptr<markers_presenter> const &, std::shared_ptr<ui::standard> const &);
+    ui_markers(std::shared_ptr<markers_presenter> const &, std::shared_ptr<ui::standard> const &,
+               std::shared_ptr<ae::color> const &);
 
     void _set_count(std::size_t const);
 };

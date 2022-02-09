@@ -71,6 +71,10 @@ ui::color color::waveform() const {
     return to_color(@"waveform");
 }
 
+ui::color color::marker() const {
+    return to_color(@"marker");
+}
+
 ui::color color::time_text() const {
     return to_color(@"time_text");
 }
