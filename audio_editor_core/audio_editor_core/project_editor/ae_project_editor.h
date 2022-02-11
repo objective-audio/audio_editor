@@ -122,10 +122,10 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
         std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
-        std::shared_ptr<pasteboard_for_project_editor> const &, std::shared_ptr<database_for_project_editor> const &,
-        std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<action_controller> const &,
-        std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &,
-        std::shared_ptr<timing_for_project_editor> const &,
+        std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
+        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
+        std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &,
+        std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
         std::shared_ptr<time_editor_maker_for_project_editor> const &);
 
    private:
@@ -134,6 +134,7 @@ struct project_editor final : project_editor_for_project {
     std::shared_ptr<player_for_project_editor> const _player;
     std::shared_ptr<file_track_for_project_editor> const _file_track;
     std::shared_ptr<marker_pool_for_project_editor> const _marker_pool;
+    std::shared_ptr<edge_editor_for_project_editor> const _edge_editor;
     std::shared_ptr<pasteboard_for_project_editor> const _pasteboard;
     std::shared_ptr<database_for_project_editor> const _database;
     std::shared_ptr<exporter_for_project_editor> const _exporter;
@@ -149,16 +150,14 @@ struct project_editor final : project_editor_for_project {
     observing::canceller_pool _pool;
     observing::cancellable_ptr _time_editing_canceller;
 
-    project_editor(url const &editing_file_url, ae::file_info const &,
-                   std::shared_ptr<player_for_project_editor> const &,
-                   std::shared_ptr<file_track_for_project_editor> const &,
-                   std::shared_ptr<marker_pool_for_project_editor> const &,
-                   std::shared_ptr<pasteboard_for_project_editor> const &,
-                   std::shared_ptr<database_for_project_editor> const &,
-                   std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<action_controller> const &,
-                   std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &,
-                   std::shared_ptr<timing_for_project_editor> const &,
-                   std::shared_ptr<time_editor_maker_for_project_editor> const &);
+    project_editor(
+        url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
+        std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
+        std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
+        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
+        std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &,
+        std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
+        std::shared_ptr<time_editor_maker_for_project_editor> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

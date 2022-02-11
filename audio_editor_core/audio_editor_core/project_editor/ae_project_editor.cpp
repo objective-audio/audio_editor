@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_action_router.h>
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_database.h>
+#include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_file_track.h>
@@ -24,6 +25,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<player_for_project_editor> const &player,
                                std::shared_ptr<file_track_for_project_editor> const &file_track,
                                std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
+                               std::shared_ptr<edge_editor_for_project_editor> const &edge_editor,
                                std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
                                std::shared_ptr<database_for_project_editor> const &database,
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
@@ -39,6 +41,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _timeline(proc::timeline::make_shared()),
       _track(proc::track::make_shared()),
       _marker_pool(marker_pool),
+      _edge_editor(edge_editor),
       _pasteboard(pasteboard),
       _database(database),
       _exporter(exporter),
@@ -125,6 +128,21 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         .sync()
         ->add_to(this->_pool);
 
+    this->_edge_editor
+        ->observe_event([this](edge_editor_event const &event) {
+            switch (event.type) {
+                case edge_editor_event_type::updated:
+                    this->_database->set_edge(event.edge);
+                    break;
+
+                case edge_editor_event_type::fetched:
+                case edge_editor_event_type::reverted:
+                    break;
+            }
+        })
+        .sync()
+        ->add_to(this->_pool);
+
     this->_pasteboard
         ->observe_event([this](pasteboard_event const &event) {
             switch (event) {
@@ -161,13 +179,24 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
 
             this->_marker_pool->revert_markers(std::move(markers));
 
+            if (auto const &db_edge = this->_database->edge()) {
+                this->_edge_editor->revert_edge(db_edge.value().edge());
+            } else {
+                this->_edge_editor->revert_edge(ae::edge::zero());
+            }
+
             this->_pasteboard->revert_data(this->_database->pasting_data());
         })
         .end()
         ->add_to(this->_pool);
 
-    this->_file_track->insert_module_and_notify(
-        file_module{.range = time::range{0, file_info.length}, .file_frame = 0});
+    // プロジェクトの初期状態を作る。事前にdbに直接挿入してrevertから始めるべきかもしれない。
+    this->_database->suspend_saving([this, &file_info] {
+        this->_file_track->insert_module_and_notify(
+            file_module{.range = time::range{0, file_info.length}, .file_frame = 0});
+
+        this->_edge_editor->set_edge({.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
+    });
 
     action_controller
         ->observe_action([this](action const &action) {
@@ -967,8 +996,9 @@ std::shared_ptr<project_editor> project_editor::make_shared(url const &editing_f
                                                             std::shared_ptr<nudging_for_project_editor> const &nudging,
                                                             std::shared_ptr<timing_for_project_editor> const &timing) {
     return make_shared(editing_file_url, file_info, player, file_track::make_shared(), marker_pool::make_shared(),
-                       pasteboard::make_shared(), database::make_shared(db_file_url), exporter::make_shared(),
-                       action_controller, dialog_presenter, nudging, timing, time_editor_maker::make_shared());
+                       edge_editor::make_shared(), pasteboard::make_shared(), database::make_shared(db_file_url),
+                       exporter::make_shared(), action_controller, dialog_presenter, nudging, timing,
+                       time_editor_maker::make_shared());
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(
@@ -976,6 +1006,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<player_for_project_editor> const &player,
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
+    std::shared_ptr<edge_editor_for_project_editor> const &edge_editor,
     std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
@@ -984,7 +1015,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<nudging_for_project_editor> const &nudging,
     std::shared_ptr<timing_for_project_editor> const &timing,
     std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker) {
-    return std::shared_ptr<project_editor>(
-        new project_editor{editing_file_url, file_info, player, file_track, marker_pool, pasteboard, database, exporter,
-                           action_controller, dialog_presenter, nudging, timing, time_editor_maker});
+    return std::shared_ptr<project_editor>(new project_editor{
+        editing_file_url, file_info, player, file_track, marker_pool, edge_editor, pasteboard, database, exporter,
+        action_controller, dialog_presenter, nudging, timing, time_editor_maker});
 }

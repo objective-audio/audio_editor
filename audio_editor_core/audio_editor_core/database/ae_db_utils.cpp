@@ -36,6 +36,17 @@ db::model database_utils::make_model() {
                                                   .not_null = true}},
                                   .relations = {}};
 
+    db::entity_args edge_entity{.name = edge_name::entity,
+                                .attributes = {{.name = edge_name::attribute::begin,
+                                                .type = db::attribute_type::integer,
+                                                .default_value = db::value{0},
+                                                .not_null = true},
+                                               {.name = edge_name::attribute::end,
+                                                .type = db::attribute_type::integer,
+                                                .default_value = db::value{0},
+                                                .not_null = true}},
+                                .relations = {}};
+
     db::entity_args pasting_subject_entity{.name = pasting_subject_name::entity,
                                            .attributes = {{.name = pasting_subject_name::attribute::data,
                                                            .type = db::attribute_type::text,
@@ -43,8 +54,8 @@ db::model database_utils::make_model() {
                                                            .not_null = true}},
                                            .relations = {}};
 
-    return db::model{db::model_args{
-        .version = std::move(version),
-        .entities = {std::move(module_entity), std::move(marker_entity), std::move(pasting_subject_entity)},
-        .indices = {}}};
+    return db::model{db::model_args{.version = std::move(version),
+                                    .entities = {std::move(module_entity), std::move(marker_entity),
+                                                 std::move(edge_entity), std::move(pasting_subject_entity)},
+                                    .indices = {}}};
 }

@@ -23,9 +23,9 @@ db_module db_module::create(db::manager_ptr const &manager, ae::file_module cons
 }
 
 std::optional<file_module> db_module::file_module() const {
-    auto const file_frame_value = this->_object->attribute_value(module_name::attribute::file_frame);
-    auto const range_frame_value = this->_object->attribute_value(module_name::attribute::range_frame);
-    auto const range_length_value = this->_object->attribute_value(module_name::attribute::range_length);
+    auto const &file_frame_value = this->_object->attribute_value(module_name::attribute::file_frame);
+    auto const &range_frame_value = this->_object->attribute_value(module_name::attribute::range_frame);
+    auto const &range_length_value = this->_object->attribute_value(module_name::attribute::range_length);
 
     if (file_frame_value && range_frame_value && range_length_value) {
         if (auto const range_length = static_cast<proc::length_t>(range_length_value.get<db::integer>());

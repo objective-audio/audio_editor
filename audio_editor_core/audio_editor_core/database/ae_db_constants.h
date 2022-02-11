@@ -25,6 +25,15 @@ namespace marker_name {
     }
 }  // namespace marker_name
 
+namespace edge_name {
+    static std::string const entity = "edge";
+
+    namespace attribute {
+        static std::string const begin = "begin";
+        static std::string const end = "end";
+    }  // namespace attribute
+}  // namespace edge_name
+
 namespace pasting_subject_name {
     static std::string const entity = "pasting_subject";
 
