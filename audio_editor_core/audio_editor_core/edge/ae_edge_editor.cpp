@@ -21,21 +21,35 @@ ae::edge const &edge_editor::edge() const {
 }
 
 void edge_editor::set_edge(ae::edge const &edge) {
-    if (this->_edge != edge) {
-        this->_edge = edge;
+    this->_set_edge_and_notify(edge, edge_editor_event_type::updated);
+}
 
-        this->_fetcher->push({.type = edge_editor_event_type::updated, .edge = this->_edge});
-    }
+void edge_editor::set_begin_frame(frame_index_t const begin_frame) {
+    this->_set_edge_and_notify({.begin_frame = begin_frame, .end_frame = std::max(begin_frame, this->_edge.end_frame)},
+                               edge_editor_event_type::updated);
+}
+
+void edge_editor::set_end_frame(frame_index_t const end_frame) {
+    this->_set_edge_and_notify({.begin_frame = std::min(end_frame, this->_edge.begin_frame), .end_frame = end_frame},
+                               edge_editor_event_type::updated);
 }
 
 void edge_editor::revert_edge(ae::edge const &edge) {
-    if (this->_edge != edge) {
-        this->_edge = edge;
-
-        this->_fetcher->push({.type = edge_editor_event_type::reverted, .edge = this->_edge});
-    }
+    this->_set_edge_and_notify(edge, edge_editor_event_type::reverted);
 }
 
 observing::syncable edge_editor::observe_event(std::function<void(edge_editor_event const &)> &&handler) {
     return this->_fetcher->observe(std::move(handler));
+}
+
+void edge_editor::_set_edge_and_notify(ae::edge const &edge, edge_editor_event_type const event_type) {
+    if (this->_edge != edge) {
+        if (edge.end_frame < edge.begin_frame) {
+            throw std::invalid_argument("invalid edge order.");
+        }
+
+        this->_edge = edge;
+
+        this->_fetcher->push({.type = event_type, .edge = this->_edge});
+    }
 }
