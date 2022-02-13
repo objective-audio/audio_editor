@@ -586,6 +586,10 @@ void project_editor::erase_and_offset() {
     }
 }
 
+ae::edge const &project_editor::edge() const {
+    return this->_edge_editor->edge();
+}
+
 bool project_editor::can_insert_marker() const {
     if (!this->_can_editing()) {
         return false;
@@ -968,6 +972,11 @@ observing::syncable project_editor::observe_file_track_event(std::function<void(
 observing::syncable project_editor::observe_marker_pool_event(
     std::function<void(marker_pool_event const &)> &&handler) {
     return this->_marker_pool->observe_event(std::move(handler));
+}
+
+observing::syncable project_editor::observe_edge_editor_event(
+    std::function<void(edge_editor_event const &)> &&handler) {
+    return this->_edge_editor->observe_event(std::move(handler));
 }
 
 observing::syncable project_editor::observe_nudging_unit_index(std::function<void(std::size_t const &)> &&handler) {

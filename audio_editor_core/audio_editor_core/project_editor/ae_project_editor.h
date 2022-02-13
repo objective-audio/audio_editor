@@ -57,6 +57,8 @@ struct project_editor final : project_editor_for_project {
     void erase();
     void erase_and_offset();
 
+    [[nodiscard]] ae::edge const &edge() const override;
+
     [[nodiscard]] bool can_insert_marker() const override;
     void insert_marker();
 
@@ -108,6 +110,8 @@ struct project_editor final : project_editor_for_project {
         std::function<void(file_track_event const &)> &&) override;
     [[nodiscard]] observing::syncable observe_marker_pool_event(
         std::function<void(marker_pool_event const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_edge_editor_event(
+        std::function<void(edge_editor_event const &)> &&) override;
     [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&) override;
     [[nodiscard]] observing::syncable observe_timing_fraction(
         std::function<void(ae::timing_fraction_kind const &)> &&) override;

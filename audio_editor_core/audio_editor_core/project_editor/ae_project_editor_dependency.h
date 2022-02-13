@@ -101,7 +101,7 @@ struct marker_pool_for_project_editor {
 };
 
 struct edge_editor_for_project_editor {
-    ~edge_editor_for_project_editor() = default;
+    virtual ~edge_editor_for_project_editor() = default;
 
     [[nodiscard]] virtual ae::edge const &edge() const = 0;
     virtual void set_edge(ae::edge const &) = 0;
