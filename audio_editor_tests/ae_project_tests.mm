@@ -155,6 +155,10 @@ struct project_editor_stub final : project_editor_for_project {
         return ae::empty_file_track_modules;
     }
 
+    ae::edge const &edge() const override {
+        return ae::edge::zero();
+    }
+
     observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override {
         return observing::syncable{};
     }
@@ -162,6 +166,9 @@ struct project_editor_stub final : project_editor_for_project {
         return observing::syncable{};
     }
     observing::syncable observe_marker_pool_event(std::function<void(marker_pool_event const &)> &&) override {
+        return observing::syncable{};
+    }
+    observing::syncable observe_edge_editor_event(std::function<void(edge_editor_event const &)> &&) override {
         return observing::syncable{};
     }
     observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&) override {

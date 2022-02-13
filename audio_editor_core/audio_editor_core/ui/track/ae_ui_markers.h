@@ -26,8 +26,6 @@ struct ui_markers final {
     std::shared_ptr<markers_presenter> const _presenter;
     std::shared_ptr<ae::color> const _color;
 
-    ui::size _scale;
-
     std::shared_ptr<ui::node> const _root_node;
     std::vector<std::shared_ptr<ui::node>> _sub_nodes;
     std::shared_ptr<ui::static_mesh_vertex_data> const _vertex_data;

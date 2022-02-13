@@ -44,6 +44,7 @@
 		B6A1237A27883B6000F31B31 /* ae_nudging_test_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6A1237927883B6000F31B31 /* ae_nudging_test_utils.cpp */; };
 		B6A1237C27883C4100F31B31 /* ae_timing_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A1237B27883C4100F31B31 /* ae_timing_tests.mm */; };
 		B6A1237E27887BF800F31B31 /* ae_scrolling_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A1237D27887BF800F31B31 /* ae_scrolling_tests.mm */; };
+		B6A93FDD27B8DDFD00E38A0F /* ae_edge_editor_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A93FDC27B8DDFD00E38A0F /* ae_edge_editor_tests.mm */; };
 		B6B563CB271BD5A00003ED60 /* ae_common_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6B563CA271BD5A00003ED60 /* ae_common_utils_tests.mm */; };
 		B6BEFE98267DD76B002B6894 /* ae_editing_root_presenter_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6BEFE97267DD76B002B6894 /* ae_editing_root_presenter_utils_tests.mm */; };
 		B6E77A80275090DF00B6521E /* ae_pasteboard_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6E77A7F275090DF00B6521E /* ae_pasteboard_tests.mm */; };
@@ -95,6 +96,7 @@
 		B6A1237927883B6000F31B31 /* ae_nudging_test_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudging_test_utils.cpp; sourceTree = "<group>"; };
 		B6A1237B27883C4100F31B31 /* ae_timing_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_timing_tests.mm; path = ../../audio_editor_tests/ae_timing_tests.mm; sourceTree = "<group>"; };
 		B6A1237D27887BF800F31B31 /* ae_scrolling_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_scrolling_tests.mm; path = ../../audio_editor_tests/ae_scrolling_tests.mm; sourceTree = "<group>"; };
+		B6A93FDC27B8DDFD00E38A0F /* ae_edge_editor_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_edge_editor_tests.mm; path = ../../audio_editor_tests/ae_edge_editor_tests.mm; sourceTree = "<group>"; };
 		B6B563CA271BD5A00003ED60 /* ae_common_utils_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_common_utils_tests.mm; path = ../../audio_editor_tests/ae_common_utils_tests.mm; sourceTree = "<group>"; };
 		B6BEFE97267DD76B002B6894 /* ae_editing_root_presenter_utils_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_editing_root_presenter_utils_tests.mm; path = ../../audio_editor_tests/ae_editing_root_presenter_utils_tests.mm; sourceTree = "<group>"; };
 		B6E77A7F275090DF00B6521E /* ae_pasteboard_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_pasteboard_tests.mm; path = ../../audio_editor_tests/ae_pasteboard_tests.mm; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				B666CE3C2634FEF300C1693D /* ae_uuid_generator_tests.mm */,
 				B66F5D6D27AE5D3700441616 /* ae_color_tests.mm */,
 				B6F4D98527B6465400AE7D5D /* ae_edge_tests.mm */,
+				B6A93FDC27B8DDFD00E38A0F /* ae_edge_editor_tests.mm */,
 				B66909F7262A7CD600E86353 /* Info.plist */,
 				B666CE412634FF3900C1693D /* utils */,
 			);
@@ -284,6 +287,7 @@
 				B6B563CB271BD5A00003ED60 /* ae_common_utils_tests.mm in Sources */,
 				B66909FF262A7D2F00E86353 /* ae_app_tests.mm in Sources */,
 				B6E77A80275090DF00B6521E /* ae_pasteboard_tests.mm in Sources */,
+				B6A93FDD27B8DDFD00E38A0F /* ae_edge_editor_tests.mm in Sources */,
 				B6EB503A279D0C08008C8389 /* ae_time_editor_utils_tests.mm in Sources */,
 				B69C68A52672615800C1083F /* ae_ui_layout_utils_tests.mm in Sources */,
 				B61E3242264ACD42000DB2B1 /* ae_file_module_utils_tests.mm in Sources */,

@@ -71,6 +71,10 @@ ui::color color::waveform() const {
     return to_color(@"waveform");
 }
 
+ui::color color::edge_line() const {
+    return to_color(@"edge_line");
+}
+
 ui::color color::marker() const {
     return to_color(@"marker");
 }

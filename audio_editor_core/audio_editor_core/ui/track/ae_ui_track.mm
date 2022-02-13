@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_track_presenter.h>
+#include <audio_editor_core/ae_ui_edge.h>
 #include <audio_editor_core/ae_ui_markers.h>
 #include <audio_editor_core/ae_ui_modules.h>
 #include <audio_editor_core/ae_ui_track_constants.h>
@@ -18,7 +19,8 @@ using namespace yas::ae;
 ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<display_space> const &display_space,
                    std::shared_ptr<track_presenter> const &presenter,
                    std::shared_ptr<scroll_gesture_controller> const &scroll_gesture_controller,
-                   std::shared_ptr<ui_modules> const &modules, std::shared_ptr<ui_markers> const &markers)
+                   std::shared_ptr<ui_modules> const &modules, std::shared_ptr<ui_edge> const &edge,
+                   std::shared_ptr<ui_markers> const &markers)
     : _standard(standard),
       _display_space(display_space),
       _presenter(presenter),
@@ -26,9 +28,11 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
       _root_node(ui::node::make_shared()),
       _time_node(ui::node::make_shared()),
       _modules(modules),
+      _edge(edge),
       _markers(markers) {
     this->_root_node->add_sub_node(this->_time_node);
     this->_time_node->add_sub_node(this->_modules->node());
+    this->_time_node->add_sub_node(this->_edge->node());
     this->_time_node->add_sub_node(this->_markers->node());
 
     standard->renderer()
@@ -85,9 +89,10 @@ std::shared_ptr<ui_track> ui_track::make_shared(std::shared_ptr<ui::standard> co
     auto const presenter = track_presenter::make_shared(project_id);
     auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id);
     auto const modules = ui_modules::make_shared(project_id, standard, display_space);
+    auto const edge = ui_edge::make_shared(project_id, standard, display_space);
     auto const markers = ui_markers::make_shared(project_id, standard, display_space);
     return std::shared_ptr<ui_track>(
-        new ui_track{standard, display_space, presenter, scroll_gestore_controller, modules, markers});
+        new ui_track{standard, display_space, presenter, scroll_gestore_controller, modules, edge, markers});
 }
 
 void ui_track::_update_scale() {

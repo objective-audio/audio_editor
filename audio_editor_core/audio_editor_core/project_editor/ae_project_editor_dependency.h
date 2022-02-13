@@ -101,10 +101,12 @@ struct marker_pool_for_project_editor {
 };
 
 struct edge_editor_for_project_editor {
-    ~edge_editor_for_project_editor() = default;
+    virtual ~edge_editor_for_project_editor() = default;
 
     [[nodiscard]] virtual ae::edge const &edge() const = 0;
     virtual void set_edge(ae::edge const &) = 0;
+    virtual void set_begin_frame(frame_index_t const) = 0;
+    virtual void set_end_frame(frame_index_t const) = 0;
     virtual void revert_edge(ae::edge const &) = 0;
 
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(edge_editor_event const &)> &&) = 0;

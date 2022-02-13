@@ -20,6 +20,8 @@ struct color final {
     ui::color module_bg() const;
     ui::color waveform() const;
 
+    ui::color edge_line() const;
+
     ui::color marker() const;
 
     ui::color time_text() const;

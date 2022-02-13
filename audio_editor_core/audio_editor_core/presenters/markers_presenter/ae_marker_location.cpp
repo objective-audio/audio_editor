@@ -11,12 +11,11 @@ marker_location marker_location::make_value(yas::identifier const &identifier, f
                                             uint32_t const sample_rate, ui::size const &scale) {
     double const position = static_cast<double>(frame) / static_cast<double>(sample_rate);
     return marker_location{.identifier = identifier,
-                           .x = static_cast<float>(position),
                            .point = {.x = static_cast<float>(position * scale.width), .y = scale.height * 0.5f}};
 }
 
 bool marker_location::operator==(marker_location const &rhs) const {
-    return this->identifier == rhs.identifier && this->point == rhs.point && this->x == rhs.x;
+    return this->identifier == rhs.identifier && this->point == rhs.point;
 }
 
 bool marker_location::operator!=(marker_location const &rhs) const {
