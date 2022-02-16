@@ -66,6 +66,8 @@ std::optional<ae::action> action_time_routing::to_action(ae::key const key) {
         case key::n:
         case key::shift_n:
         case key::t:
+        case key::left_bracket:
+        case key::right_bracket:
             return std::nullopt;
     }
 }
@@ -109,6 +111,8 @@ bool action_time_routing::responds_to_action(ae::action_kind const kind) {
         case action_kind::copy:
         case action_kind::paste:
         case action_kind::begin_time_editing:
+        case action_kind::set_begin_edge:
+        case action_kind::set_end_edge:
             return false;
     }
 }

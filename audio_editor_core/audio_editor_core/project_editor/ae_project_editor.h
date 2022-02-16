@@ -62,6 +62,11 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool can_insert_marker() const override;
     void insert_marker();
 
+    [[nodiscard]] bool can_set_begin_edge() const;
+    [[nodiscard]] bool can_set_end_edge() const;
+    void set_begin_edge();
+    void set_end_edge();
+
     [[nodiscard]] bool can_return_to_zero() const override;
     void return_to_zero();
 

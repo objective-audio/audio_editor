@@ -198,6 +198,8 @@ bool editing_root_presenter::responds_to_action(action const action) {
         case action_kind::change_time_sign_to_plus:
         case action_kind::change_time_sign_to_minus:
         case action_kind::select_time_unit:
+        case action_kind::set_begin_edge:
+        case action_kind::set_end_edge:
             return false;
     }
 }

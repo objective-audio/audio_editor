@@ -25,6 +25,8 @@ enum class key {
     ret,
     tab,
     shift_tab,
+    left_bracket,
+    right_bracket,
 
     num_0,
     num_1,
