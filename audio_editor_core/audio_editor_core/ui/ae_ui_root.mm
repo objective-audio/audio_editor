@@ -19,6 +19,11 @@ ui_root::ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::stand
     : _project_view_id(project_view_id),
       _standard(standard),
       _texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
+      _font_atlas_14(ui::font_atlas::make_shared(
+          {.font_name = "TrebuchetMS-Bold",
+           .font_size = 14.0f,
+           .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"},
+          _texture)),
       _display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
       _presenter(presenter),
       _pinch_gesture_controller(pinch_gesture_controller),
@@ -48,6 +53,10 @@ std::shared_ptr<ui::standard> const &ui_root::standard() const {
 
 std::shared_ptr<ui::texture> const &ui_root::texture() const {
     return this->_texture;
+}
+
+std::shared_ptr<ui::font_atlas> const &ui_root::font_atlas_14() const {
+    return this->_font_atlas_14;
 }
 
 std::shared_ptr<display_space> const &ui_root::display_space() const {

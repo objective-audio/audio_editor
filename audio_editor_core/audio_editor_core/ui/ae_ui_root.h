@@ -21,6 +21,7 @@ struct ui_root final {
 
     [[nodiscard]] std::shared_ptr<ui::standard> const &standard() const;
     [[nodiscard]] std::shared_ptr<ui::texture> const &texture() const;
+    [[nodiscard]] std::shared_ptr<ui::font_atlas> const &font_atlas_14() const;
     [[nodiscard]] std::shared_ptr<display_space> const &display_space() const;
 
     [[nodiscard]] bool responds_to_action(action const);
@@ -29,6 +30,7 @@ struct ui_root final {
     std::uintptr_t const _project_view_id;
     std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<ui::texture> const _texture;
+    std::shared_ptr<ui::font_atlas> const _font_atlas_14;
     std::shared_ptr<ae::display_space> const _display_space;
     std::shared_ptr<root_presenter> const _presenter;
     std::shared_ptr<pinch_gesture_controller> const _pinch_gesture_controller;

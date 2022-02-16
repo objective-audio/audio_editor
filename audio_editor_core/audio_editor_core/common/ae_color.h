@@ -21,6 +21,7 @@ struct color final {
     ui::color waveform() const;
 
     ui::color edge_line() const;
+    ui::color edge_text() const;
 
     ui::color marker() const;
 

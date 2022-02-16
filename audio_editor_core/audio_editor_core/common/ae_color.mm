@@ -75,6 +75,10 @@ ui::color color::edge_line() const {
     return to_color(@"edge_line");
 }
 
+ui::color color::edge_text() const {
+    return to_color(@"edge_text");
+}
+
 ui::color color::marker() const {
     return to_color(@"marker");
 }
