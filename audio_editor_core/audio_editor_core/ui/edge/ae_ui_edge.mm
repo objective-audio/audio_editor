@@ -6,15 +6,20 @@
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_edge_presenter.h>
+#include <audio_editor_core/ae_ui_pool.h>
+#include <audio_editor_core/ae_ui_root.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_edge> ui_edge::make_shared(std::string const &project_id,
-                                              std::shared_ptr<ui::standard> const &standard,
-                                              std::shared_ptr<display_space> const &display_space) {
+std::shared_ptr<ui_edge> ui_edge::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
+    auto const &app = app::global();
+    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &standard = ui_root->standard();
+    auto const &display_space = ui_root->display_space();
+
     auto const presenter = edge_presenter::make_shared(project_id, display_space);
-    auto const color = ae::app::global()->color();
+    auto const color = app->color();
     return std::shared_ptr<ui_edge>(new ui_edge{presenter, standard, color});
 }
 

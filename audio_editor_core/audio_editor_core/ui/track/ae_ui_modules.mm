@@ -11,12 +11,27 @@
 #include <audio_editor_core/ae_module_waveforms_presenter.h>
 #include <audio_editor_core/ae_modules_presenter.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
+#include <audio_editor_core/ae_ui_pool.h>
+#include <audio_editor_core/ae_ui_root.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::ui_modules_constants {
 static std::size_t const reserving_interval = 100;
+}
+
+std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
+    auto const &app = app::global();
+    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &standard = ui_root->standard();
+    auto const &display_space = ui_root->display_space();
+
+    auto const location_pool = module_location_pool::make_shared();
+    auto const modules_presenter = modules_presenter::make_shared(project_id, display_space, location_pool);
+    auto const waveforms = ui_module_waveforms::make_shared(project_id, project_view_id, location_pool);
+    auto const &color = app->color();
+    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, standard, color, waveforms});
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
@@ -67,17 +82,6 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id,
-                                                    std::shared_ptr<ui::standard> const &standard,
-                                                    std::shared_ptr<display_space> const &display_space) {
-    auto const location_pool = module_location_pool::make_shared();
-    auto const modules_presenter = modules_presenter::make_shared(project_id, display_space, location_pool);
-    auto const waveforms_presenter = module_waveforms_presenter::make_shared(project_id, location_pool);
-    auto const waveforms = ui_module_waveforms::make_shared(standard, waveforms_presenter);
-    auto const &color = app::global()->color();
-    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, standard, color, waveforms});
 }
 
 std::shared_ptr<ui::node> const &ui_modules::node() const {

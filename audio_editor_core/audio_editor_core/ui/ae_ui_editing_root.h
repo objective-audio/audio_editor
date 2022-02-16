@@ -21,8 +21,8 @@ class color;
 struct ui_editing_root final {
     bool responds_to_action(action const);
 
-    static std::shared_ptr<ui_editing_root> make_shared(std::shared_ptr<ui::standard> const &,
-                                                        std::string const &project_id);
+    [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(std::string const &project_id,
+                                                                      std::uintptr_t const project_view_id);
 
    private:
     std::shared_ptr<editing_root_presenter> const _presenter;

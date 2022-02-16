@@ -13,14 +13,14 @@ class display_space;
 class color;
 
 struct ui_markers final {
+    [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(std::string const &project_id,
+                                                                 uintptr_t const project_view_id);
+
     std::shared_ptr<ui::node> const &node() const;
 
     void set_locations(std::vector<std::optional<marker_location>> const &);
     void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, marker_location>> const &erased,
                           std::vector<std::pair<std::size_t, marker_location>> const &inserted);
-
-    static std::shared_ptr<ui_markers> make_shared(std::string const &project_id, std::shared_ptr<ui::standard> const &,
-                                                   std::shared_ptr<display_space> const &);
 
    private:
     std::shared_ptr<markers_presenter> const _presenter;

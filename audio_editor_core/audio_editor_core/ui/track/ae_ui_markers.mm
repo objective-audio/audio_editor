@@ -7,12 +7,25 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_markers_presenter.h>
+#include <audio_editor_core/ae_ui_pool.h>
+#include <audio_editor_core/ae_ui_root.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::ui_markers_constants {
 static std::size_t const reserving_interval = 10;
+}
+
+std::shared_ptr<ui_markers> ui_markers::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
+    auto const &app = app::global();
+    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &standard = ui_root->standard();
+    auto const &display_space = ui_root->display_space();
+
+    auto const presenter = markers_presenter::make_shared(project_id, display_space);
+    auto const &color = app->color();
+    return std::shared_ptr<ui_markers>(new ui_markers{presenter, standard, color});
 }
 
 ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
@@ -68,14 +81,6 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui_markers> ui_markers::make_shared(std::string const &project_id,
-                                                    std::shared_ptr<ui::standard> const &standard,
-                                                    std::shared_ptr<display_space> const &display_space) {
-    auto const presenter = markers_presenter::make_shared(project_id, display_space);
-    auto const &color = ae::app::global()->color();
-    return std::shared_ptr<ui_markers>(new ui_markers{presenter, standard, color});
 }
 
 std::shared_ptr<ui::node> const &ui_markers::node() const {

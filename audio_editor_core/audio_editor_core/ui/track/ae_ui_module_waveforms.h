@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_module_location_pool.h>
 #include <cpp_utils/yas_url.h>
 #include <ui/yas_ui_umbrella.h>
 
@@ -15,7 +16,7 @@ class color;
 
 struct ui_module_waveforms final {
     [[nodiscard]] static std::shared_ptr<ui_module_waveforms> make_shared(
-        std::shared_ptr<ui::standard> const &standard, std::shared_ptr<module_waveforms_presenter> const &);
+        std::string const &project_id, uintptr_t const project_view_id, std::shared_ptr<module_location_pool> const &);
 
     std::shared_ptr<ui::node> const &node();
 

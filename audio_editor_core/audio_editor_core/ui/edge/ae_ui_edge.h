@@ -13,8 +13,7 @@ class color;
 
 struct ui_edge final {
     [[nodiscard]] static std::shared_ptr<ui_edge> make_shared(std::string const &project_id,
-                                                              std::shared_ptr<ui::standard> const &,
-                                                              std::shared_ptr<display_space> const &);
+                                                              uintptr_t const project_view_id);
 
     std::shared_ptr<ui::node> const &node() const;
 
