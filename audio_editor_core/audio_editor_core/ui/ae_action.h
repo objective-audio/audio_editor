@@ -23,6 +23,8 @@ enum class action_kind {
     drop_tail,
     erase,
     insert_marker,
+    set_begin_edge,
+    set_end_edge,
     return_to_zero,
     go_to_marker,
     undo,

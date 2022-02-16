@@ -12,6 +12,8 @@ using namespace yas::ae;
 std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
                                           std::unordered_set<ae::modifier> const &modifiers) {
     static std::unordered_set<ae::modifier> const shift_modifiers{ae::modifier::shift};
+    static std::unordered_set<ae::modifier> const alternate_modifiers{ae::modifier::alternate};
+    static std::unordered_set<ae::modifier> const command_modifiers{ae::modifier::command};
     static std::unordered_set<ae::modifier> const function_and_numeric_modifiers{ae::modifier::function,
                                                                                  ae::modifier::numeric_pad};
 
@@ -68,6 +70,10 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::num_8;
         } else if (chara == "9") {
             return key::num_9;
+        } else if (chara == "[") {
+            return key::left_bracket;
+        } else if (chara == "]") {
+            return key::right_bracket;
         }
     }
 

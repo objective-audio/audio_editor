@@ -34,6 +34,10 @@ std::optional<ae::action> action_normal_routing::to_action(ae::key const key) {
             return action_kind::rotate_timing_fraction;
         case key::t:
             return action_kind::begin_time_editing;
+        case key::left_bracket:
+            return action_kind::set_begin_edge;
+        case key::right_bracket:
+            return action_kind::set_end_edge;
         case key::left:
             return action_kind::nudge_previous;
         case key::right:
@@ -88,6 +92,8 @@ bool action_normal_routing::responds_to_action(ae::action_kind const kind) {
         case action_kind::drop_tail:
         case action_kind::erase:
         case action_kind::insert_marker:
+        case action_kind::set_begin_edge:
+        case action_kind::set_end_edge:
         case action_kind::return_to_zero:
         case action_kind::go_to_marker:
         case action_kind::undo:

@@ -246,6 +246,12 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                 case action_kind::insert_marker:
                     this->insert_marker();
                     break;
+                case action_kind::set_begin_edge:
+                    this->set_begin_edge();
+                    break;
+                case action_kind::set_end_edge:
+                    this->set_end_edge();
+                    break;
                 case action_kind::return_to_zero:
                     this->return_to_zero();
                     break;
@@ -608,6 +614,46 @@ void project_editor::insert_marker() {
         auto const current_frame = this->_player->current_frame();
         this->_marker_pool->insert_marker(marker{.frame = current_frame});
     });
+}
+
+bool project_editor::can_set_begin_edge() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
+    auto const current_frame = this->_player->current_frame();
+    auto const begin_frame = this->_edge_editor->edge().begin_frame;
+
+    return current_frame != begin_frame;
+}
+
+bool project_editor::can_set_end_edge() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
+    auto const current_frame = this->_player->current_frame();
+    auto const end_frame = this->_edge_editor->edge().end_frame;
+
+    return current_frame != end_frame;
+}
+
+void project_editor::set_begin_edge() {
+    if (!this->can_set_begin_edge()) {
+        return;
+    }
+
+    auto const current_frame = this->_player->current_frame();
+    this->_edge_editor->set_begin_frame(current_frame);
+}
+
+void project_editor::set_end_edge() {
+    if (!this->can_set_end_edge()) {
+        return;
+    }
+
+    auto const current_frame = this->_player->current_frame();
+    this->_edge_editor->set_end_frame(current_frame);
 }
 
 bool project_editor::can_return_to_zero() const {
