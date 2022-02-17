@@ -12,9 +12,8 @@ class action_controller;
 class color;
 
 struct ui_time final {
-    [[nodiscard]] static std::shared_ptr<ui_time> make_shared(std::shared_ptr<ui::standard> const &,
-                                                              std::shared_ptr<ui::texture> const &,
-                                                              std::string const &project_id);
+    [[nodiscard]] static std::shared_ptr<ui_time> make_shared(std::string const &project_id,
+                                                              uintptr_t const project_view_id);
 
     std::shared_ptr<ui::layout_value_target> top_layout_target() const;
     std::shared_ptr<ui::node> const &node() const;

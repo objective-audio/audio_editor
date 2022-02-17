@@ -9,6 +9,8 @@
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_ui_pool.h>
+#include <audio_editor_core/ae_ui_root.h>
 #include <audio_editor_core/ae_waveform_mesh_importer.h>
 #include <cpp_utils/yas_fast_each.h>
 
@@ -16,8 +18,14 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
-    std::shared_ptr<ui::standard> const &standard, std::shared_ptr<module_waveforms_presenter> const &presenter) {
-    auto const &color = app::global()->color();
+    std::string const &project_id, uintptr_t const project_view_id,
+    std::shared_ptr<module_location_pool> const &location_pool) {
+    auto const &app = app::global();
+    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &standard = ui_root->standard();
+    auto const &color = app->color();
+    auto const presenter = module_waveforms_presenter::make_shared(project_id, location_pool);
+
     return std::shared_ptr<ui_module_waveforms>(new ui_module_waveforms{standard, color, presenter});
 }
 

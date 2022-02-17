@@ -15,10 +15,10 @@ class scroll_gesture_controller;
 class display_space;
 
 struct ui_track final {
-    std::shared_ptr<ui::node> const node() const;
+    [[nodiscard]] static std::shared_ptr<ui_track> make_shared(std::string const &project_id,
+                                                               uintptr_t const project_view_id);
 
-    [[nodiscard]] static std::shared_ptr<ui_track> make_shared(std::shared_ptr<ui::standard> const &,
-                                                               std::string const &project_id);
+    std::shared_ptr<ui::node> const node() const;
 
    private:
     std::shared_ptr<track_presenter> const _presenter;

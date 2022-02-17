@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_system_url.h>
+#include <audio_editor_core/ae_ui_pool.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
@@ -21,7 +22,8 @@ app::app()
       _system_url(system_url::make_shared()),
       _file_importer(file_importer::make_shared(this->_worker, static_cast<uint32_t>(worker_priority::file_importing))),
       _file_loader(file_loader::make_shared()),
-      _color(ae::color::make_shared()) {
+      _color(ae::color::make_shared()),
+      _ui_pool(ui_pool::make_shared()) {
     file_manager::remove_contents_in_directory(this->_system_url->app_directory().path());
     this->_worker->start();
 }
@@ -53,4 +55,8 @@ std::shared_ptr<file_loader> const &app::file_loader() const {
 
 std::shared_ptr<color> const &app::color() const {
     return this->_color;
+}
+
+std::shared_ptr<ui_pool> const &app::ui_pool() const {
+    return this->_ui_pool;
 }

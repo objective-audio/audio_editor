@@ -14,11 +14,29 @@
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_ui_editing_root_utils.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
+#include <audio_editor_core/ae_ui_pool.h>
+#include <audio_editor_core/ae_ui_root.h>
 #include <audio_editor_core/ae_ui_time.h>
 #include <audio_editor_core/ae_ui_track.h>
 
 using namespace yas;
 using namespace yas::ae;
+
+std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::string const &project_id,
+                                                              std::uintptr_t const project_view_id) {
+    auto const &app = app::global();
+    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &standard = ui_root->standard();
+    auto const &texture = ui_root->texture();
+    auto const presenter = editing_root_presenter::make_shared(project_id);
+    auto const &color = app->color();
+    auto const &action_controller = app->project_pool()->project_for_id(project_id)->action_controller();
+    auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
+    auto const ui_track = ui_track::make_shared(project_id, project_view_id);
+    auto const ui_time = ui_time::make_shared(project_id, project_view_id);
+    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, texture, color, presenter, action_controller,
+                                                                pinch_gesture_controller, ui_track, ui_time});
+}
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<ui::texture> const &texture, std::shared_ptr<ae::color> const &color,
@@ -230,18 +248,4 @@ void ui_editing_root::_setup_layout() {
                ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::shared_ptr<ui::standard> const &standard,
-                                                              std::string const &project_id) {
-    auto const texture = ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look());
-    auto const presenter = editing_root_presenter::make_shared(project_id);
-    auto const &app = app::global();
-    auto const &color = app->color();
-    auto const action_controller = app->project_pool()->project_for_id(project_id)->action_controller();
-    auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
-    auto const ui_track = ui_track::make_shared(standard, project_id);
-    auto const ui_time = ui_time::make_shared(standard, texture, project_id);
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, texture, color, presenter, action_controller,
-                                                                pinch_gesture_controller, ui_track, ui_time});
 }

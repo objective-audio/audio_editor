@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_ui_pool.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 
 using namespace yas;
@@ -17,16 +18,24 @@ using namespace yas::ae;
 @end
 
 @implementation AEMetalViewController {
-    std::shared_ptr<ui_root> _ui_root;
+    std::weak_ptr<ui_root> _ui_root;
     std::weak_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
+}
+
+- (std::uintptr_t)project_view_id {
+    return reinterpret_cast<std::uintptr_t>(self);
+}
+
+- (void)dealloc {
+    app::global()->ui_pool()->remove_ui_root_for_view_id(self.project_view_id);
 }
 
 - (void)setupWithProjectID:(std::string const &)project_id {
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
-    self->_ui_root = ui_root::make_shared(standard, project_id);
+    self->_ui_root = app::global()->ui_pool()->add_and_return_ui_root(standard, project_id, self.project_view_id);
 
     auto const &project = app::global()->project_pool()->project_for_id(project_id);
     self->_action_controller = project->action_controller();
@@ -131,10 +140,11 @@ using namespace yas::ae;
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     if (auto const action = [self actionForSelector:menuItem.action]) {
-        return self->_ui_root->responds_to_action(action.value());
-    } else {
-        return NO;
+        if (auto const ui_root = self->_ui_root.lock()) {
+            return ui_root->responds_to_action(action.value());
+        }
     }
+    return NO;
 }
 
 - (std::optional<action>)actionForSelector:(SEL)selector {
