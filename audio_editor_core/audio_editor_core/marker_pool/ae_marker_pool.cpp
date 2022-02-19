@@ -72,7 +72,7 @@ std::optional<marker> marker_pool::marker_at(std::size_t const idx) const {
     return iterator->second;
 }
 
-std::optional<frame_index_t> marker_pool::next_edge(frame_index_t const frame) const {
+std::optional<frame_index_t> marker_pool::next_jumpable_frame(frame_index_t const frame) const {
     auto const &markers = this->markers();
     auto upper_it = markers.upper_bound(frame);
     if (upper_it != markers.end()) {
@@ -81,7 +81,7 @@ std::optional<frame_index_t> marker_pool::next_edge(frame_index_t const frame) c
     return std::nullopt;
 }
 
-std::optional<frame_index_t> marker_pool::previous_edge(frame_index_t const frame) const {
+std::optional<frame_index_t> marker_pool::previous_jumpable_frame(frame_index_t const frame) const {
     auto const &markers = this->markers();
     for (auto it = markers.rbegin(); it != markers.rend(); ++it) {
         if (it->first < frame) {

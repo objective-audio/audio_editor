@@ -61,7 +61,7 @@ std::optional<file_module> file_track::last_module() const {
     return file_module_utils::last_module(this->_modules);
 }
 
-std::optional<frame_index_t> file_track::next_edge(frame_index_t const frame) const {
+std::optional<frame_index_t> file_track::next_jumpable_frame(frame_index_t const frame) const {
     if (auto const &module = this->module_at(frame); module.has_value()) {
         return module->range.next_frame();
     }
@@ -73,7 +73,7 @@ std::optional<frame_index_t> file_track::next_edge(frame_index_t const frame) co
     return std::nullopt;
 }
 
-std::optional<frame_index_t> file_track::previous_edge(frame_index_t const frame) const {
+std::optional<frame_index_t> file_track::previous_jumpable_frame(frame_index_t const frame) const {
     if (auto const &module = this->module_at(frame); module.has_value()) {
         if (module->range.frame < frame) {
             return module->range.frame;

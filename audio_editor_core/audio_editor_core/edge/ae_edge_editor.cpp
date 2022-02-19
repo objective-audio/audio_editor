@@ -38,6 +38,26 @@ void edge_editor::revert_edge(ae::edge const &edge) {
     this->_set_edge_and_notify(edge, edge_editor_event_type::reverted);
 }
 
+std::optional<frame_index_t> edge_editor::next_jumpable_frame(frame_index_t const frame) const {
+    if (frame < this->_edge.begin_frame) {
+        return this->_edge.begin_frame;
+    } else if (frame < this->_edge.end_frame) {
+        return this->_edge.end_frame;
+    } else {
+        return std::nullopt;
+    }
+}
+
+std::optional<frame_index_t> edge_editor::previous_jumpable_frame(frame_index_t const frame) const {
+    if (this->_edge.end_frame < frame) {
+        return this->_edge.end_frame;
+    } else if (this->_edge.begin_frame < frame) {
+        return this->_edge.begin_frame;
+    } else {
+        return std::nullopt;
+    }
+}
+
 observing::syncable edge_editor::observe_event(std::function<void(edge_editor_event const &)> &&handler) {
     return this->_fetcher->observe(std::move(handler));
 }
