@@ -27,19 +27,20 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::string const 
     auto const &app = app::global();
     auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
     auto const &standard = ui_root->standard();
-    auto const &texture = ui_root->texture();
+    auto const &font_atlas = ui_root->font_atlas_14();
     auto const presenter = editing_root_presenter::make_shared(project_id);
     auto const &color = app->color();
     auto const &action_controller = app->project_pool()->project_for_id(project_id)->action_controller();
     auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
     auto const ui_track = ui_track::make_shared(project_id, project_view_id);
     auto const ui_time = ui_time::make_shared(project_id, project_view_id);
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{standard, texture, color, presenter, action_controller,
-                                                                pinch_gesture_controller, ui_track, ui_time});
+    return std::shared_ptr<ui_editing_root>(new ui_editing_root{
+        standard, font_atlas, color, presenter, action_controller, pinch_gesture_controller, ui_track, ui_time});
 }
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
-                                 std::shared_ptr<ui::texture> const &texture, std::shared_ptr<ae::color> const &color,
+                                 std::shared_ptr<ui::font_atlas> const &font_atlas,
+                                 std::shared_ptr<ae::color> const &color,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
                                  std::shared_ptr<action_controller> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
@@ -50,11 +51,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _standard(standard),
       _color(color),
       _keyboard(ae::keyboard::make_shared(standard->event_manager())),
-      _font_atlas(ui::font_atlas::make_shared(
-          {.font_name = "TrebuchetMS-Bold",
-           .font_size = 14.0f,
-           .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"},
-          texture)),
+      _font_atlas(font_atlas),
       _status_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
       _file_info_strings(ui::strings::make_shared(

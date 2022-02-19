@@ -43,7 +43,7 @@ struct ui_editing_root final {
 
     observing::canceller_pool _pool;
 
-    ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::texture> const &texture,
+    ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &font_atlas,
                     std::shared_ptr<ae::color> const &, std::shared_ptr<editing_root_presenter> const &,
                     std::shared_ptr<action_controller> const &, std::shared_ptr<pinch_gesture_controller> const &,
                     std::shared_ptr<ui_track> const &, std::shared_ptr<ui_time> const &);
