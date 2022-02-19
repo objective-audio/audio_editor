@@ -173,8 +173,8 @@ struct project_editor final : project_editor_for_project {
     project_editor &operator=(project_editor const &) = delete;
     project_editor &operator=(project_editor &&) = delete;
 
-    [[nodiscard]] std::optional<frame_index_t> _previous_edge() const;
-    [[nodiscard]] std::optional<frame_index_t> _next_edge() const;
+    [[nodiscard]] std::optional<frame_index_t> _previous_jumpable_frame() const;
+    [[nodiscard]] std::optional<frame_index_t> _next_jumpable_frame() const;
     [[nodiscard]] std::optional<frame_index_t> _first_edge() const;
     [[nodiscard]] std::optional<frame_index_t> _last_edge() const;
     [[nodiscard]] bool _can_editing() const;

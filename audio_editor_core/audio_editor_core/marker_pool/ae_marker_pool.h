@@ -22,8 +22,8 @@ struct marker_pool final : marker_pool_for_project_editor {
     marker_map_t const &markers() const override;
     std::optional<marker> marker_at(std::size_t const) const override;
 
-    std::optional<frame_index_t> next_edge(frame_index_t const) const override;
-    std::optional<frame_index_t> previous_edge(frame_index_t const) const override;
+    [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
+    [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;
 
     observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) override;
 

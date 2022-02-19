@@ -18,6 +18,9 @@ struct edge_editor final : edge_editor_for_project_editor {
     void set_end_frame(frame_index_t const) override;
     void revert_edge(ae::edge const &) override;
 
+    [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
+    [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;
+
     [[nodiscard]] observing::syncable observe_event(std::function<void(edge_editor_event const &)> &&) override;
 
    private:
