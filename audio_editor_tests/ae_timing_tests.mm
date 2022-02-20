@@ -230,4 +230,33 @@ using namespace yas::ae;
     XCTAssertEqual(timing->frame(timing->components(76821058)), 76821000);
 }
 
+- (void)test_offset {
+    XCTAssertEqual(
+        timing_components::offset({.is_minus = false, .count = 1, .unit_index = 2, .fraction_unit_size = 10000}),
+        (timing_components{{.is_minus = false, .minutes = 1, .fraction_unit_size = 10000}}));
+    XCTAssertEqual(
+        timing_components::offset({.is_minus = false, .count = 10, .unit_index = 1, .fraction_unit_size = 10000}),
+        (timing_components{{.is_minus = false, .seconds = 10, .fraction_unit_size = 10000}}));
+    XCTAssertEqual(
+        timing_components::offset({.is_minus = false, .count = 100, .unit_index = 0, .fraction_unit_size = 10000}),
+        (timing_components{{.is_minus = false, .fraction = 100, .fraction_unit_size = 10000}}));
+
+    // マイナス
+    XCTAssertEqual(
+        timing_components::offset({.is_minus = true, .count = 1, .unit_index = 2, .fraction_unit_size = 10000}),
+        (timing_components{{.is_minus = true, .minutes = 1, .fraction_unit_size = 10000}}));
+    XCTAssertEqual(
+        timing_components::offset({.is_minus = true, .count = 10, .unit_index = 1, .fraction_unit_size = 10000}),
+        (timing_components{{.is_minus = true, .seconds = 10, .fraction_unit_size = 10000}}));
+    XCTAssertEqual(
+        timing_components::offset({.is_minus = true, .count = 100, .unit_index = 0, .fraction_unit_size = 10000}),
+        (timing_components{{.is_minus = true, .fraction = 100, .fraction_unit_size = 10000}}));
+
+    // 繰り上がり
+    XCTAssertEqual(
+        timing_components::offset({.is_minus = false, .count = 623456, .unit_index = 0, .fraction_unit_size = 10000}),
+        (timing_components{
+            {.is_minus = false, .minutes = 1, .seconds = 2, .fraction = 3456, .fraction_unit_size = 10000}}));
+}
+
 @end

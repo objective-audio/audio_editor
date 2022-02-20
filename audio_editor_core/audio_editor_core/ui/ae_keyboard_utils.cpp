@@ -16,6 +16,8 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
     static std::unordered_set<ae::modifier> const command_modifiers{ae::modifier::command};
     static std::unordered_set<ae::modifier> const function_and_numeric_modifiers{ae::modifier::function,
                                                                                  ae::modifier::numeric_pad};
+    static std::unordered_set<ae::modifier> const function_and_numeric_and_shift_modifiers{
+        ae::modifier::function, ae::modifier::numeric_pad, ae::modifier::shift};
 
     auto const &chara = event.characters();
     auto const lower_chara = to_lower(chara);
@@ -98,6 +100,14 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::down;
         } else if (key_code == 126) {
             return key::up;
+        }
+    }
+
+    if (modifiers == function_and_numeric_and_shift_modifiers) {
+        if (key_code == 123) {
+            return key::shift_left;
+        } else if (key_code == 124) {
+            return key::shift_right;
         }
     }
 

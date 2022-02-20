@@ -133,8 +133,9 @@ bool editing_root_presenter::responds_to_action(action const action) {
         case action_kind::toggle_play:
             return true;
         case action_kind::nudge_previous:
-            return editor->can_nudge();
         case action_kind::nudge_next:
+        case action_kind::nudge_previous_more:
+        case action_kind::nudge_next_more:
             return editor->can_nudge();
         case action_kind::rotate_nudging_next_unit:
         case action_kind::rotate_nudging_previous_unit:

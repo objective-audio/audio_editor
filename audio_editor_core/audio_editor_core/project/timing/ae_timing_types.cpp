@@ -4,6 +4,7 @@
 
 #include <audio_editor_core/ae_math.h>
 #include <audio_editor_core/ae_timing_types.h>
+#include <cpp_utils/yas_fast_each.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -81,6 +82,34 @@ bool timing_components::operator<(timing_components const &rhs) const {
 
 timing_components timing_components::adding(timing_components const &rhs) const {
     return {this->_components.adding(rhs._components)};
+}
+
+timing_components timing_components::offset(offset_args &&args) {
+    std::vector<number_components_unit> units{{.size = args.fraction_unit_size, .value = 0},
+                                              {.size = 60, .value = 0},
+                                              {.size = 60, .value = 0},
+                                              {.size = 100, .value = 0}};
+
+    uint32_t carry_over = 0;
+
+    auto each = make_fast_each(units.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto &unit = units.at(idx);
+
+        if (idx == args.unit_index) {
+            carry_over = args.count;
+        }
+
+        if (carry_over > 0) {
+            unit.value = carry_over % unit.size;
+            carry_over = carry_over / unit.size;
+        }
+    }
+
+    assert(carry_over == 0);
+
+    return timing_components{{args.is_minus, std::move(units)}};
 }
 
 std::size_t yas::to_index(timing_unit_kind const kind) {

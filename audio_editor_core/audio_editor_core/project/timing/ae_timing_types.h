@@ -51,6 +51,15 @@ struct timing_components {
 
     [[nodiscard]] timing_components adding(timing_components const &) const;
 
+    struct offset_args {
+        bool is_minus;
+        uint32_t count;
+        std::size_t unit_index;
+        std::size_t fraction_unit_size;
+    };
+
+    [[nodiscard]] static timing_components offset(offset_args &&args);
+
    private:
     number_components _components;
 };
