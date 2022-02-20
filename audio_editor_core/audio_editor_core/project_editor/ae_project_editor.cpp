@@ -743,11 +743,16 @@ bool project_editor::can_export_to_file() const {
         return false;
     }
 
-    return this->_file_track->modules().size() > 0;
+    return this->_edge_editor->edge().range().has_value();
 }
 
 void project_editor::export_to_file(url const &export_url) {
     if (!this->can_export_to_file()) {
+        return;
+    }
+
+    auto const range = this->_edge_editor->edge().range();
+    if (!range.has_value()) {
         return;
     }
 
@@ -756,7 +761,8 @@ void project_editor::export_to_file(url const &export_url) {
     exporting_format const format{.sample_rate = this->_file_info.sample_rate,
                                   .pcm_format = audio::pcm_format::float32,
                                   .channel_count = this->_file_info.channel_count};
-    this->_exporter->begin(export_url, this->_timeline, format);
+
+    this->_exporter->begin(export_url, this->_timeline, format, range.value());
 }
 
 bool project_editor::can_cut() const {

@@ -142,7 +142,8 @@ struct database_for_project_editor {
 struct exporter_for_project_editor {
     virtual ~exporter_for_project_editor() = default;
 
-    virtual void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &) = 0;
+    virtual void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &,
+                       time::range const &) = 0;
     [[nodiscard]] virtual bool is_exporting() const = 0;
     [[nodiscard]] virtual observing::syncable observe_is_exporting(std::function<void(bool const &)> &&) = 0;
 };

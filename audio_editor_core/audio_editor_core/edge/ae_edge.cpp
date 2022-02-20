@@ -15,6 +15,14 @@ bool edge::operator!=(edge const &rhs) const {
     return !(*this == rhs);
 }
 
+std::optional<time::range> edge::range() const {
+    if (this->begin_frame < this->end_frame) {
+        return time::range{this->begin_frame, static_cast<length_t>(this->end_frame - this->begin_frame)};
+    } else {
+        return std::nullopt;
+    }
+}
+
 edge const &edge::zero() {
     static edge const zero_value{.begin_frame = 0, .end_frame = 0};
     return zero_value;

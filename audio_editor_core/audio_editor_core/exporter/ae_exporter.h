@@ -11,7 +11,8 @@ namespace yas::ae {
 struct exporter final : exporter_for_project_editor {
     [[nodiscard]] static std::shared_ptr<exporter> make_shared();
 
-    void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &) override;
+    void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &,
+               time::range const &) override;
 
     [[nodiscard]] bool is_exporting() const override;
     [[nodiscard]] observing::syncable observe_is_exporting(std::function<void(bool const &)> &&) override;

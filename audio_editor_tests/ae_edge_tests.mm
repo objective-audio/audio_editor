@@ -32,6 +32,14 @@ using namespace yas::ae;
     XCTAssertTrue(value1a != value3);
 }
 
+- (void)test_range {
+    XCTAssertEqual((edge{.begin_frame = 0, .end_frame = 1}.range()), (time::range{0, 1}));
+    XCTAssertEqual((edge{.begin_frame = 1, .end_frame = 3}.range()), (time::range{1, 2}));
+
+    XCTAssertFalse((edge{.begin_frame = 2, .end_frame = 2}.range().has_value()));
+    XCTAssertFalse((edge{.begin_frame = 2, .end_frame = 1}.range().has_value()));
+}
+
 - (void)test_zero {
     auto const zero = edge::zero();
 

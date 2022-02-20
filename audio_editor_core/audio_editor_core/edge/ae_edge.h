@@ -16,6 +16,8 @@ struct edge final {
     bool operator==(edge const &) const;
     bool operator!=(edge const &) const;
 
+    std::optional<time::range> range() const;
+
     [[nodiscard]] static edge const &zero();
 };
 }  // namespace yas::ae
