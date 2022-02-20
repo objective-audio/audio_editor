@@ -6,7 +6,7 @@
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_edge_presenter.h>
-#include <audio_editor_core/ae_ui_edge.h>
+#include <audio_editor_core/ae_ui_edge_element.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_pool.h>
 #include <audio_editor_core/ae_ui_root.h>
@@ -36,18 +36,19 @@ std::shared_ptr<ui_edges> ui_edges::make_shared(std::string const &project_id, u
         indices.at(1) = 1;
     });
 
-    ui_edge::args const args{.line_vertex_data = vertex_data, .line_index_data = index_data, .top_guide = top_guide};
+    ui_edge_element::args const args{
+        .line_vertex_data = vertex_data, .line_index_data = index_data, .top_guide = top_guide};
 
-    auto const begin_edge = ui_edge::make_shared("BEGIN", args, project_view_id);
-    auto const end_edge = ui_edge::make_shared("END", args, project_view_id);
+    auto const begin_edge = ui_edge_element::make_shared("BEGIN", args, project_view_id);
+    auto const end_edge = ui_edge_element::make_shared("END", args, project_view_id);
 
     auto const presenter = edge_presenter::make_shared(project_id, display_space);
     return std::shared_ptr<ui_edges>(new ui_edges{presenter, standard, top_guide, begin_edge, end_edge});
 }
 
 ui_edges::ui_edges(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui::standard> const &standard,
-                   std::shared_ptr<ui::layout_value_guide> const &top_guide, std::shared_ptr<ui_edge> const &begin_edge,
-                   std::shared_ptr<ui_edge> const &end_edge)
+                   std::shared_ptr<ui::layout_value_guide> const &top_guide,
+                   std::shared_ptr<ui_edge_element> const &begin_edge, std::shared_ptr<ui_edge_element> const &end_edge)
     : _presenter(presenter),
       _top_guide(top_guide),
       _node(ui::node::make_shared()),

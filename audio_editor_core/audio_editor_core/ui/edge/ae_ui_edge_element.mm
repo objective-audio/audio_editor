@@ -1,8 +1,8 @@
 //
-//  ae_ui_edge.mm
+//  ae_ui_edge_element.mm
 //
 
-#include "ae_ui_edge.h"
+#include "ae_ui_edge_element.h"
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_pool.h>
@@ -11,20 +11,20 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_edge> ui_edge::make_shared(std::string const &text, args const &args,
-                                              uintptr_t const project_view_id) {
+std::shared_ptr<ui_edge_element> ui_edge_element::make_shared(std::string const &text, args const &args,
+                                                              uintptr_t const project_view_id) {
     auto const &app = app::global();
     auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
     auto const &standard = ui_root->standard();
     auto const &font_atlas = ui_root->font_atlas_14();
     auto const &color = app->color();
 
-    return std::shared_ptr<ui_edge>(new ui_edge{text, standard, font_atlas, color, args});
+    return std::shared_ptr<ui_edge_element>(new ui_edge_element{text, standard, font_atlas, color, args});
 }
 
-ui_edge::ui_edge(std::string const &text, std::shared_ptr<ui::standard> const &standard,
-                 std::shared_ptr<ui::font_atlas> const &font_atlas, std::shared_ptr<ae::color> const &color,
-                 args const &args)
+ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::standard> const &standard,
+                                 std::shared_ptr<ui::font_atlas> const &font_atlas,
+                                 std::shared_ptr<ae::color> const &color, args const &args)
     : _mesh(ui::mesh::make_shared()),
       _node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
@@ -60,6 +60,6 @@ ui_edge::ui_edge(std::string const &text, std::shared_ptr<ui::standard> const &s
         ->add_to(this->_pool);
 }
 
-std::shared_ptr<ui::node> const &ui_edge::node() const {
+std::shared_ptr<ui::node> const &ui_edge_element::node() const {
     return this->_node;
 }

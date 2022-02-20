@@ -1,5 +1,5 @@
 //
-//  ae_ui_edge.h
+//  ae_ui_edge_element.h
 //
 
 #pragma once
@@ -9,15 +9,15 @@
 namespace yas::ae {
 class color;
 
-struct ui_edge final {
+struct ui_edge_element final {
     struct args final {
         std::shared_ptr<ui::static_mesh_vertex_data> const &line_vertex_data;
         std::shared_ptr<ui::static_mesh_index_data> const &line_index_data;
         std::shared_ptr<ui::layout_value_guide> const &top_guide;
     };
 
-    [[nodiscard]] static std::shared_ptr<ui_edge> make_shared(std::string const &text, args const &args,
-                                                              uintptr_t const project_view_id);
+    [[nodiscard]] static std::shared_ptr<ui_edge_element> make_shared(std::string const &text, args const &args,
+                                                                      uintptr_t const project_view_id);
 
     [[nodiscard]] std::shared_ptr<ui::node> const &node() const;
 
@@ -30,7 +30,7 @@ struct ui_edge final {
 
     observing::canceller_pool _pool;
 
-    ui_edge(std::string const &text, std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &,
-            std::shared_ptr<ae::color> const &, args const &args);
+    ui_edge_element(std::string const &text, std::shared_ptr<ui::standard> const &,
+                    std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ae::color> const &, args const &args);
 };
 }  // namespace yas::ae
