@@ -42,6 +42,10 @@ std::optional<ae::action> action_normal_routing::to_action(ae::key const key) {
             return action_kind::nudge_previous;
         case key::right:
             return action_kind::nudge_next;
+        case key::shift_left:
+            return action_kind::nudge_previous_more;
+        case key::shift_right:
+            return action_kind::nudge_next_more;
         case key::num_0:
             return action_kind::return_to_zero;
         case key::num_1:
@@ -80,6 +84,8 @@ bool action_normal_routing::responds_to_action(ae::action_kind const kind) {
         case action_kind::toggle_play:
         case action_kind::nudge_previous:
         case action_kind::nudge_next:
+        case action_kind::nudge_previous_more:
+        case action_kind::nudge_next_more:
         case action_kind::rotate_nudging_next_unit:
         case action_kind::rotate_nudging_previous_unit:
         case action_kind::rotate_timing_fraction:

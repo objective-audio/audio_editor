@@ -205,10 +205,16 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     this->set_playing(!this->is_playing());
                     break;
                 case action_kind::nudge_previous:
-                    this->nudge_previous();
+                    this->nudge_previous(1);
                     break;
                 case action_kind::nudge_next:
-                    this->nudge_next();
+                    this->nudge_next(1);
+                    break;
+                case action_kind::nudge_previous_more:
+                    this->nudge_previous(10);
+                    break;
+                case action_kind::nudge_next_more:
+                    this->nudge_next(10);
                     break;
                 case action_kind::rotate_nudging_next_unit:
                     this->rotate_nudging_next_unit();
@@ -371,23 +377,23 @@ bool project_editor::can_nudge() const {
     return !this->_player->is_playing();
 }
 
-void project_editor::nudge_previous() {
+void project_editor::nudge_previous(uint32_t const offset_count) {
     if (!this->can_nudge()) {
         return;
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    frame_index_t const prev_frame = this->_nudging->previous_frame(current_frame);
+    frame_index_t const prev_frame = this->_nudging->previous_frame(current_frame, offset_count);
     this->_player->seek(prev_frame);
 }
 
-void project_editor::nudge_next() {
+void project_editor::nudge_next(uint32_t const offset_count) {
     if (!this->can_nudge()) {
         return;
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    frame_index_t const next_frame = this->_nudging->next_frame(current_frame);
+    frame_index_t const next_frame = this->_nudging->next_frame(current_frame, offset_count);
     this->_player->seek(next_frame);
 }
 

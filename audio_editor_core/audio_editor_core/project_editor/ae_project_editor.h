@@ -28,8 +28,8 @@ struct project_editor final : project_editor_for_project {
     [[nodiscard]] bool is_scrolling() const override;
 
     [[nodiscard]] bool can_nudge() const override;
-    void nudge_previous();
-    void nudge_next();
+    void nudge_previous(uint32_t const offset_count);
+    void nudge_next(uint32_t const offset_count);
     [[nodiscard]] std::size_t nudging_unit_index() const override;
     void rotate_nudging_next_unit();
     void rotate_nudging_previous_unit();

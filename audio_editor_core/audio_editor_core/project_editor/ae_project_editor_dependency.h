@@ -167,8 +167,10 @@ struct nudging_for_project_editor {
     [[nodiscard]] virtual std::size_t unit_index() const = 0;
     [[nodiscard]] virtual observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&) = 0;
 
-    [[nodiscard]] virtual frame_index_t next_frame(frame_index_t const) const = 0;
-    [[nodiscard]] virtual frame_index_t previous_frame(frame_index_t const) const = 0;
+    [[nodiscard]] virtual frame_index_t next_frame(frame_index_t const current_frame,
+                                                   uint32_t const offset_count) const = 0;
+    [[nodiscard]] virtual frame_index_t previous_frame(frame_index_t const current_frame,
+                                                       uint32_t const offset_count) const = 0;
 };
 
 struct timing_for_project_editor : timing_for_nudging, timing_for_time_presenter {
