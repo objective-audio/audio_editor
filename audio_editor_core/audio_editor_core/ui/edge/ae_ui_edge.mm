@@ -5,56 +5,66 @@
 #include "ae_ui_edge.h"
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_color.h>
+#include <audio_editor_core/ae_edge_presenter.h>
+#include <audio_editor_core/ae_ui_edge_element.h>
+#include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_pool.h>
 #include <audio_editor_core/ae_ui_root.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_edge> ui_edge::make_shared(std::string const &text, args const &args,
-                                              uintptr_t const project_view_id) {
+std::shared_ptr<ui_edge> ui_edge::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
     auto const &app = app::global();
     auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
     auto const &standard = ui_root->standard();
-    auto const &font_atlas = ui_root->font_atlas_14();
-    auto const &color = app->color();
+    auto const &display_space = ui_root->display_space();
+    auto const color = app->color();
 
-    return std::shared_ptr<ui_edge>(new ui_edge{text, standard, font_atlas, color, args});
+    auto const top_guide = ui::layout_value_guide::make_shared();
+
+    auto const vertex_data = ui::static_mesh_vertex_data::make_shared(2);
+    auto const index_data = ui::static_mesh_index_data::make_shared(2);
+
+    vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
+        vertices.at(0).position = {0.0f, -0.5f};
+        vertices.at(1).position = {0.0f, 0.5f};
+    });
+
+    index_data->write_once([](std::vector<ui::index2d_t> &indices) {
+        indices.at(0) = 0;
+        indices.at(1) = 1;
+    });
+
+    ui_edge_element::args const args{
+        .line_vertex_data = vertex_data, .line_index_data = index_data, .top_guide = top_guide};
+
+    auto const begin_edge = ui_edge_element::make_shared("BEGIN", args, project_view_id);
+    auto const end_edge = ui_edge_element::make_shared("END", args, project_view_id);
+
+    auto const presenter = edge_presenter::make_shared(project_id, display_space);
+    return std::shared_ptr<ui_edge>(new ui_edge{presenter, standard, top_guide, begin_edge, end_edge});
 }
 
-ui_edge::ui_edge(std::string const &text, std::shared_ptr<ui::standard> const &standard,
-                 std::shared_ptr<ui::font_atlas> const &font_atlas, std::shared_ptr<ae::color> const &color,
-                 args const &args)
-    : _mesh(ui::mesh::make_shared()),
+ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui::standard> const &standard,
+                 std::shared_ptr<ui::layout_value_guide> const &top_guide,
+                 std::shared_ptr<ui_edge_element> const &begin_edge, std::shared_ptr<ui_edge_element> const &end_edge)
+    : _presenter(presenter),
+      _top_guide(top_guide),
       _node(ui::node::make_shared()),
-      _line_node(ui::node::make_shared()),
-      _text(ui::strings::make_shared({.text = text}, font_atlas)),
-      _color(color) {
-    this->_mesh->set_vertex_data(args.line_vertex_data);
-    this->_mesh->set_index_data(args.line_index_data);
-    this->_mesh->set_primitive_type(ui::primitive_type::line);
-    this->_line_node->set_mesh(this->_mesh);
+      _begin_edge(begin_edge),
+      _end_edge(end_edge) {
+    this->_node->add_sub_node(this->_begin_edge->node());
+    this->_node->add_sub_node(this->_end_edge->node());
 
-    this->_text->rect_plane()->node()->set_position({2.0f, 0.0f});
-
-    this->_node->add_sub_node(this->_line_node);
-    this->_node->add_sub_node(this->_text->rect_plane()->node());
-
-    this->_text->rect_plane()->node()->attach_y_layout_guide(*args.top_guide);
-
-    standard->view_look()
-        ->view_layout_guide()
-        ->observe([this](ui::region const &region) {
-            ui::size const scale{.width = 1.0f, .height = region.size.height};
-            this->_line_node->set_scale(scale);
-        })
+    ui::layout(standard->view_look()->view_layout_guide()->top(), this->_top_guide, ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
 
-    standard->view_look()
-        ->observe_appearance([this](auto const &) {
-            this->_line_node->set_color(this->_color->edge_line());
-            this->_text->rect_plane()->node()->set_color(this->_color->edge_text());
+    this->_presenter
+        ->observe_locations([this](edge_locations const &locations) {
+            this->_begin_edge->node()->set_position({.x = locations.begin.x, .y = 0.0f});
+            this->_end_edge->node()->set_position({.x = locations.end.x, .y = 0.0f});
         })
         .sync()
         ->add_to(this->_pool);
