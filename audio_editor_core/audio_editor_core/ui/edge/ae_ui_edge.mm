@@ -1,8 +1,8 @@
 //
-//  ae_ui_edges.mm
+//  ae_ui_edge.mm
 //
 
-#include "ae_ui_edges.h"
+#include "ae_ui_edge.h"
 #include <audio_editor_core/ae_app.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_edge_presenter.h>
@@ -14,7 +14,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_edges> ui_edges::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
+std::shared_ptr<ui_edge> ui_edge::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
     auto const &app = app::global();
     auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
     auto const &standard = ui_root->standard();
@@ -43,12 +43,12 @@ std::shared_ptr<ui_edges> ui_edges::make_shared(std::string const &project_id, u
     auto const end_edge = ui_edge_element::make_shared("END", args, project_view_id);
 
     auto const presenter = edge_presenter::make_shared(project_id, display_space);
-    return std::shared_ptr<ui_edges>(new ui_edges{presenter, standard, top_guide, begin_edge, end_edge});
+    return std::shared_ptr<ui_edge>(new ui_edge{presenter, standard, top_guide, begin_edge, end_edge});
 }
 
-ui_edges::ui_edges(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui::standard> const &standard,
-                   std::shared_ptr<ui::layout_value_guide> const &top_guide,
-                   std::shared_ptr<ui_edge_element> const &begin_edge, std::shared_ptr<ui_edge_element> const &end_edge)
+ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui::standard> const &standard,
+                 std::shared_ptr<ui::layout_value_guide> const &top_guide,
+                 std::shared_ptr<ui_edge_element> const &begin_edge, std::shared_ptr<ui_edge_element> const &end_edge)
     : _presenter(presenter),
       _top_guide(top_guide),
       _node(ui::node::make_shared()),
@@ -70,6 +70,6 @@ ui_edges::ui_edges(std::shared_ptr<edge_presenter> const &presenter, std::shared
         ->add_to(this->_pool);
 }
 
-std::shared_ptr<ui::node> const &ui_edges::node() const {
+std::shared_ptr<ui::node> const &ui_edge::node() const {
     return this->_node;
 }
