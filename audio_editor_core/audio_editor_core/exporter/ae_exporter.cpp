@@ -25,7 +25,7 @@ exporter::exporter()
 }
 
 void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> const &timeline,
-                     exporting_format const &format) {
+                     exporting_format const &format, time::range const &range) {
     if (!format.is_available()) {
         throw std::invalid_argument("invalid format.");
     }
@@ -37,8 +37,9 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
     this->_last_result = exporting_result{nullptr};
     this->_is_exporting->set_value(true);
 
-    this->_queue->push_back(task<std::nullptr_t>::make_shared(
-        [timeline = std::move(timeline), format, export_url, weak_exporter = this->_weak_exporter](auto const &) {
+    this->_queue->push_back(
+        task<std::nullptr_t>::make_shared([timeline = std::move(timeline), format, export_url, range,
+                                           weak_exporter = this->_weak_exporter](auto const &) {
             assert(!thread::is_main());
 
             exporting_result result{nullptr};
@@ -54,7 +55,6 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
             std::shared_ptr<audio::file> file = nullptr;
 
             if (result) {
-#warning todo 元のファイルに合わせる？
                 auto const settings = audio::wave_file_settings(format.sample_rate, format.channel_count, 32);
                 if (auto create_result = audio::file::make_created({.file_url = export_url, .settings = settings})) {
                     file = create_result.value();
@@ -63,21 +63,11 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
                 }
             }
 
-            std::optional<time::range> total_range{std::nullopt};
-
-            if (result) {
-                total_range = timeline->total_range();
-
-                if (!total_range) {
-                    result = exporting_result{exporting_error::invalid_timeline};
-                }
-            }
-
             if (result) {
                 proc::length_t const slice_length = 512;
                 audio::pcm_buffer buffer{file->processing_format(), slice_length};
 
-                timeline->process(total_range.value(), proc::sync_source{format.sample_rate, slice_length},
+                timeline->process(range, proc::sync_source{format.sample_rate, slice_length},
                                   [&file, &buffer, &result, ch_count = format.channel_count](
                                       time::range const &current_range, proc::stream const &stream) mutable {
                                       buffer.reset_buffer();
