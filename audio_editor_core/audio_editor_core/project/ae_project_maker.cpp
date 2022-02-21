@@ -45,8 +45,9 @@ std::shared_ptr<project_for_project_pool> project_maker::make(url const &file_ur
     auto const action_router = action_router::make_shared();
     auto const action_controller = action_controller::make_shared(action_router);
     auto const dialog_presenter = dialog_presenter::make_shared();
+    auto const context_menu_presenter = context_menu_presenter::make_shared();
     auto const editor_maker = project_editor_maker::make_shared(player, action_controller, dialog_presenter);
     return project::make_shared(identifier, file_url, project_url, file_importer, file_loader, player, editor_maker,
                                 horizontal_zooming, vertical_zooming, scrolling, action_controller, dialog_presenter,
-                                action_router);
+                                context_menu_presenter, action_router);
 }

@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_ui_pool.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
+#import "AEMetalView.h"
 
 using namespace yas;
 using namespace yas::ae;
@@ -20,7 +21,16 @@ using namespace yas::ae;
 @implementation AEMetalViewController {
     std::weak_ptr<ui_root> _ui_root;
     std::weak_ptr<action_controller> _action_controller;
+    std::weak_ptr<context_menu_presenter> _context_menu_presenter;
     observing::canceller_pool _pool;
+}
+
+- (AEMetalView *)aeMetalView {
+    if ([self.view isKindOfClass:[AEMetalView class]]) {
+        return static_cast<AEMetalView *>(self.view);
+    } else {
+        throw std::runtime_error("self.view is not AEMetalView.");
+    }
 }
 
 - (std::uintptr_t)project_view_id {
@@ -62,6 +72,8 @@ using namespace yas::ae;
         })
         .end()
         ->add_to(self->_pool);
+
+    [self.aeMetalView setupWithProjectID:project_id];
 }
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
