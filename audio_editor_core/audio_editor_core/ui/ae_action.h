@@ -52,12 +52,12 @@ enum class action_kind {
 
 struct action {
     action_kind kind;
-    std::string value;
+    std::string value = "";
 
-    action(action_kind const kind) : action(kind, "") {
-    }
+    action(action_kind const kind);
+    action(action_kind const kind, std::string const &value);
 
-    action(action_kind const kind, std::string const &value) : kind(kind), value(value) {
-    }
+    bool operator==(action const &) const;
+    bool operator!=(action const &) const;
 };
 }  // namespace yas::ae

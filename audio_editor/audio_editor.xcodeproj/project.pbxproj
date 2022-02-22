@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B605EA6C2657C2FF0031B177 /* AEMetalViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B605EA6B2657C2FF0031B177 /* AEMetalViewController.mm */; };
 		B6690A27262A846600E86353 /* Window.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6690A26262A846600E86353 /* Window.storyboard */; };
+		B68483ED27C5010900792D17 /* AEMetalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B68483EC27C5010900792D17 /* AEMetalView.mm */; };
 		B69CF582262ACC90007A0A75 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B69CF581262ACC90007A0A75 /* UniformTypeIdentifiers.framework */; };
 		B69CF592262AE2EB007A0A75 /* AEWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B69CF591262AE2EB007A0A75 /* AEWindowController.mm */; };
 		B6A997202629B28300DAC3FE /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A9971F2629B28300DAC3FE /* AppDelegate.mm */; };
@@ -61,6 +62,8 @@
 		B605EA6A2657C2FF0031B177 /* AEMetalViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEMetalViewController.h; sourceTree = "<group>"; };
 		B605EA6B2657C2FF0031B177 /* AEMetalViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AEMetalViewController.mm; sourceTree = "<group>"; };
 		B6690A26262A846600E86353 /* Window.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Window.storyboard; sourceTree = "<group>"; };
+		B68483EB27C5010900792D17 /* AEMetalView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEMetalView.h; sourceTree = "<group>"; };
+		B68483EC27C5010900792D17 /* AEMetalView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AEMetalView.mm; sourceTree = "<group>"; };
 		B69CF581262ACC90007A0A75 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
 		B69CF590262AE2EB007A0A75 /* AEWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEWindowController.h; sourceTree = "<group>"; };
 		B69CF591262AE2EB007A0A75 /* AEWindowController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AEWindowController.mm; sourceTree = "<group>"; };
@@ -124,18 +127,20 @@
 		B6A9971D2629B28300DAC3FE /* audio_editor */ = {
 			isa = PBXGroup;
 			children = (
-				B6A9971E2629B28300DAC3FE /* AppDelegate.h */,
-				B6A9971F2629B28300DAC3FE /* AppDelegate.mm */,
-				B69CF590262AE2EB007A0A75 /* AEWindowController.h */,
-				B69CF591262AE2EB007A0A75 /* AEWindowController.mm */,
+				B68483EB27C5010900792D17 /* AEMetalView.h */,
+				B68483EC27C5010900792D17 /* AEMetalView.mm */,
 				B605EA6A2657C2FF0031B177 /* AEMetalViewController.h */,
 				B605EA6B2657C2FF0031B177 /* AEMetalViewController.mm */,
+				B69CF590262AE2EB007A0A75 /* AEWindowController.h */,
+				B69CF591262AE2EB007A0A75 /* AEWindowController.mm */,
+				B6A9971E2629B28300DAC3FE /* AppDelegate.h */,
+				B6A9971F2629B28300DAC3FE /* AppDelegate.mm */,
 				B6A997242629B28A00DAC3FE /* Assets.xcassets */,
-				B6A997262629B28A00DAC3FE /* Main.storyboard */,
-				B6690A26262A846600E86353 /* Window.storyboard */,
+				B6A9972C2629B28A00DAC3FE /* audio_editor.entitlements */,
 				B6A997292629B28A00DAC3FE /* Info.plist */,
 				B6A9972A2629B28A00DAC3FE /* main.m */,
-				B6A9972C2629B28A00DAC3FE /* audio_editor.entitlements */,
+				B6A997262629B28A00DAC3FE /* Main.storyboard */,
+				B6690A26262A846600E86353 /* Window.storyboard */,
 			);
 			path = audio_editor;
 			sourceTree = "<group>";
@@ -249,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B69CF592262AE2EB007A0A75 /* AEWindowController.mm in Sources */,
+				B68483ED27C5010900792D17 /* AEMetalView.mm in Sources */,
 				B6A9972B2629B28A00DAC3FE /* main.m in Sources */,
 				B605EA6C2657C2FF0031B177 /* AEMetalViewController.mm in Sources */,
 				B6A997202629B28300DAC3FE /* AppDelegate.mm in Sources */,

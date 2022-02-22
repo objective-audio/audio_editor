@@ -53,6 +53,11 @@ struct project_stub final : project_for_project_pool {
         return _value;
     }
 
+    std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter() const override {
+        static std::shared_ptr<ae::context_menu_presenter> const _value = nullptr;
+        return _value;
+    }
+
     std::shared_ptr<ae::action_router> const &action_router() const override {
         static std::shared_ptr<ae::action_router> const _value = nullptr;
         return _value;
