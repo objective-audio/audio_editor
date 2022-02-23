@@ -21,10 +21,10 @@ app_level::app_level()
     : worker(worker::make_shared()),
       system_url(system_url::make_shared()),
       app(app::make_shared(worker, system_url)),
-      project_pool(project_pool::make_shared()),
       file_importer(file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing))),
       file_loader(file_loader::make_shared()),
       color(ae::color::make_shared()),
+      project_pool(project_pool::make_shared()),
       ui_pool(ui_pool::make_shared()) {
     this->app->setup();
 }
