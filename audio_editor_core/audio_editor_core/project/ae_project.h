@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_project_pool_dependency.h>
 
 namespace yas::ae {
-struct project final : project_for_project_pool {
+struct project final : project_for_window_presenter, project_for_root_presenter, project_for_editing_root_presenter {
     [[nodiscard]] static std::shared_ptr<project> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
@@ -21,22 +21,22 @@ struct project final : project_for_project_pool {
     [[nodiscard]] std::string const &identifier() const override;
     [[nodiscard]] url const &file_url() const override;
     [[nodiscard]] project_state const &state() const override;
-    [[nodiscard]] std::shared_ptr<project_url_for_project> const &project_url() const override;
+    [[nodiscard]] std::shared_ptr<project_url_for_project> const &project_url() const;
     [[nodiscard]] std::shared_ptr<player_for_project> const &player() const;
-    [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const override;
-    [[nodiscard]] std::shared_ptr<zooming_for_project> const &horizontal_zooming() const override;
-    [[nodiscard]] std::shared_ptr<zooming_for_project> const &vertical_zooming() const override;
-    [[nodiscard]] std::shared_ptr<scrolling_for_project> const &scrolling() const override;
-    [[nodiscard]] std::shared_ptr<ae::action_controller> const &action_controller() const override;
-    [[nodiscard]] std::shared_ptr<ae::dialog_presenter> const &dialog_presenter() const override;
-    [[nodiscard]] std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter() const override;
-    [[nodiscard]] std::shared_ptr<ae::action_router> const &action_router() const override;
+    [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const;
+    [[nodiscard]] std::shared_ptr<zooming_for_project> const &horizontal_zooming() const;
+    [[nodiscard]] std::shared_ptr<zooming_for_project> const &vertical_zooming() const;
+    [[nodiscard]] std::shared_ptr<scrolling_for_project> const &scrolling() const;
+    [[nodiscard]] std::shared_ptr<ae::action_controller> const &action_controller() const;
+    [[nodiscard]] std::shared_ptr<ae::dialog_presenter> const &dialog_presenter() const;
+    [[nodiscard]] std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter() const;
+    [[nodiscard]] std::shared_ptr<ae::action_router> const &action_router() const;
 
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
 
     [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&) override;
-    [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&) override;
+    [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);
 
    private:
     std::string const _identifier;
