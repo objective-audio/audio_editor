@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <memory>
+#include <cpp_utils/yas_worker.h>
 
 namespace yas::ae {
 class app;
@@ -19,6 +19,7 @@ struct app_level final {
     [[nodiscard]] static std::shared_ptr<app_level> make_shared();
     [[nodiscard]] static std::shared_ptr<app_level> global();
 
+    std::shared_ptr<worker> const worker;
     std::shared_ptr<ae::system_url> const system_url;
     std::shared_ptr<ae::app> const app;
     std::shared_ptr<ae::project_pool> const project_pool;

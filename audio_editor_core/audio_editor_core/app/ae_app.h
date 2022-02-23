@@ -10,15 +10,15 @@ namespace yas::ae {
 class system_url;
 
 struct app final {
-    [[nodiscard]] static std::shared_ptr<app> make_shared(std::shared_ptr<ae::system_url> const &);
-
-    worker_ptr const worker;
+    [[nodiscard]] static std::shared_ptr<app> make_shared(std::shared_ptr<worker> const &,
+                                                          std::shared_ptr<ae::system_url> const &);
 
     void setup();
 
    private:
+    std::shared_ptr<worker> const _worker;
     std::shared_ptr<ae::system_url> const _system_url;
 
-    app(std::shared_ptr<ae::system_url> const &);
+    app(std::shared_ptr<worker> const &, std::shared_ptr<ae::system_url> const &);
 };
 }  // namespace yas::ae
