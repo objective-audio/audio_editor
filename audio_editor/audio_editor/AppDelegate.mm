@@ -4,7 +4,7 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
-#import <audio_editor_core/ae_app.h>
+#import <audio_editor_core/ae_app_level.h>
 #import <audio_editor_core/ae_app_presenter.h>
 #import <cpp_utils/yas_cf_utils.h>
 #import <objc_utils/yas_objc_unowned.h>

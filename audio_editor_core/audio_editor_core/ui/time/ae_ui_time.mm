@@ -3,7 +3,7 @@
 //
 
 #include "ae_ui_time.h"
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
@@ -18,12 +18,12 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_time> ui_time::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
     auto const presenter = time_presenter::make_shared(project_id);
-    auto const &app = app::global();
-    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &app_level = app_level::global();
+    auto const &ui_root = app_level->ui_pool->ui_root_for_view_id(project_view_id);
     auto const &standard = ui_root->standard();
     auto const &texture = ui_root->texture();
-    auto const &color = app->color();
-    auto const &action_controller = app->project_pool()->project_for_id(project_id)->action_controller();
+    auto const &color = app_level->color;
+    auto const &action_controller = app_level->project_pool->project_for_id(project_id)->action_controller();
     return std::shared_ptr<ui_time>(new ui_time{standard, texture, color, presenter, action_controller});
 }
 

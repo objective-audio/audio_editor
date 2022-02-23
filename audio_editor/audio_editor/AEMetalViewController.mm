@@ -4,7 +4,7 @@
 
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_ui_pool.h>
@@ -38,16 +38,16 @@ using namespace yas::ae;
 }
 
 - (void)dealloc {
-    app::global()->ui_pool()->remove_ui_root_for_view_id(self.project_view_id);
+    app_level::global()->ui_pool->remove_ui_root_for_view_id(self.project_view_id);
 }
 
 - (void)setupWithProjectID:(std::string const &)project_id {
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
-    self->_ui_root = app::global()->ui_pool()->add_and_return_ui_root(standard, project_id, self.project_view_id);
+    self->_ui_root = app_level::global()->ui_pool->add_and_return_ui_root(standard, project_id, self.project_view_id);
 
-    auto const &project = app::global()->project_pool()->project_for_id(project_id);
+    auto const &project = app_level::global()->project_pool->project_for_id(project_id);
     self->_action_controller = project->action_controller();
 
     [self configure_with_metal_system:metal_system

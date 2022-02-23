@@ -4,7 +4,7 @@
 
 #include "ae_window_presenter.h"
 
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 
@@ -15,7 +15,7 @@ window_presenter::window_presenter(std::shared_ptr<project_for_window_presenter>
 }
 
 std::shared_ptr<window_presenter> window_presenter::make_shared(std::string const &project_id) {
-    auto const project = app::global()->project_pool()->project_for_id(project_id);
+    auto const project = app_level::global()->project_pool->project_for_id(project_id);
     return make_shared(project);
 }
 

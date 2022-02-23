@@ -4,7 +4,7 @@
 
 #include "ae_module_waveforms_presenter.h"
 
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_project_url.h>
@@ -15,7 +15,7 @@ using namespace yas::ae;
 
 std::shared_ptr<module_waveforms_presenter> module_waveforms_presenter::make_shared(
     std::string const &project_id, std::shared_ptr<module_location_pool> const &location_pool) {
-    auto const url = app::global()->project_pool()->project_for_id(project_id)->project_url()->editing_file();
+    auto const url = app_level::global()->project_pool->project_for_id(project_id)->project_url()->editing_file();
     return std::shared_ptr<module_waveforms_presenter>(new module_waveforms_presenter{url, location_pool});
 }
 
