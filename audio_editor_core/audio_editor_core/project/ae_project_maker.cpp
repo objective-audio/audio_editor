@@ -31,7 +31,7 @@ project_maker::project_maker(std::shared_ptr<uuid_generatable> const &uuid_gener
     : _uuid_generator(uuid_generator) {
 }
 
-std::shared_ptr<project_for_project_pool> project_maker::make(url const &file_url) {
+std::shared_ptr<project> project_maker::make(url const &file_url) {
     auto const identifier = this->_uuid_generator->generate();
     auto const app_level = app_level::global();
     auto const project_url = project_url::make_shared(app_level->system_url->project_directory(identifier));
