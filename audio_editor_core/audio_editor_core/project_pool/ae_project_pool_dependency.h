@@ -32,10 +32,4 @@ struct project_for_project_pool : project_for_window_presenter,
 
     [[nodiscard]] virtual observing::endable observe_event(std::function<void(project_event const &)> &&) = 0;
 };
-
-struct project_maker_for_project_pool {
-    virtual ~project_maker_for_project_pool() = default;
-
-    [[nodiscard]] virtual std::shared_ptr<project_for_project_pool> make(url const &file_url) = 0;
-};
 }  // namespace yas::ae

@@ -14,7 +14,7 @@ namespace yas::ae {
 class project;
 class uuid_generatable;
 
-struct project_maker final : project_maker_for_project_pool {
+struct project_maker final {
     [[nodiscard]] std::shared_ptr<project_for_project_pool> make(url const &file_url);
 
     [[nodiscard]] static std::shared_ptr<project_maker> make_shared();

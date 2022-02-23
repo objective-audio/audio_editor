@@ -11,8 +11,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-project_pool::project_pool(std::shared_ptr<project_maker_for_project_pool> const &project_maker)
-    : _project_maker(project_maker) {
+project_pool::project_pool(std::shared_ptr<project_maker> const &project_maker) : _project_maker(project_maker) {
 }
 
 void project_pool::add_project(url const &file_url) {
@@ -76,7 +75,6 @@ std::shared_ptr<project_pool> project_pool::make_shared() {
     return make_shared(project_maker::make_shared());
 }
 
-std::shared_ptr<project_pool> project_pool::make_shared(
-    std::shared_ptr<project_maker_for_project_pool> const &project_maker) {
+std::shared_ptr<project_pool> project_pool::make_shared(std::shared_ptr<project_maker> const &project_maker) {
     return std::shared_ptr<project_pool>(new project_pool{project_maker});
 }
