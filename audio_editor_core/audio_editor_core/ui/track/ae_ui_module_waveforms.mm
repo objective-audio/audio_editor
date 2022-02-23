@@ -3,7 +3,7 @@
 //
 
 #include "ae_ui_module_waveforms.h"
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_module_waveforms_presenter.h>
 #include <audio_editor_core/ae_project.h>
@@ -20,10 +20,10 @@ using namespace yas::ae;
 std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
     std::string const &project_id, uintptr_t const project_view_id,
     std::shared_ptr<module_location_pool> const &location_pool) {
-    auto const &app = app::global();
-    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &app_level = app_level::global();
+    auto const &ui_root = app_level->ui_pool->ui_root_for_view_id(project_view_id);
     auto const &standard = ui_root->standard();
-    auto const &color = app->color();
+    auto const &color = app_level->color;
     auto const presenter = module_waveforms_presenter::make_shared(project_id, location_pool);
 
     return std::shared_ptr<ui_module_waveforms>(new ui_module_waveforms{standard, color, presenter});

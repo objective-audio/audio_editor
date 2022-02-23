@@ -3,7 +3,7 @@
 //
 
 #include "ae_ui_track.h"
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
@@ -20,8 +20,8 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_track> ui_track::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
-    auto const &app = ae::app::global();
-    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &app_level = ae::app_level::global();
+    auto const &ui_root = app_level->ui_pool->ui_root_for_view_id(project_view_id);
     auto const &standard = ui_root->standard();
     auto const display_space = ui_root->display_space();
 

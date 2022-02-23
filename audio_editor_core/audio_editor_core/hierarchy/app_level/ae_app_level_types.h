@@ -1,8 +1,10 @@
 //
-//  ae_app_types.h
+//  ae_app_level_types.h
 //
 
 #pragma once
+
+#include <cstdint>
 
 namespace yas::ae {
 enum class worker_priority : uint32_t {

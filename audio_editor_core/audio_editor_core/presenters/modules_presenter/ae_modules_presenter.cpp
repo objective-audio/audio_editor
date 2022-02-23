@@ -4,7 +4,7 @@
 
 #include "ae_modules_presenter.h"
 
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_project.h>
@@ -17,7 +17,7 @@ using namespace yas::ae;
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(
     std::string const &project_id, std::shared_ptr<display_space> const &display_space,
     std::shared_ptr<module_location_pool> const &location_pool) {
-    auto const project = app::global()->project_pool()->project_for_id(project_id);
+    auto const project = app_level::global()->project_pool->project_for_id(project_id);
     return make_shared(project->editor(), display_space, location_pool);
 }
 

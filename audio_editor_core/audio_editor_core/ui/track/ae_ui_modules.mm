@@ -3,7 +3,7 @@
 //
 
 #include "ae_ui_modules.h"
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_display_space.h>
@@ -22,15 +22,15 @@ static std::size_t const reserving_interval = 100;
 }
 
 std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
-    auto const &app = app::global();
-    auto const &ui_root = app->ui_pool()->ui_root_for_view_id(project_view_id);
+    auto const &app_level = app_level::global();
+    auto const &ui_root = app_level->ui_pool->ui_root_for_view_id(project_view_id);
     auto const &standard = ui_root->standard();
     auto const &display_space = ui_root->display_space();
 
     auto const location_pool = module_location_pool::make_shared();
     auto const modules_presenter = modules_presenter::make_shared(project_id, display_space, location_pool);
     auto const waveforms = ui_module_waveforms::make_shared(project_id, project_view_id, location_pool);
-    auto const &color = app->color();
+    auto const &color = app_level->color;
     return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, standard, color, waveforms});
 }
 

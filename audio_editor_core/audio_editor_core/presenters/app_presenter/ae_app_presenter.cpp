@@ -4,14 +4,14 @@
 
 #include "ae_app_presenter.h"
 
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_app_presenter_utils.h>
 #include <audio_editor_core/ae_project_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-app_presenter::app_presenter() : app_presenter(app::global()->project_pool()) {
+app_presenter::app_presenter() : app_presenter(app_level::global()->project_pool) {
 }
 
 app_presenter::app_presenter(std::shared_ptr<project_pool_for_app_presenter> const &pool) : _project_pool(pool) {

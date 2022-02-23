@@ -5,7 +5,7 @@
 #include "ae_project_editor.h"
 
 #include <audio_editor_core/ae_action_router.h>
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_exporter.h>

@@ -4,7 +4,7 @@
 
 #include "ae_markers_presenter.h"
 
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
@@ -14,7 +14,7 @@ using namespace yas::ae;
 
 std::shared_ptr<markers_presenter> markers_presenter::make_shared(std::string const &project_id,
                                                                   std::shared_ptr<display_space> const &display_space) {
-    auto const project = app::global()->project_pool()->project_for_id(project_id);
+    auto const project = app_level::global()->project_pool->project_for_id(project_id);
     return make_shared(project->editor(), display_space);
 }
 
