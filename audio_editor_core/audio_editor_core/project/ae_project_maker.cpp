@@ -23,12 +23,11 @@ std::shared_ptr<project_maker> project_maker::make_shared() {
     return make_shared(uuid_generator::make_shared());
 }
 
-std::shared_ptr<project_maker> project_maker::make_shared(
-    std::shared_ptr<uuid_generator_for_project_maker> const &uuid_generator) {
+std::shared_ptr<project_maker> project_maker::make_shared(std::shared_ptr<uuid_generatable> const &uuid_generator) {
     return std::shared_ptr<project_maker>(new project_maker{uuid_generator});
 }
 
-project_maker::project_maker(std::shared_ptr<uuid_generator_for_project_maker> const &uuid_generator)
+project_maker::project_maker(std::shared_ptr<uuid_generatable> const &uuid_generator)
     : _uuid_generator(uuid_generator) {
 }
 
