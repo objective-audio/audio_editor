@@ -25,7 +25,7 @@ project::project(std::string const &identifier, url const &file_url,
       project_url(project_url),
       _file_importer(file_importer),
       _file_loader(file_loader),
-      _player(player),
+      player(player),
       _editor_maker(editor_maker),
       _horizontal_zooming(horizontal_zooming),
       _vertical_zooming(vertical_zooming),
@@ -68,10 +68,6 @@ url const &project::file_url() const {
 
 project_state const &project::state() const {
     return this->_state->value();
-}
-
-std::shared_ptr<player_for_project> const &project::player() const {
-    return this->_player;
 }
 
 std::shared_ptr<project_editor_for_project> const &project::editor() const {
