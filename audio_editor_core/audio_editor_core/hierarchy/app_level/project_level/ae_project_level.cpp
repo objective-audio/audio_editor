@@ -27,11 +27,9 @@ std::shared_ptr<project_level> project_level::make_shared(std::string const &ide
     auto const action_router = action_router::make_shared();
     auto const action_controller = action_controller::make_shared(action_router);
     auto const dialog_presenter = dialog_presenter::make_shared();
-    auto const editor_maker = project_editor_maker::make_shared(player, action_controller, dialog_presenter);
 
     return std::shared_ptr<project_level>(new project_level{identifier, file_url, app_level, scrolling, player,
-                                                            action_router, action_controller, dialog_presenter,
-                                                            editor_maker});
+                                                            action_router, action_controller, dialog_presenter});
 }
 
 project_level::project_level(std::string const &identifier, url const &file_url,
@@ -39,8 +37,7 @@ project_level::project_level(std::string const &identifier, url const &file_url,
                              std::shared_ptr<ae::scrolling> const &scrolling, std::shared_ptr<ae::player> const &player,
                              std::shared_ptr<ae::action_router> const &action_router,
                              std::shared_ptr<ae::action_controller> const &action_controller,
-                             std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
-                             std::shared_ptr<ae::project_editor_maker> const &editor_maker)
+                             std::shared_ptr<ae::dialog_presenter> const &dialog_presenter)
     : identifier(identifier),
       horizontal_zooming(zooming::make_shared()),
       vertical_zooming(zooming::make_shared()),
@@ -50,7 +47,7 @@ project_level::project_level(std::string const &identifier, url const &file_url,
       action_controller(action_controller),
       dialog_presenter(dialog_presenter),
       context_menu_presenter(context_menu_presenter::make_shared()),
-      editor_maker(editor_maker),
+      editor_maker(project_editor_maker::make_shared(player, action_controller, dialog_presenter)),
       project(project::make_shared(identifier, file_url,
                                    project_url::make_shared(app_level->system_url->project_directory(identifier)),
                                    app_level->file_importer, app_level->file_loader, player, editor_maker)) {
