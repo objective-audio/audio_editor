@@ -11,6 +11,7 @@
 
 namespace yas::ae {
 class zooming;
+class scrolling;
 class project;
 
 struct project_level final {
@@ -20,10 +21,12 @@ struct project_level final {
 
     std::shared_ptr<ae::zooming> const horizontal_zooming;
     std::shared_ptr<ae::zooming> const vertical_zooming;
+    std::shared_ptr<ae::scrolling> const scrolling;
 
     std::shared_ptr<project> const project;
 
    private:
-    project_level(std::string const &identifier, std::shared_ptr<ae::project> const &);
+    project_level(std::string const &identifier, std::shared_ptr<ae::scrolling> const &,
+                  std::shared_ptr<ae::project> const &);
 };
 }  // namespace yas::ae
