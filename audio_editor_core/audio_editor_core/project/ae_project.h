@@ -8,6 +8,8 @@
 #include <audio_editor_core/ae_project_pool_dependency.h>
 
 namespace yas::ae {
+class zooming;
+
 struct project final : project_for_window_presenter, project_for_root_presenter, project_for_editing_root_presenter {
     [[nodiscard]] static std::shared_ptr<project> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
@@ -26,8 +28,8 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
 
     std::shared_ptr<project_editor_for_project> editor;
 
-    std::shared_ptr<zooming_for_project> const horizontal_zooming;
-    std::shared_ptr<zooming_for_project> const vertical_zooming;
+    std::shared_ptr<ae::zooming> const horizontal_zooming;
+    std::shared_ptr<ae::zooming> const vertical_zooming;
     std::shared_ptr<scrolling_for_project> const scrolling;
     std::shared_ptr<ae::action_controller> const action_controller;
     std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
