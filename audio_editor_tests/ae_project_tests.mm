@@ -226,8 +226,7 @@ struct scrolling_stub final : scrolling_for_project {
     auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
 
-    auto project =
-        project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, player, editor_maker);
+    auto project = project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, editor_maker);
 
     XCTAssertTrue(project != nullptr);
     XCTAssertEqual(project->file_url(), file_url);
@@ -256,8 +255,8 @@ struct scrolling_stub final : scrolling_for_project {
         return false;
     };
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, editor_maker);
+    auto const project =
+        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, editor_maker);
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -278,8 +277,8 @@ struct scrolling_stub final : scrolling_for_project {
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, editor_maker);
+    auto const project =
+        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, editor_maker);
 
     std::vector<project_state> called;
 
@@ -330,8 +329,8 @@ struct scrolling_stub final : scrolling_for_project {
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              player, editor_maker);
+    auto const project =
+        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, editor_maker);
 
     std::vector<project_state> called;
 
