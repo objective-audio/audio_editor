@@ -54,7 +54,7 @@ using namespace yas::ae;
                              renderer:standard->renderer()
                         event_manager:standard->event_manager()];
 
-    project->dialog_presenter()
+    project->dialog_presenter
         ->observe_event([weak_controller = self->_action_controller](dialog_event const &event) {
             auto const panel = [NSSavePanel savePanel];
             panel.canCreateDirectories = YES;
