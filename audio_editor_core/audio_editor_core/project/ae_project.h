@@ -28,8 +28,6 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
 
     std::shared_ptr<project_editor_for_project> editor;
 
-    std::shared_ptr<ae::zooming> const horizontal_zooming;
-    std::shared_ptr<ae::zooming> const vertical_zooming;
     std::shared_ptr<scrolling_for_project> const scrolling;
     std::shared_ptr<ae::action_controller> const action_controller;
     std::shared_ptr<ae::dialog_presenter> const dialog_presenter;

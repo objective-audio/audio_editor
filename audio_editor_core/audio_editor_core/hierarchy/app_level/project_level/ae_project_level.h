@@ -10,12 +10,16 @@
 #include <string>
 
 namespace yas::ae {
+class zooming;
 class project;
 
 struct project_level final {
     [[nodiscard]] static std::shared_ptr<project_level> make_shared(std::string const &identifier, url const &file_url);
 
     std::string const identifier;
+
+    std::shared_ptr<ae::zooming> const horizontal_zooming;
+    std::shared_ptr<ae::zooming> const vertical_zooming;
 
     std::shared_ptr<project> const project;
 

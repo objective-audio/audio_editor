@@ -38,5 +38,8 @@ std::shared_ptr<project_level> project_level::make_shared(std::string const &ide
 }
 
 project_level::project_level(std::string const &identifier, std::shared_ptr<ae::project> const &project)
-    : identifier(identifier), project(project) {
+    : identifier(identifier),
+      horizontal_zooming(zooming::make_shared()),
+      vertical_zooming(zooming::make_shared()),
+      project(project) {
 }
