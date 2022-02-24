@@ -5,6 +5,7 @@
 #include "ae_project_pool.h"
 
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_level.h>
 #include <audio_editor_core/ae_project_maker.h>
 #include <audio_editor_core/ae_uuid_generator.h>
 
@@ -19,7 +20,8 @@ void project_pool::add_project(url const &file_url) {
 }
 
 std::shared_ptr<project> project_pool::add_and_return_project(url const &file_url) {
-    auto const project = this->_project_maker->make(file_url);
+    auto const project_level = this->_project_maker->make(file_url);
+    auto const &project = project_level->project;
 
     auto canceller = project
                          ->observe_event([this, project_id = project->identifier()](auto const &event) {

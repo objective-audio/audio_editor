@@ -22,9 +22,7 @@ project_maker::project_maker(std::shared_ptr<uuid_generatable> const &uuid_gener
     : _uuid_generator(uuid_generator) {
 }
 
-std::shared_ptr<project> project_maker::make(url const &file_url) {
+std::shared_ptr<project_level> project_maker::make(url const &file_url) {
     auto const identifier = this->_uuid_generator->generate();
-
-    auto const project_level = project_level::make_shared(identifier, file_url);
-    return project_level->project;
+    return project_level::make_shared(identifier, file_url);
 }
