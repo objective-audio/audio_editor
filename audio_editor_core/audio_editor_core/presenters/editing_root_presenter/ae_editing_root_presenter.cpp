@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_editing_root_presenter_utils.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_project_level.h>
 #include <audio_editor_core/ae_project_pool.h>
 
 using namespace yas;
@@ -32,7 +33,7 @@ editing_root_presenter::editing_root_presenter(
 }
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
-    auto const project = app_level::global()->project_pool->project_for_id(project_id);
+    auto const project = app_level::global()->project_pool->project_level_for_id(project_id)->project;
     return make_shared(project, project->editor, project->action_router);
 }
 

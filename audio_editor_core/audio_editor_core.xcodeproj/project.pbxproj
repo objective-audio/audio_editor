@@ -22,7 +22,7 @@
 		B6126300278329410019B364 /* ae_nudging_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FE278329410019B364 /* ae_nudging_utils.cpp */; };
 		B6126301278329410019B364 /* ae_nudging_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FF278329410019B364 /* ae_nudging_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6137F6C27C7B23C0097A3C6 /* ae_project_level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6137F6A27C7B23C0097A3C6 /* ae_project_level.cpp */; };
-		B6137F6D27C7B23C0097A3C6 /* ae_project_level.h in Headers */ = {isa = PBXBuildFile; fileRef = B6137F6B27C7B23C0097A3C6 /* ae_project_level.h */; };
+		B6137F6D27C7B23C0097A3C6 /* ae_project_level.h in Headers */ = {isa = PBXBuildFile; fileRef = B6137F6B27C7B23C0097A3C6 /* ae_project_level.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD62743D0C400589393 /* ae_dialog_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD42743D0C400589393 /* ae_dialog_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD72743D0C400589393 /* ae_dialog_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */; };
 		B6169BD92743D91400589393 /* ae_dialog_presenter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD82743D91400589393 /* ae_dialog_presenter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };

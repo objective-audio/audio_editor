@@ -6,6 +6,7 @@
 #include <audio_editor_core/ae_action_utils.h>
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_level.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <objc_utils/yas_objc_unowned.h>
 
@@ -22,7 +23,7 @@ using namespace yas::ae;
 }
 
 - (void)setupWithProjectID:(std::string const &)project_id {
-    auto const &project = app_level::global()->project_pool->project_for_id(project_id);
+    auto const &project = app_level::global()->project_pool->project_level_for_id(project_id)->project;
 
     self->_context_menu_presenter = project->context_menu_presenter;
     self->_action_controller = project->action_controller;

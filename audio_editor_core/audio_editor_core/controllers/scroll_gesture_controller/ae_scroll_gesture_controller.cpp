@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_level.h>
 #include <audio_editor_core/ae_project_pool.h>
 #include <audio_editor_core/ae_scrolling.h>
 
@@ -14,7 +15,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<scroll_gesture_controller> scroll_gesture_controller::make_shared(std::string const &project_id) {
-    auto const project = app_level::global()->project_pool->project_for_id(project_id);
+    auto const project = app_level::global()->project_pool->project_level_for_id(project_id)->project;
     return std::shared_ptr<scroll_gesture_controller>(new scroll_gesture_controller{project->scrolling});
 }
 
