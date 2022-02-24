@@ -48,14 +48,14 @@ using namespace yas::ae;
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
     self->_ui_root = app_level::global()->ui_pool->add_and_return_ui_root(standard, project_id, self.project_view_id);
 
-    auto const &project = app_level::global()->project_pool->project_level_for_id(project_id)->project;
-    self->_action_controller = project->action_controller;
+    auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
+    self->_action_controller = project_level->action_controller;
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
                         event_manager:standard->event_manager()];
 
-    project->dialog_presenter
+    project_level->dialog_presenter
         ->observe_event([weak_controller = self->_action_controller](dialog_event const &event) {
             auto const panel = [NSSavePanel savePanel];
             panel.canCreateDirectories = YES;
