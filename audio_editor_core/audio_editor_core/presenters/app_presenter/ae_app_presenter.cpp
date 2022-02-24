@@ -29,7 +29,7 @@ void app_presenter::open_file_dialog() {
 
 void app_presenter::select_file(url const &file_url) {
     if (auto const pool = this->_project_pool.lock()) {
-        pool->add_project(file_url);
+        pool->add_project_level(file_url);
     }
 }
 

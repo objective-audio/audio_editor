@@ -13,16 +13,9 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
                                               std::shared_ptr<project_url_for_project> const &project_url,
                                               std::shared_ptr<file_importer_for_project> const &file_importer,
                                               std::shared_ptr<file_loader_for_project> const &file_loader,
-                                              std::shared_ptr<player_for_project> const &player,
-                                              std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
-                                              std::shared_ptr<scrolling_for_project> const &scrolling,
-                                              std::shared_ptr<ae::action_controller> const &action_controller,
-                                              std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
-                                              std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter,
-                                              std::shared_ptr<ae::action_router> const &action_router) {
-    auto shared = std::shared_ptr<project>(new project{identifier, file_url, project_url, file_importer, file_loader,
-                                                       player, editor_maker, scrolling, action_controller,
-                                                       dialog_presenter, context_menu_presenter, action_router});
+                                              std::shared_ptr<project_editor_maker_for_project> const &editor_maker) {
+    auto shared = std::shared_ptr<project>(
+        new project{identifier, file_url, project_url, file_importer, file_loader, editor_maker});
     shared->_setup(shared);
     return shared;
 }
@@ -31,28 +24,14 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<project_url_for_project> const &project_url,
                  std::shared_ptr<file_importer_for_project> const &file_importer,
                  std::shared_ptr<file_loader_for_project> const &file_loader,
-                 std::shared_ptr<player_for_project> const &player,
-                 std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
-                 std::shared_ptr<scrolling_for_project> const &scrolling,
-                 std::shared_ptr<ae::action_controller> const &action_controller,
-                 std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
-                 std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter,
-                 std::shared_ptr<ae::action_router> const &action_router)
+                 std::shared_ptr<project_editor_maker_for_project> const &editor_maker)
     : _identifier(identifier),
       _file_url(file_url),
-      project_url(project_url),
+      _project_url(project_url),
       _file_importer(file_importer),
       _file_loader(file_loader),
-      player(player),
       editor(nullptr),
       _editor_maker(editor_maker),
-      horizontal_zooming(zooming::make_shared()),
-      vertical_zooming(zooming::make_shared()),
-      scrolling(scrolling),
-      action_controller(action_controller),
-      dialog_presenter(dialog_presenter),
-      context_menu_presenter(context_menu_presenter),
-      action_router(action_router),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
 }
@@ -104,14 +83,14 @@ void project::_setup(std::weak_ptr<project> weak) {
     this->_file_importer->import(
         {.identifier = this->_identifier,
          .src_url = this->_file_url,
-         .dst_url = this->project_url->editing_file(),
+         .dst_url = this->_project_url->editing_file(),
          .completion = [weak](bool const result) {
              if (auto const project = weak.lock()) {
                  auto const &state = project->_state->value();
                  switch (state) {
                      case project_state::loading: {
                          if (result) {
-                             auto const &project_url = project->project_url;
+                             auto const &project_url = project->_project_url;
                              auto const editing_file_url = project_url->editing_file();
                              if (auto const file_info = project->_file_loader->load_file_info(editing_file_url)) {
                                  project->editor = project->_editor_maker->make(

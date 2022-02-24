@@ -8,33 +8,17 @@
 #include <audio_editor_core/ae_project_pool_dependency.h>
 
 namespace yas::ae {
-class zooming;
-
 struct project final : project_for_window_presenter, project_for_root_presenter, project_for_editing_root_presenter {
     [[nodiscard]] static std::shared_ptr<project> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
-        std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &,
-        std::shared_ptr<scrolling_for_project> const &, std::shared_ptr<ae::action_controller> const &,
-        std::shared_ptr<ae::dialog_presenter> const &, std::shared_ptr<ae::context_menu_presenter> const &,
-        std::shared_ptr<ae::action_router> const &);
+        std::shared_ptr<project_editor_maker_for_project> const &);
 
     [[nodiscard]] std::string const &identifier() const override;
     [[nodiscard]] url const &file_url() const override;
     [[nodiscard]] project_state const &state() const override;
 
-    std::shared_ptr<project_url_for_project> const project_url;
-    std::shared_ptr<player_for_project> const player;
-
     std::shared_ptr<project_editor_for_project> editor;
-
-    std::shared_ptr<ae::zooming> const horizontal_zooming;
-    std::shared_ptr<ae::zooming> const vertical_zooming;
-    std::shared_ptr<scrolling_for_project> const scrolling;
-    std::shared_ptr<ae::action_controller> const action_controller;
-    std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
-    std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;
-    std::shared_ptr<ae::action_router> const action_router;
 
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
@@ -46,6 +30,7 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
     std::string const _identifier;
     url const _file_url;
 
+    std::shared_ptr<project_url_for_project> const _project_url;
     std::shared_ptr<file_importer_for_project> const _file_importer;
     std::shared_ptr<file_loader_for_project> const _file_loader;
     std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
@@ -57,10 +42,7 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
 
     project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
             std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
-            std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &,
-            std::shared_ptr<scrolling_for_project> const &, std::shared_ptr<ae::action_controller> const &,
-            std::shared_ptr<ae::dialog_presenter> const &, std::shared_ptr<ae::context_menu_presenter> const &,
-            std::shared_ptr<ae::action_router> const &);
+            std::shared_ptr<project_editor_maker_for_project> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;

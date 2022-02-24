@@ -21,6 +21,8 @@
 		B61262FD2782FF030019B364 /* ae_nudging.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FB2782FF030019B364 /* ae_nudging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6126300278329410019B364 /* ae_nudging_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FE278329410019B364 /* ae_nudging_utils.cpp */; };
 		B6126301278329410019B364 /* ae_nudging_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FF278329410019B364 /* ae_nudging_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6137F6C27C7B23C0097A3C6 /* ae_project_level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6137F6A27C7B23C0097A3C6 /* ae_project_level.cpp */; };
+		B6137F6D27C7B23C0097A3C6 /* ae_project_level.h in Headers */ = {isa = PBXBuildFile; fileRef = B6137F6B27C7B23C0097A3C6 /* ae_project_level.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD62743D0C400589393 /* ae_dialog_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD42743D0C400589393 /* ae_dialog_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD72743D0C400589393 /* ae_dialog_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */; };
 		B6169BD92743D91400589393 /* ae_dialog_presenter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD82743D91400589393 /* ae_dialog_presenter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -273,6 +275,8 @@
 		B61262FB2782FF030019B364 /* ae_nudging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging.h; sourceTree = "<group>"; };
 		B61262FE278329410019B364 /* ae_nudging_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudging_utils.cpp; sourceTree = "<group>"; };
 		B61262FF278329410019B364 /* ae_nudging_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_utils.h; sourceTree = "<group>"; };
+		B6137F6A27C7B23C0097A3C6 /* ae_project_level.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_level.cpp; sourceTree = "<group>"; };
+		B6137F6B27C7B23C0097A3C6 /* ae_project_level.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_level.h; sourceTree = "<group>"; };
 		B6169BD42743D0C400589393 /* ae_dialog_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_dialog_presenter.h; sourceTree = "<group>"; };
 		B6169BD52743D0C400589393 /* ae_dialog_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_dialog_presenter.cpp; sourceTree = "<group>"; };
 		B6169BD82743D91400589393 /* ae_dialog_presenter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_dialog_presenter_types.h; sourceTree = "<group>"; };
@@ -605,6 +609,15 @@
 			path = nudging;
 			sourceTree = "<group>";
 		};
+		B6137F6927C7B22C0097A3C6 /* project_level */ = {
+			isa = PBXGroup;
+			children = (
+				B6137F6A27C7B23C0097A3C6 /* ae_project_level.cpp */,
+				B6137F6B27C7B23C0097A3C6 /* ae_project_level.h */,
+			);
+			path = project_level;
+			sourceTree = "<group>";
+		};
 		B6169BD32743D0B400589393 /* dialog_presenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -844,6 +857,7 @@
 				B668BE0B262DCB900021AD20 /* ae_app_level_types.h */,
 				B6A997B72629C07600DAC3FE /* ae_app_level.cpp */,
 				B6A997B82629C07600DAC3FE /* ae_app_level.h */,
+				B6137F6927C7B22C0097A3C6 /* project_level */,
 			);
 			path = app_level;
 			sourceTree = "<group>";
@@ -1212,6 +1226,7 @@
 				B666CE0B263424FF00C1693D /* ae_file_importer_types.h in Headers */,
 				B6169BD62743D0C400589393 /* ae_dialog_presenter.h in Headers */,
 				B68483E427C3B6E200792D17 /* ae_context_menu_presenter.h in Headers */,
+				B6137F6D27C7B23C0097A3C6 /* ae_project_level.h in Headers */,
 				B6BF109C278549CF000553ED /* ae_timing_types.h in Headers */,
 				B6370CC02796FCAA00449D03 /* ae_action_normal_routing.h in Headers */,
 				B6B002B9263BC7320013E6D0 /* ae_file_loader.h in Headers */,
@@ -1470,6 +1485,7 @@
 				B68E19EC278AB79F00760C6B /* ae_timing_types.cpp in Sources */,
 				B6097BC1272535FE008A6D57 /* ae_gesture.cpp in Sources */,
 				B668BE3F262F412B0021AD20 /* ae_app_presenter.cpp in Sources */,
+				B6137F6C27C7B23C0097A3C6 /* ae_project_level.cpp in Sources */,
 				B6DBC361275F9EFB001AF1D3 /* ae_module_location.cpp in Sources */,
 				B68483E327C3B6E200792D17 /* ae_context_menu_presenter.cpp in Sources */,
 				B6DBC36F2764447D001AF1D3 /* ae_marker_location.cpp in Sources */,
