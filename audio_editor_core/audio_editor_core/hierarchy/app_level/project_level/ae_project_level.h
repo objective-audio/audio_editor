@@ -27,6 +27,7 @@ struct project_level final {
     [[nodiscard]] static std::shared_ptr<project_level> make_shared(std::string const &identifier, url const &file_url);
 
     std::string const identifier;
+    url const file_url;
 
     std::shared_ptr<ae::project_url> const project_url;
     std::shared_ptr<ae::zooming> const horizontal_zooming;

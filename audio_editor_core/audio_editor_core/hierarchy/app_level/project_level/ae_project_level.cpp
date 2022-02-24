@@ -25,6 +25,7 @@ std::shared_ptr<project_level> project_level::make_shared(std::string const &ide
 project_level::project_level(std::string const &identifier, url const &file_url,
                              std::shared_ptr<app_level> const &app_level)
     : identifier(identifier),
+      file_url(file_url),
       project_url(project_url::make_shared(app_level->system_url->project_directory(identifier))),
       horizontal_zooming(zooming::make_shared()),
       vertical_zooming(zooming::make_shared()),
