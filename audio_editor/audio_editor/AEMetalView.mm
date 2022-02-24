@@ -25,7 +25,7 @@ using namespace yas::ae;
     auto const &project = app_level::global()->project_pool->project_for_id(project_id);
 
     self->_context_menu_presenter = project->context_menu_presenter();
-    self->_action_controller = project->action_controller();
+    self->_action_controller = project->action_controller;
 
     auto *const unowned = [[YASUnownedObject<AEMetalView *> alloc] initWithObject:self];
 

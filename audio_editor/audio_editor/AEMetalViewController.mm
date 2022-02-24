@@ -48,7 +48,7 @@ using namespace yas::ae;
     self->_ui_root = app_level::global()->ui_pool->add_and_return_ui_root(standard, project_id, self.project_view_id);
 
     auto const &project = app_level::global()->project_pool->project_for_id(project_id);
-    self->_action_controller = project->action_controller();
+    self->_action_controller = project->action_controller;
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()

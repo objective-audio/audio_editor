@@ -30,9 +30,9 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
     std::shared_ptr<zooming_for_project> const horizontal_zooming;
     std::shared_ptr<zooming_for_project> const vertical_zooming;
     std::shared_ptr<scrolling_for_project> const scrolling;
+    std::shared_ptr<ae::action_controller> const action_controller;
+    std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
 
-    [[nodiscard]] std::shared_ptr<ae::action_controller> const &action_controller() const;
-    [[nodiscard]] std::shared_ptr<ae::dialog_presenter> const &dialog_presenter() const;
     [[nodiscard]] std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter() const;
     [[nodiscard]] std::shared_ptr<ae::action_router> const &action_router() const;
 
@@ -50,8 +50,6 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
     std::shared_ptr<file_loader_for_project> const _file_loader;
     std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
     std::shared_ptr<project_editor_for_project> _editor = nullptr;
-    std::shared_ptr<ae::action_controller> const _action_controller;
-    std::shared_ptr<ae::dialog_presenter> const _dialog_presenter;
     std::shared_ptr<ae::context_menu_presenter> const _context_menu_presenter;
     std::shared_ptr<ae::action_router> const _action_router;
 
