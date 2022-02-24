@@ -14,7 +14,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<time_presenter> time_presenter::make_shared(std::string const project_id) {
-    auto const project_editor = app_level::global()->project_pool->project_for_id(project_id)->editor();
+    auto const project_editor = app_level::global()->project_pool->project_for_id(project_id)->editor;
     return std::shared_ptr<time_presenter>(new time_presenter{project_editor, project_editor->timing()});
 }
 

@@ -25,7 +25,7 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
     std::shared_ptr<project_url_for_project> const project_url;
     std::shared_ptr<player_for_project> const player;
 
-    [[nodiscard]] std::shared_ptr<project_editor_for_project> const &editor() const;
+    std::shared_ptr<project_editor_for_project> editor;
 
     std::shared_ptr<zooming_for_project> const horizontal_zooming;
     std::shared_ptr<zooming_for_project> const vertical_zooming;
@@ -48,7 +48,6 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
     std::shared_ptr<file_importer_for_project> const _file_importer;
     std::shared_ptr<file_loader_for_project> const _file_loader;
     std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
-    std::shared_ptr<project_editor_for_project> _editor = nullptr;
 
     observing::value::holder_ptr<project_state> const _state;
 

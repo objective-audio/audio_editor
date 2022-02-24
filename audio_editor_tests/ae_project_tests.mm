@@ -352,7 +352,7 @@ struct scrolling_stub final : scrolling_for_project {
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::editing);
 
-    std::shared_ptr<project_editor_for_track_presenter> const editor = project->editor();
+    std::shared_ptr<project_editor_for_track_presenter> const editor = project->editor;
     XCTAssertEqual(editor->file_info(), (file_info{.sample_rate = 48000, .channel_count = 1, .length = 2}));
 }
 
@@ -405,14 +405,14 @@ struct scrolling_stub final : scrolling_for_project {
     XCTAssertEqual(project->state(), project_state::loading);
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), project_state::loading);
-    XCTAssertFalse(project->editor());
+    XCTAssertFalse(project->editor);
 
     [self waitForExpectations:@[expectation] timeout:10.0];
 
     XCTAssertEqual(project->state(), project_state::failure);
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::failure);
-    XCTAssertFalse(project->editor());
+    XCTAssertFalse(project->editor);
 }
 
 @end

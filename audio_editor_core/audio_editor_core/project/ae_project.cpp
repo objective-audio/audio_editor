@@ -26,6 +26,7 @@ project::project(std::string const &identifier, url const &file_url,
       _file_importer(file_importer),
       _file_loader(file_loader),
       player(player),
+      editor(nullptr),
       _editor_maker(editor_maker),
       horizontal_zooming(horizontal_zooming),
       vertical_zooming(vertical_zooming),
@@ -68,10 +69,6 @@ url const &project::file_url() const {
 
 project_state const &project::state() const {
     return this->_state->value();
-}
-
-std::shared_ptr<project_editor_for_project> const &project::editor() const {
-    return this->_editor;
 }
 
 bool project::can_close() const {
@@ -119,7 +116,7 @@ void project::_setup(std::weak_ptr<project> weak) {
                              auto const &project_url = project->project_url;
                              auto const editing_file_url = project_url->editing_file();
                              if (auto const file_info = project->_file_loader->load_file_info(editing_file_url)) {
-                                 project->_editor = project->_editor_maker->make(
+                                 project->editor = project->_editor_maker->make(
                                      editing_file_url, project_url->db_file(), file_info.value());
                                  project->_state->set_value(project_state::editing);
                              } else {
