@@ -15,7 +15,7 @@ using namespace yas::ae;
 std::shared_ptr<markers_presenter> markers_presenter::make_shared(std::string const &project_id,
                                                                   std::shared_ptr<display_space> const &display_space) {
     auto const project = app_level::global()->project_pool->project_for_id(project_id);
-    return make_shared(project->editor(), display_space);
+    return make_shared(project->editor, display_space);
 }
 
 std::shared_ptr<markers_presenter> markers_presenter::make_shared(

@@ -4,10 +4,17 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_dependency.h>
+#include <memory>
+#include <string>
 
 namespace yas::ae {
-struct uuid_generator final : uuid_generator_for_project_maker {
+struct uuid_generatable {
+    virtual ~uuid_generatable() = default;
+
+    virtual std::string generate() const = 0;
+};
+
+struct uuid_generator final : uuid_generatable {
     std::string generate() const override;
 
     static std::shared_ptr<uuid_generator> make_shared();

@@ -74,14 +74,4 @@ struct project_editor_maker_for_project {
 struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_controller {
     virtual ~scrolling_for_project() = default;
 };
-
-struct zooming_for_project : zooming_for_track_presenter, zooming_for_pinch_gesture_controller {
-    virtual ~zooming_for_project() = default;
-};
-
-struct uuid_generator_for_project_maker {
-    virtual ~uuid_generator_for_project_maker() = default;
-
-    virtual std::string generate() const = 0;
-};
 }  // namespace yas::ae

@@ -30,7 +30,7 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::string const 
     auto const &font_atlas = ui_root->font_atlas_14();
     auto const presenter = editing_root_presenter::make_shared(project_id);
     auto const &color = app_level->color;
-    auto const &action_controller = app_level->project_pool->project_for_id(project_id)->action_controller();
+    auto const &action_controller = app_level->project_pool->project_for_id(project_id)->action_controller;
     auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
     auto const ui_track = ui_track::make_shared(project_id, project_view_id);
     auto const ui_time = ui_time::make_shared(project_id, project_view_id);

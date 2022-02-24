@@ -11,15 +11,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-project_pool::project_pool(std::shared_ptr<project_maker_for_project_pool> const &project_maker)
-    : _project_maker(project_maker) {
+project_pool::project_pool(std::shared_ptr<project_maker> const &project_maker) : _project_maker(project_maker) {
 }
 
 void project_pool::add_project(url const &file_url) {
     this->add_and_return_project(file_url);
 }
 
-std::shared_ptr<project_for_project_pool> project_pool::add_and_return_project(url const &file_url) {
+std::shared_ptr<project> project_pool::add_and_return_project(url const &file_url) {
     auto const project = this->_project_maker->make(file_url);
 
     auto canceller = project
@@ -37,11 +36,11 @@ std::shared_ptr<project_for_project_pool> project_pool::add_and_return_project(u
     return project;
 }
 
-std::shared_ptr<project_for_project_pool> const &project_pool::project_for_id(std::string const &project_id) const {
+std::shared_ptr<project> const &project_pool::project_for_id(std::string const &project_id) const {
     if (this->_projects->contains(project_id)) {
         return this->_projects->at(project_id).first;
     } else {
-        static std::shared_ptr<project_for_project_pool> const empty_project = nullptr;
+        static std::shared_ptr<project> const empty_project = nullptr;
         return empty_project;
     }
 }
@@ -76,7 +75,6 @@ std::shared_ptr<project_pool> project_pool::make_shared() {
     return make_shared(project_maker::make_shared());
 }
 
-std::shared_ptr<project_pool> project_pool::make_shared(
-    std::shared_ptr<project_maker_for_project_pool> const &project_maker) {
+std::shared_ptr<project_pool> project_pool::make_shared(std::shared_ptr<project_maker> const &project_maker) {
     return std::shared_ptr<project_pool>(new project_pool{project_maker});
 }

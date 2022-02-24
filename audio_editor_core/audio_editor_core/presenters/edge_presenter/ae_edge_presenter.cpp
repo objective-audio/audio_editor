@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_pool.h>
 
 using namespace yas;
@@ -14,7 +15,7 @@ using namespace yas::ae;
 
 std::shared_ptr<edge_presenter> edge_presenter::make_shared(std::string const &project_id,
                                                             std::shared_ptr<display_space> const &display_space) {
-    auto const &editor = ae::app_level::global()->project_pool->project_for_id(project_id)->editor();
+    auto const &editor = ae::app_level::global()->project_pool->project_for_id(project_id)->editor;
     return make_shared(editor, display_space);
 }
 

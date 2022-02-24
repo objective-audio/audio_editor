@@ -24,12 +24,12 @@ using namespace yas::ae;
 - (void)setupWithProjectID:(std::string const &)project_id {
     auto const &project = app_level::global()->project_pool->project_for_id(project_id);
 
-    self->_context_menu_presenter = project->context_menu_presenter();
-    self->_action_controller = project->action_controller();
+    self->_context_menu_presenter = project->context_menu_presenter;
+    self->_action_controller = project->action_controller;
 
     auto *const unowned = [[YASUnownedObject<AEMetalView *> alloc] initWithObject:self];
 
-    project->context_menu_presenter()
+    project->context_menu_presenter
         ->observe([unowned](std::optional<context_menu> const &event) {
             if (!event.has_value()) {
                 return;
