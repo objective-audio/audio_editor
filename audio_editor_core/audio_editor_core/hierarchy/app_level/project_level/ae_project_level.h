@@ -4,16 +4,22 @@
 
 #pragma once
 
+#include <cpp_utils/yas_url.h>
+
 #include <memory>
 #include <string>
 
 namespace yas::ae {
+class project;
+
 struct project_level final {
-    [[nodiscard]] static std::shared_ptr<project_level> make_shared(std::string const &identifier);
+    [[nodiscard]] static std::shared_ptr<project_level> make_shared(std::string const &identifier, url const &file_url);
 
     std::string const identifier;
 
+    std::shared_ptr<project> const project;
+
    private:
-    project_level(std::string const &identifier);
+    project_level(std::string const &identifier, std::shared_ptr<ae::project> const &);
 };
 }  // namespace yas::ae
