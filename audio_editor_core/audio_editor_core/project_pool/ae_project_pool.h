@@ -14,8 +14,8 @@ class project;
 class project_level;
 
 struct project_pool final : project_pool_for_app_presenter {
-    void add_project(url const &file_url) override;
-    std::shared_ptr<project> add_and_return_project(url const &file_url);
+    void add_project_level(url const &file_url) override;
+    std::shared_ptr<project_level> add_and_return_project_level(url const &file_url);
     [[nodiscard]] std::shared_ptr<project_level> const &project_level_for_id(std::string const &) const;
     [[nodiscard]] std::shared_ptr<project> const &project_for_id(std::string const &) const;
     [[nodiscard]] std::size_t size() const;

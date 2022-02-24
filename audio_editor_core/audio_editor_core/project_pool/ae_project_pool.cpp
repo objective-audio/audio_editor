@@ -15,12 +15,12 @@ using namespace yas::ae;
 project_pool::project_pool(std::shared_ptr<project_maker> const &project_maker) : _project_maker(project_maker) {
 }
 
-void project_pool::add_project(url const &file_url) {
-    this->add_and_return_project(file_url);
+void project_pool::add_project_level(url const &file_url) {
+    this->add_and_return_project_level(file_url);
 }
 
-std::shared_ptr<project> project_pool::add_and_return_project(url const &file_url) {
-    auto project_level = this->_project_maker->make(file_url);
+std::shared_ptr<project_level> project_pool::add_and_return_project_level(url const &file_url) {
+    auto const project_level = this->_project_maker->make(file_url);
     auto const &project = project_level->project;
 
     auto canceller = project
@@ -34,9 +34,9 @@ std::shared_ptr<project> project_pool::add_and_return_project(url const &file_ur
                          .end();
 
     this->_project_levels->insert_or_replace(project->identifier(),
-                                             std::make_pair(std::move(project_level), std::move(canceller)));
+                                             std::make_pair(project_level, std::move(canceller)));
 
-    return project;
+    return project_level;
 }
 
 std::shared_ptr<project_level> const &project_pool::project_level_for_id(std::string const &project_id) const {
