@@ -27,7 +27,7 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<project_editor_maker_for_project> const &editor_maker)
     : _identifier(identifier),
       _file_url(file_url),
-      project_url(project_url),
+      _project_url(project_url),
       _file_importer(file_importer),
       _file_loader(file_loader),
       editor(nullptr),
@@ -83,14 +83,14 @@ void project::_setup(std::weak_ptr<project> weak) {
     this->_file_importer->import(
         {.identifier = this->_identifier,
          .src_url = this->_file_url,
-         .dst_url = this->project_url->editing_file(),
+         .dst_url = this->_project_url->editing_file(),
          .completion = [weak](bool const result) {
              if (auto const project = weak.lock()) {
                  auto const &state = project->_state->value();
                  switch (state) {
                      case project_state::loading: {
                          if (result) {
-                             auto const &project_url = project->project_url;
+                             auto const &project_url = project->_project_url;
                              auto const editing_file_url = project_url->editing_file();
                              if (auto const file_info = project->_file_loader->load_file_info(editing_file_url)) {
                                  project->editor = project->_editor_maker->make(

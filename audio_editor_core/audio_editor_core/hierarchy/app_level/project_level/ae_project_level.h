@@ -11,6 +11,7 @@
 
 namespace yas::ae {
 class app_level;
+class project_url;
 class zooming;
 class scrolling;
 class system_url;
@@ -27,6 +28,7 @@ struct project_level final {
 
     std::string const identifier;
 
+    std::shared_ptr<ae::project_url> const project_url;
     std::shared_ptr<ae::zooming> const horizontal_zooming;
     std::shared_ptr<ae::zooming> const vertical_zooming;
     std::shared_ptr<ae::scrolling> const scrolling;

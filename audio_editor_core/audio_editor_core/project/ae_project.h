@@ -20,8 +20,6 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
     [[nodiscard]] url const &file_url() const override;
     [[nodiscard]] project_state const &state() const override;
 
-    std::shared_ptr<project_url_for_project> const project_url;
-
     std::shared_ptr<project_editor_for_project> editor;
 
     [[nodiscard]] bool can_close() const override;
@@ -34,6 +32,7 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
     std::string const _identifier;
     url const _file_url;
 
+    std::shared_ptr<project_url_for_project> const _project_url;
     std::shared_ptr<file_importer_for_project> const _file_importer;
     std::shared_ptr<file_loader_for_project> const _file_loader;
     std::shared_ptr<project_editor_maker_for_project> const _editor_maker;
