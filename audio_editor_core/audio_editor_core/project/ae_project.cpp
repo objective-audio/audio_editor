@@ -13,10 +13,9 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
                                               std::shared_ptr<project_url_for_project> const &project_url,
                                               std::shared_ptr<file_importer_for_project> const &file_importer,
                                               std::shared_ptr<file_loader_for_project> const &file_loader,
-                                              std::shared_ptr<player_for_project> const &player,
                                               std::shared_ptr<project_editor_maker_for_project> const &editor_maker) {
     auto shared = std::shared_ptr<project>(
-        new project{identifier, file_url, project_url, file_importer, file_loader, player, editor_maker});
+        new project{identifier, file_url, project_url, file_importer, file_loader, editor_maker});
     shared->_setup(shared);
     return shared;
 }
@@ -25,14 +24,12 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<project_url_for_project> const &project_url,
                  std::shared_ptr<file_importer_for_project> const &file_importer,
                  std::shared_ptr<file_loader_for_project> const &file_loader,
-                 std::shared_ptr<player_for_project> const &player,
                  std::shared_ptr<project_editor_maker_for_project> const &editor_maker)
     : _identifier(identifier),
       _file_url(file_url),
       project_url(project_url),
       _file_importer(file_importer),
       _file_loader(file_loader),
-      player(player),
       editor(nullptr),
       _editor_maker(editor_maker),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),

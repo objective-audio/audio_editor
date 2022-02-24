@@ -34,7 +34,7 @@ project_level::project_level(std::string const &identifier, url const &file_url,
       dialog_presenter(dialog_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       editor_maker(project_editor_maker::make_shared(this->player, this->action_controller, this->dialog_presenter)),
-      project(project::make_shared(
-          identifier, file_url, project_url::make_shared(app_level->system_url->project_directory(identifier)),
-          app_level->file_importer, app_level->file_loader, this->player, this->editor_maker)) {
+      project(project::make_shared(identifier, file_url,
+                                   project_url::make_shared(app_level->system_url->project_directory(identifier)),
+                                   app_level->file_importer, app_level->file_loader, this->editor_maker)) {
 }
