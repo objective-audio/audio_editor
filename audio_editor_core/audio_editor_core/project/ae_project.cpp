@@ -4,6 +4,8 @@
 
 #include "ae_project.h"
 
+#include <audio_editor_core/ae_zooming.h>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -13,8 +15,6 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<file_loader_for_project> const &file_loader,
                  std::shared_ptr<player_for_project> const &player,
                  std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
-                 std::shared_ptr<zooming_for_project> const &horizontal_zooming,
-                 std::shared_ptr<zooming_for_project> const &vertical_zooming,
                  std::shared_ptr<scrolling_for_project> const &scrolling,
                  std::shared_ptr<ae::action_controller> const &action_controller,
                  std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
@@ -28,8 +28,8 @@ project::project(std::string const &identifier, url const &file_url,
       player(player),
       editor(nullptr),
       _editor_maker(editor_maker),
-      horizontal_zooming(horizontal_zooming),
-      vertical_zooming(vertical_zooming),
+      horizontal_zooming(zooming::make_shared()),
+      vertical_zooming(zooming::make_shared()),
       scrolling(scrolling),
       action_controller(action_controller),
       dialog_presenter(dialog_presenter),
@@ -45,16 +45,14 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
                                               std::shared_ptr<file_loader_for_project> const &file_loader,
                                               std::shared_ptr<player_for_project> const &player,
                                               std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
-                                              std::shared_ptr<zooming_for_project> const &horizontal_zooming,
-                                              std::shared_ptr<zooming_for_project> const &vertical_zooming,
                                               std::shared_ptr<scrolling_for_project> const &scrolling,
                                               std::shared_ptr<ae::action_controller> const &action_controller,
                                               std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
                                               std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter,
                                               std::shared_ptr<ae::action_router> const &action_router) {
-    auto shared = std::shared_ptr<project>(new project{
-        identifier, file_url, project_url, file_importer, file_loader, player, editor_maker, horizontal_zooming,
-        vertical_zooming, scrolling, action_controller, dialog_presenter, context_menu_presenter, action_router});
+    auto shared = std::shared_ptr<project>(new project{identifier, file_url, project_url, file_importer, file_loader,
+                                                       player, editor_maker, scrolling, action_controller,
+                                                       dialog_presenter, context_menu_presenter, action_router});
     shared->_setup(shared);
     return shared;
 }
