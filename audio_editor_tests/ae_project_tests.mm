@@ -192,23 +192,6 @@ struct project_editor_maker_stub final : project_editor_maker_for_project {
     }
 };
 
-struct zooming_stub final : zooming_for_project {
-    void begin() override {
-    }
-    void set_magnification(double const) override {
-    }
-    void end() override {
-    }
-
-    double scale() const override {
-        return 0.0;
-    }
-
-    observing::syncable observe_scale(std::function<void(double const &)> &&) override {
-        return observing::syncable{};
-    }
-};
-
 struct scrolling_stub final : scrolling_for_project {
     void begin() override {
     }
