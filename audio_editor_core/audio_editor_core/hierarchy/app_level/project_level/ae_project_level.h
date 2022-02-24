@@ -19,6 +19,7 @@ class action_router;
 class action_controller;
 class dialog_presenter;
 class context_menu_presenter;
+class project_editor_maker;
 class project;
 
 struct project_level final {
@@ -34,13 +35,14 @@ struct project_level final {
     std::shared_ptr<ae::action_controller> const action_controller;
     std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
     std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;
-
-    std::shared_ptr<project> const project;
+    std::shared_ptr<ae::project_editor_maker> const editor_maker;
+    std::shared_ptr<ae::project> const project;
 
    private:
     project_level(std::string const &identifier, url const &file_url, std::shared_ptr<app_level> const &,
                   std::shared_ptr<ae::scrolling> const &, std::shared_ptr<ae::player> const &,
                   std::shared_ptr<ae::action_router> const &, std::shared_ptr<ae::action_controller> const &,
-                  std::shared_ptr<ae::dialog_presenter> const &, std::shared_ptr<ae::project> const &);
+                  std::shared_ptr<ae::dialog_presenter> const &, std::shared_ptr<ae::project_editor_maker> const &,
+                  std::shared_ptr<ae::project> const &);
 };
 }  // namespace yas::ae

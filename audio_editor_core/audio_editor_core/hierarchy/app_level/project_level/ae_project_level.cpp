@@ -34,7 +34,7 @@ std::shared_ptr<project_level> project_level::make_shared(std::string const &ide
 
     return std::shared_ptr<project_level>(new project_level{identifier, file_url, app_level, scrolling, player,
                                                             action_router, action_controller, dialog_presenter,
-                                                            project});
+                                                            editor_maker, project});
 }
 
 project_level::project_level(std::string const &identifier, url const &file_url,
@@ -43,6 +43,7 @@ project_level::project_level(std::string const &identifier, url const &file_url,
                              std::shared_ptr<ae::action_router> const &action_router,
                              std::shared_ptr<ae::action_controller> const &action_controller,
                              std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
+                             std::shared_ptr<ae::project_editor_maker> const &editor_maker,
                              std::shared_ptr<ae::project> const &project)
     : identifier(identifier),
       horizontal_zooming(zooming::make_shared()),
@@ -53,5 +54,6 @@ project_level::project_level(std::string const &identifier, url const &file_url,
       action_controller(action_controller),
       dialog_presenter(dialog_presenter),
       context_menu_presenter(context_menu_presenter::make_shared()),
+      editor_maker(editor_maker),
       project(project) {
 }
