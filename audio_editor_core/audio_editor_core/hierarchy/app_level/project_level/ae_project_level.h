@@ -12,6 +12,7 @@
 namespace yas::ae {
 class zooming;
 class scrolling;
+class context_menu_presenter;
 class project;
 
 struct project_level final {
@@ -22,6 +23,7 @@ struct project_level final {
     std::shared_ptr<ae::zooming> const horizontal_zooming;
     std::shared_ptr<ae::zooming> const vertical_zooming;
     std::shared_ptr<ae::scrolling> const scrolling;
+    std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;
 
     std::shared_ptr<project> const project;
 

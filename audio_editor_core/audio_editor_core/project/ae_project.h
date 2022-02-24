@@ -16,7 +16,7 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
         std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &,
         std::shared_ptr<ae::action_controller> const &, std::shared_ptr<ae::dialog_presenter> const &,
-        std::shared_ptr<ae::context_menu_presenter> const &, std::shared_ptr<ae::action_router> const &);
+        std::shared_ptr<ae::action_router> const &);
 
     [[nodiscard]] std::string const &identifier() const override;
     [[nodiscard]] url const &file_url() const override;
@@ -29,7 +29,6 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
 
     std::shared_ptr<ae::action_controller> const action_controller;
     std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
-    std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;
     std::shared_ptr<ae::action_router> const action_router;
 
     [[nodiscard]] bool can_close() const override;
@@ -55,7 +54,7 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
             std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
             std::shared_ptr<player_for_project> const &, std::shared_ptr<project_editor_maker_for_project> const &,
             std::shared_ptr<ae::action_controller> const &, std::shared_ptr<ae::dialog_presenter> const &,
-            std::shared_ptr<ae::context_menu_presenter> const &, std::shared_ptr<ae::action_router> const &);
+            std::shared_ptr<ae::action_router> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;

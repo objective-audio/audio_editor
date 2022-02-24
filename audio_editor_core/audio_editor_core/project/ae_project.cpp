@@ -17,11 +17,10 @@ std::shared_ptr<project> project::make_shared(std::string const &identifier, url
                                               std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
                                               std::shared_ptr<ae::action_controller> const &action_controller,
                                               std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
-                                              std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter,
                                               std::shared_ptr<ae::action_router> const &action_router) {
-    auto shared = std::shared_ptr<project>(new project{identifier, file_url, project_url, file_importer, file_loader,
-                                                       player, editor_maker, action_controller, dialog_presenter,
-                                                       context_menu_presenter, action_router});
+    auto shared =
+        std::shared_ptr<project>(new project{identifier, file_url, project_url, file_importer, file_loader, player,
+                                             editor_maker, action_controller, dialog_presenter, action_router});
     shared->_setup(shared);
     return shared;
 }
@@ -34,7 +33,6 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<project_editor_maker_for_project> const &editor_maker,
                  std::shared_ptr<ae::action_controller> const &action_controller,
                  std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
-                 std::shared_ptr<ae::context_menu_presenter> const &context_menu_presenter,
                  std::shared_ptr<ae::action_router> const &action_router)
     : _identifier(identifier),
       _file_url(file_url),
@@ -46,7 +44,6 @@ project::project(std::string const &identifier, url const &file_url,
       _editor_maker(editor_maker),
       action_controller(action_controller),
       dialog_presenter(dialog_presenter),
-      context_menu_presenter(context_menu_presenter),
       action_router(action_router),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
