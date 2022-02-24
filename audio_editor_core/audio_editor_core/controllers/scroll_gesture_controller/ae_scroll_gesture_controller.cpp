@@ -15,7 +15,7 @@ using namespace yas::ae;
 
 std::shared_ptr<scroll_gesture_controller> scroll_gesture_controller::make_shared(std::string const &project_id) {
     auto const project = app_level::global()->project_pool->project_for_id(project_id);
-    return std::shared_ptr<scroll_gesture_controller>(new scroll_gesture_controller{project->scrolling()});
+    return std::shared_ptr<scroll_gesture_controller>(new scroll_gesture_controller{project->scrolling});
 }
 
 scroll_gesture_controller::scroll_gesture_controller(std::shared_ptr<scrolling_for_gesture_controller> const &scrolling)
