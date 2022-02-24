@@ -39,9 +39,6 @@ struct project_level final {
     std::shared_ptr<ae::project> const project;
 
    private:
-    project_level(std::string const &identifier, url const &file_url, std::shared_ptr<app_level> const &,
-                  std::shared_ptr<ae::scrolling> const &, std::shared_ptr<ae::player> const &,
-                  std::shared_ptr<ae::action_router> const &, std::shared_ptr<ae::action_controller> const &,
-                  std::shared_ptr<ae::dialog_presenter> const &);
+    project_level(std::string const &identifier, url const &file_url, std::shared_ptr<app_level> const &);
 };
 }  // namespace yas::ae
