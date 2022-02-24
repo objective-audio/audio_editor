@@ -4,11 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_dependency.h>
-#include <audio_editor_core/ae_project_pool_dependency.h>
 #include <cpp_utils/yas_url.h>
-
-#include <memory>
 
 namespace yas::ae {
 class project;
