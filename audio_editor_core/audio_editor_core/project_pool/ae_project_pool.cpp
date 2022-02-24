@@ -39,6 +39,15 @@ std::shared_ptr<project> project_pool::add_and_return_project(url const &file_ur
     return project;
 }
 
+std::shared_ptr<project_level> const &project_pool::project_level_for_id(std::string const &project_id) const {
+    if (this->_project_levels->contains(project_id)) {
+        return this->_project_levels->at(project_id).first;
+    } else {
+        static std::shared_ptr<project_level> const empty = nullptr;
+        return empty;
+    }
+}
+
 std::shared_ptr<project> const &project_pool::project_for_id(std::string const &project_id) const {
     if (this->_project_levels->contains(project_id)) {
         return this->_project_levels->at(project_id).first->project;
