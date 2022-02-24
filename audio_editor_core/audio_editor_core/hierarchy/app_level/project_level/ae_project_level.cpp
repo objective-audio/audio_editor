@@ -32,11 +32,13 @@ std::shared_ptr<project_level> project_level::make_shared(std::string const &ide
     auto const project =
         project::make_shared(identifier, file_url, project_url, file_importer, file_loader, player, editor_maker);
 
-    return std::shared_ptr<project_level>(
-        new project_level{identifier, scrolling, action_router, action_controller, dialog_presenter, project});
+    return std::shared_ptr<project_level>(new project_level{identifier, app_level->system_url, scrolling, player,
+                                                            action_router, action_controller, dialog_presenter,
+                                                            project});
 }
 
-project_level::project_level(std::string const &identifier, std::shared_ptr<ae::scrolling> const &scrolling,
+project_level::project_level(std::string const &identifier, std::shared_ptr<ae::system_url> const &system_url,
+                             std::shared_ptr<ae::scrolling> const &scrolling, std::shared_ptr<ae::player> const &player,
                              std::shared_ptr<ae::action_router> const &action_router,
                              std::shared_ptr<ae::action_controller> const &action_controller,
                              std::shared_ptr<ae::dialog_presenter> const &dialog_presenter,
@@ -45,6 +47,7 @@ project_level::project_level(std::string const &identifier, std::shared_ptr<ae::
       horizontal_zooming(zooming::make_shared()),
       vertical_zooming(zooming::make_shared()),
       scrolling(scrolling),
+      player(player),
       action_router(action_router),
       action_controller(action_controller),
       dialog_presenter(dialog_presenter),
