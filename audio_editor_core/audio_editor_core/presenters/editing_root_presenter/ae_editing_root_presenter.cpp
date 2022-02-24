@@ -33,7 +33,7 @@ editing_root_presenter::editing_root_presenter(
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
     auto const project = app_level::global()->project_pool->project_for_id(project_id);
-    return make_shared(project, project->editor(), project->action_router());
+    return make_shared(project, project->editor(), project->action_router);
 }
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(

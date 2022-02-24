@@ -32,8 +32,8 @@ project::project(std::string const &identifier, url const &file_url,
       scrolling(scrolling),
       action_controller(action_controller),
       dialog_presenter(dialog_presenter),
-      _context_menu_presenter(context_menu_presenter),
-      _action_router(action_router),
+      context_menu_presenter(context_menu_presenter),
+      action_router(action_router),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
 }
@@ -72,14 +72,6 @@ project_state const &project::state() const {
 
 std::shared_ptr<project_editor_for_project> const &project::editor() const {
     return this->_editor;
-}
-
-std::shared_ptr<ae::context_menu_presenter> const &project::context_menu_presenter() const {
-    return this->_context_menu_presenter;
-}
-
-std::shared_ptr<ae::action_router> const &project::action_router() const {
-    return this->_action_router;
 }
 
 bool project::can_close() const {
