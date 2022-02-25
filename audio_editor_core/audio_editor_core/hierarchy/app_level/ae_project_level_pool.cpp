@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_level_maker.h>
 #include <audio_editor_core/ae_uuid_generator.h>
 
 using namespace yas;

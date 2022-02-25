@@ -8,7 +8,6 @@
 #include <audio_editor_core/ae_project_level_pool_types.h>
 
 namespace yas::ae {
-class project_level_maker;
 class project_level;
 class uuid_generatable;
 
