@@ -6,14 +6,22 @@
 
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_level_maker.h>
 #include <audio_editor_core/ae_uuid_generator.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-project_level_pool::project_level_pool(std::shared_ptr<project_level_maker> const &project_maker)
-    : _project_maker(project_maker) {
+std::shared_ptr<project_level_pool> project_level_pool::make_shared() {
+    return make_shared(uuid_generator::make_shared());
+}
+
+std::shared_ptr<project_level_pool> project_level_pool::make_shared(
+    std::shared_ptr<uuid_generatable> const &uuid_generator) {
+    return std::shared_ptr<project_level_pool>(new project_level_pool{uuid_generator});
+}
+
+project_level_pool::project_level_pool(std::shared_ptr<uuid_generatable> const &uuid_generator)
+    : _uuid_generator(uuid_generator) {
 }
 
 void project_level_pool::add_project_level(url const &file_url) {
@@ -21,7 +29,8 @@ void project_level_pool::add_project_level(url const &file_url) {
 }
 
 std::shared_ptr<project_level> project_level_pool::add_and_return_project_level(url const &file_url) {
-    auto const project_level = this->_project_maker->make(file_url);
+    auto const identifier = this->_uuid_generator->generate();
+    auto const project_level = project_level::make_shared(identifier, file_url);
     auto const &project_id = project_level->identifier;
     auto const &project = project_level->project;
 
@@ -77,13 +86,4 @@ observing::syncable project_level_pool::observe_event(std::function<void(project
             } break;
         }
     });
-}
-
-std::shared_ptr<project_level_pool> project_level_pool::make_shared() {
-    return make_shared(project_level_maker::make_shared());
-}
-
-std::shared_ptr<project_level_pool> project_level_pool::make_shared(
-    std::shared_ptr<project_level_maker> const &project_maker) {
-    return std::shared_ptr<project_level_pool>(new project_level_pool{project_maker});
 }
