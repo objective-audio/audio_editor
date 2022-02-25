@@ -6,8 +6,11 @@
 
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_project_editor_level.h>
+#include <audio_editor_core/ae_project_editor_level_pool.h>
 #include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_project_level_pool.h>
 #include <audio_editor_core/ae_zooming.h>
 #include <cpp_utils/yas_stl_utils.h>
 
@@ -16,7 +19,7 @@ using namespace yas::ae;
 
 std::shared_ptr<track_presenter> track_presenter::make_shared(std::string const &project_id) {
     auto const project_level = app_level::global()->project_pool->project_level_for_id(project_id);
-    return make_shared(project_level->project->editor, project_level->horizontal_zooming,
+    return make_shared(project_level->editor_level_pool->editor_level()->editor, project_level->horizontal_zooming,
                        project_level->vertical_zooming);
 }
 

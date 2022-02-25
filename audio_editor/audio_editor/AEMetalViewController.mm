@@ -4,10 +4,12 @@
 
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
+#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_app_level.h>
+#include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_project_level_pool.h>
 #include <audio_editor_core/ae_ui_pool.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #import "AEMetalView.h"

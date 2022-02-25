@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_project_level_pool.h>
 #include <audio_editor_core/ae_scrolling.h>
 
 using namespace yas;

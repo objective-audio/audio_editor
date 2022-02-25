@@ -20,8 +20,9 @@ class action_router;
 class action_controller;
 class dialog_presenter;
 class context_menu_presenter;
-class project_editor_maker;
+class project_editor_level_maker;
 class project;
+class project_editor_level_pool;
 
 struct project_level final {
     [[nodiscard]] static std::shared_ptr<project_level> make_shared(std::string const &identifier, url const &file_url);
@@ -38,7 +39,8 @@ struct project_level final {
     std::shared_ptr<ae::action_controller> const action_controller;
     std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
     std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;
-    std::shared_ptr<ae::project_editor_maker> const editor_maker;
+    std::shared_ptr<ae::project_editor_level_maker> const editor_maker;
+    std::shared_ptr<ae::project_editor_level_pool> const editor_level_pool;
     std::shared_ptr<ae::project> const project;
 
    private:

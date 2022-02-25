@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_app_presenter_utils.h>
-#include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_project_level_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -35,7 +35,7 @@ void app_presenter::select_file(url const &file_url) {
 
 observing::syncable app_presenter::observe_event(std::function<void(app_presenter_event const &)> &&handler) {
     if (auto const pool = this->_project_pool.lock()) {
-        auto syncable = pool->observe_event([handler](project_pool_event const &pool_event) {
+        auto syncable = pool->observe_event([handler](project_level_pool_event const &pool_event) {
             handler(app_presenter_event{.type = to_presenter_event_type(pool_event.type),
                                         .project_id = pool_event.project_id});
         });

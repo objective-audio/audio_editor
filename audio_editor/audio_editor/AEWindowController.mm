@@ -28,7 +28,7 @@ using namespace yas::ae;
 }
 
 - (std::string const &)project_id {
-    return self->_presenter->project_id();
+    return self->_presenter->project_id;
 }
 
 - (void)windowDidLoad {

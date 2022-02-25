@@ -12,6 +12,19 @@
 
 namespace yas::ae {
 struct project_editor final : project_editor_for_project {
+    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
+        std::string const &identifier, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
+        std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &,
+        std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &);
+    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
+        url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
+        std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
+        std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
+        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
+        std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &,
+        std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
+        std::shared_ptr<time_editor_maker_for_project_editor> const &);
+
     [[nodiscard]] ae::file_info const &file_info() const override;
     [[nodiscard]] std::shared_ptr<player_for_project_editor> const &player() const;
     [[nodiscard]] std::shared_ptr<file_track_for_project_editor> const &file_track() const;
@@ -122,20 +135,6 @@ struct project_editor final : project_editor_for_project {
         std::function<void(ae::timing_fraction_kind const &)> &&) override;
     [[nodiscard]] observing::syncable observe_time_editor_for_time_presenter(
         std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&) override;
-
-    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
-        url const &editing_file_url, url const &db_url, ae::file_info const &,
-        std::shared_ptr<player_for_project_editor> const &, std::shared_ptr<action_controller> const &,
-        std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &,
-        std::shared_ptr<timing_for_project_editor> const &);
-    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
-        url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
-        std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
-        std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
-        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
-        std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &,
-        std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
-        std::shared_ptr<time_editor_maker_for_project_editor> const &);
 
    private:
     url const _editing_file_url;

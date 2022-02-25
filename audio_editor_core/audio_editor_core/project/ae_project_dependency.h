@@ -63,15 +63,13 @@ struct project_editor_for_project : project_editor_for_editing_root_presenter,
     [[nodiscard]] virtual std::shared_ptr<timing_for_project_editor> const &timing() const = 0;
 };
 
-struct project_editor_maker_for_project {
-    virtual ~project_editor_maker_for_project() = default;
-
-    [[nodiscard]] virtual std::shared_ptr<project_editor_for_project> make(url const &editing_file_url,
-                                                                           url const &db_file_url,
-                                                                           file_info const &) const = 0;
-};
-
 struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_controller {
     virtual ~scrolling_for_project() = default;
+};
+
+struct project_editor_level_pool_for_project {
+    virtual ~project_editor_level_pool_for_project() = default;
+
+    virtual void add_editor_level(file_info const &) = 0;
 };
 }  // namespace yas::ae

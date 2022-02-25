@@ -3,11 +3,13 @@
 //
 
 #import "AEMetalView.h"
+#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_action_utils.h>
 #include <audio_editor_core/ae_app_level.h>
+#include <audio_editor_core/ae_context_menu_presenter.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_project_level_pool.h>
 #include <objc_utils/yas_objc_unowned.h>
 
 using namespace yas;

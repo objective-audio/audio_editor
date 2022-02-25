@@ -183,15 +183,6 @@ struct project_editor_stub final : project_editor_for_project {
     }
 };
 
-struct project_editor_maker_stub final : project_editor_maker_for_project {
-    [[nodiscard]] std::shared_ptr<project_editor_for_project> make(url const &, url const &,
-                                                                   file_info const &info) const override {
-        auto editor = std::make_shared<project_editor_stub>();
-        editor->file_info_value = info;
-        return editor;
-    }
-};
-
 struct scrolling_stub final : scrolling_for_project {
     void begin() override {
     }
@@ -209,6 +200,14 @@ struct scrolling_stub final : scrolling_for_project {
         return observing::endable{};
     }
 };
+
+struct project_editor_level_pool_stub final : project_editor_level_pool_for_project {
+    std::optional<file_info> file_info_value{std::nullopt};
+
+    void add_editor_level(file_info const &file_info) override {
+        this->file_info_value = file_info;
+    }
+};
 }
 
 @interface ae_project_tests : XCTestCase
@@ -223,13 +222,13 @@ struct scrolling_stub final : scrolling_for_project {
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
-    auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
+    auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
-    auto project = project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, editor_maker);
+    auto project =
+        project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, editor_level_pool);
 
     XCTAssertTrue(project != nullptr);
-    XCTAssertEqual(project->file_url(), file_url);
 }
 
 - (void)test_loading {
@@ -238,10 +237,8 @@ struct scrolling_stub final : scrolling_for_project {
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
-    auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
-    auto const action_controller = ae::action_controller::make_shared(action_router::make_shared());
-    auto const dialog_presenter = ae::dialog_presenter::make_shared();
+    auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     struct called_values {
         url src_url;
@@ -255,8 +252,9 @@ struct scrolling_stub final : scrolling_for_project {
         return false;
     };
 
-    auto const project =
-        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, editor_maker);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              editor_level_pool);
+    project->setup();
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -271,14 +269,15 @@ struct scrolling_stub final : scrolling_for_project {
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
-    auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
+    auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
-    auto const project =
-        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, editor_maker);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              editor_level_pool);
+    project->setup();
 
     std::vector<project_state> called;
 
@@ -313,8 +312,8 @@ struct scrolling_stub final : scrolling_for_project {
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::editing);
 
-    std::shared_ptr<project_editor_for_track_presenter> const editor = project->editor;
-    XCTAssertEqual(editor->file_info(), (file_info{.sample_rate = 48000, .channel_count = 1, .length = 2}));
+    XCTAssertEqual(editor_level_pool->file_info_value,
+                   (file_info{.sample_rate = 48000, .channel_count = 1, .length = 2}));
 }
 
 - (void)test_import_failure {
@@ -323,14 +322,15 @@ struct scrolling_stub final : scrolling_for_project {
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
     auto const player = std::make_shared<test_utils::player_stub>();
-    auto const editor_maker = std::make_shared<test_utils::project_editor_maker_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
+    auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
-    auto const project =
-        project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader, editor_maker);
+    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
+                                              editor_level_pool);
+    project->setup();
 
     std::vector<project_state> called;
 
@@ -358,14 +358,14 @@ struct scrolling_stub final : scrolling_for_project {
     XCTAssertEqual(project->state(), project_state::loading);
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), project_state::loading);
-    XCTAssertFalse(project->editor);
+    XCTAssertFalse(editor_level_pool->file_info_value.has_value());
 
     [self waitForExpectations:@[expectation] timeout:10.0];
 
     XCTAssertEqual(project->state(), project_state::failure);
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), project_state::failure);
-    XCTAssertFalse(project->editor);
+    XCTAssertFalse(editor_level_pool->file_info_value.has_value());
 }
 
 @end
