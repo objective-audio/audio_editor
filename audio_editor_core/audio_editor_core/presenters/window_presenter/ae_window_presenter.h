@@ -9,17 +9,21 @@
 namespace yas::ae {
 struct window_presenter final {
     static std::shared_ptr<window_presenter> make_shared(std::string const &project_id);
-    static std::shared_ptr<window_presenter> make_shared(std::shared_ptr<project_for_window_presenter> const &);
+    static std::shared_ptr<window_presenter> make_shared(std::string const &project_id, url const &file_url,
+                                                         std::shared_ptr<project_for_window_presenter> const &);
 
-    std::string const &project_id() const;
+    std::string const project_id;
+
     std::string title() const;
 
     bool should_close();
 
    private:
+    url const _file_url;
     std::shared_ptr<project_for_window_presenter> _project;
 
-    window_presenter(std::shared_ptr<project_for_window_presenter> const &);
+    window_presenter(std::string const &project_id, url const &file_url,
+                     std::shared_ptr<project_for_window_presenter> const &);
 
     window_presenter(window_presenter const &) = delete;
     window_presenter(window_presenter &&) = delete;

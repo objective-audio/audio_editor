@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_module_waveforms_presenter.h>
 #include <audio_editor_core/ae_project.h>
-#include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_project_level_pool.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_ui_pool.h>
 #include <audio_editor_core/ae_ui_root.h>

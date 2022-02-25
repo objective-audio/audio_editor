@@ -16,7 +16,6 @@ struct editing_root_presenter final {
         std::shared_ptr<project_editor_for_editing_root_presenter> const &,
         std::shared_ptr<action_router_for_editing_root_presenter> const &);
 
-    [[nodiscard]] std::string const &project_id() const;
     [[nodiscard]] std::string state_text() const;
     [[nodiscard]] std::string file_info_text() const;
     [[nodiscard]] std::string file_track_text() const;

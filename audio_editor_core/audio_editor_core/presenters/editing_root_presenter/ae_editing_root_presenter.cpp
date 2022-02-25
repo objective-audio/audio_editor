@@ -4,15 +4,32 @@
 
 #include "ae_editing_root_presenter.h"
 
+#include <audio_editor_core/ae_action_router.h>
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_editing_root_presenter_utils.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_project_editor_level.h>
+#include <audio_editor_core/ae_project_editor_level_pool.h>
 #include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_pool.h>
+#include <audio_editor_core/ae_project_level_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
+
+std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
+    auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
+    auto const &project = project_level->project;
+    auto const &editor = project_level->editor_level_pool->editor_level()->editor;
+    return make_shared(project, editor, project_level->action_router);
+}
+
+std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
+    std::shared_ptr<project_for_editing_root_presenter> const &project,
+    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
+    std::shared_ptr<action_router_for_editing_root_presenter> const &action_router) {
+    return std::shared_ptr<editing_root_presenter>(new editing_root_presenter{project, editor, action_router});
+}
 
 editing_root_presenter::editing_root_presenter(
     std::shared_ptr<project_for_editing_root_presenter> const &project,
@@ -30,27 +47,6 @@ editing_root_presenter::editing_root_presenter(
     editor->observe_marker_pool_event([this](auto const &event) { this->_marker_pool_event_fetcher->push(event); })
         .end()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
-    auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
-    auto const &project = project_level->project;
-    return make_shared(project, project->editor, project_level->action_router);
-}
-
-std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
-    std::shared_ptr<project_for_editing_root_presenter> const &project,
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
-    std::shared_ptr<action_router_for_editing_root_presenter> const &action_router) {
-    return std::shared_ptr<editing_root_presenter>(new editing_root_presenter{project, editor, action_router});
-}
-
-std::string const &editing_root_presenter::project_id() const {
-    if (auto const project = this->_project.lock()) {
-        return project->identifier();
-    } else {
-        return editing_root_presenter_utils::empty_text();
-    }
 }
 
 std::string editing_root_presenter::state_text() const {
@@ -120,10 +116,9 @@ observing::syncable editing_root_presenter::observe_marker_pool_text(
 }
 
 bool editing_root_presenter::responds_to_action(action const action) {
-    auto const project = this->_project.lock();
     auto const editor = this->_project_editor.lock();
     auto const router = this->_action_router.lock();
-    if (!project || !editor || !router) {
+    if (!editor || !router) {
         return false;
     }
 
