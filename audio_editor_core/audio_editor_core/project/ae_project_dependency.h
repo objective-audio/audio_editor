@@ -52,15 +52,6 @@ struct player_for_project {
     virtual frame_index_t current_frame() const = 0;
 };
 
-struct project_editor_for_project : project_editor_for_editing_root_presenter,
-                                    project_editor_for_markers_presenter,
-                                    project_editor_for_modules_presenter,
-                                    project_editor_for_track_presenter,
-                                    project_editor_for_time_presenter,
-                                    project_editor_for_edge_presenter {
-    virtual ~project_editor_for_project() = default;
-};
-
 struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_controller {
     virtual ~scrolling_for_project() = default;
 };
