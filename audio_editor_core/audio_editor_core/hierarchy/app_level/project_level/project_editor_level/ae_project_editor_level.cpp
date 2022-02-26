@@ -40,5 +40,7 @@ project_editor_level::project_editor_level(std::string const &identifier, ae::fi
       database(database::make_shared(project_url->db_file())),
       exporter(exporter::make_shared()),
       time_editor_maker(time_editor_maker::make_shared()),
-      editor(project_editor::make_shared(identifier, file_info, this->nudging, this->timing)) {
+      editor(project_editor::make_shared(identifier, file_info, this->file_track, this->marker_pool, this->edge_editor,
+                                         this->pasteboard, this->database, this->exporter, this->nudging, this->timing,
+                                         this->time_editor_maker)) {
 }

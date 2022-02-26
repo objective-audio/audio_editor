@@ -23,38 +23,23 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor> project_editor::make_shared(std::string const &identifier,
-                                                            ae::file_info const &file_info,
-                                                            std::shared_ptr<nudging_for_project_editor> const &nudging,
-                                                            std::shared_ptr<timing_for_project_editor> const &timing) {
-    auto const &project_level = hierarchy::project_level_for_id(identifier);
-    auto const &project_url = project_level->project_url;
-    return make_shared(identifier, file_info, project_level->player, file_track::make_shared(),
-                       marker_pool::make_shared(), edge_editor::make_shared(), pasteboard::make_shared(),
-                       database::make_shared(project_url->db_file()), exporter::make_shared(),
-                       project_level->action_controller, project_level->dialog_presenter, nudging, timing,
-                       time_editor_maker::make_shared());
-}
-
 std::shared_ptr<project_editor> project_editor::make_shared(
     std::string const &identifier, ae::file_info const &file_info,
-    std::shared_ptr<player_for_project_editor> const &player,
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
     std::shared_ptr<edge_editor_for_project_editor> const &edge_editor,
     std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
-    std::shared_ptr<action_controller> const &action_controller,
-    std::shared_ptr<dialog_presenter> const &dialog_presenter,
     std::shared_ptr<nudging_for_project_editor> const &nudging,
     std::shared_ptr<timing_for_project_editor> const &timing,
     std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker) {
     auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
-    return std::shared_ptr<project_editor>(new project_editor{
-        project_url->editing_file(), file_info, player, file_track, marker_pool, edge_editor, pasteboard, database,
-        exporter, action_controller, dialog_presenter, nudging, timing, time_editor_maker});
+    return std::shared_ptr<project_editor>(
+        new project_editor{project_url->editing_file(), file_info, project_level->player, file_track, marker_pool,
+                           edge_editor, pasteboard, database, exporter, project_level->action_controller,
+                           project_level->dialog_presenter, nudging, timing, time_editor_maker});
 }
 
 project_editor::project_editor(url const &editing_file_url, ae::file_info const &file_info,
