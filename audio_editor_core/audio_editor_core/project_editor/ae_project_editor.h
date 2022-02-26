@@ -21,7 +21,7 @@ struct project_editor final : project_editor_for_editing_root_presenter,
         std::string const &identifier, ae::file_info const &, std::shared_ptr<nudging_for_project_editor> const &,
         std::shared_ptr<timing_for_project_editor> const &);
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
-        url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
+        std::string const &identifier, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
         std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
         std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
         std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
