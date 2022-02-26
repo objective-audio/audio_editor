@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_modules_presenter_dependency.h>
 
@@ -15,8 +16,8 @@ struct modules_presenter final {
                                                                         std::shared_ptr<display_space> const &,
                                                                         std::shared_ptr<module_location_pool> const &);
     [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(
-        std::shared_ptr<project_editor_for_modules_presenter> const &, std::shared_ptr<display_space> const &,
-        std::shared_ptr<module_location_pool> const &);
+        file_info const &, std::shared_ptr<project_editor_for_modules_presenter> const &,
+        std::shared_ptr<display_space> const &, std::shared_ptr<module_location_pool> const &);
 
     [[nodiscard]] std::vector<std::optional<module_location>> const &locations() const;
     [[nodiscard]] observing::syncable observe_locations(std::function<void(module_location_pool_event const &)> &&);
@@ -24,6 +25,7 @@ struct modules_presenter final {
     void update_if_needed();
 
    private:
+    file_info const _file_info;
     std::weak_ptr<project_editor_for_modules_presenter> _project_editor;
     std::shared_ptr<display_space> const _display_space;
     std::shared_ptr<module_location_pool> _location_pool;
@@ -32,7 +34,7 @@ struct modules_presenter final {
     std::optional<frame_index_t> _last_frame = std::nullopt;
     std::optional<time::range> _last_space_range = std::nullopt;
 
-    modules_presenter(std::shared_ptr<project_editor_for_modules_presenter> const &,
+    modules_presenter(file_info const &, std::shared_ptr<project_editor_for_modules_presenter> const &,
                       std::shared_ptr<display_space> const &, std::shared_ptr<module_location_pool> const &);
 
     modules_presenter(modules_presenter const &) = delete;

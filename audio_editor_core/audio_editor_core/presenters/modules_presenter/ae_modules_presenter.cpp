@@ -22,21 +22,24 @@ std::shared_ptr<modules_presenter> modules_presenter::make_shared(
     std::string const &project_id, std::shared_ptr<display_space> const &display_space,
     std::shared_ptr<module_location_pool> const &location_pool) {
     auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
-    auto const &editor = project_level->editor_level_pool->editor_level()->editor;
-    return make_shared(editor, display_space, location_pool);
+    auto const &editor_level = project_level->editor_level_pool->editor_level();
+    auto const &file_info = editor_level->file_info;
+    auto const &editor = editor_level->editor;
+    return make_shared(file_info, editor, display_space, location_pool);
 }
 
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(
-    std::shared_ptr<project_editor_for_modules_presenter> const &editor,
+    file_info const &file_info, std::shared_ptr<project_editor_for_modules_presenter> const &editor,
     std::shared_ptr<display_space> const &display_space, std::shared_ptr<module_location_pool> const &location_pool) {
-    return std::shared_ptr<modules_presenter>(new modules_presenter{editor, display_space, location_pool});
+    return std::shared_ptr<modules_presenter>(new modules_presenter{file_info, editor, display_space, location_pool});
 }
 
-modules_presenter::modules_presenter(std::shared_ptr<project_editor_for_modules_presenter> const &editor,
+modules_presenter::modules_presenter(file_info const &file_info,
+                                     std::shared_ptr<project_editor_for_modules_presenter> const &editor,
                                      std::shared_ptr<display_space> const &display_space,
                                      std::shared_ptr<module_location_pool> const &location_pool)
-    : _project_editor(editor), _display_space(display_space), _location_pool(location_pool) {
-    auto const sample_rate = editor->file_info().sample_rate;
+    : _file_info(file_info), _project_editor(editor), _display_space(display_space), _location_pool(location_pool) {
+    auto const sample_rate = this->_file_info.sample_rate;
 
     editor
         ->observe_file_track_event([this, sample_rate](file_track_event const &event) {
@@ -81,7 +84,7 @@ void modules_presenter::update_if_needed() {
 
 std::optional<time::range> modules_presenter::_space_range() const {
     if (auto const editor = this->_project_editor.lock()) {
-        auto const sample_rate = editor->file_info().sample_rate;
+        auto const sample_rate = this->_file_info.sample_rate;
         auto const current_frame = editor->current_frame();
         return this->_display_space->frame_range(sample_rate, current_frame);
     } else {
@@ -105,7 +108,7 @@ void modules_presenter::_update_all_locations(bool const force) {
 
         auto const locations = filter_map<module_location>(
             editor->modules(),
-            [&space_range_value, sample_rate = editor->file_info().sample_rate, &scale](auto const &module) {
+            [&space_range_value, sample_rate = this->_file_info.sample_rate, &scale](auto const &module) {
                 if (module.first.is_overlap(space_range_value)) {
                     return std::make_optional(
                         module_location::make_value(module.second, sample_rate, space_range_value, scale));
