@@ -130,7 +130,7 @@
 		B68A2D00278BD20900071E9D /* ae_math.h in Headers */ = {isa = PBXBuildFile; fileRef = B68A2CFE278BD20900071E9D /* ae_math.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68C3E702707EE4100888A53 /* ae_ui_track.h in Headers */ = {isa = PBXBuildFile; fileRef = B68C3E6E2707EE4100888A53 /* ae_ui_track.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68C3E712707EE4100888A53 /* ae_ui_track.mm in Sources */ = {isa = PBXBuildFile; fileRef = B68C3E6F2707EE4100888A53 /* ae_ui_track.mm */; };
-		B68C3E752707F1F500888A53 /* ae_track_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B68C3E732707F1F500888A53 /* ae_track_presenter.h */; };
+		B68C3E752707F1F500888A53 /* ae_track_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B68C3E732707F1F500888A53 /* ae_track_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68C3E762707F1F500888A53 /* ae_track_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B68C3E742707F1F500888A53 /* ae_track_presenter.cpp */; };
 		B68C3E782708255600888A53 /* ae_ui_track_constants.h in Headers */ = {isa = PBXBuildFile; fileRef = B68C3E772708255300888A53 /* ae_ui_track_constants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68C3E7B27088AEA00888A53 /* ae_ui_root.h in Headers */ = {isa = PBXBuildFile; fileRef = B68C3E7927088AEA00888A53 /* ae_ui_root.h */; settings = {ATTRIBUTES = (Public, ); }; };

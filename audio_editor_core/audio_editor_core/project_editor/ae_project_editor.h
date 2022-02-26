@@ -29,8 +29,6 @@ struct project_editor final : project_editor_for_editing_root_presenter,
         std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
         std::shared_ptr<time_editor_maker_for_project_editor> const &);
 
-    [[nodiscard]] ae::file_info const &file_info() const override;
-
     [[nodiscard]] frame_index_t current_frame() const override;
 
     void set_playing(bool const);

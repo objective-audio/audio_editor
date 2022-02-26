@@ -367,10 +367,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
     this->_player->begin_rendering();
 }
 
-ae::file_info const &project_editor::file_info() const {
-    return this->_file_info;
-}
-
 frame_index_t project_editor::current_frame() const {
     return this->_player->current_frame();
 }
