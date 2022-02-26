@@ -4,13 +4,9 @@
 
 #include "ae_time_presenter.h"
 
-#include <audio_editor_core/ae_app_level.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
-#include <audio_editor_core/ae_project_editor_level.h>
-#include <audio_editor_core/ae_project_editor_level_pool.h>
-#include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_level_pool.h>
 #include <audio_editor_core/ae_time_presenter_utils.h>
 #include <audio_editor_core/ae_timing.h>
 
@@ -18,8 +14,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<time_presenter> time_presenter::make_shared(std::string const project_id) {
-    auto const &editor_level =
-        app_level::global()->project_pool->project_level_for_id(project_id)->editor_level_pool->editor_level();
+    auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
     return std::shared_ptr<time_presenter>(new time_presenter{editor_level->editor, editor_level->timing});
 }
 

@@ -5,25 +5,19 @@
 #include "ae_editing_root_presenter.h"
 
 #include <audio_editor_core/ae_action_router.h>
-#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_editing_root_presenter_utils.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
-#include <audio_editor_core/ae_project_editor_level.h>
-#include <audio_editor_core/ae_project_editor_level_pool.h>
-#include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_level_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
-    auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
-    auto const &project = project_level->project;
-    auto const &editor_level = project_level->editor_level_pool->editor_level();
-    auto const &file_info = editor_level->file_info;
-    auto const &editor = editor_level->editor;
-    return make_shared(file_info, project, editor, project_level->action_router);
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
+    auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
+    return make_shared(editor_level->file_info, project_level->project, editor_level->editor,
+                       project_level->action_router);
 }
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(

@@ -5,18 +5,16 @@
 #include "ae_project_editor.h"
 
 #include <audio_editor_core/ae_action_router.h>
-#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_file_track.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
-#include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_level_pool.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_time_editor_maker.h>
 #include <cpp_utils/yas_fast_each.h>
@@ -29,15 +27,13 @@ std::shared_ptr<project_editor> project_editor::make_shared(std::string const &i
                                                             ae::file_info const &file_info,
                                                             std::shared_ptr<nudging_for_project_editor> const &nudging,
                                                             std::shared_ptr<timing_for_project_editor> const &timing) {
-    auto const &project_level = app_level::global()->project_pool->project_level_for_id(identifier);
+    auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
-    auto const &player = project_level->player;
-    auto const &action_controller = project_level->action_controller;
-    auto const &dialog_presenter = project_level->dialog_presenter;
-    return make_shared(project_url->editing_file(), file_info, player, file_track::make_shared(),
+    return make_shared(project_url->editing_file(), file_info, project_level->player, file_track::make_shared(),
                        marker_pool::make_shared(), edge_editor::make_shared(), pasteboard::make_shared(),
-                       database::make_shared(project_url->db_file()), exporter::make_shared(), action_controller,
-                       dialog_presenter, nudging, timing, time_editor_maker::make_shared());
+                       database::make_shared(project_url->db_file()), exporter::make_shared(),
+                       project_level->action_controller, project_level->dialog_presenter, nudging, timing,
+                       time_editor_maker::make_shared());
 }
 
 std::shared_ptr<project_editor> project_editor::make_shared(

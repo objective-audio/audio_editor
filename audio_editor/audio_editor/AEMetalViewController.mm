@@ -5,11 +5,9 @@
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
 #include <audio_editor_core/ae_action_controller.h>
-#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project.h>
-#include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_level_pool.h>
 #include <audio_editor_core/ae_ui_pool.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #import "AEMetalView.h"
@@ -50,7 +48,7 @@ using namespace yas::ae;
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
     self->_ui_root = app_level::global()->ui_pool->add_and_return_ui_root(standard, project_id, self.project_view_id);
 
-    auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
     self->_action_controller = project_level->action_controller;
 
     [self configure_with_metal_system:metal_system

@@ -17,7 +17,7 @@ class ui_pool;
 
 struct app_level final {
     [[nodiscard]] static std::shared_ptr<app_level> make_shared();
-    [[nodiscard]] static std::shared_ptr<app_level> global();
+    [[nodiscard]] static std::shared_ptr<app_level> const &global();
 
     std::shared_ptr<worker> const worker;
     std::shared_ptr<ae::system_url> const system_url;
@@ -26,7 +26,7 @@ struct app_level final {
     std::shared_ptr<ae::file_loader> const file_loader;
     std::shared_ptr<ae::color> const color;
 
-    std::shared_ptr<ae::project_level_pool> const project_pool;
+    std::shared_ptr<ae::project_level_pool> const project_level_pool;
     std::shared_ptr<ae::ui_pool> const ui_pool;
 
    private:

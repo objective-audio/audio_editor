@@ -4,15 +4,11 @@
 
 #include "ae_modules_presenter.h"
 
-#include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_display_space.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
-#include <audio_editor_core/ae_project_editor_level.h>
-#include <audio_editor_core/ae_project_editor_level_pool.h>
-#include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_level_pool.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
@@ -21,11 +17,8 @@ using namespace yas::ae;
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(
     std::string const &project_id, std::shared_ptr<display_space> const &display_space,
     std::shared_ptr<module_location_pool> const &location_pool) {
-    auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
-    auto const &editor_level = project_level->editor_level_pool->editor_level();
-    auto const &file_info = editor_level->file_info;
-    auto const &editor = editor_level->editor;
-    return make_shared(file_info, editor, display_space, location_pool);
+    auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
+    return make_shared(editor_level->file_info, editor_level->editor, display_space, location_pool);
 }
 
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(
