@@ -40,6 +40,8 @@
 		B62EF82227C884CE00A27948 /* ae_project_editor_level_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62EF82027C884CE00A27948 /* ae_project_editor_level_pool.cpp */; };
 		B62EF82327C884CE00A27948 /* ae_project_editor_level_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B62EF82127C884CE00A27948 /* ae_project_editor_level_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B62EF82727C9EE5300A27948 /* ae_file_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62EF82627C9EE5300A27948 /* ae_file_info.cpp */; };
+		B62EF82E27C9F85600A27948 /* ae_hierarchy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62EF82C27C9F85600A27948 /* ae_hierarchy.cpp */; };
+		B62EF82F27C9F85600A27948 /* ae_hierarchy.h in Headers */ = {isa = PBXBuildFile; fileRef = B62EF82D27C9F85600A27948 /* ae_hierarchy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B632197E2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B632197D2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B633290027094C1D0047E45F /* ae_ui_root_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B63328FF27094C1D0047E45F /* ae_ui_root_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6370CB927966FE300449D03 /* ae_action_router.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6370CB727966FE300449D03 /* ae_action_router.cpp */; };
@@ -294,6 +296,8 @@
 		B62EF82027C884CE00A27948 /* ae_project_editor_level_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_editor_level_pool.cpp; sourceTree = "<group>"; };
 		B62EF82127C884CE00A27948 /* ae_project_editor_level_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_editor_level_pool.h; sourceTree = "<group>"; };
 		B62EF82627C9EE5300A27948 /* ae_file_info.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_info.cpp; sourceTree = "<group>"; };
+		B62EF82C27C9F85600A27948 /* ae_hierarchy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_hierarchy.cpp; sourceTree = "<group>"; };
+		B62EF82D27C9F85600A27948 /* ae_hierarchy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_hierarchy.h; sourceTree = "<group>"; };
 		B632197D2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_pinch_gesture_controller_dependency.h; sourceTree = "<group>"; };
 		B63328FF27094C1D0047E45F /* ae_ui_root_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_root_dependency.h; sourceTree = "<group>"; };
 		B6370CB727966FE300449D03 /* ae_action_router.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_action_router.cpp; sourceTree = "<group>"; };
@@ -847,6 +851,8 @@
 		B68483F427C5B18F00792D17 /* hierarchy */ = {
 			isa = PBXGroup;
 			children = (
+				B62EF82C27C9F85600A27948 /* ae_hierarchy.cpp */,
+				B62EF82D27C9F85600A27948 /* ae_hierarchy.h */,
 				B68483F527C5B1E500792D17 /* app_level */,
 			);
 			path = hierarchy;
@@ -1252,6 +1258,7 @@
 				B632197E2738190F00C0EA56 /* ae_pinch_gesture_controller_dependency.h in Headers */,
 				B6C3926A2741442400ACFFF4 /* ae_action_controller.h in Headers */,
 				B6966F45272EDB2F00A90733 /* ae_db_module.h in Headers */,
+				B62EF82F27C9F85600A27948 /* ae_hierarchy.h in Headers */,
 				B6F4D98427B6027200AE7D5D /* ae_edge_editor_types.h in Headers */,
 				B6E8995D2688806E00BBFA73 /* ae_ui_editing_root_utils.h in Headers */,
 				B6A123772788373E00F31B31 /* ae_nudging_dependency.h in Headers */,
@@ -1472,6 +1479,7 @@
 				B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */,
 				B64E9FC82650EDC800758FE8 /* ae_marker_pool.cpp in Sources */,
 				B6A12388278947A200F31B31 /* ae_time_presenter.cpp in Sources */,
+				B62EF82E27C9F85600A27948 /* ae_hierarchy.cpp in Sources */,
 				B69C68A22670F5BF00C1083F /* ae_ui_button.mm in Sources */,
 				B68483E927C4944100792D17 /* ae_action_utils.cpp in Sources */,
 				B68C3E8B2709472A00888A53 /* ae_ui_editing_root_maker.mm in Sources */,
