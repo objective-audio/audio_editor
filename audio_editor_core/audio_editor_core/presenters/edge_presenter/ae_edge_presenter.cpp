@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_display_space.h>
-#include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_level.h>

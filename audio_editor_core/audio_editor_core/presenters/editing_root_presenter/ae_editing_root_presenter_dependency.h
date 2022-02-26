@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
-#include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_project_types.h>

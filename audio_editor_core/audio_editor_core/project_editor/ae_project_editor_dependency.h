@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_edge_editor_types.h>
 #include <audio_editor_core/ae_exporter_types.h>
-#include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_marker_pool_types.h>

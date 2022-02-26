@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_editing_root_presenter_dependency.h>
-#include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_project.h>
