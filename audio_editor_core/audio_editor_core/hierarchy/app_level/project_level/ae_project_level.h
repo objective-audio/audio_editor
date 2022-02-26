@@ -20,7 +20,6 @@ class action_router;
 class action_controller;
 class dialog_presenter;
 class context_menu_presenter;
-class project_editor_level_maker;
 class project;
 class project_editor_level_pool;
 

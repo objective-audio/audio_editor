@@ -10,7 +10,6 @@
 
 namespace yas::ae {
 class project_editor_level;
-class project_editor_level_maker;
 class action_controller;
 class dialog_presenter;
 
