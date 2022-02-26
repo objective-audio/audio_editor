@@ -20,22 +20,26 @@ using namespace yas::ae;
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
     auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
     auto const &project = project_level->project;
-    auto const &editor = project_level->editor_level_pool->editor_level()->editor;
-    return make_shared(project, editor, project_level->action_router);
+    auto const &editor_level = project_level->editor_level_pool->editor_level();
+    auto const &file_info = editor_level->file_info;
+    auto const &editor = editor_level->editor;
+    return make_shared(file_info, project, editor, project_level->action_router);
 }
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
-    std::shared_ptr<project_for_editing_root_presenter> const &project,
+    file_info const &file_info, std::shared_ptr<project_for_editing_root_presenter> const &project,
     std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
     std::shared_ptr<action_router_for_editing_root_presenter> const &action_router) {
-    return std::shared_ptr<editing_root_presenter>(new editing_root_presenter{project, editor, action_router});
+    return std::shared_ptr<editing_root_presenter>(
+        new editing_root_presenter{file_info, project, editor, action_router});
 }
 
 editing_root_presenter::editing_root_presenter(
-    std::shared_ptr<project_for_editing_root_presenter> const &project,
+    file_info const &file_info, std::shared_ptr<project_for_editing_root_presenter> const &project,
     std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
     std::shared_ptr<action_router_for_editing_root_presenter> const &action_router)
-    : _project(project),
+    : _file_info(file_info),
+      _project(project),
       _project_editor(editor),
       _action_router(action_router),
       _file_track_event_fetcher(editing_root_presenter_utils::make_file_track_fetcher(editor)),
@@ -59,7 +63,7 @@ std::string editing_root_presenter::state_text() const {
 
 std::string editing_root_presenter::file_info_text() const {
     if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::label_text(editor->file_info());
+        return editing_root_presenter_utils::label_text(this->_file_info);
     } else {
         return editing_root_presenter_utils::empty_text();
     }

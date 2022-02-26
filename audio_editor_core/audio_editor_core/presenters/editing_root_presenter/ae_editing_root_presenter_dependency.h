@@ -36,8 +36,6 @@ struct project_for_editing_root_presenter {
 struct project_editor_for_editing_root_presenter {
     virtual ~project_editor_for_editing_root_presenter() = default;
 
-    [[nodiscard]] virtual ae::file_info const &file_info() const = 0;
-
     [[nodiscard]] virtual frame_index_t current_frame() const = 0;
     [[nodiscard]] virtual bool is_playing() const = 0;
     [[nodiscard]] virtual bool is_scrolling() const = 0;
