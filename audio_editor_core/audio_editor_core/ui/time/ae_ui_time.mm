@@ -25,7 +25,7 @@ std::shared_ptr<ui_time> ui_time::make_shared(std::string const &project_id, uin
     auto const &standard = ui_root->standard();
     auto const &texture = ui_root->texture();
     auto const &color = app_level->color;
-    auto const &action_controller = app_level->project_pool->project_level_for_id(project_id)->action_controller;
+    auto const &action_controller = app_level->project_level_pool->project_level_for_id(project_id)->action_controller;
     return std::shared_ptr<ui_time>(new ui_time{standard, texture, color, presenter, action_controller});
 }
 

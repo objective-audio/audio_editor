@@ -24,7 +24,7 @@ app_level::app_level()
       file_importer(file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing))),
       file_loader(file_loader::make_shared()),
       color(ae::color::make_shared()),
-      project_pool(project_level_pool::make_shared()),
+      project_level_pool(project_level_pool::make_shared()),
       ui_pool(ui_pool::make_shared()) {
     this->app->setup();
 }

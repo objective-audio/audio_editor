@@ -18,7 +18,7 @@ using namespace yas::ae;
     auto const app_level = app_level::make_shared();
 
     XCTAssertTrue(app_level != nullptr);
-    XCTAssertTrue(app_level->project_pool != nullptr);
+    XCTAssertTrue(app_level->project_level_pool != nullptr);
     XCTAssertTrue(app_level->system_url != nullptr);
     XCTAssertTrue(app_level->file_importer != nullptr);
     XCTAssertTrue(app_level->file_loader != nullptr);

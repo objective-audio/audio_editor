@@ -11,7 +11,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-app_presenter::app_presenter() : app_presenter(app_level::global()->project_pool) {
+app_presenter::app_presenter() : app_presenter(app_level::global()->project_level_pool) {
 }
 
 app_presenter::app_presenter(std::shared_ptr<project_pool_for_app_presenter> const &pool) : _project_pool(pool) {
