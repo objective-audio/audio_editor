@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_level.h>
-#include <audio_editor_core/ae_project_editor_level_maker.h>
 #include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
