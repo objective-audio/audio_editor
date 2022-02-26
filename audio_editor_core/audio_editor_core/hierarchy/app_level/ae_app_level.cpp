@@ -33,7 +33,7 @@ std::shared_ptr<app_level> app_level::make_shared() {
     return std::shared_ptr<app_level>(new app_level{});
 }
 
-std::shared_ptr<app_level> app_level::global() {
+std::shared_ptr<app_level> const &app_level::global() {
     static std::shared_ptr<app_level> const _global = app_level::make_shared();
     return _global;
 }
