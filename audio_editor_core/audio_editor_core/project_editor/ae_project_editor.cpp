@@ -13,6 +13,7 @@
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
+#include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_project_level.h>
 #include <audio_editor_core/ae_project_level_pool.h>
@@ -26,13 +27,13 @@ using namespace yas::ae;
 
 std::shared_ptr<project_editor> project_editor::make_shared(std::string const &identifier,
                                                             ae::file_info const &file_info,
-                                                            std::shared_ptr<player_for_project_editor> const &player,
-                                                            std::shared_ptr<action_controller> const &action_controller,
-                                                            std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                                             std::shared_ptr<nudging_for_project_editor> const &nudging,
                                                             std::shared_ptr<timing_for_project_editor> const &timing) {
     auto const &project_level = app_level::global()->project_pool->project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
+    auto const &player = project_level->player;
+    auto const &action_controller = project_level->action_controller;
+    auto const &dialog_presenter = project_level->dialog_presenter;
     return make_shared(project_url->editing_file(), file_info, player, file_track::make_shared(),
                        marker_pool::make_shared(), edge_editor::make_shared(), pasteboard::make_shared(),
                        database::make_shared(project_url->db_file()), exporter::make_shared(), action_controller,
@@ -368,30 +369,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
 
 ae::file_info const &project_editor::file_info() const {
     return this->_file_info;
-}
-
-std::shared_ptr<player_for_project_editor> const &project_editor::player() const {
-    return this->_player;
-}
-
-std::shared_ptr<file_track_for_project_editor> const &project_editor::file_track() const {
-    return this->_file_track;
-}
-
-std::shared_ptr<marker_pool_for_project_editor> const &project_editor::marker_pool() const {
-    return this->_marker_pool;
-}
-
-std::shared_ptr<database_for_project_editor> const &project_editor::database() const {
-    return this->_database;
-}
-
-std::shared_ptr<timing_for_project_editor> const &project_editor::timing() const {
-    return this->_timing;
-}
-
-std::shared_ptr<time_editor_for_project_editor> const &project_editor::time_editor() const {
-    return this->_time_editor->value();
 }
 
 frame_index_t project_editor::current_frame() const {

@@ -59,8 +59,6 @@ struct project_editor_for_project : project_editor_for_editing_root_presenter,
                                     project_editor_for_time_presenter,
                                     project_editor_for_edge_presenter {
     virtual ~project_editor_for_project() = default;
-
-    [[nodiscard]] virtual std::shared_ptr<timing_for_project_editor> const &timing() const = 0;
 };
 
 struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_controller {
