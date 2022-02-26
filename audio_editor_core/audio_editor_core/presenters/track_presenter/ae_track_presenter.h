@@ -4,13 +4,14 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_track_presenter_dependency.h>
 
 namespace yas::ae {
 struct track_presenter final {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::string const &project_id);
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(
-        std::shared_ptr<project_editor_for_track_presenter> const &,
+        file_info const &, std::shared_ptr<project_editor_for_track_presenter> const &,
         std::shared_ptr<zooming_for_track_presenter> const &horizontal_zooming,
         std::shared_ptr<zooming_for_track_presenter> const &vertical_zooming);
 
@@ -22,11 +23,12 @@ struct track_presenter final {
     [[nodiscard]] float current_position() const;
 
    private:
+    file_info const _file_info;
     std::weak_ptr<project_editor_for_track_presenter> _project_editor;
     std::weak_ptr<zooming_for_track_presenter> _horizontal_zooming;
     std::weak_ptr<zooming_for_track_presenter> _vertical_zooming;
 
-    track_presenter(std::shared_ptr<project_editor_for_track_presenter> const &,
+    track_presenter(file_info const &, std::shared_ptr<project_editor_for_track_presenter> const &,
                     std::shared_ptr<zooming_for_track_presenter> const &horizontal_zooming,
                     std::shared_ptr<zooming_for_track_presenter> const &vertical_zooming);
 

@@ -11,7 +11,12 @@
 #include <audio_editor_core/ae_project_editor_dependency.h>
 
 namespace yas::ae {
-struct project_editor final : project_editor_for_project {
+struct project_editor final : project_editor_for_editing_root_presenter,
+                              project_editor_for_markers_presenter,
+                              project_editor_for_modules_presenter,
+                              project_editor_for_track_presenter,
+                              project_editor_for_time_presenter,
+                              project_editor_for_edge_presenter {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         std::string const &identifier, ae::file_info const &, std::shared_ptr<nudging_for_project_editor> const &,
         std::shared_ptr<timing_for_project_editor> const &);
@@ -23,8 +28,6 @@ struct project_editor final : project_editor_for_project {
         std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &,
         std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
         std::shared_ptr<time_editor_maker_for_project_editor> const &);
-
-    [[nodiscard]] ae::file_info const &file_info() const override;
 
     [[nodiscard]] frame_index_t current_frame() const override;
 

@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
-#include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_project_types.h>
@@ -35,8 +35,6 @@ struct project_for_editing_root_presenter {
 
 struct project_editor_for_editing_root_presenter {
     virtual ~project_editor_for_editing_root_presenter() = default;
-
-    [[nodiscard]] virtual ae::file_info const &file_info() const = 0;
 
     [[nodiscard]] virtual frame_index_t current_frame() const = 0;
     [[nodiscard]] virtual bool is_playing() const = 0;

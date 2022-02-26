@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_file_loader_types.h>
+#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 
