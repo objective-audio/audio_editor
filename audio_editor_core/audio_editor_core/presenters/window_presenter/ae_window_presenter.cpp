@@ -4,10 +4,8 @@
 
 #include "ae_window_presenter.h"
 
-#include <audio_editor_core/ae_app_level.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project.h>
-#include <audio_editor_core/ae_project_level.h>
-#include <audio_editor_core/ae_project_level_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -18,7 +16,7 @@ window_presenter::window_presenter(std::string const &project_id, url const &fil
 }
 
 std::shared_ptr<window_presenter> window_presenter::make_shared(std::string const &project_id) {
-    auto const &project_level = app_level::global()->project_pool->project_level_for_id(project_id);
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
     return make_shared(project_id, project_level->file_url, project_level->project);
 }
 
