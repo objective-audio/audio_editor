@@ -40,7 +40,8 @@ project_level::project_level(std::string const &identifier, url const &file_url,
       context_menu_presenter(context_menu_presenter::make_shared()),
       editor_maker(project_editor_level_maker::make_shared(identifier, this->player, this->action_controller,
                                                            this->dialog_presenter)),
-      editor_level_pool(project_editor_level_pool::make_shared(this->editor_maker)),
+      editor_level_pool(project_editor_level_pool::make_shared(identifier, this->player, this->action_controller,
+                                                               this->dialog_presenter)),
       project(project::make_shared(identifier, file_url, this->project_url, app_level->file_importer,
                                    app_level->file_loader, this->editor_level_pool)) {
     this->project->setup();
