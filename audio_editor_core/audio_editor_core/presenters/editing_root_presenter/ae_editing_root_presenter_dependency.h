@@ -33,6 +33,12 @@ struct project_for_editing_root_presenter {
     [[nodiscard]] virtual observing::syncable observe_state(std::function<void(project_state const &)> &&) = 0;
 };
 
+struct player_for_editing_root_presenter {
+    virtual ~player_for_editing_root_presenter() = default;
+
+    [[nodiscard]] virtual bool is_playing() const = 0;
+};
+
 struct project_editor_for_editing_root_presenter {
     virtual ~project_editor_for_editing_root_presenter() = default;
 

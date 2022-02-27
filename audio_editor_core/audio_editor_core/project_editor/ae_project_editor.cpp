@@ -223,7 +223,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         ->observe_action([this](action const &action) {
             switch (action.kind) {
                 case action_kind::toggle_play:
-                    this->set_playing(!this->is_playing());
+                    this->_player->set_playing(!this->_player->is_playing());
                     break;
                 case action_kind::nudge_previous:
                     this->nudge_previous(1);
