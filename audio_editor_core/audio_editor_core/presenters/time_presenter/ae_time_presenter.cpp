@@ -5,6 +5,8 @@
 #include "ae_time_presenter.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_nudging.h>
+#include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_presenter_utils.h>
@@ -14,13 +16,16 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<time_presenter> time_presenter::make_shared(std::string const project_id) {
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return std::shared_ptr<time_presenter>(new time_presenter{editor_level->editor, editor_level->timing});
+    return std::shared_ptr<time_presenter>(
+        new time_presenter{editor_level->editor, editor_level->timing, project_level->player, editor_level->nudging});
 }
 
 time_presenter::time_presenter(std::shared_ptr<project_editor> const &project_editor,
-                               std::shared_ptr<timing> const &timing)
-    : _project_editor(project_editor), _timing(timing) {
+                               std::shared_ptr<timing> const &timing, std::shared_ptr<player> const &player,
+                               std::shared_ptr<nudging> const &nudging)
+    : _timing(timing), _player(player), _nudging(nudging) {
     this->_range_fetcher =
         observing::fetcher<std::optional<index_range>>::make_shared([this] { return this->editing_time_text_range(); });
 
@@ -44,10 +49,10 @@ std::string time_presenter::time_text() const {
     if (auto const time_editor = this->_time_editor.lock()) {
         return time_presenter_utils::time_text(time_editor->editing_components());
     } else {
-        auto const editor = this->_project_editor.lock();
+        auto const player = this->_player.lock();
         auto const timing = this->_timing.lock();
-        if (editor && timing) {
-            return time_presenter_utils::time_text(timing->components(editor->current_frame()).raw_components());
+        if (player && timing) {
+            return time_presenter_utils::time_text(timing->components(player->current_frame()).raw_components());
         } else {
             return "";
         }
@@ -95,16 +100,16 @@ observing::syncable time_presenter::observe_editing_time_text_range(
 }
 
 std::optional<std::size_t> time_presenter::nudging_unit_index() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editor->nudging_unit_index();
+    if (auto const nudging = this->_nudging.lock()) {
+        return nudging->unit_index();
     } else {
         return std::nullopt;
     }
 }
 
 observing::syncable time_presenter::observe_nudging_unit_index(std::function<void(std::size_t const &)> &&handler) {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editor->observe_nudging_unit_index(std::move(handler));
+    if (auto const nudging = this->_nudging.lock()) {
+        return nudging->observe_unit_index(std::move(handler));
     } else {
         return observing::syncable{};
     }
