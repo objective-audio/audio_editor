@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_presenter_utils.h>
 #include <audio_editor_core/ae_timing.h>
 
@@ -24,19 +25,17 @@ time_presenter::time_presenter(std::shared_ptr<project_editor> const &project_ed
         observing::fetcher<std::optional<index_range>>::make_shared([this] { return this->editing_time_text_range(); });
 
     project_editor
-        ->observe_time_editor_for_time_presenter(
-            [this, cancellable = observing::cancellable_ptr{nullptr}](
-                std::shared_ptr<time_editor_for_time_presenter> const &editor) mutable {
-                this->_time_editor = editor;
+        ->observe_time_editor([this, cancellable = observing::cancellable_ptr{nullptr}](
+                                  std::shared_ptr<time_editor> const &editor) mutable {
+            this->_time_editor = editor;
 
-                if (editor) {
-                    cancellable =
-                        editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
-                } else {
-                    cancellable = nullptr;
-                    this->_range_fetcher->push();
-                }
-            })
+            if (editor) {
+                cancellable = editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
+            } else {
+                cancellable = nullptr;
+                this->_range_fetcher->push();
+            }
+        })
         .sync()
         ->add_to(this->_pool);
 }

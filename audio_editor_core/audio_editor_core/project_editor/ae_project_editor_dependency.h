@@ -174,17 +174,18 @@ struct nudging_for_project_editor {
                                                        uint32_t const offset_count) const = 0;
 };
 
-struct timing_for_project_editor : timing_for_nudging, timing_for_time_presenter {
+struct timing_for_project_editor : timing_for_nudging {
     virtual ~timing_for_project_editor() = default;
 
     virtual void set_fraction_kind(timing_fraction_kind const) = 0;
+    [[nodiscard]] virtual timing_fraction_kind fraction_kind() const = 0;
     [[nodiscard]] virtual observing::syncable observe_fraction_kind(
         std::function<void(timing_fraction_kind const &)> &&) = 0;
 
     [[nodiscard]] virtual timing_components components(frame_index_t const) const = 0;
 };
 
-struct time_editor_for_project_editor : time_editor_for_time_presenter {
+struct time_editor_for_project_editor {
     virtual ~time_editor_for_project_editor() = default;
 
     [[nodiscard]] virtual bool can_input_number() const = 0;

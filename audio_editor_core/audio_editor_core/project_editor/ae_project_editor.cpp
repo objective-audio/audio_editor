@@ -72,7 +72,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _nudging(nudging),
       _timing(timing),
       _time_editor_maker(time_editor_maker),
-      _time_editor(observing::value::holder<std::shared_ptr<time_editor_for_project_editor>>::make_shared(nullptr)) {
+      _time_editor(observing::value::holder<std::shared_ptr<time_editor>>::make_shared(nullptr)) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -1034,9 +1034,9 @@ observing::syncable project_editor::observe_timing_fraction(
     return this->_timing->observe_fraction_kind(std::move(handler));
 }
 
-observing::syncable project_editor::observe_time_editor_for_time_presenter(
-    std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&handler) {
-    return this->_time_editor->observe([handler = std::move(handler)](auto const &editor) { handler(editor); });
+observing::syncable project_editor::observe_time_editor(
+    std::function<void(std::shared_ptr<time_editor> const &)> &&handler) {
+    return this->_time_editor->observe(std::move(handler));
 }
 
 bool project_editor::_can_editing() const {

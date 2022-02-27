@@ -11,9 +11,10 @@
 #include <audio_editor_core/ae_project_editor_dependency.h>
 
 namespace yas::ae {
+class time_editor;
 class time_editor_maker;
 
-struct project_editor final : project_editor_for_time_presenter, project_editor_for_edge_presenter {
+struct project_editor final : project_editor_for_edge_presenter {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         std::string const &identifier, ae::file_info const &, std::shared_ptr<file_track_for_project_editor> const &,
         std::shared_ptr<marker_pool_for_project_editor> const &,
@@ -22,12 +23,12 @@ struct project_editor final : project_editor_for_time_presenter, project_editor_
         std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
         std::shared_ptr<time_editor_maker> const &);
 
-    [[nodiscard]] frame_index_t current_frame() const override;
+    [[nodiscard]] frame_index_t current_frame() const;
 
     [[nodiscard]] bool can_nudge() const;
     void nudge_previous(uint32_t const offset_count);
     void nudge_next(uint32_t const offset_count);
-    [[nodiscard]] std::size_t nudging_unit_index() const override;
+    [[nodiscard]] std::size_t nudging_unit_index() const;
     void rotate_nudging_next_unit();
     void rotate_nudging_previous_unit();
 
@@ -111,10 +112,9 @@ struct project_editor final : project_editor_for_time_presenter, project_editor_
     [[nodiscard]] observing::syncable observe_marker_pool_event(std::function<void(marker_pool_event const &)> &&);
     [[nodiscard]] observing::syncable observe_edge_editor_event(
         std::function<void(edge_editor_event const &)> &&) override;
-    [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&);
     [[nodiscard]] observing::syncable observe_timing_fraction(std::function<void(ae::timing_fraction_kind const &)> &&);
-    [[nodiscard]] observing::syncable observe_time_editor_for_time_presenter(
-        std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_time_editor(std::function<void(std::shared_ptr<time_editor> const &)> &&);
 
    private:
     url const _editing_file_url;
@@ -131,7 +131,7 @@ struct project_editor final : project_editor_for_time_presenter, project_editor_
     std::shared_ptr<nudging_for_project_editor> const _nudging;
     std::shared_ptr<timing_for_project_editor> const _timing;
     std::shared_ptr<time_editor_maker> const _time_editor_maker;
-    observing::value::holder_ptr<std::shared_ptr<time_editor_for_project_editor>> const _time_editor;
+    observing::value::holder_ptr<std::shared_ptr<time_editor>> const _time_editor;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;

@@ -6,14 +6,12 @@
 
 #include <audio_editor_core/ae_time_presenter_dependency.h>
 #include <cpp_utils/yas_index_range.h>
-
-#include <memory>
-#include <optional>
-#include <string>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 class project_editor;
 class timing;
+class time_editor;
 
 struct time_presenter final {
     [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(std::string const project_id);
@@ -31,7 +29,7 @@ struct time_presenter final {
    private:
     std::weak_ptr<project_editor> _project_editor;
     std::weak_ptr<timing> _timing;
-    std::weak_ptr<time_editor_for_time_presenter> _time_editor;
+    std::weak_ptr<time_editor> _time_editor;
 
     observing::fetcher_ptr<std::optional<index_range>> _range_fetcher;
 

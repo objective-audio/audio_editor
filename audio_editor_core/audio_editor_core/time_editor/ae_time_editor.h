@@ -34,11 +34,11 @@ struct time_editor final : time_editor_for_project_editor {
     void finish() override;
     void cancel() override;
 
-    [[nodiscard]] std::size_t unit_index() const override;
-    [[nodiscard]] number_components editing_components() const override;
+    [[nodiscard]] std::size_t unit_index() const;
+    [[nodiscard]] number_components editing_components() const;
     [[nodiscard]] std::optional<number_components> finalized_components() const override;
 
-    [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&);
     [[nodiscard]] observing::syncable observe_editing_components(std::function<void(number_components const &)> &&);
     [[nodiscard]] observing::endable observe_event(std::function<void(time_editor_event const &)> &&) override;
 
