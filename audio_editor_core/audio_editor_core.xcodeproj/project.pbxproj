@@ -172,6 +172,8 @@
 		B69C68A32670F5BF00C1083F /* ae_ui_button.h in Headers */ = {isa = PBXBuildFile; fileRef = B69C68A12670F5BF00C1083F /* ae_ui_button.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69CF561262AC49C007A0A75 /* ae_project.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69CF55F262AC49C007A0A75 /* ae_project.cpp */; };
 		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B69D8C5327CB6AD800CA30DE /* ae_time_editor_level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69D8C5127CB6AD800CA30DE /* ae_time_editor_level.cpp */; };
+		B69D8C5427CB6AD800CA30DE /* ae_time_editor_level.h in Headers */ = {isa = PBXBuildFile; fileRef = B69D8C5227CB6AD800CA30DE /* ae_time_editor_level.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69DA66027B75FA400228CAB /* ae_edge_location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69DA65E27B75FA400228CAB /* ae_edge_location.cpp */; };
 		B69DA66127B75FA400228CAB /* ae_edge_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DA65F27B75FA400228CAB /* ae_edge_location.h */; };
 		B6A123772788373E00F31B31 /* ae_nudging_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A123762788373E00F31B31 /* ae_nudging_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -428,6 +430,8 @@
 		B69C68A12670F5BF00C1083F /* ae_ui_button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_button.h; sourceTree = "<group>"; };
 		B69CF55F262AC49C007A0A75 /* ae_project.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project.cpp; sourceTree = "<group>"; };
 		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
+		B69D8C5127CB6AD800CA30DE /* ae_time_editor_level.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_time_editor_level.cpp; sourceTree = "<group>"; };
+		B69D8C5227CB6AD800CA30DE /* ae_time_editor_level.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_editor_level.h; sourceTree = "<group>"; };
 		B69DA65E27B75FA400228CAB /* ae_edge_location.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_edge_location.cpp; sourceTree = "<group>"; };
 		B69DA65F27B75FA400228CAB /* ae_edge_location.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_edge_location.h; sourceTree = "<group>"; };
 		B6A123762788373E00F31B31 /* ae_nudging_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_dependency.h; sourceTree = "<group>"; };
@@ -679,6 +683,7 @@
 			children = (
 				B62EF81C27C882BA00A27948 /* ae_project_editor_level.cpp */,
 				B62EF81D27C882BA00A27948 /* ae_project_editor_level.h */,
+				B69D8C5027CB6AC600CA30DE /* time_editor_level */,
 			);
 			path = project_editor_level;
 			sourceTree = "<group>";
@@ -966,6 +971,15 @@
 				B62D8FA42723CE4D00779D42 /* zooming */,
 			);
 			path = project;
+			sourceTree = "<group>";
+		};
+		B69D8C5027CB6AC600CA30DE /* time_editor_level */ = {
+			isa = PBXGroup;
+			children = (
+				B69D8C5127CB6AD800CA30DE /* ae_time_editor_level.cpp */,
+				B69D8C5227CB6AD800CA30DE /* ae_time_editor_level.h */,
+			);
+			path = time_editor_level;
 			sourceTree = "<group>";
 		};
 		B6A123832789349200F31B31 /* time */ = {
@@ -1330,6 +1344,7 @@
 				B6F3E065264287C90067E53A /* ae_player_dependency.h in Headers */,
 				B695726B2737E19E00E97EAE /* ae_modules_presenter_dependency.h in Headers */,
 				B657D4D826806DA90048C6AD /* ae_keyboard_utils.h in Headers */,
+				B69D8C5427CB6AD800CA30DE /* ae_time_editor_level.h in Headers */,
 				B6A55ECB266C81980039E56F /* ae_ui_layout_utils.h in Headers */,
 				B6813579271EE756009CC0FC /* ae_gesture.h in Headers */,
 				B68E852227BD255900074894 /* ae_ui_pool.h in Headers */,
@@ -1510,6 +1525,7 @@
 				B6C9A727264047B100585FDF /* ae_player.cpp in Sources */,
 				B657D4D726806DA90048C6AD /* ae_keyboard_utils.cpp in Sources */,
 				B68C3E7C27088AEA00888A53 /* ae_ui_root.mm in Sources */,
+				B69D8C5327CB6AD800CA30DE /* ae_time_editor_level.cpp in Sources */,
 				B62D8F9B2723AEAE00779D42 /* ae_scroll_gesture_controller.cpp in Sources */,
 				B6813581271F0745009CC0FC /* ae_zooming.cpp in Sources */,
 				B6F4D97927B3DE2F00AE7D5D /* ae_edge.cpp in Sources */,

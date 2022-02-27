@@ -17,6 +17,7 @@
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_time_editor.h>
+#include <audio_editor_core/ae_time_editor_level.h>
 #include <audio_editor_core/ae_time_editor_maker.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
@@ -831,7 +832,7 @@ void project_editor::begin_time_editing() {
     auto const current_frame = this->_player->current_frame();
     auto const components = this->_timing->components(current_frame);
 
-    this->_time_editor->set_value(this->_time_editor_maker->make(components.raw_components()));
+    this->_time_editor->set_value(this->_time_editor_maker->make(components.raw_components())->time_editor);
 
     this->_time_editor->value()
         ->observe_event([this](time_editor_event const &) {
