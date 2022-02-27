@@ -14,6 +14,8 @@
 
 namespace yas::ae {
 class player;
+class file_track;
+class marker_pool;
 class project;
 class project_editor;
 class action_router;
@@ -36,15 +38,18 @@ struct editing_root_presenter final {
 
    private:
     file_info const _file_info;
-    std::weak_ptr<project> _project;
-    std::weak_ptr<player> _player;
-    std::weak_ptr<project_editor> _project_editor;
-    std::weak_ptr<action_router> _action_router;
+    std::weak_ptr<project> const _project;
+    std::weak_ptr<player> const _player;
+    std::weak_ptr<file_track> const _file_track;
+    std::weak_ptr<marker_pool> const _marker_pool;
+    std::weak_ptr<project_editor> const _project_editor;
+    std::weak_ptr<action_router> const _action_router;
     observing::fetcher_ptr<file_track_event> const _file_track_event_fetcher;
     observing::fetcher_ptr<marker_pool_event> const _marker_pool_event_fetcher;
     observing::canceller_pool _pool;
 
     editing_root_presenter(file_info const &file_info, std::shared_ptr<player> const &,
+                           std::shared_ptr<file_track> const &, std::shared_ptr<marker_pool> const &,
                            std::shared_ptr<project> const &, std::shared_ptr<project_editor> const &,
                            std::shared_ptr<action_router> const &);
 

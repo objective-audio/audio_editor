@@ -4,7 +4,8 @@
 
 #include "ae_editing_root_presenter_utils.h"
 
-#include <audio_editor_core/ae_file_track_types.h>
+#include <audio_editor_core/ae_file_track.h>
+#include <audio_editor_core/ae_marker_pool.h>
 #include <playing/yas_playing_math.h>
 
 #include <iomanip>
@@ -97,20 +98,20 @@ std::string editing_root_presenter_utils::timing_text(timing_fraction_kind const
 }
 
 observing::fetcher_ptr<file_track_event> editing_root_presenter_utils::make_file_track_fetcher(
-    std::shared_ptr<project_editor> const &editor) {
-    return observing::fetcher<file_track_event>::make_shared([weak_editor = to_weak(editor)] {
-        if (auto const &editor = weak_editor.lock()) {
-            return file_track_event({.type = file_track_event_type::any, .modules = editor->modules()});
+    std::shared_ptr<file_track> const &file_track) {
+    return observing::fetcher<file_track_event>::make_shared([weak_file_track = to_weak(file_track)] {
+        if (auto const file_track = weak_file_track.lock()) {
+            return file_track_event({.type = file_track_event_type::any, .modules = file_track->modules()});
         }
         return file_track_event({.type = file_track_event_type::any, .modules = ae::empty_file_track_modules});
     });
 }
 
 observing::fetcher_ptr<marker_pool_event> editing_root_presenter_utils::make_marker_pool_fetcher(
-    std::shared_ptr<project_editor> const &editor) {
-    return observing::fetcher<marker_pool_event>::make_shared([weak_editor = to_weak(editor)] {
-        if (auto const &editor = weak_editor.lock()) {
-            return marker_pool_event({.type = marker_pool_event_type::any, .markers = editor->markers()});
+    std::shared_ptr<marker_pool> const &marker_pool) {
+    return observing::fetcher<marker_pool_event>::make_shared([weak_marker_pool = to_weak(marker_pool)] {
+        if (auto const &marker_pool = weak_marker_pool.lock()) {
+            return marker_pool_event({.type = marker_pool_event_type::any, .markers = marker_pool->markers()});
         }
         return marker_pool_event({.type = marker_pool_event_type::any, .markers = ae::empty_markers});
     });
