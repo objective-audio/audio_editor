@@ -59,6 +59,6 @@ struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_contr
 struct project_editor_level_pool_for_project {
     virtual ~project_editor_level_pool_for_project() = default;
 
-    virtual void add_editor_level(file_info const &) = 0;
+    virtual void add_level(file_info const &) = 0;
 };
 }  // namespace yas::ae
