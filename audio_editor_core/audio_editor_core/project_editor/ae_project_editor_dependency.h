@@ -178,33 +178,4 @@ struct timing_for_project_editor : timing_for_nudging {
 
     [[nodiscard]] virtual timing_components components(frame_index_t const) const = 0;
 };
-
-struct time_editor_for_project_editor {
-    virtual ~time_editor_for_project_editor() = default;
-
-    [[nodiscard]] virtual bool can_input_number() const = 0;
-    [[nodiscard]] virtual bool can_delete_number() const = 0;
-    [[nodiscard]] virtual bool can_increment_number() const = 0;
-    [[nodiscard]] virtual bool can_decrement_number() const = 0;
-    virtual void input_number(uint32_t const) = 0;
-    virtual void delete_number() = 0;
-    virtual void increment_number() = 0;
-    virtual void decrement_number() = 0;
-
-    [[nodiscard]] virtual bool can_move_to_next_unit() const = 0;
-    [[nodiscard]] virtual bool can_move_to_previous_unit() const = 0;
-    virtual void set_unit_idx(std::size_t const) = 0;
-    virtual void move_to_next_unit() = 0;
-    virtual void move_to_previous_unit() = 0;
-
-    virtual void change_sign_to_plus() = 0;
-    virtual void change_sign_to_minus() = 0;
-
-    virtual void finish() = 0;
-    virtual void cancel() = 0;
-
-    [[nodiscard]] virtual std::optional<number_components> finalized_components() const = 0;
-
-    [[nodiscard]] virtual observing::endable observe_event(std::function<void(time_editor_event const &)> &&) = 0;
-};
 }  // namespace yas::ae
