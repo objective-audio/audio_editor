@@ -12,7 +12,7 @@ namespace yas::ae {
 struct project_pool_for_app_presenter {
     virtual ~project_pool_for_app_presenter() = default;
 
-    virtual void add_project_level(url const &file_url) = 0;
+    virtual void add_level(url const &file_url) = 0;
     [[nodiscard]] virtual observing::syncable observe_event(
         std::function<void(project_level_pool_event const &)> &&) = 0;
 };

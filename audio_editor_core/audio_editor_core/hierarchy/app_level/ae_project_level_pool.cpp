@@ -24,11 +24,11 @@ project_level_pool::project_level_pool(std::shared_ptr<uuid_generatable> const &
     : _uuid_generator(uuid_generator) {
 }
 
-void project_level_pool::add_project_level(url const &file_url) {
-    this->add_and_return_project_level(file_url);
+void project_level_pool::add_level(url const &file_url) {
+    this->add_and_return_level(file_url);
 }
 
-std::shared_ptr<project_level> project_level_pool::add_and_return_project_level(url const &file_url) {
+std::shared_ptr<project_level> project_level_pool::add_and_return_level(url const &file_url) {
     auto const identifier = this->_uuid_generator->generate();
     auto const project_level = project_level::make_shared(identifier, file_url);
     auto const &project_id = project_level->identifier;
@@ -49,7 +49,7 @@ std::shared_ptr<project_level> project_level_pool::add_and_return_project_level(
     return project_level;
 }
 
-std::shared_ptr<project_level> const &project_level_pool::project_level_for_id(std::string const &project_id) const {
+std::shared_ptr<project_level> const &project_level_pool::level_for_id(std::string const &project_id) const {
     if (this->_project_levels->contains(project_id)) {
         return this->_project_levels->at(project_id).first;
     } else {
