@@ -44,5 +44,5 @@ project_editor_level::project_editor_level(std::string const &identifier, ae::fi
       time_editor_level_pool(time_editor_level_pool::make_shared(identifier)),
       editor(project_editor::make_shared(identifier, file_info, this->file_track, this->marker_pool, this->edge_editor,
                                          this->pasteboard, this->database, this->exporter, this->nudging, this->timing,
-                                         this->time_editor_maker, this->time_editor_level_pool)) {
+                                         this->time_editor_level_pool)) {
 }

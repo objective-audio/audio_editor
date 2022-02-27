@@ -20,7 +20,7 @@ time_editor_level_pool::time_editor_level_pool(std::string const &identifier)
 }
 
 void time_editor_level_pool::add_level(number_components const &components) {
-    if (this->_level != nullptr) {
+    if (this->_level->value() != nullptr) {
         throw std::runtime_error("level is not null.");
     }
 
@@ -28,7 +28,7 @@ void time_editor_level_pool::add_level(number_components const &components) {
 }
 
 void time_editor_level_pool::remove_level() {
-    if (this->_level == nullptr) {
+    if (this->_level->value() == nullptr) {
         throw std::runtime_error("level is null.");
     }
 

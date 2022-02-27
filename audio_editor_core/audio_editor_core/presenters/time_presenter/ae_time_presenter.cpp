@@ -7,8 +7,9 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_time_editor.h>
+#include <audio_editor_core/ae_time_editor_level.h>
+#include <audio_editor_core/ae_time_editor_level_pool.h>
 #include <audio_editor_core/ae_time_presenter_utils.h>
 #include <audio_editor_core/ae_timing.h>
 
@@ -18,24 +19,24 @@ using namespace yas::ae;
 std::shared_ptr<time_presenter> time_presenter::make_shared(std::string const project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return std::shared_ptr<time_presenter>(
-        new time_presenter{editor_level->editor, editor_level->timing, project_level->player, editor_level->nudging});
+    return std::shared_ptr<time_presenter>(new time_presenter{
+        editor_level->timing, project_level->player, editor_level->nudging, editor_level->time_editor_level_pool});
 }
 
-time_presenter::time_presenter(std::shared_ptr<project_editor> const &project_editor,
-                               std::shared_ptr<timing> const &timing, std::shared_ptr<player> const &player,
-                               std::shared_ptr<nudging> const &nudging)
-    : _timing(timing), _player(player), _nudging(nudging) {
+time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::shared_ptr<player> const &player,
+                               std::shared_ptr<nudging> const &nudging,
+                               std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool)
+    : _timing(timing), _player(player), _nudging(nudging), _time_editor_level_pool(time_editor_level_pool) {
     this->_range_fetcher =
         observing::fetcher<std::optional<index_range>>::make_shared([this] { return this->editing_time_text_range(); });
 
-    project_editor
-        ->observe_time_editor([this, cancellable = observing::cancellable_ptr{nullptr}](
-                                  std::shared_ptr<time_editor> const &editor) mutable {
-            this->_time_editor = editor;
-
-            if (editor) {
-                cancellable = editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
+    time_editor_level_pool
+        ->observe_level([this, cancellable = observing::cancellable_ptr{nullptr}](
+                            std::shared_ptr<time_editor_level> const &level) mutable {
+            if (level) {
+                cancellable =
+                    level->time_editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); })
+                        .sync();
             } else {
                 cancellable = nullptr;
                 this->_range_fetcher->push();
@@ -46,16 +47,19 @@ time_presenter::time_presenter(std::shared_ptr<project_editor> const &project_ed
 }
 
 std::string time_presenter::time_text() const {
-    if (auto const time_editor = this->_time_editor.lock()) {
-        return time_presenter_utils::time_text(time_editor->editing_components());
-    } else {
-        auto const player = this->_player.lock();
-        auto const timing = this->_timing.lock();
-        if (player && timing) {
-            return time_presenter_utils::time_text(timing->components(player->current_frame()).raw_components());
-        } else {
-            return "";
+    if (auto const pool = this->_time_editor_level_pool.lock()) {
+        if (auto const &level = pool->level()) {
+            auto const &time_editor = level->time_editor;
+            return time_presenter_utils::time_text(time_editor->editing_components());
         }
+    }
+
+    auto const player = this->_player.lock();
+    auto const timing = this->_timing.lock();
+    if (player && timing) {
+        return time_presenter_utils::time_text(timing->components(player->current_frame()).raw_components());
+    } else {
+        return "";
     }
 }
 
@@ -79,19 +83,23 @@ std::vector<index_range> time_presenter::time_text_unit_ranges() const {
 }
 
 std::optional<std::size_t> time_presenter::editing_unit_index() const {
-    if (auto const time_editor = this->_time_editor.lock()) {
-        return time_editor->unit_index();
-    } else {
-        return std::nullopt;
+    if (auto const pool = this->_time_editor_level_pool.lock()) {
+        if (auto const &level = pool->level()) {
+            return level->time_editor->unit_index();
+        }
     }
+    return std::nullopt;
 }
 
 std::optional<index_range> time_presenter::editing_time_text_range() const {
-    if (auto const time_editor = this->_time_editor.lock()) {
-        return time_presenter_utils::to_time_text_range(time_editor->editing_components(), time_editor->unit_index());
-    } else {
-        return std::nullopt;
+    if (auto const pool = this->_time_editor_level_pool.lock()) {
+        if (auto &level = pool->level()) {
+            auto const &time_editor = level->time_editor;
+            return time_presenter_utils::to_time_text_range(time_editor->editing_components(),
+                                                            time_editor->unit_index());
+        }
     }
+    return std::nullopt;
 }
 
 observing::syncable time_presenter::observe_editing_time_text_range(

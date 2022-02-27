@@ -9,11 +9,11 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-class project_editor;
 class timing;
 class player;
 class nudging;
 class time_editor;
+class time_editor_level_pool;
 
 struct time_presenter final {
     [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(std::string const project_id);
@@ -29,16 +29,16 @@ struct time_presenter final {
     [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&);
 
    private:
-    std::weak_ptr<timing> _timing;
-    std::weak_ptr<player> _player;
-    std::weak_ptr<nudging> _nudging;
-    std::weak_ptr<time_editor> _time_editor;
+    std::weak_ptr<timing> const _timing;
+    std::weak_ptr<player> const _player;
+    std::weak_ptr<nudging> const _nudging;
+    std::weak_ptr<time_editor_level_pool> const _time_editor_level_pool;
 
     observing::fetcher_ptr<std::optional<index_range>> _range_fetcher;
 
     observing::canceller_pool _pool;
 
-    time_presenter(std::shared_ptr<project_editor> const &, std::shared_ptr<timing> const &,
-                   std::shared_ptr<player> const &, std::shared_ptr<nudging> const &);
+    time_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &, std::shared_ptr<nudging> const &,
+                   std::shared_ptr<time_editor_level_pool> const &);
 };
 }  // namespace yas::ae
