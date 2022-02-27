@@ -11,6 +11,8 @@
 #include <audio_editor_core/ae_project_editor_dependency.h>
 
 namespace yas::ae {
+class time_editor_maker;
+
 struct project_editor final : project_editor_for_time_presenter, project_editor_for_edge_presenter {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         std::string const &identifier, ae::file_info const &, std::shared_ptr<file_track_for_project_editor> const &,
@@ -18,7 +20,7 @@ struct project_editor final : project_editor_for_time_presenter, project_editor_
         std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
         std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
         std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
-        std::shared_ptr<time_editor_maker_for_project_editor> const &);
+        std::shared_ptr<time_editor_maker> const &);
 
     [[nodiscard]] frame_index_t current_frame() const override;
 
@@ -128,7 +130,7 @@ struct project_editor final : project_editor_for_time_presenter, project_editor_
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
     std::shared_ptr<nudging_for_project_editor> const _nudging;
     std::shared_ptr<timing_for_project_editor> const _timing;
-    std::shared_ptr<time_editor_maker_for_project_editor> const _time_editor_maker;
+    std::shared_ptr<time_editor_maker> const _time_editor_maker;
     observing::value::holder_ptr<std::shared_ptr<time_editor_for_project_editor>> const _time_editor;
 
     proc::timeline_ptr const _timeline;
@@ -136,14 +138,16 @@ struct project_editor final : project_editor_for_time_presenter, project_editor_
     observing::canceller_pool _pool;
     observing::cancellable_ptr _time_editing_canceller;
 
-    project_editor(
-        url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
-        std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
-        std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
-        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
-        std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &,
-        std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
-        std::shared_ptr<time_editor_maker_for_project_editor> const &);
+    project_editor(url const &editing_file_url, ae::file_info const &,
+                   std::shared_ptr<player_for_project_editor> const &,
+                   std::shared_ptr<file_track_for_project_editor> const &,
+                   std::shared_ptr<marker_pool_for_project_editor> const &,
+                   std::shared_ptr<edge_editor_for_project_editor> const &,
+                   std::shared_ptr<pasteboard_for_project_editor> const &,
+                   std::shared_ptr<database_for_project_editor> const &,
+                   std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<action_controller> const &,
+                   std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &,
+                   std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<time_editor_maker> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

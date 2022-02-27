@@ -16,6 +16,7 @@
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_maker.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
@@ -33,7 +34,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<nudging_for_project_editor> const &nudging,
     std::shared_ptr<timing_for_project_editor> const &timing,
-    std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker) {
+    std::shared_ptr<time_editor_maker> const &time_editor_maker) {
     auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
     return std::shared_ptr<project_editor>(
@@ -54,7 +55,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<nudging_for_project_editor> const &nudging,
                                std::shared_ptr<timing_for_project_editor> const &timing,
-                               std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker)
+                               std::shared_ptr<time_editor_maker> const &time_editor_maker)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),

@@ -212,10 +212,4 @@ struct time_editor_for_project_editor : time_editor_for_time_presenter {
 
     [[nodiscard]] virtual observing::endable observe_event(std::function<void(time_editor_event const &)> &&) = 0;
 };
-
-struct time_editor_maker_for_project_editor {
-    virtual ~time_editor_maker_for_project_editor() = default;
-
-    [[nodiscard]] virtual std::shared_ptr<time_editor_for_project_editor> make(number_components const &) const = 0;
-};
 }  // namespace yas::ae

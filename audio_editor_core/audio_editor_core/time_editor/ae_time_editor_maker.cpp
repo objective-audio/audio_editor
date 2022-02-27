@@ -13,7 +13,7 @@ std::shared_ptr<time_editor_maker> time_editor_maker::make_shared() {
     return std::shared_ptr<time_editor_maker>(new time_editor_maker{});
 }
 
-std::shared_ptr<time_editor_for_project_editor> time_editor_maker::make(number_components const &components) const {
+std::shared_ptr<time_editor> time_editor_maker::make(number_components const &components) const {
     return time_editor::make_shared(components);
 }
 
