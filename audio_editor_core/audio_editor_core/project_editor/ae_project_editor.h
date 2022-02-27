@@ -11,9 +11,7 @@
 #include <audio_editor_core/ae_project_editor_dependency.h>
 
 namespace yas::ae {
-struct project_editor final : project_editor_for_track_presenter,
-                              project_editor_for_time_presenter,
-                              project_editor_for_edge_presenter {
+struct project_editor final : project_editor_for_time_presenter, project_editor_for_edge_presenter {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         std::string const &identifier, ae::file_info const &, std::shared_ptr<file_track_for_project_editor> const &,
         std::shared_ptr<marker_pool_for_project_editor> const &,
