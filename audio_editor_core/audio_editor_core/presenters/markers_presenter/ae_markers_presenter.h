@@ -10,13 +10,12 @@
 
 namespace yas::ae {
 class display_space;
+class player;
+class marker_pool;
 
 struct markers_presenter final {
     [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(std::string const &project_id,
                                                                         std::shared_ptr<display_space> const &);
-    [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(
-        file_info const &, std::shared_ptr<project_editor_for_markers_presenter> const &,
-        std::shared_ptr<display_space> const &);
 
     [[nodiscard]] std::vector<std::optional<marker_location>> locations() const;
     [[nodiscard]] observing::syncable observe_locations(std::function<void(marker_location_pool_event const &)> &&);
@@ -25,7 +24,8 @@ struct markers_presenter final {
 
    private:
     file_info const _file_info;
-    std::weak_ptr<project_editor_for_markers_presenter> _project_editor;
+    std::weak_ptr<player> const _player;
+    std::weak_ptr<marker_pool> const _marker_pool;
     std::shared_ptr<display_space> const _display_space;
     std::shared_ptr<marker_location_pool> const _location_pool;
     observing::canceller_pool _canceller_pool;
@@ -33,7 +33,7 @@ struct markers_presenter final {
     std::optional<frame_index_t> _last_frame = std::nullopt;
     std::optional<time::range> _last_space_range = std::nullopt;
 
-    markers_presenter(file_info const &, std::shared_ptr<project_editor_for_markers_presenter> const &,
+    markers_presenter(file_info const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,
                       std::shared_ptr<display_space> const &);
 
     markers_presenter(markers_presenter const &) = delete;

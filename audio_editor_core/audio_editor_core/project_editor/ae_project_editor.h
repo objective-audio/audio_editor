@@ -12,7 +12,6 @@
 
 namespace yas::ae {
 struct project_editor final : project_editor_for_editing_root_presenter,
-                              project_editor_for_markers_presenter,
                               project_editor_for_modules_presenter,
                               project_editor_for_track_presenter,
                               project_editor_for_time_presenter,

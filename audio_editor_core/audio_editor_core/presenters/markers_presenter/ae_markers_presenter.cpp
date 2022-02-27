@@ -6,6 +6,8 @@
 
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_marker_pool.h>
+#include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
 
@@ -14,27 +16,24 @@ using namespace yas::ae;
 
 std::shared_ptr<markers_presenter> markers_presenter::make_shared(std::string const &project_id,
                                                                   std::shared_ptr<display_space> const &display_space) {
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return make_shared(editor_level->file_info, editor_level->editor, display_space);
+    return std::shared_ptr<markers_presenter>(new markers_presenter{editor_level->file_info, project_level->player,
+                                                                    editor_level->marker_pool, display_space});
 }
 
-std::shared_ptr<markers_presenter> markers_presenter::make_shared(
-    file_info const &file_info, std::shared_ptr<project_editor_for_markers_presenter> const &editor,
-    std::shared_ptr<display_space> const &display_space) {
-    return std::shared_ptr<markers_presenter>(new markers_presenter{file_info, editor, display_space});
-}
-
-markers_presenter::markers_presenter(file_info const &file_info,
-                                     std::shared_ptr<project_editor_for_markers_presenter> const &editor,
+markers_presenter::markers_presenter(file_info const &file_info, std::shared_ptr<player> const &player,
+                                     std::shared_ptr<marker_pool> const &marker_pool,
                                      std::shared_ptr<display_space> const &display_space)
     : _file_info(file_info),
-      _project_editor(editor),
+      _player(player),
+      _marker_pool(marker_pool),
       _display_space(display_space),
       _location_pool(marker_location_pool::make_shared()) {
     auto const sample_rate = this->_file_info.sample_rate;
 
-    editor
-        ->observe_marker_pool_event([this, sample_rate](marker_pool_event const &event) {
+    marker_pool
+        ->observe_event([this, sample_rate](marker_pool_event const &event) {
             switch (event.type) {
                 case marker_pool_event_type::any:
                 case marker_pool_event_type::reverted:
@@ -86,9 +85,9 @@ void markers_presenter::update_if_needed() {
 }
 
 std::optional<time::range> markers_presenter::_space_range() const {
-    if (auto const editor = this->_project_editor.lock()) {
+    if (auto const player = this->_player.lock()) {
         auto const sample_rate = this->_file_info.sample_rate;
-        auto const current_frame = editor->current_frame();
+        auto const current_frame = player->current_frame();
         return this->_display_space->frame_range(sample_rate, current_frame);
     } else {
         return std::nullopt;
@@ -97,10 +96,11 @@ std::optional<time::range> markers_presenter::_space_range() const {
 
 void markers_presenter::_update_all_locations(update_type const type) {
     auto const space_range = this->_space_range();
-    auto const editor = this->_project_editor.lock();
+    auto const marker_pool = this->_marker_pool.lock();
+    auto const player = this->_player.lock();
 
-    if (editor && space_range.has_value()) {
-        auto const current_frame = editor->current_frame();
+    if (marker_pool && player && space_range.has_value()) {
+        auto const current_frame = player->current_frame();
 
         if (space_range == this->_last_space_range && current_frame == this->_last_frame &&
             type == update_type::update_if_changed) {
@@ -110,8 +110,8 @@ void markers_presenter::_update_all_locations(update_type const type) {
         auto const &space_range_value = space_range.value();
 
         auto const locations = filter_map<marker_location>(
-            editor->markers(), [&space_range_value, sample_rate = this->_file_info.sample_rate,
-                                scale = this->_display_space->scale()](auto const &pair) {
+            marker_pool->markers(), [&space_range_value, sample_rate = this->_file_info.sample_rate,
+                                     scale = this->_display_space->scale()](auto const &pair) {
                 if (space_range_value.is_contain(pair.second.frame)) {
                     return std::make_optional(
                         marker_location::make_value(pair.second.identifier, pair.second.frame, sample_rate, scale));
