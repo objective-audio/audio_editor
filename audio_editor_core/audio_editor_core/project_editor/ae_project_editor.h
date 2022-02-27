@@ -11,8 +11,7 @@
 #include <audio_editor_core/ae_project_editor_dependency.h>
 
 namespace yas::ae {
-struct project_editor final : project_editor_for_modules_presenter,
-                              project_editor_for_track_presenter,
+struct project_editor final : project_editor_for_track_presenter,
                               project_editor_for_time_presenter,
                               project_editor_for_edge_presenter {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
@@ -106,10 +105,9 @@ struct project_editor final : project_editor_for_modules_presenter,
     void select_time_unit(std::size_t const);
 
     [[nodiscard]] std::map<frame_index_t, marker> const &markers() const;
-    [[nodiscard]] file_track_module_map_t const &modules() const override;
+    [[nodiscard]] file_track_module_map_t const &modules() const;
 
-    [[nodiscard]] observing::syncable observe_file_track_event(
-        std::function<void(file_track_event const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_file_track_event(std::function<void(file_track_event const &)> &&);
     [[nodiscard]] observing::syncable observe_marker_pool_event(std::function<void(marker_pool_event const &)> &&);
     [[nodiscard]] observing::syncable observe_edge_editor_event(
         std::function<void(edge_editor_event const &)> &&) override;
