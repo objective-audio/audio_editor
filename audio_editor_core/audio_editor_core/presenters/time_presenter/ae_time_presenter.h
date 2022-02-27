@@ -12,6 +12,9 @@
 #include <string>
 
 namespace yas::ae {
+class project_editor;
+class timing;
+
 struct time_presenter final {
     [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(std::string const project_id);
 
@@ -26,15 +29,14 @@ struct time_presenter final {
     [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&);
 
    private:
-    std::weak_ptr<project_editor_for_time_presenter> _project_editor;
-    std::weak_ptr<timing_for_time_presenter> _timing;
+    std::weak_ptr<project_editor> _project_editor;
+    std::weak_ptr<timing> _timing;
     std::weak_ptr<time_editor_for_time_presenter> _time_editor;
 
     observing::fetcher_ptr<std::optional<index_range>> _range_fetcher;
 
     observing::canceller_pool _pool;
 
-    time_presenter(std::shared_ptr<project_editor_for_time_presenter> const &,
-                   std::shared_ptr<timing_for_time_presenter> const &);
+    time_presenter(std::shared_ptr<project_editor> const &, std::shared_ptr<timing> const &);
 };
 }  // namespace yas::ae
