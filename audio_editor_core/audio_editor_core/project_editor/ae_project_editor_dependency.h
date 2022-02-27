@@ -31,12 +31,6 @@ struct jumpable_on_project_editor {
     [[nodiscard]] virtual std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const = 0;
 };
 
-struct file_loader_for_project_editor {
-    virtual ~file_loader_for_project_editor() = default;
-
-    [[nodiscard]] virtual std::optional<file_info> load_file_info(url const &) const = 0;
-};
-
 struct player_for_project_editor {
     virtual ~player_for_project_editor() = default;
 
@@ -174,48 +168,14 @@ struct nudging_for_project_editor {
                                                        uint32_t const offset_count) const = 0;
 };
 
-struct timing_for_project_editor : timing_for_nudging, timing_for_time_presenter {
+struct timing_for_project_editor : timing_for_nudging {
     virtual ~timing_for_project_editor() = default;
 
     virtual void set_fraction_kind(timing_fraction_kind const) = 0;
+    [[nodiscard]] virtual timing_fraction_kind fraction_kind() const = 0;
     [[nodiscard]] virtual observing::syncable observe_fraction_kind(
         std::function<void(timing_fraction_kind const &)> &&) = 0;
 
     [[nodiscard]] virtual timing_components components(frame_index_t const) const = 0;
-};
-
-struct time_editor_for_project_editor : time_editor_for_time_presenter {
-    virtual ~time_editor_for_project_editor() = default;
-
-    [[nodiscard]] virtual bool can_input_number() const = 0;
-    [[nodiscard]] virtual bool can_delete_number() const = 0;
-    [[nodiscard]] virtual bool can_increment_number() const = 0;
-    [[nodiscard]] virtual bool can_decrement_number() const = 0;
-    virtual void input_number(uint32_t const) = 0;
-    virtual void delete_number() = 0;
-    virtual void increment_number() = 0;
-    virtual void decrement_number() = 0;
-
-    [[nodiscard]] virtual bool can_move_to_next_unit() const = 0;
-    [[nodiscard]] virtual bool can_move_to_previous_unit() const = 0;
-    virtual void set_unit_idx(std::size_t const) = 0;
-    virtual void move_to_next_unit() = 0;
-    virtual void move_to_previous_unit() = 0;
-
-    virtual void change_sign_to_plus() = 0;
-    virtual void change_sign_to_minus() = 0;
-
-    virtual void finish() = 0;
-    virtual void cancel() = 0;
-
-    [[nodiscard]] virtual std::optional<number_components> finalized_components() const = 0;
-
-    [[nodiscard]] virtual observing::endable observe_event(std::function<void(time_editor_event const &)> &&) = 0;
-};
-
-struct time_editor_maker_for_project_editor {
-    virtual ~time_editor_maker_for_project_editor() = default;
-
-    [[nodiscard]] virtual std::shared_ptr<time_editor_for_project_editor> make(number_components const &) const = 0;
 };
 }  // namespace yas::ae

@@ -22,7 +22,7 @@ struct timing final : timing_for_project_editor {
         std::function<void(timing_fraction_kind const &)> &&) override;
 
     [[nodiscard]] timing_components components(frame_index_t const) const override;
-    [[nodiscard]] uint32_t fraction_digits() const override;
+    [[nodiscard]] uint32_t fraction_digits() const;
 
     [[nodiscard]] frame_index_t frame(timing_components const &) const override;
 

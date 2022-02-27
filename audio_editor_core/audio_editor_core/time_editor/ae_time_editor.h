@@ -10,37 +10,37 @@
 #include <audio_editor_core/ae_time_presenter_dependency.h>
 
 namespace yas::ae {
-struct time_editor final : time_editor_for_project_editor {
+struct time_editor final {
     [[nodiscard]] static std::shared_ptr<time_editor> make_shared(number_components const &);
 
-    [[nodiscard]] bool can_input_number() const override;
-    [[nodiscard]] bool can_delete_number() const override;
-    [[nodiscard]] bool can_increment_number() const override;
-    [[nodiscard]] bool can_decrement_number() const override;
-    void input_number(uint32_t const) override;
-    void delete_number() override;
-    void increment_number() override;
-    void decrement_number() override;
+    [[nodiscard]] bool can_input_number() const;
+    [[nodiscard]] bool can_delete_number() const;
+    [[nodiscard]] bool can_increment_number() const;
+    [[nodiscard]] bool can_decrement_number() const;
+    void input_number(uint32_t const);
+    void delete_number();
+    void increment_number();
+    void decrement_number();
 
-    [[nodiscard]] bool can_move_to_next_unit() const override;
-    [[nodiscard]] bool can_move_to_previous_unit() const override;
-    void set_unit_idx(std::size_t const) override;
-    void move_to_next_unit() override;
-    void move_to_previous_unit() override;
+    [[nodiscard]] bool can_move_to_next_unit() const;
+    [[nodiscard]] bool can_move_to_previous_unit() const;
+    void set_unit_idx(std::size_t const);
+    void move_to_next_unit();
+    void move_to_previous_unit();
 
-    void change_sign_to_plus() override;
-    void change_sign_to_minus() override;
+    void change_sign_to_plus();
+    void change_sign_to_minus();
 
-    void finish() override;
-    void cancel() override;
+    void finish();
+    void cancel();
 
-    [[nodiscard]] std::size_t unit_index() const override;
-    [[nodiscard]] number_components editing_components() const override;
-    [[nodiscard]] std::optional<number_components> finalized_components() const override;
+    [[nodiscard]] std::size_t unit_index() const;
+    [[nodiscard]] number_components editing_components() const;
+    [[nodiscard]] std::optional<number_components> finalized_components() const;
 
-    [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&);
     [[nodiscard]] observing::syncable observe_editing_components(std::function<void(number_components const &)> &&);
-    [[nodiscard]] observing::endable observe_event(std::function<void(time_editor_event const &)> &&) override;
+    [[nodiscard]] observing::endable observe_event(std::function<void(time_editor_event const &)> &&);
 
    private:
     enum class state {

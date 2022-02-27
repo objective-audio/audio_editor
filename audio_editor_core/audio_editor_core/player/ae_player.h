@@ -13,7 +13,7 @@
 #include <memory>
 
 namespace yas::ae {
-struct player final : player_for_project, player_for_project_editor, player_for_editing_root_presenter {
+struct player final : player_for_project, player_for_project_editor {
     void begin_rendering() override;
 
     void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,

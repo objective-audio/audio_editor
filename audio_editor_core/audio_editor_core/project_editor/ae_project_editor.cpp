@@ -16,6 +16,7 @@
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_maker.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
@@ -33,7 +34,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<nudging_for_project_editor> const &nudging,
     std::shared_ptr<timing_for_project_editor> const &timing,
-    std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker) {
+    std::shared_ptr<time_editor_maker> const &time_editor_maker) {
     auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
     return std::shared_ptr<project_editor>(
@@ -54,7 +55,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<nudging_for_project_editor> const &nudging,
                                std::shared_ptr<timing_for_project_editor> const &timing,
-                               std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker)
+                               std::shared_ptr<time_editor_maker> const &time_editor_maker)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),
@@ -71,7 +72,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _nudging(nudging),
       _timing(timing),
       _time_editor_maker(time_editor_maker),
-      _time_editor(observing::value::holder<std::shared_ptr<time_editor_for_project_editor>>::make_shared(nullptr)) {
+      _time_editor(observing::value::holder<std::shared_ptr<time_editor>>::make_shared(nullptr)) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -238,10 +239,10 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     this->nudge_next(10);
                     break;
                 case action_kind::rotate_nudging_next_unit:
-                    this->rotate_nudging_next_unit();
+                    this->_nudging->rotate_next_unit();
                     break;
                 case action_kind::rotate_nudging_previous_unit:
-                    this->rotate_nudging_previous_unit();
+                    this->_nudging->rotate_previous_unit();
                     break;
                 case action_kind::rotate_timing_fraction:
                     this->rotate_timing_fraction();
@@ -350,10 +351,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
     this->_player->begin_rendering();
 }
 
-frame_index_t project_editor::current_frame() const {
-    return this->_player->current_frame();
-}
-
 bool project_editor::can_nudge() const {
     return !this->_player->is_playing();
 }
@@ -376,22 +373,6 @@ void project_editor::nudge_next(uint32_t const offset_count) {
     frame_index_t const current_frame = this->_player->current_frame();
     frame_index_t const next_frame = this->_nudging->next_frame(current_frame, offset_count);
     this->_player->seek(next_frame);
-}
-
-std::size_t project_editor::nudging_unit_index() const {
-    return this->_nudging->unit_index();
-}
-
-void project_editor::rotate_nudging_next_unit() {
-    this->_nudging->rotate_next_unit();
-}
-
-void project_editor::rotate_nudging_previous_unit() {
-    this->_nudging->rotate_previous_unit();
-}
-
-ae::timing_fraction_kind project_editor::timing_fraction_kind() const {
-    return this->_timing->fraction_kind();
 }
 
 void project_editor::rotate_timing_fraction() {
@@ -577,10 +558,6 @@ void project_editor::erase_and_offset() {
     if (auto const &module = previous_module) {
         this->_player->seek(module->range.next_frame());
     }
-}
-
-ae::edge const &project_editor::edge() const {
-    return this->_edge_editor->edge();
 }
 
 bool project_editor::can_insert_marker() const {
@@ -1002,40 +979,9 @@ std::optional<frame_index_t> project_editor::_last_edge() const {
     }
 }
 
-std::map<frame_index_t, marker> const &project_editor::markers() const {
-    return this->_marker_pool->markers();
-}
-
-file_track_module_map_t const &project_editor::modules() const {
-    return this->_file_track->modules();
-}
-
-observing::syncable project_editor::observe_file_track_event(std::function<void(file_track_event const &)> &&handler) {
-    return this->_file_track->observe_event(std::move(handler));
-}
-
-observing::syncable project_editor::observe_marker_pool_event(
-    std::function<void(marker_pool_event const &)> &&handler) {
-    return this->_marker_pool->observe_event(std::move(handler));
-}
-
-observing::syncable project_editor::observe_edge_editor_event(
-    std::function<void(edge_editor_event const &)> &&handler) {
-    return this->_edge_editor->observe_event(std::move(handler));
-}
-
-observing::syncable project_editor::observe_nudging_unit_index(std::function<void(std::size_t const &)> &&handler) {
-    return this->_nudging->observe_unit_index(std::move(handler));
-}
-
-observing::syncable project_editor::observe_timing_fraction(
-    std::function<void(ae::timing_fraction_kind const &)> &&handler) {
-    return this->_timing->observe_fraction_kind(std::move(handler));
-}
-
-observing::syncable project_editor::observe_time_editor_for_time_presenter(
-    std::function<void(std::shared_ptr<time_editor_for_time_presenter> const &)> &&handler) {
-    return this->_time_editor->observe([handler = std::move(handler)](auto const &editor) { handler(editor); });
+observing::syncable project_editor::observe_time_editor(
+    std::function<void(std::shared_ptr<time_editor> const &)> &&handler) {
+    return this->_time_editor->observe(std::move(handler));
 }
 
 bool project_editor::_can_editing() const {

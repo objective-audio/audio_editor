@@ -10,7 +10,7 @@
 #include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
-struct project final : project_for_window_presenter, project_for_root_presenter, project_for_editing_root_presenter {
+struct project final : project_for_window_presenter, project_for_root_presenter {
     [[nodiscard]] static std::shared_ptr<project> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
@@ -18,7 +18,7 @@ struct project final : project_for_window_presenter, project_for_root_presenter,
 
     void setup();
 
-    [[nodiscard]] project_state const &state() const override;
+    [[nodiscard]] project_state const &state() const;
 
     [[nodiscard]] bool can_close() const override;
     void request_close() override;

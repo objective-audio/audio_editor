@@ -6,7 +6,9 @@
 
 #include <audio_editor_core/ae_action_router.h>
 #include <audio_editor_core/ae_editing_root_presenter_utils.h>
+#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
@@ -17,36 +19,31 @@ using namespace yas::ae;
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return make_shared(editor_level->file_info, project_level->player, project_level->project, editor_level->editor,
-                       project_level->action_router);
+    return std::shared_ptr<editing_root_presenter>(new editing_root_presenter{
+        editor_level->file_info, project_level->player, editor_level->file_track, editor_level->marker_pool,
+        project_level->project, editor_level->editor, project_level->action_router});
 }
 
-std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
-    file_info const &file_info, std::shared_ptr<player_for_editing_root_presenter> const &player,
-    std::shared_ptr<project_for_editing_root_presenter> const &project,
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
-    std::shared_ptr<action_router_for_editing_root_presenter> const &action_router) {
-    return std::shared_ptr<editing_root_presenter>(
-        new editing_root_presenter{file_info, player, project, editor, action_router});
-}
-
-editing_root_presenter::editing_root_presenter(
-    file_info const &file_info, std::shared_ptr<player_for_editing_root_presenter> const &player,
-    std::shared_ptr<project_for_editing_root_presenter> const &project,
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
-    std::shared_ptr<action_router_for_editing_root_presenter> const &action_router)
+editing_root_presenter::editing_root_presenter(file_info const &file_info, std::shared_ptr<player> const &player,
+                                               std::shared_ptr<file_track> const &file_track,
+                                               std::shared_ptr<marker_pool> const &marker_pool,
+                                               std::shared_ptr<project> const &project,
+                                               std::shared_ptr<project_editor> const &editor,
+                                               std::shared_ptr<action_router> const &action_router)
     : _file_info(file_info),
       _project(project),
       _player(player),
+      _file_track(file_track),
+      _marker_pool(marker_pool),
       _project_editor(editor),
       _action_router(action_router),
-      _file_track_event_fetcher(editing_root_presenter_utils::make_file_track_fetcher(editor)),
-      _marker_pool_event_fetcher(editing_root_presenter_utils::make_marker_pool_fetcher(editor)) {
-    editor->observe_file_track_event([this](auto const &event) { this->_file_track_event_fetcher->push(event); })
+      _file_track_event_fetcher(editing_root_presenter_utils::make_file_track_fetcher(file_track)),
+      _marker_pool_event_fetcher(editing_root_presenter_utils::make_marker_pool_fetcher(marker_pool)) {
+    file_track->observe_event([this](auto const &event) { this->_file_track_event_fetcher->push(event); })
         .sync()
         ->add_to(this->_pool);
 
-    editor->observe_marker_pool_event([this](auto const &event) { this->_marker_pool_event_fetcher->push(event); })
+    marker_pool->observe_event([this](auto const &event) { this->_marker_pool_event_fetcher->push(event); })
         .end()
         ->add_to(this->_pool);
 }
@@ -60,34 +57,27 @@ std::string editing_root_presenter::state_text() const {
 }
 
 std::string editing_root_presenter::file_info_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::label_text(this->_file_info);
-    } else {
-        return editing_root_presenter_utils::empty_text();
-    }
+    return editing_root_presenter_utils::label_text(this->_file_info);
 }
 
 std::string editing_root_presenter::file_track_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::file_track_text(editor->modules());
+    if (auto const file_track = this->_file_track.lock()) {
+        return editing_root_presenter_utils::file_track_text(file_track->modules());
     } else {
         return editing_root_presenter_utils::empty_text();
     }
 }
 
 std::string editing_root_presenter::marker_pool_text() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        return editing_root_presenter_utils::marker_pool_text(editor->markers());
+    if (auto const marker_pool = this->_marker_pool.lock()) {
+        return editing_root_presenter_utils::marker_pool_text(marker_pool->markers());
     } else {
         return editing_root_presenter_utils::empty_text();
     }
 }
 
 playing_line_state_t editing_root_presenter::playing_line_state() const {
-    auto const editor = this->_project_editor.lock();
-    auto const player = this->_player.lock();
-
-    if (editor && player) {
+    if (auto const player = this->_player.lock()) {
         if (player->is_scrolling()) {
             return playing_line_state_t::scrolling;
         } else if (player->is_playing()) {

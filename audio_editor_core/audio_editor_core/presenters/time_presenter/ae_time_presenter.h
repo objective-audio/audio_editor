@@ -6,12 +6,15 @@
 
 #include <audio_editor_core/ae_time_presenter_dependency.h>
 #include <cpp_utils/yas_index_range.h>
-
-#include <memory>
-#include <optional>
-#include <string>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
+class project_editor;
+class timing;
+class player;
+class nudging;
+class time_editor;
+
 struct time_presenter final {
     [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(std::string const project_id);
 
@@ -26,15 +29,16 @@ struct time_presenter final {
     [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&);
 
    private:
-    std::weak_ptr<project_editor_for_time_presenter> _project_editor;
-    std::weak_ptr<timing_for_time_presenter> _timing;
-    std::weak_ptr<time_editor_for_time_presenter> _time_editor;
+    std::weak_ptr<timing> _timing;
+    std::weak_ptr<player> _player;
+    std::weak_ptr<nudging> _nudging;
+    std::weak_ptr<time_editor> _time_editor;
 
     observing::fetcher_ptr<std::optional<index_range>> _range_fetcher;
 
     observing::canceller_pool _pool;
 
-    time_presenter(std::shared_ptr<project_editor_for_time_presenter> const &,
-                   std::shared_ptr<timing_for_time_presenter> const &);
+    time_presenter(std::shared_ptr<project_editor> const &, std::shared_ptr<timing> const &,
+                   std::shared_ptr<player> const &, std::shared_ptr<nudging> const &);
 };
 }  // namespace yas::ae
