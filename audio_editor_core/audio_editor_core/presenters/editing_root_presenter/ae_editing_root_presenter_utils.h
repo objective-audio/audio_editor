@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_marker_pool_types.h>
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_editor.h>
 
 #include <optional>
 #include <string>
@@ -24,8 +25,6 @@ std::string marker_pool_text(marker_map_t const &);
 std::string timing_fraction_text(timing_fraction_kind const);
 std::string timing_text(timing_fraction_kind const);
 
-observing::fetcher_ptr<file_track_event> make_file_track_fetcher(
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &);
-observing::fetcher_ptr<marker_pool_event> make_marker_pool_fetcher(
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &);
+observing::fetcher_ptr<file_track_event> make_file_track_fetcher(std::shared_ptr<project_editor> const &);
+observing::fetcher_ptr<marker_pool_event> make_marker_pool_fetcher(std::shared_ptr<project_editor> const &);
 }  // namespace yas::ae::editing_root_presenter_utils

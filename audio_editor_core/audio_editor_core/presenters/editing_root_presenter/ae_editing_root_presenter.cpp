@@ -17,24 +17,15 @@ using namespace yas::ae;
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return make_shared(editor_level->file_info, project_level->player, project_level->project, editor_level->editor,
-                       project_level->action_router);
-}
-
-std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
-    file_info const &file_info, std::shared_ptr<player_for_editing_root_presenter> const &player,
-    std::shared_ptr<project_for_editing_root_presenter> const &project,
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
-    std::shared_ptr<action_router_for_editing_root_presenter> const &action_router) {
     return std::shared_ptr<editing_root_presenter>(
-        new editing_root_presenter{file_info, player, project, editor, action_router});
+        new editing_root_presenter{editor_level->file_info, project_level->player, project_level->project,
+                                   editor_level->editor, project_level->action_router});
 }
 
-editing_root_presenter::editing_root_presenter(
-    file_info const &file_info, std::shared_ptr<player_for_editing_root_presenter> const &player,
-    std::shared_ptr<project_for_editing_root_presenter> const &project,
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
-    std::shared_ptr<action_router_for_editing_root_presenter> const &action_router)
+editing_root_presenter::editing_root_presenter(file_info const &file_info, std::shared_ptr<player> const &player,
+                                               std::shared_ptr<project> const &project,
+                                               std::shared_ptr<project_editor> const &editor,
+                                               std::shared_ptr<action_router> const &action_router)
     : _file_info(file_info),
       _project(project),
       _player(player),

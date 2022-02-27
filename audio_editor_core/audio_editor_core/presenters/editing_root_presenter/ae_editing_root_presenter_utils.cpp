@@ -97,7 +97,7 @@ std::string editing_root_presenter_utils::timing_text(timing_fraction_kind const
 }
 
 observing::fetcher_ptr<file_track_event> editing_root_presenter_utils::make_file_track_fetcher(
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor) {
+    std::shared_ptr<project_editor> const &editor) {
     return observing::fetcher<file_track_event>::make_shared([weak_editor = to_weak(editor)] {
         if (auto const &editor = weak_editor.lock()) {
             return file_track_event({.type = file_track_event_type::any, .modules = editor->modules()});
@@ -107,7 +107,7 @@ observing::fetcher_ptr<file_track_event> editing_root_presenter_utils::make_file
 }
 
 observing::fetcher_ptr<marker_pool_event> editing_root_presenter_utils::make_marker_pool_fetcher(
-    std::shared_ptr<project_editor_for_editing_root_presenter> const &editor) {
+    std::shared_ptr<project_editor> const &editor) {
     return observing::fetcher<marker_pool_event>::make_shared([weak_editor = to_weak(editor)] {
         if (auto const &editor = weak_editor.lock()) {
             return marker_pool_event({.type = marker_pool_event_type::any, .markers = editor->markers()});
