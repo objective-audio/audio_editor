@@ -23,36 +23,23 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor> project_editor::make_shared(std::string const &identifier,
-                                                            ae::file_info const &file_info,
-                                                            std::shared_ptr<nudging_for_project_editor> const &nudging,
-                                                            std::shared_ptr<timing_for_project_editor> const &timing) {
-    auto const &project_level = hierarchy::project_level_for_id(identifier);
-    auto const &project_url = project_level->project_url;
-    return make_shared(project_url->editing_file(), file_info, project_level->player, file_track::make_shared(),
-                       marker_pool::make_shared(), edge_editor::make_shared(), pasteboard::make_shared(),
-                       database::make_shared(project_url->db_file()), exporter::make_shared(),
-                       project_level->action_controller, project_level->dialog_presenter, nudging, timing,
-                       time_editor_maker::make_shared());
-}
-
 std::shared_ptr<project_editor> project_editor::make_shared(
-    url const &editing_file_url, ae::file_info const &file_info,
-    std::shared_ptr<player_for_project_editor> const &player,
+    std::string const &identifier, ae::file_info const &file_info,
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
     std::shared_ptr<edge_editor_for_project_editor> const &edge_editor,
     std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
-    std::shared_ptr<action_controller> const &action_controller,
-    std::shared_ptr<dialog_presenter> const &dialog_presenter,
     std::shared_ptr<nudging_for_project_editor> const &nudging,
     std::shared_ptr<timing_for_project_editor> const &timing,
     std::shared_ptr<time_editor_maker_for_project_editor> const &time_editor_maker) {
-    return std::shared_ptr<project_editor>(new project_editor{
-        editing_file_url, file_info, player, file_track, marker_pool, edge_editor, pasteboard, database, exporter,
-        action_controller, dialog_presenter, nudging, timing, time_editor_maker});
+    auto const &project_level = hierarchy::project_level_for_id(identifier);
+    auto const &project_url = project_level->project_url;
+    return std::shared_ptr<project_editor>(
+        new project_editor{project_url->editing_file(), file_info, project_level->player, file_track, marker_pool,
+                           edge_editor, pasteboard, database, exporter, project_level->action_controller,
+                           project_level->dialog_presenter, nudging, timing, time_editor_maker});
 }
 
 project_editor::project_editor(url const &editing_file_url, ae::file_info const &file_info,
@@ -236,7 +223,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         ->observe_action([this](action const &action) {
             switch (action.kind) {
                 case action_kind::toggle_play:
-                    this->set_playing(!this->is_playing());
+                    this->_player->set_playing(!this->_player->is_playing());
                     break;
                 case action_kind::nudge_previous:
                     this->nudge_previous(1);
@@ -365,18 +352,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
 
 frame_index_t project_editor::current_frame() const {
     return this->_player->current_frame();
-}
-
-void project_editor::set_playing(bool const is_playing) {
-    this->_player->set_playing(is_playing);
-}
-
-bool project_editor::is_playing() const {
-    return this->_player->is_playing();
-}
-
-bool project_editor::is_scrolling() const {
-    return this->_player->is_scrolling();
 }
 
 bool project_editor::can_nudge() const {
@@ -876,7 +851,7 @@ void project_editor::begin_time_editing() {
 
     this->_action_controller->router()->set_kind(action_routing_kind::time);
 
-    auto const current_frame = this->current_frame();
+    auto const current_frame = this->_player->current_frame();
     auto const components = this->_timing->components(current_frame);
 
     this->_time_editor->set_value(this->_time_editor_maker->make(components.raw_components()));
@@ -1033,10 +1008,6 @@ std::map<frame_index_t, marker> const &project_editor::markers() const {
 
 file_track_module_map_t const &project_editor::modules() const {
     return this->_file_track->modules();
-}
-
-observing::syncable project_editor::observe_is_playing(std::function<void(bool const &)> &&handler) {
-    return this->_player->observe_is_playing(std::move(handler));
 }
 
 observing::syncable project_editor::observe_file_track_event(std::function<void(file_track_event const &)> &&handler) {

@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_action_router.h>
 #include <audio_editor_core/ae_editing_root_presenter_utils.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor.h>
 
@@ -16,24 +17,27 @@ using namespace yas::ae;
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return make_shared(editor_level->file_info, project_level->project, editor_level->editor,
+    return make_shared(editor_level->file_info, project_level->player, project_level->project, editor_level->editor,
                        project_level->action_router);
 }
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
-    file_info const &file_info, std::shared_ptr<project_for_editing_root_presenter> const &project,
+    file_info const &file_info, std::shared_ptr<player_for_editing_root_presenter> const &player,
+    std::shared_ptr<project_for_editing_root_presenter> const &project,
     std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
     std::shared_ptr<action_router_for_editing_root_presenter> const &action_router) {
     return std::shared_ptr<editing_root_presenter>(
-        new editing_root_presenter{file_info, project, editor, action_router});
+        new editing_root_presenter{file_info, player, project, editor, action_router});
 }
 
 editing_root_presenter::editing_root_presenter(
-    file_info const &file_info, std::shared_ptr<project_for_editing_root_presenter> const &project,
+    file_info const &file_info, std::shared_ptr<player_for_editing_root_presenter> const &player,
+    std::shared_ptr<project_for_editing_root_presenter> const &project,
     std::shared_ptr<project_editor_for_editing_root_presenter> const &editor,
     std::shared_ptr<action_router_for_editing_root_presenter> const &action_router)
     : _file_info(file_info),
       _project(project),
+      _player(player),
       _project_editor(editor),
       _action_router(action_router),
       _file_track_event_fetcher(editing_root_presenter_utils::make_file_track_fetcher(editor)),
@@ -80,10 +84,13 @@ std::string editing_root_presenter::marker_pool_text() const {
 }
 
 playing_line_state_t editing_root_presenter::playing_line_state() const {
-    if (auto const editor = this->_project_editor.lock()) {
-        if (editor->is_scrolling()) {
+    auto const editor = this->_project_editor.lock();
+    auto const player = this->_player.lock();
+
+    if (editor && player) {
+        if (player->is_scrolling()) {
             return playing_line_state_t::scrolling;
-        } else if (editor->is_playing()) {
+        } else if (player->is_playing()) {
             return playing_line_state_t::playing;
         }
     }
