@@ -23,16 +23,10 @@ struct project_editor final {
         std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
         std::shared_ptr<time_editor_maker> const &);
 
-    [[nodiscard]] frame_index_t current_frame() const;
-
     [[nodiscard]] bool can_nudge() const;
     void nudge_previous(uint32_t const offset_count);
     void nudge_next(uint32_t const offset_count);
-    [[nodiscard]] std::size_t nudging_unit_index() const;
-    void rotate_nudging_next_unit();
-    void rotate_nudging_previous_unit();
 
-    [[nodiscard]] ae::timing_fraction_kind timing_fraction_kind() const;
     void rotate_timing_fraction();
 
     [[nodiscard]] bool can_jump_to_previous_edge() const;
@@ -54,8 +48,6 @@ struct project_editor final {
     [[nodiscard]] bool can_erase() const;
     void erase();
     void erase_and_offset();
-
-    [[nodiscard]] ae::edge const &edge() const;
 
     [[nodiscard]] bool can_insert_marker() const;
     void insert_marker();
@@ -105,14 +97,6 @@ struct project_editor final {
     void change_time_sign_to_minus();
     void select_time_unit(std::size_t const);
 
-    [[nodiscard]] std::map<frame_index_t, marker> const &markers() const;
-    [[nodiscard]] file_track_module_map_t const &modules() const;
-
-    [[nodiscard]] observing::syncable observe_file_track_event(std::function<void(file_track_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_marker_pool_event(std::function<void(marker_pool_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_edge_editor_event(std::function<void(edge_editor_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&);
-    [[nodiscard]] observing::syncable observe_timing_fraction(std::function<void(ae::timing_fraction_kind const &)> &&);
     [[nodiscard]] observing::syncable observe_time_editor(std::function<void(std::shared_ptr<time_editor> const &)> &&);
 
    private:

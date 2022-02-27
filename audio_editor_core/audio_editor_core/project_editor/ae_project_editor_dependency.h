@@ -31,12 +31,6 @@ struct jumpable_on_project_editor {
     [[nodiscard]] virtual std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const = 0;
 };
 
-struct file_loader_for_project_editor {
-    virtual ~file_loader_for_project_editor() = default;
-
-    [[nodiscard]] virtual std::optional<file_info> load_file_info(url const &) const = 0;
-};
-
 struct player_for_project_editor {
     virtual ~player_for_project_editor() = default;
 
