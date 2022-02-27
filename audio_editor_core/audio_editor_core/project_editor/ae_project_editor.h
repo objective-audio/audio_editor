@@ -27,8 +27,6 @@ struct project_editor final : project_editor_for_editing_root_presenter,
 
     [[nodiscard]] frame_index_t current_frame() const override;
 
-    [[nodiscard]] bool is_scrolling() const override;
-
     [[nodiscard]] bool can_nudge() const override;
     void nudge_previous(uint32_t const offset_count);
     void nudge_next(uint32_t const offset_count);

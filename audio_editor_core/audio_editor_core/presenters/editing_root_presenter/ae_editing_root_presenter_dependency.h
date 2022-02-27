@@ -37,12 +37,12 @@ struct player_for_editing_root_presenter {
     virtual ~player_for_editing_root_presenter() = default;
 
     [[nodiscard]] virtual bool is_playing() const = 0;
+
+    [[nodiscard]] virtual bool is_scrolling() const = 0;
 };
 
 struct project_editor_for_editing_root_presenter {
     virtual ~project_editor_for_editing_root_presenter() = default;
-
-    [[nodiscard]] virtual bool is_scrolling() const = 0;
 
     [[nodiscard]] virtual bool can_nudge() const = 0;
     [[nodiscard]] virtual timing_fraction_kind timing_fraction_kind() const = 0;

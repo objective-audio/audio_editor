@@ -354,10 +354,6 @@ frame_index_t project_editor::current_frame() const {
     return this->_player->current_frame();
 }
 
-bool project_editor::is_scrolling() const {
-    return this->_player->is_scrolling();
-}
-
 bool project_editor::can_nudge() const {
     return !this->_player->is_playing();
 }

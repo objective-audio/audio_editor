@@ -88,7 +88,7 @@ playing_line_state_t editing_root_presenter::playing_line_state() const {
     auto const player = this->_player.lock();
 
     if (editor && player) {
-        if (editor->is_scrolling()) {
+        if (player->is_scrolling()) {
             return playing_line_state_t::scrolling;
         } else if (player->is_playing()) {
             return playing_line_state_t::playing;
