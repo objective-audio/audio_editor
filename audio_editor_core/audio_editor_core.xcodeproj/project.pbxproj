@@ -174,6 +174,8 @@
 		B69CF562262AC49C007A0A75 /* ae_project.h in Headers */ = {isa = PBXBuildFile; fileRef = B69CF560262AC49C007A0A75 /* ae_project.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69D8C5327CB6AD800CA30DE /* ae_time_editor_level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69D8C5127CB6AD800CA30DE /* ae_time_editor_level.cpp */; };
 		B69D8C5427CB6AD800CA30DE /* ae_time_editor_level.h in Headers */ = {isa = PBXBuildFile; fileRef = B69D8C5227CB6AD800CA30DE /* ae_time_editor_level.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B69D8C5927CB6C3A00CA30DE /* ae_time_editor_level_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69D8C5727CB6C3A00CA30DE /* ae_time_editor_level_pool.cpp */; };
+		B69D8C5A27CB6C3A00CA30DE /* ae_time_editor_level_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B69D8C5827CB6C3A00CA30DE /* ae_time_editor_level_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69DA66027B75FA400228CAB /* ae_edge_location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69DA65E27B75FA400228CAB /* ae_edge_location.cpp */; };
 		B69DA66127B75FA400228CAB /* ae_edge_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DA65F27B75FA400228CAB /* ae_edge_location.h */; };
 		B6A123772788373E00F31B31 /* ae_nudging_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A123762788373E00F31B31 /* ae_nudging_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -432,6 +434,8 @@
 		B69CF560262AC49C007A0A75 /* ae_project.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project.h; sourceTree = "<group>"; };
 		B69D8C5127CB6AD800CA30DE /* ae_time_editor_level.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_time_editor_level.cpp; sourceTree = "<group>"; };
 		B69D8C5227CB6AD800CA30DE /* ae_time_editor_level.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_editor_level.h; sourceTree = "<group>"; };
+		B69D8C5727CB6C3A00CA30DE /* ae_time_editor_level_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_time_editor_level_pool.cpp; sourceTree = "<group>"; };
+		B69D8C5827CB6C3A00CA30DE /* ae_time_editor_level_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_editor_level_pool.h; sourceTree = "<group>"; };
 		B69DA65E27B75FA400228CAB /* ae_edge_location.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_edge_location.cpp; sourceTree = "<group>"; };
 		B69DA65F27B75FA400228CAB /* ae_edge_location.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_edge_location.h; sourceTree = "<group>"; };
 		B6A123762788373E00F31B31 /* ae_nudging_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_dependency.h; sourceTree = "<group>"; };
@@ -683,6 +687,8 @@
 			children = (
 				B62EF81C27C882BA00A27948 /* ae_project_editor_level.cpp */,
 				B62EF81D27C882BA00A27948 /* ae_project_editor_level.h */,
+				B69D8C5727CB6C3A00CA30DE /* ae_time_editor_level_pool.cpp */,
+				B69D8C5827CB6C3A00CA30DE /* ae_time_editor_level_pool.h */,
 				B69D8C5027CB6AC600CA30DE /* time_editor_level */,
 			);
 			path = project_editor_level;
@@ -1353,6 +1359,7 @@
 				B675F93E2765CBB2002FE285 /* ae_waveform_mesh_importer.h in Headers */,
 				B695726D2737E54100E97EAE /* ae_track_presenter_dependency.h in Headers */,
 				B6624D4A274A54D3001A7BED /* ae_db_pasting_subject.h in Headers */,
+				B69D8C5A27CB6C3A00CA30DE /* ae_time_editor_level_pool.h in Headers */,
 				B657D4D426803C7B0048C6AD /* ae_keyboard_types.h in Headers */,
 				B69C68A32670F5BF00C1083F /* ae_ui_button.h in Headers */,
 				B64DE67F2658B990006FC562 /* ae_ui_editing_root_dependency.h in Headers */,
@@ -1474,6 +1481,7 @@
 				B6A12382278932B900F31B31 /* ae_ui_time.mm in Sources */,
 				B6F4D97427B3DCFA00AE7D5D /* ae_db_edge.cpp in Sources */,
 				B6370CD3279BA06C00449D03 /* ae_time_editor_utils.cpp in Sources */,
+				B69D8C5927CB6C3A00CA30DE /* ae_time_editor_level_pool.cpp in Sources */,
 				B62EF81E27C882BA00A27948 /* ae_project_editor_level.cpp in Sources */,
 				B60204F6263ABBC400CFC752 /* ae_editing_root_presenter_utils.cpp in Sources */,
 				B6CCC48E274B4B1600B563C8 /* ae_pasteboard.cpp in Sources */,
