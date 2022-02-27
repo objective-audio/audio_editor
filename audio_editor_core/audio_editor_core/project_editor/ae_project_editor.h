@@ -14,7 +14,7 @@ namespace yas::ae {
 class time_editor;
 class time_editor_maker;
 
-struct project_editor final : project_editor_for_edge_presenter {
+struct project_editor final {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         std::string const &identifier, ae::file_info const &, std::shared_ptr<file_track_for_project_editor> const &,
         std::shared_ptr<marker_pool_for_project_editor> const &,
@@ -55,7 +55,7 @@ struct project_editor final : project_editor_for_edge_presenter {
     void erase();
     void erase_and_offset();
 
-    [[nodiscard]] ae::edge const &edge() const override;
+    [[nodiscard]] ae::edge const &edge() const;
 
     [[nodiscard]] bool can_insert_marker() const;
     void insert_marker();
@@ -110,8 +110,7 @@ struct project_editor final : project_editor_for_edge_presenter {
 
     [[nodiscard]] observing::syncable observe_file_track_event(std::function<void(file_track_event const &)> &&);
     [[nodiscard]] observing::syncable observe_marker_pool_event(std::function<void(marker_pool_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_edge_editor_event(
-        std::function<void(edge_editor_event const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_edge_editor_event(std::function<void(edge_editor_event const &)> &&);
     [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&);
     [[nodiscard]] observing::syncable observe_timing_fraction(std::function<void(ae::timing_fraction_kind const &)> &&);
     [[nodiscard]] observing::syncable observe_time_editor(std::function<void(std::shared_ptr<time_editor> const &)> &&);
