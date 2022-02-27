@@ -4,11 +4,7 @@
 
 #include "ae_project_editor_level_pool.h"
 
-#include <audio_editor_core/ae_nudging.h>
-#include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_level.h>
-#include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
 using namespace yas::ae;
