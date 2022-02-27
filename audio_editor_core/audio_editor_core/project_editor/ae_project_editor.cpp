@@ -354,14 +354,6 @@ frame_index_t project_editor::current_frame() const {
     return this->_player->current_frame();
 }
 
-void project_editor::set_playing(bool const is_playing) {
-    this->_player->set_playing(is_playing);
-}
-
-bool project_editor::is_playing() const {
-    return this->_player->is_playing();
-}
-
 bool project_editor::is_scrolling() const {
     return this->_player->is_scrolling();
 }
@@ -863,7 +855,7 @@ void project_editor::begin_time_editing() {
 
     this->_action_controller->router()->set_kind(action_routing_kind::time);
 
-    auto const current_frame = this->current_frame();
+    auto const current_frame = this->_player->current_frame();
     auto const components = this->_timing->components(current_frame);
 
     this->_time_editor->set_value(this->_time_editor_maker->make(components.raw_components()));
@@ -1020,10 +1012,6 @@ std::map<frame_index_t, marker> const &project_editor::markers() const {
 
 file_track_module_map_t const &project_editor::modules() const {
     return this->_file_track->modules();
-}
-
-observing::syncable project_editor::observe_is_playing(std::function<void(bool const &)> &&handler) {
-    return this->_player->observe_is_playing(std::move(handler));
 }
 
 observing::syncable project_editor::observe_file_track_event(std::function<void(file_track_event const &)> &&handler) {

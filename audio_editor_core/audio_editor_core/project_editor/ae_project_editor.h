@@ -27,9 +27,6 @@ struct project_editor final : project_editor_for_editing_root_presenter,
 
     [[nodiscard]] frame_index_t current_frame() const override;
 
-    void set_playing(bool const);
-    [[nodiscard]] bool is_playing() const override;
-
     [[nodiscard]] bool is_scrolling() const override;
 
     [[nodiscard]] bool can_nudge() const override;
@@ -115,7 +112,6 @@ struct project_editor final : project_editor_for_editing_root_presenter,
     [[nodiscard]] std::map<frame_index_t, marker> const &markers() const override;
     [[nodiscard]] file_track_module_map_t const &modules() const override;
 
-    [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
     [[nodiscard]] observing::syncable observe_file_track_event(
         std::function<void(file_track_event const &)> &&) override;
     [[nodiscard]] observing::syncable observe_marker_pool_event(

@@ -37,7 +37,6 @@ struct project_editor_for_editing_root_presenter {
     virtual ~project_editor_for_editing_root_presenter() = default;
 
     [[nodiscard]] virtual frame_index_t current_frame() const = 0;
-    [[nodiscard]] virtual bool is_playing() const = 0;
     [[nodiscard]] virtual bool is_scrolling() const = 0;
 
     [[nodiscard]] virtual bool can_nudge() const = 0;
@@ -63,7 +62,6 @@ struct project_editor_for_editing_root_presenter {
     [[nodiscard]] virtual std::map<frame_index_t, marker> const &markers() const = 0;
     [[nodiscard]] virtual file_track_module_map_t const &modules() const = 0;
 
-    [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;
     [[nodiscard]] virtual observing::syncable observe_file_track_event(
         std::function<void(file_track_event const &)> &&) = 0;
     [[nodiscard]] virtual observing::syncable observe_marker_pool_event(
