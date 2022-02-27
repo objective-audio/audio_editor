@@ -4,11 +4,7 @@
 
 #include "ae_project_editor_level_pool.h"
 
-#include <audio_editor_core/ae_nudging.h>
-#include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_level.h>
-#include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -21,7 +17,7 @@ project_editor_level_pool::project_editor_level_pool(std::string const &identifi
     : _identifier(identifier), _editor_level(nullptr) {
 }
 
-void project_editor_level_pool::add_editor_level(file_info const &file_info) {
+void project_editor_level_pool::add_level(file_info const &file_info) {
     if (this->_editor_level != nullptr) {
         throw std::runtime_error("editor_level is not null.");
     }
@@ -29,6 +25,6 @@ void project_editor_level_pool::add_editor_level(file_info const &file_info) {
     this->_editor_level = project_editor_level::make_shared(this->_identifier, file_info);
 }
 
-std::shared_ptr<project_editor_level> const &project_editor_level_pool::editor_level() const {
+std::shared_ptr<project_editor_level> const &project_editor_level_pool::level() const {
     return this->_editor_level;
 }

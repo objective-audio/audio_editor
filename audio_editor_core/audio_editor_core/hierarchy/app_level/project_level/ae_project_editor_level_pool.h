@@ -10,15 +10,12 @@
 
 namespace yas::ae {
 class project_editor_level;
-class player;
-class action_controller;
-class dialog_presenter;
 
 struct project_editor_level_pool final : project_editor_level_pool_for_project {
     [[nodiscard]] static std::shared_ptr<project_editor_level_pool> make_shared(std::string const &identifier);
 
-    void add_editor_level(file_info const &) override;
-    std::shared_ptr<project_editor_level> const &editor_level() const;
+    void add_level(file_info const &) override;
+    std::shared_ptr<project_editor_level> const &level() const;
 
    private:
     std::string const _identifier;

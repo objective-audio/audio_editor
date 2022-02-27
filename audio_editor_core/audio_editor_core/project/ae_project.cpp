@@ -50,7 +50,7 @@ void project::setup() {
                          if (result) {
                              auto const editing_file_url = project->_project_url->editing_file();
                              if (auto const file_info = project->_file_loader->load_file_info(editing_file_url)) {
-                                 project->_editor_level_pool->add_editor_level(file_info.value());
+                                 project->_editor_level_pool->add_level(file_info.value());
                                  project->_state->set_value(project_state::editing);
                              } else {
                                  project->_state->set_value(project_state::failure);

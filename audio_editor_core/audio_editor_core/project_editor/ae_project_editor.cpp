@@ -17,6 +17,7 @@
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_time_editor.h>
+#include <audio_editor_core/ae_time_editor_level.h>
 #include <audio_editor_core/ae_time_editor_maker.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
@@ -34,13 +35,14 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<nudging_for_project_editor> const &nudging,
     std::shared_ptr<timing_for_project_editor> const &timing,
-    std::shared_ptr<time_editor_maker> const &time_editor_maker) {
+    std::shared_ptr<time_editor_maker> const &time_editor_maker,
+    std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool) {
     auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
-    return std::shared_ptr<project_editor>(
-        new project_editor{project_url->editing_file(), file_info, project_level->player, file_track, marker_pool,
-                           edge_editor, pasteboard, database, exporter, project_level->action_controller,
-                           project_level->dialog_presenter, nudging, timing, time_editor_maker});
+    return std::shared_ptr<project_editor>(new project_editor{
+        project_url->editing_file(), file_info, project_level->player, file_track, marker_pool, edge_editor, pasteboard,
+        database, exporter, project_level->action_controller, project_level->dialog_presenter, nudging, timing,
+        time_editor_maker, time_editor_level_pool});
 }
 
 project_editor::project_editor(url const &editing_file_url, ae::file_info const &file_info,
@@ -55,7 +57,8 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<nudging_for_project_editor> const &nudging,
                                std::shared_ptr<timing_for_project_editor> const &timing,
-                               std::shared_ptr<time_editor_maker> const &time_editor_maker)
+                               std::shared_ptr<time_editor_maker> const &time_editor_maker,
+                               std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),
@@ -72,6 +75,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _nudging(nudging),
       _timing(timing),
       _time_editor_maker(time_editor_maker),
+      _time_editor_level_pool(time_editor_level_pool),
       _time_editor(observing::value::holder<std::shared_ptr<time_editor>>::make_shared(nullptr)) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
@@ -831,7 +835,7 @@ void project_editor::begin_time_editing() {
     auto const current_frame = this->_player->current_frame();
     auto const components = this->_timing->components(current_frame);
 
-    this->_time_editor->set_value(this->_time_editor_maker->make(components.raw_components()));
+    this->_time_editor->set_value(this->_time_editor_maker->make(components.raw_components())->time_editor);
 
     this->_time_editor->value()
         ->observe_event([this](time_editor_event const &) {

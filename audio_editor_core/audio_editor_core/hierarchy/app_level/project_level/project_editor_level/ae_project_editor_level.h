@@ -21,6 +21,7 @@ class pasteboard;
 class database;
 class exporter;
 class time_editor_maker;
+class time_editor_level_pool;
 class project_editor;
 
 struct project_editor_level final {
@@ -39,6 +40,7 @@ struct project_editor_level final {
     std::shared_ptr<database> const database;
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<time_editor_maker> const time_editor_maker;
+    std::shared_ptr<time_editor_level_pool> const time_editor_level_pool;
     std::shared_ptr<project_editor> const editor;
 
    private:

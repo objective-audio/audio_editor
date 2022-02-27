@@ -19,5 +19,5 @@ std::shared_ptr<project_level> const &hierarchy::project_level_for_id(std::strin
 }
 
 std::shared_ptr<project_editor_level> const &hierarchy::project_editor_level_for_id(std::string const &project_id) {
-    return project_level_for_id(project_id)->editor_level_pool->editor_level();
+    return project_level_for_id(project_id)->editor_level_pool->level();
 }
