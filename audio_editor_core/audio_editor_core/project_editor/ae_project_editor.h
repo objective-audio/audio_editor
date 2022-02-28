@@ -12,7 +12,6 @@
 
 namespace yas::ae {
 class time_editor;
-class time_editor_maker;
 class time_editor_level_pool;
 
 struct project_editor final {
