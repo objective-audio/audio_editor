@@ -12,7 +12,7 @@
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_level_pool.h>
 #include <audio_editor_core/ae_system_url.h>
-#include <audio_editor_core/ae_ui_pool.h>
+#include <audio_editor_core/ae_ui_root_level_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -25,7 +25,7 @@ app_level::app_level()
       file_loader(file_loader::make_shared()),
       color(ae::color::make_shared()),
       project_level_pool(project_level_pool::make_shared()),
-      ui_pool(ui_pool::make_shared()) {
+      ui_root_level_pool(ui_root_level_pool::make_shared()) {
     this->app->setup();
 }
 

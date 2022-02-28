@@ -18,12 +18,16 @@ using namespace yas::ae;
     auto const app_level = app_level::make_shared();
 
     XCTAssertTrue(app_level != nullptr);
-    XCTAssertTrue(app_level->project_level_pool != nullptr);
+
+    XCTAssertTrue(app_level->worker != nullptr);
     XCTAssertTrue(app_level->system_url != nullptr);
+    XCTAssertTrue(app_level->app != nullptr);
     XCTAssertTrue(app_level->file_importer != nullptr);
     XCTAssertTrue(app_level->file_loader != nullptr);
     XCTAssertTrue(app_level->color != nullptr);
-    XCTAssertTrue(app_level->ui_pool != nullptr);
+
+    XCTAssertTrue(app_level->project_level_pool != nullptr);
+    XCTAssertTrue(app_level->ui_root_level_pool != nullptr);
 }
 
 @end

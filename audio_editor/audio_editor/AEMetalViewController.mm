@@ -6,9 +6,10 @@
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
-#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project.h>
-#include <audio_editor_core/ae_ui_pool.h>
+#include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_root_level_pool.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #import "AEMetalView.h"
 
@@ -20,7 +21,7 @@ using namespace yas::ae;
 @end
 
 @implementation AEMetalViewController {
-    std::weak_ptr<ui_root> _ui_root;
+    std::weak_ptr<ui_root_level> _ui_root_level;
     std::weak_ptr<action_controller> _action_controller;
     std::weak_ptr<context_menu_presenter> _context_menu_presenter;
     observing::canceller_pool _pool;
@@ -39,14 +40,17 @@ using namespace yas::ae;
 }
 
 - (void)dealloc {
-    app_level::global()->ui_pool->remove_ui_root_for_view_id(self.project_view_id);
+    app_level::global()->ui_root_level_pool->remove_level_for_view_id(self.project_view_id);
 }
 
 - (void)setupWithProjectID:(std::string const &)project_id {
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
-    self->_ui_root = app_level::global()->ui_pool->add_and_return_ui_root(standard, project_id, self.project_view_id);
+
+    auto const &ui_root_level_pool = app_level::global()->ui_root_level_pool;
+    ui_root_level_pool->add_level(standard, project_id, self.project_view_id);
+    self->_ui_root_level = ui_root_level_pool->level_for_view_id(self.project_view_id);
 
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     self->_action_controller = project_level->action_controller;
@@ -153,8 +157,8 @@ using namespace yas::ae;
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     if (auto const action = [self actionForSelector:menuItem.action]) {
-        if (auto const ui_root = self->_ui_root.lock()) {
-            return ui_root->responds_to_action(action.value());
+        if (auto const ui_root_level = self->_ui_root_level.lock()) {
+            return ui_root_level->ui_root->responds_to_action(action.value());
         }
     }
     return NO;
