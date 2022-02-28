@@ -7,14 +7,15 @@
 #include <memory>
 
 namespace yas::ae {
+class number_components;
 class time_editor;
 
 struct time_editor_level final {
-    [[nodiscard]] static std::shared_ptr<time_editor_level> make_shared(std::shared_ptr<time_editor> const &);
+    [[nodiscard]] static std::shared_ptr<time_editor_level> make_shared(number_components const &);
 
     std::shared_ptr<time_editor> const time_editor;
 
    private:
-    time_editor_level(std::shared_ptr<ae::time_editor> const &);
+    time_editor_level(number_components const &);
 };
 }  // namespace yas::ae

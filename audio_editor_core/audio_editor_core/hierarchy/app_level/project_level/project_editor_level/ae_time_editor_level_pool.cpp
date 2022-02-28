@@ -24,7 +24,7 @@ void time_editor_level_pool::add_level(number_components const &components) {
         throw std::runtime_error("level is not null.");
     }
 
-    this->_level->set_value(time_editor_level::make_shared(time_editor::make_shared(components)));
+    this->_level->set_value(time_editor_level::make_shared(components));
 }
 
 void time_editor_level_pool::remove_level() {
