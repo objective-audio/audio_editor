@@ -47,19 +47,16 @@ time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::share
 }
 
 std::string time_presenter::time_text() const {
-    if (auto const pool = this->_time_editor_level_pool.lock()) {
-        if (auto const &level = pool->level()) {
-            auto const &time_editor = level->time_editor;
-            return time_presenter_utils::time_text(time_editor->editing_components());
-        }
-    }
-
-    auto const player = this->_player.lock();
-    auto const timing = this->_timing.lock();
-    if (player && timing) {
-        return time_presenter_utils::time_text(timing->components(player->current_frame()).raw_components());
+    if (auto const &level = this->_level()) {
+        return time_presenter_utils::time_text(level->time_editor->editing_components());
     } else {
-        return "";
+        auto const player = this->_player.lock();
+        auto const timing = this->_timing.lock();
+        if (player && timing) {
+            return time_presenter_utils::time_text(timing->components(player->current_frame()).raw_components());
+        } else {
+            return "";
+        }
     }
 }
 
@@ -83,23 +80,20 @@ std::vector<index_range> time_presenter::time_text_unit_ranges() const {
 }
 
 std::optional<std::size_t> time_presenter::editing_unit_index() const {
-    if (auto const pool = this->_time_editor_level_pool.lock()) {
-        if (auto const &level = pool->level()) {
-            return level->time_editor->unit_index();
-        }
+    if (auto const &level = this->_level()) {
+        return level->time_editor->unit_index();
+    } else {
+        return std::nullopt;
     }
-    return std::nullopt;
 }
 
 std::optional<index_range> time_presenter::editing_time_text_range() const {
-    if (auto const pool = this->_time_editor_level_pool.lock()) {
-        if (auto &level = pool->level()) {
-            auto const &time_editor = level->time_editor;
-            return time_presenter_utils::to_time_text_range(time_editor->editing_components(),
-                                                            time_editor->unit_index());
-        }
+    if (auto &level = this->_level()) {
+        auto const &time_editor = level->time_editor;
+        return time_presenter_utils::to_time_text_range(time_editor->editing_components(), time_editor->unit_index());
+    } else {
+        return std::nullopt;
     }
-    return std::nullopt;
 }
 
 observing::syncable time_presenter::observe_editing_time_text_range(
@@ -121,4 +115,13 @@ observing::syncable time_presenter::observe_nudging_unit_index(std::function<voi
     } else {
         return observing::syncable{};
     }
+}
+
+std::shared_ptr<time_editor_level> const &time_presenter::_level() const {
+    if (auto const pool = this->_time_editor_level_pool.lock()) {
+        return pool->level();
+    }
+
+    static std::shared_ptr<time_editor_level> const null_level;
+    return null_level;
 }

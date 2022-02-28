@@ -12,7 +12,7 @@ namespace yas::ae {
 class timing;
 class player;
 class nudging;
-class time_editor;
+class time_editor_level;
 class time_editor_level_pool;
 
 struct time_presenter final {
@@ -40,5 +40,7 @@ struct time_presenter final {
 
     time_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &, std::shared_ptr<nudging> const &,
                    std::shared_ptr<time_editor_level_pool> const &);
+
+    std::shared_ptr<time_editor_level> const &_level() const;
 };
 }  // namespace yas::ae
