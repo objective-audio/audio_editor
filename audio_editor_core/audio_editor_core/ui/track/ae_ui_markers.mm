@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_markers_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
-#include <audio_editor_core/ae_ui_root.h>
+#include <audio_editor_core/ae_ui_root_level.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -18,13 +18,11 @@ static std::size_t const reserving_interval = 10;
 
 std::shared_ptr<ui_markers> ui_markers::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
     auto const &app_level = app_level::global();
-    auto const &ui_root = hierarchy::ui_root_level_for_view_id(project_view_id)->ui_root;
-    auto const &standard = ui_root->standard();
-    auto const &display_space = ui_root->display_space();
+    auto const &ui_root_level = hierarchy::ui_root_level_for_view_id(project_view_id);
 
-    auto const presenter = markers_presenter::make_shared(project_id, display_space);
+    auto const presenter = markers_presenter::make_shared(project_id, ui_root_level->display_space);
     auto const &color = app_level->color;
-    return std::shared_ptr<ui_markers>(new ui_markers{presenter, standard, color});
+    return std::shared_ptr<ui_markers>(new ui_markers{presenter, ui_root_level->standard, color});
 }
 
 ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,

@@ -3,22 +3,18 @@
 //
 
 #include "ae_ui_edge.h"
-#include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_edge_presenter.h>
 #include <audio_editor_core/ae_ui_edge_element.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
-#include <audio_editor_core/ae_ui_root.h>
+#include <audio_editor_core/ae_ui_root_level.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_edge> ui_edge::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
     auto const &app_level = app_level::global();
-    auto const &ui_root = hierarchy::ui_root_level_for_view_id(project_view_id)->ui_root;
-    auto const &standard = ui_root->standard();
-    auto const &display_space = ui_root->display_space();
-    auto const color = app_level->color;
+    auto const &ui_root_level = hierarchy::ui_root_level_for_view_id(project_view_id);
 
     auto const top_guide = ui::layout_value_guide::make_shared();
 
@@ -41,8 +37,8 @@ std::shared_ptr<ui_edge> ui_edge::make_shared(std::string const &project_id, uin
     auto const begin_edge = ui_edge_element::make_shared("BEGIN", args, project_view_id);
     auto const end_edge = ui_edge_element::make_shared("END", args, project_view_id);
 
-    auto const presenter = edge_presenter::make_shared(project_id, display_space);
-    return std::shared_ptr<ui_edge>(new ui_edge{presenter, standard, top_guide, begin_edge, end_edge});
+    auto const presenter = edge_presenter::make_shared(project_id, ui_root_level->display_space);
+    return std::shared_ptr<ui_edge>(new ui_edge{presenter, ui_root_level->standard, top_guide, begin_edge, end_edge});
 }
 
 ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui::standard> const &standard,

@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
-#include <audio_editor_core/ae_ui_root.h>
+#include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_waveform_mesh_importer.h>
 #include <cpp_utils/yas_fast_each.h>
 
@@ -19,12 +19,11 @@ std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
     std::string const &project_id, uintptr_t const project_view_id,
     std::shared_ptr<module_location_pool> const &location_pool) {
     auto const &app_level = app_level::global();
-    auto const &ui_root = hierarchy::ui_root_level_for_view_id(project_view_id)->ui_root;
-    auto const &standard = ui_root->standard();
-    auto const &color = app_level->color;
+    auto const &ui_root_level = hierarchy::ui_root_level_for_view_id(project_view_id);
     auto const presenter = module_waveforms_presenter::make_shared(project_id, location_pool);
 
-    return std::shared_ptr<ui_module_waveforms>(new ui_module_waveforms{standard, color, presenter});
+    return std::shared_ptr<ui_module_waveforms>(
+        new ui_module_waveforms{ui_root_level->standard, app_level->color, presenter});
 }
 
 ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &standard,

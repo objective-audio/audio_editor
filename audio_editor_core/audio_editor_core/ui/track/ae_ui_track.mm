@@ -11,7 +11,7 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_markers.h>
 #include <audio_editor_core/ae_ui_modules.h>
-#include <audio_editor_core/ae_ui_root.h>
+#include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_track_constants.h>
 #include <cpp_utils/yas_fast_each.h>
 
@@ -19,17 +19,15 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_track> ui_track::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
-    auto const &ui_root = hierarchy::ui_root_level_for_view_id(project_view_id)->ui_root;
-    auto const &standard = ui_root->standard();
-    auto const display_space = ui_root->display_space();
+    auto const &ui_root_level = hierarchy::ui_root_level_for_view_id(project_view_id);
 
     auto const presenter = track_presenter::make_shared(project_id);
     auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id);
     auto const modules = ui_modules::make_shared(project_id, project_view_id);
     auto const edge = ui_edge::make_shared(project_id, project_view_id);
     auto const markers = ui_markers::make_shared(project_id, project_view_id);
-    return std::shared_ptr<ui_track>(
-        new ui_track{standard, display_space, presenter, scroll_gestore_controller, modules, edge, markers});
+    return std::shared_ptr<ui_track>(new ui_track{ui_root_level->standard, ui_root_level->display_space, presenter,
+                                                  scroll_gestore_controller, modules, edge, markers});
 }
 
 ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<display_space> const &display_space,
