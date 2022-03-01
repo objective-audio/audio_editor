@@ -14,10 +14,10 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_root> ui_root::make_shared(
-    std::shared_ptr<ui::standard> const &standard, std::string const &project_id, std::uintptr_t const project_view_id,
+    std::shared_ptr<ui::standard> const &standard, ui_project_id const &project_id,
     std::shared_ptr<ui_editing_root_level_pool> const &ui_editing_root_level_pool) {
-    auto const presenter = root_presenter::make_shared(project_id);
-    return std::shared_ptr<ui_root>(new ui_root{project_view_id, standard, presenter, ui_editing_root_level_pool});
+    auto const presenter = root_presenter::make_shared(project_id.identifier);
+    return std::shared_ptr<ui_root>(new ui_root{project_id.view_id, standard, presenter, ui_editing_root_level_pool});
 }
 
 ui_root::ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::standard> const &standard,

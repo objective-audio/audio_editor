@@ -20,16 +20,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::string const &project_id,
-                                                              std::uintptr_t const project_view_id) {
+std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &project_id) {
     auto const &app_level = app_level::global();
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_view_id);
-    auto const presenter = editing_root_presenter::make_shared(project_id);
+    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
+    auto const presenter = editing_root_presenter::make_shared(project_id.identifier);
     auto const &color = app_level->color;
-    auto const &action_controller = hierarchy::project_level_for_id(project_id)->action_controller;
-    auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
-    auto const ui_track = ui_track::make_shared(project_id, project_view_id);
-    auto const ui_time = ui_time::make_shared(project_id, project_view_id);
+    auto const &action_controller = hierarchy::project_level_for_id(project_id.identifier)->action_controller;
+    auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id.identifier);
+    auto const ui_track = ui_track::make_shared(project_id);
+    auto const ui_time = ui_time::make_shared(project_id);
     return std::shared_ptr<ui_editing_root>(new ui_editing_root{ui_root_level->standard, ui_root_level->font_atlas_14,
                                                                 color, presenter, action_controller,
                                                                 pinch_gesture_controller, ui_track, ui_time});

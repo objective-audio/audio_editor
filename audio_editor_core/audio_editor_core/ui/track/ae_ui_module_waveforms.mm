@@ -16,11 +16,10 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
-    std::string const &project_id, uintptr_t const project_view_id,
-    std::shared_ptr<module_location_pool> const &location_pool) {
+    ui_project_id const &project_id, std::shared_ptr<module_location_pool> const &location_pool) {
     auto const &app_level = app_level::global();
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_view_id);
-    auto const presenter = module_waveforms_presenter::make_shared(project_id, location_pool);
+    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
+    auto const presenter = module_waveforms_presenter::make_shared(project_id.identifier, location_pool);
 
     return std::shared_ptr<ui_module_waveforms>(
         new ui_module_waveforms{ui_root_level->standard, app_level->color, presenter});

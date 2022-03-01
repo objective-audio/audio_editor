@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_marker_location.h>
+#include <audio_editor_core/ae_ui_project_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -13,8 +14,7 @@ class display_space;
 class color;
 
 struct ui_markers final {
-    [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(std::string const &project_id,
-                                                                 uintptr_t const project_view_id);
+    [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(ui_project_id const &project_id);
 
     std::shared_ptr<ui::node> const &node() const;
 

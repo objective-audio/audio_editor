@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_ui_project_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -14,10 +15,8 @@ class ui_root;
 
 struct ui_root_level {
     [[nodiscard]] static std::shared_ptr<ui_root_level> make_shared(std::shared_ptr<ui::standard> const &,
-                                                                    std::string const &project_id,
-                                                                    std::uintptr_t const project_view_id);
-    std::string const project_id;
-    std::uintptr_t const project_view_id;
+                                                                    ui_project_id const &project_id);
+    ui_project_id const project_id;
 
     std::shared_ptr<ui::standard> const standard;
     std::shared_ptr<ui::texture> const texture;
@@ -28,7 +27,6 @@ struct ui_root_level {
     std::shared_ptr<ui_root> const ui_root;
 
    private:
-    ui_root_level(std::shared_ptr<ui::standard> const &, std::string const &project_id,
-                  std::uintptr_t const project_view_id);
+    ui_root_level(std::shared_ptr<ui::standard> const &, ui_project_id const &project_id);
 };
 }  // namespace yas::ae

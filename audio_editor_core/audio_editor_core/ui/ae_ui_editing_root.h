@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_ui_button.h>
 #include <audio_editor_core/ae_ui_editing_root_dependency.h>
+#include <audio_editor_core/ae_ui_project_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -21,8 +22,7 @@ class color;
 struct ui_editing_root final {
     bool responds_to_action(action const);
 
-    [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(std::string const &project_id,
-                                                                      std::uintptr_t const project_view_id);
+    [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(ui_project_id const &project_id);
 
    private:
     std::shared_ptr<editing_root_presenter> const _presenter;
