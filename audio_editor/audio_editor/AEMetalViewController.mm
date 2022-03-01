@@ -158,7 +158,7 @@ using namespace yas::ae;
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     if (auto const action = [self actionForSelector:menuItem.action]) {
         if (auto const ui_root_level = self->_ui_root_level.lock()) {
-            return ui_root_level->ui_root->responds_to_action(action.value());
+            return ui_root_level->root->responds_to_action(action.value());
         }
     }
     return NO;

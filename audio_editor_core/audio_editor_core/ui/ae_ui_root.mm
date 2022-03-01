@@ -32,8 +32,6 @@ ui_root::ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::stand
                 if (auto const &pool = this->_ui_editing_root_level_pool.lock()) {
                     if (pool->level() == nullptr) {
                         pool->add_level();
-                    } else {
-                        assert(0);
                     }
                 }
             }
@@ -45,7 +43,7 @@ ui_root::ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::stand
 bool ui_root::responds_to_action(action const action) {
     if (auto const &pool = this->_ui_editing_root_level_pool.lock()) {
         if (auto const &level = pool->level()) {
-            return level->ui_editing_root->responds_to_action(action);
+            return level->editing_root->responds_to_action(action);
         }
     }
     return false;
