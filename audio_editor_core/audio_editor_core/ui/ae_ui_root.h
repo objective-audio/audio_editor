@@ -10,7 +10,6 @@
 
 namespace yas::ae {
 class root_presenter;
-class pinch_gesture_controller;
 class ui_editing_root;
 class display_space;
 
@@ -19,27 +18,16 @@ struct ui_root final {
                                                               std::string const &project_id,
                                                               std::uintptr_t const project_view_id);
 
-    [[nodiscard]] std::shared_ptr<ui::standard> const &standard() const;
-    [[nodiscard]] std::shared_ptr<ui::texture> const &texture() const;
-    [[nodiscard]] std::shared_ptr<ui::font_atlas> const &font_atlas_14() const;
-    [[nodiscard]] std::shared_ptr<display_space> const &display_space() const;
-
     [[nodiscard]] bool responds_to_action(action const);
 
    private:
     std::uintptr_t const _project_view_id;
-    std::shared_ptr<ui::standard> const _standard;
-    std::shared_ptr<ui::texture> const _texture;
-    std::shared_ptr<ui::font_atlas> const _font_atlas_14;
-    std::shared_ptr<ae::display_space> const _display_space;
     std::shared_ptr<root_presenter> const _presenter;
-    std::shared_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
     std::shared_ptr<ui_editing_root_maker_for_ui_root> const _editing_root_maker;
     std::shared_ptr<ui_editing_root> _editing_root = nullptr;
     observing::canceller_pool _pool;
 
     ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::standard> const &,
-            std::shared_ptr<root_presenter> const &, std::shared_ptr<pinch_gesture_controller> const &,
-            std::shared_ptr<ui_editing_root_maker_for_ui_root> const &);
+            std::shared_ptr<root_presenter> const &, std::shared_ptr<ui_editing_root_maker_for_ui_root> const &);
 };
 }  // namespace yas::ae

@@ -5,7 +5,7 @@
 #include "ae_ui_edge_element.h"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
-#include <audio_editor_core/ae_ui_root.h>
+#include <audio_editor_core/ae_ui_root_level.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -13,12 +13,10 @@ using namespace yas::ae;
 std::shared_ptr<ui_edge_element> ui_edge_element::make_shared(std::string const &text, args const &args,
                                                               uintptr_t const project_view_id) {
     auto const &app_level = app_level::global();
-    auto const &ui_root = hierarchy::ui_root_level_for_view_id(project_view_id)->ui_root;
-    auto const &standard = ui_root->standard();
-    auto const &font_atlas = ui_root->font_atlas_14();
-    auto const &color = app_level->color;
+    auto const &ui_root_level = hierarchy::ui_root_level_for_view_id(project_view_id);
 
-    return std::shared_ptr<ui_edge_element>(new ui_edge_element{text, standard, font_atlas, color, args});
+    return std::shared_ptr<ui_edge_element>(
+        new ui_edge_element{text, ui_root_level->standard, ui_root_level->font_atlas_14, app_level->color, args});
 }
 
 ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::standard> const &standard,

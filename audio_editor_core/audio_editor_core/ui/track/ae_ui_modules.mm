@@ -11,7 +11,7 @@
 #include <audio_editor_core/ae_modules_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
-#include <audio_editor_core/ae_ui_root.h>
+#include <audio_editor_core/ae_ui_root_level.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -22,15 +22,14 @@ static std::size_t const reserving_interval = 100;
 
 std::shared_ptr<ui_modules> ui_modules::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
     auto const &app_level = app_level::global();
-    auto const &ui_root = hierarchy::ui_root_level_for_view_id(project_view_id)->ui_root;
-    auto const &standard = ui_root->standard();
-    auto const &display_space = ui_root->display_space();
+    auto const &ui_root_level = hierarchy::ui_root_level_for_view_id(project_view_id);
 
     auto const location_pool = module_location_pool::make_shared();
-    auto const modules_presenter = modules_presenter::make_shared(project_id, display_space, location_pool);
+    auto const modules_presenter =
+        modules_presenter::make_shared(project_id, ui_root_level->display_space, location_pool);
     auto const waveforms = ui_module_waveforms::make_shared(project_id, project_view_id, location_pool);
     auto const &color = app_level->color;
-    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, standard, color, waveforms});
+    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, ui_root_level->standard, color, waveforms});
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,

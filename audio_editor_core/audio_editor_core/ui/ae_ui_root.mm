@@ -12,22 +12,17 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<ui_root> ui_root::make_shared(std::shared_ptr<ui::standard> const &standard,
+                                              std::string const &project_id, std::uintptr_t const project_view_id) {
+    auto const presenter = root_presenter::make_shared(project_id);
+    auto const editing_root_maker = ui_editing_root_maker::make_shared(project_id, project_view_id);
+    return std::shared_ptr<ui_root>(new ui_root{project_view_id, standard, presenter, editing_root_maker});
+}
+
 ui_root::ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::standard> const &standard,
                  std::shared_ptr<root_presenter> const &presenter,
-                 std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
                  std::shared_ptr<ui_editing_root_maker_for_ui_root> const &editing_root_maker)
-    : _project_view_id(project_view_id),
-      _standard(standard),
-      _texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
-      _font_atlas_14(ui::font_atlas::make_shared(
-          {.font_name = "TrebuchetMS-Bold",
-           .font_size = 14.0f,
-           .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"},
-          _texture)),
-      _display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
-      _presenter(presenter),
-      _pinch_gesture_controller(pinch_gesture_controller),
-      _editing_root_maker(editing_root_maker) {
+    : _project_view_id(project_view_id), _presenter(presenter), _editing_root_maker(editing_root_maker) {
     presenter
         ->observe_is_editing([this](bool const &is_editing) {
             if (is_editing && !this->_editing_root) {
@@ -36,31 +31,6 @@ ui_root::ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::stand
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui_root> ui_root::make_shared(std::shared_ptr<ui::standard> const &standard,
-                                              std::string const &project_id, std::uintptr_t const project_view_id) {
-    auto const presenter = root_presenter::make_shared(project_id);
-    auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
-    auto const editing_root_maker = ui_editing_root_maker::make_shared(project_id, project_view_id);
-    return std::shared_ptr<ui_root>(
-        new ui_root{project_view_id, standard, presenter, pinch_gesture_controller, editing_root_maker});
-}
-
-std::shared_ptr<ui::standard> const &ui_root::standard() const {
-    return this->_standard;
-}
-
-std::shared_ptr<ui::texture> const &ui_root::texture() const {
-    return this->_texture;
-}
-
-std::shared_ptr<ui::font_atlas> const &ui_root::font_atlas_14() const {
-    return this->_font_atlas_14;
-}
-
-std::shared_ptr<display_space> const &ui_root::display_space() const {
-    return this->_display_space;
 }
 
 bool ui_root::responds_to_action(action const action) {

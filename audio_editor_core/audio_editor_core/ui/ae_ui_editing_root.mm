@@ -13,7 +13,7 @@
 #include <audio_editor_core/ae_ui_editing_root_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
-#include <audio_editor_core/ae_ui_root.h>
+#include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_time.h>
 #include <audio_editor_core/ae_ui_track.h>
 
@@ -23,17 +23,16 @@ using namespace yas::ae;
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(std::string const &project_id,
                                                               std::uintptr_t const project_view_id) {
     auto const &app_level = app_level::global();
-    auto const &ui_root = hierarchy::ui_root_level_for_view_id(project_view_id)->ui_root;
-    auto const &standard = ui_root->standard();
-    auto const &font_atlas = ui_root->font_atlas_14();
+    auto const &ui_root_level = hierarchy::ui_root_level_for_view_id(project_view_id);
     auto const presenter = editing_root_presenter::make_shared(project_id);
     auto const &color = app_level->color;
     auto const &action_controller = hierarchy::project_level_for_id(project_id)->action_controller;
     auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id);
     auto const ui_track = ui_track::make_shared(project_id, project_view_id);
     auto const ui_time = ui_time::make_shared(project_id, project_view_id);
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{
-        standard, font_atlas, color, presenter, action_controller, pinch_gesture_controller, ui_track, ui_time});
+    return std::shared_ptr<ui_editing_root>(new ui_editing_root{ui_root_level->standard, ui_root_level->font_atlas_14,
+                                                                color, presenter, action_controller,
+                                                                pinch_gesture_controller, ui_track, ui_time});
 }
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
