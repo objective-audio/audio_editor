@@ -16,6 +16,7 @@ struct ui_editing_root_level_pool final {
     [[nodiscard]] static std::shared_ptr<ui_editing_root_level_pool> make_shared(ui_project_id const &project_id);
 
     void add_level();
+    void remove_level();
 
     std::shared_ptr<ui_editing_root_level> const &level() const;
 
