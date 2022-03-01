@@ -1,5 +1,5 @@
 //
-//  ae_ui_root.cpp
+//  ae_ui_editing_root.cpp
 //
 
 #include "ae_ui_editing_root.h"

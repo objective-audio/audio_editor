@@ -1,5 +1,5 @@
 //
-//  ae_ui_root.h
+//  ae_ui_editing_root.h
 //
 
 #pragma once
