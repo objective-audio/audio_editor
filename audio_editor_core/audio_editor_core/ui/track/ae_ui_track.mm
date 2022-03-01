@@ -19,7 +19,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_track> ui_track::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
-    auto const &ui_root_level = hierarchy::ui_root_level_for_view_id(project_view_id);
+    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_view_id);
 
     auto const presenter = track_presenter::make_shared(project_id);
     auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id);
