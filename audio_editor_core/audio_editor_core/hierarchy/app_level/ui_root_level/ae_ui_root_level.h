@@ -1,0 +1,23 @@
+//
+//  ui_root_level.h
+//
+
+#pragma once
+
+#include <ui/yas_ui_umbrella.h>
+
+namespace yas::ae {
+class ui_root;
+
+struct ui_root_level {
+    [[nodiscard]] static std::shared_ptr<ui_root_level> make_shared(std::shared_ptr<ui::standard> const &,
+                                                                    std::string const &project_id,
+                                                                    std::uintptr_t const project_view_id);
+
+    std::shared_ptr<ui_root> const ui_root;
+
+   private:
+    ui_root_level(std::shared_ptr<ui::standard> const &, std::string const &project_id,
+                  std::uintptr_t const project_view_id);
+};
+}  // namespace yas::ae
