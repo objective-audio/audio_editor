@@ -49,7 +49,7 @@ using namespace yas::ae;
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
     auto const &ui_root_level_pool = app_level::global()->ui_root_level_pool;
-    ui_root_level_pool->add_level(standard, project_id, self.project_view_id);
+    ui_root_level_pool->add_level(standard, {.identifier = project_id, .view_id = self.project_view_id});
     self->_ui_root_level = ui_root_level_pool->level_for_view_id(self.project_view_id);
 
     auto const &project_level = hierarchy::project_level_for_id(project_id);

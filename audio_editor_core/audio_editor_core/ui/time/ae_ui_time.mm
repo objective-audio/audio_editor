@@ -15,11 +15,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_time> ui_time::make_shared(std::string const &project_id, uintptr_t const project_view_id) {
-    auto const presenter = time_presenter::make_shared(project_id);
+std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &project_id) {
+    auto const presenter = time_presenter::make_shared(project_id.identifier);
     auto const &app_level = app_level::global();
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_view_id);
-    auto const &action_controller = hierarchy::project_level_for_id(project_id)->action_controller;
+    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
+    auto const &action_controller = hierarchy::project_level_for_id(project_id.identifier)->action_controller;
     return std::shared_ptr<ui_time>(
         new ui_time{ui_root_level->standard, ui_root_level->texture, app_level->color, presenter, action_controller});
 }

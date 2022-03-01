@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_ui_project_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -15,8 +16,7 @@ class scroll_gesture_controller;
 class display_space;
 
 struct ui_track final {
-    [[nodiscard]] static std::shared_ptr<ui_track> make_shared(std::string const &project_id,
-                                                               uintptr_t const project_view_id);
+    [[nodiscard]] static std::shared_ptr<ui_track> make_shared(ui_project_id const &project_id);
 
     std::shared_ptr<ui::node> const node() const;
 

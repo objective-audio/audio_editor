@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_ui_project_id.h>
 #include <ui/yas_ui_standard.h>
 
 #include <map>
@@ -15,8 +16,7 @@ class ui_root_level;
 struct ui_root_level_pool {
     [[nodiscard]] static std::shared_ptr<ui_root_level_pool> make_shared();
 
-    void add_level(std::shared_ptr<ui::standard> const &, std::string const &project_id,
-                   uintptr_t const project_view_id);
+    void add_level(std::shared_ptr<ui::standard> const &, ui_project_id const &project_id);
     [[nodiscard]] std::shared_ptr<ui_root_level> const &level_for_view_id(uintptr_t const project_view_id) const;
     void remove_level_for_view_id(uintptr_t const project_view_id);
 

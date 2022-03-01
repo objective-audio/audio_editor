@@ -15,12 +15,11 @@ std::shared_ptr<ui_root_level_pool> ui_root_level_pool::make_shared() {
 ui_root_level_pool::ui_root_level_pool() {
 }
 
-void ui_root_level_pool::add_level(std::shared_ptr<ui::standard> const &standard, std::string const &project_id,
-                                   uintptr_t const project_view_id) {
-    assert(!this->_ui_roots.contains(project_view_id));
+void ui_root_level_pool::add_level(std::shared_ptr<ui::standard> const &standard, ui_project_id const &project_id) {
+    assert(!this->_ui_roots.contains(project_id.view_id));
 
-    auto value = ui_root_level::make_shared(standard, project_id, project_view_id);
-    this->_ui_roots.emplace(project_view_id, std::move(value));
+    auto value = ui_root_level::make_shared(standard, project_id);
+    this->_ui_roots.emplace(project_id.view_id, std::move(value));
 }
 
 std::shared_ptr<ui_root_level> const &ui_root_level_pool::level_for_view_id(uintptr_t const project_view_id) const {
