@@ -60,12 +60,6 @@ struct file_loader_stub final : file_loader_for_project {
     }
 };
 
-struct player_stub final : player_for_project {
-    frame_index_t current_frame() const override {
-        return 0;
-    }
-};
-
 struct scrolling_stub final : scrolling_for_project {
     void begin() override {
     }
@@ -108,7 +102,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
-    auto const player = std::make_shared<test_utils::player_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
@@ -123,7 +116,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
-    auto const player = std::make_shared<test_utils::player_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
@@ -155,7 +147,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
-    auto const player = std::make_shared<test_utils::player_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
@@ -208,7 +199,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
-    auto const player = std::make_shared<test_utils::player_stub>();
     auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
