@@ -41,7 +41,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<action_controller> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
                                  std::shared_ptr<ui_track> const &track, std::shared_ptr<ui_time> const &time)
-    : _presenter(presenter),
+    : node(ui::node::make_shared()),
+      _presenter(presenter),
       _action_controller(action_controller),
       _pinch_gesture_controller(pinch_gesture_controller),
       _standard(standard),
@@ -71,17 +72,15 @@ bool ui_editing_root::responds_to_action(action const action) {
 }
 
 void ui_editing_root::_setup_node_hierarchie() {
-    auto const &root_node = this->_standard->root_node();
+    this->node->add_sub_node(this->_track->node());
 
-    root_node->add_sub_node(this->_track->node());
+    this->node->add_sub_node(this->_status_strings->rect_plane()->node());
+    this->node->add_sub_node(this->_file_info_strings->rect_plane()->node());
+    this->node->add_sub_node(this->_file_track_strings->rect_plane()->node());
+    this->node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
 
-    root_node->add_sub_node(this->_status_strings->rect_plane()->node());
-    root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
-    root_node->add_sub_node(this->_file_track_strings->rect_plane()->node());
-    root_node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
-
-    root_node->add_sub_node(this->_playing_line->node());
-    root_node->add_sub_node(this->_time->node());
+    this->node->add_sub_node(this->_playing_line->node());
+    this->node->add_sub_node(this->_time->node());
 }
 
 void ui_editing_root::_setup_observing() {

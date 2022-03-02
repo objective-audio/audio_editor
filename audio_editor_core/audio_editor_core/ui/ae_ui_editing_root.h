@@ -20,6 +20,8 @@ class ui_time;
 class color;
 
 struct ui_editing_root final {
+    std::shared_ptr<ui::node> const node;
+
     bool responds_to_action(action const);
 
     [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(ui_project_id const &project_id);

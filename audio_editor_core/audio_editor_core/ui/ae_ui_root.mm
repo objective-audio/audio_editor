@@ -25,11 +25,17 @@ ui_root::ui_root(std::shared_ptr<ui::node> const &root_node, std::shared_ptr<roo
     : _presenter(presenter), _root_node(root_node), _ui_editing_root_level_pool(ui_editing_root_level_pool) {
     presenter
         ->observe_is_editing([this](bool const &is_editing) {
+            auto const &pool = this->_ui_editing_root_level_pool.lock();
+            if (!pool) {
+                return;
+            }
+
             if (is_editing) {
-                if (auto const &pool = this->_ui_editing_root_level_pool.lock()) {
-                    if (pool->level() == nullptr) {
-                        pool->add_level();
-                    }
+                if (pool->level() == nullptr) {
+                    pool->add_level();
+
+                    auto const &level = pool->level();
+                    this->_root_node->add_sub_node(level->editing_root->node);
                 }
             }
         })
@@ -38,10 +44,14 @@ ui_root::ui_root(std::shared_ptr<ui::node> const &root_node, std::shared_ptr<roo
 }
 
 bool ui_root::responds_to_action(action const action) {
-    if (auto const &pool = this->_ui_editing_root_level_pool.lock()) {
-        if (auto const &level = pool->level()) {
-            return level->editing_root->responds_to_action(action);
-        }
+    auto const &pool = this->_ui_editing_root_level_pool.lock();
+    if (!pool) {
+        return false;
     }
-    return false;
+
+    if (auto const &level = pool->level()) {
+        return level->editing_root->responds_to_action(action);
+    } else {
+        return false;
+    }
 }
