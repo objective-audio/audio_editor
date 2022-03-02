@@ -50,7 +50,6 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _pinch_gesture_controller(pinch_gesture_controller),
       _standard(standard),
       _color(color),
-      _keyboard(keyboard),
       _font_atlas(font_atlas),
       _status_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
@@ -66,7 +65,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
     this->_file_info_strings->set_text(presenter->file_info_text());
 
     this->_setup_node_hierarchie();
-    this->_setup_observing();
+    this->_setup_observing(keyboard);
     this->_setup_layout();
 }
 
@@ -86,7 +85,7 @@ void ui_editing_root::_setup_node_hierarchie() {
     this->node->add_sub_node(this->_time->node());
 }
 
-void ui_editing_root::_setup_observing() {
+void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard_for_ui_root> const &keyboard) {
     auto const &presenter = this->_presenter;
 
     presenter->observe_state_text([this](std::string const &string) { this->_status_strings->set_text(string); })
@@ -111,7 +110,7 @@ void ui_editing_root::_setup_observing() {
         .end()
         ->add_to(this->_pool);
 
-    this->_keyboard
+    keyboard
         ->observe_key([this](ae::key const &key) {
             if (auto const controller = this->_action_controller.lock()) {
                 controller->handle_key(key);
@@ -119,7 +118,7 @@ void ui_editing_root::_setup_observing() {
         })
         .end()
         ->add_to(this->_pool);
-    this->_keyboard
+    keyboard
         ->observe_modifier([this](ae::modifier_event const &event) {
             switch (event.modifier) {
                 case ae::modifier::shift:
