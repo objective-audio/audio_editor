@@ -18,7 +18,7 @@ class color;
 struct ui_modules final {
     [[nodiscard]] static std::shared_ptr<ui_modules> make_shared(ui_project_id const &project_id);
 
-    [[nodiscard]] std::shared_ptr<ui::node> const &node() const;
+    std::shared_ptr<ui::node> const node;
 
     void set_scale(ui::size const &);
     void set_locations(std::vector<std::optional<module_location>> const &);
@@ -29,7 +29,6 @@ struct ui_modules final {
     std::shared_ptr<modules_presenter> const _presenter;
     std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui_module_waveforms> const _waveforms;
-    std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::node> const _triangle_node;
     std::shared_ptr<ui::node> const _line_node;
 
