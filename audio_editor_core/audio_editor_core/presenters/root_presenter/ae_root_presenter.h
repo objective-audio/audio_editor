@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_root_presenter_dependency.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 class project_editor_level_pool;
