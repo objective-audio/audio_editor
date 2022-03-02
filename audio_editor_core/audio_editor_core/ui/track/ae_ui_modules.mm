@@ -44,7 +44,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
     this->node->add_sub_node(this->_triangle_node);
-    this->node->add_sub_node(this->_waveforms->node());
+    this->node->add_sub_node(this->_waveforms->node);
     this->node->add_sub_node(this->_line_node);
 
     this->_triangle_node->set_mesh(this->_triangle_mesh);

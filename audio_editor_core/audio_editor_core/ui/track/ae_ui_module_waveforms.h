@@ -19,7 +19,7 @@ struct ui_module_waveforms final {
     [[nodiscard]] static std::shared_ptr<ui_module_waveforms> make_shared(
         ui_project_id const &project_id, std::shared_ptr<module_location_pool> const &);
 
-    std::shared_ptr<ui::node> const &node();
+    std::shared_ptr<ui::node> const node;
 
     void set_scale(ui::size const &);
 
@@ -31,7 +31,6 @@ struct ui_module_waveforms final {
    private:
     std::shared_ptr<module_waveforms_presenter> const _presenter;
     std::shared_ptr<ae::color> const _color;
-    std::shared_ptr<ui::node> const _node;
     std::optional<float> _scale = std::nullopt;
 
     observing::canceller_pool _pool;
