@@ -47,7 +47,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
     this->node->add_sub_node(this->_time_node);
     this->_time_node->add_sub_node(this->_modules->node);
     this->_time_node->add_sub_node(this->_edge->node());
-    this->_time_node->add_sub_node(this->_markers->node());
+    this->_time_node->add_sub_node(this->_markers->node);
 
     standard->renderer()
         ->observe_will_render([this](auto const &) {
