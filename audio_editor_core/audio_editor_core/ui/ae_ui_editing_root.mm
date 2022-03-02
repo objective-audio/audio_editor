@@ -74,7 +74,7 @@ bool ui_editing_root::responds_to_action(action const action) {
 }
 
 void ui_editing_root::_setup_node_hierarchie() {
-    this->node->add_sub_node(this->_track->node());
+    this->node->add_sub_node(this->_track->node);
 
     this->node->add_sub_node(this->_status_strings->rect_plane()->node());
     this->node->add_sub_node(this->_file_info_strings->rect_plane()->node());

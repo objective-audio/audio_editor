@@ -18,7 +18,7 @@ class display_space;
 struct ui_track final {
     [[nodiscard]] static std::shared_ptr<ui_track> make_shared(ui_project_id const &project_id);
 
-    std::shared_ptr<ui::node> const node() const;
+    std::shared_ptr<ui::node> const node;
 
    private:
     std::shared_ptr<track_presenter> const _presenter;
@@ -26,7 +26,6 @@ struct ui_track final {
 
     std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<display_space> const _display_space;
-    std::shared_ptr<ui::node> const _root_node;
     std::shared_ptr<ui::node> const _time_node;
     std::shared_ptr<ui_modules> const _modules;
     std::shared_ptr<ui_edge> const _edge;
