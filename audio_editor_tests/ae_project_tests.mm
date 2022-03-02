@@ -60,24 +60,6 @@ struct file_loader_stub final : file_loader_for_project {
     }
 };
 
-struct scrolling_stub final : scrolling_for_project {
-    void begin() override {
-    }
-    void set_delta_time(double const) override {
-    }
-    void end() override {
-    }
-    bool is_began() const override {
-        return false;
-    }
-    void set_is_enabled(bool const) override {
-    }
-
-    observing::endable observe(std::function<void(scrolling_event const &)> &&) override {
-        return observing::endable{};
-    }
-};
-
 struct project_editor_level_pool_stub final : project_editor_level_pool_for_project {
     std::optional<file_info> file_info_value{std::nullopt};
 
@@ -102,7 +84,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
-    auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     auto project =
@@ -116,7 +97,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
-    auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     struct called_values {
@@ -147,7 +127,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
-    auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
@@ -199,7 +178,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
-    auto const scrolling = std::make_shared<test_utils::scrolling_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
