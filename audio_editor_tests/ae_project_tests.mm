@@ -90,6 +90,10 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     void add_level(file_info const &file_info) override {
         this->file_info_value = file_info;
     }
+
+    void remove_level() override {
+        this->file_info_value = std::nullopt;
+    }
 };
 }
 
