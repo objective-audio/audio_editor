@@ -23,10 +23,10 @@ using namespace yas::ae;
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &project_id) {
     auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
+    auto const &pinch_gesture_controller = ui_root_level->pinch_gesture_controller;
     auto const presenter = editing_root_presenter::make_shared(project_id.identifier);
     auto const &color = app_level->color;
     auto const &action_controller = hierarchy::project_level_for_id(project_id.identifier)->action_controller;
-    auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id.identifier);
     auto const ui_track = ui_track::make_shared(project_id);
     auto const ui_time = ui_time::make_shared(project_id);
     return std::shared_ptr<ui_editing_root>(new ui_editing_root{ui_root_level->standard, ui_root_level->font_atlas_14,
@@ -120,7 +120,9 @@ void ui_editing_root::_setup_observing() {
         ->observe_modifier([this](ae::modifier_event const &event) {
             switch (event.modifier) {
                 case ae::modifier::shift:
-                    this->_pinch_gesture_controller->handle_modifier(event.state);
+                    if (auto const controller = this->_pinch_gesture_controller.lock()) {
+                        controller->handle_modifier(event.state);
+                    }
                     break;
 
                 default:
@@ -136,8 +138,10 @@ void ui_editing_root::_setup_observing() {
                 auto const &pinch_event = event->get<ui::pinch>();
                 gesture_state const state = to_gesture_state(event->phase());
 
-                this->_pinch_gesture_controller->handle_gesture(
-                    pinch_gesture{.state = state, .magnification = pinch_event.magnification()});
+                if (auto const controller = this->_pinch_gesture_controller.lock()) {
+                    controller->handle_gesture(
+                        pinch_gesture{.state = state, .magnification = pinch_event.magnification()});
+                }
             }
         })
         .end()
