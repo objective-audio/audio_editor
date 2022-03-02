@@ -23,6 +23,14 @@ void ui_editing_root_level_pool::add_level() {
     this->_level = ui_editing_root_level::make_shared(this->_project_id);
 }
 
+void ui_editing_root_level_pool::remove_level() {
+    if (this->_level == nullptr) {
+        throw std::runtime_error("level is null.");
+    }
+
+    this->_level = nullptr;
+}
+
 std::shared_ptr<ui_editing_root_level> const &ui_editing_root_level_pool::level() const {
     return this->_level;
 }

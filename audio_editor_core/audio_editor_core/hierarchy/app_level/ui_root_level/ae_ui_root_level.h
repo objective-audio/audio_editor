@@ -23,8 +23,8 @@ struct ui_root_level {
     std::shared_ptr<ui::font_atlas> const font_atlas_14;
     std::shared_ptr<ae::display_space> const display_space;
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
-    std::shared_ptr<ui_editing_root_level_pool> const ui_editing_root_level_pool;
-    std::shared_ptr<ui_root> const ui_root;
+    std::shared_ptr<ui_editing_root_level_pool> const editing_root_level_pool;
+    std::shared_ptr<ui_root> const root;
 
    private:
     ui_root_level(std::shared_ptr<ui::standard> const &, ui_project_id const &project_id);

@@ -14,5 +14,5 @@ std::shared_ptr<ui_root_level> const &ui_hierarchy::root_level_for_view_id(uintp
 }
 
 std::shared_ptr<ui_editing_root_level> const &ui_hierarchy::editing_root_level_for_view_id(uintptr_t const view_id) {
-    return root_level_for_view_id(view_id)->ui_editing_root_level_pool->level();
+    return root_level_for_view_id(view_id)->editing_root_level_pool->level();
 }

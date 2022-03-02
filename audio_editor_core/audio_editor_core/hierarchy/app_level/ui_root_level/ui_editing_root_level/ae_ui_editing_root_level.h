@@ -14,7 +14,7 @@ class ui_editing_root;
 struct ui_editing_root_level final {
     [[nodiscard]] static std::shared_ptr<ui_editing_root_level> make_shared(ui_project_id const &project_id);
 
-    std::shared_ptr<ui_editing_root> const ui_editing_root;
+    std::shared_ptr<ui_editing_root> const editing_root;
 
    private:
     ui_editing_root_level(ui_project_id const &project_id);

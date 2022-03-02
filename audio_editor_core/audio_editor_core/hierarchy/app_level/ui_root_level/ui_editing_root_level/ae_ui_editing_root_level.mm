@@ -13,5 +13,5 @@ std::shared_ptr<ui_editing_root_level> ui_editing_root_level::make_shared(ui_pro
 }
 
 ui_editing_root_level::ui_editing_root_level(ui_project_id const &project_id)
-    : ui_editing_root(ui_editing_root::make_shared(project_id)) {
+    : editing_root(ui_editing_root::make_shared(project_id)) {
 }

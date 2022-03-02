@@ -17,23 +17,18 @@ std::shared_ptr<ui_root> ui_root::make_shared(
     std::shared_ptr<ui::standard> const &standard, ui_project_id const &project_id,
     std::shared_ptr<ui_editing_root_level_pool> const &ui_editing_root_level_pool) {
     auto const presenter = root_presenter::make_shared(project_id.identifier);
-    return std::shared_ptr<ui_root>(new ui_root{project_id.view_id, standard, presenter, ui_editing_root_level_pool});
+    return std::shared_ptr<ui_root>(new ui_root{standard->root_node(), presenter, ui_editing_root_level_pool});
 }
 
-ui_root::ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::standard> const &standard,
-                 std::shared_ptr<root_presenter> const &presenter,
+ui_root::ui_root(std::shared_ptr<ui::node> const &root_node, std::shared_ptr<root_presenter> const &presenter,
                  std::shared_ptr<ui_editing_root_level_pool> const &ui_editing_root_level_pool)
-    : _project_view_id(project_view_id),
-      _presenter(presenter),
-      _ui_editing_root_level_pool(ui_editing_root_level_pool) {
+    : _presenter(presenter), _root_node(root_node), _ui_editing_root_level_pool(ui_editing_root_level_pool) {
     presenter
         ->observe_is_editing([this](bool const &is_editing) {
             if (is_editing) {
                 if (auto const &pool = this->_ui_editing_root_level_pool.lock()) {
                     if (pool->level() == nullptr) {
                         pool->add_level();
-                    } else {
-                        assert(0);
                     }
                 }
             }
@@ -45,7 +40,7 @@ ui_root::ui_root(std::uintptr_t const project_view_id, std::shared_ptr<ui::stand
 bool ui_root::responds_to_action(action const action) {
     if (auto const &pool = this->_ui_editing_root_level_pool.lock()) {
         if (auto const &level = pool->level()) {
-            return level->ui_editing_root->responds_to_action(action);
+            return level->editing_root->responds_to_action(action);
         }
     }
     return false;

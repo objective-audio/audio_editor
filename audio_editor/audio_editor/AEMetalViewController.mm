@@ -21,7 +21,7 @@ using namespace yas::ae;
 @end
 
 @implementation AEMetalViewController {
-    std::weak_ptr<ui_root_level> _ui_root_level;
+    std::weak_ptr<ui_root_level> _root_level;
     std::weak_ptr<action_controller> _action_controller;
     std::weak_ptr<context_menu_presenter> _context_menu_presenter;
     observing::canceller_pool _pool;
@@ -50,7 +50,7 @@ using namespace yas::ae;
 
     auto const &ui_root_level_pool = app_level::global()->ui_root_level_pool;
     ui_root_level_pool->add_level(standard, {.identifier = project_id, .view_id = self.project_view_id});
-    self->_ui_root_level = ui_root_level_pool->level_for_view_id(self.project_view_id);
+    self->_root_level = ui_root_level_pool->level_for_view_id(self.project_view_id);
 
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     self->_action_controller = project_level->action_controller;
@@ -157,8 +157,8 @@ using namespace yas::ae;
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     if (auto const action = [self actionForSelector:menuItem.action]) {
-        if (auto const ui_root_level = self->_ui_root_level.lock()) {
-            return ui_root_level->ui_root->responds_to_action(action.value());
+        if (auto const ui_root_level = self->_root_level.lock()) {
+            return ui_root_level->root->responds_to_action(action.value());
         }
     }
     return NO;
