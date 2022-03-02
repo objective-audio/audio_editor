@@ -84,9 +84,13 @@ void project::request_close() {
             return;
         case project_state::loading:
             this->_file_importer->cancel(this->_identifier);
-            [[fallthrough]];
-        case project_state::launching:
+            this->_state->set_value(project_state::closing);
+            break;
         case project_state::editing:
+            this->_editor_level_pool->remove_level();
+            this->_state->set_value(project_state::closing);
+            break;
+        case project_state::launching:
         case project_state::failure:
             this->_state->set_value(project_state::closing);
             break;
