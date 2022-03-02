@@ -43,13 +43,13 @@ std::shared_ptr<ui_edge> ui_edge::make_shared(ui_project_id const &project_id) {
 ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui::standard> const &standard,
                  std::shared_ptr<ui::layout_value_guide> const &top_guide,
                  std::shared_ptr<ui_edge_element> const &begin_edge, std::shared_ptr<ui_edge_element> const &end_edge)
-    : _presenter(presenter),
+    : node(ui::node::make_shared()),
+      _presenter(presenter),
       _top_guide(top_guide),
-      _node(ui::node::make_shared()),
       _begin_edge(begin_edge),
       _end_edge(end_edge) {
-    this->_node->add_sub_node(this->_begin_edge->node());
-    this->_node->add_sub_node(this->_end_edge->node());
+    this->node->add_sub_node(this->_begin_edge->node());
+    this->node->add_sub_node(this->_end_edge->node());
 
     ui::layout(standard->view_look()->view_layout_guide()->top(), this->_top_guide, ui_layout_utils::constant(0.0f))
         .sync()
@@ -62,8 +62,4 @@ ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_p
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui::node> const &ui_edge::node() const {
-    return this->_node;
 }
