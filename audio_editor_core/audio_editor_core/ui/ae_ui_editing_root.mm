@@ -23,15 +23,14 @@ using namespace yas::ae;
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &project_id) {
     auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
-    auto const &pinch_gesture_controller = ui_root_level->pinch_gesture_controller;
     auto const presenter = editing_root_presenter::make_shared(project_id.identifier);
     auto const &color = app_level->color;
     auto const &action_controller = hierarchy::project_level_for_id(project_id.identifier)->action_controller;
     auto const ui_track = ui_track::make_shared(project_id);
     auto const ui_time = ui_time::make_shared(project_id);
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{ui_root_level->standard, ui_root_level->font_atlas_14,
-                                                                color, presenter, action_controller,
-                                                                pinch_gesture_controller, ui_track, ui_time});
+    return std::shared_ptr<ui_editing_root>(
+        new ui_editing_root{ui_root_level->standard, ui_root_level->font_atlas_14, color, presenter, action_controller,
+                            ui_root_level->pinch_gesture_controller, ui_root_level->keyboard, ui_track, ui_time});
 }
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
@@ -40,6 +39,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
                                  std::shared_ptr<action_controller> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
+                                 std::shared_ptr<ae::keyboard_for_ui_root> const &keyboard,
                                  std::shared_ptr<ui_track> const &track, std::shared_ptr<ui_time> const &time)
     : node(ui::node::make_shared()),
       _presenter(presenter),
@@ -47,7 +47,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _pinch_gesture_controller(pinch_gesture_controller),
       _standard(standard),
       _color(color),
-      _keyboard(ae::keyboard::make_shared(standard->event_manager())),
+      _keyboard(keyboard),
       _font_atlas(font_atlas),
       _status_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),

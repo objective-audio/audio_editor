@@ -30,10 +30,10 @@ struct ui_editing_root final {
     std::shared_ptr<editing_root_presenter> const _presenter;
     std::weak_ptr<action_controller> const _action_controller;
     std::weak_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
+    std::shared_ptr<ae::keyboard_for_ui_root> const _keyboard;
 
     std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<ae::color> const _color;
-    std::shared_ptr<keyboard_for_ui_root> const _keyboard;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui::strings> const _status_strings;
     std::shared_ptr<ui::strings> const _file_info_strings;
@@ -48,7 +48,8 @@ struct ui_editing_root final {
     ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &font_atlas,
                     std::shared_ptr<ae::color> const &, std::shared_ptr<editing_root_presenter> const &,
                     std::shared_ptr<action_controller> const &, std::shared_ptr<pinch_gesture_controller> const &,
-                    std::shared_ptr<ui_track> const &, std::shared_ptr<ui_time> const &);
+                    std::shared_ptr<ae::keyboard_for_ui_root> const &, std::shared_ptr<ui_track> const &,
+                    std::shared_ptr<ui_time> const &);
 
     void _setup_node_hierarchie();
     void _setup_observing();
