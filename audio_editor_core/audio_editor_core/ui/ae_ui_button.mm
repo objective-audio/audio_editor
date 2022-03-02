@@ -9,6 +9,11 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<ui_button> ui_button::make_shared(std::shared_ptr<ui::font_atlas> const &font_atlas,
+                                                  std::shared_ptr<ui::standard> const &standard) {
+    return std::shared_ptr<ui_button>(new ui_button{font_atlas, standard});
+}
+
 ui_button::ui_button(std::shared_ptr<ui::font_atlas> const &font_atlas, std::shared_ptr<ui::standard> const &standard)
     : _button(ui::button::make_shared(ui::region::zero(), 2, standard->event_manager(), standard->detector())),
       _strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, font_atlas)) {
@@ -78,9 +83,4 @@ observing::endable ui_button::observe_tapped(std::function<void(void)> &&handler
 
 std::shared_ptr<ui::layout_region_guide> const &ui_button::layout_guide() const {
     return this->_button->layout_guide();
-}
-
-std::shared_ptr<ui_button> ui_button::make_shared(std::shared_ptr<ui::font_atlas> const &font_atlas,
-                                                  std::shared_ptr<ui::standard> const &standard) {
-    return std::shared_ptr<ui_button>(new ui_button{font_atlas, standard});
 }
