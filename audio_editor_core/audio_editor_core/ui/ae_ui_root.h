@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_ui_project_id.h>
-#include <audio_editor_core/ae_ui_root_dependency.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {

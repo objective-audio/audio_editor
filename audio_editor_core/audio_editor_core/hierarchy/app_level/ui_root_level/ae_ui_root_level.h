@@ -9,6 +9,7 @@
 
 namespace yas::ae {
 class display_space;
+class keyboard;
 class pinch_gesture_controller;
 class ui_editing_root_level_pool;
 class ui_root;
@@ -22,6 +23,7 @@ struct ui_root_level {
     std::shared_ptr<ui::texture> const texture;
     std::shared_ptr<ui::font_atlas> const font_atlas_14;
     std::shared_ptr<ae::display_space> const display_space;
+    std::shared_ptr<ae::keyboard> const keyboard;
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
     std::shared_ptr<ui_editing_root_level_pool> const editing_root_level_pool;
     std::shared_ptr<ui_root> const root;

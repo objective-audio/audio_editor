@@ -13,7 +13,6 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_edge> ui_edge::make_shared(ui_project_id const &project_id) {
-    auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
     auto const top_guide = ui::layout_value_guide::make_shared();

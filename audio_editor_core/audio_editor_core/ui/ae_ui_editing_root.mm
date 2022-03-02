@@ -23,15 +23,17 @@ using namespace yas::ae;
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &project_id) {
     auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
+
     auto const presenter = editing_root_presenter::make_shared(project_id.identifier);
-    auto const &color = app_level->color;
-    auto const &action_controller = hierarchy::project_level_for_id(project_id.identifier)->action_controller;
-    auto const pinch_gesture_controller = pinch_gesture_controller::make_shared(project_id.identifier);
+
+    auto const &project_level = hierarchy::project_level_for_id(project_id.identifier);
     auto const ui_track = ui_track::make_shared(project_id);
     auto const ui_time = ui_time::make_shared(project_id);
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{ui_root_level->standard, ui_root_level->font_atlas_14,
-                                                                color, presenter, action_controller,
-                                                                pinch_gesture_controller, ui_track, ui_time});
+
+    return std::shared_ptr<ui_editing_root>(
+        new ui_editing_root{ui_root_level->standard, ui_root_level->font_atlas_14, app_level->color, presenter,
+                            project_level->action_controller, ui_root_level->pinch_gesture_controller,
+                            ui_root_level->keyboard, ui_track, ui_time});
 }
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
@@ -40,13 +42,14 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
                                  std::shared_ptr<action_controller> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
-                                 std::shared_ptr<ui_track> const &track, std::shared_ptr<ui_time> const &time)
-    : _presenter(presenter),
+                                 std::shared_ptr<ae::keyboard> const &keyboard, std::shared_ptr<ui_track> const &track,
+                                 std::shared_ptr<ui_time> const &time)
+    : node(ui::node::make_shared()),
+      _presenter(presenter),
       _action_controller(action_controller),
       _pinch_gesture_controller(pinch_gesture_controller),
       _standard(standard),
       _color(color),
-      _keyboard(ae::keyboard::make_shared(standard->event_manager())),
       _font_atlas(font_atlas),
       _status_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 128}, this->_font_atlas)),
@@ -62,7 +65,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
     this->_file_info_strings->set_text(presenter->file_info_text());
 
     this->_setup_node_hierarchie();
-    this->_setup_observing();
+    this->_setup_observing(keyboard);
     this->_setup_layout();
 }
 
@@ -71,20 +74,18 @@ bool ui_editing_root::responds_to_action(action const action) {
 }
 
 void ui_editing_root::_setup_node_hierarchie() {
-    auto const &root_node = this->_standard->root_node();
+    this->node->add_sub_node(this->_track->node());
 
-    root_node->add_sub_node(this->_track->node());
+    this->node->add_sub_node(this->_status_strings->rect_plane()->node());
+    this->node->add_sub_node(this->_file_info_strings->rect_plane()->node());
+    this->node->add_sub_node(this->_file_track_strings->rect_plane()->node());
+    this->node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
 
-    root_node->add_sub_node(this->_status_strings->rect_plane()->node());
-    root_node->add_sub_node(this->_file_info_strings->rect_plane()->node());
-    root_node->add_sub_node(this->_file_track_strings->rect_plane()->node());
-    root_node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
-
-    root_node->add_sub_node(this->_playing_line->node());
-    root_node->add_sub_node(this->_time->node());
+    this->node->add_sub_node(this->_playing_line->node());
+    this->node->add_sub_node(this->_time->node());
 }
 
-void ui_editing_root::_setup_observing() {
+void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyboard) {
     auto const &presenter = this->_presenter;
 
     presenter->observe_state_text([this](std::string const &string) { this->_status_strings->set_text(string); })
@@ -109,7 +110,7 @@ void ui_editing_root::_setup_observing() {
         .end()
         ->add_to(this->_pool);
 
-    this->_keyboard
+    keyboard
         ->observe_key([this](ae::key const &key) {
             if (auto const controller = this->_action_controller.lock()) {
                 controller->handle_key(key);
@@ -117,11 +118,13 @@ void ui_editing_root::_setup_observing() {
         })
         .end()
         ->add_to(this->_pool);
-    this->_keyboard
+    keyboard
         ->observe_modifier([this](ae::modifier_event const &event) {
             switch (event.modifier) {
                 case ae::modifier::shift:
-                    this->_pinch_gesture_controller->handle_modifier(event.state);
+                    if (auto const controller = this->_pinch_gesture_controller.lock()) {
+                        controller->handle_modifier(event.state);
+                    }
                     break;
 
                 default:
@@ -137,8 +140,10 @@ void ui_editing_root::_setup_observing() {
                 auto const &pinch_event = event->get<ui::pinch>();
                 gesture_state const state = to_gesture_state(event->phase());
 
-                this->_pinch_gesture_controller->handle_gesture(
-                    pinch_gesture{.state = state, .magnification = pinch_event.magnification()});
+                if (auto const controller = this->_pinch_gesture_controller.lock()) {
+                    controller->handle_gesture(
+                        pinch_gesture{.state = state, .magnification = pinch_event.magnification()});
+                }
             }
         })
         .end()

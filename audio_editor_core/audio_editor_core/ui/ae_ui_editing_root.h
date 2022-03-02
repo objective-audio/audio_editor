@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_ui_button.h>
-#include <audio_editor_core/ae_ui_editing_root_dependency.h>
 #include <audio_editor_core/ae_ui_project_id.h>
 #include <ui/yas_ui_umbrella.h>
 
@@ -18,8 +17,11 @@ class pinch_gesture_controller;
 class ui_track;
 class ui_time;
 class color;
+class keyboard;
 
 struct ui_editing_root final {
+    std::shared_ptr<ui::node> const node;
+
     bool responds_to_action(action const);
 
     [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(ui_project_id const &project_id);
@@ -27,11 +29,10 @@ struct ui_editing_root final {
    private:
     std::shared_ptr<editing_root_presenter> const _presenter;
     std::weak_ptr<action_controller> const _action_controller;
-    std::shared_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
+    std::weak_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
 
     std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<ae::color> const _color;
-    std::shared_ptr<keyboard_for_ui_root> const _keyboard;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui::strings> const _status_strings;
     std::shared_ptr<ui::strings> const _file_info_strings;
@@ -46,10 +47,11 @@ struct ui_editing_root final {
     ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &font_atlas,
                     std::shared_ptr<ae::color> const &, std::shared_ptr<editing_root_presenter> const &,
                     std::shared_ptr<action_controller> const &, std::shared_ptr<pinch_gesture_controller> const &,
-                    std::shared_ptr<ui_track> const &, std::shared_ptr<ui_time> const &);
+                    std::shared_ptr<ae::keyboard> const &, std::shared_ptr<ui_track> const &,
+                    std::shared_ptr<ui_time> const &);
 
     void _setup_node_hierarchie();
-    void _setup_observing();
+    void _setup_observing(std::shared_ptr<ae::keyboard> const &);
     void _setup_layout();
 };
 }  // namespace yas::ae
