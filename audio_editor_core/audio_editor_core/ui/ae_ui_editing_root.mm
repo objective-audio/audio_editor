@@ -42,8 +42,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
                                  std::shared_ptr<action_controller> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
-                                 std::shared_ptr<ae::keyboard_for_ui_root> const &keyboard,
-                                 std::shared_ptr<ui_track> const &track, std::shared_ptr<ui_time> const &time)
+                                 std::shared_ptr<ae::keyboard> const &keyboard, std::shared_ptr<ui_track> const &track,
+                                 std::shared_ptr<ui_time> const &time)
     : node(ui::node::make_shared()),
       _presenter(presenter),
       _action_controller(action_controller),
@@ -85,7 +85,7 @@ void ui_editing_root::_setup_node_hierarchie() {
     this->node->add_sub_node(this->_time->node());
 }
 
-void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard_for_ui_root> const &keyboard) {
+void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyboard) {
     auto const &presenter = this->_presenter;
 
     presenter->observe_state_text([this](std::string const &string) { this->_status_strings->set_text(string); })

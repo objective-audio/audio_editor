@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_keyboard_types.h>
 #include <audio_editor_core/ae_ui_editing_root_dependency.h>
 #include <ui/yas_ui_umbrella.h>
 
@@ -11,9 +12,9 @@
 #include <unordered_set>
 
 namespace yas::ae {
-struct keyboard final : keyboard_for_ui_root {
-    [[nodiscard]] observing::endable observe_key(std::function<void(ae::key const &)> &&) override;
-    [[nodiscard]] observing::endable observe_modifier(std::function<void(ae::modifier_event const &)> &&) override;
+struct keyboard final {
+    [[nodiscard]] observing::endable observe_key(std::function<void(ae::key const &)> &&);
+    [[nodiscard]] observing::endable observe_modifier(std::function<void(ae::modifier_event const &)> &&);
 
     [[nodiscard]] static std::shared_ptr<keyboard> make_shared(std::shared_ptr<ui::event_manager> const &);
 

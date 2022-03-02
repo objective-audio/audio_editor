@@ -18,6 +18,7 @@ class pinch_gesture_controller;
 class ui_track;
 class ui_time;
 class color;
+class keyboard;
 
 struct ui_editing_root final {
     std::shared_ptr<ui::node> const node;
@@ -47,11 +48,11 @@ struct ui_editing_root final {
     ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &font_atlas,
                     std::shared_ptr<ae::color> const &, std::shared_ptr<editing_root_presenter> const &,
                     std::shared_ptr<action_controller> const &, std::shared_ptr<pinch_gesture_controller> const &,
-                    std::shared_ptr<ae::keyboard_for_ui_root> const &, std::shared_ptr<ui_track> const &,
+                    std::shared_ptr<ae::keyboard> const &, std::shared_ptr<ui_track> const &,
                     std::shared_ptr<ui_time> const &);
 
     void _setup_node_hierarchie();
-    void _setup_observing(std::shared_ptr<ae::keyboard_for_ui_root> const &);
+    void _setup_observing(std::shared_ptr<ae::keyboard> const &);
     void _setup_layout();
 };
 }  // namespace yas::ae
