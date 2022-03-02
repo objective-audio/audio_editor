@@ -5,7 +5,6 @@
 #pragma once
 
 #include <audio_editor_core/ae_keyboard_types.h>
-#include <audio_editor_core/ae_ui_editing_root_dependency.h>
 #include <ui/yas_ui_umbrella.h>
 
 #include <memory>
