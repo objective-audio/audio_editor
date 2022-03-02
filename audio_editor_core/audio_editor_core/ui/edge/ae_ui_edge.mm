@@ -48,8 +48,8 @@ ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_p
       _top_guide(top_guide),
       _begin_edge(begin_edge),
       _end_edge(end_edge) {
-    this->node->add_sub_node(this->_begin_edge->node());
-    this->node->add_sub_node(this->_end_edge->node());
+    this->node->add_sub_node(this->_begin_edge->node);
+    this->node->add_sub_node(this->_end_edge->node);
 
     ui::layout(standard->view_look()->view_layout_guide()->top(), this->_top_guide, ui_layout_utils::constant(0.0f))
         .sync()
@@ -57,8 +57,8 @@ ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_p
 
     this->_presenter
         ->observe_locations([this](edge_locations const &locations) {
-            this->_begin_edge->node()->set_position({.x = locations.begin.x, .y = 0.0f});
-            this->_end_edge->node()->set_position({.x = locations.end.x, .y = 0.0f});
+            this->_begin_edge->node->set_position({.x = locations.begin.x, .y = 0.0f});
+            this->_end_edge->node->set_position({.x = locations.end.x, .y = 0.0f});
         })
         .sync()
         ->add_to(this->_pool);
