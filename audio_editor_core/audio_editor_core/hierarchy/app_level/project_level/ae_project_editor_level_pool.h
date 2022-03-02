@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_dependency.h>
+#include <observing/yas_observing_umbrella.h>
 
 #include <memory>
 
@@ -19,10 +20,12 @@ struct project_editor_level_pool final : project_editor_level_pool_for_project {
 
     std::shared_ptr<project_editor_level> const &level() const;
 
+    observing::syncable observe_level(std::function<void(std::shared_ptr<project_editor_level> const &)> &&);
+
    private:
     std::string const _identifier;
 
-    std::shared_ptr<project_editor_level> _editor_level;
+    observing::value::holder_ptr<std::shared_ptr<project_editor_level>> const _editor_level;
 
     project_editor_level_pool(std::string const &identifier);
 };
