@@ -27,25 +27,25 @@ std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &project_id) {
 ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::texture> const &texture,
                  std::shared_ptr<ae::color> const &color, std::shared_ptr<time_presenter> const &presenter,
                  std::shared_ptr<action_controller> const &action_controller)
-    : _presenter(presenter),
+    : node(ui::node::make_shared()),
+      _presenter(presenter),
       _action_controller(action_controller),
       _standard(standard),
       _color(color),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
       _top_guide(ui::layout_value_guide::make_shared()),
-      _node(ui::node::make_shared()),
       _bg_button(
           ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard->event_manager(), standard->detector())),
       _buttons_root_node(ui::node::make_shared()),
       _nudge_plane(ui::rect_plane::make_shared(1)),
       _time_strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, _font_atlas)) {
-    this->_node->add_sub_node(this->_bg_button->rect_plane()->node());
-    this->_node->add_sub_node(this->_buttons_root_node);
-    this->_node->add_sub_node(this->_nudge_plane->node());
-    this->_node->add_sub_node(this->_time_strings->rect_plane()->node());
+    this->node->add_sub_node(this->_bg_button->rect_plane()->node());
+    this->node->add_sub_node(this->_buttons_root_node);
+    this->node->add_sub_node(this->_nudge_plane->node());
+    this->node->add_sub_node(this->_time_strings->rect_plane()->node());
 
-    this->_node->set_batch(ui::batch::make_shared());
+    this->node->set_batch(ui::batch::make_shared());
 
     auto const &bg_plane = this->_bg_button->rect_plane();
     bg_plane->node()->mesh()->set_use_mesh_color(true);
@@ -69,7 +69,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
 
     this->_nudge_plane->data()->set_rect_position(ui::region{.size = {1.0f, 1.0f}}, 0);
 
-    this->_node->attach_y_layout_guide(*this->_top_guide);
+    this->node->attach_y_layout_guide(*this->_top_guide);
 
     this->_time_strings->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
@@ -132,10 +132,6 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
 
 std::shared_ptr<ui::layout_value_target> ui_time::top_layout_target() const {
     return this->_top_guide;
-}
-
-std::shared_ptr<ui::node> const &ui_time::node() const {
-    return this->_node;
 }
 
 void ui_time::_resize_buttons() {

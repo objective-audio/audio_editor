@@ -16,7 +16,8 @@ struct ui_time final {
     [[nodiscard]] static std::shared_ptr<ui_time> make_shared(ui_project_id const &project_id);
 
     std::shared_ptr<ui::layout_value_target> top_layout_target() const;
-    std::shared_ptr<ui::node> const &node() const;
+
+    std::shared_ptr<ui::node> const node;
 
    private:
     struct button_element {
@@ -30,7 +31,6 @@ struct ui_time final {
     std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
-    std::shared_ptr<ui::node> const _node;
     std::shared_ptr<ui::button> const _bg_button;
     std::shared_ptr<ui::node> const _buttons_root_node;
     std::vector<button_element> _button_elements;

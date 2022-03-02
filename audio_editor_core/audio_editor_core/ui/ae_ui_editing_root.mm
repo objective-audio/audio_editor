@@ -82,7 +82,7 @@ void ui_editing_root::_setup_node_hierarchie() {
     this->node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
 
     this->node->add_sub_node(this->_playing_line->node());
-    this->node->add_sub_node(this->_time->node());
+    this->node->add_sub_node(this->_time->node);
 }
 
 void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyboard) {
