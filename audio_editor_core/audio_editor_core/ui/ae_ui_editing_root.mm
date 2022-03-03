@@ -74,7 +74,7 @@ bool ui_editing_root::responds_to_action(action const action) {
 }
 
 void ui_editing_root::_setup_node_hierarchie() {
-    this->node->add_sub_node(this->_track->node());
+    this->node->add_sub_node(this->_track->node);
 
     this->node->add_sub_node(this->_status_strings->rect_plane()->node());
     this->node->add_sub_node(this->_file_info_strings->rect_plane()->node());
@@ -82,7 +82,7 @@ void ui_editing_root::_setup_node_hierarchie() {
     this->node->add_sub_node(this->_marker_pool_strings->rect_plane()->node());
 
     this->node->add_sub_node(this->_playing_line->node());
-    this->node->add_sub_node(this->_time->node());
+    this->node->add_sub_node(this->_time->node);
 }
 
 void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyboard) {

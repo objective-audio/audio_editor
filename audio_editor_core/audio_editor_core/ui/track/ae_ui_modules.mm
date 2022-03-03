@@ -35,17 +35,17 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &project
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                        std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
                        std::shared_ptr<ui_module_waveforms> const &waveforms)
-    : _presenter(presenter),
+    : node(ui::node::make_shared()),
+      _presenter(presenter),
       _color(color),
       _waveforms(waveforms),
-      _node(ui::node::make_shared()),
       _triangle_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
       _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
-    this->_node->add_sub_node(this->_triangle_node);
-    this->_node->add_sub_node(this->_waveforms->node());
-    this->_node->add_sub_node(this->_line_node);
+    this->node->add_sub_node(this->_triangle_node);
+    this->node->add_sub_node(this->_waveforms->node);
+    this->node->add_sub_node(this->_line_node);
 
     this->_triangle_node->set_mesh(this->_triangle_mesh);
     this->_line_node->set_mesh(this->_line_mesh);
@@ -80,10 +80,6 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui::node> const &ui_modules::node() const {
-    return this->_node;
 }
 
 void ui_modules::set_scale(ui::size const &scale) {

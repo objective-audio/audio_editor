@@ -22,8 +22,8 @@ std::shared_ptr<ui_edge_element> ui_edge_element::make_shared(std::string const 
 ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<ui::font_atlas> const &font_atlas,
                                  std::shared_ptr<ae::color> const &color, args const &args)
-    : _mesh(ui::mesh::make_shared()),
-      _node(ui::node::make_shared()),
+    : node(ui::node::make_shared()),
+      _mesh(ui::mesh::make_shared()),
       _line_node(ui::node::make_shared()),
       _text(ui::strings::make_shared({.text = text}, font_atlas)),
       _color(color) {
@@ -34,8 +34,8 @@ ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::st
 
     this->_text->rect_plane()->node()->set_position({2.0f, 0.0f});
 
-    this->_node->add_sub_node(this->_line_node);
-    this->_node->add_sub_node(this->_text->rect_plane()->node());
+    this->node->add_sub_node(this->_line_node);
+    this->node->add_sub_node(this->_text->rect_plane()->node());
 
     this->_text->rect_plane()->node()->attach_y_layout_guide(*args.top_guide);
 
@@ -55,8 +55,4 @@ ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::st
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui::node> const &ui_edge_element::node() const {
-    return this->_node;
 }

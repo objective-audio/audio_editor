@@ -7,13 +7,12 @@
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_player_dependency.h>
-#include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 
 #include <memory>
 
 namespace yas::ae {
-struct player final : player_for_project, player_for_project_editor {
+struct player final : player_for_project_editor {
     void begin_rendering() override;
 
     void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,

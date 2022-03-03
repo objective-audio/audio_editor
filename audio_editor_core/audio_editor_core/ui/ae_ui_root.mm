@@ -37,6 +37,11 @@ ui_root::ui_root(std::shared_ptr<ui::node> const &root_node, std::shared_ptr<roo
                     auto const &level = pool->level();
                     this->_root_node->add_sub_node(level->editing_root->node);
                 }
+            } else {
+                if (auto const &level = pool->level()) {
+                    level->editing_root->node->remove_from_super_node();
+                    pool->remove_level();
+                }
             }
         })
         .sync()

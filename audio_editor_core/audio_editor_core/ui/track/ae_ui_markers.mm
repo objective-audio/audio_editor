@@ -27,12 +27,12 @@ std::shared_ptr<ui_markers> ui_markers::make_shared(ui_project_id const &project
 
 ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
                        std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color)
-    : _presenter(presenter),
+    : node(ui::node::make_shared()),
+      _presenter(presenter),
       _color(color),
-      _root_node(ui::node::make_shared()),
       _vertex_data(ui::static_mesh_vertex_data::make_shared(3)),
       _index_data(ui::static_mesh_index_data::make_shared(3)) {
-    this->_root_node->set_batch(ui::batch::make_shared());
+    this->node->set_batch(ui::batch::make_shared());
 
     this->_vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
         float const half_width = -5.0f;
@@ -78,10 +78,6 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui::node> const &ui_markers::node() const {
-    return this->_root_node;
 }
 
 void ui_markers::set_locations(std::vector<std::optional<marker_location>> const &locations) {
@@ -137,7 +133,7 @@ void ui_markers::_set_count(std::size_t const location_count) {
             node->set_mesh(ui::mesh::make_shared({}, this->_vertex_data, this->_index_data, nullptr));
             node->set_color(marker_color);
             node->set_is_enabled(false);
-            this->_root_node->add_sub_node(node);
+            this->node->add_sub_node(node);
             this->_sub_nodes.emplace_back(std::move(node));
         }
     } else if (location_count < prev_node_count) {

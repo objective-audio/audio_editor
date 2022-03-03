@@ -16,13 +16,12 @@ class ui_edge_element;
 struct ui_edge final {
     [[nodiscard]] static std::shared_ptr<ui_edge> make_shared(ui_project_id const &project_id);
 
-    std::shared_ptr<ui::node> const &node() const;
+    std::shared_ptr<ui::node> const node;
 
    private:
     std::shared_ptr<edge_presenter> const _presenter;
 
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
-    std::shared_ptr<ui::node> const _node;
 
     std::shared_ptr<ui_edge_element> const _begin_edge;
     std::shared_ptr<ui_edge_element> const _end_edge;

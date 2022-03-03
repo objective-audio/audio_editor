@@ -4,19 +4,20 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_root_presenter_dependency.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
+class project_editor_level_pool;
+
 struct root_presenter final {
     [[nodiscard]] static std::shared_ptr<root_presenter> make_shared(std::string const &project_id);
 
     [[nodiscard]] observing::syncable observe_is_editing(std::function<void(bool const &)> &&);
 
    private:
-    observing::value::holder_ptr<bool> const _is_editing;
-    observing::canceller_pool _pool;
+    std::weak_ptr<project_editor_level_pool> const _editor_level_pool;
 
-    root_presenter(std::shared_ptr<project_for_root_presenter> const &);
+    root_presenter(std::shared_ptr<project_editor_level_pool> const &);
 
     root_presenter(root_presenter const &) = delete;
     root_presenter(root_presenter &&) = delete;

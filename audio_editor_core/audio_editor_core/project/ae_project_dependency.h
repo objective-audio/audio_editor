@@ -46,12 +46,6 @@ struct file_loader_for_project {
     [[nodiscard]] virtual std::optional<file_info> load_file_info(url const &) const = 0;
 };
 
-struct player_for_project {
-    virtual ~player_for_project() = default;
-
-    virtual frame_index_t current_frame() const = 0;
-};
-
 struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_controller {
     virtual ~scrolling_for_project() = default;
 };
@@ -60,5 +54,6 @@ struct project_editor_level_pool_for_project {
     virtual ~project_editor_level_pool_for_project() = default;
 
     virtual void add_level(file_info const &) = 0;
+    virtual void remove_level() = 0;
 };
 }  // namespace yas::ae

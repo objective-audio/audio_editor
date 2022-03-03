@@ -28,10 +28,10 @@ std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
 ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &standard,
                                          std::shared_ptr<ae::color> const &color,
                                          std::shared_ptr<module_waveforms_presenter> const &presenter)
-    : _presenter(presenter), _color(color), _node(ui::node::make_shared()) {
+    : node(ui::node::make_shared()), _presenter(presenter), _color(color) {
     this->_presenter
         ->observe_mesh_importer([this](waveform_mesh_importer_event const &event) {
-            auto const &sub_nodes = this->_node->sub_nodes();
+            auto const &sub_nodes = this->node->sub_nodes();
             if (event.index < sub_nodes.size()) {
                 auto const &sub_node = sub_nodes.at(event.index);
                 if (sub_node->is_enabled()) {
@@ -78,7 +78,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
         ->observe_appearance([this](auto const &) {
             auto const &waveform_color = this->_color->waveform();
 
-            for (auto const &sub_node : this->_node->sub_nodes()) {
+            for (auto const &sub_node : this->node->sub_nodes()) {
                 for (auto const &mesh_node : sub_node->sub_nodes()) {
                     mesh_node->set_color(waveform_color);
                 }
@@ -88,12 +88,8 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
         ->add_to(this->_pool);
 }
 
-std::shared_ptr<ui::node> const &ui_module_waveforms::node() {
-    return this->_node;
-}
-
 void ui_module_waveforms::set_scale(ui::size const &scale) {
-    this->_node->set_scale({.width = 1.0f, .height = scale.height * 0.5f});
+    this->node->set_scale({.width = 1.0f, .height = scale.height * 0.5f});
 
     if (this->_scale != scale.width) {
         bool const prev_null = !this->_scale.has_value();
@@ -105,7 +101,7 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
         }
 
         if (auto const scale = this->_waveform_scale()) {
-            for (auto const &sub_node : this->_node->sub_nodes()) {
+            for (auto const &sub_node : this->node->sub_nodes()) {
                 sub_node->set_scale(scale.value());
             }
         }
@@ -121,7 +117,7 @@ void ui_module_waveforms::set_locations(std::vector<std::optional<module_locatio
 
     this->_resize_sub_nodes(locations.size());
 
-    auto const sub_nodes = this->_node->sub_nodes();
+    auto const sub_nodes = this->node->sub_nodes();
 
     auto each = make_fast_each(locations.size());
     while (yas_each_next(each)) {
@@ -160,8 +156,8 @@ void ui_module_waveforms::update_locations(std::size_t const count,
         auto const &idx = pair.first;
         auto const &location = pair.second;
 
-        if (idx < this->_node->sub_nodes().size()) {
-            auto const &sub_node = this->_node->sub_nodes().at(idx);
+        if (idx < this->node->sub_nodes().size()) {
+            auto const &sub_node = this->node->sub_nodes().at(idx);
             sub_node->remove_all_sub_nodes();
             sub_node->set_is_enabled(false);
         }
@@ -174,9 +170,9 @@ void ui_module_waveforms::update_locations(std::size_t const count,
         auto const &pair = replaced.at(yas_each_index(each));
         auto const &idx = pair.first;
 
-        if (idx < this->_node->sub_nodes().size()) {
+        if (idx < this->node->sub_nodes().size()) {
             auto const &location = pair.second;
-            auto const &sub_node = this->_node->sub_nodes().at(idx);
+            auto const &sub_node = this->node->sub_nodes().at(idx);
             sub_node->set_is_enabled(true);
             sub_node->set_position({.x = location.x() * location.scale, .y = 0.0f});
             this->_presenter->import(idx, location);
@@ -188,9 +184,9 @@ void ui_module_waveforms::update_locations(std::size_t const count,
         auto const &pair = inserted.at(yas_each_index(each));
         auto const &idx = pair.first;
 
-        if (idx < this->_node->sub_nodes().size()) {
+        if (idx < this->node->sub_nodes().size()) {
             auto const &location = pair.second;
-            auto const &sub_node = this->_node->sub_nodes().at(idx);
+            auto const &sub_node = this->node->sub_nodes().at(idx);
             sub_node->remove_all_sub_nodes();
             sub_node->set_is_enabled(true);
             sub_node->set_position({.x = location.x() * location.scale, .y = 0.0f});
@@ -200,7 +196,7 @@ void ui_module_waveforms::update_locations(std::size_t const count,
 }
 
 void ui_module_waveforms::_resize_sub_nodes(std::size_t const count) {
-    auto const &prev_count = this->_node->sub_nodes().size();
+    auto const &prev_count = this->node->sub_nodes().size();
 
     if (prev_count < count) {
         auto const scale = this->_waveform_scale();
@@ -214,13 +210,13 @@ void ui_module_waveforms::_resize_sub_nodes(std::size_t const count) {
                 node->set_scale(scale.value());
             }
 
-            this->_node->add_sub_node(node);
+            this->node->add_sub_node(node);
         }
     } else if (prev_count > count) {
         auto each = make_fast_each(prev_count - count);
         while (yas_each_next(each)) {
             auto const idx = prev_count - yas_each_index(each) - 1;
-            this->_node->sub_nodes().at(idx)->remove_from_super_node();
+            this->node->sub_nodes().at(idx)->remove_from_super_node();
         }
     }
 }

@@ -35,19 +35,19 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
                    std::shared_ptr<scroll_gesture_controller> const &scroll_gesture_controller,
                    std::shared_ptr<ui_modules> const &modules, std::shared_ptr<ui_edge> const &edge,
                    std::shared_ptr<ui_markers> const &markers)
-    : _standard(standard),
+    : node(ui::node::make_shared()),
+      _standard(standard),
       _display_space(display_space),
       _presenter(presenter),
       _scroll_gesture_controller(scroll_gesture_controller),
-      _root_node(ui::node::make_shared()),
       _time_node(ui::node::make_shared()),
       _modules(modules),
       _edge(edge),
       _markers(markers) {
-    this->_root_node->add_sub_node(this->_time_node);
-    this->_time_node->add_sub_node(this->_modules->node());
-    this->_time_node->add_sub_node(this->_edge->node());
-    this->_time_node->add_sub_node(this->_markers->node());
+    this->node->add_sub_node(this->_time_node);
+    this->_time_node->add_sub_node(this->_modules->node);
+    this->_time_node->add_sub_node(this->_edge->node);
+    this->_time_node->add_sub_node(this->_markers->node);
 
     standard->renderer()
         ->observe_will_render([this](auto const &) {
@@ -91,10 +91,6 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui::node> const ui_track::node() const {
-    return this->_root_node;
 }
 
 void ui_track::_update_scale() {
