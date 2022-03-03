@@ -24,7 +24,9 @@ struct ui_editing_root final {
 
     bool responds_to_action(action const);
 
-    [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(ui_project_id const &project_id);
+    [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(ui_project_id const &project_id,
+                                                                      std::shared_ptr<ui_track> const &,
+                                                                      std::shared_ptr<ui_time> const &);
 
    private:
     std::shared_ptr<editing_root_presenter> const _presenter;

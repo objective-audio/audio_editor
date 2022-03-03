@@ -16,7 +16,10 @@ class scroll_gesture_controller;
 class display_space;
 
 struct ui_track final {
-    [[nodiscard]] static std::shared_ptr<ui_track> make_shared(ui_project_id const &project_id);
+    [[nodiscard]] static std::shared_ptr<ui_track> make_shared(ui_project_id const &project_id,
+                                                               std::shared_ptr<ui_modules> const &,
+                                                               std::shared_ptr<ui_edge> const &,
+                                                               std::shared_ptr<ui_markers> const &);
 
     std::shared_ptr<ui::node> const node;
 
