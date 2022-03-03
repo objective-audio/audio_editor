@@ -36,7 +36,6 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
                    std::shared_ptr<ui_modules> const &modules, std::shared_ptr<ui_edge> const &edge,
                    std::shared_ptr<ui_markers> const &markers)
     : node(ui::node::make_shared()),
-      _standard(standard),
       _display_space(display_space),
       _presenter(presenter),
       _scroll_gesture_controller(scroll_gesture_controller),
@@ -66,7 +65,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
         .sync()
         ->add_to(this->_pool);
 
-    this->_standard->event_manager()
+    standard->event_manager()
         ->observe([this](std::shared_ptr<ui::event> const &event) {
             if (event->type() == ui::event_type::scroll) {
                 auto const &scroll_event = event->get<ui::scroll>();
