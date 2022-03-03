@@ -31,7 +31,6 @@ struct ui_editing_root final {
     std::weak_ptr<action_controller> const _action_controller;
     std::weak_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
 
-    std::shared_ptr<ui::standard> const _standard;
     std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<ui::strings> const _status_strings;
@@ -51,7 +50,7 @@ struct ui_editing_root final {
                     std::shared_ptr<ui_time> const &);
 
     void _setup_node_hierarchie();
-    void _setup_observing(std::shared_ptr<ae::keyboard> const &);
-    void _setup_layout();
+    void _setup_observing(std::shared_ptr<ui::standard> const &, std::shared_ptr<ae::keyboard> const &);
+    void _setup_layout(std::shared_ptr<ui::view_look> const &);
 };
 }  // namespace yas::ae

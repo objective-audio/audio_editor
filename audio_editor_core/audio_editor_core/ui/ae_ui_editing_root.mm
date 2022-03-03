@@ -48,7 +48,6 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
       _presenter(presenter),
       _action_controller(action_controller),
       _pinch_gesture_controller(pinch_gesture_controller),
-      _standard(standard),
       _color(color),
       _font_atlas(font_atlas),
       _status_strings(ui::strings::make_shared(
@@ -65,8 +64,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
     this->_file_info_strings->set_text(presenter->file_info_text());
 
     this->_setup_node_hierarchie();
-    this->_setup_observing(keyboard);
-    this->_setup_layout();
+    this->_setup_observing(standard, keyboard);
+    this->_setup_layout(standard->view_look());
 }
 
 bool ui_editing_root::responds_to_action(action const action) {
@@ -85,7 +84,8 @@ void ui_editing_root::_setup_node_hierarchie() {
     this->node->add_sub_node(this->_time->node);
 }
 
-void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyboard) {
+void ui_editing_root::_setup_observing(std::shared_ptr<ui::standard> const &standard,
+                                       std::shared_ptr<ae::keyboard> const &keyboard) {
     auto const &presenter = this->_presenter;
 
     presenter->observe_state_text([this](std::string const &string) { this->_status_strings->set_text(string); })
@@ -102,7 +102,7 @@ void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyb
         .sync()
         ->add_to(this->_pool);
 
-    this->_standard->renderer()
+    standard->renderer()
         ->observe_will_render([this](auto const &) {
             this->_playing_line->node()->set_color(
                 ui_editing_root_utils::to_playing_line_color(this->_presenter->playing_line_state(), this->_color));
@@ -134,7 +134,7 @@ void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyb
         .end()
         ->add_to(this->_pool);
 
-    this->_standard->event_manager()
+    standard->event_manager()
         ->observe([this](std::shared_ptr<ui::event> const &event) {
             if (event->type() == ui::event_type::pinch) {
                 auto const &pinch_event = event->get<ui::pinch>();
@@ -149,10 +149,9 @@ void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyb
         .end()
         ->add_to(this->_pool);
 
-    this->_standard->view_look()
+    standard->view_look()
         ->observe_appearance([this](auto const &) {
             auto const &color = this->_color;
-            this->_standard->view_look()->background()->set_color(color->background());
             this->_status_strings->rect_plane()->node()->set_color(color->debug_text());
             this->_file_info_strings->rect_plane()->node()->set_color(color->debug_text());
             this->_file_track_strings->rect_plane()->node()->set_color(color->debug_text());
@@ -162,9 +161,9 @@ void ui_editing_root::_setup_observing(std::shared_ptr<ae::keyboard> const &keyb
         ->add_to(this->_pool);
 }
 
-void ui_editing_root::_setup_layout() {
-    auto const &safe_area_guide = this->_standard->view_look()->safe_area_layout_guide();
-    auto const &safe_area_h_guide = this->_standard->view_look()->safe_area_layout_guide()->horizontal_range();
+void ui_editing_root::_setup_layout(std::shared_ptr<ui::view_look> const &view_look) {
+    auto const &safe_area_guide = view_look->safe_area_layout_guide();
+    auto const &safe_area_h_guide = view_look->safe_area_layout_guide()->horizontal_range();
     auto const &status_preferred_guide = this->_status_strings->preferred_layout_guide();
     auto const status_actual_source = this->_status_strings->actual_layout_source();
     auto const &file_info_preferred_guide = this->_file_info_strings->preferred_layout_guide();
@@ -242,8 +241,7 @@ void ui_editing_root::_setup_layout() {
 
     // time
 
-    ui::layout(this->_standard->view_look()->view_layout_guide()->top(), this->_time->top_layout_target(),
-               ui_layout_utils::constant(0.0f))
+    ui::layout(view_look->view_layout_guide()->top(), this->_time->top_layout_target(), ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
 }
