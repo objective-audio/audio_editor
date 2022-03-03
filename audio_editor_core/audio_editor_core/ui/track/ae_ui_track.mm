@@ -18,14 +18,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_track> ui_track::make_shared(ui_project_id const &project_id) {
+std::shared_ptr<ui_track> ui_track::make_shared(ui_project_id const &project_id,
+                                                std::shared_ptr<ui_modules> const &modules,
+                                                std::shared_ptr<ui_edge> const &edge,
+                                                std::shared_ptr<ui_markers> const &markers) {
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
-
     auto const presenter = track_presenter::make_shared(project_id.identifier);
     auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id.identifier);
-    auto const modules = ui_modules::make_shared(project_id);
-    auto const edge = ui_edge::make_shared(project_id);
-    auto const markers = ui_markers::make_shared(project_id);
     return std::shared_ptr<ui_track>(new ui_track{ui_root_level->standard, ui_root_level->display_space, presenter,
                                                   scroll_gestore_controller, modules, edge, markers});
 }

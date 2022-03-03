@@ -20,15 +20,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &project_id) {
+std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &project_id,
+                                                              std::shared_ptr<ui_track> const &ui_track,
+                                                              std::shared_ptr<ui_time> const &ui_time) {
     auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
     auto const presenter = editing_root_presenter::make_shared(project_id.identifier);
 
     auto const &project_level = hierarchy::project_level_for_id(project_id.identifier);
-    auto const ui_track = ui_track::make_shared(project_id);
-    auto const ui_time = ui_time::make_shared(project_id);
 
     return std::shared_ptr<ui_editing_root>(
         new ui_editing_root{ui_root_level->standard, ui_root_level->font_atlas_14, app_level->color, presenter,
