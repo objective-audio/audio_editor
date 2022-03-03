@@ -3,7 +3,10 @@
 //
 
 #include "ae_ui_root.h"
+#include <audio_editor_core/ae_app_level.h>
+#include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_display_space.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_root_presenter.h>
 #include <audio_editor_core/ae_ui_editing_root.h>
@@ -16,13 +19,19 @@ using namespace yas::ae;
 std::shared_ptr<ui_root> ui_root::make_shared(
     std::shared_ptr<ui::standard> const &standard, ui_project_id const &project_id,
     std::shared_ptr<ui_editing_root_level_pool> const &ui_editing_root_level_pool) {
+    auto const &app_level = hierarchy::app_level();
     auto const presenter = root_presenter::make_shared(project_id.identifier);
-    return std::shared_ptr<ui_root>(new ui_root{standard->root_node(), presenter, ui_editing_root_level_pool});
+    return std::shared_ptr<ui_root>(new ui_root{app_level->color, standard, presenter, ui_editing_root_level_pool});
 }
 
-ui_root::ui_root(std::shared_ptr<ui::node> const &root_node, std::shared_ptr<root_presenter> const &presenter,
+ui_root::ui_root(std::shared_ptr<ae::color> const &color, std::shared_ptr<ui::standard> const &standard,
+                 std::shared_ptr<root_presenter> const &presenter,
                  std::shared_ptr<ui_editing_root_level_pool> const &ui_editing_root_level_pool)
-    : _presenter(presenter), _root_node(root_node), _ui_editing_root_level_pool(ui_editing_root_level_pool) {
+    : _presenter(presenter),
+      _root_node(standard->root_node()),
+      _color(color),
+      _background(standard->view_look()->background()),
+      _ui_editing_root_level_pool(ui_editing_root_level_pool) {
     presenter
         ->observe_is_editing([this](bool const &is_editing) {
             auto const &pool = this->_ui_editing_root_level_pool.lock();
@@ -42,6 +51,15 @@ ui_root::ui_root(std::shared_ptr<ui::node> const &root_node, std::shared_ptr<roo
                     level->editing_root->node->remove_from_super_node();
                     pool->remove_level();
                 }
+            }
+        })
+        .sync()
+        ->add_to(this->_pool);
+
+    standard->view_look()
+        ->observe_appearance([this](auto const &) {
+            if (auto const background = this->_background.lock()) {
+                background->set_color(this->_color->background());
             }
         })
         .sync()
