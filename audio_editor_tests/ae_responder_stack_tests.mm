@@ -12,7 +12,9 @@ using namespace yas::ae;
 namespace yas::ae::test {
 struct responder_stub : ae::responder {
     std::function<void(ae::action const &)> handle_action_handler = [](auto const &) {};
-    std::function<bool(ae::action const &)> responds_to_action_handler = [](auto const &) { return false; };
+    std::function<responding(ae::action const &)> responding_to_action_handler = [](auto const &) {
+        return responding::fallthrough;
+    };
 
     identifier responder_id() override {
         return this->_raw_responder_id;
@@ -22,8 +24,8 @@ struct responder_stub : ae::responder {
         this->handle_action_handler(action);
     }
 
-    bool responds_to_action(ae::action const &action) override {
-        return this->responds_to_action_handler(action);
+    responding responding_to_action(ae::action const &action) override {
+        return this->responding_to_action_handler(action);
     }
 
    private:
@@ -37,32 +39,33 @@ struct responder_stub : ae::responder {
 
 @implementation ae_responder_stack_tests
 
+#warning todo もっと細かく分けたい
 - (void)test {
     auto const responder_1 = std::make_shared<test::responder_stub>();
     auto const responder_2 = std::make_shared<test::responder_stub>();
     auto const stack = responder_stack::make_shared();
 
-    std::vector<ae::action> responds_to_action_called_1;
+    std::vector<ae::action> responding_to_action_called_1;
     std::vector<ae::action> handle_action_called_1;
-    bool responds_to_action_result_1 = false;
-    std::vector<ae::action> responds_to_action_called_2;
+    responding responding_to_action_result_1 = responding::fallthrough;
+    std::vector<ae::action> responding_to_action_called_2;
     std::vector<ae::action> handle_action_called_2;
-    bool responds_to_action_result_2 = false;
+    responding responding_to_action_result_2 = responding::fallthrough;
 
-    responder_1->responds_to_action_handler = [&responds_to_action_called_1,
-                                               &responds_to_action_result_1](auto const &action) {
-        responds_to_action_called_1.push_back(action);
-        return responds_to_action_result_1;
+    responder_1->responding_to_action_handler = [&responding_to_action_called_1,
+                                                 &responding_to_action_result_1](auto const &action) {
+        responding_to_action_called_1.push_back(action);
+        return responding_to_action_result_1;
     };
 
     responder_1->handle_action_handler = [&handle_action_called_1](auto const &action) {
         handle_action_called_1.push_back(action);
     };
 
-    responder_2->responds_to_action_handler = [&responds_to_action_called_2,
-                                               &responds_to_action_result_2](auto const &action) {
-        responds_to_action_called_2.push_back(action);
-        return responds_to_action_result_2;
+    responder_2->responding_to_action_handler = [&responding_to_action_called_2,
+                                                 &responding_to_action_result_2](auto const &action) {
+        responding_to_action_called_2.push_back(action);
+        return responding_to_action_result_2;
     };
 
     responder_2->handle_action_handler = [&handle_action_called_2](auto const &action) {
@@ -71,98 +74,99 @@ struct responder_stub : ae::responder {
 
     stack->push_responder(responder_1);
 
-    responds_to_action_result_1 = false;
-    responds_to_action_result_2 = false;
+    responding_to_action_result_1 = responding::fallthrough;
+    responding_to_action_result_2 = responding::fallthrough;
 
-    XCTAssertFalse(stack->responds_to_action(ae::action{ae::action_kind::begin_time_editing}));
-
-    XCTAssertEqual(handle_action_called_1.size(), 0);
-    XCTAssertEqual(responds_to_action_called_1.size(), 1);
-    XCTAssertEqual(responds_to_action_called_1.at(0), (ae::action{ae::action_kind::begin_time_editing}));
-    XCTAssertEqual(handle_action_called_2.size(), 0);
-    XCTAssertEqual(responds_to_action_called_2.size(), 0);
-
-    responds_to_action_result_1 = true;
-    responds_to_action_result_2 = false;
-
-    XCTAssertTrue(stack->responds_to_action(ae::action{ae::action_kind::cancel_time_editing}));
+    XCTAssertEqual(stack->responding_to_action(ae::action{ae::action_kind::begin_time_editing}),
+                   responding::fallthrough);
 
     XCTAssertEqual(handle_action_called_1.size(), 0);
-    XCTAssertEqual(responds_to_action_called_1.size(), 2);
-    XCTAssertEqual(responds_to_action_called_1.at(1), (ae::action{ae::action_kind::cancel_time_editing}));
+    XCTAssertEqual(responding_to_action_called_1.size(), 1);
+    XCTAssertEqual(responding_to_action_called_1.at(0), (ae::action{ae::action_kind::begin_time_editing}));
     XCTAssertEqual(handle_action_called_2.size(), 0);
-    XCTAssertEqual(responds_to_action_called_2.size(), 0);
+    XCTAssertEqual(responding_to_action_called_2.size(), 0);
+
+    responding_to_action_result_1 = responding::blocking;
+    responding_to_action_result_2 = responding::fallthrough;
+
+    XCTAssertEqual(stack->responding_to_action(ae::action{ae::action_kind::cancel_time_editing}), responding::blocking);
+
+    XCTAssertEqual(handle_action_called_1.size(), 0);
+    XCTAssertEqual(responding_to_action_called_1.size(), 2);
+    XCTAssertEqual(responding_to_action_called_1.at(1), (ae::action{ae::action_kind::cancel_time_editing}));
+    XCTAssertEqual(handle_action_called_2.size(), 0);
+    XCTAssertEqual(responding_to_action_called_2.size(), 0);
 
     stack->handle_action(ae::action{ae::action_kind::change_time_sign_to_minus});
 
-    XCTAssertEqual(handle_action_called_1.size(), 1);
-    XCTAssertEqual(handle_action_called_1.at(0), (ae::action{ae::action_kind::change_time_sign_to_minus}));
-    XCTAssertEqual(responds_to_action_called_1.size(), 3);
-    XCTAssertEqual(responds_to_action_called_1.at(2), (ae::action{ae::action_kind::change_time_sign_to_minus}));
+    XCTAssertEqual(handle_action_called_1.size(), 0);
+    XCTAssertEqual(responding_to_action_called_1.size(), 3);
+    XCTAssertEqual(responding_to_action_called_1.at(2), (ae::action{ae::action_kind::change_time_sign_to_minus}));
     XCTAssertEqual(handle_action_called_2.size(), 0);
-    XCTAssertEqual(responds_to_action_called_2.size(), 0);
+    XCTAssertEqual(responding_to_action_called_2.size(), 0);
 
     stack->push_responder(responder_2);
 
-    responds_to_action_result_1 = true;
-    responds_to_action_result_2 = true;
+    responding_to_action_result_1 = responding::blocking;
+    responding_to_action_result_2 = responding::accepting;
 
-    XCTAssertTrue(stack->responds_to_action(ae::action{ae::action_kind::change_time_sign_to_plus}));
+    XCTAssertEqual(stack->responding_to_action(ae::action{ae::action_kind::change_time_sign_to_plus}),
+                   responding::accepting);
 
-    XCTAssertEqual(handle_action_called_1.size(), 1);
-    XCTAssertEqual(responds_to_action_called_1.size(), 3);
+    XCTAssertEqual(handle_action_called_1.size(), 0);
+    XCTAssertEqual(responding_to_action_called_1.size(), 3);
     XCTAssertEqual(handle_action_called_2.size(), 0);
-    XCTAssertEqual(responds_to_action_called_2.size(), 1);
-    XCTAssertEqual(responds_to_action_called_2.at(0), (ae::action{ae::action_kind::change_time_sign_to_plus}));
+    XCTAssertEqual(responding_to_action_called_2.size(), 1);
+    XCTAssertEqual(responding_to_action_called_2.at(0), (ae::action{ae::action_kind::change_time_sign_to_plus}));
 
     stack->handle_action(ae::action{ae::action_kind::copy});
 
-    XCTAssertEqual(handle_action_called_1.size(), 1);
-    XCTAssertEqual(responds_to_action_called_1.size(), 3);
+    XCTAssertEqual(handle_action_called_1.size(), 0);
+    XCTAssertEqual(responding_to_action_called_1.size(), 3);
     XCTAssertEqual(handle_action_called_2.size(), 1);
     XCTAssertEqual(handle_action_called_2.at(0), (ae::action{ae::action_kind::copy}));
-    XCTAssertEqual(responds_to_action_called_2.size(), 2);
-    XCTAssertEqual(responds_to_action_called_2.at(1), (ae::action{ae::action_kind::copy}));
+    XCTAssertEqual(responding_to_action_called_2.size(), 2);
+    XCTAssertEqual(responding_to_action_called_2.at(1), (ae::action{ae::action_kind::copy}));
 
-    responds_to_action_result_1 = true;
-    responds_to_action_result_2 = false;
+    responding_to_action_result_1 = responding::accepting;
+    responding_to_action_result_2 = responding::fallthrough;
 
-    XCTAssertTrue(stack->responds_to_action(ae::action{ae::action_kind::cut}));
+    XCTAssertEqual(stack->responding_to_action(ae::action{ae::action_kind::cut}), responding::accepting);
 
-    XCTAssertEqual(responds_to_action_called_1.size(), 4);
-    XCTAssertEqual(responds_to_action_called_1.at(3), (ae::action{ae::action_kind::cut}));
-    XCTAssertEqual(responds_to_action_called_2.size(), 3);
-    XCTAssertEqual(responds_to_action_called_2.at(2), (ae::action{ae::action_kind::cut}));
+    XCTAssertEqual(responding_to_action_called_1.size(), 4);
+    XCTAssertEqual(responding_to_action_called_1.at(3), (ae::action{ae::action_kind::cut}));
+    XCTAssertEqual(responding_to_action_called_2.size(), 3);
+    XCTAssertEqual(responding_to_action_called_2.at(2), (ae::action{ae::action_kind::cut}));
 
-    responds_to_action_result_1 = false;
-    responds_to_action_result_2 = false;
+    responding_to_action_result_1 = responding::fallthrough;
+    responding_to_action_result_2 = responding::fallthrough;
 
-    XCTAssertFalse(stack->responds_to_action(ae::action{ae::action_kind::decrement_time}));
+    XCTAssertEqual(stack->responding_to_action(ae::action{ae::action_kind::decrement_time}), responding::fallthrough);
 
-    XCTAssertEqual(responds_to_action_called_1.size(), 5);
-    XCTAssertEqual(responds_to_action_called_1.at(4), (ae::action{ae::action_kind::decrement_time}));
-    XCTAssertEqual(responds_to_action_called_2.size(), 4);
-    XCTAssertEqual(responds_to_action_called_2.at(3), (ae::action{ae::action_kind::decrement_time}));
+    XCTAssertEqual(responding_to_action_called_1.size(), 5);
+    XCTAssertEqual(responding_to_action_called_1.at(4), (ae::action{ae::action_kind::decrement_time}));
+    XCTAssertEqual(responding_to_action_called_2.size(), 4);
+    XCTAssertEqual(responding_to_action_called_2.at(3), (ae::action{ae::action_kind::decrement_time}));
 
     XCTAssertThrows(stack->pop_responder(responder_1->responder_id()));
 
     XCTAssertNoThrow(stack->pop_responder(responder_2->responder_id()));
 
-    responds_to_action_result_1 = true;
-    responds_to_action_result_2 = true;
+    responding_to_action_result_1 = responding::accepting;
+    responding_to_action_result_2 = responding::accepting;
 
-    XCTAssertTrue(stack->responds_to_action(ae::action{ae::action_kind::delete_time}));
+    XCTAssertEqual(stack->responding_to_action(ae::action{ae::action_kind::delete_time}), responding::accepting);
 
-    XCTAssertEqual(responds_to_action_called_1.size(), 6);
-    XCTAssertEqual(responds_to_action_called_1.at(5), (ae::action{ae::action_kind::delete_time}));
-    XCTAssertEqual(responds_to_action_called_2.size(), 4);
+    XCTAssertEqual(responding_to_action_called_1.size(), 6);
+    XCTAssertEqual(responding_to_action_called_1.at(5), (ae::action{ae::action_kind::delete_time}));
+    XCTAssertEqual(responding_to_action_called_2.size(), 4);
 
     XCTAssertNoThrow(stack->pop_responder(responder_1->responder_id()));
 
-    XCTAssertFalse(stack->responds_to_action(ae::action{ae::action_kind::drop_head}));
+    XCTAssertEqual(stack->responding_to_action(ae::action{ae::action_kind::drop_head}), responding::fallthrough);
 
-    XCTAssertEqual(responds_to_action_called_1.size(), 6);
-    XCTAssertEqual(responds_to_action_called_2.size(), 4);
+    XCTAssertEqual(responding_to_action_called_1.size(), 6);
+    XCTAssertEqual(responding_to_action_called_2.size(), 4);
 }
 
 @end

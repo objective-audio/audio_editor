@@ -14,7 +14,7 @@ struct responder_stack final {
     [[nodiscard]] static std::shared_ptr<responder_stack> make_shared();
 
     void handle_action(ae::action const &);
-    [[nodiscard]] bool responds_to_action(ae::action const &);
+    [[nodiscard]] responding responding_to_action(ae::action const &);
 
     void push_responder(std::shared_ptr<ae::responder> const &);
     void pop_responder(identifier const &);
