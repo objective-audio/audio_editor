@@ -16,23 +16,44 @@ responder_stack::responder_stack() {
 
 void responder_stack::handle_action(ae::action const &action) {
     for (auto const &pair : this->_responders) {
-        if (auto const &responder = pair.second.lock(); responder && responder->responds_to_action(action)) {
-            responder->handle_action(action);
-            return;
+        if (auto const &responder = pair.second.lock()) {
+            auto const responding = responder->responding_to_action(action);
+            switch (responding) {
+                case responding::accepting:
+                    responder->handle_action(action);
+                    return;
+                case responding::blocking:
+                    return;
+                case responding::fallthrough:
+                    break;
+            }
         }
     }
 }
 
-bool responder_stack::responds_to_action(ae::action const &action) {
+responding responder_stack::responding_to_action(ae::action const &action) {
     for (auto const &pair : this->_responders) {
-        if (auto const &responder = pair.second.lock(); responder && responder->responds_to_action(action)) {
-            return true;
+        if (auto const &responder = pair.second.lock()) {
+            auto const responding = responder->responding_to_action(action);
+            switch (responding) {
+                case responding::accepting:
+                    return responding::accepting;
+                case responding::blocking:
+                    return responding::blocking;
+                case responding::fallthrough:
+                    break;
+            }
         }
     }
-    return false;
+    return responding::fallthrough;
 }
 
 void responder_stack::push_responder(std::shared_ptr<ae::responder> const &responder) {
+    for (auto const &pair : this->_responders) {
+        if (pair.first == responder->responder_id()) {
+            throw std::runtime_error("responder exists.");
+        }
+    }
     this->_responders.emplace_front(responder->responder_id(), responder);
 }
 
