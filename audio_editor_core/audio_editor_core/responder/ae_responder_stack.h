@@ -13,6 +13,7 @@ namespace yas::ae {
 struct responder_stack final {
     [[nodiscard]] static std::shared_ptr<responder_stack> make_shared();
 
+    std::optional<ae::action> to_action(ae::key const &);
     void handle_action(ae::action const &);
     [[nodiscard]] responding responding_to_action(ae::action const &);
 

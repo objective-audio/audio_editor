@@ -15,9 +15,16 @@ struct responder_stub : ae::responder {
     std::function<responding(ae::action const &)> responding_to_action_handler = [](auto const &) {
         return responding::fallthrough;
     };
+    std::function<std::optional<ae::action>(ae::key const &)> to_action_handler = [](ae::key const &) {
+        return std::nullopt;
+    };
 
     identifier responder_id() override {
         return this->_raw_responder_id;
+    }
+
+    std::optional<ae::action> to_action(ae::key const &key) override {
+        return this->to_action_handler(key);
     }
 
     void handle_action(ae::action const &action) override {
@@ -43,11 +50,16 @@ struct responder_stub : ae::responder {
     std::shared_ptr<responder_stack> stack;
 
     std::vector<ae::action> responding_called_1;
-    std::vector<ae::action> handle_called_1;
     responding responding_result_1;
+    std::vector<ae::action> handle_called_1;
+    std::vector<ae::key> to_action_called_1;
+    std::optional<ae::action> to_action_result_1;
+
     std::vector<ae::action> responding_called_2;
-    std::vector<ae::action> handle_called_2;
     responding responding_result_2;
+    std::vector<ae::action> handle_called_2;
+    std::vector<ae::key> to_action_called_2;
+    std::optional<ae::action> to_action_result_2;
 }
 
 - (void)setUp {
@@ -61,9 +73,13 @@ struct responder_stub : ae::responder {
     auto &responding_called_1 = self->responding_called_1;
     auto &responding_result_1 = self->responding_result_1;
     auto &handle_called_1 = self->handle_called_1;
+    auto &to_action_called_1 = self->to_action_called_1;
+    auto &to_action_result_1 = self->to_action_result_1;
     auto &responding_called_2 = self->responding_called_2;
     auto &responding_result_2 = self->responding_result_2;
     auto &handle_called_2 = self->handle_called_2;
+    auto &to_action_called_2 = self->to_action_called_2;
+    auto &to_action_result_2 = self->to_action_result_2;
 
     self->responder_1->responding_to_action_handler = [&responding_called_1, &responding_result_1](auto const &action) {
         responding_called_1.push_back(action);
@@ -74,6 +90,11 @@ struct responder_stub : ae::responder {
         handle_called_1.push_back(action);
     };
 
+    self->responder_1->to_action_handler = [&to_action_called_1, &to_action_result_1](ae::key const &key) {
+        to_action_called_1.push_back(key);
+        return to_action_result_1;
+    };
+
     self->responder_2->responding_to_action_handler = [&responding_called_2, &responding_result_2](auto const &action) {
         responding_called_2.push_back(action);
         return responding_result_2;
@@ -81,6 +102,11 @@ struct responder_stub : ae::responder {
 
     self->responder_2->handle_action_handler = [&handle_called_2](auto const &action) {
         handle_called_2.push_back(action);
+    };
+
+    self->responder_2->to_action_handler = [&to_action_called_2, &to_action_result_2](ae::key const &key) {
+        to_action_called_2.push_back(key);
+        return to_action_result_2;
     };
 }
 
@@ -95,8 +121,10 @@ struct responder_stub : ae::responder {
 - (void)reset_called {
     self->responding_called_1.clear();
     self->handle_called_1.clear();
+    self->to_action_called_1.clear();
     self->responding_called_2.clear();
     self->handle_called_2.clear();
+    self->to_action_called_2.clear();
 }
 
 - (void)test_push_and_pop {
@@ -309,6 +337,61 @@ struct responder_stub : ae::responder {
         XCTAssertEqual(responding_called_2.size(), 1);
         XCTAssertEqual(responding_called_1.at(0), (ae::action{ae::action_kind::move_to_next_time_unit}));
         XCTAssertEqual(handle_called_2.size(), 0);
+    }
+
+    [self reset_called];
+}
+
+- (void)test_to_action {
+    auto const &responder_1 = self->responder_1;
+    auto const &responder_2 = self->responder_2;
+    auto const &stack = self->stack;
+
+    auto &to_action_called_1 = self->to_action_called_1;
+    auto &to_action_result_1 = self->to_action_result_1;
+    auto &to_action_called_2 = self->to_action_called_2;
+    auto &to_action_result_2 = self->to_action_result_2;
+
+    {
+        // responderひとつだけの場合
+
+        stack->push_responder(responder_1);
+
+        to_action_result_1 = ae::action{ae::action_kind::go_to_marker};
+
+        XCTAssertEqual(stack->to_action(ae::key::a), (ae::action{ae::action_kind::go_to_marker}));
+        XCTAssertEqual(to_action_called_1.size(), 1);
+        XCTAssertEqual(to_action_called_1.at(0), ae::key::a);
+    }
+
+    [self reset_called];
+
+    {
+        // responder二つで、後から追加した方が使われる
+
+        stack->push_responder(responder_2);
+
+        to_action_result_1 = ae::action{ae::action_kind::drop_head};
+        to_action_result_2 = ae::action{ae::action_kind::delete_time};
+
+        XCTAssertEqual(stack->to_action(ae::key::left), (ae::action{ae::action_kind::delete_time}));
+        XCTAssertEqual(to_action_called_1.size(), 0);
+        XCTAssertEqual(to_action_called_2.size(), 1);
+        XCTAssertEqual(to_action_called_2.at(0), ae::key::left);
+    }
+
+    [self reset_called];
+
+    {
+        // responder二つで、後から追加したほうがnullの場合にフォールバックしない
+
+        to_action_result_1 = ae::action{ae::action_kind::drop_head};
+        to_action_result_2 = std::nullopt;
+
+        XCTAssertEqual(stack->to_action(ae::key::right), std::nullopt);
+        XCTAssertEqual(to_action_called_1.size(), 0);
+        XCTAssertEqual(to_action_called_2.size(), 1);
+        XCTAssertEqual(to_action_called_2.at(0), ae::key::right);
     }
 
     [self reset_called];
