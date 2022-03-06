@@ -14,6 +14,19 @@ std::shared_ptr<responder_stack> responder_stack::make_shared() {
 responder_stack::responder_stack() {
 }
 
+std::optional<ae::action> responder_stack::to_action(ae::key const &key) {
+    if (this->_responders.size() == 0) {
+        return std::nullopt;
+    }
+
+    auto const responder = this->_responders.front().second.lock();
+    if (!responder) {
+        return std::nullopt;
+    }
+
+    return responder->to_action(key);
+}
+
 void responder_stack::handle_action(ae::action const &action) {
     for (auto const &pair : this->_responders) {
         if (auto const &responder = pair.second.lock()) {
