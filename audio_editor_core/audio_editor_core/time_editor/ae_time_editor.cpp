@@ -155,6 +155,14 @@ void time_editor::move_to_previous_unit() {
     this->set_unit_idx(this->_unit_idx->value() + 1);
 }
 
+bool time_editor::can_change_sign_to_plus() const {
+    return !this->_is_ended();
+}
+
+bool time_editor::can_change_sign_to_minus() const {
+    return !this->_is_ended();
+}
+
 void time_editor::change_sign_to_plus() {
     if (this->_is_ended()) {
         return;
@@ -175,6 +183,14 @@ void time_editor::change_sign_to_minus() {
         this->_commited_components = this->_commited_components.is_minus_replaced(true);
         this->_components_fetcher->push();
     }
+}
+
+bool time_editor::can_finish() const {
+    return !this->_is_ended();
+}
+
+bool time_editor::can_cancel() const {
+    return !this->_is_ended();
 }
 
 void time_editor::finish() {
