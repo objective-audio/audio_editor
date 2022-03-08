@@ -34,7 +34,6 @@ struct project_level final {
     std::shared_ptr<ae::zooming> const vertical_zooming;
     std::shared_ptr<ae::scrolling> const scrolling;
     std::shared_ptr<ae::player> const player;
-    std::shared_ptr<ae::action_router> const action_router;
     std::shared_ptr<ae::action_controller> const action_controller;
     std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
     std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;

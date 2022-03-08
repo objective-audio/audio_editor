@@ -10,25 +10,21 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-class action_router;
+class responder_stack;
 
 struct action_controller final {
-    [[nodiscard]] static std::shared_ptr<action_controller> make_shared(std::shared_ptr<action_router> const &);
-
-    [[nodiscard]] std::shared_ptr<action_router> const &router() const;
+    [[nodiscard]] static std::shared_ptr<action_controller> make_shared(std::shared_ptr<responder_stack> const &);
 
     void handle_action(action const &);
     void handle_key(ae::key const);
     void export_to_file(url const &);
 
-    [[nodiscard]] observing::endable observe_action(std::function<void(action const &)> &&);
     [[nodiscard]] observing::endable observe_export(std::function<void(url const &)> &&);
 
    private:
-    std::shared_ptr<action_router> const _router;
-    observing::notifier_ptr<action> const _action_notifier;
+    std::weak_ptr<responder_stack> const _responder_stack;
     observing::notifier_ptr<url> const _export_notifier;
 
-    action_controller(std::shared_ptr<action_router> const &);
+    action_controller(std::shared_ptr<responder_stack> const &);
 };
 }  // namespace yas::ae
