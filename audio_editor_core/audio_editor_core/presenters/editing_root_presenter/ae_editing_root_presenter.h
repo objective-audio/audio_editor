@@ -18,7 +18,7 @@ class file_track;
 class marker_pool;
 class project;
 class project_editor;
-class action_router;
+class responder_stack;
 
 struct editing_root_presenter final {
     [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(std::string const &project_id);
@@ -43,7 +43,7 @@ struct editing_root_presenter final {
     std::weak_ptr<file_track> const _file_track;
     std::weak_ptr<marker_pool> const _marker_pool;
     std::weak_ptr<project_editor> const _project_editor;
-    std::weak_ptr<action_router> const _action_router;
+    std::weak_ptr<responder_stack> const _responder_stack;
     observing::fetcher_ptr<file_track_event> const _file_track_event_fetcher;
     observing::fetcher_ptr<marker_pool_event> const _marker_pool_event_fetcher;
     observing::canceller_pool _pool;
@@ -51,7 +51,7 @@ struct editing_root_presenter final {
     editing_root_presenter(file_info const &file_info, std::shared_ptr<player> const &,
                            std::shared_ptr<file_track> const &, std::shared_ptr<marker_pool> const &,
                            std::shared_ptr<project> const &, std::shared_ptr<project_editor> const &,
-                           std::shared_ptr<action_router> const &);
+                           std::shared_ptr<responder_stack> const &);
 
     editing_root_presenter(editing_root_presenter const &) = delete;
     editing_root_presenter(editing_root_presenter &&) = delete;

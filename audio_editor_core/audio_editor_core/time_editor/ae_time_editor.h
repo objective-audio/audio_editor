@@ -6,11 +6,12 @@
 
 #include <audio_editor_core/ae_number_components.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
+#include <audio_editor_core/ae_responder.h>
 #include <audio_editor_core/ae_time_editor_types.h>
 #include <audio_editor_core/ae_time_presenter_dependency.h>
 
 namespace yas::ae {
-struct time_editor final {
+struct time_editor final : responder {
     [[nodiscard]] static std::shared_ptr<time_editor> make_shared(number_components const &,
                                                                   std::optional<std::size_t> const unit_idx);
 
@@ -23,6 +24,7 @@ struct time_editor final {
     void increment_number();
     void decrement_number();
 
+    [[nodiscard]] bool can_set_unit_idx() const;
     [[nodiscard]] bool can_move_to_next_unit() const;
     [[nodiscard]] bool can_move_to_previous_unit() const;
     void set_unit_idx(std::size_t const);
@@ -47,6 +49,13 @@ struct time_editor final {
     [[nodiscard]] observing::syncable observe_editing_components(std::function<void(number_components const &)> &&);
     [[nodiscard]] observing::endable observe_event(std::function<void(time_editor_event const &)> &&);
 
+    // responder
+
+    [[nodiscard]] identifier responder_id() override;
+    std::optional<ae::action> to_action(ae::key const &) override;
+    void handle_action(ae::action const &) override;
+    [[nodiscard]] responding responding_to_action(ae::action const &) override;
+
    private:
     enum class state {
         editing,
@@ -54,6 +63,7 @@ struct time_editor final {
         canceled,
     };
 
+    identifier const _responder_id;
     state _state;
     number_components const _original_components;
     number_components _commited_components;

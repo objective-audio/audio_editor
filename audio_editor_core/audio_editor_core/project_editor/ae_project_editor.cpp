@@ -4,7 +4,6 @@
 
 #include "ae_project_editor.h"
 
-#include <audio_editor_core/ae_action_router.h>
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_exporter.h>
@@ -16,6 +15,7 @@
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_level.h>
 #include <audio_editor_core/ae_time_editor_level_pool.h>
@@ -36,12 +36,13 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<nudging_for_project_editor> const &nudging,
     std::shared_ptr<timing_for_project_editor> const &timing,
     std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool) {
+    auto const &app_level = hierarchy::app_level();
     auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
-    return std::shared_ptr<project_editor>(
-        new project_editor{project_url->editing_file(), file_info, project_level->player, file_track, marker_pool,
-                           edge_editor, pasteboard, database, exporter, project_level->action_controller,
-                           project_level->dialog_presenter, nudging, timing, time_editor_level_pool});
+    return std::shared_ptr<project_editor>(new project_editor{
+        project_url->editing_file(), file_info, project_level->player, file_track, marker_pool, edge_editor, pasteboard,
+        database, exporter, project_level->action_controller, project_level->dialog_presenter, nudging, timing,
+        app_level->responder_stack, time_editor_level_pool});
 }
 
 project_editor::project_editor(url const &editing_file_url, ae::file_info const &file_info,
@@ -56,6 +57,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<nudging_for_project_editor> const &nudging,
                                std::shared_ptr<timing_for_project_editor> const &timing,
+                               std::shared_ptr<responder_stack> const &responder_stack,
                                std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
@@ -72,6 +74,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _dialog_presenter(dialog_presenter),
       _nudging(nudging),
       _timing(timing),
+      _responder_stack(responder_stack),
       _time_editor_level_pool(time_editor_level_pool) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
@@ -219,132 +222,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
 
         this->_edge_editor->set_edge({.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
     });
-
-    action_controller
-        ->observe_action([this](action const &action) {
-            switch (action.kind) {
-                case action_kind::toggle_play:
-                    this->_player->set_playing(!this->_player->is_playing());
-                    break;
-                case action_kind::nudge_previous:
-                    this->nudge_previous(1);
-                    break;
-                case action_kind::nudge_next:
-                    this->nudge_next(1);
-                    break;
-                case action_kind::nudge_previous_more:
-                    this->nudge_previous(10);
-                    break;
-                case action_kind::nudge_next_more:
-                    this->nudge_next(10);
-                    break;
-                case action_kind::rotate_nudging_next_unit:
-                    this->_nudging->rotate_next_unit();
-                    break;
-                case action_kind::rotate_nudging_previous_unit:
-                    this->_nudging->rotate_previous_unit();
-                    break;
-                case action_kind::rotate_timing_fraction:
-                    this->rotate_timing_fraction();
-                    break;
-                case action_kind::jump_previous:
-                    this->jump_to_previous_edge();
-                    break;
-                case action_kind::jump_next:
-                    this->jump_to_next_edge();
-                    break;
-                case action_kind::jump_to_beginning:
-                    this->jump_to_beginning();
-                    break;
-                case action_kind::jump_to_end:
-                    this->jump_to_end();
-                    break;
-                case action_kind::drop_head:
-                    this->drop_head();
-                    break;
-                case action_kind::split:
-                    this->split();
-                    break;
-                case action_kind::drop_tail:
-                    this->drop_tail();
-                    break;
-                case action_kind::erase:
-                    this->erase();
-                    break;
-                case action_kind::insert_marker:
-                    this->insert_marker();
-                    break;
-                case action_kind::set_begin_edge:
-                    this->set_begin_edge();
-                    break;
-                case action_kind::set_end_edge:
-                    this->set_end_edge();
-                    break;
-                case action_kind::return_to_zero:
-                    this->return_to_zero();
-                    break;
-                case action_kind::go_to_marker:
-                    this->go_to_marker(std::stoi(action.value));
-                    break;
-                case action_kind::undo:
-                    this->undo();
-                    break;
-                case action_kind::redo:
-                    this->redo();
-                    break;
-                case action_kind::select_file_for_export:
-                    this->select_file_for_export();
-                    break;
-                case action_kind::cut:
-                    this->cut_and_offset();
-                    break;
-                case action_kind::copy:
-                    this->copy();
-                    break;
-                case action_kind::paste:
-                    this->paste_and_offset();
-                    break;
-
-                case action_kind::begin_time_editing:
-                    this->begin_time_editing(std::nullopt);
-                    break;
-                case action_kind::finish_time_editing:
-                    this->finish_time_editing();
-                    break;
-                case action_kind::cancel_time_editing:
-                    this->cancel_time_editing();
-                    break;
-                case action_kind::move_to_previous_time_unit:
-                    this->move_to_previous_time_unit();
-                    break;
-                case action_kind::move_to_next_time_unit:
-                    this->move_to_next_time_unit();
-                    break;
-                case action_kind::input_time:
-                    this->input_time_number(std::stoi(action.value));
-                    break;
-                case action_kind::delete_time:
-                    this->delete_time_number();
-                    break;
-                case action_kind::increment_time:
-                    this->increment_time_number();
-                    break;
-                case action_kind::decrement_time:
-                    this->decrement_time_number();
-                    break;
-                case action_kind::change_time_sign_to_plus:
-                    this->change_time_sign_to_plus();
-                    break;
-                case action_kind::change_time_sign_to_minus:
-                    this->change_time_sign_to_minus();
-                    break;
-                case action_kind::select_time_unit:
-                    this->select_time_unit(std::stoi(action.value));
-                    break;
-            }
-        })
-        .end()
-        ->add_to(this->_pool);
 
     action_controller->observe_export([this](url const &url) { this->export_to_file(url); }).end()->add_to(this->_pool);
 
@@ -821,28 +698,44 @@ bool project_editor::can_end_time_editing() const {
     return this->_time_editor_level_pool->level() != nullptr;
 }
 
+bool project_editor::can_input_time_number() const {
+    return this->_time_editor_level_pool->level() != nullptr;
+}
+
+bool project_editor::can_select_time_unit() const {
+    return this->can_begin_time_editing();
+}
+
 void project_editor::begin_time_editing(std::optional<std::size_t> const unit_idx) {
     if (!this->can_begin_time_editing()) {
         return;
     }
-
-    this->_action_controller->router()->set_kind(action_routing_kind::time);
 
     auto const current_frame = this->_player->current_frame();
     auto const components = this->_timing->components(current_frame);
 
     this->_time_editor_level_pool->add_level(components.raw_components(), unit_idx);
 
-    this->_time_editor_level_pool->level()
-        ->time_editor
+    auto const &time_editor = this->_time_editor_level_pool->level()->time_editor;
+
+    if (auto const responder_stack = this->_responder_stack.lock()) {
+        responder_stack->push_responder(time_editor);
+    }
+
+    time_editor
         ->observe_event([this](time_editor_event const &) {
             if (auto const components = this->_time_editor_level_pool->level()->time_editor->finalized_components()) {
                 auto const frame = this->_timing->frame(timing_components{components.value()});
                 this->_player->seek(frame);
             }
 
+            if (auto const &level = this->_time_editor_level_pool->level()) {
+                if (auto const responder_stack = this->_responder_stack.lock()) {
+                    responder_stack->pop_responder(level->time_editor->responder_id());
+                }
+            }
+
             this->_time_editor_level_pool->remove_level();
-            this->_action_controller->router()->set_kind(action_routing_kind::normal);
             this->_time_editing_canceller->cancel();
             this->_time_editing_canceller = nullptr;
         })
@@ -860,10 +753,6 @@ void project_editor::cancel_time_editing() {
     if (auto const &level = this->_time_editor_level_pool->level()) {
         level->time_editor->cancel();
     }
-}
-
-bool project_editor::can_input_time_number() const {
-    return this->_time_editor_level_pool->level() != nullptr;
 }
 
 void project_editor::input_time_number(uint32_t const number) {
@@ -921,6 +810,279 @@ void project_editor::select_time_unit(std::size_t const unit_idx) {
         level->time_editor->set_unit_idx(unit_idx);
     }
 }
+
+#pragma mark - responder
+
+identifier project_editor::responder_id() {
+    return this->_responder_id;
+}
+
+std::optional<ae::action> project_editor::to_action(ae::key const &key) {
+    switch (key) {
+        case key::space:
+            return action_kind::toggle_play;
+        case key::del:
+            return action_kind::erase;
+        case key::a:
+            return action_kind::drop_head;
+        case key::s:
+            return action_kind::split;
+        case key::d:
+            return action_kind::drop_tail;
+        case key::n:
+            return action_kind::rotate_nudging_next_unit;
+        case key::shift_n:
+            return action_kind::rotate_nudging_previous_unit;
+        case key::f:
+            return action_kind::rotate_timing_fraction;
+        case key::t:
+            return action_kind::begin_time_editing;
+        case key::left_bracket:
+            return action_kind::set_begin_edge;
+        case key::right_bracket:
+            return action_kind::set_end_edge;
+        case key::left:
+            return action_kind::nudge_previous;
+        case key::right:
+            return action_kind::nudge_next;
+        case key::shift_left:
+            return action_kind::nudge_previous_more;
+        case key::shift_right:
+            return action_kind::nudge_next_more;
+        case key::num_0:
+            return action_kind::return_to_zero;
+        case key::num_1:
+            return action{action_kind::go_to_marker, "0"};
+        case key::num_2:
+            return action{action_kind::go_to_marker, "1"};
+        case key::num_3:
+            return action{action_kind::go_to_marker, "2"};
+        case key::num_4:
+            return action{action_kind::go_to_marker, "3"};
+        case key::num_5:
+            return action{action_kind::go_to_marker, "4"};
+        case key::num_6:
+            return action{action_kind::go_to_marker, "5"};
+        case key::num_7:
+            return action{action_kind::go_to_marker, "6"};
+        case key::num_8:
+            return action{action_kind::go_to_marker, "7"};
+        case key::num_9:
+            return action{action_kind::go_to_marker, "8"};
+
+        case key::esc:
+        case key::plus:
+        case key::hyphen:
+        case key::ret:
+        case key::tab:
+        case key::shift_tab:
+        case key::up:
+        case key::down:
+            return std::nullopt;
+    }
+}
+
+void project_editor::handle_action(ae::action const &action) {
+    auto const responding = this->responding_to_action(action);
+    switch (responding) {
+        case responding::accepting: {
+            switch (action.kind) {
+                case action_kind::toggle_play:
+                    this->_player->set_playing(!this->_player->is_playing());
+                    break;
+                case action_kind::nudge_previous:
+                    this->nudge_previous(1);
+                    break;
+                case action_kind::nudge_next:
+                    this->nudge_next(1);
+                    break;
+                case action_kind::nudge_previous_more:
+                    this->nudge_previous(10);
+                    break;
+                case action_kind::nudge_next_more:
+                    this->nudge_next(10);
+                    break;
+                case action_kind::rotate_nudging_next_unit:
+                    this->_nudging->rotate_next_unit();
+                    break;
+                case action_kind::rotate_nudging_previous_unit:
+                    this->_nudging->rotate_previous_unit();
+                    break;
+                case action_kind::rotate_timing_fraction:
+                    this->rotate_timing_fraction();
+                    break;
+                case action_kind::jump_previous:
+                    this->jump_to_previous_edge();
+                    break;
+                case action_kind::jump_next:
+                    this->jump_to_next_edge();
+                    break;
+                case action_kind::jump_to_beginning:
+                    this->jump_to_beginning();
+                    break;
+                case action_kind::jump_to_end:
+                    this->jump_to_end();
+                    break;
+                case action_kind::drop_head:
+                    this->drop_head();
+                    break;
+                case action_kind::split:
+                    this->split();
+                    break;
+                case action_kind::drop_tail:
+                    this->drop_tail();
+                    break;
+                case action_kind::erase:
+                    this->erase();
+                    break;
+                case action_kind::insert_marker:
+                    this->insert_marker();
+                    break;
+                case action_kind::set_begin_edge:
+                    this->set_begin_edge();
+                    break;
+                case action_kind::set_end_edge:
+                    this->set_end_edge();
+                    break;
+                case action_kind::return_to_zero:
+                    this->return_to_zero();
+                    break;
+                case action_kind::go_to_marker:
+                    this->go_to_marker(std::stoi(action.value));
+                    break;
+                case action_kind::undo:
+                    this->undo();
+                    break;
+                case action_kind::redo:
+                    this->redo();
+                    break;
+                case action_kind::select_file_for_export:
+                    this->select_file_for_export();
+                    break;
+                case action_kind::cut:
+                    this->cut_and_offset();
+                    break;
+                case action_kind::copy:
+                    this->copy();
+                    break;
+                case action_kind::paste:
+                    this->paste_and_offset();
+                    break;
+
+                case action_kind::begin_time_editing:
+                    this->begin_time_editing(std::nullopt);
+                    break;
+                case action_kind::select_time_unit:
+                    this->select_time_unit(std::stoi(action.value));
+                    break;
+
+                    // 以下、time_editor用
+                case action_kind::finish_time_editing:
+                case action_kind::cancel_time_editing:
+                case action_kind::move_to_previous_time_unit:
+                case action_kind::move_to_next_time_unit:
+                case action_kind::input_time:
+                case action_kind::delete_time:
+                case action_kind::increment_time:
+                case action_kind::decrement_time:
+                case action_kind::change_time_sign_to_plus:
+                case action_kind::change_time_sign_to_minus:
+                    break;
+            }
+        } break;
+
+        case responding::blocking:
+        case responding::fallthrough:
+            break;
+    }
+}
+
+responding project_editor::responding_to_action(ae::action const &action) {
+    auto const to_responding = [](bool const &flag) { return flag ? responding::accepting : responding::blocking; };
+
+    switch (action.kind) {
+        case action_kind::toggle_play:
+            return responding::accepting;
+        case action_kind::nudge_previous:
+        case action_kind::nudge_next:
+        case action_kind::nudge_previous_more:
+        case action_kind::nudge_next_more:
+            return to_responding(this->can_nudge());
+        case action_kind::rotate_nudging_next_unit:
+        case action_kind::rotate_nudging_previous_unit:
+            return responding::accepting;
+        case action_kind::rotate_timing_fraction:
+            return responding::accepting;
+
+        case action_kind::jump_previous:
+            return to_responding(this->can_jump_to_previous_edge());
+        case action_kind::jump_next:
+            return to_responding(this->can_jump_to_next_edge());
+        case action_kind::jump_to_beginning:
+            return to_responding(this->can_jump_to_beginnig());
+        case action_kind::jump_to_end:
+            return to_responding(this->can_jump_to_end());
+
+        case action_kind::drop_head:
+            return to_responding(this->can_split());
+        case action_kind::split:
+            return to_responding(this->can_split());
+        case action_kind::drop_tail:
+            return to_responding(this->can_split());
+
+        case action_kind::erase:
+            return to_responding(this->can_erase());
+
+        case action_kind::insert_marker:
+            return to_responding(this->can_insert_marker());
+
+        case action_kind::return_to_zero:
+            return to_responding(this->can_return_to_zero());
+        case action_kind::go_to_marker:
+            return to_responding(this->can_go_to_marker(std::stoi(action.value)));
+
+        case action_kind::undo:
+            return to_responding(this->can_undo());
+        case action_kind::redo:
+            return to_responding(this->can_redo());
+
+        case action_kind::select_file_for_export:
+            return to_responding(this->can_select_file_for_export());
+
+        case action_kind::cut:
+            return to_responding(this->can_cut());
+        case action_kind::copy:
+            return to_responding(this->can_copy());
+        case action_kind::paste:
+            return to_responding(this->can_paste());
+
+        case action_kind::cancel_time_editing:
+            return to_responding(this->can_end_time_editing());
+        case action_kind::begin_time_editing:
+            return to_responding(this->can_begin_time_editing());
+        case action_kind::select_time_unit:
+            return to_responding(this->can_select_time_unit());
+
+        case action_kind::set_begin_edge:
+            return to_responding(this->can_set_begin_edge());
+        case action_kind::set_end_edge:
+            return to_responding(this->can_set_end_edge());
+
+            // 以下、time_editor用
+        case action_kind::finish_time_editing:
+        case action_kind::move_to_previous_time_unit:
+        case action_kind::move_to_next_time_unit:
+        case action_kind::input_time:
+        case action_kind::delete_time:
+        case action_kind::increment_time:
+        case action_kind::decrement_time:
+        case action_kind::change_time_sign_to_plus:
+        case action_kind::change_time_sign_to_minus:
+            return responding::fallthrough;
+    }
+}
+
+#pragma mark - private
 
 std::optional<frame_index_t> project_editor::_previous_jumpable_frame() const {
     frame_index_t const current_frame = this->_player->current_frame();
