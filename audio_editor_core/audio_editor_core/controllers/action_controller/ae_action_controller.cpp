@@ -31,11 +31,3 @@ void action_controller::handle_key(ae::key const key) {
         }
     }
 }
-
-void action_controller::export_to_file(url const &url) {
-    this->_export_notifier->notify(url);
-}
-
-observing::endable action_controller::observe_export(std::function<void(url const &)> &&handler) {
-    return this->_export_notifier->observe(std::move(handler));
-}

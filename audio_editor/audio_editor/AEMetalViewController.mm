@@ -67,11 +67,9 @@ using namespace yas::ae;
             panel.nameFieldStringValue = @"Untitled";
 
             if ([panel runModal] == NSModalResponseOK) {
-                auto const path = to_string((__bridge CFStringRef)panel.URL.path);
-                auto const url = url::file_url(path);
-
                 if (auto const controller = weak_controller.lock()) {
-                    controller->export_to_file(url);
+                    auto const path = to_string((__bridge CFStringRef)panel.URL.path);
+                    controller->handle_action({action_kind::export_to_file, path});
                 }
             }
         })
