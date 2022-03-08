@@ -70,6 +70,11 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     void remove_level() override {
         this->file_info_value = std::nullopt;
     }
+
+    std::shared_ptr<project_editor_level> const &level() const override {
+        static std::shared_ptr<project_editor_level> const _null_level;
+        return _null_level;
+    }
 };
 }
 
