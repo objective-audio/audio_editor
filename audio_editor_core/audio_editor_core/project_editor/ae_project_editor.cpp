@@ -306,7 +306,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                     break;
 
                 case action_kind::begin_time_editing:
-                    this->begin_time_editing();
+                    this->begin_time_editing(std::nullopt);
                     break;
                 case action_kind::finish_time_editing:
                     this->finish_time_editing();
@@ -821,7 +821,7 @@ bool project_editor::can_end_time_editing() const {
     return this->_time_editor_level_pool->level() != nullptr;
 }
 
-void project_editor::begin_time_editing() {
+void project_editor::begin_time_editing(std::optional<std::size_t> const unit_idx) {
     if (!this->can_begin_time_editing()) {
         return;
     }
@@ -831,7 +831,7 @@ void project_editor::begin_time_editing() {
     auto const current_frame = this->_player->current_frame();
     auto const components = this->_timing->components(current_frame);
 
-    this->_time_editor_level_pool->add_level(components.raw_components());
+    this->_time_editor_level_pool->add_level(components.raw_components(), unit_idx);
 
     this->_time_editor_level_pool->level()
         ->time_editor
@@ -915,7 +915,7 @@ void project_editor::change_time_sign_to_minus() {
 }
 
 void project_editor::select_time_unit(std::size_t const unit_idx) {
-    this->begin_time_editing();
+    this->begin_time_editing(unit_idx);
 
     if (auto const &level = this->_time_editor_level_pool->level()) {
         level->time_editor->set_unit_idx(unit_idx);

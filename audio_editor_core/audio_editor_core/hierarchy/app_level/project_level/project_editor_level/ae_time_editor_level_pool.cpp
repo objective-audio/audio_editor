@@ -19,12 +19,12 @@ time_editor_level_pool::time_editor_level_pool(std::string const &identifier)
       _level(observing::value ::holder<std::shared_ptr<time_editor_level>>::make_shared(nullptr)) {
 }
 
-void time_editor_level_pool::add_level(number_components const &components) {
+void time_editor_level_pool::add_level(number_components const &components, std::optional<std::size_t> const unit_idx) {
     if (this->_level->value() != nullptr) {
         throw std::runtime_error("level is not null.");
     }
 
-    this->_level->set_value(time_editor_level::make_shared(components));
+    this->_level->set_value(time_editor_level::make_shared(components, unit_idx));
 }
 
 void time_editor_level_pool::remove_level() {

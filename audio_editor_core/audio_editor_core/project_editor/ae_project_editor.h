@@ -84,7 +84,7 @@ struct project_editor final {
     [[nodiscard]] bool can_begin_time_editing() const;
     [[nodiscard]] bool can_end_time_editing() const;
     [[nodiscard]] bool can_input_time_number() const;
-    void begin_time_editing();
+    void begin_time_editing(std::optional<std::size_t> const unit_idx);
     void finish_time_editing();
     void cancel_time_editing();
     void input_time_number(uint32_t const);

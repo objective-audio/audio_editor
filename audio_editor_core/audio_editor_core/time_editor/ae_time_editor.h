@@ -11,7 +11,8 @@
 
 namespace yas::ae {
 struct time_editor final {
-    [[nodiscard]] static std::shared_ptr<time_editor> make_shared(number_components const &);
+    [[nodiscard]] static std::shared_ptr<time_editor> make_shared(number_components const &,
+                                                                  std::optional<std::size_t> const unit_idx);
 
     [[nodiscard]] bool can_input_number() const;
     [[nodiscard]] bool can_delete_number() const;
@@ -62,7 +63,7 @@ struct time_editor final {
     observing::fetcher_ptr<number_components> _components_fetcher;
     observing::notifier_ptr<time_editor_event> const _event_notifier;
 
-    time_editor(number_components const &);
+    time_editor(number_components const &, std::optional<std::size_t> const unit_idx);
 
     std::optional<uint32_t> _editing_unit_value() const;
     void _commit_unit_value();
