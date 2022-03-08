@@ -28,9 +28,13 @@ struct time_editor final {
     void move_to_next_unit();
     void move_to_previous_unit();
 
+    [[nodiscard]] bool can_change_sign_to_plus() const;
+    [[nodiscard]] bool can_change_sign_to_minus() const;
     void change_sign_to_plus();
     void change_sign_to_minus();
 
+    [[nodiscard]] bool can_finish() const;
+    [[nodiscard]] bool can_cancel() const;
     void finish();
     void cancel();
 
