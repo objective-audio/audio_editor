@@ -38,10 +38,10 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool) {
     auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
-    return std::shared_ptr<project_editor>(new project_editor{
-        project_url->editing_file(), file_info, project_level->player, file_track, marker_pool, edge_editor, pasteboard,
-        database, exporter, project_level->action_controller, project_level->dialog_presenter, nudging, timing,
-        project_level->responder_stack, time_editor_level_pool});
+    return std::shared_ptr<project_editor>(
+        new project_editor{project_url->editing_file(), file_info, project_level->player, file_track, marker_pool,
+                           edge_editor, pasteboard, database, exporter, project_level->dialog_presenter, nudging,
+                           timing, project_level->responder_stack, time_editor_level_pool});
 }
 
 project_editor::project_editor(url const &editing_file_url, ae::file_info const &file_info,
@@ -52,7 +52,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
                                std::shared_ptr<database_for_project_editor> const &database,
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
-                               std::shared_ptr<action_controller> const &action_controller,
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<nudging_for_project_editor> const &nudging,
                                std::shared_ptr<timing_for_project_editor> const &timing,
@@ -69,7 +68,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _pasteboard(pasteboard),
       _database(database),
       _exporter(exporter),
-      _action_controller(action_controller),
       _dialog_presenter(dialog_presenter),
       _nudging(nudging),
       _timing(timing),
