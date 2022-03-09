@@ -4,7 +4,6 @@
 
 #include "ae_project_level.h"
 
-#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_context_menu_presenter.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
@@ -36,7 +35,6 @@ project_level::project_level(std::string const &identifier, url const &file_url,
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_level->system_url->playing_directory(), identifier, this->scrolling)),
       responder_stack(responder_stack::make_shared()),
-      action_controller(action_controller::make_shared(this->responder_stack)),
       dialog_presenter(dialog_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       editor_level_pool(project_editor_level_pool::make_shared(identifier)),

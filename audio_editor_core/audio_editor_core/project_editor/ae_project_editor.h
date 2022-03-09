@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_project_dependency.h>
@@ -14,6 +13,7 @@
 namespace yas::ae {
 class time_editor;
 class time_editor_level_pool;
+class responder_stack;
 
 struct project_editor final : responder {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
@@ -117,7 +117,6 @@ struct project_editor final : responder {
     std::shared_ptr<pasteboard_for_project_editor> const _pasteboard;
     std::shared_ptr<database_for_project_editor> const _database;
     std::shared_ptr<exporter_for_project_editor> const _exporter;
-    std::shared_ptr<action_controller> const _action_controller;
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
     std::shared_ptr<nudging_for_project_editor> const _nudging;
     std::shared_ptr<timing_for_project_editor> const _timing;
@@ -134,9 +133,9 @@ struct project_editor final : responder {
         std::shared_ptr<file_track_for_project_editor> const &, std::shared_ptr<marker_pool_for_project_editor> const &,
         std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
         std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
-        std::shared_ptr<action_controller> const &, std::shared_ptr<dialog_presenter> const &,
-        std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
-        std::shared_ptr<responder_stack> const &, std::shared_ptr<time_editor_level_pool> const &);
+        std::shared_ptr<dialog_presenter> const &, std::shared_ptr<nudging_for_project_editor> const &,
+        std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<responder_stack> const &,
+        std::shared_ptr<time_editor_level_pool> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

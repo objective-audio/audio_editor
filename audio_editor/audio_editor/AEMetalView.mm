@@ -18,7 +18,7 @@ using namespace yas::ae;
 
 @implementation AEMetalView {
     std::weak_ptr<context_menu_presenter> _context_menu_presenter;
-    std::weak_ptr<action_controller> _action_controller;
+    std::shared_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
 }
 
@@ -26,7 +26,7 @@ using namespace yas::ae;
     auto const &project_level = hierarchy::project_level_for_id(project_id);
 
     self->_context_menu_presenter = project_level->context_menu_presenter;
-    self->_action_controller = project_level->action_controller;
+    self->_action_controller = action_controller::make_shared(project_id);
 
     auto *const unowned = [[YASUnownedObject<AEMetalView *> alloc] initWithObject:self];
 
@@ -81,14 +81,12 @@ using namespace yas::ae;
 
 - (void)contextMenuItemClicked:(NSMenuItem *)menuItem {
     if (auto const presenter = self->_context_menu_presenter.lock()) {
-        if (auto const controller = self->_action_controller.lock()) {
-            if (auto const &context_menu = presenter->context_menu()) {
-                auto const &context_menu_value = context_menu.value();
-                auto const &idx = menuItem.tag;
-                if (idx < context_menu_value.actions.size()) {
-                    if (auto const &action = context_menu_value.actions.at(idx)) {
-                        controller->handle_action(action.value());
-                    }
+        if (auto const &context_menu = presenter->context_menu()) {
+            auto const &context_menu_value = context_menu.value();
+            auto const &idx = menuItem.tag;
+            if (idx < context_menu_value.actions.size()) {
+                if (auto const &action = context_menu_value.actions.at(idx)) {
+                    self->_action_controller->handle_action(action.value());
                 }
             }
         }
