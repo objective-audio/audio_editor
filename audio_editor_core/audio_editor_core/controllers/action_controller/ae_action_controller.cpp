@@ -4,10 +4,16 @@
 
 #include "ae_action_controller.h"
 
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_responder_stack.h>
 
 using namespace yas;
 using namespace yas::ae;
+
+std::shared_ptr<action_controller> action_controller::make_shared(std::string const &project_id) {
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
+    return make_shared(project_level->responder_stack);
+}
 
 std::shared_ptr<action_controller> action_controller::make_shared(
     std::shared_ptr<responder_stack> const &responder_stack) {

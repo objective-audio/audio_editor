@@ -13,6 +13,7 @@ namespace yas::ae {
 class responder_stack;
 
 struct action_controller final {
+    [[nodiscard]] static std::shared_ptr<action_controller> make_shared(std::string const &project_id);
     [[nodiscard]] static std::shared_ptr<action_controller> make_shared(std::shared_ptr<responder_stack> const &);
 
     void handle_action(action const &);
