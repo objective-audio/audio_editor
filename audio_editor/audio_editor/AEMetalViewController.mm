@@ -22,7 +22,7 @@ using namespace yas::ae;
 
 @implementation AEMetalViewController {
     std::weak_ptr<ui_root_level> _root_level;
-    std::weak_ptr<action_controller> _action_controller;
+    std::shared_ptr<action_controller> _action_controller;
     std::weak_ptr<context_menu_presenter> _context_menu_presenter;
     observing::canceller_pool _pool;
 }
@@ -53,14 +53,14 @@ using namespace yas::ae;
     self->_root_level = ui_root_level_pool->level_for_view_id(self.project_view_id);
 
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    self->_action_controller = project_level->action_controller;
+    self->_action_controller = action_controller::make_shared(project_id);
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
                         event_manager:standard->event_manager()];
 
     project_level->dialog_presenter
-        ->observe_event([weak_controller = self->_action_controller](dialog_event const &event) {
+        ->observe_event([weak_controller = to_weak(self->_action_controller)](dialog_event const &event) {
             auto const panel = [NSSavePanel savePanel];
             panel.canCreateDirectories = YES;
             panel.allowedFileTypes = @[@"wav"];
@@ -80,75 +80,51 @@ using namespace yas::ae;
 }
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::jump_previous);
-    }
+    self->_action_controller->handle_action(action_kind::jump_previous);
 }
 
 - (IBAction)jumpNext:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::jump_next);
-    }
+    self->_action_controller->handle_action(action_kind::jump_next);
 }
 
 - (IBAction)jumpToBeginning:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::jump_to_beginning);
-    }
+    self->_action_controller->handle_action(action_kind::jump_to_beginning);
 }
 
 - (IBAction)jumpToEnd:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::jump_to_end);
-    }
+    self->_action_controller->handle_action(action_kind::jump_to_end);
 }
 
 - (IBAction)insertMarker:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::insert_marker);
-    }
+    self->_action_controller->handle_action(action_kind::insert_marker);
 }
 
 - (IBAction)returnToZero:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::return_to_zero);
-    }
+    self->_action_controller->handle_action(action_kind::return_to_zero);
 }
 
 - (IBAction)undo:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::undo);
-    }
+    self->_action_controller->handle_action(action_kind::undo);
 }
 
 - (IBAction)redo:(NSMenuItem *)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::redo);
-    }
+    self->_action_controller->handle_action(action_kind::redo);
 }
 
 - (IBAction)exportToFile:(id)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::select_file_for_export);
-    }
+    self->_action_controller->handle_action(action_kind::select_file_for_export);
 }
 
 - (IBAction)cut:(id)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::cut);
-    }
+    self->_action_controller->handle_action(action_kind::cut);
 }
 
 - (IBAction)copy:(id)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::copy);
-    }
+    self->_action_controller->handle_action(action_kind::copy);
 }
 
 - (IBAction)paste:(id)sender {
-    if (auto const controller = self->_action_controller.lock()) {
-        controller->handle_action(action_kind::paste);
-    }
+    self->_action_controller->handle_action(action_kind::paste);
 }
 
 #pragma mark -
