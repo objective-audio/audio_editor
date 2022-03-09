@@ -223,8 +223,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         this->_edge_editor->set_edge({.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
     });
 
-    action_controller->observe_export([this](url const &url) { this->export_to_file(url); }).end()->add_to(this->_pool);
-
     this->_player->begin_rendering();
 }
 
@@ -959,6 +957,9 @@ void project_editor::handle_action(ae::action const &action) {
                 case action_kind::select_file_for_export:
                     this->select_file_for_export();
                     break;
+                case action_kind::export_to_file:
+                    this->export_to_file(url::file_url(action.value));
+                    break;
                 case action_kind::cut:
                     this->cut_and_offset();
                     break;
@@ -1048,6 +1049,8 @@ responding project_editor::responding_to_action(ae::action const &action) {
 
         case action_kind::select_file_for_export:
             return to_responding(this->can_select_file_for_export());
+        case action_kind::export_to_file:
+            return to_responding(this->can_export_to_file());
 
         case action_kind::cut:
             return to_responding(this->can_cut());

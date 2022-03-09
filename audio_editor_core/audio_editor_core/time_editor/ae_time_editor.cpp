@@ -400,6 +400,7 @@ void time_editor::handle_action(ae::action const &action) {
                 case action_kind::undo:
                 case action_kind::redo:
                 case action_kind::select_file_for_export:
+                case action_kind::export_to_file:
                 case action_kind::cut:
                 case action_kind::copy:
                 case action_kind::paste:
@@ -464,6 +465,7 @@ responding time_editor::responding_to_action(ae::action const &action) {
         case action_kind::undo:
         case action_kind::redo:
         case action_kind::select_file_for_export:
+        case action_kind::export_to_file:
         case action_kind::cut:
         case action_kind::copy:
         case action_kind::paste:

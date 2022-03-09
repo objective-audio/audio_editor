@@ -17,9 +17,6 @@ struct action_controller final {
 
     void handle_action(action const &);
     void handle_key(ae::key const);
-    void export_to_file(url const &);
-
-    [[nodiscard]] observing::endable observe_export(std::function<void(url const &)> &&);
 
    private:
     std::weak_ptr<responder_stack> const _responder_stack;

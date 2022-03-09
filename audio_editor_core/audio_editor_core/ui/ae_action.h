@@ -32,6 +32,7 @@ enum class action_kind {
     undo,
     redo,
     select_file_for_export,
+    export_to_file,
     cut,
     copy,
     paste,
