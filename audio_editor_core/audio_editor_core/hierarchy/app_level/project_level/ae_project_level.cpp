@@ -14,6 +14,7 @@
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor_level_pool.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_zooming.h>
@@ -34,11 +35,12 @@ project_level::project_level(std::string const &identifier, url const &file_url,
       vertical_zooming(zooming::make_shared()),
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_level->system_url->playing_directory(), identifier, this->scrolling)),
-      action_controller(action_controller::make_shared(app_level->responder_stack)),
+      responder_stack(responder_stack::make_shared()),
+      action_controller(action_controller::make_shared(this->responder_stack)),
       dialog_presenter(dialog_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       editor_level_pool(project_editor_level_pool::make_shared(identifier)),
       project(project::make_shared(identifier, file_url, this->project_url, app_level->file_importer,
-                                   app_level->file_loader, this->editor_level_pool)) {
+                                   app_level->file_loader, this->responder_stack, this->editor_level_pool)) {
     this->project->setup();
 }
