@@ -17,9 +17,11 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &project_id) {
     auto const presenter = time_presenter::make_shared(project_id.identifier);
+    auto const action_controller = action_controller::make_shared(project_id.identifier);
+
     auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
-    auto const &action_controller = hierarchy::project_level_for_id(project_id.identifier)->action_controller;
+
     return std::shared_ptr<ui_time>(
         new ui_time{ui_root_level->standard, ui_root_level->texture, app_level->color, presenter, action_controller});
 }
@@ -54,9 +56,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
         ->observe([this](auto const &context) {
             switch (context.method) {
                 case ui::button::method::ended:
-                    if (auto const controller = this->_action_controller.lock()) {
-                        controller->handle_action({action_kind::begin_time_editing});
-                    }
+                    this->_action_controller->handle_action({action_kind::begin_time_editing});
                     break;
                 default:
                     break;
@@ -160,20 +160,18 @@ void ui_time::_resize_buttons() {
 
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
-            auto canceller =
-                button
-                    ->observe([this, idx](auto const &context) {
-                        switch (context.method) {
-                            case ui::button::method::ended: {
-                                if (auto const controller = this->_action_controller.lock()) {
-                                    controller->handle_action({action_kind::select_time_unit, std::to_string(idx)});
-                                }
-                            } break;
-                            default:
-                                break;
-                        }
-                    })
-                    .end();
+            auto canceller = button
+                                 ->observe([this, idx](auto const &context) {
+                                     switch (context.method) {
+                                         case ui::button::method::ended: {
+                                             this->_action_controller->handle_action(
+                                                 {action_kind::select_time_unit, std::to_string(idx)});
+                                         } break;
+                                         default:
+                                             break;
+                                     }
+                                 })
+                                 .end();
 
             this->_buttons_root_node->add_sub_node(button->rect_plane()->node());
 
