@@ -23,7 +23,6 @@ using namespace yas::ae;
 @implementation AEMetalViewController {
     std::weak_ptr<ui_root_level> _root_level;
     std::shared_ptr<action_controller> _action_controller;
-    std::weak_ptr<context_menu_presenter> _context_menu_presenter;
     observing::canceller_pool _pool;
 }
 
