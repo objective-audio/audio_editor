@@ -16,10 +16,10 @@ std::shared_ptr<project> project::make_shared(
     std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &project_url,
     std::shared_ptr<file_importer_for_project> const &file_importer,
     std::shared_ptr<file_loader_for_project> const &file_loader,
+    std::shared_ptr<responder_stack_for_project> const &responder_stack,
     std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool) {
-    auto const &app_level = hierarchy::app_level();
-    auto project = std::shared_ptr<ae::project>(new ae::project{
-        identifier, file_url, project_url, file_importer, file_loader, app_level->responder_stack, editor_level_pool});
+    auto project = std::shared_ptr<ae::project>(new ae::project{identifier, file_url, project_url, file_importer,
+                                                                file_loader, responder_stack, editor_level_pool});
     project->_weak_project = project;
     return project;
 }
@@ -28,7 +28,7 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<project_url_for_project> const &project_url,
                  std::shared_ptr<file_importer_for_project> const &file_importer,
                  std::shared_ptr<file_loader_for_project> const &file_loader,
-                 std::shared_ptr<responder_stack> const &responder_stack,
+                 std::shared_ptr<responder_stack_for_project> const &responder_stack,
                  std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool)
     : _identifier(identifier),
       _file_url(file_url),

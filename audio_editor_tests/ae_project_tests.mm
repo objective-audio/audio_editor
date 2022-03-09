@@ -60,6 +60,11 @@ struct file_loader_stub final : file_loader_for_project {
     }
 };
 
+struct responder_stack_stub final : responder_stack_for_project {
+    void push_responder(std::shared_ptr<ae::responder> const &) override {
+    }
+};
+
 struct project_editor_level_pool_stub final : project_editor_level_pool_for_project {
     std::optional<file_info> file_info_value{std::nullopt};
 
@@ -89,10 +94,11 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
+    auto const responder_stack = std::make_shared<test_utils::responder_stack_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
-    auto project =
-        project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, editor_level_pool);
+    auto project = project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, responder_stack,
+                                        editor_level_pool);
 
     XCTAssertTrue(project != nullptr);
 }
@@ -102,6 +108,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
+    auto const responder_stack = std::make_shared<test_utils::responder_stack_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     struct called_values {
@@ -117,7 +124,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     };
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              editor_level_pool);
+                                              responder_stack, editor_level_pool);
     project->setup();
 
     XCTAssertTrue(called.has_value());
@@ -132,13 +139,14 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
+    auto const responder_stack = std::make_shared<test_utils::responder_stack_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              editor_level_pool);
+                                              responder_stack, editor_level_pool);
     project->setup();
 
     std::vector<project_state> called;
@@ -183,13 +191,14 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_loader = std::make_shared<test_utils::file_loader_stub>();
+    auto const responder_stack = std::make_shared<test_utils::responder_stack_stub>();
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
     auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              editor_level_pool);
+                                              responder_stack, editor_level_pool);
     project->setup();
 
     std::vector<project_state> called;

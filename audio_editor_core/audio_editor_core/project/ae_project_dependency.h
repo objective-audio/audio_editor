@@ -50,6 +50,14 @@ struct scrolling_for_project : scrolling_for_player, scrolling_for_gesture_contr
     virtual ~scrolling_for_project() = default;
 };
 
+class responder;
+
+struct responder_stack_for_project {
+    virtual ~responder_stack_for_project() = default;
+
+    virtual void push_responder(std::shared_ptr<ae::responder> const &) = 0;
+};
+
 class project_editor_level;
 
 struct project_editor_level_pool_for_project {

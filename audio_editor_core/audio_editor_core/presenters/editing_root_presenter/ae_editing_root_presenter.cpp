@@ -17,12 +17,11 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
-    auto const &app_level = hierarchy::app_level();
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
     return std::shared_ptr<editing_root_presenter>(new editing_root_presenter{
         editor_level->file_info, project_level->player, editor_level->file_track, editor_level->marker_pool,
-        project_level->project, editor_level->editor, app_level->responder_stack});
+        project_level->project, editor_level->editor, project_level->responder_stack});
 }
 
 editing_root_presenter::editing_root_presenter(file_info const &file_info, std::shared_ptr<player> const &player,
