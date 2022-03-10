@@ -53,10 +53,13 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
     bg_plane->node()->mesh()->set_use_mesh_color(true);
 
     this->_bg_button
-        ->observe([this](auto const &context) {
+        ->observe([this](ui::button::context const &context) {
             switch (context.method) {
                 case ui::button::method::ended:
-                    this->_action_controller->handle_action({action_kind::begin_time_editing});
+                    // 左クリック
+                    if (context.touch.identifier() == 0) {
+                        this->_action_controller->handle_action({action_kind::begin_time_editing});
+                    }
                     break;
                 default:
                     break;
@@ -161,11 +164,14 @@ void ui_time::_resize_buttons() {
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
             auto canceller = button
-                                 ->observe([this, idx](auto const &context) {
+                                 ->observe([this, idx](ui::button::context const &context) {
                                      switch (context.method) {
                                          case ui::button::method::ended: {
-                                             this->_action_controller->handle_action(
-                                                 {action_kind::select_time_unit, std::to_string(idx)});
+                                             // 左クリック
+                                             if (context.touch.identifier() == 0) {
+                                                 this->_action_controller->handle_action(
+                                                     {action_kind::select_time_unit, std::to_string(idx)});
+                                             }
                                          } break;
                                          default:
                                              break;
