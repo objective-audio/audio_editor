@@ -72,7 +72,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
 
                 auto const sec_width =
                     ui_track_constants::standard_width_per_sec * this->_presenter->horizontal_zooming_scale();
-                auto const delta_time = -scroll_event.deltaX() / sec_width;
+                auto const delta_time = -scroll_event.delta_x / sec_width;
 
                 this->_scroll_gesture_controller->handle_gesture(
                     scroll_gesture{.state = state, .delta_time = delta_time});

@@ -19,9 +19,9 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
     static std::unordered_set<ae::modifier> const function_and_numeric_and_shift_modifiers{
         ae::modifier::function, ae::modifier::numeric_pad, ae::modifier::shift};
 
-    auto const &chara = event.characters();
+    auto const &chara = event.characters;
     auto const lower_chara = to_lower(chara);
-    auto const key_code = event.key_code();
+    auto const key_code = event.key_code;
 
     bool const empty_modifiers = modifiers.size() == 0;
 

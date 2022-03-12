@@ -135,7 +135,7 @@ void ui_editing_root::_setup_observing(std::shared_ptr<ui::standard> const &stan
 
                 if (auto const controller = this->_pinch_gesture_controller.lock()) {
                     controller->handle_gesture(
-                        pinch_gesture{.state = state, .magnification = pinch_event.magnification()});
+                        pinch_gesture{.state = state, .magnification = pinch_event.magnification});
                 }
             }
         })
