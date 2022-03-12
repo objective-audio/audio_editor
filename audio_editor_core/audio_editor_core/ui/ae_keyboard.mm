@@ -17,7 +17,7 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
             switch (event->type()) {
                 case ui::event_type::modifier: {
                     auto const modifier_event = event->get<ui::modifier>();
-                    auto const flags = modifier_event.flag();
+                    auto const flags = modifier_event.flag;
                     auto const modifier = keyboard_utils::to_modifier(flags);
 
                     switch (event->phase()) {

@@ -57,7 +57,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
             switch (context.method) {
                 case ui::button::method::ended:
                     // 左クリック
-                    if (context.touch.identifier() == 0) {
+                    if (context.touch.touch_id == ui::touch_id::mouse_left()) {
                         this->_action_controller->handle_action({action_kind::begin_time_editing});
                     }
                     break;
@@ -168,7 +168,7 @@ void ui_time::_resize_buttons() {
                                      switch (context.method) {
                                          case ui::button::method::ended: {
                                              // 左クリック
-                                             if (context.touch.identifier() == 0) {
+                                             if (context.touch.touch_id == ui::touch_id::mouse_left()) {
                                                  this->_action_controller->handle_action(
                                                      {action_kind::select_time_unit, std::to_string(idx)});
                                              }
