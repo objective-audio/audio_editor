@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_time_presenter.h>
+#include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_types.h>
@@ -52,11 +53,13 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
     auto const &bg_plane = this->_bg_button->rect_plane();
     bg_plane->node()->mesh()->set_use_mesh_color(true);
 
+    this->_bg_button->set_can_begin_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
+    this->_bg_button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
+
     this->_bg_button
         ->observe([this](ui::button::context const &context) {
             switch (context.method) {
                 case ui::button::method::ended:
-                    // 左クリック
                     if (context.touch.touch_id == ui::touch_id::mouse_left()) {
                         this->_action_controller->handle_action({action_kind::begin_time_editing});
                     }
