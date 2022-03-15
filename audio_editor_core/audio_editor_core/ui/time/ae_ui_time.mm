@@ -164,6 +164,9 @@ void ui_time::_resize_buttons() {
             auto button = ui::button::make_shared(ui::region{.origin = ui::point::zero(), .size = {1.0f, 1.0f}}, 2,
                                                   standard->event_manager(), standard->detector());
 
+            button->set_can_begin_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
+            button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
+
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
             auto canceller = button
