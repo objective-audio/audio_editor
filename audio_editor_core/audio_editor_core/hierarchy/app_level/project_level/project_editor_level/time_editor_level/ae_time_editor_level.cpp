@@ -9,11 +9,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_level> time_editor_level::make_shared(number_components const &components,
+std::shared_ptr<time_editor_level> time_editor_level::make_shared(std::string const &project_id,
+                                                                  number_components const &components,
                                                                   std::optional<std::size_t> const unit_idx) {
-    return std::shared_ptr<time_editor_level>(new time_editor_level{components, unit_idx});
+    return std::shared_ptr<time_editor_level>(new time_editor_level{project_id, components, unit_idx});
 }
 
-time_editor_level::time_editor_level(number_components const &components, std::optional<std::size_t> const unit_idx)
-    : time_editor(time_editor::make_shared(components, unit_idx)) {
+time_editor_level::time_editor_level(std::string const &project_id, number_components const &components,
+                                     std::optional<std::size_t> const unit_idx)
+    : project_id(project_id), time_editor(time_editor::make_shared(components, unit_idx)) {
 }

@@ -5,14 +5,13 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
-#include <ui/yas_ui_types.h>
 
 #include <optional>
 #include <vector>
 
 namespace yas::ae {
 struct context_menu final {
-    ui::point location_in_view;
+    std::string position;
     std::vector<std::optional<ae::action>> actions;
 
     bool operator==(context_menu const &) const;

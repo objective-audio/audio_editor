@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_action_utils.h>
 #include <audio_editor_core/ae_context_menu_presenter.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_ui_event_utils.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <objc_utils/yas_objc_unowned.h>
 
@@ -40,7 +41,8 @@ using namespace yas::ae;
 
             auto *const view = unowned.object;
 
-            auto const location = NSMakePoint(event_value.location_in_view.x, event_value.location_in_view.y);
+            auto const position = ui_event_utils::to_position_from_event_string(event_value.position);
+            auto const view_location = [view view_location_from_ui_position:position];
 
             auto *const menu = [[NSMenu alloc] initWithTitle:@""];
             menu.delegate = view;
@@ -64,7 +66,7 @@ using namespace yas::ae;
             }
 
             NSEvent *popUpEvent = [NSEvent otherEventWithType:NSEventTypeApplicationDefined
-                                                     location:location
+                                                     location:NSMakePoint(view_location.x, view_location.y)
                                                 modifierFlags:kNilOptions
                                                     timestamp:0
                                                  windowNumber:view.window.windowNumber

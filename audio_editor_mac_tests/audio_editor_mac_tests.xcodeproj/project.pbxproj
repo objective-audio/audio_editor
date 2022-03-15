@@ -12,6 +12,7 @@
 		B61E3236264ACAC9000DB2B1 /* ae_file_module_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B61E3235264ACAC9000DB2B1 /* ae_file_module_tests.mm */; };
 		B61E3242264ACD42000DB2B1 /* ae_file_module_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B61E3241264ACD42000DB2B1 /* ae_file_module_utils_tests.mm */; };
 		B6370CD6279BD17900449D03 /* ae_time_editor_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6370CD5279BD17900449D03 /* ae_time_editor_tests.mm */; };
+		B6455D4027DDB9B600044716 /* ae_ui_event_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6455D3F27DDB9B600044716 /* ae_ui_event_utils_tests.mm */; };
 		B64A4F7F2777FCCD00A959DD /* ae_module_location_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64A4F7E2777FCCD00A959DD /* ae_module_location_tests.mm */; };
 		B64A4F812777FE4400A959DD /* ae_marker_location_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64A4F802777FE4400A959DD /* ae_marker_location_tests.mm */; };
 		B64E2121263C44A300B1BF51 /* ae_file_loader_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */; };
@@ -60,6 +61,7 @@
 		B61E3235264ACAC9000DB2B1 /* ae_file_module_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_module_tests.mm; path = ../../audio_editor_tests/ae_file_module_tests.mm; sourceTree = "<group>"; };
 		B61E3241264ACD42000DB2B1 /* ae_file_module_utils_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_module_utils_tests.mm; path = ../../audio_editor_tests/ae_file_module_utils_tests.mm; sourceTree = "<group>"; };
 		B6370CD5279BD17900449D03 /* ae_time_editor_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_time_editor_tests.mm; path = ../../audio_editor_tests/ae_time_editor_tests.mm; sourceTree = "<group>"; };
+		B6455D3F27DDB9B600044716 /* ae_ui_event_utils_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_ui_event_utils_tests.mm; path = ../../audio_editor_tests/ae_ui_event_utils_tests.mm; sourceTree = "<group>"; };
 		B64A4F7E2777FCCD00A959DD /* ae_module_location_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_module_location_tests.mm; path = ../../audio_editor_tests/ae_module_location_tests.mm; sourceTree = "<group>"; };
 		B64A4F802777FE4400A959DD /* ae_marker_location_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_marker_location_tests.mm; path = ../../audio_editor_tests/ae_marker_location_tests.mm; sourceTree = "<group>"; };
 		B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_loader_tests.mm; path = ../../audio_editor_tests/ae_file_loader_tests.mm; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				B6F4D98527B6465400AE7D5D /* ae_edge_tests.mm */,
 				B6A93FDC27B8DDFD00E38A0F /* ae_edge_editor_tests.mm */,
 				B66ED64127D1C0D400E1DFA7 /* ae_responder_stack_tests.mm */,
+				B6455D3F27DDB9B600044716 /* ae_ui_event_utils_tests.mm */,
 				B66909F7262A7CD600E86353 /* Info.plist */,
 				B666CE412634FF3900C1693D /* utils */,
 			);
@@ -313,6 +316,7 @@
 				B64A4F812777FE4400A959DD /* ae_marker_location_tests.mm in Sources */,
 				B6F5264D2792611600688339 /* ae_number_components_tests.mm in Sources */,
 				B666F190275C9C5A0040D306 /* ae_module_location_pool_tests.mm in Sources */,
+				B6455D4027DDB9B600044716 /* ae_ui_event_utils_tests.mm in Sources */,
 				B612630327832A530019B364 /* ae_nudging_utils_tests.mm in Sources */,
 				B6370CD6279BD17900449D03 /* ae_time_editor_tests.mm in Sources */,
 				B61E3236264ACAC9000DB2B1 /* ae_file_module_tests.mm in Sources */,
