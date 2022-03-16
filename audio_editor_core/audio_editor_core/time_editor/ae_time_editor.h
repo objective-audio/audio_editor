@@ -11,7 +11,7 @@
 #include <audio_editor_core/ae_time_presenter_dependency.h>
 
 namespace yas::ae {
-struct time_editor final : responder {
+struct time_editor final {
     [[nodiscard]] static std::shared_ptr<time_editor> make_shared(number_components const &,
                                                                   std::optional<std::size_t> const unit_idx);
 
@@ -48,13 +48,6 @@ struct time_editor final : responder {
     [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&);
     [[nodiscard]] observing::syncable observe_editing_components(std::function<void(number_components const &)> &&);
     [[nodiscard]] observing::endable observe_event(std::function<void(time_editor_event const &)> &&);
-
-    // responder
-
-    [[nodiscard]] identifier responder_id() override;
-    std::optional<ae::action> to_action(ae::key const &) override;
-    void handle_action(ae::action const &) override;
-    [[nodiscard]] responding responding_to_action(ae::action const &) override;
 
    private:
     enum class state {
