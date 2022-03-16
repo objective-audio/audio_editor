@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_root_presenter.h>
 #include <audio_editor_core/ae_ui_editing_root.h>
 #include <audio_editor_core/ae_ui_editing_root_level.h>

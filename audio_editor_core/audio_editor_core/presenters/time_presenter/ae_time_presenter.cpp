@@ -35,8 +35,7 @@ time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::share
                             std::shared_ptr<time_editor_level> const &level) mutable {
             if (level) {
                 cancellable =
-                    level->time_editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); })
-                        .sync();
+                    level->editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
             } else {
                 cancellable = nullptr;
                 this->_range_fetcher->push();
@@ -48,7 +47,7 @@ time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::share
 
 std::string time_presenter::time_text() const {
     if (auto const &level = this->_level()) {
-        return time_presenter_utils::time_text(level->time_editor->editing_components());
+        return time_presenter_utils::time_text(level->editor->editing_components());
     } else {
         auto const player = this->_player.lock();
         auto const timing = this->_timing.lock();
@@ -81,7 +80,7 @@ std::vector<index_range> time_presenter::time_text_unit_ranges() const {
 
 std::optional<std::size_t> time_presenter::editing_unit_index() const {
     if (auto const &level = this->_level()) {
-        return level->time_editor->unit_index();
+        return level->editor->unit_index();
     } else {
         return std::nullopt;
     }
@@ -89,7 +88,7 @@ std::optional<std::size_t> time_presenter::editing_unit_index() const {
 
 std::optional<index_range> time_presenter::editing_time_text_range() const {
     if (auto &level = this->_level()) {
-        auto const &time_editor = level->time_editor;
+        auto const &time_editor = level->editor;
         return time_presenter_utils::to_time_text_range(time_editor->editing_components(), time_editor->unit_index());
     } else {
         return std::nullopt;
