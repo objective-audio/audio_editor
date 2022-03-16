@@ -10,8 +10,6 @@
 #include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
-class responder_stack;
-
 struct project final : project_for_window_presenter {
     [[nodiscard]] static std::shared_ptr<project> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
