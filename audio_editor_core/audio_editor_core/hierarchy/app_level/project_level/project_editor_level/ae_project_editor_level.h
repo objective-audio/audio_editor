@@ -22,6 +22,7 @@ class database;
 class exporter;
 class time_editor_level_pool;
 class project_editor;
+class project_editor_responder;
 
 struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(std::string const &identifier,
@@ -40,6 +41,7 @@ struct project_editor_level final {
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<time_editor_level_pool> const time_editor_level_pool;
     std::shared_ptr<project_editor> const editor;
+    std::shared_ptr<project_editor_responder> const responder;
 
    private:
     project_editor_level(std::string const &identifier, ae::file_info const &, std::shared_ptr<project_url> const &);

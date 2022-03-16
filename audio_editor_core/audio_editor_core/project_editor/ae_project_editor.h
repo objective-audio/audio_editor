@@ -15,7 +15,7 @@ class time_editor;
 class time_editor_level_pool;
 class responder_stack;
 
-struct project_editor final : responder {
+struct project_editor final {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         std::string const &identifier, ae::file_info const &, std::shared_ptr<file_track_for_project_editor> const &,
         std::shared_ptr<marker_pool_for_project_editor> const &,
@@ -24,9 +24,13 @@ struct project_editor final : responder {
         std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
         std::shared_ptr<time_editor_level_pool> const &);
 
+    void toggle_playing();
+
     [[nodiscard]] bool can_nudge() const;
     void nudge_previous(uint32_t const offset_count);
     void nudge_next(uint32_t const offset_count);
+    void rotate_nudging_next_unit();
+    void rotate_nudging_previous_unit();
 
     void rotate_timing_fraction();
 
@@ -98,13 +102,6 @@ struct project_editor final : responder {
     void change_time_sign_to_plus();
     void change_time_sign_to_minus();
     void select_time_unit(std::size_t const);
-
-    // responder
-
-    [[nodiscard]] identifier responder_id() override;
-    std::optional<ae::action> to_action(ae::key const &) override;
-    void handle_action(ae::action const &) override;
-    [[nodiscard]] responding responding_to_action(ae::action const &) override;
 
    private:
     identifier const _responder_id;

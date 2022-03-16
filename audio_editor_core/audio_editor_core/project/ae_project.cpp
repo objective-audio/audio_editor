@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_zooming.h>
 
@@ -59,9 +60,9 @@ void project::setup() {
                                  project->_editor_level_pool->add_level(file_info.value());
 
                                  auto const responder_stack = project->_responder_stack.lock();
-                                 auto const editor_level = project->_editor_level_pool->level();
-                                 if (responder_stack && editor_level) {
-                                     responder_stack->push_responder(editor_level->editor);
+                                 auto const level = project->_editor_level_pool->level();
+                                 if (responder_stack && level) {
+                                     responder_stack->push_responder(level->responder);
                                  }
 
                                  project->_state->set_value(project_state::editing);
