@@ -18,7 +18,7 @@ struct responder_stack final : responder_stack_for_project {
     void handle_action(ae::action const &);
     [[nodiscard]] responding responding_to_action(ae::action const &);
 
-    void push_responder(std::shared_ptr<ae::responder> const &) override;
+    void push_responder(identifier const &, std::shared_ptr<ae::responder> const &) override;
     void pop_responder(identifier const &);
 
    private:
