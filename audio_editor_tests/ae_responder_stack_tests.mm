@@ -19,7 +19,7 @@ struct responder_stub : ae::responder {
         return std::nullopt;
     };
 
-    identifier responder_id() override {
+    identifier responder_id() {
         return this->_raw_responder_id;
     }
 
@@ -132,10 +132,10 @@ struct responder_stub : ae::responder {
     auto const &responder_2 = self->responder_2;
     auto const &stack = self->stack;
 
-    XCTAssertNoThrow(stack->push_responder(responder_1));
-    XCTAssertThrows(stack->push_responder(responder_1));
+    XCTAssertNoThrow(stack->push_responder(responder_1->responder_id(), responder_1));
+    XCTAssertThrows(stack->push_responder(responder_1->responder_id(), responder_1));
 
-    XCTAssertNoThrow(stack->push_responder(responder_2));
+    XCTAssertNoThrow(stack->push_responder(responder_2->responder_id(), responder_2));
 
     XCTAssertThrows(stack->pop_responder(responder_1->responder_id()));
 
@@ -171,7 +171,7 @@ struct responder_stub : ae::responder {
     {
         // 1つだけpushされていてfallthrough
 
-        stack->push_responder(responder_1);
+        stack->push_responder(responder_1->responder_id(), responder_1);
 
         responding_result_1 = responding::fallthrough;
         responding_result_2 = responding::fallthrough;
@@ -189,7 +189,7 @@ struct responder_stub : ae::responder {
     {
         // 2つpushされていて、両方fallthrough
 
-        stack->push_responder(responder_2);
+        stack->push_responder(responder_2->responder_id(), responder_2);
 
         XCTAssertEqual(stack->responding_to_action((ae::action{ae::action_kind::cancel_time_editing})),
                        responding::fallthrough);
@@ -266,8 +266,8 @@ struct responder_stub : ae::responder {
     auto &responding_result_2 = self->responding_result_2;
     auto &handle_called_2 = self->handle_called_2;
 
-    stack->push_responder(responder_1);
-    stack->push_responder(responder_2);
+    stack->push_responder(responder_1->responder_id(), responder_1);
+    stack->push_responder(responder_2->responder_id(), responder_2);
 
     {
         // 両方fallthrough
@@ -355,7 +355,7 @@ struct responder_stub : ae::responder {
     {
         // responderひとつだけの場合
 
-        stack->push_responder(responder_1);
+        stack->push_responder(responder_1->responder_id(), responder_1);
 
         to_action_result_1 = ae::action{ae::action_kind::go_to_marker};
 
@@ -369,7 +369,7 @@ struct responder_stub : ae::responder {
     {
         // responder二つで、後から追加した方が使われる
 
-        stack->push_responder(responder_2);
+        stack->push_responder(responder_2->responder_id(), responder_2);
 
         to_action_result_1 = ae::action{ae::action_kind::drop_head};
         to_action_result_2 = ae::action{ae::action_kind::delete_time};

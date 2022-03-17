@@ -31,7 +31,7 @@ void project_level_pool::add_level(url const &file_url) {
 std::shared_ptr<project_level> project_level_pool::add_and_return_level(url const &file_url) {
     auto const identifier = this->_uuid_generator->generate();
     auto const project_level = project_level::make_shared(identifier, file_url);
-    auto const &project_id = project_level->identifier;
+    auto const &project_id = project_level->project_id;
     auto const &project = project_level->project;
 
     auto canceller = project
@@ -69,20 +69,20 @@ observing::syncable project_level_pool::observe_event(std::function<void(project
             case observing::map::event_type::any: {
                 for (auto const &pair : event.elements) {
                     handler(
-                        {.type = project_level_pool_event_type::inserted, .project_id = pair.second.first->identifier});
+                        {.type = project_level_pool_event_type::inserted, .project_id = pair.second.first->project_id});
                 }
             } break;
             case observing::map::event_type::inserted: {
                 handler(
-                    {.type = project_level_pool_event_type::inserted, .project_id = event.inserted->first->identifier});
+                    {.type = project_level_pool_event_type::inserted, .project_id = event.inserted->first->project_id});
             } break;
             case observing::map::event_type::replaced: {
-                handler({.type = project_level_pool_event_type::erased, .project_id = event.erased->first->identifier});
+                handler({.type = project_level_pool_event_type::erased, .project_id = event.erased->first->project_id});
                 handler(
-                    {.type = project_level_pool_event_type::inserted, .project_id = event.inserted->first->identifier});
+                    {.type = project_level_pool_event_type::inserted, .project_id = event.inserted->first->project_id});
             } break;
             case observing::map::event_type::erased: {
-                handler({.type = project_level_pool_event_type::erased, .project_id = event.erased->first->identifier});
+                handler({.type = project_level_pool_event_type::erased, .project_id = event.erased->first->project_id});
             } break;
         }
     });

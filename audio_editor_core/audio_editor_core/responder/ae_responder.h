@@ -20,7 +20,6 @@ enum class responding {
 struct responder {
     virtual ~responder() = default;
 
-    [[nodiscard]] virtual identifier responder_id() = 0;
     virtual std::optional<ae::action> to_action(ae::key const &) = 0;
     virtual void handle_action(ae::action const &) = 0;
     [[nodiscard]] virtual responding responding_to_action(ae::action const &) = 0;

@@ -61,13 +61,13 @@ responding responder_stack::responding_to_action(ae::action const &action) {
     return responding::fallthrough;
 }
 
-void responder_stack::push_responder(std::shared_ptr<ae::responder> const &responder) {
+void responder_stack::push_responder(identifier const &responder_id, std::shared_ptr<ae::responder> const &responder) {
     for (auto const &pair : this->_responders) {
-        if (pair.first == responder->responder_id()) {
+        if (pair.first == responder_id) {
             throw std::runtime_error("responder exists.");
         }
     }
-    this->_responders.emplace_front(responder->responder_id(), responder);
+    this->_responders.emplace_front(responder_id, responder);
 }
 
 void responder_stack::pop_responder(identifier const &responder_id) {

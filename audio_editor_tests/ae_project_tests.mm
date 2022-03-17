@@ -61,7 +61,7 @@ struct file_loader_stub final : file_loader_for_project {
 };
 
 struct responder_stack_stub final : responder_stack_for_project {
-    void push_responder(std::shared_ptr<ae::responder> const &) override {
+    void push_responder(identifier const &, std::shared_ptr<ae::responder> const &) override {
     }
 };
 

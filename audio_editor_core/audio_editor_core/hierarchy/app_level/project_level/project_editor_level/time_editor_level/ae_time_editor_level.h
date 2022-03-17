@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <cpp_utils/yas_identifier.h>
+
 #include <memory>
 #include <optional>
 #include <string>
@@ -18,6 +20,7 @@ struct time_editor_level final {
                                                                         number_components const &,
                                                                         std::optional<std::size_t> const unit_idx);
 
+    identifier const instance_id;
     std::string const project_id;
     std::shared_ptr<time_editor> const editor;
     std::shared_ptr<time_editor_responder> const responder;

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_info.h>
+#include <cpp_utils/yas_identifier.h>
 
 #include <memory>
 #include <string>
@@ -25,10 +26,11 @@ class project_editor;
 class project_editor_responder;
 
 struct project_editor_level final {
-    [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(std::string const &identifier,
+    [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(std::string const &project_id,
                                                                            file_info const &);
 
-    std::string const identifier;
+    identifier const instance_id;
+    std::string const project_id;
     file_info const file_info;
 
     std::shared_ptr<timing> const timing;

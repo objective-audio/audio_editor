@@ -16,10 +16,6 @@ std::shared_ptr<time_editor_responder> time_editor_responder::make_shared(std::s
 time_editor_responder::time_editor_responder(std::shared_ptr<time_editor> const &editor) : _editor(editor) {
 }
 
-identifier time_editor_responder::responder_id() {
-    return this->_responder_id;
-}
-
 std::optional<ae::action> time_editor_responder::to_action(ae::key const &key) {
     switch (key) {
         case ae::key::ret:

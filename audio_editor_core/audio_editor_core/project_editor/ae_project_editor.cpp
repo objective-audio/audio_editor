@@ -728,7 +728,7 @@ void project_editor::begin_time_editing(std::optional<std::size_t> const unit_id
     auto const &time_editor = level->editor;
 
     if (auto const responder_stack = this->_responder_stack.lock()) {
-        responder_stack->push_responder(level->responder);
+        responder_stack->push_responder(level->instance_id, level->responder);
     }
 
     time_editor
@@ -740,7 +740,7 @@ void project_editor::begin_time_editing(std::optional<std::size_t> const unit_id
 
             if (auto const &level = this->_time_editor_level_pool->level()) {
                 if (auto const responder_stack = this->_responder_stack.lock()) {
-                    responder_stack->pop_responder(level->responder->responder_id());
+                    responder_stack->pop_responder(level->instance_id);
                 }
             }
 

@@ -62,7 +62,7 @@ void project::setup() {
                                  auto const responder_stack = project->_responder_stack.lock();
                                  auto const level = project->_editor_level_pool->level();
                                  if (responder_stack && level) {
-                                     responder_stack->push_responder(level->responder);
+                                     responder_stack->push_responder(level->instance_id, level->responder);
                                  }
 
                                  project->_state->set_value(project_state::editing);

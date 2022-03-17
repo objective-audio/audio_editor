@@ -55,7 +55,7 @@ class responder;
 struct responder_stack_for_project {
     virtual ~responder_stack_for_project() = default;
 
-    virtual void push_responder(std::shared_ptr<ae::responder> const &) = 0;
+    virtual void push_responder(identifier const &, std::shared_ptr<ae::responder> const &) = 0;
 };
 
 class project_editor_level;
