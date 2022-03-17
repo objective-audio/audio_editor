@@ -21,16 +21,16 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor_level> project_editor_level::make_shared(std::string const &identifier,
+std::shared_ptr<project_editor_level> project_editor_level::make_shared(std::string const &project_id,
                                                                         ae::file_info const &file_info) {
-    auto const &project_level = hierarchy::project_level_for_id(identifier);
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<project_editor_level>(
-        new project_editor_level{identifier, file_info, project_level->project_url});
+        new project_editor_level{project_id, file_info, project_level->project_url});
 }
 
 project_editor_level::project_editor_level(std::string const &identifier, ae::file_info const &file_info,
                                            std::shared_ptr<project_url> const &project_url)
-    : identifier(identifier),
+    : project_id(identifier),
       file_info(file_info),
       timing(timing::make_shared(file_info.sample_rate)),
       nudging(nudging::make_shared(this->timing)),

@@ -25,10 +25,10 @@ class project_editor;
 class project_editor_responder;
 
 struct project_editor_level final {
-    [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(std::string const &identifier,
+    [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(std::string const &project_id,
                                                                            file_info const &);
 
-    std::string const identifier;
+    std::string const project_id;
     file_info const file_info;
 
     std::shared_ptr<timing> const timing;

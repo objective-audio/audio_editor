@@ -23,9 +23,9 @@ class project;
 class project_editor_level_pool;
 
 struct project_level final {
-    [[nodiscard]] static std::shared_ptr<project_level> make_shared(std::string const &identifier, url const &file_url);
+    [[nodiscard]] static std::shared_ptr<project_level> make_shared(std::string const &project_id, url const &file_url);
 
-    std::string const identifier;
+    std::string const project_id;
     url const file_url;
 
     std::shared_ptr<ae::project_url> const project_url;
