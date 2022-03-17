@@ -19,7 +19,7 @@ struct responder_stub : ae::responder {
         return std::nullopt;
     };
 
-    identifier responder_id() override {
+    identifier responder_id() {
         return this->_raw_responder_id;
     }
 

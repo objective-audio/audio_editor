@@ -17,10 +17,6 @@ std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
 project_editor_responder::project_editor_responder(std::shared_ptr<project_editor> const &editor) : _editor(editor) {
 }
 
-identifier project_editor_responder::responder_id() {
-    return this->_responder_id;
-}
-
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
     switch (key) {
         case key::space:
