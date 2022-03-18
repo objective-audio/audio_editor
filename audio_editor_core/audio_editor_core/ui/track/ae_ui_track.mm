@@ -4,81 +4,32 @@
 
 #include "ae_ui_track.h"
 #include <audio_editor_core/ae_display_space.h>
-#include <audio_editor_core/ae_gesture.h>
-#include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_track_presenter.h>
-#include <audio_editor_core/ae_ui_edge.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
-#include <audio_editor_core/ae_ui_markers.h>
 #include <audio_editor_core/ae_ui_modules.h>
-#include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_track_constants.h>
-#include <cpp_utils/yas_fast_each.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_track> ui_track::make_shared(ui_project_id const &project_id,
-                                                std::shared_ptr<ui_modules> const &modules,
-                                                std::shared_ptr<ui_edge> const &edge,
-                                                std::shared_ptr<ui_markers> const &markers) {
+                                                std::shared_ptr<ui_modules> const &modules) {
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
     auto const presenter = track_presenter::make_shared(project_id.identifier);
-    auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id.identifier);
-    return std::shared_ptr<ui_track>(new ui_track{ui_root_level->standard, ui_root_level->display_space, presenter,
-                                                  scroll_gestore_controller, modules, edge, markers});
+    return std::shared_ptr<ui_track>(
+        new ui_track{ui_root_level->standard, ui_root_level->display_space, presenter, modules});
 }
 
 ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<display_space> const &display_space,
-                   std::shared_ptr<track_presenter> const &presenter,
-                   std::shared_ptr<scroll_gesture_controller> const &scroll_gesture_controller,
-                   std::shared_ptr<ui_modules> const &modules, std::shared_ptr<ui_edge> const &edge,
-                   std::shared_ptr<ui_markers> const &markers)
-    : node(ui::node::make_shared()),
-      _display_space(display_space),
-      _presenter(presenter),
-      _scroll_gesture_controller(scroll_gesture_controller),
-      _time_node(ui::node::make_shared()),
-      _modules(modules),
-      _edge(edge),
-      _markers(markers) {
-    this->node->add_sub_node(this->_time_node);
-    this->_time_node->add_sub_node(this->_modules->node);
-    this->_time_node->add_sub_node(this->_edge->node);
-    this->_time_node->add_sub_node(this->_markers->node);
-
-    standard->renderer()
-        ->observe_will_render([this](auto const &) {
-            auto const time = this->_presenter->current_position();
-            auto const scale = this->_presenter->horizontal_zooming_scale();
-            float const x = -time * ui_track_constants::standard_width_per_sec * scale;
-            this->_time_node->set_position(ui::point{x, 0.0f});
-        })
-        .end()
-        ->add_to(this->_pool);
+                   std::shared_ptr<track_presenter> const &presenter, std::shared_ptr<ui_modules> const &modules)
+    : node(ui::node::make_shared()), _display_space(display_space), _presenter(presenter), _modules(modules) {
+    this->node->add_sub_node(this->_modules->node);
 
     presenter->observe_horizontal_zooming_scale([this](double const &) { this->_update_scale(); })
         .sync()
         ->add_to(this->_pool);
     presenter->observe_vertical_zooming_scale([this](double const &) { this->_update_scale(); })
         .sync()
-        ->add_to(this->_pool);
-
-    standard->event_manager()
-        ->observe([this](std::shared_ptr<ui::event> const &event) {
-            if (event->type() == ui::event_type::scroll) {
-                auto const &scroll_event = event->get<ui::scroll>();
-                gesture_state const state = to_gesture_state(event->phase());
-
-                auto const sec_width =
-                    ui_track_constants::standard_width_per_sec * this->_presenter->horizontal_zooming_scale();
-                auto const delta_time = -scroll_event.delta_x / sec_width;
-
-                this->_scroll_gesture_controller->handle_gesture(
-                    scroll_gesture{.state = state, .delta_time = delta_time});
-            }
-        })
-        .end()
         ->add_to(this->_pool);
 
     standard->view_look()

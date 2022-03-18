@@ -15,6 +15,7 @@ class ui_modules;
 class ui_edge;
 class ui_markers;
 class ui_track;
+class ui_scroller;
 class ui_time;
 class ui_editing_root;
 
@@ -27,6 +28,7 @@ struct ui_editing_root_level final {
     std::shared_ptr<ui_edge> const edge;
     std::shared_ptr<ui_markers> const markers;
     std::shared_ptr<ui_track> const track;
+    std::shared_ptr<ui_scroller> const scroller;
 
     std::shared_ptr<ui_time> const time;
 
