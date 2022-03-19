@@ -9,7 +9,7 @@
 
 namespace yas::ae {
 class player;
-class zooming;
+class zooming_pair;
 
 struct track_presenter final {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::string const &project_id);
@@ -20,11 +20,9 @@ struct track_presenter final {
     [[nodiscard]] observing::syncable observe_vertical_zooming_scale(std::function<void(double const &)> &&);
 
    private:
-    std::weak_ptr<zooming> _horizontal_zooming;
-    std::weak_ptr<zooming> _vertical_zooming;
+    std::weak_ptr<zooming_pair> _zooming_pair;
 
-    track_presenter(std::shared_ptr<zooming> const &horizontal_zooming,
-                    std::shared_ptr<zooming> const &vertical_zooming);
+    track_presenter(std::shared_ptr<zooming_pair> const &);
 
     track_presenter(track_presenter const &) = delete;
     track_presenter(track_presenter &&) = delete;

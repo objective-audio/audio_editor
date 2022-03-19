@@ -11,7 +11,6 @@
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_markers_presenter_dependency.h>
 #include <audio_editor_core/ae_modules_presenter_dependency.h>
-#include <audio_editor_core/ae_pinch_gesture_controller_dependency.h>
 #include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>

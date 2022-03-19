@@ -16,7 +16,7 @@
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_url.h>
-#include <audio_editor_core/ae_zooming.h>
+#include <audio_editor_core/ae_zooming_pair.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -30,8 +30,7 @@ project_level::project_level(std::string const &project_id, url const &file_url,
     : project_id(project_id),
       file_url(file_url),
       project_url(project_url::make_shared(app_level->system_url->project_directory(project_id))),
-      horizontal_zooming(zooming::make_shared()),
-      vertical_zooming(zooming::make_shared()),
+      zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_level->system_url->playing_directory(), project_id, this->scrolling)),
       responder_stack(responder_stack::make_shared()),
