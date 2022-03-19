@@ -25,12 +25,7 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
     : node(ui::node::make_shared()), _display_space(display_space), _presenter(presenter), _modules(modules) {
     this->node->add_sub_node(this->_modules->node);
 
-    presenter->observe_horizontal_zooming_scale([this](double const &) { this->_update_scale(); })
-        .sync()
-        ->add_to(this->_pool);
-    presenter->observe_vertical_zooming_scale([this](double const &) { this->_update_scale(); })
-        .sync()
-        ->add_to(this->_pool);
+    presenter->observe_zooming_scale([this](auto const &) { this->_update_scale(); }).sync()->add_to(this->_pool);
 
     standard->view_look()
         ->view_layout_guide()
@@ -43,8 +38,9 @@ ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_pt
 }
 
 void ui_track::_update_scale() {
-    float const width = this->_presenter->horizontal_zooming_scale() * ui_track_constants::standard_width_per_sec;
-    float const height = std::ceil(this->_presenter->vertical_zooming_scale() * ui_track_constants::standard_height);
+    auto const zooming_scale = this->_presenter->zooming_scale();
+    float const width = zooming_scale.horizontal * ui_track_constants::standard_width_per_sec;
+    float const height = std::ceil(zooming_scale.vertical * ui_track_constants::standard_height);
 
     ui::size const scale{width, height};
     this->_modules->set_scale(scale);
