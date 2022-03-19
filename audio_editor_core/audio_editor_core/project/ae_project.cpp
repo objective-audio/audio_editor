@@ -8,7 +8,6 @@
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_responder_stack.h>
-#include <audio_editor_core/ae_zooming.h>
 
 using namespace yas;
 using namespace yas::ae;

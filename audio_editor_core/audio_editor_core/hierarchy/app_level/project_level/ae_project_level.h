@@ -12,7 +12,7 @@
 namespace yas::ae {
 class app_level;
 class project_url;
-class zooming;
+class zooming_pair;
 class scrolling;
 class system_url;
 class player;
@@ -29,8 +29,7 @@ struct project_level final {
     url const file_url;
 
     std::shared_ptr<ae::project_url> const project_url;
-    std::shared_ptr<ae::zooming> const horizontal_zooming;
-    std::shared_ptr<ae::zooming> const vertical_zooming;
+    std::shared_ptr<ae::zooming_pair> const zooming_pair;
     std::shared_ptr<ae::scrolling> const scrolling;
     std::shared_ptr<ae::player> const player;
     std::shared_ptr<ae::responder_stack> const responder_stack;
