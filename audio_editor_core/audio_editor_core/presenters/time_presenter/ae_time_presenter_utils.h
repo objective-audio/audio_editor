@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_nudging_types.h>
 #include <audio_editor_core/ae_number_components.h>
-#include <audio_editor_core/ae_time_presenter_dependency.h>
 #include <cpp_utils/yas_index_range.h>
 
 #include <string>

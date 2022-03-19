@@ -14,6 +14,7 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_scroller.h>
 #include <audio_editor_core/ae_ui_time.h>
 #include <audio_editor_core/ae_ui_track.h>
 
@@ -21,7 +22,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &project_id,
-                                                              std::shared_ptr<ui_track> const &ui_track,
+                                                              std::shared_ptr<ui_scroller> const &ui_scroller,
                                                               std::shared_ptr<ui_time> const &ui_time) {
     auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
@@ -31,7 +32,7 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id cons
 
     return std::shared_ptr<ui_editing_root>(new ui_editing_root{
         ui_root_level->standard, ui_root_level->font_atlas_14, app_level->color, presenter, action_controller,
-        ui_root_level->pinch_gesture_controller, ui_root_level->keyboard, ui_track, ui_time});
+        ui_root_level->pinch_gesture_controller, ui_root_level->keyboard, ui_scroller, ui_time});
 }
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
@@ -40,8 +41,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
                                  std::shared_ptr<action_controller> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
-                                 std::shared_ptr<ae::keyboard> const &keyboard, std::shared_ptr<ui_track> const &track,
-                                 std::shared_ptr<ui_time> const &time)
+                                 std::shared_ptr<ae::keyboard> const &keyboard,
+                                 std::shared_ptr<ui_scroller> const &scroller, std::shared_ptr<ui_time> const &time)
     : node(ui::node::make_shared()),
       _presenter(presenter),
       _action_controller(action_controller),
@@ -56,8 +57,8 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
       _marker_pool_strings(ui::strings::make_shared(
           {.text = "", .alignment = ui::layout_alignment::min, .max_word_count = 1024}, this->_font_atlas)),
-      _track(track),
       _playing_line(ui::rect_plane::make_shared(1)),
+      _scroller(scroller),
       _time(time) {
     this->_file_info_strings->set_text(presenter->file_info_text());
 
@@ -71,7 +72,7 @@ bool ui_editing_root::responds_to_action(action const action) {
 }
 
 void ui_editing_root::_setup_node_hierarchie() {
-    this->node->add_sub_node(this->_track->node);
+    this->node->add_sub_node(this->_scroller->node);
 
     this->node->add_sub_node(this->_status_strings->rect_plane()->node());
     this->node->add_sub_node(this->_file_info_strings->rect_plane()->node());

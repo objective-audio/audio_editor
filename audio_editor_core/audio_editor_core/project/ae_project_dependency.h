@@ -15,8 +15,6 @@
 #include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
-#include <audio_editor_core/ae_time_presenter_dependency.h>
-#include <audio_editor_core/ae_track_presenter_dependency.h>
 #include <cpp_utils/yas_url.h>
 
 namespace yas::proc {
