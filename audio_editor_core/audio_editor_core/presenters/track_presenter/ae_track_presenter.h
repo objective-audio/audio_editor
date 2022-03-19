@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_info.h>
+#include <audio_editor_core/ae_zooming_types.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
@@ -14,13 +15,11 @@ class zooming_pair;
 struct track_presenter final {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(std::string const &project_id);
 
-    [[nodiscard]] double horizontal_zooming_scale() const;
-    [[nodiscard]] double vertical_zooming_scale() const;
-    [[nodiscard]] observing::syncable observe_horizontal_zooming_scale(std::function<void(double const &)> &&);
-    [[nodiscard]] observing::syncable observe_vertical_zooming_scale(std::function<void(double const &)> &&);
+    [[nodiscard]] ae::zooming_scale zooming_scale() const;
+    [[nodiscard]] observing::syncable observe_zooming_scale(std::function<void(ae::zooming_scale const &)> &&);
 
    private:
-    std::weak_ptr<zooming_pair> _zooming_pair;
+    std::weak_ptr<zooming_pair> const _zooming_pair;
 
     track_presenter(std::shared_ptr<zooming_pair> const &);
 
