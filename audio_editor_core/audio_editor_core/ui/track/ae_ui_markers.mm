@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_markers_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 
 using namespace yas;
@@ -30,6 +31,7 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
     : node(ui::node::make_shared()),
       _presenter(presenter),
       _color(color),
+      _top_guide(ui::layout_value_guide::make_shared()),
       _vertex_data(ui::static_mesh_vertex_data::make_shared(3)),
       _index_data(ui::static_mesh_index_data::make_shared(3)) {
     this->node->set_batch(ui::batch::make_shared());
@@ -37,9 +39,9 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
     this->_vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
         float const half_width = -5.0f;
         float const height = 10.0f;
-        vertices[0].position = {0.0f, 0.0f};
-        vertices[1].position = {-half_width, height};
-        vertices[2].position = {half_width, height};
+        vertices[0].position = {0.0f, -height};
+        vertices[1].position = {-half_width, 0.0f};
+        vertices[2].position = {half_width, 0.0f};
     });
 
     this->_index_data->write_once([](std::vector<ui::index2d_t> &indices) {
@@ -78,6 +80,10 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
         })
         .sync()
         ->add_to(this->_pool);
+
+    ui::layout(standard->view_look()->view_layout_guide()->top(), this->_top_guide, ui_layout_utils::constant(0.0f))
+        .sync()
+        ->add_to(this->_pool);
 }
 
 void ui_markers::set_locations(std::vector<std::optional<marker_location>> const &locations) {
@@ -91,7 +97,7 @@ void ui_markers::set_locations(std::vector<std::optional<marker_location>> const
         if (location.has_value()) {
             auto const &location_value = location.value();
             node->set_is_enabled(true);
-            node->set_position(location_value.point);
+            node->set_position({location_value.x, node->position().y});
         } else {
             node->set_is_enabled(false);
         }
@@ -115,7 +121,7 @@ void ui_markers::update_locations(std::size_t const count,
         auto const &location = pair.second;
         auto const &node = this->_sub_nodes.at(idx);
         node->set_is_enabled(true);
-        node->set_position(location.point);
+        node->set_position({location.x, node->position().y});
     }
 }
 
@@ -133,6 +139,7 @@ void ui_markers::_set_count(std::size_t const location_count) {
             node->set_mesh(ui::mesh::make_shared({}, this->_vertex_data, this->_index_data, nullptr));
             node->set_color(marker_color);
             node->set_is_enabled(false);
+            node->attach_y_layout_guide(*this->_top_guide);
             this->node->add_sub_node(node);
             this->_sub_nodes.emplace_back(std::move(node));
         }

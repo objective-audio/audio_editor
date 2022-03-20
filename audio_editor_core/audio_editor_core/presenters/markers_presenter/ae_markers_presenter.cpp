@@ -47,7 +47,7 @@ markers_presenter::markers_presenter(file_info const &file_info, std::shared_ptr
                     if (auto const space_range = this->_space_range();
                         space_range.has_value() && space_range.value().is_contain(marker.frame)) {
                         this->_location_pool->insert(marker_location::make_value(
-                            marker.identifier, marker.frame, sample_rate, this->_display_space->scale()));
+                            marker.identifier, marker.frame, sample_rate, this->_display_space->scale().width));
                     }
                     break;
             }
@@ -59,9 +59,9 @@ markers_presenter::markers_presenter(file_info const &file_info, std::shared_ptr
         ->observe([this](display_space_event const &event) {
             switch (event.source) {
                 case display_space_event_source::fetched:
-                case display_space_event_source::view:
                     this->_update_all_locations(update_type::update);
                     break;
+                case display_space_event_source::view:
                 case display_space_event_source::scale:
                     this->_update_all_locations(update_type::replace);
                     break;
@@ -96,6 +96,7 @@ std::optional<time::range> markers_presenter::_space_range() const {
 
 void markers_presenter::_update_all_locations(update_type const type) {
     auto const space_range = this->_space_range();
+    auto const scale = this->_display_space->scale();
     auto const marker_pool = this->_marker_pool.lock();
     auto const player = this->_player.lock();
 
@@ -110,11 +111,11 @@ void markers_presenter::_update_all_locations(update_type const type) {
         auto const &space_range_value = space_range.value();
 
         auto const locations = filter_map<marker_location>(
-            marker_pool->markers(), [&space_range_value, sample_rate = this->_file_info.sample_rate,
-                                     scale = this->_display_space->scale()](auto const &pair) {
+            marker_pool->markers(),
+            [&space_range_value, sample_rate = this->_file_info.sample_rate, &scale](auto const &pair) {
                 if (space_range_value.is_contain(pair.second.frame)) {
-                    return std::make_optional(
-                        marker_location::make_value(pair.second.identifier, pair.second.frame, sample_rate, scale));
+                    return std::make_optional(marker_location::make_value(pair.second.identifier, pair.second.frame,
+                                                                          sample_rate, scale.width));
                 } else {
                     return std::optional<marker_location>(std::nullopt);
                 }
