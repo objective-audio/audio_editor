@@ -232,10 +232,4 @@ void ui_editing_root::_setup_layout(std::shared_ptr<ui::view_look> const &view_l
         })
         .sync()
         ->add_to(this->_pool);
-
-    // time
-
-    ui::layout(view_look->view_layout_guide()->top(), this->_time->top_layout_target(), ui_layout_utils::constant(0.0f))
-        .sync()
-        ->add_to(this->_pool);
 }
