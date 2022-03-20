@@ -31,7 +31,7 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
     : node(ui::node::make_shared()),
       _presenter(presenter),
       _color(color),
-      _top_guide(ui::layout_value_guide::make_shared()),
+      _top_guide(standard->view_look()->view_layout_guide()->top()),
       _vertex_data(ui::static_mesh_vertex_data::make_shared(3)),
       _index_data(ui::static_mesh_index_data::make_shared(3)) {
     this->node->set_batch(ui::batch::make_shared());
@@ -78,10 +78,6 @@ ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
                 sub_node->set_color(marker_color);
             }
         })
-        .sync()
-        ->add_to(this->_pool);
-
-    ui::layout(standard->view_look()->view_layout_guide()->top(), this->_top_guide, ui_layout_utils::constant(0.0f))
         .sync()
         ->add_to(this->_pool);
 }
