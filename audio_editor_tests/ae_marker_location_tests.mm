@@ -21,8 +21,8 @@ using namespace yas::ae;
     frame_index_t const frame_2 = 2;
     uint32_t const sample_rate_1 = 1;
     uint32_t const sample_rate_2 = 2;
-    ui::size const scale_1{.width = 1.0f, .height = 1.0f};
-    ui::size const scale_2{.width = 1.0f, .height = 2.0f};
+    float const scale_1 = 1.0f;
+    float const scale_2 = 2.0f;
 
     XCTAssertTrue(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) ==
                   marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1));
