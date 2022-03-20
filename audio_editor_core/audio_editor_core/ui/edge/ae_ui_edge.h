@@ -28,8 +28,7 @@ struct ui_edge final {
 
     observing::canceller_pool _pool;
 
-    ui_edge(std::shared_ptr<edge_presenter> const &, std::shared_ptr<ui::standard> const &,
-            std::shared_ptr<ui::layout_value_guide> const &top_guide,
+    ui_edge(std::shared_ptr<edge_presenter> const &, std::shared_ptr<ui::layout_value_guide> const &top_guide,
             std::shared_ptr<ui_edge_element> const &begin_edge, std::shared_ptr<ui_edge_element> const &end_edge);
 };
 }  // namespace yas::ae
