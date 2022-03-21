@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_time_presenter.h>
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_time_constants.h>
 #include <audio_editor_core/ae_ui_types.h>
@@ -38,7 +39,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
       _color(color),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
-      _top_guide(standard->view_look()->view_layout_guide()->top()),
+      _top_guide(ui::layout_value_guide::make_shared()),
       _bg_button(
           ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard->event_manager(), standard->detector())),
       _buttons_root_node(ui::node::make_shared()),
@@ -76,6 +77,12 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
 
     this->_nudge_plane->data()->set_rect_position(ui::region{.size = {1.0f, 1.0f}}, 0);
 
+    float const node_y_offset =
+        ui_time_constants::nudge_height + this->_font_atlas->ascent() + this->_font_atlas->descent();
+    ui::layout(standard->view_look()->view_layout_guide()->bottom(), this->_top_guide,
+               ae::ui_layout_utils::constant(node_y_offset))
+        .sync()
+        ->add_to(this->_pool);
     this->node->attach_y_layout_guide(*this->_top_guide);
 
     this->_time_strings->rect_plane()->node()->mesh()->set_use_mesh_color(true);
