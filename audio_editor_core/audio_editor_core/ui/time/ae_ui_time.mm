@@ -9,7 +9,9 @@
 #include <audio_editor_core/ae_time_presenter.h>
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_time_constants.h>
 #include <audio_editor_core/ae_ui_types.h>
 #include <cpp_utils/yas_fast_each.h>
 
@@ -37,13 +39,15 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
       _color(color),
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
-      _top_guide(standard->view_look()->view_layout_guide()->top()),
+      _top_guide(ui::layout_value_guide::make_shared()),
       _bg_button(
           ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard->event_manager(), standard->detector())),
       _buttons_root_node(ui::node::make_shared()),
+      _nudge_bg_plane(ui::rect_plane::make_shared(1)),
       _nudge_plane(ui::rect_plane::make_shared(1)),
       _time_strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, _font_atlas)) {
     this->node->add_sub_node(this->_bg_button->rect_plane()->node());
+    this->node->add_sub_node(this->_nudge_bg_plane->node());
     this->node->add_sub_node(this->_buttons_root_node);
     this->node->add_sub_node(this->_nudge_plane->node());
     this->node->add_sub_node(this->_time_strings->rect_plane()->node());
@@ -73,17 +77,29 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
 
     this->_resize_buttons();
 
+    this->_nudge_bg_plane->data()->set_rect_position(ui::region{.size = {1.0f, 1.0f}}, 0);
     this->_nudge_plane->data()->set_rect_position(ui::region{.size = {1.0f, 1.0f}}, 0);
 
+    float const node_y_offset =
+        ui_time_constants::nudge_height + this->_font_atlas->ascent() + this->_font_atlas->descent();
+    ui::layout(standard->view_look()->view_layout_guide()->bottom(), this->_top_guide,
+               ae::ui_layout_utils::constant(node_y_offset))
+        .sync()
+        ->add_to(this->_pool);
     this->node->attach_y_layout_guide(*this->_top_guide);
 
     this->_time_strings->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
     this->_time_strings->actual_layout_source()
         ->observe_layout_region([this](ui::region const &region) {
-            auto const &node = this->_bg_button->rect_plane()->node();
-            node->set_position(region.origin);
-            node->set_scale(region.size);
+            auto const &bg_button_node = this->_bg_button->rect_plane()->node();
+            bg_button_node->set_position(region.origin);
+            bg_button_node->set_scale(region.size);
+
+            auto const &nudge_bg_node = this->_nudge_bg_plane->node();
+            float const nudge_height = ui_time_constants::nudge_height;
+            nudge_bg_node->set_position(region.origin - ui::point{.x = 0.0f, .y = nudge_height});
+            nudge_bg_node->set_scale(ui::size{.width = region.size.width, .height = nudge_height});
         })
         .sync()
         ->add_to(this->_pool);
@@ -120,6 +136,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
             bg_data->set_rect_color(this->_color->time_bg(), to_rect_index(0, false));
             bg_data->set_rect_color(this->_color->time_bg_tracking(), to_rect_index(0, true));
 
+            this->_nudge_bg_plane->node()->set_color(color->time_bg());
             this->_nudge_plane->node()->set_color(color->time_nudging_line());
 
             for (auto const &element : this->_button_elements) {
@@ -134,10 +151,6 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-std::shared_ptr<ui::layout_value_target> ui_time::top_layout_target() const {
-    return this->_top_guide;
 }
 
 void ui_time::_resize_buttons() {
@@ -296,7 +309,7 @@ void ui_time::_update_nudge_position() {
 
         if (region.has_value()) {
             auto const &region_value = region.value();
-            float const height = 2.0f;
+            float const height = ui_time_constants::nudge_height;
             node->set_position(ui::point{.x = region_value.left(), .y = region_value.bottom() - height});
             node->set_scale(ui::size{.width = region_value.size.width, .height = height});
             node->set_is_enabled(true);
