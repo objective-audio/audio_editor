@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_time_constants.h>
 #include <audio_editor_core/ae_ui_types.h>
 #include <cpp_utils/yas_fast_each.h>
 
@@ -292,7 +293,7 @@ void ui_time::_update_nudge_position() {
 
         if (region.has_value()) {
             auto const &region_value = region.value();
-            float const height = 2.0f;
+            float const height = ui_time_constants::nudge_height;
             node->set_position(ui::point{.x = region_value.left(), .y = region_value.bottom() - height});
             node->set_scale(ui::size{.width = region_value.size.width, .height = height});
             node->set_is_enabled(true);
