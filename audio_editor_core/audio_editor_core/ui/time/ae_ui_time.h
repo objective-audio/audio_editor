@@ -15,8 +15,6 @@ class color;
 struct ui_time final {
     [[nodiscard]] static std::shared_ptr<ui_time> make_shared(ui_project_id const &project_id);
 
-    std::shared_ptr<ui::layout_value_target> top_layout_target() const;
-
     std::shared_ptr<ui::node> const node;
 
    private:

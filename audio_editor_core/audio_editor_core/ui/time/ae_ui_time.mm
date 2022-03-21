@@ -136,10 +136,6 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
         ->add_to(this->_pool);
 }
 
-std::shared_ptr<ui::layout_value_target> ui_time::top_layout_target() const {
-    return this->_top_guide;
-}
-
 void ui_time::_resize_buttons() {
     auto const standard = this->_standard.lock();
     if (!standard) {
