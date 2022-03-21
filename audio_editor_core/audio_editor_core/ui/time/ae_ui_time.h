@@ -32,7 +32,6 @@ struct ui_time final {
     std::shared_ptr<ui::button> const _bg_button;
     std::shared_ptr<ui::node> const _buttons_root_node;
     std::vector<button_element> _button_elements;
-    std::shared_ptr<ui::rect_plane> const _nudge_bg_plane;
     std::shared_ptr<ui::rect_plane> const _nudge_plane;
     std::shared_ptr<ui::strings> const _time_strings;
 
