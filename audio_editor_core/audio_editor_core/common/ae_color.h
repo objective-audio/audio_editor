@@ -23,7 +23,8 @@ struct color final {
     ui::color edge_line() const;
     ui::color edge_text() const;
 
-    ui::color marker() const;
+    ui::color marker_triangle() const;
+    ui::color marker_line() const;
 
     ui::color time_text() const;
     ui::color time_selected_text() const;

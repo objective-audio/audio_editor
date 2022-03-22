@@ -12,6 +12,8 @@ namespace yas::ae {
 class markers_presenter;
 class display_space;
 class color;
+class ui_marker_element;
+class ui_mesh_data;
 
 struct ui_markers final {
     [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(ui_project_id const &project_id);
@@ -23,18 +25,20 @@ struct ui_markers final {
                           std::vector<std::pair<std::size_t, marker_location>> const &inserted);
 
    private:
+    uintptr_t const _project_view_id;
     std::shared_ptr<markers_presenter> const _presenter;
     std::shared_ptr<ae::color> const _color;
 
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
-    std::vector<std::shared_ptr<ui::node>> _sub_nodes;
-    std::shared_ptr<ui::static_mesh_vertex_data> const _vertex_data;
-    std::shared_ptr<ui::static_mesh_index_data> const _index_data;
+    std::vector<std::shared_ptr<ui_marker_element>> _elements;
+    std::shared_ptr<ui_mesh_data> const _vertical_line_data;
+    std::shared_ptr<ui_mesh_data> const _triangle_data;
 
     observing::canceller_pool _pool;
 
-    ui_markers(std::shared_ptr<markers_presenter> const &, std::shared_ptr<ui::standard> const &,
-               std::shared_ptr<ae::color> const &);
+    ui_markers(uintptr_t const project_view_id, std::shared_ptr<markers_presenter> const &,
+               std::shared_ptr<ui::standard> const &, std::shared_ptr<ae::color> const &,
+               std::shared_ptr<ui_mesh_data> const &);
 
     void _set_count(std::size_t const);
 };

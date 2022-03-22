@@ -5,6 +5,7 @@
 #include "ae_ui_edge_element.h"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_ui_mesh_data.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 
 using namespace yas;
@@ -23,21 +24,20 @@ ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::st
                                  std::shared_ptr<ui::font_atlas> const &font_atlas,
                                  std::shared_ptr<ae::color> const &color, args const &args)
     : node(ui::node::make_shared()),
-      _mesh(ui::mesh::make_shared()),
       _line_node(ui::node::make_shared()),
       _text(ui::strings::make_shared({.text = text}, font_atlas)),
       _color(color) {
-    this->_mesh->set_vertex_data(args.line_vertex_data);
-    this->_mesh->set_index_data(args.line_index_data);
-    this->_mesh->set_primitive_type(ui::primitive_type::line);
-    this->_line_node->set_mesh(this->_mesh);
+    auto const mesh =
+        ui::mesh::make_shared({.primitive_type = args.vertical_line_data->primitive_type},
+                              args.vertical_line_data->vertex_data, args.vertical_line_data->index_data, nullptr);
+    this->_line_node->set_mesh(mesh);
 
     this->_text->rect_plane()->node()->set_position({2.0f, 0.0f});
 
     this->node->add_sub_node(this->_line_node);
     this->node->add_sub_node(this->_text->rect_plane()->node());
 
-    this->_text->rect_plane()->node()->attach_y_layout_guide(*args.top_guide);
+    this->_text->rect_plane()->node()->attach_y_layout_guide(*standard->view_look()->view_layout_guide()->top());
 
     standard->view_look()
         ->view_layout_guide()

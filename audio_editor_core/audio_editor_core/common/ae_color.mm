@@ -79,8 +79,12 @@ ui::color color::edge_text() const {
     return to_color(@"edge_text");
 }
 
-ui::color color::marker() const {
-    return to_color(@"marker");
+ui::color color::marker_triangle() const {
+    return to_color(@"marker_triangle");
+}
+
+ui::color color::marker_line() const {
+    return to_color(@"marker_line");
 }
 
 ui::color color::time_text() const {
