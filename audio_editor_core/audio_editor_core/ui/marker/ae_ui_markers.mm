@@ -41,6 +41,8 @@ ui_markers::ui_markers(uintptr_t const project_view_id, std::shared_ptr<markers_
       _triangle_data(ui_mesh_data::make_shared(ui::primitive_type::triangle,
                                                ui::static_mesh_vertex_data::make_shared(3),
                                                ui::static_mesh_index_data::make_shared(3))) {
+    this->node->set_batch(ui::batch::make_shared());
+
     this->_triangle_data->vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
         float const half_width = -5.0f;
         float const height = 10.0f;
