@@ -13,6 +13,7 @@ class keyboard;
 class pinch_gesture_controller;
 class ui_editing_root_level_pool;
 class ui_root;
+class ui_mesh_data;
 
 struct ui_root_level {
     [[nodiscard]] static std::shared_ptr<ui_root_level> make_shared(std::shared_ptr<ui::standard> const &,
@@ -22,6 +23,7 @@ struct ui_root_level {
     std::shared_ptr<ui::standard> const standard;
     std::shared_ptr<ui::texture> const texture;
     std::shared_ptr<ui::font_atlas> const font_atlas_14;
+    std::shared_ptr<ui_mesh_data> const vertical_line_data;
     std::shared_ptr<ae::display_space> const display_space;
     std::shared_ptr<ae::keyboard> const keyboard;
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;

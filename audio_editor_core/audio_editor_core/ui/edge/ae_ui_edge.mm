@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_ui_edge_element.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
+#include <audio_editor_core/ae_ui_mesh_data.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 
 using namespace yas;
@@ -14,40 +15,20 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_edge> ui_edge::make_shared(ui_project_id const &project_id) {
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
+    auto const &vertical_line_data = ui_root_level->vertical_line_data;
 
-    auto const &top_guide = ui_root_level->standard->view_look()->view_layout_guide()->top();
-
-    auto const vertex_data = ui::static_mesh_vertex_data::make_shared(2);
-    auto const index_data = ui::static_mesh_index_data::make_shared(2);
-
-    vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
-        vertices.at(0).position = {0.0f, -0.5f};
-        vertices.at(1).position = {0.0f, 0.5f};
-    });
-
-    index_data->write_once([](std::vector<ui::index2d_t> &indices) {
-        indices.at(0) = 0;
-        indices.at(1) = 1;
-    });
-
-    ui_edge_element::args const args{
-        .line_vertex_data = vertex_data, .line_index_data = index_data, .top_guide = top_guide};
+    ui_edge_element::args const args{.vertical_line_data = vertical_line_data};
 
     auto const begin_edge = ui_edge_element::make_shared("BEGIN", args, project_id.view_id);
     auto const end_edge = ui_edge_element::make_shared("END", args, project_id.view_id);
 
     auto const presenter = edge_presenter::make_shared(project_id.identifier, ui_root_level->display_space);
-    return std::shared_ptr<ui_edge>(new ui_edge{presenter, top_guide, begin_edge, end_edge});
+    return std::shared_ptr<ui_edge>(new ui_edge{presenter, begin_edge, end_edge});
 }
 
-ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter,
-                 std::shared_ptr<ui::layout_value_guide> const &top_guide,
-                 std::shared_ptr<ui_edge_element> const &begin_edge, std::shared_ptr<ui_edge_element> const &end_edge)
-    : node(ui::node::make_shared()),
-      _presenter(presenter),
-      _top_guide(top_guide),
-      _begin_edge(begin_edge),
-      _end_edge(end_edge) {
+ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui_edge_element> const &begin_edge,
+                 std::shared_ptr<ui_edge_element> const &end_edge)
+    : node(ui::node::make_shared()), _presenter(presenter), _begin_edge(begin_edge), _end_edge(end_edge) {
     this->node->add_sub_node(this->_begin_edge->node);
     this->node->add_sub_node(this->_end_edge->node);
 
