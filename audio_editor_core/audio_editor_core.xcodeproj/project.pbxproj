@@ -16,6 +16,8 @@
 		B606EB042747EDCF006C3DD2 /* ae_exporter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B606EB032747EDCF006C3DD2 /* ae_exporter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B607E7AE276EDEC00048F75C /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B607E7AD276EDEC00048F75C /* Accelerate.framework */; };
 		B6097BC1272535FE008A6D57 /* ae_gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6097BC0272535FE008A6D57 /* ae_gesture.cpp */; };
+		B60AEF0C27EACE3A000D2019 /* ae_ui_modal_bg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B60AEF0A27EACE3A000D2019 /* ae_ui_modal_bg.mm */; };
+		B60AEF0D27EACE3A000D2019 /* ae_ui_modal_bg.h in Headers */ = {isa = PBXBuildFile; fileRef = B60AEF0B27EACE3A000D2019 /* ae_ui_modal_bg.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B61262F92782FC560019B364 /* ae_nudging_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262F72782FC560019B364 /* ae_nudging_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B61262FC2782FF030019B364 /* ae_nudging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FA2782FF030019B364 /* ae_nudging.cpp */; };
 		B61262FD2782FF030019B364 /* ae_nudging.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FB2782FF030019B364 /* ae_nudging.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -290,6 +292,8 @@
 		B606EB032747EDCF006C3DD2 /* ae_exporter_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_exporter_types.h; sourceTree = "<group>"; };
 		B607E7AD276EDEC00048F75C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		B6097BC0272535FE008A6D57 /* ae_gesture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_gesture.cpp; sourceTree = "<group>"; };
+		B60AEF0A27EACE3A000D2019 /* ae_ui_modal_bg.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_modal_bg.mm; sourceTree = "<group>"; };
+		B60AEF0B27EACE3A000D2019 /* ae_ui_modal_bg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_modal_bg.h; sourceTree = "<group>"; };
 		B61262F72782FC560019B364 /* ae_nudging_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_types.h; sourceTree = "<group>"; };
 		B61262FA2782FF030019B364 /* ae_nudging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudging.cpp; sourceTree = "<group>"; };
 		B61262FB2782FF030019B364 /* ae_nudging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging.h; sourceTree = "<group>"; };
@@ -626,6 +630,7 @@
 				B68C3E7A27088AEA00888A53 /* ae_ui_root.mm */,
 				B6EE90DE27A25A26000470F3 /* ae_ui_types.cpp */,
 				B6EE90DC27A25A06000470F3 /* ae_ui_types.h */,
+				B60AEF0927EACE2B000D2019 /* modal_bg */,
 				B6DC2CBB27B649C2000EF5F9 /* edge */,
 				B6F09CE427E84ECE00638C6A /* marker */,
 				B6B1E5D927E437E100FA4B88 /* scroller */,
@@ -633,6 +638,15 @@
 				B6C3A58827102CA700514B94 /* track */,
 			);
 			path = ui;
+			sourceTree = "<group>";
+		};
+		B60AEF0927EACE2B000D2019 /* modal_bg */ = {
+			isa = PBXGroup;
+			children = (
+				B60AEF0A27EACE3A000D2019 /* ae_ui_modal_bg.mm */,
+				B60AEF0B27EACE3A000D2019 /* ae_ui_modal_bg.h */,
+			);
+			path = modal_bg;
 			sourceTree = "<group>";
 		};
 		B61262F52782FC310019B364 /* nudging */ = {
@@ -1483,6 +1497,7 @@
 				B6DBC36D276382FB001AF1D3 /* ae_recycle_pool_private.h in Headers */,
 				B681357C271EF1FA009CC0FC /* ae_pinch_gesture_controller.h in Headers */,
 				B6966F41272E639D00A90733 /* ae_db_utils.h in Headers */,
+				B60AEF0D27EACE3A000D2019 /* ae_ui_modal_bg.h in Headers */,
 				B6B563C6271BD3FD0003ED60 /* ae_common_utils.h in Headers */,
 				B61262FD2782FF030019B364 /* ae_nudging.h in Headers */,
 				B6966F33272CEF9100A90733 /* ae_editing_root_presenter_types.h in Headers */,
@@ -1625,6 +1640,7 @@
 				B68483E327C3B6E200792D17 /* ae_context_menu_presenter.cpp in Sources */,
 				B6DBC36F2764447D001AF1D3 /* ae_marker_location.cpp in Sources */,
 				B6A55ECC266C81980039E56F /* ae_ui_layout_utils.cpp in Sources */,
+				B60AEF0C27EACE3A000D2019 /* ae_ui_modal_bg.mm in Sources */,
 				B6F3D6A427E20BA00013E00B /* ae_time_editor_responder.cpp in Sources */,
 				B68483FE27C5BBF800792D17 /* ae_app.cpp in Sources */,
 				B64504BB271A94D2009E05D6 /* ae_modules_presenter.cpp in Sources */,

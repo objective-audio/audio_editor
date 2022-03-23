@@ -87,6 +87,10 @@ ui::color color::marker_line() const {
     return to_color(@"marker_line");
 }
 
+ui::color color::modal_bg() const {
+    return to_color(@"modal_bg");
+}
+
 ui::color color::time_text() const {
     return to_color(@"time_text");
 }

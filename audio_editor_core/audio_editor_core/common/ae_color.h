@@ -26,6 +26,8 @@ struct color final {
     ui::color marker_triangle() const;
     ui::color marker_line() const;
 
+    ui::color modal_bg() const;
+
     ui::color time_text() const;
     ui::color time_selected_text() const;
     ui::color time_nudging_line() const;
