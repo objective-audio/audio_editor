@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_ui_edge.h>
 #include <audio_editor_core/ae_ui_editing_root.h>
 #include <audio_editor_core/ae_ui_markers.h>
+#include <audio_editor_core/ae_ui_modal_bg.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
 #include <audio_editor_core/ae_ui_modules.h>
 #include <audio_editor_core/ae_ui_scroller.h>
@@ -28,6 +29,7 @@ ui_editing_root_level::ui_editing_root_level(ui_project_id const &project_id)
       markers(ui_markers::make_shared(project_id)),
       track(ui_track::make_shared(project_id, this->modules)),
       scroller(ui_scroller::make_shared(project_id, this->track, this->edge, this->markers)),
+      modal_bg(ui_modal_bg::make_shared(project_id)),
       time(ui_time::make_shared(project_id)),
-      editing_root(ui_editing_root::make_shared(project_id, this->scroller, this->time)) {
+      editing_root(ui_editing_root::make_shared(project_id, this->scroller, this->modal_bg, this->time)) {
 }

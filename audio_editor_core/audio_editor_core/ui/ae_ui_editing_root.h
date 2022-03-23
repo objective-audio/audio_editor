@@ -15,6 +15,7 @@ class action_controller;
 class pinch_gesture_controller;
 class ui_track;
 class ui_scroller;
+class ui_modal_bg;
 class ui_time;
 class color;
 class keyboard;
@@ -26,6 +27,7 @@ struct ui_editing_root final {
 
     [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(ui_project_id const &project_id,
                                                                       std::shared_ptr<ui_scroller> const &,
+                                                                      std::shared_ptr<ui_modal_bg> const &,
                                                                       std::shared_ptr<ui_time> const &);
 
    private:
@@ -41,6 +43,7 @@ struct ui_editing_root final {
     std::shared_ptr<ui::strings> const _marker_pool_strings;
     std::shared_ptr<ui::rect_plane> const _playing_line;
     std::shared_ptr<ui_scroller> const _scroller;
+    std::shared_ptr<ui_modal_bg> const _modal_bg;
     std::shared_ptr<ui_time> const _time;
 
     observing::canceller_pool _pool;
@@ -49,7 +52,7 @@ struct ui_editing_root final {
                     std::shared_ptr<ae::color> const &, std::shared_ptr<editing_root_presenter> const &,
                     std::shared_ptr<action_controller> const &, std::shared_ptr<pinch_gesture_controller> const &,
                     std::shared_ptr<ae::keyboard> const &, std::shared_ptr<ui_scroller> const &,
-                    std::shared_ptr<ui_time> const &);
+                    std::shared_ptr<ui_modal_bg> const &, std::shared_ptr<ui_time> const &);
 
     void _setup_node_hierarchie();
     void _setup_observing(std::shared_ptr<ui::standard> const &, std::shared_ptr<ae::keyboard> const &);
