@@ -15,7 +15,11 @@ db::model database_utils::make_model() {
     yas::version version{"0.0.1"};
 
     db::entity_args module_entity{.name = module_name::entity,
-                                  .attributes = {{.name = module_name::attribute::file_frame,
+                                  .attributes = {{.name = module_name::attribute::name,
+                                                  .type = db::attribute_type::text,
+                                                  .default_value = db::value{""},
+                                                  .not_null = true},
+                                                 {.name = module_name::attribute::file_frame,
                                                   .type = db::attribute_type::integer,
                                                   .default_value = db::value{0},
                                                   .not_null = true},
