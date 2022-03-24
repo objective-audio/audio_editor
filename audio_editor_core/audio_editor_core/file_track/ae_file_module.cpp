@@ -15,7 +15,8 @@ bool file_module::is_equal_location(file_module const &rhs) const {
 
 std::optional<file_module> file_module::head_dropped(frame_index_t const frame) const {
     if (file_module_utils::can_split_time_range(this->range, frame)) {
-        return file_module{.range = {frame, static_cast<proc::length_t>(this->range.next_frame() - frame)},
+        return file_module{.name = this->name,
+                           .range = {frame, static_cast<proc::length_t>(this->range.next_frame() - frame)},
                            .file_frame = static_cast<frame_index_t>(this->file_frame - this->range.frame + frame)};
     } else {
         return std::nullopt;
@@ -24,7 +25,8 @@ std::optional<file_module> file_module::head_dropped(frame_index_t const frame) 
 
 std::optional<file_module> file_module::tail_dropped(frame_index_t const frame) const {
     if (file_module_utils::can_split_time_range(this->range, frame)) {
-        return file_module{.range = {this->range.frame, static_cast<proc::length_t>(frame - this->range.frame)},
+        return file_module{.name = this->name,
+                           .range = {this->range.frame, static_cast<proc::length_t>(frame - this->range.frame)},
                            .file_frame = this->file_frame};
     } else {
         return std::nullopt;
@@ -32,7 +34,7 @@ std::optional<file_module> file_module::tail_dropped(frame_index_t const frame) 
 }
 
 file_module file_module::offset(frame_index_t const offset) const {
-    return file_module{.range = this->range.offset(offset), .file_frame = this->file_frame};
+    return file_module{.name = this->name, .range = this->range.offset(offset), .file_frame = this->file_frame};
 }
 
 std::string yas::to_string(ae::file_module const &file_module) {

@@ -214,9 +214,10 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
         ->add_to(this->_pool);
 
     // プロジェクトの初期状態を作る。事前にdbに直接挿入してrevertから始めるべきかもしれない。
-    this->_database->suspend_saving([this, &file_info] {
-        this->_file_track->insert_module_and_notify(
-            file_module{.range = time::range{0, file_info.length}, .file_frame = 0});
+    this->_database->suspend_saving([this, &file_info, &editing_file_url] {
+        this->_file_track->insert_module_and_notify(file_module{.name = editing_file_url.last_path_component(),
+                                                                .range = time::range{0, file_info.length},
+                                                                .file_frame = 0});
 
         this->_edge_editor->set_edge({.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
     });

@@ -12,6 +12,7 @@
 namespace yas::ae {
 struct file_module final {
     identifier identifier;
+    std::string name;
     time::range range;
     frame_index_t file_frame;
 
