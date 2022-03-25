@@ -31,23 +31,30 @@ struct ui_modules final {
    private:
     std::shared_ptr<modules_presenter> const _presenter;
     std::shared_ptr<ae::color> const _color;
+    std::shared_ptr<ui::font_atlas> const _name_font_atlas;
     std::shared_ptr<ui_module_waveforms> const _waveforms;
     std::shared_ptr<ui::node> const _triangle_node;
     std::shared_ptr<ui::node> const _line_node;
+    std::shared_ptr<ui::node> const _names_root_node;
 
+    ui::size _scale{.width = 1.0f, .height = 1.0f};
     std::size_t _remaked_count = 0;
     std::shared_ptr<ui::dynamic_mesh_vertex_data> _vertex_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _triangle_index_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _line_index_data;
     std::shared_ptr<ui::mesh> const _triangle_mesh;
     std::shared_ptr<ui::mesh> const _line_mesh;
+    std::vector<std::shared_ptr<ui::strings>> _names;
 
     observing::canceller_pool _pool;
 
     ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<ui::standard> const &,
-               std::shared_ptr<ae::color> const &, std::shared_ptr<ui_module_waveforms> const &);
+               std::shared_ptr<ae::color> const &, std::shared_ptr<ui::font_atlas> const &,
+               std::shared_ptr<ui_module_waveforms> const &);
 
     void _remake_data_if_needed(std::size_t const);
     void _set_rect_count(std::size_t const);
+    void _update_all_name_positions();
+    void _update_name_position(std::size_t const idx, ae::module_location const &);
 };
 }  // namespace yas::ae
