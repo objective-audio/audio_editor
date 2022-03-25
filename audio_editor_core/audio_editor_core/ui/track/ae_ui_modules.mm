@@ -51,6 +51,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
     this->node->add_sub_node(this->_line_node);
     this->node->add_sub_node(this->_names_root_node);
 
+    this->node->set_batch(ui::batch::make_shared());
+
     this->_triangle_node->set_mesh(this->_triangle_mesh);
     this->_line_node->set_mesh(this->_line_mesh);
 
