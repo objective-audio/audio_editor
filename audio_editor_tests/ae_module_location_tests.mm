@@ -17,6 +17,8 @@ using namespace yas::ae;
 - (void)test_equal {
     identifier const id_1;
     identifier const id_2;
+    std::string const name_1 = "name_1";
+    std::string const name_2 = "name_2";
     time::range const range_1(0, 1);
     time::range const range_2(0, 2);
     frame_index_t const file_frame_1 = 1;
@@ -28,35 +30,55 @@ using namespace yas::ae;
     float const scale_1 = 1.0f;
     float const scale_2 = 2.0f;
 
-    XCTAssertTrue(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
-                  module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
-    XCTAssertFalse(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
-                   module_location::make_value(id_2, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
-    XCTAssertFalse(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
-                   module_location::make_value(id_1, range_2, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
-    XCTAssertFalse(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
-                   module_location::make_value(id_1, range_1, file_frame_2, sample_rate_1, mesh_elements_1, scale_1));
-    XCTAssertFalse(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
-                   module_location::make_value(id_1, range_1, file_frame_1, sample_rate_2, mesh_elements_1, scale_1));
-    XCTAssertFalse(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
-                   module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_2, scale_1));
-    XCTAssertFalse(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
-                   module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_2));
+    XCTAssertTrue(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertFalse(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
+        module_location::make_value(id_2, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertFalse(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
+        module_location::make_value(id_1, name_2, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertFalse(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
+        module_location::make_value(id_1, name_1, range_2, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertFalse(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
+        module_location::make_value(id_1, name_1, range_1, file_frame_2, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertFalse(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_2, mesh_elements_1, scale_1));
+    XCTAssertFalse(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_2, scale_1));
+    XCTAssertFalse(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) ==
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_2));
 
-    XCTAssertFalse(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
-                   module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
-    XCTAssertTrue(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
-                  module_location::make_value(id_2, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
-    XCTAssertTrue(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
-                  module_location::make_value(id_1, range_2, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
-    XCTAssertTrue(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
-                  module_location::make_value(id_1, range_1, file_frame_2, sample_rate_1, mesh_elements_1, scale_1));
-    XCTAssertTrue(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
-                  module_location::make_value(id_1, range_1, file_frame_1, sample_rate_2, mesh_elements_1, scale_1));
-    XCTAssertTrue(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
-                  module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_2, scale_1));
-    XCTAssertTrue(module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
-                  module_location::make_value(id_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_2));
+    XCTAssertFalse(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertTrue(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
+        module_location::make_value(id_2, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertTrue(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
+        module_location::make_value(id_1, name_2, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertTrue(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
+        module_location::make_value(id_1, name_1, range_2, file_frame_1, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertTrue(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
+        module_location::make_value(id_1, name_1, range_1, file_frame_2, sample_rate_1, mesh_elements_1, scale_1));
+    XCTAssertTrue(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_2, mesh_elements_1, scale_1));
+    XCTAssertTrue(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_2, scale_1));
+    XCTAssertTrue(
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_1) !=
+        module_location::make_value(id_1, name_1, range_1, file_frame_1, sample_rate_1, mesh_elements_1, scale_2));
 }
 
 @end
