@@ -36,11 +36,6 @@ struct ui_editing_root final {
     std::weak_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
 
     std::shared_ptr<ae::color> const _color;
-    std::shared_ptr<ui::font_atlas> const _font_atlas;
-    std::shared_ptr<ui::strings> const _status_strings;
-    std::shared_ptr<ui::strings> const _file_info_strings;
-    std::shared_ptr<ui::strings> const _file_track_strings;
-    std::shared_ptr<ui::strings> const _marker_pool_strings;
     std::shared_ptr<ui::rect_plane> const _playing_line;
     std::shared_ptr<ui_scroller> const _scroller;
     std::shared_ptr<ui_modal_bg> const _modal_bg;
