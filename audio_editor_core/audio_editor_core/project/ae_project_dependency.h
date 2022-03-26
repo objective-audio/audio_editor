@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_edge_presenter_dependency.h>
-#include <audio_editor_core/ae_editing_root_presenter_dependency.h>
 #include <audio_editor_core/ae_file_importer_types.h>
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_markers_presenter_dependency.h>
