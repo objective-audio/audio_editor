@@ -1,5 +1,5 @@
 //
-//  ae_dialog_types.h
+//  ae_dialog_event.h
 //
 
 #pragma once

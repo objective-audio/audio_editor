@@ -11,6 +11,7 @@
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_root_level_pool.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
+#include <objc_utils/yas_objc_unowned.h>
 #import "AEMetalView.h"
 
 using namespace yas;
@@ -58,18 +59,16 @@ using namespace yas::ae;
                              renderer:standard->renderer()
                         event_manager:standard->event_manager()];
 
-    project_level->dialog_presenter
-        ->observe_event([weak_controller = to_weak(self->_action_controller)](dialog_event const &event) {
-            auto const panel = [NSSavePanel savePanel];
-            panel.canCreateDirectories = YES;
-            panel.allowedFileTypes = @[@"wav"];
-            panel.nameFieldStringValue = @"Untitled";
+    auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
 
-            if ([panel runModal] == NSModalResponseOK) {
-                if (auto const controller = weak_controller.lock()) {
-                    auto const path = to_string((__bridge CFStringRef)panel.URL.path);
-                    controller->handle_action({action_kind::export_to_file, path});
-                }
+    project_level->dialog_presenter
+        ->observe_event([unowned_self](dialog_event const &event) {
+            auto *const self = unowned_self.object;
+
+            switch (event) {
+                case dialog_event::select_file_for_export: {
+                    [self showSelectFileForExportDialog];
+                } break;
             }
         })
         .end()
@@ -165,6 +164,20 @@ using namespace yas::ae;
     }
 
     return std::nullopt;
+}
+
+#pragma mark -
+
+- (void)showSelectFileForExportDialog {
+    auto *const panel = [NSSavePanel savePanel];
+    panel.canCreateDirectories = YES;
+    panel.allowedFileTypes = @[@"wav"];
+    panel.nameFieldStringValue = @"Untitled";
+
+    if ([panel runModal] == NSModalResponseOK) {
+        auto const path = to_string((__bridge CFStringRef)panel.URL.path);
+        self->_action_controller->handle_action({action_kind::export_to_file, path});
+    }
 }
 
 @end
