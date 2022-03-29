@@ -30,7 +30,7 @@ void file_track::insert_module_and_notify(file_module const &module) {
 }
 
 void file_track::erase_module_and_notify(file_module const &module) {
-    if (this->_modules.count(module.range) > 0) {
+    if (this->_modules.contains(module.range)) {
         this->_modules.erase(module.range);
         this->_event_fetcher->push(
             {.type = file_track_event_type::erased, .module = module, .modules = this->_modules});
