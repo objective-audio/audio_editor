@@ -27,10 +27,16 @@ template <typename Element>
 struct recycle_pool final {
     [[nodiscard]] static std::shared_ptr<recycle_pool<Element>> make_shared();
 
+    /// 全ての要素をそのままセットして更新する
     void replace_all(std::vector<Element> const &);
+    /// 元のelementsを活かしながら全ての要素を更新する
     void update_all(std::vector<Element> const &);
+    /// 単独の要素を削除する
     void erase(identifier const &);
+    /// 単独の要素を追加する
     void insert(Element const &);
+    /// identifierの一致する単独の要素を置き換える
+    void replace(Element const &);
 
     std::vector<std::optional<Element>> const &elements() const;
 
