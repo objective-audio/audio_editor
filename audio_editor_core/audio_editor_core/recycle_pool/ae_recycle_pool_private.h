@@ -147,6 +147,31 @@ void recycle_pool<Element>::insert(Element const &element) {
 }
 
 template <typename Element>
+void recycle_pool<Element>::replace(Element const &element) {
+    std::vector<std::pair<std::size_t, Element>> replaced;
+
+    auto each = make_fast_each(this->_elements.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto const &overwriting = this->_elements.at(idx);
+        if (overwriting.has_value()) {
+            if (overwriting.value().identifier == element.identifier) {
+                replaced.emplace_back(idx, element);
+                this->_elements.at(idx) = element;
+                break;
+            }
+        }
+    }
+
+    if (replaced.empty()) {
+        return;
+    }
+
+    this->_fetcher->push(
+        {.type = recycle_pool_event_type::updated, .elements = this->_elements, .replaced = std::move(replaced)});
+}
+
+template <typename Element>
 std::vector<std::optional<Element>> const &recycle_pool<Element>::elements() const {
     return this->_elements;
 }
