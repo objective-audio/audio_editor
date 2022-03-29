@@ -22,6 +22,7 @@ using namespace yas::ae;
 @end
 
 @implementation AEMetalViewController {
+    std::string _project_id;
     std::weak_ptr<ui_root_level> _root_level;
     std::shared_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
@@ -44,6 +45,8 @@ using namespace yas::ae;
 }
 
 - (void)setupWithProjectID:(std::string const &)project_id {
+    self->_project_id = project_id;
+
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
