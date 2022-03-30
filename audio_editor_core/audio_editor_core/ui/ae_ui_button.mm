@@ -64,7 +64,7 @@ void ui_button::set_text(std::string const &text) {
 }
 
 void ui_button::set_enabled(bool const enabled) {
-    this->_button->rect_plane()->node()->collider()->set_enabled(enabled);
+    this->_button->rect_plane()->node()->colliders().at(0)->set_enabled(enabled);
     auto const state = enabled ? ui_button_state::enabled : ui_button_state::disabled;
     this->_button->set_state_index(ui_button_utils::to_state_idx(state));
 }
