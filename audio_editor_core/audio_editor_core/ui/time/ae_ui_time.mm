@@ -40,8 +40,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
       _font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
       _top_guide(ui::layout_value_guide::make_shared()),
-      _bg_button(
-          ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard->event_manager(), standard->detector())),
+      _bg_button(ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard)),
       _buttons_root_node(ui::node::make_shared()),
       _nudge_plane(ui::rect_plane::make_shared(1)),
       _time_strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, _font_atlas)) {
@@ -60,8 +59,8 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
 
     this->_bg_button
         ->observe([this](ui::button::context const &context) {
-            switch (context.method) {
-                case ui::button::method::ended:
+            switch (context.phase) {
+                case ui::button::phase::ended:
                     if (context.touch.touch_id == ui::touch_id::mouse_left()) {
                         this->_action_controller->handle_action({action_kind::begin_time_editing});
                     }
@@ -166,8 +165,8 @@ void ui_time::_resize_buttons() {
         auto each = make_fast_each(adding_count);
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
-            auto button = ui::button::make_shared(ui::region{.origin = ui::point::zero(), .size = {1.0f, 1.0f}}, 2,
-                                                  standard->event_manager(), standard->detector());
+            auto button =
+                ui::button::make_shared(ui::region{.origin = ui::point::zero(), .size = {1.0f, 1.0f}}, standard, 2);
 
             button->set_can_begin_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
             button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
@@ -176,8 +175,8 @@ void ui_time::_resize_buttons() {
 
             auto canceller = button
                                  ->observe([this, idx](ui::button::context const &context) {
-                                     switch (context.method) {
-                                         case ui::button::method::ended: {
+                                     switch (context.phase) {
+                                         case ui::button::phase::ended: {
                                              // 左クリック
                                              if (context.touch.touch_id == ui::touch_id::mouse_left()) {
                                                  this->_action_controller->handle_action(
