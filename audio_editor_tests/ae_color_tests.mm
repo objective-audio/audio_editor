@@ -18,12 +18,24 @@ using namespace yas::ae;
     auto const color = ae::color::make_shared();
 
     XCTAssertNoThrow(color->background());
+
     XCTAssertNoThrow(color->playing_line_pausing());
     XCTAssertNoThrow(color->playing_line_playing());
     XCTAssertNoThrow(color->playing_line_scroling());
+
     XCTAssertNoThrow(color->module_frame());
     XCTAssertNoThrow(color->module_bg());
+    XCTAssertNoThrow(color->module_name());
     XCTAssertNoThrow(color->waveform());
+
+    XCTAssertNoThrow(color->edge_line());
+    XCTAssertNoThrow(color->edge_text());
+
+    XCTAssertNoThrow(color->marker_triangle());
+    XCTAssertNoThrow(color->marker_line());
+
+    XCTAssertNoThrow(color->modal_bg());
+
     XCTAssertNoThrow(color->time_text());
     XCTAssertNoThrow(color->time_selected_text());
     XCTAssertNoThrow(color->time_nudging_line());
@@ -33,6 +45,7 @@ using namespace yas::ae;
     XCTAssertNoThrow(color->time_unit_tracking());
     XCTAssertNoThrow(color->time_unit_selected());
     XCTAssertNoThrow(color->time_unit_selected_tracking());
+
     XCTAssertNoThrow(color->debug_text());
 }
 
