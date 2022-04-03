@@ -67,6 +67,10 @@ ui::color color::module_bg() const {
     return to_color(@"module_bg");
 }
 
+ui::color color::module_name() const {
+    return to_color(@"module_name");
+}
+
 ui::color color::waveform() const {
     return to_color(@"waveform");
 }

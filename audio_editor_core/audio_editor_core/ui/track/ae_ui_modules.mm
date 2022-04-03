@@ -83,6 +83,11 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
             auto const &color = this->_color;
             this->_line_node->set_color(color->module_frame());
             this->_triangle_node->set_color(color->module_bg());
+
+            auto const module_name_color = this->_color->module_name();
+            for (auto const &name : this->_names) {
+                name->rect_plane()->node()->set_color(module_name_color);
+            }
         })
         .sync()
         ->add_to(this->_pool);

@@ -18,6 +18,7 @@ struct color final {
 
     ui::color module_frame() const;
     ui::color module_bg() const;
+    ui::color module_name() const;
     ui::color waveform() const;
 
     ui::color edge_line() const;
