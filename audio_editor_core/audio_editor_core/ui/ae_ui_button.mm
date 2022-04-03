@@ -15,7 +15,7 @@ std::shared_ptr<ui_button> ui_button::make_shared(std::shared_ptr<ui::font_atlas
 }
 
 ui_button::ui_button(std::shared_ptr<ui::font_atlas> const &font_atlas, std::shared_ptr<ui::standard> const &standard)
-    : _button(ui::button::make_shared(ui::region::zero(), 2, standard->event_manager(), standard->detector())),
+    : _button(ui::button::make_shared(ui::region::zero(), standard, 2)),
       _strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, font_atlas)) {
     this->_button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
@@ -75,7 +75,7 @@ std::shared_ptr<ui::node> const &ui_button::node() const {
 
 observing::endable ui_button::observe_tapped(std::function<void(void)> &&handler) {
     return this->_button->observe([handler = std::move(handler)](auto const &context) {
-        if (context.method == ui::button::method::ended) {
+        if (context.phase == ui::button::phase::ended) {
             handler();
         }
     });

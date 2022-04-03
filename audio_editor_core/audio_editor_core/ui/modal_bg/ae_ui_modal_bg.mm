@@ -26,15 +26,15 @@ ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::sha
                          std::shared_ptr<action_controller> const &action_controller)
     : node(ui::node::make_shared()),
       _color(color),
-      _button(ui::button::make_shared({.size = {1.0f, 1.0f}}, standard->event_manager(), standard->detector())),
+      _button(ui::button::make_shared({.size = {1.0f, 1.0f}}, standard)),
       _action_controller(action_controller) {
     auto const &button_node = this->_button->rect_plane()->node();
     this->node->add_sub_node(button_node);
 
     this->_button
         ->observe([this](auto const &context) {
-            switch (context.method) {
-                case ui::button::method::ended:
+            switch (context.phase) {
+                case ui::button::phase::ended:
                     this->_action_controller->handle_action({ae::action_kind::cancel_time_editing});
                     break;
                 default:
