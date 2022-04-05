@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <audio_editor_core/ae_responder.h>
@@ -13,6 +12,7 @@ namespace yas::ae {
 class time_editor;
 class time_editor_level_pool;
 class responder_stack;
+class dialog_presenter;
 
 struct project_editor final {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(

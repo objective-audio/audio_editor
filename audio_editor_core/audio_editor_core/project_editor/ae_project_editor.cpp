@@ -5,6 +5,7 @@
 #include "ae_project_editor.h"
 
 #include <audio_editor_core/ae_database.h>
+#include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_loader.h>
