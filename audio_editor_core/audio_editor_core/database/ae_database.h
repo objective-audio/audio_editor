@@ -30,6 +30,7 @@ struct database final : database_for_project_editor {
 
     void add_module(file_module const &) override;
     void remove_module(time::range const &) override;
+    void update_module_detail(file_module const &) override;
     void set_pasting_data(std::string const &) override;
     void add_marker(marker const &) override;
     void remove_marker(frame_index_t const &) override;

@@ -16,6 +16,7 @@ struct db_module final {
 
     [[nodiscard]] std::optional<file_module> file_module() const;
 
+    void set_name(std::string const &);
     void remove();
 
    private:

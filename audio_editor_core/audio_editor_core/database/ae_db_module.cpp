@@ -43,6 +43,10 @@ std::optional<file_module> db_module::file_module() const {
     return std::nullopt;
 }
 
+void db_module::set_name(std::string const &name) {
+    this->_object->set_attribute_value(module_name::attribute::name, db::value{name});
+}
+
 void db_module::remove() {
     this->_object->remove();
 }
