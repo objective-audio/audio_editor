@@ -15,6 +15,7 @@ struct file_track final : file_track_for_project_editor {
     void revert_modules_and_notify(std::vector<file_module> &&) override;
     void insert_module_and_notify(file_module const &) override;
     void erase_module_and_notify(file_module const &) override;
+    void set_module_name_and_notify(time::range const &, std::string const &);
 
     std::optional<file_module> module_at(frame_index_t const) const override;
     std::optional<file_module> previous_module_at(frame_index_t const) const override;

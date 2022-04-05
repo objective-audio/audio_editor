@@ -123,6 +123,12 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                         this->_database->remove_module(file_module.range);
                     }
                     break;
+                case file_track_event_type::detail_updated:
+                    if (auto const &track = this->_track) {
+                        auto const &file_module = event.module.value();
+                        this->_database->update_module_detail(file_module);
+                    }
+                    break;
             }
         })
         .sync()

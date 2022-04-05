@@ -37,6 +37,17 @@ void file_track::erase_module_and_notify(file_module const &module) {
     }
 }
 
+void file_track::set_module_name_and_notify(time::range const &range, std::string const &name) {
+    if (this->_modules.contains(range)) {
+        auto &module = this->_modules.at(range);
+        if (module.name != name) {
+            module.name = name;
+            this->_event_fetcher->push(
+                {.type = file_track_event_type::detail_updated, .module = module, .modules = this->_modules});
+        }
+    }
+}
+
 std::optional<file_module> file_track::module_at(frame_index_t const frame) const {
     return file_module_utils::module(this->_modules, frame);
 }
