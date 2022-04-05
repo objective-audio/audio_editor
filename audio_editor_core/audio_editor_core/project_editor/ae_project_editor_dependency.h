@@ -117,6 +117,7 @@ struct database_for_project_editor {
 
     virtual void add_module(file_module const &) = 0;
     virtual void remove_module(time::range const &) = 0;
+    virtual void update_module_detail(file_module const &) = 0;
     virtual void set_pasting_data(std::string const &) = 0;
     virtual void add_marker(marker const &) = 0;
     virtual void remove_marker(frame_index_t const &) = 0;

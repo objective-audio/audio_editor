@@ -65,6 +65,16 @@ void database::remove_module(time::range const &range) {
     }
 }
 
+void database::update_module_detail(file_module const &file_module) {
+    auto const &range = file_module.range;
+
+    if (this->_modules.contains(range)) {
+        auto &db_module = this->_modules.at(range);
+        db_module.set_name(file_module.name);
+        this->_save();
+    }
+}
+
 void database::set_pasting_data(std::string const &data) {
     if (auto const &subject = this->_pasting_subject) {
         auto subject_value = subject.value();

@@ -54,6 +54,14 @@ modules_presenter::modules_presenter(file_info const &file_info, std::shared_ptr
                             module, sample_rate, space_range.value(), this->_display_space->scale().width));
                     }
                 } break;
+                case file_track_event_type::detail_updated: {
+                    auto const &module = event.module.value();
+                    auto const space_range = this->_space_range();
+                    if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
+                        this->_location_pool->replace(module_location::make_value(
+                            module, sample_rate, space_range.value(), this->_display_space->scale().width));
+                    }
+                } break;
             }
         })
         .sync()

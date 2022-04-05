@@ -18,6 +18,7 @@ enum class file_track_event_type {
     reverted,
     inserted,
     erased,
+    detail_updated,
 };
 
 struct file_track_event final {

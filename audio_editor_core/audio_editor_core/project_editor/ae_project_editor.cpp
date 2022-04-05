@@ -5,6 +5,7 @@
 #include "ae_project_editor.h"
 
 #include <audio_editor_core/ae_database.h>
+#include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_loader.h>
@@ -16,6 +17,7 @@
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_responder_stack.h>
+#include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_level.h>
 #include <audio_editor_core/ae_time_editor_level_pool.h>
@@ -39,10 +41,10 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool) {
     auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
-    return std::shared_ptr<project_editor>(
-        new project_editor{project_url->editing_file(), file_info, project_level->player, file_track, marker_pool,
-                           edge_editor, pasteboard, database, exporter, project_level->dialog_presenter, nudging,
-                           timing, project_level->responder_stack, time_editor_level_pool});
+    return std::shared_ptr<project_editor>(new project_editor{
+        project_url->editing_file(), file_info, project_level->player, file_track, marker_pool, edge_editor, pasteboard,
+        database, exporter, project_level->dialog_presenter, project_level->sheet_presenter, nudging, timing,
+        project_level->responder_stack, time_editor_level_pool});
 }
 
 project_editor::project_editor(url const &editing_file_url, ae::file_info const &file_info,
@@ -54,6 +56,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<database_for_project_editor> const &database,
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
+                               std::shared_ptr<sheet_presenter> const &sheet_presenter,
                                std::shared_ptr<nudging_for_project_editor> const &nudging,
                                std::shared_ptr<timing_for_project_editor> const &timing,
                                std::shared_ptr<responder_stack> const &responder_stack,
@@ -70,6 +73,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _database(database),
       _exporter(exporter),
       _dialog_presenter(dialog_presenter),
+      _sheet_presenter(sheet_presenter),
       _nudging(nudging),
       _timing(timing),
       _responder_stack(responder_stack),
@@ -121,6 +125,12 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                         auto const &file_module = event.module.value();
                         track->erase_modules_for_range(file_module.range);
                         this->_database->remove_module(file_module.range);
+                    }
+                    break;
+                case file_track_event_type::detail_updated:
+                    if (auto const &track = this->_track) {
+                        auto const &file_module = event.module.value();
+                        this->_database->update_module_detail(file_module);
                     }
                     break;
             }

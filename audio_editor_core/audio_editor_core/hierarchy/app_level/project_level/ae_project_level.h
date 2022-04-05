@@ -17,6 +17,7 @@ class scrolling;
 class system_url;
 class player;
 class dialog_presenter;
+class sheet_presenter;
 class context_menu_presenter;
 class responder_stack;
 class project;
@@ -34,6 +35,7 @@ struct project_level final {
     std::shared_ptr<ae::player> const player;
     std::shared_ptr<ae::responder_stack> const responder_stack;
     std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
+    std::shared_ptr<ae::sheet_presenter> const sheet_presenter;
     std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;
     std::shared_ptr<ae::project_editor_level_pool> const editor_level_pool;
     std::shared_ptr<ae::project> const project;
