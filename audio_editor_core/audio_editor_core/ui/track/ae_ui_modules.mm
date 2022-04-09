@@ -72,7 +72,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                     this->set_locations(event.elements);
                     break;
                 case module_location_pool_event_type::updated:
-                    this->update_locations(event.elements.size(), event.erased, event.inserted);
+                    this->update_locations(event.elements.size(), event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -171,8 +171,9 @@ void ui_modules::set_locations(std::vector<std::optional<module_location>> const
 }
 
 void ui_modules::update_locations(std::size_t const count,
-                                  std::vector<std::pair<std::size_t, module_location>> const &erased,
-                                  std::vector<std::pair<std::size_t, module_location>> const &inserted) {
+                                  std::vector<std::pair<std::size_t, module_location>> const &inserted,
+                                  std::vector<std::pair<std::size_t, module_location>> const &replaced,
+                                  std::vector<std::pair<std::size_t, module_location>> const &erased) {
     this->_set_rect_count(count);
 
     this->_vertex_data->write(
@@ -213,6 +214,14 @@ void ui_modules::update_locations(std::size_t const count,
         auto const &strings = this->_names.at(idx);
         auto const &node = strings->rect_plane()->node();
         node->set_is_enabled(true);
+        this->_update_name_position(idx, location_value);
+        strings->set_text(location_value.name);
+    }
+
+    for (auto const &pair : replaced) {
+        auto const &idx = pair.first;
+        auto const &location_value = pair.second;
+        auto const &strings = this->_names.at(idx);
         this->_update_name_position(idx, location_value);
         strings->set_text(location_value.name);
     }

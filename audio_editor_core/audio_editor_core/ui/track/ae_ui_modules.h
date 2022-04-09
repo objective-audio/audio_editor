@@ -26,8 +26,9 @@ struct ui_modules final {
 
     void set_scale(ui::size const &);
     void set_locations(std::vector<std::optional<module_location>> const &);
-    void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, module_location>> const &erased,
-                          std::vector<std::pair<std::size_t, module_location>> const &inserted);
+    void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, module_location>> const &inserted,
+                          std::vector<std::pair<std::size_t, module_location>> const &replaced,
+                          std::vector<std::pair<std::size_t, module_location>> const &erased);
 
    private:
     std::shared_ptr<modules_presenter> const _presenter;
