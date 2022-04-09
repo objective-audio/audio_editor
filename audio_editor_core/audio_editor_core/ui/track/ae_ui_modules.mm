@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_module_location.h>
 #include <audio_editor_core/ae_module_waveforms_presenter.h>
+#include <audio_editor_core/ae_modules_controller.h>
 #include <audio_editor_core/ae_modules_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
@@ -28,16 +29,19 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &project
 
     auto const modules_presenter =
         modules_presenter::make_shared(project_id.identifier, ui_root_level->display_space, location_pool);
-    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, ui_root_level->standard, app_level->color,
-                                                      ui_root_level->font_atlas_14, waveforms});
+    auto const modules_controller = modules_controller::make_shared(project_id.identifier, location_pool);
+    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, modules_controller, ui_root_level->standard,
+                                                      app_level->color, ui_root_level->font_atlas_14, waveforms});
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
+                       std::shared_ptr<modules_controller> const &controller,
                        std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
                        std::shared_ptr<ui::font_atlas> const &name_font_atlas,
                        std::shared_ptr<ui_module_waveforms> const &waveforms)
     : node(ui::node::make_shared()),
       _presenter(presenter),
+      _controller(controller),
       _color(color),
       _name_font_atlas(name_font_atlas),
       _waveforms(waveforms),

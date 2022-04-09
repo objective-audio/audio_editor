@@ -12,6 +12,7 @@
 namespace yas::ae {
 class module_location;
 class modules_presenter;
+class modules_controller;
 class display_space;
 class ui_module_waveforms;
 class color;
@@ -30,6 +31,7 @@ struct ui_modules final {
 
    private:
     std::shared_ptr<modules_presenter> const _presenter;
+    std::shared_ptr<modules_controller> const _controller;
     std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui::font_atlas> const _name_font_atlas;
     std::shared_ptr<ui_module_waveforms> const _waveforms;
@@ -48,9 +50,9 @@ struct ui_modules final {
 
     observing::canceller_pool _pool;
 
-    ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<ui::standard> const &,
-               std::shared_ptr<ae::color> const &, std::shared_ptr<ui::font_atlas> const &,
-               std::shared_ptr<ui_module_waveforms> const &);
+    ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<modules_controller> const &,
+               std::shared_ptr<ui::standard> const &, std::shared_ptr<ae::color> const &,
+               std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ui_module_waveforms> const &);
 
     void _remake_data_if_needed(std::size_t const);
     void _set_rect_count(std::size_t const);
