@@ -226,10 +226,13 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     this->_line_mesh->set_index_data(this->_line_index_data);
 
     if (this->_names.size() < max_count) {
+        auto const module_name_color = this->_color->module_name();
+
         auto each = make_fast_each(max_count - this->_names.size());
         while (yas_each_next(each)) {
             auto strings = ui::strings::make_shared({.max_word_count = 32}, this->_name_font_atlas);
             strings->rect_plane()->node()->set_is_enabled(false);
+            strings->rect_plane()->node()->set_color(module_name_color);
             this->_names.emplace_back(std::move(strings));
         }
     }
