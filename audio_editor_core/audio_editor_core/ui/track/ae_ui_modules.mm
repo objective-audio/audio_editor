@@ -124,23 +124,32 @@ void ui_modules::set_scale(ui::size const &scale) {
 void ui_modules::set_locations(std::vector<std::optional<module_location>> const &locations) {
     this->_set_rect_count(locations.size());
 
-    this->_vertex_data->write([&locations](std::vector<ui::vertex2d_t> &vertices) {
-        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+    this->_vertex_data->write(
+        [&locations, &colliders = this->_triangle_node->colliders()](std::vector<ui::vertex2d_t> &vertices) {
+            auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
-        auto each = make_fast_each(locations.size());
-        while (yas_each_next(each)) {
-            auto const &idx = yas_each_index(each);
-            auto const &location = locations.at(idx);
+            auto each = make_fast_each(locations.size());
+            while (yas_each_next(each)) {
+                auto const &idx = yas_each_index(each);
+                auto const &location = locations.at(idx);
+                auto const &collider = colliders.at(idx);
 
-            if (location.has_value()) {
-                auto const &value = location.value();
-                vertex_rects[idx].set_position(ui::region{.origin = {.x = value.x(), .y = -0.5f},
-                                                          .size = {.width = value.width(), .height = 1.0f}});
-            } else {
-                vertex_rects[idx].set_position(ui::region::zero());
+                if (location.has_value()) {
+                    auto const &value = location.value();
+                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
+                                            .size = {.width = value.width(), .height = 1.0f}};
+                    vertex_rects[idx].set_position(region);
+
+                    collider->set_shape(ui::shape::make_shared({.rect = region}));
+                    collider->set_enabled(true);
+                } else {
+                    vertex_rects[idx].set_position(ui::region::zero());
+
+                    collider->set_enabled(false);
+                    collider->set_shape(nullptr);
+                }
             }
-        }
-    });
+        });
 
     auto each = make_fast_each(locations.size());
     while (yas_each_next(each)) {
@@ -166,19 +175,30 @@ void ui_modules::update_locations(std::size_t const count,
                                   std::vector<std::pair<std::size_t, module_location>> const &inserted) {
     this->_set_rect_count(count);
 
-    this->_vertex_data->write([&erased, &inserted](std::vector<ui::vertex2d_t> &vertices) {
-        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+    this->_vertex_data->write(
+        [&erased, &inserted, &colliders = this->_triangle_node->colliders()](std::vector<ui::vertex2d_t> &vertices) {
+            auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
-        for (auto const &pair : erased) {
-            vertex_rects[pair.first].set_position(ui::region::zero());
-        }
+            for (auto const &pair : erased) {
+                vertex_rects[pair.first].set_position(ui::region::zero());
 
-        for (auto const &pair : inserted) {
-            auto const &value = pair.second;
-            vertex_rects[pair.first].set_position(
-                ui::region{.origin = {.x = value.x(), .y = -0.5f}, .size = {.width = value.width(), .height = 1.0f}});
-        }
-    });
+                auto const &collider = colliders.at(pair.first);
+                collider->set_enabled(false);
+                collider->set_shape(nullptr);
+            }
+
+            for (auto const &pair : inserted) {
+                auto const &value = pair.second;
+                ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
+                                        .size = {.width = value.width(), .height = 1.0f}};
+
+                vertex_rects[pair.first].set_position(region);
+
+                auto const &collider = colliders.at(pair.first);
+                collider->set_shape(ui::shape::make_shared({.rect = region}));
+                collider->set_enabled(true);
+            }
+        });
 
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
