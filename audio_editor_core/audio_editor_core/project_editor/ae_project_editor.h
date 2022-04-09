@@ -86,6 +86,9 @@ struct project_editor final {
     [[nodiscard]] bool can_paste() const;
     void paste_and_offset();
 
+    [[nodiscard]] bool can_begin_module_renaming() const;
+    void begin_module_renaming(std::string const &range);
+
     [[nodiscard]] bool can_begin_time_editing() const;
     [[nodiscard]] bool can_end_time_editing() const;
     [[nodiscard]] bool can_input_time_number() const;

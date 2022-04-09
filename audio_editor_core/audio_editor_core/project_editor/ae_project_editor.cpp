@@ -709,6 +709,22 @@ void project_editor::paste_and_offset() {
     }
 }
 
+bool project_editor::can_begin_module_renaming() const {
+    if (!this->_can_editing()) {
+        return false;
+    }
+
+    return true;
+}
+
+void project_editor::begin_module_renaming(std::string const &range) {
+    if (!this->can_begin_module_renaming()) {
+        return;
+    }
+
+    this->_sheet_presenter->notify_event({.kind = sheet_kind::module_name, .value = range});
+}
+
 bool project_editor::can_begin_time_editing() const {
     return this->_time_editor_level_pool->level() == nullptr;
 }

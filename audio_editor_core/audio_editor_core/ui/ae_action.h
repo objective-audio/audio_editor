@@ -36,6 +36,7 @@ enum class action_kind {
     cut,
     copy,
     paste,
+    begin_module_renaming,
 
     begin_time_editing,
     finish_time_editing,

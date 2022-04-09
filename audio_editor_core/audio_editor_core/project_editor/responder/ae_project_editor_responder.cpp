@@ -176,6 +176,9 @@ void project_editor_responder::handle_action(ae::action const &action) {
                 case action_kind::paste:
                     editor->paste_and_offset();
                     break;
+                case action_kind::begin_module_renaming:
+                    editor->begin_module_renaming(action.value);
+                    break;
 
                 case action_kind::begin_time_editing:
                     editor->begin_time_editing(std::nullopt);
@@ -272,6 +275,9 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return to_responding(editor->can_copy());
         case action_kind::paste:
             return to_responding(editor->can_paste());
+
+        case action_kind::begin_module_renaming:
+            return to_responding(editor->can_begin_time_editing());
 
         case action_kind::cancel_time_editing:
             return to_responding(editor->can_end_time_editing());

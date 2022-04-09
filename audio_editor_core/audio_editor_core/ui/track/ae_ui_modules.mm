@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_module_location.h>
 #include <audio_editor_core/ae_module_waveforms_presenter.h>
+#include <audio_editor_core/ae_modules_controller.h>
 #include <audio_editor_core/ae_modules_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
@@ -28,22 +29,27 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &project
 
     auto const modules_presenter =
         modules_presenter::make_shared(project_id.identifier, ui_root_level->display_space, location_pool);
-    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, ui_root_level->standard, app_level->color,
-                                                      ui_root_level->font_atlas_14, waveforms});
+    auto const modules_controller = modules_controller::make_shared(project_id.identifier, location_pool);
+    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, modules_controller, ui_root_level->standard,
+                                                      app_level->color, ui_root_level->font_atlas_14, waveforms});
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
+                       std::shared_ptr<modules_controller> const &controller,
                        std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
                        std::shared_ptr<ui::font_atlas> const &name_font_atlas,
                        std::shared_ptr<ui_module_waveforms> const &waveforms)
     : node(ui::node::make_shared()),
       _presenter(presenter),
+      _controller(controller),
       _color(color),
       _name_font_atlas(name_font_atlas),
       _waveforms(waveforms),
       _triangle_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
       _names_root_node(ui::node::make_shared()),
+      _touch_tracker(ui::touch_tracker::make_shared(standard, this->_triangle_node)),
+      _multiple_touch(ui::multiple_touch::make_shared()),
       _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
     this->node->add_sub_node(this->_triangle_node);
@@ -90,6 +96,20 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
             }
         })
         .sync()
+        ->add_to(this->_pool);
+
+    this->_touch_tracker
+        ->observe([this](ui::touch_tracker::context const &context) {
+            if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
+                this->_multiple_touch->handle_event(context.phase, context.collider_idx);
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
+
+    this->_multiple_touch
+        ->observe([this](std::uintptr_t const &collider_idx) { this->_controller->select_module_at(collider_idx); })
+        .end()
         ->add_to(this->_pool);
 }
 
@@ -191,6 +211,7 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     this->_triangle_mesh->set_index_data(nullptr);
     this->_line_mesh->set_vertex_data(nullptr);
     this->_line_mesh->set_index_data(nullptr);
+    this->_triangle_node->set_colliders({});
     this->_names_root_node->remove_all_sub_nodes();
 
     this->_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(max_count * vertex2d_rect::vector_count);
@@ -226,12 +247,29 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     this->_line_mesh->set_index_data(this->_line_index_data);
 
     if (this->_names.size() < max_count) {
+        auto const module_name_color = this->_color->module_name();
+
         auto each = make_fast_each(max_count - this->_names.size());
         while (yas_each_next(each)) {
             auto strings = ui::strings::make_shared({.max_word_count = 32}, this->_name_font_atlas);
             strings->rect_plane()->node()->set_is_enabled(false);
+            strings->rect_plane()->node()->set_color(module_name_color);
             this->_names.emplace_back(std::move(strings));
         }
+    }
+
+    {
+        std::vector<std::shared_ptr<ui::collider>> colliders;
+        colliders.reserve(max_count);
+
+        auto each = make_fast_each(max_count);
+        while (yas_each_next(each)) {
+            auto collider = ui::collider::make_shared();
+            collider->set_enabled(false);
+            colliders.emplace_back(std::move(collider));
+        }
+
+        this->_triangle_node->set_colliders(std::move(colliders));
     }
 
     this->_remaked_count = max_count;
