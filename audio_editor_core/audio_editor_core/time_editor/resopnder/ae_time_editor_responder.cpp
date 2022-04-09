@@ -148,6 +148,7 @@ void time_editor_responder::handle_action(ae::action const &action) {
                 case action_kind::cut:
                 case action_kind::copy:
                 case action_kind::paste:
+                case action_kind::begin_module_renaming:
                 case action_kind::begin_time_editing:
                     break;
             }
@@ -220,6 +221,7 @@ responding time_editor_responder::responding_to_action(ae::action const &action)
         case action_kind::cut:
         case action_kind::copy:
         case action_kind::paste:
+        case action_kind::begin_module_renaming:
         case action_kind::begin_time_editing:
         case action_kind::set_begin_edge:
         case action_kind::set_end_edge:
