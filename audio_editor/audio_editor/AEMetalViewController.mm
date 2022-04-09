@@ -7,12 +7,14 @@
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_root_level_pool.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #include <objc_utils/yas_objc_unowned.h>
 #import "AEMetalView.h"
+#import "AEModuleNameViewController.h"
 
 using namespace yas;
 using namespace yas::ae;
@@ -26,6 +28,7 @@ using namespace yas::ae;
     std::weak_ptr<ui_root_level> _root_level;
     std::shared_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
+    observing::cancellable_ptr _sheet_canceller;
 }
 
 - (AEMetalView *)aeMetalView {
@@ -72,6 +75,19 @@ using namespace yas::ae;
                 case dialog_event::select_file_for_export: {
                     [self showSelectFileForExportDialog];
                 } break;
+            }
+        })
+        .end()
+        ->add_to(self->_pool);
+
+    project_level->sheet_presenter
+        ->observe_event([unowned_self](sheet_event const &event) {
+            auto *const self = unowned_self.object;
+
+            switch (event.kind) {
+                case sheet_kind::module_name:
+                    [self showModuleNameSheetWithValue:event.value];
+                    break;
             }
         })
         .end()
@@ -181,6 +197,33 @@ using namespace yas::ae;
         auto const path = to_string((__bridge CFStringRef)panel.URL.path);
         self->_action_controller->handle_action({action_kind::export_to_file, path});
     }
+}
+
+- (void)showModuleNameSheetWithValue:(std::string const &)value {
+    auto const splited = yas::split(value, ',');
+    if (splited.size() < 2) {
+        assert(0);
+        return;
+    }
+
+    time::range const range{std::stoi(splited.at(0)), std::stoull(splited.at(1))};
+
+    auto *const vc = [AEModuleNameViewController instantiateWithProjectId:self->_project_id moduleRange:range];
+
+    auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
+    auto *const unowned_vc = [[YASUnownedObject<AEModuleNameViewController *> alloc] initWithObject:vc];
+
+    [vc observe_event:[unowned_self, unowned_vc](auto const &) {
+        auto *const self = unowned_self.object;
+        auto *const vc = unowned_vc.object;
+
+        [self dismissViewController:vc];
+
+        self->_sheet_canceller = nullptr;
+    }].end()
+        ->set_to(self->_sheet_canceller);
+
+    [self presentViewControllerAsSheet:vc];
 }
 
 @end
