@@ -48,6 +48,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _triangle_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
       _names_root_node(ui::node::make_shared()),
+      _touch_tracker(ui::touch_tracker::make_shared(standard, this->_triangle_node)),
+      _multiple_touch(ui::multiple_touch::make_shared()),
       _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
     this->node->add_sub_node(this->_triangle_node);
@@ -94,6 +96,20 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
             }
         })
         .sync()
+        ->add_to(this->_pool);
+
+    this->_touch_tracker
+        ->observe([this](ui::touch_tracker::context const &context) {
+            if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
+                this->_multiple_touch->handle_event(context.phase, context.collider_idx);
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
+
+    this->_multiple_touch
+        ->observe([this](std::uintptr_t const &collider_idx) { this->_controller->select_module_at(collider_idx); })
+        .end()
         ->add_to(this->_pool);
 }
 
@@ -195,6 +211,7 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     this->_triangle_mesh->set_index_data(nullptr);
     this->_line_mesh->set_vertex_data(nullptr);
     this->_line_mesh->set_index_data(nullptr);
+    this->_triangle_node->set_colliders({});
     this->_names_root_node->remove_all_sub_nodes();
 
     this->_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(max_count * vertex2d_rect::vector_count);
@@ -239,6 +256,20 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
             strings->rect_plane()->node()->set_color(module_name_color);
             this->_names.emplace_back(std::move(strings));
         }
+    }
+
+    {
+        std::vector<std::shared_ptr<ui::collider>> colliders;
+        colliders.reserve(max_count);
+
+        auto each = make_fast_each(max_count);
+        while (yas_each_next(each)) {
+            auto collider = ui::collider::make_shared();
+            collider->set_enabled(false);
+            colliders.emplace_back(std::move(collider));
+        }
+
+        this->_triangle_node->set_colliders(std::move(colliders));
     }
 
     this->_remaked_count = max_count;

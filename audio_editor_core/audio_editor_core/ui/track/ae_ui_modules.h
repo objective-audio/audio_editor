@@ -38,6 +38,8 @@ struct ui_modules final {
     std::shared_ptr<ui::node> const _triangle_node;
     std::shared_ptr<ui::node> const _line_node;
     std::shared_ptr<ui::node> const _names_root_node;
+    std::shared_ptr<ui::touch_tracker> const _touch_tracker;
+    std::shared_ptr<ui::multiple_touch> const _multiple_touch;
 
     ui::size _scale{.width = 1.0f, .height = 1.0f};
     std::size_t _remaked_count = 0;
