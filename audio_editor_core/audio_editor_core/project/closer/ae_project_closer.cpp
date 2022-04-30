@@ -12,15 +12,16 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_closer> project_closer::make_shared(
-    std::string const &project_id, std::shared_ptr<file_importer> const &file_importer,
-    std::shared_ptr<project_editor_level_pool> const &editor_level_pool,
-    std::shared_ptr<project_status> const &status) {
+    std::string const &project_id, std::shared_ptr<file_importer_for_project_closer> const &file_importer,
+    std::shared_ptr<project_editor_level_pool_for_project_closer> const &editor_level_pool,
+    std::shared_ptr<project_status_for_project_closer> const &status) {
     return std::shared_ptr<project_closer>(new project_closer{project_id, file_importer, editor_level_pool, status});
 }
 
-project_closer::project_closer(std::string const &project_id, std::shared_ptr<file_importer> const &file_importer,
-                               std::shared_ptr<project_editor_level_pool> const &editor_level_pool,
-                               std::shared_ptr<project_status> const &status)
+project_closer::project_closer(std::string const &project_id,
+                               std::shared_ptr<file_importer_for_project_closer> const &file_importer,
+                               std::shared_ptr<project_editor_level_pool_for_project_closer> const &editor_level_pool,
+                               std::shared_ptr<project_status_for_project_closer> const &status)
     : _project_id(project_id),
       _file_importer(file_importer),
       _editor_level_pool(editor_level_pool),

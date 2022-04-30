@@ -15,10 +15,10 @@ class project_editor_level_pool;
 class project_status;
 
 struct project_closer final : project_closer_for_window_presenter {
-    [[nodiscard]] static std::shared_ptr<project_closer> make_shared(std::string const &project_id,
-                                                                     std::shared_ptr<file_importer> const &,
-                                                                     std::shared_ptr<project_editor_level_pool> const &,
-                                                                     std::shared_ptr<project_status> const &);
+    [[nodiscard]] static std::shared_ptr<project_closer> make_shared(
+        std::string const &project_id, std::shared_ptr<file_importer_for_project_closer> const &,
+        std::shared_ptr<project_editor_level_pool_for_project_closer> const &,
+        std::shared_ptr<project_status_for_project_closer> const &);
 
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
@@ -28,13 +28,14 @@ struct project_closer final : project_closer_for_window_presenter {
    private:
     std::string const _project_id;
 
-    std::shared_ptr<file_importer> const _file_importer;
-    std::shared_ptr<project_editor_level_pool> const _editor_level_pool;
-    std::shared_ptr<project_status> const _status;
+    std::shared_ptr<file_importer_for_project_closer> const _file_importer;
+    std::shared_ptr<project_editor_level_pool_for_project_closer> const _editor_level_pool;
+    std::shared_ptr<project_status_for_project_closer> const _status;
 
     observing::notifier_ptr<project_event> const _event_notifier;
 
-    project_closer(std::string const &project_id, std::shared_ptr<file_importer> const &,
-                   std::shared_ptr<project_editor_level_pool> const &, std::shared_ptr<project_status> const &);
+    project_closer(std::string const &project_id, std::shared_ptr<file_importer_for_project_closer> const &,
+                   std::shared_ptr<project_editor_level_pool_for_project_closer> const &,
+                   std::shared_ptr<project_status_for_project_closer> const &);
 };
 }  // namespace yas::ae
