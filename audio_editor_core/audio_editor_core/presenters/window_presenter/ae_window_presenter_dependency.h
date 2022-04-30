@@ -15,11 +15,4 @@ struct project_closer_for_window_presenter {
     [[nodiscard]] virtual bool can_close() const = 0;
     virtual void request_close() = 0;
 };
-
-struct project_for_window_presenter {
-    virtual ~project_for_window_presenter() = default;
-
-    [[nodiscard]] virtual bool can_close() const = 0;
-    virtual void request_close() = 0;
-};
 }  // namespace yas::ae

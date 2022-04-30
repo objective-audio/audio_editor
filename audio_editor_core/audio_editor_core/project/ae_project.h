@@ -11,7 +11,7 @@
 namespace yas::ae {
 class project_status;
 
-struct project final : project_for_window_presenter {
+struct project final {
     [[nodiscard]] static std::shared_ptr<project> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
@@ -20,8 +20,8 @@ struct project final : project_for_window_presenter {
 
     void setup();
 
-    [[nodiscard]] bool can_close() const override;
-    void request_close() override;
+    [[nodiscard]] bool can_close() const;
+    void request_close();
 
     [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);
 
