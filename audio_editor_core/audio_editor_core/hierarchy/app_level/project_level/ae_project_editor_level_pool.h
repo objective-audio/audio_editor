@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_closer_dependency.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -12,7 +13,8 @@
 namespace yas::ae {
 class project_editor_level;
 
-struct project_editor_level_pool final : project_editor_level_pool_for_project {
+struct project_editor_level_pool final : project_editor_level_pool_for_project,
+                                         project_editor_level_pool_for_project_closer {
     [[nodiscard]] static std::shared_ptr<project_editor_level_pool> make_shared(std::string const &identifier);
 
     void add_level(file_info const &) override;

@@ -4,13 +4,14 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_closer_dependency.h>
 #include <audio_editor_core/ae_project_dependency.h>
 #include <cpp_utils/yas_worker.h>
 
 namespace yas::ae {
 class file_importer_resource;
 
-struct file_importer final : file_importer_for_project {
+struct file_importer final : file_importer_for_project, file_importer_for_project_closer {
     void import(file_importing_context &&) override;
     void cancel(std::string const &) override;
 
