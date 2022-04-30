@@ -17,9 +17,10 @@ std::shared_ptr<project> project::make_shared(
     std::shared_ptr<file_importer_for_project> const &file_importer,
     std::shared_ptr<file_loader_for_project> const &file_loader,
     std::shared_ptr<responder_stack_for_project> const &responder_stack,
-    std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool) {
-    auto project = std::shared_ptr<ae::project>(new ae::project{identifier, file_url, project_url, file_importer,
-                                                                file_loader, responder_stack, editor_level_pool});
+    std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
+    std::shared_ptr<project_status> const &status) {
+    auto project = std::shared_ptr<ae::project>(new ae::project{
+        identifier, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
     project->_weak_project = project;
     return project;
 }
@@ -29,7 +30,8 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<file_importer_for_project> const &file_importer,
                  std::shared_ptr<file_loader_for_project> const &file_loader,
                  std::shared_ptr<responder_stack_for_project> const &responder_stack,
-                 std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool)
+                 std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
+                 std::shared_ptr<project_status> const &status)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),
@@ -37,6 +39,7 @@ project::project(std::string const &identifier, url const &file_url,
       _file_loader(file_loader),
       _responder_stack(responder_stack),
       _editor_level_pool(editor_level_pool),
+      _status(status),
       _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
 }

@@ -9,12 +9,14 @@
 #include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
+class project_status;
+
 struct project final : project_for_window_presenter {
     [[nodiscard]] static std::shared_ptr<project> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
         std::shared_ptr<responder_stack_for_project> const &,
-        std::shared_ptr<project_editor_level_pool_for_project> const &);
+        std::shared_ptr<project_editor_level_pool_for_project> const &, std::shared_ptr<project_status> const &);
 
     void setup();
 
@@ -37,6 +39,7 @@ struct project final : project_for_window_presenter {
     std::shared_ptr<file_loader_for_project> const _file_loader;
     std::weak_ptr<responder_stack_for_project> const _responder_stack;
     std::shared_ptr<project_editor_level_pool_for_project> const _editor_level_pool;
+    std::shared_ptr<project_status> const _status;
 
     observing::value::holder_ptr<project_state> const _state;
 
@@ -46,7 +49,7 @@ struct project final : project_for_window_presenter {
     project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
             std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
             std::shared_ptr<responder_stack_for_project> const &,
-            std::shared_ptr<project_editor_level_pool_for_project> const &);
+            std::shared_ptr<project_editor_level_pool_for_project> const &, std::shared_ptr<project_status> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;
