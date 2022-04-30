@@ -14,6 +14,8 @@ struct project_status final {
     project_state const &state() const;
     void set_state(project_state const &);
 
+    observing::syncable observe_state(std::function<void(project_state const &)> &&);
+
    private:
     observing::value::holder_ptr<project_state> const _state;
 
