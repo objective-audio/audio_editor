@@ -16,7 +16,8 @@ struct project final {
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
         std::shared_ptr<responder_stack_for_project> const &,
-        std::shared_ptr<project_editor_level_pool_for_project> const &, std::shared_ptr<project_status> const &);
+        std::shared_ptr<project_editor_level_pool_for_project> const &,
+        std::shared_ptr<project_status_for_project> const &);
 
     void setup();
 
@@ -31,14 +32,15 @@ struct project final {
     std::shared_ptr<file_loader_for_project> const _file_loader;
     std::weak_ptr<responder_stack_for_project> const _responder_stack;
     std::shared_ptr<project_editor_level_pool_for_project> const _editor_level_pool;
-    std::shared_ptr<project_status> const _status;
+    std::shared_ptr<project_status_for_project> const _status;
 
     observing::canceller_pool _pool;
 
     project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
             std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
             std::shared_ptr<responder_stack_for_project> const &,
-            std::shared_ptr<project_editor_level_pool_for_project> const &, std::shared_ptr<project_status> const &);
+            std::shared_ptr<project_editor_level_pool_for_project> const &,
+            std::shared_ptr<project_status_for_project> const &);
 
     project(project const &) = delete;
     project(project &&) = delete;
