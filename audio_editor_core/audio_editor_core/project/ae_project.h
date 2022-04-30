@@ -20,8 +20,6 @@ struct project final : project_for_window_presenter {
 
     void setup();
 
-    [[nodiscard]] project_state const &state() const;
-
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
 

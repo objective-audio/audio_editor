@@ -86,10 +86,6 @@ void project::setup() {
          }});
 }
 
-project_state const &project::state() const {
-    return this->_status->state();
-}
-
 bool project::can_close() const {
     return true;
 }
