@@ -33,7 +33,6 @@ struct file_importer_for_project {
     virtual ~file_importer_for_project() = default;
 
     virtual void import(file_importing_context &&) = 0;
-    virtual void cancel(std::string const &) = 0;
 };
 
 struct file_loader_for_project {
@@ -60,7 +59,6 @@ struct project_editor_level_pool_for_project {
     virtual ~project_editor_level_pool_for_project() = default;
 
     virtual void add_level(file_info const &) = 0;
-    virtual void remove_level() = 0;
 
     [[nodiscard]] virtual std::shared_ptr<project_editor_level> const &level() const = 0;
 };
