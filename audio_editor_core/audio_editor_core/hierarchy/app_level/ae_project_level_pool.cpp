@@ -4,7 +4,7 @@
 
 #include "ae_project_level_pool.h"
 
-#include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_level.h>
 #include <audio_editor_core/ae_uuid_generator.h>
 
@@ -32,9 +32,9 @@ std::shared_ptr<project_level> project_level_pool::add_and_return_level(url cons
     auto const identifier = this->_uuid_generator->generate();
     auto const project_level = project_level::make_shared(identifier, file_url);
     auto const &project_id = project_level->project_id;
-    auto const &project = project_level->project;
+    auto const &closer = project_level->closer;
 
-    auto canceller = project
+    auto canceller = closer
                          ->observe_event([this, project_id](auto const &event) {
                              switch (event) {
                                  case project_event::should_close: {

@@ -20,11 +20,6 @@ struct project final {
 
     void setup();
 
-    [[nodiscard]] bool can_close() const;
-    void request_close();
-
-    [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);
-
    private:
     std::weak_ptr<project> _weak_project;
 
@@ -38,7 +33,6 @@ struct project final {
     std::shared_ptr<project_editor_level_pool_for_project> const _editor_level_pool;
     std::shared_ptr<project_status> const _status;
 
-    observing::notifier_ptr<project_event> const _event_notifier;
     observing::canceller_pool _pool;
 
     project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,

@@ -40,8 +40,7 @@ project::project(std::string const &identifier, url const &file_url,
       _file_loader(file_loader),
       _responder_stack(responder_stack),
       _editor_level_pool(editor_level_pool),
-      _status(status),
-      _event_notifier(observing::notifier<project_event>::make_shared()) {
+      _status(status) {
 }
 
 void project::setup() {
@@ -84,33 +83,4 @@ void project::setup() {
                  }
              }
          }});
-}
-
-bool project::can_close() const {
-    return true;
-}
-
-void project::request_close() {
-    switch (this->_status->state()) {
-        case project_state::closing:
-            return;
-        case project_state::loading:
-            this->_file_importer->cancel(this->_identifier);
-            this->_status->set_state(project_state::closing);
-            break;
-        case project_state::editing:
-            this->_editor_level_pool->remove_level();
-            this->_status->set_state(project_state::closing);
-            break;
-        case project_state::launching:
-        case project_state::failure:
-            this->_status->set_state(project_state::closing);
-            break;
-    }
-
-    this->_event_notifier->notify(project_event::should_close);
-}
-
-observing::endable project::observe_event(std::function<void(project_event const &)> &&handler) {
-    return this->_event_notifier->observe(std::move(handler));
 }
