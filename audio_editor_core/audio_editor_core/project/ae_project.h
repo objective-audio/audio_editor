@@ -41,8 +41,6 @@ struct project final : project_for_window_presenter {
     std::shared_ptr<project_editor_level_pool_for_project> const _editor_level_pool;
     std::shared_ptr<project_status> const _status;
 
-    observing::value::holder_ptr<project_state> const _state;
-
     observing::notifier_ptr<project_event> const _event_notifier;
     observing::canceller_pool _pool;
 

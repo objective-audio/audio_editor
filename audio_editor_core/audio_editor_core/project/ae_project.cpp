@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
+#include <audio_editor_core/ae_project_status.h>
 #include <audio_editor_core/ae_responder_stack.h>
 
 using namespace yas;
@@ -40,12 +41,11 @@ project::project(std::string const &identifier, url const &file_url,
       _responder_stack(responder_stack),
       _editor_level_pool(editor_level_pool),
       _status(status),
-      _state(observing::value::holder<project_state>::make_shared(project_state::launching)),
       _event_notifier(observing::notifier<project_event>::make_shared()) {
 }
 
 void project::setup() {
-    this->_state->set_value(project_state::loading);
+    this->_status->set_state(project_state::loading);
 
     this->_file_importer->import(
         {.identifier = this->_identifier,
@@ -53,7 +53,7 @@ void project::setup() {
          .dst_url = this->_project_url->editing_file(),
          .completion = [weak = this->_weak_project](bool const result) {
              if (auto const project = weak.lock()) {
-                 auto const &state = project->_state->value();
+                 auto const &state = project->_status->state();
                  switch (state) {
                      case project_state::loading: {
                          if (result) {
@@ -67,12 +67,12 @@ void project::setup() {
                                      responder_stack->push_responder(level->instance_id, level->responder);
                                  }
 
-                                 project->_state->set_value(project_state::editing);
+                                 project->_status->set_state(project_state::editing);
                              } else {
-                                 project->_state->set_value(project_state::failure);
+                                 project->_status->set_state(project_state::failure);
                              }
                          } else {
-                             project->_state->set_value(project_state::failure);
+                             project->_status->set_state(project_state::failure);
                          }
                      } break;
 
@@ -87,7 +87,7 @@ void project::setup() {
 }
 
 project_state const &project::state() const {
-    return this->_state->value();
+    return this->_status->state();
 }
 
 bool project::can_close() const {
@@ -95,20 +95,20 @@ bool project::can_close() const {
 }
 
 void project::request_close() {
-    switch (this->_state->value()) {
+    switch (this->_status->state()) {
         case project_state::closing:
             return;
         case project_state::loading:
             this->_file_importer->cancel(this->_identifier);
-            this->_state->set_value(project_state::closing);
+            this->_status->set_state(project_state::closing);
             break;
         case project_state::editing:
             this->_editor_level_pool->remove_level();
-            this->_state->set_value(project_state::closing);
+            this->_status->set_state(project_state::closing);
             break;
         case project_state::launching:
         case project_state::failure:
-            this->_state->set_value(project_state::closing);
+            this->_status->set_state(project_state::closing);
             break;
     }
 
@@ -116,7 +116,7 @@ void project::request_close() {
 }
 
 observing::syncable project::observe_state(std::function<void(project_state const &)> &&handler) {
-    return this->_state->observe(std::move(handler));
+    return this->_status->observe_state(std::move(handler));
 }
 
 observing::endable project::observe_event(std::function<void(project_event const &)> &&handler) {
