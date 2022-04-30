@@ -25,7 +25,6 @@ struct project final : project_for_window_presenter {
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
 
-    [[nodiscard]] observing::syncable observe_state(std::function<void(project_state const &)> &&);
     [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);
 
    private:

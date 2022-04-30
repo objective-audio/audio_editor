@@ -115,10 +115,6 @@ void project::request_close() {
     this->_event_notifier->notify(project_event::should_close);
 }
 
-observing::syncable project::observe_state(std::function<void(project_state const &)> &&handler) {
-    return this->_status->observe_state(std::move(handler));
-}
-
 observing::endable project::observe_event(std::function<void(project_event const &)> &&handler) {
     return this->_event_notifier->observe(std::move(handler));
 }

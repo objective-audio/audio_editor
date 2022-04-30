@@ -22,7 +22,3 @@ project_state const &project_status::state() const {
 void project_status::set_state(project_state const &state) {
     this->_state->set_value(state);
 }
-
-observing::syncable project_status::observe_state(std::function<void(project_state const &)> &&handler) {
-    return this->_state->observe(std::move(handler));
-}
