@@ -20,7 +20,7 @@ struct project_launcher final {
     void setup();
 
    private:
-    std::weak_ptr<project_launcher> _weak_project;
+    std::weak_ptr<project_launcher> _weak_launcher;
 
     std::string const _identifier;
     url const _file_url;

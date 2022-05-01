@@ -19,7 +19,7 @@ std::shared_ptr<project_launcher> project_launcher::make_shared(
     std::shared_ptr<project_status_for_project> const &status) {
     auto project = std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
         identifier, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
-    project->_weak_project = project;
+    project->_weak_launcher = project;
     return project;
 }
 
@@ -47,28 +47,28 @@ void project_launcher::setup() {
         {.identifier = this->_identifier,
          .src_url = this->_file_url,
          .dst_url = this->_project_url->editing_file(),
-         .completion = [weak = this->_weak_project](bool const result) {
-             if (auto const project = weak.lock()) {
-                 auto const &state = project->_status->state();
+         .completion = [weak = this->_weak_launcher](bool const result) {
+             if (auto const launcher = weak.lock()) {
+                 auto const &state = launcher->_status->state();
                  switch (state) {
                      case project_state::loading: {
                          if (result) {
-                             auto const editing_file_url = project->_project_url->editing_file();
-                             if (auto const file_info = project->_file_loader->load_file_info(editing_file_url)) {
-                                 project->_editor_level_pool->add_level(file_info.value());
+                             auto const editing_file_url = launcher->_project_url->editing_file();
+                             if (auto const file_info = launcher->_file_loader->load_file_info(editing_file_url)) {
+                                 launcher->_editor_level_pool->add_level(file_info.value());
 
-                                 auto const responder_stack = project->_responder_stack.lock();
-                                 auto const level = project->_editor_level_pool->level();
+                                 auto const responder_stack = launcher->_responder_stack.lock();
+                                 auto const level = launcher->_editor_level_pool->level();
                                  if (responder_stack && level) {
                                      responder_stack->push_responder(level->instance_id, level->responder);
                                  }
 
-                                 project->_status->set_state(project_state::editing);
+                                 launcher->_status->set_state(project_state::editing);
                              } else {
-                                 project->_status->set_state(project_state::failure);
+                                 launcher->_status->set_state(project_state::failure);
                              }
                          } else {
-                             project->_status->set_state(project_state::failure);
+                             launcher->_status->set_state(project_state::failure);
                          }
                      } break;
 
