@@ -46,5 +46,5 @@ project_level::project_level(std::string const &project_id, url const &file_url,
       launcher(project_launcher::make_shared(project_id, file_url, this->project_url, app_level->file_importer,
                                              app_level->file_loader, this->responder_stack, this->editor_level_pool,
                                              this->status)) {
-    this->launcher->setup();
+    this->launcher->launch();
 }

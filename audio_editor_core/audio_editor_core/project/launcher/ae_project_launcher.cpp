@@ -40,7 +40,7 @@ project_launcher::project_launcher(std::string const &identifier, url const &fil
       _status(status) {
 }
 
-void project_launcher::setup() {
+void project_launcher::launch() {
     this->_status->set_state(project_state::loading);
 
     this->_file_importer->import(

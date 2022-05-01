@@ -121,7 +121,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 
     auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
                                                         file_loader, responder_stack, editor_level_pool, status);
-    launcher->setup();
+    launcher->launch();
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -144,7 +144,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 
     auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
                                                         file_loader, responder_stack, editor_level_pool, status);
-    launcher->setup();
+    launcher->launch();
 
     std::vector<project_state> called;
 
@@ -197,7 +197,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 
     auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
                                                         file_loader, responder_stack, editor_level_pool, status);
-    launcher->setup();
+    launcher->launch();
 
     std::vector<project_state> called;
 

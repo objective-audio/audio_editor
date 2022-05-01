@@ -17,7 +17,7 @@ struct project_launcher final {
         std::shared_ptr<project_editor_level_pool_for_project> const &,
         std::shared_ptr<project_status_for_project> const &);
 
-    void setup();
+    void launch();
 
    private:
     std::weak_ptr<project_launcher> _weak_launcher;
