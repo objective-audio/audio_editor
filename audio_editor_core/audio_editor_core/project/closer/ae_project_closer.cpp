@@ -38,26 +38,34 @@ bool project_closer::can_close() const {
 }
 
 void project_closer::request_close() {
-    switch (this->_status->state()) {
+    auto const status = this->_status.lock();
+    auto const file_importer = this->_file_importer.lock();
+    auto const editor_level_pool = this->_editor_level_pool.lock();
+    auto const project_level_pool = this->_project_level_pool.lock();
+
+    if (!status || !file_importer || !editor_level_pool || !project_level_pool) {
+        assert(0);
+        return;
+    }
+
+    switch (status->state()) {
         case project_state::closing:
             return;
         case project_state::loading:
-            this->_file_importer->cancel(this->_project_id);
-            this->_status->set_state(project_state::closing);
+            file_importer->cancel(this->_project_id);
+            status->set_state(project_state::closing);
             break;
         case project_state::editing:
-            this->_editor_level_pool->remove_level();
-            this->_status->set_state(project_state::closing);
+            editor_level_pool->remove_level();
+            status->set_state(project_state::closing);
             break;
         case project_state::launching:
         case project_state::failure:
-            this->_status->set_state(project_state::closing);
+            status->set_state(project_state::closing);
             break;
     }
 
-    if (auto const pool = this->_project_level_pool.lock()) {
-        pool->remove_level(this->_project_id);
-    }
+    project_level_pool->remove_level(this->_project_id);
 }
 
 observing::endable project_closer::observe_event(std::function<void(project_event const &)> &&handler) {
