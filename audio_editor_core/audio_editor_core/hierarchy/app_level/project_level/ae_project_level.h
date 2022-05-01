@@ -42,7 +42,7 @@ struct project_level final {
     std::shared_ptr<ae::project_editor_level_pool> const editor_level_pool;
     std::shared_ptr<ae::project_status> const status;
     std::shared_ptr<ae::project_closer> const closer;
-    std::shared_ptr<ae::project_launcher> const project;
+    std::shared_ptr<ae::project_launcher> const launcher;
 
    private:
     project_level(std::string const &identifier, url const &file_url, std::shared_ptr<app_level> const &);
