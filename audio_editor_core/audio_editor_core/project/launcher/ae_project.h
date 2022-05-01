@@ -1,5 +1,5 @@
 //
-//  ae_project.h
+//  ae_project_launcher.h
 //
 
 #pragma once
@@ -9,8 +9,8 @@
 #include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
-struct project final {
-    [[nodiscard]] static std::shared_ptr<project> make_shared(
+struct project_launcher final {
+    [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
         std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
         std::shared_ptr<responder_stack_for_project> const &,
@@ -20,7 +20,7 @@ struct project final {
     void setup();
 
    private:
-    std::weak_ptr<project> _weak_project;
+    std::weak_ptr<project_launcher> _weak_project;
 
     std::string const _identifier;
     url const _file_url;
@@ -34,15 +34,17 @@ struct project final {
 
     observing::canceller_pool _pool;
 
-    project(std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
-            std::shared_ptr<file_importer_for_project> const &, std::shared_ptr<file_loader_for_project> const &,
-            std::shared_ptr<responder_stack_for_project> const &,
-            std::shared_ptr<project_editor_level_pool_for_project> const &,
-            std::shared_ptr<project_status_for_project> const &);
+    project_launcher(std::string const &identifier, url const &file_url,
+                     std::shared_ptr<project_url_for_project> const &,
+                     std::shared_ptr<file_importer_for_project> const &,
+                     std::shared_ptr<file_loader_for_project> const &,
+                     std::shared_ptr<responder_stack_for_project> const &,
+                     std::shared_ptr<project_editor_level_pool_for_project> const &,
+                     std::shared_ptr<project_status_for_project> const &);
 
-    project(project const &) = delete;
-    project(project &&) = delete;
-    project &operator=(project const &) = delete;
-    project &operator=(project &&) = delete;
+    project_launcher(project_launcher const &) = delete;
+    project_launcher(project_launcher &&) = delete;
+    project_launcher &operator=(project_launcher const &) = delete;
+    project_launcher &operator=(project_launcher &&) = delete;
 };
 }  // namespace yas::ae
