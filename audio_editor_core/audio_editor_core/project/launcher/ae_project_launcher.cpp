@@ -43,6 +43,11 @@ project_launcher::project_launcher(
 }
 
 void project_launcher::launch() {
+    if (this->_status->state() != project_state::launching) {
+        assert(0);
+        return;
+    }
+
     this->_status->set_state(project_state::loading);
 
     this->_file_importer->import(
