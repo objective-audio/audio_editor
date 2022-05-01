@@ -9,8 +9,6 @@
 #include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
-class project_status;
-
 struct project final {
     [[nodiscard]] static std::shared_ptr<project> make_shared(
         std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &,
