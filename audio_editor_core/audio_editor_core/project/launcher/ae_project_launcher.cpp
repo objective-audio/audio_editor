@@ -43,43 +43,66 @@ project_launcher::project_launcher(
 }
 
 void project_launcher::launch() {
-    this->_status->set_state(project_state::loading);
+    auto const status = this->_status.lock();
+    auto const file_importer = this->_file_importer.lock();
+    if (!status || !file_importer) {
+        assert(0);
+        return;
+    }
 
-    this->_file_importer->import(
-        {.identifier = this->_project_id,
-         .src_url = this->_file_url,
-         .dst_url = this->_project_url->editing_file(),
-         .completion = [weak = this->_weak_launcher](bool const result) {
-             if (auto const launcher = weak.lock()) {
-                 auto const &state = launcher->_status->state();
-                 switch (state) {
-                     case project_state::loading: {
-                         if (result) {
-                             auto const editing_file_url = launcher->_project_url->editing_file();
-                             if (auto const file_info = launcher->_file_loader->load_file_info(editing_file_url)) {
-                                 launcher->_editor_level_pool->add_level(file_info.value());
+    if (status->state() != project_state::launching) {
+        assert(0);
+        return;
+    }
 
-                                 auto const responder_stack = launcher->_responder_stack.lock();
-                                 auto const level = launcher->_editor_level_pool->level();
-                                 if (responder_stack && level) {
-                                     responder_stack->push_responder(level->instance_id, level->responder);
-                                 }
+    status->set_state(project_state::loading);
 
-                                 launcher->_status->set_state(project_state::editing);
-                             } else {
-                                 launcher->_status->set_state(project_state::failure);
-                             }
-                         } else {
-                             launcher->_status->set_state(project_state::failure);
-                         }
-                     } break;
+    file_importer->import({.identifier = this->_project_id,
+                           .src_url = this->_file_url,
+                           .dst_url = this->_project_url->editing_file(),
+                           .completion = [weak = this->_weak_launcher](bool const result) {
+                               auto const launcher = weak.lock();
+                               if (!launcher) {
+                                   return;
+                               }
 
-                     case project_state::launching:
-                     case project_state::editing:
-                     case project_state::failure:
-                     case project_state::closing:
-                         break;
-                 }
-             }
-         }});
+                               auto const status = launcher->_status.lock();
+                               auto const file_loader = launcher->_file_loader.lock();
+                               auto const editor_level_pool = launcher->_editor_level_pool.lock();
+                               auto const responder_stack = launcher->_responder_stack.lock();
+                               if (!status || !file_loader || !editor_level_pool || !responder_stack) {
+                                   assert(0);
+                                   return;
+                               }
+
+                               auto const &state = status->state();
+                               switch (state) {
+                                   case project_state::loading: {
+                                       if (result) {
+                                           auto const editing_file_url = launcher->_project_url->editing_file();
+                                           if (auto const file_info = file_loader->load_file_info(editing_file_url)) {
+                                               editor_level_pool->add_level(file_info.value());
+
+                                               auto const level = editor_level_pool->level();
+                                               if (level) {
+                                                   responder_stack->push_responder(level->instance_id,
+                                                                                   level->responder);
+                                               }
+
+                                               status->set_state(project_state::editing);
+                                           } else {
+                                               status->set_state(project_state::failure);
+                                           }
+                                       } else {
+                                           status->set_state(project_state::failure);
+                                       }
+                                   } break;
+
+                                   case project_state::launching:
+                                   case project_state::editing:
+                                   case project_state::failure:
+                                   case project_state::closing:
+                                       break;
+                               }
+                           }});
 }
