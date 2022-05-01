@@ -27,11 +27,11 @@ struct project_launcher final {
     url const _file_url;
 
     std::shared_ptr<project_url_for_project_launcher> const _project_url;
-    std::shared_ptr<file_importer_for_project_launcher> const _file_importer;
-    std::shared_ptr<file_loader_for_project_launcher> const _file_loader;
+    std::weak_ptr<file_importer_for_project_launcher> const _file_importer;
+    std::weak_ptr<file_loader_for_project_launcher> const _file_loader;
     std::weak_ptr<responder_stack_for_project_launcher> const _responder_stack;
-    std::shared_ptr<project_editor_level_pool_for_project_launcher> const _editor_level_pool;
-    std::shared_ptr<project_status_for_project_launcher> const _status;
+    std::weak_ptr<project_editor_level_pool_for_project_launcher> const _editor_level_pool;
+    std::weak_ptr<project_status_for_project_launcher> const _status;
 
     observing::canceller_pool _pool;
 
