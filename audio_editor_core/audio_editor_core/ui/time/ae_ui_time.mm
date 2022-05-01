@@ -5,7 +5,6 @@
 #include "ae_ui_time.h"
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_color.h>
-#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_time_presenter.h>
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>

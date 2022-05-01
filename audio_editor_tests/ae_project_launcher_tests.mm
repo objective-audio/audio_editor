@@ -1,8 +1,9 @@
 //
-//  ae_project_tests.mm
+//  ae_project_launcher_tests.mm
 //
 
 #import <XCTest/XCTest.h>
+#include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_status.h>
 #import <audio_editor_core/audio_editor_core_umbrella.h>
 #import <cpp_utils/yas_thread.h>
@@ -76,11 +77,11 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 };
 }
 
-@interface ae_project_tests : XCTestCase
+@interface ae_project_launcher_tests : XCTestCase
 
 @end
 
-@implementation ae_project_tests
+@implementation ae_project_launcher_tests
 
 - (void)test_make_shared {
     auto const file_url = url::file_url("/test/path/file.wav");
@@ -91,10 +92,10 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
     auto const status = ae::project_status::make_shared();
 
-    auto project = project::make_shared("test_uuid", file_url, project_url, file_importer, file_loader, responder_stack,
-                                        editor_level_pool, status);
+    auto const launcher = project_launcher::make_shared("test_uuid", file_url, project_url, file_importer, file_loader,
+                                                        responder_stack, editor_level_pool, status);
 
-    XCTAssertTrue(project != nullptr);
+    XCTAssertTrue(launcher != nullptr);
 }
 
 - (void)test_loading {
@@ -118,9 +119,9 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
         return false;
     };
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              responder_stack, editor_level_pool, status);
-    project->setup();
+    auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
+                                                        file_loader, responder_stack, editor_level_pool, status);
+    launcher->launch();
 
     XCTAssertTrue(called.has_value());
     XCTAssertEqual(called->src_url.path(), "/test/path/src_file.wav");
@@ -141,9 +142,9 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              responder_stack, editor_level_pool, status);
-    project->setup();
+    auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
+                                                        file_loader, responder_stack, editor_level_pool, status);
+    launcher->launch();
 
     std::vector<project_state> called;
 
@@ -194,9 +195,9 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
-    auto const project = project::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer, file_loader,
-                                              responder_stack, editor_level_pool, status);
-    project->setup();
+    auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
+                                                        file_loader, responder_stack, editor_level_pool, status);
+    launcher->launch();
 
     std::vector<project_state> called;
 

@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
-#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_ui_editing_root_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>

@@ -5,7 +5,6 @@
 #include "ae_module_waveforms_presenter.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_waveform_mesh_importer.h>
 

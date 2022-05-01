@@ -1,8 +1,8 @@
 //
-//  ae_project.cpp
+//  ae_project_launcher.cpp
 //
 
-#include "ae_project.h"
+#include "ae_project_launcher.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
@@ -10,26 +10,26 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project> project::make_shared(
+std::shared_ptr<project_launcher> project_launcher::make_shared(
     std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &project_url,
     std::shared_ptr<file_importer_for_project> const &file_importer,
     std::shared_ptr<file_loader_for_project> const &file_loader,
     std::shared_ptr<responder_stack_for_project> const &responder_stack,
     std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
     std::shared_ptr<project_status_for_project> const &status) {
-    auto project = std::shared_ptr<ae::project>(new ae::project{
+    auto launcher = std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
         identifier, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
-    project->_weak_project = project;
-    return project;
+    launcher->_weak_launcher = launcher;
+    return launcher;
 }
 
-project::project(std::string const &identifier, url const &file_url,
-                 std::shared_ptr<project_url_for_project> const &project_url,
-                 std::shared_ptr<file_importer_for_project> const &file_importer,
-                 std::shared_ptr<file_loader_for_project> const &file_loader,
-                 std::shared_ptr<responder_stack_for_project> const &responder_stack,
-                 std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
-                 std::shared_ptr<project_status_for_project> const &status)
+project_launcher::project_launcher(std::string const &identifier, url const &file_url,
+                                   std::shared_ptr<project_url_for_project> const &project_url,
+                                   std::shared_ptr<file_importer_for_project> const &file_importer,
+                                   std::shared_ptr<file_loader_for_project> const &file_loader,
+                                   std::shared_ptr<responder_stack_for_project> const &responder_stack,
+                                   std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
+                                   std::shared_ptr<project_status_for_project> const &status)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),
@@ -40,35 +40,35 @@ project::project(std::string const &identifier, url const &file_url,
       _status(status) {
 }
 
-void project::setup() {
+void project_launcher::launch() {
     this->_status->set_state(project_state::loading);
 
     this->_file_importer->import(
         {.identifier = this->_identifier,
          .src_url = this->_file_url,
          .dst_url = this->_project_url->editing_file(),
-         .completion = [weak = this->_weak_project](bool const result) {
-             if (auto const project = weak.lock()) {
-                 auto const &state = project->_status->state();
+         .completion = [weak = this->_weak_launcher](bool const result) {
+             if (auto const launcher = weak.lock()) {
+                 auto const &state = launcher->_status->state();
                  switch (state) {
                      case project_state::loading: {
                          if (result) {
-                             auto const editing_file_url = project->_project_url->editing_file();
-                             if (auto const file_info = project->_file_loader->load_file_info(editing_file_url)) {
-                                 project->_editor_level_pool->add_level(file_info.value());
+                             auto const editing_file_url = launcher->_project_url->editing_file();
+                             if (auto const file_info = launcher->_file_loader->load_file_info(editing_file_url)) {
+                                 launcher->_editor_level_pool->add_level(file_info.value());
 
-                                 auto const responder_stack = project->_responder_stack.lock();
-                                 auto const level = project->_editor_level_pool->level();
+                                 auto const responder_stack = launcher->_responder_stack.lock();
+                                 auto const level = launcher->_editor_level_pool->level();
                                  if (responder_stack && level) {
                                      responder_stack->push_responder(level->instance_id, level->responder);
                                  }
 
-                                 project->_status->set_state(project_state::editing);
+                                 launcher->_status->set_state(project_state::editing);
                              } else {
-                                 project->_status->set_state(project_state::failure);
+                                 launcher->_status->set_state(project_state::failure);
                              }
                          } else {
-                             project->_status->set_state(project_state::failure);
+                             launcher->_status->set_state(project_state::failure);
                          }
                      } break;
 

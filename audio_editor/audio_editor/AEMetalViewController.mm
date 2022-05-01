@@ -6,7 +6,6 @@
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
-#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root_level.h>

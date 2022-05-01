@@ -5,7 +5,6 @@
 #include "ae_root_presenter.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_editor_level_pool.h>
 
 using namespace yas;
