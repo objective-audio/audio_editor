@@ -12,7 +12,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::test_utils {
-struct project_url_stub final : project_url_for_project {
+struct project_url_stub final : project_url_for_project_launcher {
     url root_directory_value{url::file_url("/test/root")};
     url editing_file_value{url::file_url("/test/root/editing.caf")};
     url playing_directory_value{url::file_url("/test/root/playing")};
@@ -39,7 +39,7 @@ struct project_url_stub final : project_url_for_project {
     }
 };
 
-struct file_importer_stub final : file_importer_for_project {
+struct file_importer_stub final : file_importer_for_project_launcher {
     std::function<bool(url const &, url const &)> import_handler{[](url const &, url const &) { return false; }};
     std::function<void(std::string const &)> cancel_handler{[](std::string const &) {}};
 
@@ -50,7 +50,7 @@ struct file_importer_stub final : file_importer_for_project {
     }
 };
 
-struct file_loader_stub final : file_loader_for_project {
+struct file_loader_stub final : file_loader_for_project_launcher {
     std::optional<file_info> file_info_value = std::nullopt;
 
     std::optional<file_info> load_file_info(url const &) const override {
@@ -58,12 +58,12 @@ struct file_loader_stub final : file_loader_for_project {
     }
 };
 
-struct responder_stack_stub final : responder_stack_for_project {
+struct responder_stack_stub final : responder_stack_for_project_launcher {
     void push_responder(identifier const &, std::shared_ptr<ae::responder> const &) override {
     }
 };
 
-struct project_editor_level_pool_stub final : project_editor_level_pool_for_project {
+struct project_editor_level_pool_stub final : project_editor_level_pool_for_project_launcher {
     std::optional<file_info> file_info_value{std::nullopt};
 
     void add_level(file_info const &file_info) override {

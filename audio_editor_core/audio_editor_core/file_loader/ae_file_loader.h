@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_project_launcher_dependency.h>
 
 namespace yas::ae {
-struct file_loader final : file_loader_for_project {
+struct file_loader final : file_loader_for_project_launcher {
     std::optional<file_info> load_file_info(url const &) const override;
 
     static std::shared_ptr<file_loader> make_shared();

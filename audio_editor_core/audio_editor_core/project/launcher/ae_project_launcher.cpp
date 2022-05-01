@@ -11,25 +11,27 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_launcher> project_launcher::make_shared(
-    std::string const &identifier, url const &file_url, std::shared_ptr<project_url_for_project> const &project_url,
-    std::shared_ptr<file_importer_for_project> const &file_importer,
-    std::shared_ptr<file_loader_for_project> const &file_loader,
-    std::shared_ptr<responder_stack_for_project> const &responder_stack,
-    std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
-    std::shared_ptr<project_status_for_project> const &status) {
+    std::string const &identifier, url const &file_url,
+    std::shared_ptr<project_url_for_project_launcher> const &project_url,
+    std::shared_ptr<file_importer_for_project_launcher> const &file_importer,
+    std::shared_ptr<file_loader_for_project_launcher> const &file_loader,
+    std::shared_ptr<responder_stack_for_project_launcher> const &responder_stack,
+    std::shared_ptr<project_editor_level_pool_for_project_launcher> const &editor_level_pool,
+    std::shared_ptr<project_status_for_project_launcher> const &status) {
     auto launcher = std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
         identifier, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
     launcher->_weak_launcher = launcher;
     return launcher;
 }
 
-project_launcher::project_launcher(std::string const &identifier, url const &file_url,
-                                   std::shared_ptr<project_url_for_project> const &project_url,
-                                   std::shared_ptr<file_importer_for_project> const &file_importer,
-                                   std::shared_ptr<file_loader_for_project> const &file_loader,
-                                   std::shared_ptr<responder_stack_for_project> const &responder_stack,
-                                   std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
-                                   std::shared_ptr<project_status_for_project> const &status)
+project_launcher::project_launcher(
+    std::string const &identifier, url const &file_url,
+    std::shared_ptr<project_url_for_project_launcher> const &project_url,
+    std::shared_ptr<file_importer_for_project_launcher> const &file_importer,
+    std::shared_ptr<file_loader_for_project_launcher> const &file_loader,
+    std::shared_ptr<responder_stack_for_project_launcher> const &responder_stack,
+    std::shared_ptr<project_editor_level_pool_for_project_launcher> const &editor_level_pool,
+    std::shared_ptr<project_status_for_project_launcher> const &status)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),

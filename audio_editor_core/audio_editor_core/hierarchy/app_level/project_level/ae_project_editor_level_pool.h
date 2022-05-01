@@ -13,7 +13,7 @@
 namespace yas::ae {
 class project_editor_level;
 
-struct project_editor_level_pool final : project_editor_level_pool_for_project,
+struct project_editor_level_pool final : project_editor_level_pool_for_project_launcher,
                                          project_editor_level_pool_for_project_closer {
     [[nodiscard]] static std::shared_ptr<project_editor_level_pool> make_shared(std::string const &identifier);
 

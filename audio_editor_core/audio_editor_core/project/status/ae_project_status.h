@@ -10,7 +10,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct project_status final : project_status_for_project_closer, project_status_for_project {
+struct project_status final : project_status_for_project_closer, project_status_for_project_launcher {
     [[nodiscard]] static std::shared_ptr<project_status> make_shared();
 
     [[nodiscard]] project_state const &state() const override;

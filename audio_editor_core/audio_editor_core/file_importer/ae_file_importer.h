@@ -11,7 +11,7 @@
 namespace yas::ae {
 class file_importer_resource;
 
-struct file_importer final : file_importer_for_project, file_importer_for_project_closer {
+struct file_importer final : file_importer_for_project_launcher, file_importer_for_project_closer {
     void import(file_importing_context &&) override;
     void cancel(std::string const &) override;
 
