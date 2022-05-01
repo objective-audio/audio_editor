@@ -3,6 +3,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_status.h>
 #import <audio_editor_core/audio_editor_core_umbrella.h>
 #import <cpp_utils/yas_thread.h>

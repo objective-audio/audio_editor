@@ -5,7 +5,6 @@
 #include "ae_window_presenter.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_closer.h>
 
 using namespace yas;

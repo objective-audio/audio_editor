@@ -1,8 +1,8 @@
 //
-//  ae_project.cpp
+//  ae_project_launcher.cpp
 //
 
-#include "ae_project.h"
+#include "ae_project_launcher.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_editor_responder.h>

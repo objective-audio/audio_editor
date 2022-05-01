@@ -10,9 +10,9 @@
 #include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_editor_level_pool.h>
+#include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_status.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_responder_stack.h>

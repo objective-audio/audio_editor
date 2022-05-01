@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project.h>
 #include <audio_editor_core/ae_zooming_pair.h>
 
 using namespace yas;
