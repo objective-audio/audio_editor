@@ -1,5 +1,5 @@
 //
-//  ae_project_tests.mm
+//  ae_project_launcher_tests.mm
 //
 
 #import <XCTest/XCTest.h>
@@ -77,11 +77,11 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 };
 }
 
-@interface ae_project_tests : XCTestCase
+@interface ae_project_launcher_tests : XCTestCase
 
 @end
 
-@implementation ae_project_tests
+@implementation ae_project_launcher_tests
 
 - (void)test_make_shared {
     auto const file_url = url::file_url("/test/path/file.wav");
