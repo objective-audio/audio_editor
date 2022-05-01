@@ -22,8 +22,8 @@ std::shared_ptr<window_presenter> window_presenter::make_shared(std::string cons
 
 std::shared_ptr<window_presenter> window_presenter::make_shared(
     std::string const &project_id, url const &file_url,
-    std::shared_ptr<project_closer_for_window_presenter> const &project) {
-    return std::shared_ptr<window_presenter>(new window_presenter{project_id, file_url, project});
+    std::shared_ptr<project_closer_for_window_presenter> const &closer) {
+    return std::shared_ptr<window_presenter>(new window_presenter{project_id, file_url, closer});
 }
 
 std::string window_presenter::title() const {

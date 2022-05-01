@@ -17,10 +17,10 @@ std::shared_ptr<project_launcher> project_launcher::make_shared(
     std::shared_ptr<responder_stack_for_project> const &responder_stack,
     std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
     std::shared_ptr<project_status_for_project> const &status) {
-    auto project = std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
+    auto launcher = std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
         identifier, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
-    project->_weak_launcher = project;
-    return project;
+    launcher->_weak_launcher = launcher;
+    return launcher;
 }
 
 project_launcher::project_launcher(std::string const &identifier, url const &file_url,

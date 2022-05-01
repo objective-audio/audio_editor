@@ -142,9 +142,9 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
-    auto const project = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
-                                                       file_loader, responder_stack, editor_level_pool, status);
-    project->setup();
+    auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
+                                                        file_loader, responder_stack, editor_level_pool, status);
+    launcher->setup();
 
     std::vector<project_state> called;
 
