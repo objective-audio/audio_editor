@@ -49,6 +49,10 @@ std::shared_ptr<project_level> project_level_pool::add_and_return_level(url cons
     return project_level;
 }
 
+void project_level_pool::remove_level(std::string const &project_id) {
+    this->_project_levels->erase(project_id);
+}
+
 std::shared_ptr<project_level> const &project_level_pool::level_for_id(std::string const &project_id) const {
     if (this->_project_levels->contains(project_id)) {
         return this->_project_levels->at(project_id).first;

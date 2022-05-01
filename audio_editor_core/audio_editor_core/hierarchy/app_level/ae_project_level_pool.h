@@ -14,6 +14,7 @@ class uuid_generatable;
 struct project_level_pool final : project_pool_for_app_presenter {
     void add_level(url const &file_url) override;
     std::shared_ptr<project_level> add_and_return_level(url const &file_url);
+    void remove_level(std::string const &project_id);
     [[nodiscard]] std::shared_ptr<project_level> const &level_for_id(std::string const &) const;
     [[nodiscard]] std::size_t size() const;
     [[nodiscard]] observing::syncable observe_event(std::function<void(project_level_pool_event const &)> &&) override;
