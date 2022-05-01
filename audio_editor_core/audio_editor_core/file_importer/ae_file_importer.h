@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_closer_dependency.h>
-#include <audio_editor_core/ae_project_dependency.h>
+#include <audio_editor_core/ae_project_launcher_dependency.h>
 #include <cpp_utils/yas_worker.h>
 
 namespace yas::ae {

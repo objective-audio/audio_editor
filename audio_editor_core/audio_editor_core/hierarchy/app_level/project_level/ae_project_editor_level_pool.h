@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_closer_dependency.h>
-#include <audio_editor_core/ae_project_dependency.h>
+#include <audio_editor_core/ae_project_launcher_dependency.h>
 #include <observing/yas_observing_umbrella.h>
 
 #include <memory>
