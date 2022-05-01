@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_dependency.h>
+#include <audio_editor_core/ae_project_launcher_dependency.h>
 
 namespace yas::ae {
-struct project_url final : project_url_for_project {
+struct project_url final : project_url_for_project_launcher {
     url const &root_directory() const override;
     url editing_file() const override;
     url playing_directory() const override;
