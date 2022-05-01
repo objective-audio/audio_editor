@@ -32,7 +32,7 @@ project_launcher::project_launcher(
     std::shared_ptr<responder_stack_for_project_launcher> const &responder_stack,
     std::shared_ptr<project_editor_level_pool_for_project_launcher> const &editor_level_pool,
     std::shared_ptr<project_status_for_project_launcher> const &status)
-    : _identifier(identifier),
+    : _project_id(identifier),
       _file_url(file_url),
       _project_url(project_url),
       _file_importer(file_importer),
@@ -46,7 +46,7 @@ void project_launcher::launch() {
     this->_status->set_state(project_state::loading);
 
     this->_file_importer->import(
-        {.identifier = this->_identifier,
+        {.identifier = this->_project_id,
          .src_url = this->_file_url,
          .dst_url = this->_project_url->editing_file(),
          .completion = [weak = this->_weak_launcher](bool const result) {

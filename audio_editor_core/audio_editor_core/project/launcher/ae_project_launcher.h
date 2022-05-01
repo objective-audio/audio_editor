@@ -23,7 +23,7 @@ struct project_launcher final {
    private:
     std::weak_ptr<project_launcher> _weak_launcher;
 
-    std::string const _identifier;
+    std::string const _project_id;
     url const _file_url;
 
     std::shared_ptr<project_url_for_project_launcher> const _project_url;
