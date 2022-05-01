@@ -29,8 +29,7 @@ project_closer::project_closer(std::string const &project_id,
       _file_importer(file_importer),
       _project_level_pool(project_level_pool),
       _editor_level_pool(editor_level_pool),
-      _status(status),
-      _event_notifier(observing::notifier<project_event>::make_shared()) {
+      _status(status) {
 }
 
 bool project_closer::can_close() const {
@@ -66,8 +65,4 @@ void project_closer::request_close() {
     }
 
     project_level_pool->remove_level(this->_project_id);
-}
-
-observing::endable project_closer::observe_event(std::function<void(project_event const &)> &&handler) {
-    return this->_event_notifier->observe(std::move(handler));
 }

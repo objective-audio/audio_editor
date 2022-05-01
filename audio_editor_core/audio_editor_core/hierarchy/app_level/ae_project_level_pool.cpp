@@ -32,19 +32,8 @@ std::shared_ptr<project_level> project_level_pool::add_and_return_level(url cons
     auto const identifier = this->_uuid_generator->generate();
     auto const project_level = project_level::make_shared(identifier, file_url);
     auto const &project_id = project_level->project_id;
-    auto const &closer = project_level->closer;
 
-    auto canceller = closer
-                         ->observe_event([this, project_id](auto const &event) {
-                             switch (event) {
-                                 case project_event::should_close: {
-                                     this->_project_levels->erase(project_id);
-                                 } break;
-                             }
-                         })
-                         .end();
-
-    this->_project_levels->insert_or_replace(project_id, std::make_pair(project_level, std::move(canceller)));
+    this->_project_levels->insert_or_replace(project_id, std::make_pair(project_level, nullptr));
 
     return project_level;
 }

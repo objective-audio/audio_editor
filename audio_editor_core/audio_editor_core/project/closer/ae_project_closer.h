@@ -24,8 +24,6 @@ struct project_closer final : project_closer_for_window_presenter {
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
 
-    [[nodiscard]] observing::endable observe_event(std::function<void(project_event const &)> &&);
-
    private:
     std::string const _project_id;
 
@@ -33,8 +31,6 @@ struct project_closer final : project_closer_for_window_presenter {
     std::weak_ptr<project_level_pool_for_project_closer> const _project_level_pool;
     std::weak_ptr<project_editor_level_pool_for_project_closer> const _editor_level_pool;
     std::weak_ptr<project_status_for_project_closer> const _status;
-
-    observing::notifier_ptr<project_event> const _event_notifier;
 
     project_closer(std::string const &project_id, std::shared_ptr<file_importer_for_project_closer> const &,
                    std::shared_ptr<project_level_pool_for_project_closer> const &,
