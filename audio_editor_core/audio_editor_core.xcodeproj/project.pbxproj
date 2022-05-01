@@ -1056,8 +1056,7 @@
 				B668BE10262DD2FA0021AD20 /* ae_project_types.h */,
 				B666CE4A26351D7900C1693D /* ae_project_url.cpp */,
 				B666CE4B26351D7900C1693D /* ae_project_url.h */,
-				B69CF55F262AC49C007A0A75 /* ae_project.cpp */,
-				B69CF560262AC49C007A0A75 /* ae_project.h */,
+				B6DC5F49281E31E500B40A0F /* launcher */,
 				B6F8A597281D0F2700EDE909 /* closer */,
 				B6D26B3B281CF8ED00417E5D /* status */,
 				B61262F52782FC310019B364 /* nudging */,
@@ -1321,6 +1320,15 @@
 				B6DC2CC227B64A87000EF5F9 /* ae_edge_presenter.h */,
 			);
 			path = edge_presenter;
+			sourceTree = "<group>";
+		};
+		B6DC5F49281E31E500B40A0F /* launcher */ = {
+			isa = PBXGroup;
+			children = (
+				B69CF55F262AC49C007A0A75 /* ae_project.cpp */,
+				B69CF560262AC49C007A0A75 /* ae_project.h */,
+			);
+			path = launcher;
 			sourceTree = "<group>";
 		};
 		B6E9035F2745346900DE821F /* exporter */ = {
