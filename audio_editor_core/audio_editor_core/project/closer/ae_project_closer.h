@@ -17,6 +17,7 @@ class project_status;
 struct project_closer final : project_closer_for_window_presenter {
     [[nodiscard]] static std::shared_ptr<project_closer> make_shared(
         std::string const &project_id, std::shared_ptr<file_importer_for_project_closer> const &,
+        std::shared_ptr<project_level_pool_for_project_closer> const &,
         std::shared_ptr<project_editor_level_pool_for_project_closer> const &,
         std::shared_ptr<project_status_for_project_closer> const &);
 
@@ -29,12 +30,14 @@ struct project_closer final : project_closer_for_window_presenter {
     std::string const _project_id;
 
     std::shared_ptr<file_importer_for_project_closer> const _file_importer;
+    std::weak_ptr<project_level_pool_for_project_closer> const _project_level_pool;
     std::shared_ptr<project_editor_level_pool_for_project_closer> const _editor_level_pool;
     std::shared_ptr<project_status_for_project_closer> const _status;
 
     observing::notifier_ptr<project_event> const _event_notifier;
 
     project_closer(std::string const &project_id, std::shared_ptr<file_importer_for_project_closer> const &,
+                   std::shared_ptr<project_level_pool_for_project_closer> const &,
                    std::shared_ptr<project_editor_level_pool_for_project_closer> const &,
                    std::shared_ptr<project_status_for_project_closer> const &);
 };
