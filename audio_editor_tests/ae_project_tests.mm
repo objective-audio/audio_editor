@@ -47,10 +47,6 @@ struct file_importer_stub final : file_importer_for_project {
 
         thread::perform_async_on_main([result, completion = std::move(context.completion)] { completion(result); });
     }
-
-    void cancel(std::string const &cancel_id) override {
-        this->cancel_handler(cancel_id);
-    }
 };
 
 struct file_loader_stub final : file_loader_for_project {
@@ -71,10 +67,6 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 
     void add_level(file_info const &file_info) override {
         this->file_info_value = file_info;
-    }
-
-    void remove_level() override {
-        this->file_info_value = std::nullopt;
     }
 
     std::shared_ptr<project_editor_level> const &level() const override {

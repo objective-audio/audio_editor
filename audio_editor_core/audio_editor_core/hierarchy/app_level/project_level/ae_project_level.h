@@ -21,6 +21,7 @@ class sheet_presenter;
 class context_menu_presenter;
 class responder_stack;
 class project_status;
+class project_closer;
 class project;
 class project_editor_level_pool;
 
@@ -39,7 +40,8 @@ struct project_level final {
     std::shared_ptr<ae::sheet_presenter> const sheet_presenter;
     std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;
     std::shared_ptr<ae::project_editor_level_pool> const editor_level_pool;
-    std::shared_ptr<ae::project_status> const project_status;
+    std::shared_ptr<ae::project_status> const status;
+    std::shared_ptr<ae::project_closer> const closer;
     std::shared_ptr<ae::project> const project;
 
    private:

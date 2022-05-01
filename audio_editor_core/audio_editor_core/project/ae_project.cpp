@@ -5,10 +5,7 @@
 #include "ae_project.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
-#include <audio_editor_core/ae_project_status.h>
-#include <audio_editor_core/ae_responder_stack.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -19,7 +16,7 @@ std::shared_ptr<project> project::make_shared(
     std::shared_ptr<file_loader_for_project> const &file_loader,
     std::shared_ptr<responder_stack_for_project> const &responder_stack,
     std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
-    std::shared_ptr<project_status> const &status) {
+    std::shared_ptr<project_status_for_project> const &status) {
     auto project = std::shared_ptr<ae::project>(new ae::project{
         identifier, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
     project->_weak_project = project;
@@ -32,7 +29,7 @@ project::project(std::string const &identifier, url const &file_url,
                  std::shared_ptr<file_loader_for_project> const &file_loader,
                  std::shared_ptr<responder_stack_for_project> const &responder_stack,
                  std::shared_ptr<project_editor_level_pool_for_project> const &editor_level_pool,
-                 std::shared_ptr<project_status> const &status)
+                 std::shared_ptr<project_status_for_project> const &status)
     : _identifier(identifier),
       _file_url(file_url),
       _project_url(project_url),
@@ -40,8 +37,7 @@ project::project(std::string const &identifier, url const &file_url,
       _file_loader(file_loader),
       _responder_stack(responder_stack),
       _editor_level_pool(editor_level_pool),
-      _status(status),
-      _event_notifier(observing::notifier<project_event>::make_shared()) {
+      _status(status) {
 }
 
 void project::setup() {
@@ -84,33 +80,4 @@ void project::setup() {
                  }
              }
          }});
-}
-
-bool project::can_close() const {
-    return true;
-}
-
-void project::request_close() {
-    switch (this->_status->state()) {
-        case project_state::closing:
-            return;
-        case project_state::loading:
-            this->_file_importer->cancel(this->_identifier);
-            this->_status->set_state(project_state::closing);
-            break;
-        case project_state::editing:
-            this->_editor_level_pool->remove_level();
-            this->_status->set_state(project_state::closing);
-            break;
-        case project_state::launching:
-        case project_state::failure:
-            this->_status->set_state(project_state::closing);
-            break;
-    }
-
-    this->_event_notifier->notify(project_event::should_close);
-}
-
-observing::endable project::observe_event(std::function<void(project_event const &)> &&handler) {
-    return this->_event_notifier->observe(std::move(handler));
 }

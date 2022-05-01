@@ -11,6 +11,7 @@
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project.h>
+#include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_editor_level_pool.h>
 #include <audio_editor_core/ae_project_status.h>
 #include <audio_editor_core/ae_project_url.h>
@@ -40,9 +41,10 @@ project_level::project_level(std::string const &project_id, url const &file_url,
       sheet_presenter(sheet_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       editor_level_pool(project_editor_level_pool::make_shared(project_id)),
-      project_status(project_status::make_shared()),
+      status(project_status::make_shared()),
+      closer(project_closer::make_shared(project_id, app_level->file_importer, this->editor_level_pool, this->status)),
       project(project::make_shared(project_id, file_url, this->project_url, app_level->file_importer,
                                    app_level->file_loader, this->responder_stack, this->editor_level_pool,
-                                   this->project_status)) {
+                                   this->status)) {
     this->project->setup();
 }
