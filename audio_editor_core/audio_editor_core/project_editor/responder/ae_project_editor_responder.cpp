@@ -4,17 +4,20 @@
 
 #include "ae_project_editor_responder.h"
 
+#include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_editor.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
-    std::shared_ptr<project_editor> const &editor) {
-    return std::shared_ptr<project_editor_responder>(new project_editor_responder{editor});
+    std::shared_ptr<project_editor> const &editor, std::shared_ptr<playing_toggler> const &toggler) {
+    return std::shared_ptr<project_editor_responder>(new project_editor_responder{editor, toggler});
 }
 
-project_editor_responder::project_editor_responder(std::shared_ptr<project_editor> const &editor) : _editor(editor) {
+project_editor_responder::project_editor_responder(std::shared_ptr<project_editor> const &editor,
+                                                   std::shared_ptr<playing_toggler> const &toggler)
+    : _editor(editor), _playing_toggler(toggler) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -93,7 +96,9 @@ void project_editor_responder::handle_action(ae::action const &action) {
         case responding::accepting: {
             switch (action.kind) {
                 case action_kind::toggle_play:
-                    editor->toggle_playing();
+                    if (auto const &toggler = this->_playing_toggler.lock()) {
+                        toggler->toggle_playing();
+                    }
                     break;
                 case action_kind::nudge_previous:
                     editor->nudge_previous(1);

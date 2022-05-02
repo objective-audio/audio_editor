@@ -46,5 +46,5 @@ project_editor_level::project_editor_level(std::string const &project_id, ae::fi
       editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_editor,
                                          this->pasteboard, this->database, this->exporter, this->nudging, this->timing,
                                          this->time_editor_level_pool)),
-      responder(project_editor_responder::make_shared(this->editor)) {
+      responder(project_editor_responder::make_shared(this->editor, this->playing_toggler)) {
 }

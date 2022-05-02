@@ -23,8 +23,6 @@ struct project_editor final {
         std::shared_ptr<nudging_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
         std::shared_ptr<time_editor_level_pool> const &);
 
-    void toggle_playing();
-
     [[nodiscard]] bool can_nudge() const;
     void nudge_previous(uint32_t const offset_count);
     void nudge_next(uint32_t const offset_count);
