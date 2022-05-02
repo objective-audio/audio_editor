@@ -12,6 +12,7 @@
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_pasteboard.h>
+#include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_url.h>
@@ -28,9 +29,9 @@ std::shared_ptr<project_editor_level> project_editor_level::make_shared(std::str
         new project_editor_level{project_id, file_info, project_level->project_url});
 }
 
-project_editor_level::project_editor_level(std::string const &identifier, ae::file_info const &file_info,
+project_editor_level::project_editor_level(std::string const &project_id, ae::file_info const &file_info,
                                            std::shared_ptr<project_url> const &project_url)
-    : project_id(identifier),
+    : project_id(project_id),
       file_info(file_info),
       timing(timing::make_shared(file_info.sample_rate)),
       nudging(nudging::make_shared(this->timing)),
@@ -40,8 +41,9 @@ project_editor_level::project_editor_level(std::string const &identifier, ae::fi
       pasteboard(pasteboard::make_shared()),
       database(database::make_shared(project_url->db_file())),
       exporter(exporter::make_shared()),
-      time_editor_level_pool(time_editor_level_pool::make_shared(identifier)),
-      editor(project_editor::make_shared(identifier, file_info, this->file_track, this->marker_pool, this->edge_editor,
+      playing_toggler(playing_toggler::make_shared(project_id)),
+      time_editor_level_pool(time_editor_level_pool::make_shared(project_id)),
+      editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_editor,
                                          this->pasteboard, this->database, this->exporter, this->nudging, this->timing,
                                          this->time_editor_level_pool)),
       responder(project_editor_responder::make_shared(this->editor)) {

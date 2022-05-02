@@ -10,6 +10,7 @@
 
 namespace yas::ae {
 struct playing_toggler final {
+    [[nodiscard]] static std::shared_ptr<playing_toggler> make_shared(std::string const &project_id);
     [[nodiscard]] static std::shared_ptr<playing_toggler> make_shared(
         std::shared_ptr<player_for_playing_toggler> const &);
 

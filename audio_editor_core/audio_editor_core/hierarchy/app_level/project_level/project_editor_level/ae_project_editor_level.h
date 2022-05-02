@@ -21,6 +21,7 @@ class edge_editor;
 class pasteboard;
 class database;
 class exporter;
+class playing_toggler;
 class time_editor_level_pool;
 class project_editor;
 class project_editor_responder;
@@ -41,6 +42,7 @@ struct project_editor_level final {
     std::shared_ptr<pasteboard> const pasteboard;
     std::shared_ptr<database> const database;
     std::shared_ptr<exporter> const exporter;
+    std::shared_ptr<playing_toggler> const playing_toggler;
     std::shared_ptr<time_editor_level_pool> const time_editor_level_pool;
     std::shared_ptr<project_editor> const editor;
     std::shared_ptr<project_editor_responder> const responder;

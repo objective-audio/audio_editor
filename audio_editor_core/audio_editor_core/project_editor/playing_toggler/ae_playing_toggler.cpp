@@ -4,8 +4,16 @@
 
 #include "ae_playing_toggler.h"
 
+#include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_player.h>
+
 using namespace yas;
 using namespace yas::ae;
+
+std::shared_ptr<playing_toggler> playing_toggler::make_shared(std::string const &project_id) {
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
+    return make_shared(project_level->player);
+}
 
 std::shared_ptr<playing_toggler> playing_toggler::make_shared(
     std::shared_ptr<player_for_playing_toggler> const &player) {
