@@ -4,11 +4,12 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_launcher_dependency.h>
+#include <audio_editor_core/ae_player_dependency.h>
+#include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
 #include <audio_editor_core/ae_scrolling_types.h>
 
 namespace yas::ae {
-struct scrolling final : scrolling_for_project_launcher {
+struct scrolling final : scrolling_for_player, scrolling_for_gesture_controller {
     [[nodiscard]] static std::shared_ptr<scrolling> make_shared();
 
     void begin() override;

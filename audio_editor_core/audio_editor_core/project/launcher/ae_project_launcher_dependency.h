@@ -41,10 +41,6 @@ struct file_loader_for_project_launcher {
     [[nodiscard]] virtual std::optional<file_info> load_file_info(url const &) const = 0;
 };
 
-struct scrolling_for_project_launcher : scrolling_for_player, scrolling_for_gesture_controller {
-    virtual ~scrolling_for_project_launcher() = default;
-};
-
 class responder;
 
 struct responder_stack_for_project_launcher {
