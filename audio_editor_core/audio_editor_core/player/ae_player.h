@@ -30,14 +30,14 @@ struct player final : player_for_project_editor, player_for_playing_toggler {
 
     [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
 
-    [[nodiscard]] static std::shared_ptr<player> make_shared(url const &root_url, std::string const &identifier,
+    [[nodiscard]] static std::shared_ptr<player> make_shared(url const &root_url, std::string const &project_id,
                                                              std::shared_ptr<scrolling_for_player> const &);
     [[nodiscard]] static std::shared_ptr<player> make_shared(std::shared_ptr<playing::coordinator> const &,
                                                              std::string const &identifier,
                                                              std::shared_ptr<scrolling_for_player> const &);
 
    private:
-    std::string const _identifier;
+    std::string const _project_id;
     std::shared_ptr<playing::coordinator> const _coordinator;
     std::weak_ptr<scrolling_for_player> const _scrolling;
 
