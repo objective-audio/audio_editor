@@ -246,6 +246,9 @@
 		B6D26B3F281CF8FB00417E5D /* ae_project_status.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D26B3D281CF8FB00417E5D /* ae_project_status.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6D385312649623A005ADD0B /* ae_project_editor_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D3852F2649623A005ADD0B /* ae_project_editor_utils.cpp */; };
 		B6D385322649623A005ADD0B /* ae_project_editor_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D385302649623A005ADD0B /* ae_project_editor_utils.h */; };
+		B6D55913281F849500C9427C /* ae_playing_toggler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D55911281F849500C9427C /* ae_playing_toggler.cpp */; };
+		B6D55914281F849500C9427C /* ae_playing_toggler.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D55912281F849500C9427C /* ae_playing_toggler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6D55916281F855D00C9427C /* ae_playing_toggler_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D55915281F850800C9427C /* ae_playing_toggler_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6D98A2127E0BD1A0034AD7C /* ae_ui_event_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D98A1F27E0BD1A0034AD7C /* ae_ui_event_utils.cpp */; };
 		B6D98A2227E0BD1A0034AD7C /* ae_ui_event_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D98A2027E0BD1A0034AD7C /* ae_ui_event_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6DBC361275F9EFB001AF1D3 /* ae_module_location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6DBC360275F9EFB001AF1D3 /* ae_module_location.cpp */; };
@@ -534,6 +537,9 @@
 		B6D26B3D281CF8FB00417E5D /* ae_project_status.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_status.h; sourceTree = "<group>"; };
 		B6D3852F2649623A005ADD0B /* ae_project_editor_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_editor_utils.cpp; sourceTree = "<group>"; };
 		B6D385302649623A005ADD0B /* ae_project_editor_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_editor_utils.h; sourceTree = "<group>"; };
+		B6D55911281F849500C9427C /* ae_playing_toggler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_playing_toggler.cpp; sourceTree = "<group>"; };
+		B6D55912281F849500C9427C /* ae_playing_toggler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_playing_toggler.h; sourceTree = "<group>"; };
+		B6D55915281F850800C9427C /* ae_playing_toggler_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_playing_toggler_dependency.h; sourceTree = "<group>"; };
 		B6D98A1F27E0BD1A0034AD7C /* ae_ui_event_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_ui_event_utils.cpp; sourceTree = "<group>"; };
 		B6D98A2027E0BD1A0034AD7C /* ae_ui_event_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_event_utils.h; sourceTree = "<group>"; };
 		B6DBC360275F9EFB001AF1D3 /* ae_module_location.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_module_location.cpp; sourceTree = "<group>"; };
@@ -1298,6 +1304,16 @@
 			path = status;
 			sourceTree = "<group>";
 		};
+		B6D55910281F848100C9427C /* playing_toggler */ = {
+			isa = PBXGroup;
+			children = (
+				B6D55911281F849500C9427C /* ae_playing_toggler.cpp */,
+				B6D55912281F849500C9427C /* ae_playing_toggler.h */,
+				B6D55915281F850800C9427C /* ae_playing_toggler_dependency.h */,
+			);
+			path = playing_toggler;
+			sourceTree = "<group>";
+		};
 		B6DC2CBB27B649C2000EF5F9 /* edge */ = {
 			isa = PBXGroup;
 			children = (
@@ -1349,6 +1365,7 @@
 				B6D385302649623A005ADD0B /* ae_project_editor_utils.h */,
 				B6EA40DC2641722600BF3D06 /* ae_project_editor.cpp */,
 				B6EA40DD2641722600BF3D06 /* ae_project_editor.h */,
+				B6D55910281F848100C9427C /* playing_toggler */,
 				B6F3D6A627E2111E0013E00B /* responder */,
 			);
 			path = project_editor;
@@ -1513,6 +1530,7 @@
 				B6CCC490274BC16C00B563C8 /* ae_pasteboard_types.h in Headers */,
 				B6126301278329410019B364 /* ae_nudging_utils.h in Headers */,
 				B6C3A58627102C9800514B94 /* ae_ui_modules.h in Headers */,
+				B6D55914281F849500C9427C /* ae_playing_toggler.h in Headers */,
 				B68483EA27C4944100792D17 /* ae_action_utils.h in Headers */,
 				B62D8FA32723CE3E00779D42 /* ae_scrolling_types.h in Headers */,
 				B6B1E5E227E570DB00FA4B88 /* ae_zooming_pair.h in Headers */,
@@ -1541,6 +1559,7 @@
 				B657D4D826806DA90048C6AD /* ae_keyboard_utils.h in Headers */,
 				B69D8C5427CB6AD800CA30DE /* ae_time_editor_level.h in Headers */,
 				B6A55ECB266C81980039E56F /* ae_ui_layout_utils.h in Headers */,
+				B6D55916281F855D00C9427C /* ae_playing_toggler_dependency.h in Headers */,
 				B6813579271EE756009CC0FC /* ae_gesture.h in Headers */,
 				B68E852227BD255900074894 /* ae_ui_root_level_pool.h in Headers */,
 				B6F09CE327E81FA000638C6A /* ae_ui_time_constants.h in Headers */,
@@ -1686,6 +1705,7 @@
 				B66ED62F27CDCC4800E1DFA7 /* ae_ui_editing_root_level_pool.mm in Sources */,
 				B68C3E8127088FF000888A53 /* ae_root_presenter.cpp in Sources */,
 				B655310F277D5F62004C6AC8 /* ae_recycle_pool.cpp in Sources */,
+				B6D55913281F849500C9427C /* ae_playing_toggler.cpp in Sources */,
 				B6EE90DF27A25A26000470F3 /* ae_ui_types.cpp in Sources */,
 				B6BE6B9B2733BECD0097C99D /* ae_db_marker.cpp in Sources */,
 				B657D4D1268037720048C6AD /* ae_keyboard.mm in Sources */,
