@@ -53,7 +53,10 @@ void player::reset_timeline() {
 }
 
 void player::set_playing(bool const is_playing) {
-    this->_scrolling->set_is_enabled(!is_playing);
+    if (auto const scrolling = this->_scrolling.lock()) {
+        scrolling->set_is_enabled(!is_playing);
+    }
+
     this->_coordinator->set_playing(is_playing);
 }
 
@@ -69,7 +72,11 @@ void player::seek(frame_index_t const frame) {
 }
 
 bool player::is_scrolling() const {
-    return this->_scrolling->is_began();
+    if (auto const scrolling = this->_scrolling.lock()) {
+        return scrolling->is_began();
+    } else {
+        return false;
+    }
 }
 
 frame_index_t player::current_frame() const {

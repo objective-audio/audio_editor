@@ -39,7 +39,7 @@ struct player final : player_for_project_editor, player_for_playing_toggler {
    private:
     std::string const _identifier;
     std::shared_ptr<playing::coordinator> const _coordinator;
-    std::shared_ptr<scrolling_for_player> const _scrolling;
+    std::weak_ptr<scrolling_for_player> const _scrolling;
 
     std::optional<frame_index_t> _reserved_frame = std::nullopt;
     std::optional<frame_index_t> _seeking_frame = std::nullopt;
