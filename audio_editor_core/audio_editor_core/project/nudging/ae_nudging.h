@@ -18,13 +18,13 @@ struct nudging final : nudging_for_project_editor {
     [[nodiscard]] std::size_t unit_index() const override;
     [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&) override;
 
-    [[nodiscard]] frame_index_t next_frame(frame_index_t const current_frame,
-                                           uint32_t const offset_count) const override;
-    [[nodiscard]] frame_index_t previous_frame(frame_index_t const current_frame,
-                                               uint32_t const offset_count) const override;
+    [[nodiscard]] std::optional<frame_index_t> next_frame(frame_index_t const current_frame,
+                                                          uint32_t const offset_count) const override;
+    [[nodiscard]] std::optional<frame_index_t> previous_frame(frame_index_t const current_frame,
+                                                              uint32_t const offset_count) const override;
 
    private:
-    std::shared_ptr<timing_for_nudging> const _timing;
+    std::weak_ptr<timing_for_nudging> const _timing;
     observing::value::holder_ptr<std::size_t> const _unit_idx;
 
     nudging(std::shared_ptr<timing_for_nudging> const &);

@@ -245,8 +245,10 @@ void project_editor::nudge_previous(uint32_t const offset_count) {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    frame_index_t const prev_frame = this->_nudging->previous_frame(current_frame, offset_count);
-    this->_player->seek(prev_frame);
+
+    if (auto const prev_frame = this->_nudging->previous_frame(current_frame, offset_count)) {
+        this->_player->seek(prev_frame.value());
+    }
 }
 
 void project_editor::nudge_next(uint32_t const offset_count) {
@@ -255,8 +257,9 @@ void project_editor::nudge_next(uint32_t const offset_count) {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    frame_index_t const next_frame = this->_nudging->next_frame(current_frame, offset_count);
-    this->_player->seek(next_frame);
+    if (auto const next_frame = this->_nudging->next_frame(current_frame, offset_count)) {
+        this->_player->seek(next_frame.value());
+    }
 }
 
 void project_editor::rotate_nudging_next_unit() {
