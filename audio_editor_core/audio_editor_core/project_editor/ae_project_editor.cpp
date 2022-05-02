@@ -235,10 +235,6 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
     this->_player->begin_rendering();
 }
 
-void project_editor::toggle_playing() {
-    this->_player->set_playing(!this->_player->is_playing());
-}
-
 bool project_editor::can_nudge() const {
     return !this->_player->is_playing();
 }
