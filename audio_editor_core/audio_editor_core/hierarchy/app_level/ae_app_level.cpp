@@ -25,7 +25,7 @@ app_level::app_level()
       color(ae::color::make_shared()),
       project_level_pool(project_level_pool::make_shared()),
       ui_root_level_pool(ui_root_level_pool::make_shared()) {
-    this->app->setup();
+    this->app->launch();
 }
 
 std::shared_ptr<app_level> app_level::make_shared() {

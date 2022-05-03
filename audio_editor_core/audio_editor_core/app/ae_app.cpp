@@ -19,7 +19,7 @@ app::app(std::shared_ptr<worker> const &worker, std::shared_ptr<ae::system_url> 
     : _worker(worker), _system_url(system_url) {
 }
 
-void app::setup() {
+void app::launch() {
     file_manager::remove_contents_in_directory(this->_system_url->app_directory().path());
 
     this->_worker->start();
