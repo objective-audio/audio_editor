@@ -19,13 +19,13 @@ using namespace yas::ae;
 app_level::app_level()
     : worker(worker::make_shared()),
       system_url(system_url::make_shared()),
-      app(app_launcher::make_shared(worker, system_url)),
+      launcher(app_launcher::make_shared(worker, system_url)),
       file_importer(file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing))),
       file_loader(file_loader::make_shared()),
       color(ae::color::make_shared()),
       project_level_pool(project_level_pool::make_shared()),
       ui_root_level_pool(ui_root_level_pool::make_shared()) {
-    this->app->launch();
+    this->launcher->launch();
 }
 
 std::shared_ptr<app_level> app_level::make_shared() {

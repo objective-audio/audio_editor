@@ -21,7 +21,7 @@ struct app_level final {
 
     std::shared_ptr<worker> const worker;
     std::shared_ptr<ae::system_url> const system_url;
-    std::shared_ptr<ae::app_launcher> const app;
+    std::shared_ptr<ae::app_launcher> const launcher;
     std::shared_ptr<ae::file_importer> const file_importer;
     std::shared_ptr<ae::file_loader> const file_loader;
     std::shared_ptr<ae::color> const color;
