@@ -11,9 +11,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-player::player(std::shared_ptr<playing::coordinator> const &coordinator, std::string const &identifier,
+player::player(std::shared_ptr<playing::coordinator> const &coordinator, std::string const &project_id,
                std::shared_ptr<scrolling_for_player> const &scrolling)
-    : _identifier(identifier), _coordinator(coordinator), _scrolling(scrolling) {
+    : _project_id(project_id), _coordinator(coordinator), _scrolling(scrolling) {
     scrolling
         ->observe([this](scrolling_event const &event) {
             switch (event.state) {
@@ -44,7 +44,7 @@ void player::begin_rendering() {
 
 void player::set_timeline(proc::timeline_ptr const &time_line, playing::sample_rate_t const sample_rate,
                           audio::pcm_format const pcm_format) {
-    this->_coordinator->set_timeline(time_line, this->_identifier);
+    this->_coordinator->set_timeline(time_line, this->_project_id);
     this->_coordinator->set_timeline_format(sample_rate, pcm_format);
 }
 
@@ -53,7 +53,10 @@ void player::reset_timeline() {
 }
 
 void player::set_playing(bool const is_playing) {
-    this->_scrolling->set_is_enabled(!is_playing);
+    if (auto const scrolling = this->_scrolling.lock()) {
+        scrolling->set_is_enabled(!is_playing);
+    }
+
     this->_coordinator->set_playing(is_playing);
 }
 
@@ -69,7 +72,11 @@ void player::seek(frame_index_t const frame) {
 }
 
 bool player::is_scrolling() const {
-    return this->_scrolling->is_began();
+    if (auto const scrolling = this->_scrolling.lock()) {
+        return scrolling->is_began();
+    } else {
+        return false;
+    }
 }
 
 frame_index_t player::current_frame() const {
