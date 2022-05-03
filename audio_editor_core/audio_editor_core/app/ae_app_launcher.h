@@ -16,8 +16,8 @@ struct app_launcher final {
     void launch();
 
    private:
-    std::shared_ptr<worker> const _worker;
-    std::shared_ptr<ae::system_url> const _system_url;
+    std::weak_ptr<worker> const _worker;
+    std::weak_ptr<ae::system_url> const _system_url;
 
     app_launcher(std::shared_ptr<worker> const &, std::shared_ptr<ae::system_url> const &);
 };

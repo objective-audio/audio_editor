@@ -20,7 +20,14 @@ app_launcher::app_launcher(std::shared_ptr<worker> const &worker, std::shared_pt
 }
 
 void app_launcher::launch() {
-    file_manager::remove_contents_in_directory(this->_system_url->app_directory().path());
+    auto const system_url = this->_system_url.lock();
+    auto const worker = this->_worker.lock();
 
-    this->_worker->start();
+    if (!system_url || !worker) {
+        return;
+    }
+
+    file_manager::remove_contents_in_directory(system_url->app_directory().path());
+
+    worker->start();
 }
