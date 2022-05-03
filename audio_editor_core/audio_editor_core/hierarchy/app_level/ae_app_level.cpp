@@ -4,7 +4,7 @@
 
 #include "ae_app_level.h"
 
-#include <audio_editor_core/ae_app.h>
+#include <audio_editor_core/ae_app_launcher.h>
 #include <audio_editor_core/ae_app_level_types.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_file_importer.h>
@@ -19,7 +19,7 @@ using namespace yas::ae;
 app_level::app_level()
     : worker(worker::make_shared()),
       system_url(system_url::make_shared()),
-      app(app::make_shared(worker, system_url)),
+      app(app_launcher::make_shared(worker, system_url)),
       file_importer(file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing))),
       file_loader(file_loader::make_shared()),
       color(ae::color::make_shared()),
