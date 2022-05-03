@@ -10,12 +10,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<app_launcher> app_launcher::make_shared(std::shared_ptr<worker> const &worker,
+std::shared_ptr<app_launcher> app_launcher::make_shared(std::shared_ptr<workable> const &worker,
                                                         std::shared_ptr<ae::system_url> const &system_url) {
     return std::shared_ptr<app_launcher>(new app_launcher{worker, system_url});
 }
 
-app_launcher::app_launcher(std::shared_ptr<worker> const &worker, std::shared_ptr<ae::system_url> const &system_url)
+app_launcher::app_launcher(std::shared_ptr<workable> const &worker, std::shared_ptr<ae::system_url> const &system_url)
     : _worker(worker), _system_url(system_url) {
 }
 
