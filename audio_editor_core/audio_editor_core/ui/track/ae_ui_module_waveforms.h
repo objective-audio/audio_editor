@@ -10,7 +10,6 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-class waveform_mesh_importer;
 class module_location;
 class module_waveforms_presenter;
 class color;

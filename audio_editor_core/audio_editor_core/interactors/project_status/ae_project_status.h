@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_project_closer_dependency.h>
 #include <audio_editor_core/ae_project_launcher_dependency.h>
-#include <audio_editor_core/ae_project_types.h>
+#include <audio_editor_core/ae_project_state.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
