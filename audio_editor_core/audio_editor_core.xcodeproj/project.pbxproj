@@ -666,14 +666,14 @@
 			path = modal_bg;
 			sourceTree = "<group>";
 		};
-		B61262F52782FC310019B364 /* nudging */ = {
+		B61262F52782FC310019B364 /* nudge_settings */ = {
 			isa = PBXGroup;
 			children = (
 				B6A123762788373E00F31B31 /* ae_nudge_settings_dependency.h */,
 				B61262FA2782FF030019B364 /* ae_nudge_settings.cpp */,
 				B61262FB2782FF030019B364 /* ae_nudge_settings.h */,
 			);
-			path = nudging;
+			path = nudge_settings;
 			sourceTree = "<group>";
 		};
 		B6137F6927C7B22C0097A3C6 /* project_level */ = {
@@ -829,7 +829,7 @@
 				B6DC5F49281E31E500B40A0F /* project_launcher */,
 				B6F8A597281D0F2700EDE909 /* project_closer */,
 				B6D26B3B281CF8ED00417E5D /* project_status */,
-				B61262F52782FC310019B364 /* nudging */,
+				B61262F52782FC310019B364 /* nudge_settings */,
 				B62D8FA52723CE5100779D42 /* scrolling */,
 				B6BF1099278549B8000553ED /* timing */,
 				B62D8FA42723CE4D00779D42 /* zooming */,
