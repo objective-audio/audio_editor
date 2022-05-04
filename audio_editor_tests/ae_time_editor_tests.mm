@@ -4,6 +4,7 @@
 
 #import <XCTest/XCTest.h>
 #include <audio_editor_core/ae_time_editor.h>
+#include <audio_editor_core/ae_time_editor_status.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -18,7 +19,8 @@ using namespace yas::ae;
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 8, .value = 5}, {.size = 76, .value = 55}}};
 
-    auto const editor = time_editor::make_shared(components, std::nullopt);
+    auto const status = time_editor_status::make_shared();
+    auto const editor = time_editor::make_shared(components, std::nullopt, status);
 
     number_components const expected_components{
         false, {{.size = 10, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 55}}};
@@ -36,7 +38,8 @@ using namespace yas::ae;
     number_components const expected_true_components{
         true, {{.size = 10, .value = 1}, {.size = 10, .value = 5}, {.size = 100, .value = 55}}};
 
-    auto const editor = time_editor::make_shared(components, std::nullopt);
+    auto const status = time_editor_status::make_shared();
+    auto const editor = time_editor::make_shared(components, std::nullopt, status);
 
     std::vector<number_components> called;
 
@@ -69,7 +72,8 @@ using namespace yas::ae;
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 8, .value = 5}, {.size = 76, .value = 55}}};
 
-    auto const editor = time_editor::make_shared(components, std::nullopt);
+    auto const status = time_editor_status::make_shared();
+    auto const editor = time_editor::make_shared(components, std::nullopt, status);
 
     std::vector<number_components> called;
 
@@ -177,7 +181,8 @@ using namespace yas::ae;
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 8, .value = 5}, {.size = 76, .value = 55}}};
 
-    auto const editor = time_editor::make_shared(components, std::nullopt);
+    auto const status = time_editor_status::make_shared();
+    auto const editor = time_editor::make_shared(components, std::nullopt, status);
 
     std::vector<std::size_t> called;
 
@@ -203,7 +208,8 @@ using namespace yas::ae;
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 8, .value = 5}, {.size = 76, .value = 55}}};
 
-    auto const editor = time_editor::make_shared(components, std::nullopt);
+    auto const status = time_editor_status::make_shared();
+    auto const editor = time_editor::make_shared(components, std::nullopt, status);
 
     std::vector<std::size_t> called;
 
@@ -268,7 +274,8 @@ using namespace yas::ae;
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 11, .value = 5}, {.size = 76, .value = 55}}};
 
-    auto const editor = time_editor::make_shared(components, std::nullopt);
+    auto const status = time_editor_status::make_shared();
+    auto const editor = time_editor::make_shared(components, std::nullopt, status);
 
     editor->move_to_next_unit();
     XCTAssertEqual(editor->unit_index(), 1);
@@ -313,7 +320,8 @@ using namespace yas::ae;
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 11, .value = 5}, {.size = 76, .value = 55}}};
 
-    auto const editor = time_editor::make_shared(components, std::nullopt);
+    auto const status = time_editor_status::make_shared();
+    auto const editor = time_editor::make_shared(components, std::nullopt, status);
 
     std::vector<time_editor_event> called;
 
@@ -343,7 +351,8 @@ using namespace yas::ae;
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 11, .value = 5}, {.size = 76, .value = 55}}};
 
-    auto const editor = time_editor::make_shared(components, std::nullopt);
+    auto const status = time_editor_status::make_shared();
+    auto const editor = time_editor::make_shared(components, std::nullopt, status);
 
     std::vector<time_editor_event> called;
 
