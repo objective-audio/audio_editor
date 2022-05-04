@@ -25,7 +25,7 @@ struct time_editor_status final {
         canceled,
     };
 
-    observing::value::holder_ptr<state> const _state;
+    state _state;
 
     time_editor_status();
 };

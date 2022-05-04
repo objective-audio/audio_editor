@@ -11,7 +11,7 @@ std::shared_ptr<time_editor_status> time_editor_status::make_shared() {
     return std::shared_ptr<time_editor_status>(new time_editor_status{});
 }
 
-time_editor_status::time_editor_status() : _state(observing::value::holder<state>::make_shared(state::editing)) {
+time_editor_status::time_editor_status() : _state(state::editing) {
 }
 
 void time_editor_status::finish() {
@@ -19,7 +19,7 @@ void time_editor_status::finish() {
         return;
     }
 
-    this->_state->set_value(state::finished);
+    this->_state = state::finished;
 }
 
 void time_editor_status::cancel() {
@@ -27,16 +27,15 @@ void time_editor_status::cancel() {
         return;
     }
 
-    this->_state->set_value(state::canceled);
+    this->_state = state::canceled;
 }
 
 bool time_editor_status::is_finished() const {
-    return this->_state->value() == state::finished;
+    return this->_state == state::finished;
 }
 
 bool time_editor_status::is_ended() const {
-    auto const state = this->_state->value();
-    switch (state) {
+    switch (this->_state) {
         case state::finished:
         case state::canceled:
             return true;
