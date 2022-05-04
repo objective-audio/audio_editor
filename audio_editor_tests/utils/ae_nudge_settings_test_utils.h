@@ -1,13 +1,13 @@
 //
-//  ae_nudging_test_utils.h
+//  ae_nudge_settings_test_utils.h
 //
 
 #pragma once
 
-#include <audio_editor_core/ae_nudging_dependency.h>
+#include <audio_editor_core/ae_nudge_settings_dependency.h>
 
 namespace yas::ae::test_utils {
-struct timing_stub final : timing_for_nudging {
+struct timing_stub final : timing_for_nudge_settings {
     sample_rate_t sample_rate_value = 0;
     std::function<timing_components(frame_index_t const &)> components_handler = [](frame_index_t const &) {
         return timing_components{{.fraction_unit_size = 30}};

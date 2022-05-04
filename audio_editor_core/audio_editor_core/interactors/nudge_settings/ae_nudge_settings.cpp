@@ -1,23 +1,21 @@
 //
-//  ae_nudging.cpp
+//  ae_nudge_settings.cpp
 //
 
-#include "ae_nudging.h"
-
-#include <audio_editor_core/ae_nudging_utils.h>
+#include "ae_nudge_settings.h"
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<nudging> nudging::make_shared(std::shared_ptr<timing_for_nudging> const &timing) {
-    return std::shared_ptr<nudging>(new nudging{timing});
+std::shared_ptr<nudge_settings> nudge_settings::make_shared(std::shared_ptr<timing_for_nudge_settings> const &timing) {
+    return std::shared_ptr<nudge_settings>(new nudge_settings{timing});
 }
 
-nudging::nudging(std::shared_ptr<timing_for_nudging> const &timing)
+nudge_settings::nudge_settings(std::shared_ptr<timing_for_nudge_settings> const &timing)
     : _timing(timing), _unit_idx(observing::value::holder<std::size_t>::make_shared(0)) {
 }
 
-void nudging::rotate_next_unit() {
+void nudge_settings::rotate_next_unit() {
     auto const timing = this->_timing.lock();
     if (!timing) {
         return;
@@ -32,7 +30,7 @@ void nudging::rotate_next_unit() {
     }
 }
 
-void nudging::rotate_previous_unit() {
+void nudge_settings::rotate_previous_unit() {
     auto const timing = this->_timing.lock();
     if (!timing) {
         return;
@@ -47,15 +45,16 @@ void nudging::rotate_previous_unit() {
     }
 }
 
-std::size_t nudging::unit_index() const {
+std::size_t nudge_settings::unit_index() const {
     return this->_unit_idx->value();
 }
 
-observing::syncable nudging::observe_unit_index(std::function<void(std::size_t const &)> &&handler) {
+observing::syncable nudge_settings::observe_unit_index(std::function<void(std::size_t const &)> &&handler) {
     return this->_unit_idx->observe(std::move(handler));
 }
 
-std::optional<frame_index_t> nudging::next_frame(frame_index_t const current_frame, uint32_t const offset_count) const {
+std::optional<frame_index_t> nudge_settings::next_frame(frame_index_t const current_frame,
+                                                        uint32_t const offset_count) const {
     auto const timing = this->_timing.lock();
     if (!timing) {
         return std::nullopt;
@@ -70,8 +69,8 @@ std::optional<frame_index_t> nudging::next_frame(frame_index_t const current_fra
     return timing->frame(next);
 }
 
-std::optional<frame_index_t> nudging::previous_frame(frame_index_t const current_frame,
-                                                     uint32_t const offset_count) const {
+std::optional<frame_index_t> nudge_settings::previous_frame(frame_index_t const current_frame,
+                                                            uint32_t const offset_count) const {
     auto const timing = this->_timing.lock();
     if (!timing) {
         return std::nullopt;

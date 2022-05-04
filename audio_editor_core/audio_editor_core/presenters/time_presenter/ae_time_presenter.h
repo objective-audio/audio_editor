@@ -10,7 +10,7 @@
 namespace yas::ae {
 class timing;
 class player;
-class nudging;
+class nudge_settings;
 class time_editor_level;
 class time_editor_level_pool;
 
@@ -30,15 +30,15 @@ struct time_presenter final {
    private:
     std::weak_ptr<timing> const _timing;
     std::weak_ptr<player> const _player;
-    std::weak_ptr<nudging> const _nudging;
+    std::weak_ptr<nudge_settings> const _nudge_settings;
     std::weak_ptr<time_editor_level_pool> const _time_editor_level_pool;
 
     observing::fetcher_ptr<std::optional<index_range>> _range_fetcher;
 
     observing::canceller_pool _pool;
 
-    time_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &, std::shared_ptr<nudging> const &,
-                   std::shared_ptr<time_editor_level_pool> const &);
+    time_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &,
+                   std::shared_ptr<nudge_settings> const &, std::shared_ptr<time_editor_level_pool> const &);
 
     std::shared_ptr<time_editor_level> const &_level() const;
 };

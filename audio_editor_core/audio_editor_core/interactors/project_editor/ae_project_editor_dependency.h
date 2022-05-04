@@ -12,8 +12,7 @@
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
-#include <audio_editor_core/ae_nudging_dependency.h>
-#include <audio_editor_core/ae_nudging_types.h>
+#include <audio_editor_core/ae_nudge_settings_dependency.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
 #include <audio_editor_core/ae_time_editor_types.h>
 #include <audio_editor_core/ae_timing_types.h>
@@ -154,8 +153,8 @@ struct pasteboard_for_project_editor {
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(pasteboard_event const &)> &&) = 0;
 };
 
-struct nudging_for_project_editor {
-    virtual ~nudging_for_project_editor() = default;
+struct nudge_settings_for_project_editor {
+    virtual ~nudge_settings_for_project_editor() = default;
 
     virtual void rotate_next_unit() = 0;
     virtual void rotate_previous_unit() = 0;
@@ -168,7 +167,7 @@ struct nudging_for_project_editor {
                                                                       uint32_t const offset_count) const = 0;
 };
 
-struct timing_for_project_editor : timing_for_nudging {
+struct timing_for_project_editor : timing_for_nudge_settings {
     virtual ~timing_for_project_editor() = default;
 
     virtual void set_fraction_kind(timing_fraction_kind const) = 0;

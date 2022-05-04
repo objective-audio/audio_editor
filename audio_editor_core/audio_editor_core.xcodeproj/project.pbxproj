@@ -16,11 +16,8 @@
 		B6097BC1272535FE008A6D57 /* ae_gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6097BC0272535FE008A6D57 /* ae_gesture.cpp */; };
 		B60AEF0C27EACE3A000D2019 /* ae_ui_modal_bg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B60AEF0A27EACE3A000D2019 /* ae_ui_modal_bg.mm */; };
 		B60AEF0D27EACE3A000D2019 /* ae_ui_modal_bg.h in Headers */ = {isa = PBXBuildFile; fileRef = B60AEF0B27EACE3A000D2019 /* ae_ui_modal_bg.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B61262F92782FC560019B364 /* ae_nudging_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262F72782FC560019B364 /* ae_nudging_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B61262FC2782FF030019B364 /* ae_nudging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FA2782FF030019B364 /* ae_nudging.cpp */; };
-		B61262FD2782FF030019B364 /* ae_nudging.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FB2782FF030019B364 /* ae_nudging.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B6126300278329410019B364 /* ae_nudging_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FE278329410019B364 /* ae_nudging_utils.cpp */; };
-		B6126301278329410019B364 /* ae_nudging_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FF278329410019B364 /* ae_nudging_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B61262FC2782FF030019B364 /* ae_nudge_settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FA2782FF030019B364 /* ae_nudge_settings.cpp */; };
+		B61262FD2782FF030019B364 /* ae_nudge_settings.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FB2782FF030019B364 /* ae_nudge_settings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6137F6C27C7B23C0097A3C6 /* ae_project_level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6137F6A27C7B23C0097A3C6 /* ae_project_level.cpp */; };
 		B6137F6D27C7B23C0097A3C6 /* ae_project_level.h in Headers */ = {isa = PBXBuildFile; fileRef = B6137F6B27C7B23C0097A3C6 /* ae_project_level.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169BD62743D0C400589393 /* ae_dialog_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169BD42743D0C400589393 /* ae_dialog_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -180,7 +177,7 @@
 		B69D8C5A27CB6C3A00CA30DE /* ae_time_editor_level_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B69D8C5827CB6C3A00CA30DE /* ae_time_editor_level_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69DA66027B75FA400228CAB /* ae_edge_location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69DA65E27B75FA400228CAB /* ae_edge_location.cpp */; };
 		B69DA66127B75FA400228CAB /* ae_edge_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DA65F27B75FA400228CAB /* ae_edge_location.h */; };
-		B6A123772788373E00F31B31 /* ae_nudging_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A123762788373E00F31B31 /* ae_nudging_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6A123772788373E00F31B31 /* ae_nudge_settings_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A123762788373E00F31B31 /* ae_nudge_settings_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A12381278932B900F31B31 /* ae_ui_time.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A1237F278932B900F31B31 /* ae_ui_time.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A12382278932B900F31B31 /* ae_ui_time.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A12380278932B900F31B31 /* ae_ui_time.mm */; };
 		B6A12387278947A200F31B31 /* ae_time_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A12385278947A200F31B31 /* ae_time_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -305,11 +302,8 @@
 		B6097BC0272535FE008A6D57 /* ae_gesture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_gesture.cpp; sourceTree = "<group>"; };
 		B60AEF0A27EACE3A000D2019 /* ae_ui_modal_bg.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_modal_bg.mm; sourceTree = "<group>"; };
 		B60AEF0B27EACE3A000D2019 /* ae_ui_modal_bg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_modal_bg.h; sourceTree = "<group>"; };
-		B61262F72782FC560019B364 /* ae_nudging_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_types.h; sourceTree = "<group>"; };
-		B61262FA2782FF030019B364 /* ae_nudging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudging.cpp; sourceTree = "<group>"; };
-		B61262FB2782FF030019B364 /* ae_nudging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging.h; sourceTree = "<group>"; };
-		B61262FE278329410019B364 /* ae_nudging_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudging_utils.cpp; sourceTree = "<group>"; };
-		B61262FF278329410019B364 /* ae_nudging_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_utils.h; sourceTree = "<group>"; };
+		B61262FA2782FF030019B364 /* ae_nudge_settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudge_settings.cpp; sourceTree = "<group>"; };
+		B61262FB2782FF030019B364 /* ae_nudge_settings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudge_settings.h; sourceTree = "<group>"; };
 		B6137F6A27C7B23C0097A3C6 /* ae_project_level.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_level.cpp; sourceTree = "<group>"; };
 		B6137F6B27C7B23C0097A3C6 /* ae_project_level.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_level.h; sourceTree = "<group>"; };
 		B6169BD42743D0C400589393 /* ae_dialog_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_dialog_presenter.h; sourceTree = "<group>"; };
@@ -469,7 +463,7 @@
 		B69D8C5827CB6C3A00CA30DE /* ae_time_editor_level_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_editor_level_pool.h; sourceTree = "<group>"; };
 		B69DA65E27B75FA400228CAB /* ae_edge_location.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_edge_location.cpp; sourceTree = "<group>"; };
 		B69DA65F27B75FA400228CAB /* ae_edge_location.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_edge_location.h; sourceTree = "<group>"; };
-		B6A123762788373E00F31B31 /* ae_nudging_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudging_dependency.h; sourceTree = "<group>"; };
+		B6A123762788373E00F31B31 /* ae_nudge_settings_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudge_settings_dependency.h; sourceTree = "<group>"; };
 		B6A1237F278932B900F31B31 /* ae_ui_time.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_time.h; sourceTree = "<group>"; };
 		B6A12380278932B900F31B31 /* ae_ui_time.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_time.mm; sourceTree = "<group>"; };
 		B6A12385278947A200F31B31 /* ae_time_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_presenter.h; sourceTree = "<group>"; };
@@ -672,17 +666,14 @@
 			path = modal_bg;
 			sourceTree = "<group>";
 		};
-		B61262F52782FC310019B364 /* nudging */ = {
+		B61262F52782FC310019B364 /* nudge_settings */ = {
 			isa = PBXGroup;
 			children = (
-				B6A123762788373E00F31B31 /* ae_nudging_dependency.h */,
-				B61262F72782FC560019B364 /* ae_nudging_types.h */,
-				B61262FE278329410019B364 /* ae_nudging_utils.cpp */,
-				B61262FF278329410019B364 /* ae_nudging_utils.h */,
-				B61262FA2782FF030019B364 /* ae_nudging.cpp */,
-				B61262FB2782FF030019B364 /* ae_nudging.h */,
+				B6A123762788373E00F31B31 /* ae_nudge_settings_dependency.h */,
+				B61262FA2782FF030019B364 /* ae_nudge_settings.cpp */,
+				B61262FB2782FF030019B364 /* ae_nudge_settings.h */,
 			);
-			path = nudging;
+			path = nudge_settings;
 			sourceTree = "<group>";
 		};
 		B6137F6927C7B22C0097A3C6 /* project_level */ = {
@@ -838,7 +829,7 @@
 				B6DC5F49281E31E500B40A0F /* project_launcher */,
 				B6F8A597281D0F2700EDE909 /* project_closer */,
 				B6D26B3B281CF8ED00417E5D /* project_status */,
-				B61262F52782FC310019B364 /* nudging */,
+				B61262F52782FC310019B364 /* nudge_settings */,
 				B62D8FA52723CE5100779D42 /* scrolling */,
 				B6BF1099278549B8000553ED /* timing */,
 				B62D8FA42723CE4D00779D42 /* zooming */,
@@ -1528,13 +1519,12 @@
 				B69708EB2639A15E0045E975 /* ae_file_importer.h in Headers */,
 				B64E94F82652B7660056F511 /* ae_marker_pool_types.h in Headers */,
 				B6F5264B27925EAD00688339 /* ae_number_components.h in Headers */,
-				B61262F92782FC560019B364 /* ae_nudging_types.h in Headers */,
 				B6C3926A2741442400ACFFF4 /* ae_action_controller.h in Headers */,
 				B6966F45272EDB2F00A90733 /* ae_db_module.h in Headers */,
 				B62EF82F27C9F85600A27948 /* ae_hierarchy.h in Headers */,
 				B6F4D98427B6027200AE7D5D /* ae_edge_editor_types.h in Headers */,
 				B6E8995D2688806E00BBFA73 /* ae_ui_editing_root_utils.h in Headers */,
-				B6A123772788373E00F31B31 /* ae_nudging_dependency.h in Headers */,
+				B6A123772788373E00F31B31 /* ae_nudge_settings_dependency.h in Headers */,
 				B657D4D2268037720048C6AD /* ae_keyboard.h in Headers */,
 				B6370CD0279B9F4900449D03 /* ae_time_editor_types.h in Headers */,
 				B6CFC64127EF517400F0E1B7 /* ae_sheet_presenter.h in Headers */,
@@ -1584,7 +1574,6 @@
 				B6BE6BA1273681090097C99D /* ae_window_presenter_dependency.h in Headers */,
 				B695A3892764D87E004CB28F /* ae_display_space_types.h in Headers */,
 				B6CCC490274BC16C00B563C8 /* ae_pasteboard_types.h in Headers */,
-				B6126301278329410019B364 /* ae_nudging_utils.h in Headers */,
 				B6C3A58627102C9800514B94 /* ae_ui_modules.h in Headers */,
 				B6D55914281F849500C9427C /* ae_playing_toggler.h in Headers */,
 				B68483EA27C4944100792D17 /* ae_action_utils.h in Headers */,
@@ -1649,7 +1638,7 @@
 				B6966F41272E639D00A90733 /* ae_db_utils.h in Headers */,
 				B60AEF0D27EACE3A000D2019 /* ae_ui_modal_bg.h in Headers */,
 				B6B563C6271BD3FD0003ED60 /* ae_common_utils.h in Headers */,
-				B61262FD2782FF030019B364 /* ae_nudging.h in Headers */,
+				B61262FD2782FF030019B364 /* ae_nudge_settings.h in Headers */,
 				B6966F33272CEF9100A90733 /* ae_editing_root_presenter_types.h in Headers */,
 				B605EA712657E5530031B177 /* ae_ui_editing_root.h in Headers */,
 			);
@@ -1745,7 +1734,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B69708EA2639A15E0045E975 /* ae_file_importer.cpp in Sources */,
-				B61262FC2782FF030019B364 /* ae_nudging.cpp in Sources */,
+				B61262FC2782FF030019B364 /* ae_nudge_settings.cpp in Sources */,
 				B6A12382278932B900F31B31 /* ae_ui_time.mm in Sources */,
 				B6F4D97427B3DCFA00AE7D5D /* ae_db_edge.cpp in Sources */,
 				B6370CD3279BA06C00449D03 /* ae_time_editor_utils.cpp in Sources */,
@@ -1799,7 +1788,6 @@
 				B6D26B3E281CF8FB00417E5D /* ae_project_status.cpp in Sources */,
 				B64504BB271A94D2009E05D6 /* ae_modules_presenter.cpp in Sources */,
 				B6F3D6A927E211360013E00B /* ae_project_editor_responder.cpp in Sources */,
-				B6126300278329410019B364 /* ae_nudging_utils.cpp in Sources */,
 				B6D98A2127E0BD1A0034AD7C /* ae_ui_event_utils.cpp in Sources */,
 				B64E9FD02650EE2C00758FE8 /* ae_marker.cpp in Sources */,
 				B6F8A59A281D0F3500EDE909 /* ae_project_closer.cpp in Sources */,
