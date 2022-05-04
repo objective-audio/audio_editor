@@ -11,7 +11,9 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<time_editor_level_pool> time_editor_level_pool::make_shared(std::string const &identifier) {
-    return std::shared_ptr<time_editor_level_pool>(new time_editor_level_pool{identifier});
+    auto shared = std::shared_ptr<time_editor_level_pool>(new time_editor_level_pool{identifier});
+    shared->_weak_pool = shared;
+    return shared;
 }
 
 time_editor_level_pool::time_editor_level_pool(std::string const &identifier)
@@ -24,7 +26,8 @@ void time_editor_level_pool::add_level(number_components const &components, std:
         throw std::runtime_error("level is not null.");
     }
 
-    this->_level->set_value(time_editor_level::make_shared(this->_identifier, components, unit_idx));
+    this->_level->set_value(
+        time_editor_level::make_shared(this->_identifier, components, unit_idx, this->_weak_pool.lock()));
 }
 
 void time_editor_level_pool::remove_level() {

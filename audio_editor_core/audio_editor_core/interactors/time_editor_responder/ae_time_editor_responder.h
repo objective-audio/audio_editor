@@ -9,10 +9,12 @@
 namespace yas::ae {
 class time_editor;
 class time_editor_status;
+class time_editor_closer;
 
 struct time_editor_responder final : responder {
     [[nodiscard]] static std::shared_ptr<time_editor_responder> make_shared(
-        std::shared_ptr<time_editor> const &, std::shared_ptr<time_editor_status> const &);
+        std::shared_ptr<time_editor> const &, std::shared_ptr<time_editor_status> const &,
+        std::shared_ptr<time_editor_closer> const &);
 
     std::optional<ae::action> to_action(ae::key const &) override;
     void handle_action(ae::action const &) override;
@@ -22,7 +24,9 @@ struct time_editor_responder final : responder {
     identifier const _responder_id;
     std::weak_ptr<time_editor> const _editor;
     std::weak_ptr<time_editor_status> const _status;
+    std::weak_ptr<time_editor_closer> const _closer;
 
-    time_editor_responder(std::shared_ptr<time_editor> const &, std::shared_ptr<time_editor_status> const &);
+    time_editor_responder(std::shared_ptr<time_editor> const &, std::shared_ptr<time_editor_status> const &,
+                          std::shared_ptr<time_editor_closer> const &);
 };
 }  // namespace yas::ae

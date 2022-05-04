@@ -5,19 +5,22 @@
 #include "ae_time_editor_responder.h"
 
 #include <audio_editor_core/ae_time_editor.h>
+#include <audio_editor_core/ae_time_editor_closer.h>
 #include <audio_editor_core/ae_time_editor_status.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<time_editor_responder> time_editor_responder::make_shared(
-    std::shared_ptr<time_editor> const &editor, std::shared_ptr<time_editor_status> const &status) {
-    return std::shared_ptr<time_editor_responder>(new time_editor_responder{editor, status});
+    std::shared_ptr<time_editor> const &editor, std::shared_ptr<time_editor_status> const &status,
+    std::shared_ptr<time_editor_closer> const &closer) {
+    return std::shared_ptr<time_editor_responder>(new time_editor_responder{editor, status, closer});
 }
 
 time_editor_responder::time_editor_responder(std::shared_ptr<time_editor> const &editor,
-                                             std::shared_ptr<time_editor_status> const &status)
-    : _editor(editor), _status(status) {
+                                             std::shared_ptr<time_editor_status> const &status,
+                                             std::shared_ptr<time_editor_closer> const &closer)
+    : _editor(editor), _status(status), _closer(closer) {
 }
 
 std::optional<ae::action> time_editor_responder::to_action(ae::key const &key) {
@@ -82,7 +85,8 @@ std::optional<ae::action> time_editor_responder::to_action(ae::key const &key) {
 
 void time_editor_responder::handle_action(ae::action const &action) {
     auto const editor = this->_editor.lock();
-    if (!editor) {
+    auto const closer = this->_closer.lock();
+    if (!editor || !closer) {
         return;
     }
 
@@ -91,10 +95,10 @@ void time_editor_responder::handle_action(ae::action const &action) {
         case responding::accepting: {
             switch (action.kind) {
                 case action_kind::finish_time_editing:
-                    editor->finish();
+                    closer->finish();
                     break;
                 case action_kind::cancel_time_editing:
-                    editor->cancel();
+                    closer->cancel();
                     break;
                 case action_kind::move_to_previous_time_unit:
                     editor->move_to_previous_unit();

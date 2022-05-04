@@ -38,8 +38,7 @@ struct time_editor final {
     void change_sign_to_plus();
     void change_sign_to_minus();
 
-    void finish();
-    void cancel();
+    void commit_unit_value();
 
     [[nodiscard]] std::size_t unit_index() const;
     [[nodiscard]] number_components editing_components() const;
@@ -47,7 +46,6 @@ struct time_editor final {
 
     [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&);
     [[nodiscard]] observing::syncable observe_editing_components(std::function<void(number_components const &)> &&);
-    [[nodiscard]] observing::endable observe_event(std::function<void(time_editor_event const &)> &&);
 
    private:
     identifier const _responder_id;
@@ -64,7 +62,6 @@ struct time_editor final {
                 std::shared_ptr<time_editor_status> const &);
 
     std::optional<uint32_t> _editing_unit_value() const;
-    void _commit_unit_value();
 
     bool _is_ended() const;
 
