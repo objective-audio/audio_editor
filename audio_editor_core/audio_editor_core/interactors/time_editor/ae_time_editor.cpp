@@ -5,6 +5,7 @@
 #include "ae_time_editor.h"
 
 #include <audio_editor_core/ae_math.h>
+#include <audio_editor_core/ae_time_editor_status.h>
 #include <audio_editor_core/ae_time_editor_utils.h>
 
 using namespace yas;
@@ -13,12 +14,14 @@ using namespace yas::ae;
 static std::vector<std::string> const _zero_string_vector{"0"};
 
 std::shared_ptr<time_editor> time_editor::make_shared(number_components const &components,
-                                                      std::optional<std::size_t> const unit_idx) {
-    return std::shared_ptr<time_editor>(new time_editor{components, unit_idx});
+                                                      std::optional<std::size_t> const unit_idx,
+                                                      std::shared_ptr<time_editor_status> const &status) {
+    return std::shared_ptr<time_editor>(new time_editor{components, unit_idx, status});
 }
 
-time_editor::time_editor(number_components const &components, std::optional<std::size_t> const unit_idx)
-    : _state(state::editing),
+time_editor::time_editor(number_components const &components, std::optional<std::size_t> const unit_idx,
+                         std::shared_ptr<time_editor_status> const &status)
+    : _status(status),
       _original_components(components),
       _commited_components(time_editor_utils::to_editing_components(components)),
       _unit_idx(
@@ -203,31 +206,23 @@ void time_editor::change_sign_to_minus() {
     }
 }
 
-bool time_editor::can_finish() const {
-    return !this->_is_ended();
-}
-
-bool time_editor::can_cancel() const {
-    return !this->_is_ended();
-}
-
 void time_editor::finish() {
-    if (!this->can_finish()) {
+    if (!this->_status->can_finish()) {
         return;
     }
 
     this->_commit_unit_value();
 
-    this->_state = state::finished;
+    this->_status->finish();
     this->_event_notifier->notify(time_editor_event::finished);
 }
 
 void time_editor::cancel() {
-    if (!this->can_cancel()) {
+    if (!this->_status->can_cancel()) {
         return;
     }
 
-    this->_state = state::canceled;
+    this->_status->cancel();
     this->_event_notifier->notify(time_editor_event::canceled);
 }
 
@@ -244,7 +239,7 @@ number_components time_editor::editing_components() const {
 }
 
 std::optional<number_components> time_editor::finalized_components() const {
-    if (this->_state == state::finished) {
+    if (this->_status->is_finished()) {
         std::vector<number_components_unit> units;
         auto each = make_fast_each(this->_original_components.size());
         while (yas_each_next(each)) {
@@ -338,14 +333,7 @@ void time_editor::_commit_unit_value() {
 }
 
 bool time_editor::_is_ended() const {
-    switch (this->_state) {
-        case state::finished:
-        case state::canceled:
-            return true;
-
-        case state::editing:
-            return false;
-    }
+    return this->_status->is_ended();
 }
 
 void time_editor::_update_unit_numbers(uint32_t const value) {

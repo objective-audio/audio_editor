@@ -5,15 +5,19 @@
 #include "ae_time_editor_responder.h"
 
 #include <audio_editor_core/ae_time_editor.h>
+#include <audio_editor_core/ae_time_editor_status.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_responder> time_editor_responder::make_shared(std::shared_ptr<time_editor> const &editor) {
-    return std::shared_ptr<time_editor_responder>(new time_editor_responder{editor});
+std::shared_ptr<time_editor_responder> time_editor_responder::make_shared(
+    std::shared_ptr<time_editor> const &editor, std::shared_ptr<time_editor_status> const &status) {
+    return std::shared_ptr<time_editor_responder>(new time_editor_responder{editor, status});
 }
 
-time_editor_responder::time_editor_responder(std::shared_ptr<time_editor> const &editor) : _editor(editor) {
+time_editor_responder::time_editor_responder(std::shared_ptr<time_editor> const &editor,
+                                             std::shared_ptr<time_editor_status> const &status)
+    : _editor(editor), _status(status) {
 }
 
 std::optional<ae::action> time_editor_responder::to_action(ae::key const &key) {
@@ -162,7 +166,8 @@ void time_editor_responder::handle_action(ae::action const &action) {
 
 responding time_editor_responder::responding_to_action(ae::action const &action) {
     auto const editor = this->_editor.lock();
-    if (!editor) {
+    auto const status = this->_status.lock();
+    if (!editor || !status) {
         return responding::fallthrough;
     }
 
@@ -172,9 +177,9 @@ responding time_editor_responder::responding_to_action(ae::action const &action)
 
     switch (action.kind) {
         case action_kind::finish_time_editing:
-            return to_responding(editor->can_finish());
+            return to_responding(status->can_finish());
         case action_kind::cancel_time_editing:
-            return to_responding(editor->can_cancel());
+            return to_responding(status->can_cancel());
         case action_kind::move_to_previous_time_unit:
             return to_responding(editor->can_move_to_previous_unit());
         case action_kind::move_to_next_time_unit:
