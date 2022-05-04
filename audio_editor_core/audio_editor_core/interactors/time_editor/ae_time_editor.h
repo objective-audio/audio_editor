@@ -10,9 +10,12 @@
 #include <audio_editor_core/ae_time_editor_types.h>
 
 namespace yas::ae {
+class time_editor_status;
+
 struct time_editor final {
     [[nodiscard]] static std::shared_ptr<time_editor> make_shared(number_components const &,
-                                                                  std::optional<std::size_t> const unit_idx);
+                                                                  std::optional<std::size_t> const unit_idx,
+                                                                  std::shared_ptr<time_editor_status> const &);
 
     [[nodiscard]] bool can_input_number() const;
     [[nodiscard]] bool can_delete_number() const;
@@ -35,8 +38,6 @@ struct time_editor final {
     void change_sign_to_plus();
     void change_sign_to_minus();
 
-    [[nodiscard]] bool can_finish() const;
-    [[nodiscard]] bool can_cancel() const;
     void finish();
     void cancel();
 
@@ -49,14 +50,8 @@ struct time_editor final {
     [[nodiscard]] observing::endable observe_event(std::function<void(time_editor_event const &)> &&);
 
    private:
-    enum class state {
-        editing,
-        finished,
-        canceled,
-    };
-
     identifier const _responder_id;
-    state _state;
+    std::shared_ptr<time_editor_status> const _status;
     number_components const _original_components;
     number_components _commited_components;
     observing::value::holder_ptr<std::size_t> const _unit_idx;
@@ -65,7 +60,8 @@ struct time_editor final {
     observing::fetcher_ptr<number_components> _components_fetcher;
     observing::notifier_ptr<time_editor_event> const _event_notifier;
 
-    time_editor(number_components const &, std::optional<std::size_t> const unit_idx);
+    time_editor(number_components const &, std::optional<std::size_t> const unit_idx,
+                std::shared_ptr<time_editor_status> const &);
 
     std::optional<uint32_t> _editing_unit_value() const;
     void _commit_unit_value();

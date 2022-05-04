@@ -14,6 +14,7 @@ namespace yas::ae {
 class number_components;
 class time_editor;
 class time_editor_responder;
+class time_editor_status;
 
 struct time_editor_level final {
     [[nodiscard]] static std::shared_ptr<time_editor_level> make_shared(std::string const &project_id,
@@ -22,6 +23,7 @@ struct time_editor_level final {
 
     identifier const instance_id;
     std::string const project_id;
+    std::shared_ptr<time_editor_status> const status;
     std::shared_ptr<time_editor> const editor;
     std::shared_ptr<time_editor_responder> const responder;
 
