@@ -23,8 +23,10 @@ class database;
 class exporter;
 class playing_toggler;
 class time_editor_level_router;
+class timeline_processor;
 class project_editor;
 class project_editor_responder;
+class project_editor_launcher;
 
 struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(std::string const &project_id,
@@ -44,6 +46,8 @@ struct project_editor_level final {
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<playing_toggler> const playing_toggler;
     std::shared_ptr<time_editor_level_router> const time_editor_level_router;
+    std::shared_ptr<timeline_processor> const timeline_processor;
+    std::shared_ptr<project_editor_launcher> const launcher;
     std::shared_ptr<project_editor> const editor;
     std::shared_ptr<project_editor_responder> const responder;
 
