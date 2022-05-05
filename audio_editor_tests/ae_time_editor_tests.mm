@@ -316,6 +316,7 @@ using namespace yas::ae;
     }
 }
 
+// closerに処理を分けたので再考
 - (void)test_finish {
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 11, .value = 5}, {.size = 76, .value = 55}}};
@@ -325,9 +326,6 @@ using namespace yas::ae;
 
     std::vector<time_editor_event> called;
 
-    auto canceller =
-        editor->observe_event([&called](time_editor_event const &event) { called.push_back(event); }).end();
-
     editor->input_number(9);
     editor->input_number(9);
 
@@ -335,18 +333,16 @@ using namespace yas::ae;
         editor->editing_components(),
         (number_components{false, {{.size = 10, .value = 1}, {.size = 100, .value = 5}, {.size = 100, .value = 99}}}));
 
-    editor->finish();
-
-    XCTAssertEqual(called.size(), 1);
-    XCTAssertEqual(called.at(0), time_editor_event::finished);
+    // closerでやっていること
+    editor->commit_unit_value();
+    status->finish();
 
     XCTAssertEqual(
         editor->finalized_components(),
         (number_components{false, {{.size = 2, .value = 1}, {.size = 11, .value = 5}, {.size = 76, .value = 75}}}));
-
-    canceller->cancel();
 }
 
+// closerに処理を分けたので再考
 - (void)test_cancel {
     number_components const components{false,
                                        {{.size = 2, .value = 1}, {.size = 11, .value = 5}, {.size = 76, .value = 55}}};
@@ -356,20 +352,12 @@ using namespace yas::ae;
 
     std::vector<time_editor_event> called;
 
-    auto canceller =
-        editor->observe_event([&called](time_editor_event const &event) { called.push_back(event); }).end();
-
     editor->input_number(1);
     editor->move_to_next_unit();
 
-    editor->cancel();
-
-    XCTAssertEqual(called.size(), 1);
-    XCTAssertEqual(called.at(0), time_editor_event::canceled);
+    // 特に呼ばなくても結果は変わらない
+    status->cancel();
 
     XCTAssertFalse(editor->finalized_components().has_value());
-
-    canceller->cancel();
 }
-
 @end

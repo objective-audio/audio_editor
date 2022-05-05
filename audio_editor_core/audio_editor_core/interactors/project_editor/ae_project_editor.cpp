@@ -19,6 +19,7 @@
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_time_editor.h>
+#include <audio_editor_core/ae_time_editor_closer.h>
 #include <audio_editor_core/ae_time_editor_level.h>
 #include <audio_editor_core/ae_time_editor_level_pool.h>
 #include <audio_editor_core/ae_time_editor_responder.h>
@@ -751,42 +752,21 @@ void project_editor::begin_time_editing(std::optional<std::size_t> const unit_id
     this->_time_editor_level_pool->add_level(components.raw_components(), unit_idx);
 
     auto const &level = this->_time_editor_level_pool->level();
-    auto const &time_editor = level->editor;
 
     if (auto const responder_stack = this->_responder_stack.lock()) {
         responder_stack->push_responder(level->instance_id, level->responder);
     }
-
-    time_editor
-        ->observe_event([this](time_editor_event const &) {
-            if (auto const components = this->_time_editor_level_pool->level()->editor->finalized_components()) {
-                auto const frame = this->_timing->frame(timing_components{components.value()});
-                this->_player->seek(frame);
-            }
-
-            if (auto const &level = this->_time_editor_level_pool->level()) {
-                if (auto const responder_stack = this->_responder_stack.lock()) {
-                    responder_stack->pop_responder(level->instance_id);
-                }
-            }
-
-            this->_time_editor_level_pool->remove_level();
-            this->_time_editing_canceller->cancel();
-            this->_time_editing_canceller = nullptr;
-        })
-        .end()
-        ->set_to(this->_time_editing_canceller);
 }
 
 void project_editor::finish_time_editing() {
     if (auto const &level = this->_time_editor_level_pool->level()) {
-        level->editor->finish();
+        level->closer->finish();
     }
 }
 
 void project_editor::cancel_time_editing() {
     if (auto const &level = this->_time_editor_level_pool->level()) {
-        level->editor->cancel();
+        level->closer->cancel();
     }
 }
 

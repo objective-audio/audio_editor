@@ -124,7 +124,6 @@ struct project_editor final {
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
     observing::canceller_pool _pool;
-    observing::cancellable_ptr _time_editing_canceller;
 
     project_editor(
         url const &editing_file_url, ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,

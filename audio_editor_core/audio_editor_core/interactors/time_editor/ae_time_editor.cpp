@@ -154,7 +154,7 @@ void time_editor::set_unit_idx(std::size_t const idx) {
     }
 
     if (this->_unit_idx->value() != idx && idx < this->_original_components.size()) {
-        this->_commit_unit_value();
+        this->commit_unit_value();
 
         this->_unit_idx->set_value(idx);
     }
@@ -206,26 +206,6 @@ void time_editor::change_sign_to_minus() {
     }
 }
 
-void time_editor::finish() {
-    if (!this->_status->can_finish()) {
-        return;
-    }
-
-    this->_commit_unit_value();
-
-    this->_status->finish();
-    this->_event_notifier->notify(time_editor_event::finished);
-}
-
-void time_editor::cancel() {
-    if (!this->_status->can_cancel()) {
-        return;
-    }
-
-    this->_status->cancel();
-    this->_event_notifier->notify(time_editor_event::canceled);
-}
-
 std::size_t time_editor::unit_index() const {
     return this->_unit_idx->value();
 }
@@ -262,10 +242,6 @@ observing::syncable time_editor::observe_editing_components(std::function<void(n
     return this->_components_fetcher->observe(std::move(handler));
 }
 
-observing::endable time_editor::observe_event(std::function<void(time_editor_event const &)> &&handler) {
-    return this->_event_notifier->observe(std::move(handler));
-}
-
 #pragma mark - private
 
 std::optional<uint32_t> time_editor::_editing_unit_value() const {
@@ -292,7 +268,7 @@ std::optional<uint32_t> time_editor::_editing_unit_value() const {
     }
 }
 
-void time_editor::_commit_unit_value() {
+void time_editor::commit_unit_value() {
     auto const editing_value = this->_editing_unit_value();
     if (!editing_value.has_value()) {
         // 編集されていないので終了
