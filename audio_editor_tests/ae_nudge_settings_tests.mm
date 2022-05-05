@@ -18,9 +18,9 @@ using namespace yas::ae;
 
 - (void)test_initial {
     auto const timing = std::make_shared<test_utils::timing_stub>(48000);
-    auto const status = nudge_settings::make_shared(timing);
+    auto const settings = nudge_settings::make_shared(timing);
 
-    XCTAssertEqual(status->unit_index(), 0);
+    XCTAssertEqual(settings->unit_index(), 0);
 }
 
 - (void)test_rotate_next {

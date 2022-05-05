@@ -105,16 +105,16 @@ observing::syncable time_presenter::observe_editing_time_text_range(
 }
 
 std::optional<std::size_t> time_presenter::nudging_unit_index() const {
-    if (auto const status = this->_nudge_settings.lock()) {
-        return status->unit_index();
+    if (auto const settings = this->_nudge_settings.lock()) {
+        return settings->unit_index();
     } else {
         return std::nullopt;
     }
 }
 
 observing::syncable time_presenter::observe_nudging_unit_index(std::function<void(std::size_t const &)> &&handler) {
-    if (auto const status = this->_nudge_settings.lock()) {
-        return status->observe_unit_index(std::move(handler));
+    if (auto const settings = this->_nudge_settings.lock()) {
+        return settings->observe_unit_index(std::move(handler));
     } else {
         return observing::syncable{};
     }

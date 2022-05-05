@@ -5,7 +5,6 @@
 #include "ae_time_editor.h"
 
 #include <audio_editor_core/ae_math.h>
-#include <audio_editor_core/ae_time_editor_status.h>
 #include <audio_editor_core/ae_time_editor_utils.h>
 
 using namespace yas;
@@ -14,15 +13,12 @@ using namespace yas::ae;
 static std::vector<std::string> const _zero_string_vector{"0"};
 
 std::shared_ptr<time_editor> time_editor::make_shared(number_components const &components,
-                                                      std::optional<std::size_t> const unit_idx,
-                                                      std::shared_ptr<time_editor_status> const &status) {
-    return std::shared_ptr<time_editor>(new time_editor{components, unit_idx, status});
+                                                      std::optional<std::size_t> const unit_idx) {
+    return std::shared_ptr<time_editor>(new time_editor{components, unit_idx});
 }
 
-time_editor::time_editor(number_components const &components, std::optional<std::size_t> const unit_idx,
-                         std::shared_ptr<time_editor_status> const &status)
-    : _status(status),
-      _original_components(components),
+time_editor::time_editor(number_components const &components, std::optional<std::size_t> const unit_idx)
+    : _original_components(components),
       _commited_components(time_editor_utils::to_editing_components(components)),
       _unit_idx(
           observing::value::holder<std::size_t>::make_shared(unit_idx ? unit_idx.value() : components.size() - 1)),
@@ -32,10 +28,6 @@ time_editor::time_editor(number_components const &components, std::optional<std:
 }
 
 bool time_editor::can_input_number() const {
-    if (this->_is_ended()) {
-        return false;
-    }
-
     auto const &unit = this->_commited_components.unit(this->_unit_idx->value());
     auto const digits = math::decimal_digits_from_size(unit.size);
 
@@ -47,28 +39,16 @@ bool time_editor::can_input_number() const {
 }
 
 bool time_editor::can_delete_number() const {
-    if (this->_is_ended()) {
-        return false;
-    }
-
     return this->_unit_numbers != _zero_string_vector;
 }
 
 bool time_editor::can_increment_number() const {
-    if (this->_is_ended()) {
-        return false;
-    }
-
     auto const components = this->editing_components();
     auto const &unit = components.unit(this->_unit_idx->value());
     return unit.value < (unit.size - 1);
 }
 
 bool time_editor::can_decrement_number() const {
-    if (this->_is_ended()) {
-        return false;
-    }
-
     auto const components = this->editing_components();
     auto const &unit = components.unit(this->_unit_idx->value());
     return unit.value > 0;
@@ -129,23 +109,15 @@ void time_editor::decrement_number() {
 }
 
 bool time_editor::can_move_to_next_unit() const {
-    if (this->_is_ended()) {
-        return false;
-    }
-
     return this->_unit_idx->value() != 0;
 }
 
 bool time_editor::can_move_to_previous_unit() const {
-    if (this->_is_ended()) {
-        return false;
-    }
-
     return this->_unit_idx->value() < (this->_commited_components.size() - 1);
 }
 
 bool time_editor::can_set_unit_idx() const {
-    return !this->_is_ended();
+    return true;
 }
 
 void time_editor::set_unit_idx(std::size_t const idx) {
@@ -177,18 +149,14 @@ void time_editor::move_to_previous_unit() {
 }
 
 bool time_editor::can_change_sign_to_plus() const {
-    return !this->_is_ended();
+    return true;
 }
 
 bool time_editor::can_change_sign_to_minus() const {
-    return !this->_is_ended();
+    return true;
 }
 
 void time_editor::change_sign_to_plus() {
-    if (this->_is_ended()) {
-        return;
-    }
-
     if (this->_commited_components.is_minus()) {
         this->_commited_components = this->_commited_components.is_minus_replaced(false);
         this->_components_fetcher->push();
@@ -196,10 +164,6 @@ void time_editor::change_sign_to_plus() {
 }
 
 void time_editor::change_sign_to_minus() {
-    if (this->_is_ended()) {
-        return;
-    }
-
     if (!this->_commited_components.is_minus()) {
         this->_commited_components = this->_commited_components.is_minus_replaced(true);
         this->_components_fetcher->push();
@@ -218,20 +182,16 @@ number_components time_editor::editing_components() const {
     }
 }
 
-std::optional<number_components> time_editor::finalized_components() const {
-    if (this->_status->is_finished()) {
-        std::vector<number_components_unit> units;
-        auto each = make_fast_each(this->_original_components.size());
-        while (yas_each_next(each)) {
-            auto const &idx = yas_each_index(each);
-            auto const &original_unit = this->_original_components.unit(idx);
-            auto const &commited_unit = this->_commited_components.unit(idx);
-            units.emplace_back(number_components_unit{.size = original_unit.size, .value = commited_unit.value});
-        }
-        return number_components{this->_commited_components.is_minus(), std::move(units)};
+number_components time_editor::finalized_components() const {
+    std::vector<number_components_unit> units;
+    auto each = make_fast_each(this->_original_components.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto const &original_unit = this->_original_components.unit(idx);
+        auto const &commited_unit = this->_commited_components.unit(idx);
+        units.emplace_back(number_components_unit{.size = original_unit.size, .value = commited_unit.value});
     }
-
-    return std::nullopt;
+    return number_components{this->_commited_components.is_minus(), std::move(units)};
 }
 
 observing::syncable time_editor::observe_unit_index(std::function<void(std::size_t const &)> &&handler) {
@@ -306,10 +266,6 @@ void time_editor::commit_unit_value() {
 
     this->_unit_numbers.clear();
     this->_components_fetcher->push();
-}
-
-bool time_editor::_is_ended() const {
-    return this->_status->is_ended();
 }
 
 void time_editor::_update_unit_numbers(uint32_t const value) {
