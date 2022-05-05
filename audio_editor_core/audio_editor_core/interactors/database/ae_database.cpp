@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_db_constants.h>
 #include <audio_editor_core/ae_db_module.h>
 #include <audio_editor_core/ae_db_utils.h>
+#include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_thread.h>
 #include <cpp_utils/yas_url.h>
 #include <db/yas_db_umbrella.h>
@@ -194,7 +195,7 @@ db::integer::type const &database::_last_save_id() const {
 
 void database::_revert(db::integer::type const revert_id) {
     if (this->_last_save_id() < revert_id || this->_current_save_id() == revert_id) {
-        assert(0);
+        assertion_failure_if_not_test();
         return;
     }
 

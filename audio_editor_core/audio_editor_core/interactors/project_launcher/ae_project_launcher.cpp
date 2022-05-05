@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
+#include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -46,12 +47,12 @@ void project_launcher::launch() {
     auto const status = this->_status.lock();
     auto const file_importer = this->_file_importer.lock();
     if (!status || !file_importer) {
-        assert(0);
+        assertion_failure_if_not_test();
         return;
     }
 
     if (status->state() != project_state::launching) {
-        assert(0);
+        assertion_failure_if_not_test();
         return;
     }
 
@@ -71,7 +72,7 @@ void project_launcher::launch() {
                                auto const editor_level_pool = launcher->_editor_level_pool.lock();
                                auto const responder_stack = launcher->_responder_stack.lock();
                                if (!status || !file_loader || !editor_level_pool || !responder_stack) {
-                                   assert(0);
+                                   assertion_failure_if_not_test();
                                    return;
                                }
 
