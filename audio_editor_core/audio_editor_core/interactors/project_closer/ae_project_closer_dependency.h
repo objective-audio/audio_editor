@@ -13,8 +13,8 @@ struct file_importer_for_project_closer {
     virtual void cancel(std::string const &) = 0;
 };
 
-struct project_level_pool_for_project_closer {
-    virtual ~project_level_pool_for_project_closer() = default;
+struct project_level_collector_for_project_closer {
+    virtual ~project_level_collector_for_project_closer() = default;
 
     virtual void remove_level(std::string const &project_id) = 0;
 };

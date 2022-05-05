@@ -26,8 +26,8 @@ using namespace yas::ae;
     XCTAssertTrue(app_level->file_loader != nullptr);
     XCTAssertTrue(app_level->color != nullptr);
 
-    XCTAssertTrue(app_level->project_level_pool != nullptr);
-    XCTAssertTrue(app_level->ui_root_level_pool != nullptr);
+    XCTAssertTrue(app_level->project_level_collector != nullptr);
+    XCTAssertTrue(app_level->ui_root_level_collector != nullptr);
 }
 
 @end

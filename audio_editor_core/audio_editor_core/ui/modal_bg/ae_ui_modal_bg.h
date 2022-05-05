@@ -9,7 +9,7 @@
 
 namespace yas::ae {
 class color;
-class time_editor_level_pool;
+class time_editor_level_router;
 class action_controller;
 
 struct ui_modal_bg {
@@ -25,6 +25,6 @@ struct ui_modal_bg {
     observing::canceller_pool _pool;
 
     ui_modal_bg(std::shared_ptr<ui::standard> const &, std::shared_ptr<ae::color> const &,
-                std::shared_ptr<time_editor_level_pool> const &, std::shared_ptr<action_controller> const &);
+                std::shared_ptr<time_editor_level_router> const &, std::shared_ptr<action_controller> const &);
 };
 }  // namespace yas::ae

@@ -16,7 +16,7 @@
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_url.h>
-#include <audio_editor_core/ae_time_editor_level_pool.h>
+#include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
@@ -42,9 +42,9 @@ project_editor_level::project_editor_level(std::string const &project_id, ae::fi
       database(database::make_shared(project_url->db_file())),
       exporter(exporter::make_shared()),
       playing_toggler(playing_toggler::make_shared(project_id)),
-      time_editor_level_pool(time_editor_level_pool::make_shared(project_id)),
+      time_editor_level_router(time_editor_level_router::make_shared(project_id)),
       editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_editor,
                                          this->pasteboard, this->database, this->exporter, this->nudge_settings,
-                                         this->timing, this->time_editor_level_pool)),
+                                         this->timing, this->time_editor_level_router)),
       responder(project_editor_responder::make_shared(this->editor, this->playing_toggler)) {
 }

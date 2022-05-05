@@ -6,12 +6,12 @@
 
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_app_presenter_utils.h>
-#include <audio_editor_core/ae_project_level_pool.h>
+#include <audio_editor_core/ae_project_level_collector.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-app_presenter::app_presenter() : app_presenter(app_level::global()->project_level_pool) {
+app_presenter::app_presenter() : app_presenter(app_level::global()->project_level_collector) {
 }
 
 app_presenter::app_presenter(std::shared_ptr<project_pool_for_app_presenter> const &pool) : _project_pool(pool) {
@@ -35,7 +35,7 @@ void app_presenter::select_file(url const &file_url) {
 
 observing::syncable app_presenter::observe_event(std::function<void(app_presenter_event const &)> &&handler) {
     if (auto const pool = this->_project_pool.lock()) {
-        auto syncable = pool->observe_event([handler](project_level_pool_event const &pool_event) {
+        auto syncable = pool->observe_event([handler](project_level_collector_event const &pool_event) {
             handler(app_presenter_event{.type = to_presenter_event_type(pool_event.type),
                                         .project_id = pool_event.project_id});
         });
