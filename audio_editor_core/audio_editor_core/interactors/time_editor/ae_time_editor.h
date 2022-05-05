@@ -10,12 +10,9 @@
 #include <audio_editor_core/ae_time_editor_types.h>
 
 namespace yas::ae {
-class time_editor_status;
-
 struct time_editor final {
     [[nodiscard]] static std::shared_ptr<time_editor> make_shared(number_components const &,
-                                                                  std::optional<std::size_t> const unit_idx,
-                                                                  std::shared_ptr<time_editor_status> const &);
+                                                                  std::optional<std::size_t> const unit_idx);
 
     [[nodiscard]] bool can_input_number() const;
     [[nodiscard]] bool can_delete_number() const;
@@ -42,14 +39,13 @@ struct time_editor final {
 
     [[nodiscard]] std::size_t unit_index() const;
     [[nodiscard]] number_components editing_components() const;
-    [[nodiscard]] std::optional<number_components> finalized_components() const;
+    [[nodiscard]] number_components finalized_components() const;
 
     [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&);
     [[nodiscard]] observing::syncable observe_editing_components(std::function<void(number_components const &)> &&);
 
    private:
     identifier const _responder_id;
-    std::shared_ptr<time_editor_status> const _status;
     number_components const _original_components;
     number_components _commited_components;
     observing::value::holder_ptr<std::size_t> const _unit_idx;
@@ -58,13 +54,9 @@ struct time_editor final {
     observing::fetcher_ptr<number_components> _components_fetcher;
     observing::notifier_ptr<time_editor_event> const _event_notifier;
 
-    time_editor(number_components const &, std::optional<std::size_t> const unit_idx,
-                std::shared_ptr<time_editor_status> const &);
+    time_editor(number_components const &, std::optional<std::size_t> const unit_idx);
 
     std::optional<uint32_t> _editing_unit_value() const;
-
-    bool _is_ended() const;
-
     void _update_unit_numbers(uint32_t const);
 };
 }  // namespace yas::ae
