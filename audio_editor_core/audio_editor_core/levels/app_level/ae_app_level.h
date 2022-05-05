@@ -8,7 +8,7 @@
 
 namespace yas::ae {
 class app_launcher;
-class project_level_pool;
+class project_level_collector;
 class system_url;
 class file_importer;
 class file_loader;
@@ -26,7 +26,7 @@ struct app_level final {
     std::shared_ptr<ae::file_loader> const file_loader;
     std::shared_ptr<ae::color> const color;
 
-    std::shared_ptr<ae::project_level_pool> const project_level_pool;
+    std::shared_ptr<ae::project_level_collector> const project_level_collector;
     std::shared_ptr<ae::ui_root_level_collector> const ui_root_level_collector;
 
    private:

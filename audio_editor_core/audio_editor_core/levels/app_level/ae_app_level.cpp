@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_file_loader.h>
-#include <audio_editor_core/ae_project_level_pool.h>
+#include <audio_editor_core/ae_project_level_collector.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_ui_root_level_collector.h>
 
@@ -23,7 +23,7 @@ app_level::app_level()
       file_importer(file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing))),
       file_loader(file_loader::make_shared()),
       color(ae::color::make_shared()),
-      project_level_pool(project_level_pool::make_shared()),
+      project_level_collector(project_level_collector::make_shared()),
       ui_root_level_collector(ui_root_level_collector::make_shared()) {
     this->launcher->launch();
 }

@@ -14,21 +14,21 @@ using namespace yas::ae;
 
 std::shared_ptr<project_closer> project_closer::make_shared(
     std::string const &project_id, std::shared_ptr<file_importer_for_project_closer> const &file_importer,
-    std::shared_ptr<project_level_pool_for_project_closer> const &project_level_pool,
+    std::shared_ptr<project_level_collector_for_project_closer> const &project_level_collector,
     std::shared_ptr<project_editor_level_pool_for_project_closer> const &editor_level_pool,
     std::shared_ptr<project_status_for_project_closer> const &status) {
     return std::shared_ptr<project_closer>(
-        new project_closer{project_id, file_importer, project_level_pool, editor_level_pool, status});
+        new project_closer{project_id, file_importer, project_level_collector, editor_level_pool, status});
 }
 
-project_closer::project_closer(std::string const &project_id,
-                               std::shared_ptr<file_importer_for_project_closer> const &file_importer,
-                               std::shared_ptr<project_level_pool_for_project_closer> const &project_level_pool,
-                               std::shared_ptr<project_editor_level_pool_for_project_closer> const &editor_level_pool,
-                               std::shared_ptr<project_status_for_project_closer> const &status)
+project_closer::project_closer(
+    std::string const &project_id, std::shared_ptr<file_importer_for_project_closer> const &file_importer,
+    std::shared_ptr<project_level_collector_for_project_closer> const &project_level_collector,
+    std::shared_ptr<project_editor_level_pool_for_project_closer> const &editor_level_pool,
+    std::shared_ptr<project_status_for_project_closer> const &status)
     : _project_id(project_id),
       _file_importer(file_importer),
-      _project_level_pool(project_level_pool),
+      _project_level_collector(project_level_collector),
       _editor_level_pool(editor_level_pool),
       _status(status) {
 }
@@ -41,9 +41,9 @@ void project_closer::request_close() {
     auto const status = this->_status.lock();
     auto const file_importer = this->_file_importer.lock();
     auto const editor_level_pool = this->_editor_level_pool.lock();
-    auto const project_level_pool = this->_project_level_pool.lock();
+    auto const project_level_collector = this->_project_level_collector.lock();
 
-    if (!status || !file_importer || !editor_level_pool || !project_level_pool) {
+    if (!status || !file_importer || !editor_level_pool || !project_level_collector) {
         assertion_failure_if_not_test();
         return;
     }
@@ -65,5 +65,5 @@ void project_closer::request_close() {
             break;
     }
 
-    project_level_pool->remove_level(this->_project_id);
+    project_level_collector->remove_level(this->_project_id);
 }
