@@ -21,7 +21,7 @@
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_closer.h>
 #include <audio_editor_core/ae_time_editor_level.h>
-#include <audio_editor_core/ae_time_editor_level_pool.h>
+#include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_time_editor_responder.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
@@ -39,13 +39,13 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<nudge_settings_for_project_editor> const &nudge_settings,
     std::shared_ptr<timing_for_project_editor> const &timing,
-    std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool) {
+    std::shared_ptr<time_editor_level_router> const &time_editor_level_router) {
     auto const &project_level = hierarchy::project_level_for_id(identifier);
     auto const &project_url = project_level->project_url;
     return std::shared_ptr<project_editor>(new project_editor{
         project_url->editing_file(), file_info, project_level->player, file_track, marker_pool, edge_editor, pasteboard,
         database, exporter, project_level->dialog_presenter, project_level->sheet_presenter, nudge_settings, timing,
-        project_level->responder_stack, time_editor_level_pool});
+        project_level->responder_stack, time_editor_level_router});
 }
 
 project_editor::project_editor(url const &editing_file_url, ae::file_info const &file_info,
@@ -61,7 +61,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
                                std::shared_ptr<nudge_settings_for_project_editor> const &nudge_settings,
                                std::shared_ptr<timing_for_project_editor> const &timing,
                                std::shared_ptr<responder_stack> const &responder_stack,
-                               std::shared_ptr<time_editor_level_pool> const &time_editor_level_pool)
+                               std::shared_ptr<time_editor_level_router> const &time_editor_level_router)
     : _editing_file_url(editing_file_url),
       _file_info(file_info),
       _player(player),
@@ -78,7 +78,7 @@ project_editor::project_editor(url const &editing_file_url, ae::file_info const 
       _nudge_settings(nudge_settings),
       _timing(timing),
       _responder_stack(responder_stack),
-      _time_editor_level_pool(time_editor_level_pool) {
+      _time_editor_level_router(time_editor_level_router) {
     this->_timeline->insert_track(0, this->_track);
     this->_player->set_timeline(this->_timeline, file_info.sample_rate, audio::pcm_format::float32);
 
@@ -726,15 +726,15 @@ void project_editor::begin_module_renaming(std::string const &range) {
 }
 
 bool project_editor::can_begin_time_editing() const {
-    return this->_time_editor_level_pool->level() == nullptr;
+    return this->_time_editor_level_router->level() == nullptr;
 }
 
 bool project_editor::can_end_time_editing() const {
-    return this->_time_editor_level_pool->level() != nullptr;
+    return this->_time_editor_level_router->level() != nullptr;
 }
 
 bool project_editor::can_input_time_number() const {
-    return this->_time_editor_level_pool->level() != nullptr;
+    return this->_time_editor_level_router->level() != nullptr;
 }
 
 bool project_editor::can_select_time_unit() const {
@@ -749,9 +749,9 @@ void project_editor::begin_time_editing(std::optional<std::size_t> const unit_id
     auto const current_frame = this->_player->current_frame();
     auto const components = this->_timing->components(current_frame);
 
-    this->_time_editor_level_pool->add_level(components.raw_components(), unit_idx);
+    this->_time_editor_level_router->add_level(components.raw_components(), unit_idx);
 
-    auto const &level = this->_time_editor_level_pool->level();
+    auto const &level = this->_time_editor_level_router->level();
 
     if (auto const responder_stack = this->_responder_stack.lock()) {
         responder_stack->push_responder(level->instance_id, level->responder);
@@ -759,61 +759,61 @@ void project_editor::begin_time_editing(std::optional<std::size_t> const unit_id
 }
 
 void project_editor::finish_time_editing() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->closer->finish();
     }
 }
 
 void project_editor::cancel_time_editing() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->closer->cancel();
     }
 }
 
 void project_editor::input_time_number(uint32_t const number) {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->input_number(number);
     }
 }
 
 void project_editor::delete_time_number() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->delete_number();
     }
 }
 
 void project_editor::increment_time_number() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->increment_number();
     }
 }
 
 void project_editor::decrement_time_number() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->decrement_number();
     }
 }
 
 void project_editor::move_to_previous_time_unit() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->move_to_previous_unit();
     }
 }
 
 void project_editor::move_to_next_time_unit() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->move_to_next_unit();
     }
 }
 
 void project_editor::change_time_sign_to_plus() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->change_sign_to_plus();
     }
 }
 
 void project_editor::change_time_sign_to_minus() {
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->change_sign_to_minus();
     }
 }
@@ -821,7 +821,7 @@ void project_editor::change_time_sign_to_minus() {
 void project_editor::select_time_unit(std::size_t const unit_idx) {
     this->begin_time_editing(unit_idx);
 
-    if (auto const &level = this->_time_editor_level_pool->level()) {
+    if (auto const &level = this->_time_editor_level_router->level()) {
         level->editor->set_unit_idx(unit_idx);
     }
 }

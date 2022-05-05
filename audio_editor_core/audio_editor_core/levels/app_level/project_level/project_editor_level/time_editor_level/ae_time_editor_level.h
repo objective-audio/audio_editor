@@ -15,7 +15,7 @@ class number_components;
 class time_editor;
 class time_editor_responder;
 class time_editor_closer;
-class time_editor_level_pool;
+class time_editor_level_router;
 class responder_stack;
 
 struct time_editor_level final {
