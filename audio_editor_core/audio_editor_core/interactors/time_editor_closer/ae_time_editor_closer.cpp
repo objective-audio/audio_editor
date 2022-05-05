@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_level_pool.h>
 #include <audio_editor_core/ae_timing.h>
+#include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -40,6 +41,7 @@ time_editor_closer::time_editor_closer(identifier const level_instance_id, std::
 
 void time_editor_closer::finish() {
     if (!this->can_finish()) {
+        assertion_failure_if_not_test();
         return;
     }
 
@@ -49,6 +51,7 @@ void time_editor_closer::finish() {
     auto const player = dependencies.player.lock();
 
     if (!editor || !timing || !player) {
+        assertion_failure_if_not_test();
         return;
     }
 
@@ -63,6 +66,7 @@ void time_editor_closer::finish() {
 
 void time_editor_closer::cancel() {
     if (!this->can_cancel()) {
+        assertion_failure_if_not_test();
         return;
     }
 
@@ -71,6 +75,7 @@ void time_editor_closer::cancel() {
 
 void time_editor_closer::_finalize() {
     if (!this->_dependencies.has_value()) {
+        assertion_failure_if_not_test();
         return;
     }
 
@@ -81,6 +86,7 @@ void time_editor_closer::_finalize() {
     this->_dependencies.reset();
 
     if (!level_pool || !responder_stack) {
+        assertion_failure_if_not_test();
         return;
     }
 

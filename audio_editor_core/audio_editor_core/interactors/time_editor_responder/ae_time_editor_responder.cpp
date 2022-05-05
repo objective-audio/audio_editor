@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_closer.h>
+#include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -84,6 +85,7 @@ void time_editor_responder::handle_action(ae::action const &action) {
     auto const editor = this->_editor.lock();
     auto const closer = this->_closer.lock();
     if (!editor || !closer) {
+        assertion_failure_if_not_test();
         return;
     }
 
@@ -169,6 +171,7 @@ responding time_editor_responder::responding_to_action(ae::action const &action)
     auto const editor = this->_editor.lock();
     auto const closer = this->_closer.lock();
     if (!editor || !closer) {
+        assertion_failure_if_not_test();
         return responding::fallthrough;
     }
 

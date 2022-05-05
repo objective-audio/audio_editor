@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_project_editor_level_pool.h>
 #include <audio_editor_core/ae_project_status.h>
+#include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -43,7 +44,7 @@ void project_closer::request_close() {
     auto const project_level_pool = this->_project_level_pool.lock();
 
     if (!status || !file_importer || !editor_level_pool || !project_level_pool) {
-        assert(0);
+        assertion_failure_if_not_test();
         return;
     }
 
