@@ -19,9 +19,9 @@ class time_editor_level_pool;
 class responder_stack;
 
 struct time_editor_level final {
-    [[nodiscard]] static std::shared_ptr<time_editor_level> make_shared(
-        std::string const &project_id, number_components const &, std::optional<std::size_t> const unit_idx,
-        std::shared_ptr<time_editor_level_pool> const &);
+    [[nodiscard]] static std::shared_ptr<time_editor_level> make_shared(std::string const &project_id,
+                                                                        number_components const &,
+                                                                        std::optional<std::size_t> const unit_idx);
 
     identifier const instance_id;
     std::string const project_id;
