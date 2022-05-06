@@ -1,16 +1,16 @@
 //
-//  ae_edge_editor.h
+//  ae_edge_holder.h
 //
 
 #pragma once
 
-#include <audio_editor_core/ae_edge_editor_types.h>
+#include <audio_editor_core/ae_edge_holder_types.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct edge_editor final : edge_editor_for_project_editor {
-    [[nodiscard]] static std::shared_ptr<edge_editor> make_shared();
+struct edge_holder final : edge_holder_for_project_editor {
+    [[nodiscard]] static std::shared_ptr<edge_holder> make_shared();
 
     [[nodiscard]] ae::edge const &edge() const override;
     void set_edge(ae::edge const &) override;
@@ -21,15 +21,15 @@ struct edge_editor final : edge_editor_for_project_editor {
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
     [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;
 
-    [[nodiscard]] observing::syncable observe_event(std::function<void(edge_editor_event const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_event(std::function<void(edge_holder_event const &)> &&) override;
 
    private:
     ae::edge _edge;
 
-    observing::fetcher_ptr<edge_editor_event> _fetcher;
+    observing::fetcher_ptr<edge_holder_event> _fetcher;
 
-    edge_editor();
+    edge_holder();
 
-    void _set_edge_and_notify(ae::edge const &, edge_editor_event_type const);
+    void _set_edge_and_notify(ae::edge const &, edge_holder_event_type const);
 };
 }  // namespace yas::ae

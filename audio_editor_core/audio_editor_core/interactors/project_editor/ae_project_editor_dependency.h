@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_db_pasting_subject.h>
 #include <audio_editor_core/ae_db_types.h>
-#include <audio_editor_core/ae_edge_editor_types.h>
+#include <audio_editor_core/ae_edge_holder_types.h>
 #include <audio_editor_core/ae_exporter_types.h>
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_file_module.h>
@@ -94,8 +94,8 @@ struct marker_pool_for_project_editor : jumpable_on_project_editor {
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) = 0;
 };
 
-struct edge_editor_for_project_editor : jumpable_on_project_editor {
-    virtual ~edge_editor_for_project_editor() = default;
+struct edge_holder_for_project_editor : jumpable_on_project_editor {
+    virtual ~edge_holder_for_project_editor() = default;
 
     [[nodiscard]] virtual ae::edge const &edge() const = 0;
     virtual void set_edge(ae::edge const &) = 0;
@@ -103,7 +103,7 @@ struct edge_editor_for_project_editor : jumpable_on_project_editor {
     virtual void set_end_frame(frame_index_t const) = 0;
     virtual void revert_edge(ae::edge const &) = 0;
 
-    [[nodiscard]] virtual observing::syncable observe_event(std::function<void(edge_editor_event const &)> &&) = 0;
+    [[nodiscard]] virtual observing::syncable observe_event(std::function<void(edge_holder_event const &)> &&) = 0;
 };
 
 struct database_for_project_editor {

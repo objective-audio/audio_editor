@@ -11,7 +11,7 @@
 
 namespace yas::ae {
 class display_space;
-class edge_editor;
+class edge_holder;
 
 struct edge_presenter final {
     [[nodiscard]] static std::shared_ptr<edge_presenter> make_shared(std::string const &project_id,
@@ -24,12 +24,12 @@ struct edge_presenter final {
     observing::value::holder_ptr<edge_locations> const _locations;
 
     file_info const _file_info;
-    std::weak_ptr<edge_editor> const _edge_editor;
+    std::weak_ptr<edge_holder> const _edge_holder;
     std::shared_ptr<display_space> const _display_space;
 
     observing::canceller_pool _pool;
 
-    edge_presenter(file_info const &, std::shared_ptr<edge_editor> const &, std::shared_ptr<display_space> const &);
+    edge_presenter(file_info const &, std::shared_ptr<edge_holder> const &, std::shared_ptr<display_space> const &);
 
     void _update_locations();
 };

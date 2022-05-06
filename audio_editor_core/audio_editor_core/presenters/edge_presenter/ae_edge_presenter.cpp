@@ -5,7 +5,7 @@
 #include "ae_edge_presenter.h"
 
 #include <audio_editor_core/ae_display_space.h>
-#include <audio_editor_core/ae_edge_editor.h>
+#include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_hierarchy.h>
 
@@ -16,16 +16,16 @@ std::shared_ptr<edge_presenter> edge_presenter::make_shared(std::string const &p
                                                             std::shared_ptr<display_space> const &display_space) {
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
     return std::shared_ptr<edge_presenter>(
-        new edge_presenter{editor_level->file_info, editor_level->edge_editor, display_space});
+        new edge_presenter{editor_level->file_info, editor_level->edge_holder, display_space});
 }
 
-edge_presenter::edge_presenter(file_info const &file_info, std::shared_ptr<edge_editor> const &edge_editor,
+edge_presenter::edge_presenter(file_info const &file_info, std::shared_ptr<edge_holder> const &edge_holder,
                                std::shared_ptr<display_space> const &display_space)
     : _file_info(file_info),
       _locations(observing::value::holder<edge_locations>::make_shared({.begin = {.x = 0}, .end = {.x = 0}})),
-      _edge_editor(edge_editor),
+      _edge_holder(edge_holder),
       _display_space(display_space) {
-    edge_editor->observe_event([this](edge_editor_event const &) { this->_update_locations(); })
+    edge_holder->observe_event([this](edge_holder_event const &) { this->_update_locations(); })
         .end()
         ->add_to(this->_pool);
 
@@ -43,8 +43,8 @@ observing::syncable edge_presenter::observe_locations(std::function<void(edge_lo
 }
 
 void edge_presenter::_update_locations() {
-    if (auto const edge_editor = this->_edge_editor.lock()) {
-        auto const &edge = edge_editor->edge();
+    if (auto const edge_holder = this->_edge_holder.lock()) {
+        auto const &edge = edge_holder->edge();
         auto const sample_rate = this->_file_info.sample_rate;
         auto const &scale = this->_display_space->scale();
 

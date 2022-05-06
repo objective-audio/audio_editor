@@ -19,7 +19,7 @@ struct project_editor final {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         std::string const &project_id, ae::file_info const &, std::shared_ptr<file_track_for_project_editor> const &,
         std::shared_ptr<marker_pool_for_project_editor> const &,
-        std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
+        std::shared_ptr<edge_holder_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
         std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
         std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<time_editor_level_router> const &,
         std::shared_ptr<timeline_updater> const &);
@@ -95,7 +95,7 @@ struct project_editor final {
     std::shared_ptr<player_for_project_editor> const _player;
     std::shared_ptr<file_track_for_project_editor> const _file_track;
     std::shared_ptr<marker_pool_for_project_editor> const _marker_pool;
-    std::shared_ptr<edge_editor_for_project_editor> const _edge_editor;
+    std::shared_ptr<edge_holder_for_project_editor> const _edge_holder;
     std::shared_ptr<pasteboard_for_project_editor> const _pasteboard;
     std::shared_ptr<database_for_project_editor> const _database;
     std::shared_ptr<exporter_for_project_editor> const _exporter;
@@ -111,7 +111,7 @@ struct project_editor final {
     project_editor(ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
                    std::shared_ptr<file_track_for_project_editor> const &,
                    std::shared_ptr<marker_pool_for_project_editor> const &,
-                   std::shared_ptr<edge_editor_for_project_editor> const &,
+                   std::shared_ptr<edge_holder_for_project_editor> const &,
                    std::shared_ptr<pasteboard_for_project_editor> const &,
                    std::shared_ptr<database_for_project_editor> const &,
                    std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<dialog_presenter> const &,

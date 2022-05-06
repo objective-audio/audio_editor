@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
-#include <audio_editor_core/ae_edge_editor.h>
+#include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_file_track.h>
@@ -33,7 +33,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::string const &project_id, ae::file_info const &file_info,
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
-    std::shared_ptr<edge_editor_for_project_editor> const &edge_editor,
+    std::shared_ptr<edge_holder_for_project_editor> const &edge_holder,
     std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
@@ -42,7 +42,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<timeline_updater> const &timeline_updater) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<project_editor>(
-        new project_editor{file_info, project_level->player, file_track, marker_pool, edge_editor, pasteboard, database,
+        new project_editor{file_info, project_level->player, file_track, marker_pool, edge_holder, pasteboard, database,
                            exporter, project_level->dialog_presenter, project_level->sheet_presenter, timing,
                            project_level->responder_stack, time_editor_level_router, timeline_updater});
 }
@@ -50,7 +50,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(
 project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
                                std::shared_ptr<file_track_for_project_editor> const &file_track,
                                std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
-                               std::shared_ptr<edge_editor_for_project_editor> const &edge_editor,
+                               std::shared_ptr<edge_holder_for_project_editor> const &edge_holder,
                                std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
                                std::shared_ptr<database_for_project_editor> const &database,
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
@@ -64,7 +64,7 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
       _player(player),
       _file_track(file_track),
       _marker_pool(marker_pool),
-      _edge_editor(edge_editor),
+      _edge_holder(edge_holder),
       _pasteboard(pasteboard),
       _database(database),
       _exporter(exporter),
@@ -130,15 +130,15 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
         .sync()
         ->add_to(this->_pool);
 
-    this->_edge_editor
-        ->observe_event([this](edge_editor_event const &event) {
+    this->_edge_holder
+        ->observe_event([this](edge_holder_event const &event) {
             switch (event.type) {
-                case edge_editor_event_type::updated:
+                case edge_holder_event_type::updated:
                     this->_database->set_edge(event.edge);
                     break;
 
-                case edge_editor_event_type::fetched:
-                case edge_editor_event_type::reverted:
+                case edge_holder_event_type::fetched:
+                case edge_holder_event_type::reverted:
                     break;
             }
         })
@@ -182,9 +182,9 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
             this->_marker_pool->revert_markers(std::move(markers));
 
             if (auto const &db_edge = this->_database->edge()) {
-                this->_edge_editor->revert_edge(db_edge.value().edge());
+                this->_edge_holder->revert_edge(db_edge.value().edge());
             } else {
-                this->_edge_editor->revert_edge(ae::edge::zero());
+                this->_edge_holder->revert_edge(ae::edge::zero());
             }
 
             this->_pasteboard->revert_data(this->_database->pasting_data());
@@ -354,7 +354,7 @@ bool project_editor::can_set_begin_edge() const {
     }
 
     auto const current_frame = this->_player->current_frame();
-    auto const begin_frame = this->_edge_editor->edge().begin_frame;
+    auto const begin_frame = this->_edge_holder->edge().begin_frame;
 
     return current_frame != begin_frame;
 }
@@ -365,7 +365,7 @@ bool project_editor::can_set_end_edge() const {
     }
 
     auto const current_frame = this->_player->current_frame();
-    auto const end_frame = this->_edge_editor->edge().end_frame;
+    auto const end_frame = this->_edge_holder->edge().end_frame;
 
     return current_frame != end_frame;
 }
@@ -376,7 +376,7 @@ void project_editor::set_begin_edge() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->_edge_editor->set_begin_frame(current_frame);
+    this->_edge_holder->set_begin_frame(current_frame);
 }
 
 void project_editor::set_end_edge() {
@@ -385,7 +385,7 @@ void project_editor::set_end_edge() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->_edge_editor->set_end_frame(current_frame);
+    this->_edge_holder->set_end_frame(current_frame);
 }
 
 bool project_editor::can_return_to_zero() const {
@@ -469,7 +469,7 @@ bool project_editor::can_export_to_file() const {
         return false;
     }
 
-    return this->_edge_editor->edge().range().has_value();
+    return this->_edge_holder->edge().range().has_value();
 }
 
 void project_editor::export_to_file(url const &export_url) {
@@ -477,7 +477,7 @@ void project_editor::export_to_file(url const &export_url) {
         return;
     }
 
-    auto const range = this->_edge_editor->edge().range();
+    auto const range = this->_edge_holder->edge().range();
     if (!range.has_value()) {
         return;
     }
