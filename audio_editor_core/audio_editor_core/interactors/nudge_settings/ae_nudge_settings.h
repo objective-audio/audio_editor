@@ -10,8 +10,7 @@
 
 namespace yas::ae {
 struct nudge_settings final : nudge_settings_for_project_editor {
-    [[nodiscard]] static std::shared_ptr<nudge_settings> make_shared(
-        std::shared_ptr<timing_for_nudge_settings> const &);
+    [[nodiscard]] static std::shared_ptr<nudge_settings> make_shared(timing_for_nudge_settings const *);
 
     void rotate_next_unit() override;
     void rotate_previous_unit() override;
@@ -24,9 +23,9 @@ struct nudge_settings final : nudge_settings_for_project_editor {
                                                               uint32_t const offset_count) const override;
 
    private:
-    std::weak_ptr<timing_for_nudge_settings> const _timing;
+    timing_for_nudge_settings const *const _timing;
     observing::value::holder_ptr<std::size_t> const _unit_idx;
 
-    nudge_settings(std::shared_ptr<timing_for_nudge_settings> const &);
+    nudge_settings(timing_for_nudge_settings const *);
 };
 }  // namespace yas::ae

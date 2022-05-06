@@ -11,19 +11,17 @@ class player;
 class nudge_settings;
 
 struct nudger final {
-    [[nodiscard]] static std::shared_ptr<nudger> make_shared(std::string const &project_id,
-                                                             std::shared_ptr<nudge_settings> const &);
-    [[nodiscard]] static std::shared_ptr<nudger> make_shared(std::shared_ptr<player> const &,
-                                                             std::shared_ptr<nudge_settings> const &);
+    [[nodiscard]] static std::shared_ptr<nudger> make_shared(std::string const &project_id, nudge_settings *);
+    [[nodiscard]] static std::shared_ptr<nudger> make_shared(player *, nudge_settings *);
 
     [[nodiscard]] bool can_nudge() const;
     void nudge_previous(uint32_t const offset_count);
     void nudge_next(uint32_t const offset_count);
 
    private:
-    std::weak_ptr<player> const _player;
-    std::weak_ptr<nudge_settings> const _settings;
+    player *const _player;
+    nudge_settings const *const _settings;
 
-    nudger(std::shared_ptr<player> const &, std::shared_ptr<nudge_settings> const &);
+    nudger(player *, nudge_settings *);
 };
 }  // namespace yas::ae

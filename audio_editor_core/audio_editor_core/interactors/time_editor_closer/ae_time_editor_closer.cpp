@@ -17,25 +17,25 @@ using namespace yas::ae;
 
 std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(std::string const &project_id,
                                                                     identifier const level_instance_id,
-                                                                    std::shared_ptr<time_editor> const &editor) {
+                                                                    time_editor *editor) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return make_shared(level_instance_id, editor, editor_level->time_editor_level_router,
-                       project_level->responder_stack, editor_level->timing, project_level->player);
+    return make_shared(level_instance_id, editor, editor_level->time_editor_level_router.get(),
+                       project_level->responder_stack.get(), editor_level->timing.get(), project_level->player.get());
 }
 
-std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(
-    identifier const level_instance_id, std::shared_ptr<time_editor> const &editor,
-    std::shared_ptr<time_editor_level_router> const &router, std::shared_ptr<responder_stack> const &responder_stack,
-    std::shared_ptr<timing> const &timing, std::shared_ptr<player> const &player) {
+std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(identifier const level_instance_id,
+                                                                    time_editor *editor,
+                                                                    time_editor_level_router *router,
+                                                                    responder_stack *responder_stack, timing *timing,
+                                                                    player *player) {
     return std::shared_ptr<time_editor_closer>(
         new time_editor_closer{level_instance_id, editor, router, responder_stack, timing, player});
 }
 
-time_editor_closer::time_editor_closer(identifier const level_instance_id, std::shared_ptr<time_editor> const &editor,
-                                       std::shared_ptr<time_editor_level_router> const &router,
-                                       std::shared_ptr<responder_stack> const &responder_stack,
-                                       std::shared_ptr<timing> const &timing, std::shared_ptr<player> const &player)
+time_editor_closer::time_editor_closer(identifier const level_instance_id, time_editor *editor,
+                                       time_editor_level_router *router, responder_stack *responder_stack,
+                                       timing *timing, player *player)
     : _level_instance_id(level_instance_id), _dependencies({editor, router, responder_stack, timing, player}) {
 }
 
@@ -45,15 +45,15 @@ void time_editor_closer::finish() {
         return;
     }
 
-    auto const &dependencies = this->_dependencies.value();
-    auto const editor = dependencies.editor.lock();
-    auto const timing = dependencies.timing.lock();
-    auto const player = dependencies.player.lock();
-
-    if (!editor || !timing || !player) {
+    if (!this->_dependencies.has_value()) {
         assertion_failure_if_not_test();
         return;
     }
+
+    auto const &dependencies = this->_dependencies.value();
+    auto const editor = dependencies.editor;
+    auto const timing = dependencies.timing;
+    auto const player = dependencies.player;
 
     editor->commit_unit_value();
 
@@ -80,18 +80,12 @@ void time_editor_closer::_finalize() {
     }
 
     auto const &dependencies = this->_dependencies.value();
-    auto const router = dependencies.router.lock();
-    auto const responder_stack = dependencies.responder_stack.lock();
+    auto *router = dependencies.router;
+    auto *responder_stack = dependencies.responder_stack;
 
     this->_dependencies.reset();
 
-    if (!router || !responder_stack) {
-        assertion_failure_if_not_test();
-        return;
-    }
-
     responder_stack->pop_responder(this->_level_instance_id);
-
     router->remove_level();
 }
 

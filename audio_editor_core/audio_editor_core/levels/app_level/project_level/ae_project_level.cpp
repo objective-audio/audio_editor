@@ -36,17 +36,18 @@ project_level::project_level(std::string const &project_id, url const &file_url,
       project_url(project_url::make_shared(app_level->system_url->project_directory(project_id))),
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
-      player(player::make_shared(app_level->system_url->playing_directory(), project_id, this->scrolling)),
+      player(player::make_shared(app_level->system_url->playing_directory(), project_id, this->scrolling.get())),
       responder_stack(responder_stack::make_shared()),
       dialog_presenter(dialog_presenter::make_shared()),
       sheet_presenter(sheet_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       editor_level_pool(project_editor_level_pool::make_shared(project_id)),
       status(project_status::make_shared()),
-      closer(project_closer::make_shared(project_id, app_level->file_importer, app_level->project_level_collector,
-                                         this->editor_level_pool, this->status)),
-      launcher(project_launcher::make_shared(project_id, file_url, this->project_url, app_level->file_importer,
-                                             app_level->file_loader, this->responder_stack, this->editor_level_pool,
-                                             this->status)) {
+      closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
+                                         app_level->project_level_collector.get(), this->editor_level_pool.get(),
+                                         this->status.get())),
+      launcher(project_launcher::make_shared(
+          project_id, file_url, this->project_url.get(), app_level->file_importer.get(), app_level->file_loader.get(),
+          this->responder_stack.get(), this->editor_level_pool.get(), this->status.get())) {
     this->launcher->launch();
 }

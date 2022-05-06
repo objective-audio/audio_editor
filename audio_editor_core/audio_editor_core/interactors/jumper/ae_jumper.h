@@ -16,14 +16,10 @@ class marker_pool;
 class edge_holder;
 
 struct jumper final {
-    [[nodiscard]] static std::shared_ptr<jumper> make_shared(std::string const &project_id,
-                                                             std::shared_ptr<file_track> const &,
-                                                             std::shared_ptr<marker_pool> const &,
-                                                             std::shared_ptr<edge_holder> const &);
-    [[nodiscard]] static std::shared_ptr<jumper> make_shared(std::shared_ptr<player> const &,
-                                                             std::shared_ptr<file_track> const &,
-                                                             std::shared_ptr<marker_pool> const &,
-                                                             std::shared_ptr<edge_holder> const &);
+    [[nodiscard]] static std::shared_ptr<jumper> make_shared(std::string const &project_id, file_track const *,
+                                                             marker_pool const *, edge_holder const *);
+    [[nodiscard]] static std::shared_ptr<jumper> make_shared(player *, file_track const *, marker_pool const *,
+                                                             edge_holder const *);
 
     [[nodiscard]] bool can_jump_to_previous_edge() const;
     [[nodiscard]] bool can_jump_to_next_edge() const;
@@ -35,13 +31,12 @@ struct jumper final {
     void jump_to_end();
 
    private:
-    std::weak_ptr<player> const _player;
-    std::weak_ptr<file_track> const _file_track;
-    std::weak_ptr<marker_pool> const _marker_pool;
-    std::weak_ptr<edge_holder> const _edge_holder;
+    player *_player;
+    file_track const *const _file_track;
+    marker_pool const *const _marker_pool;
+    edge_holder const *const _edge_holder;
 
-    jumper(std::shared_ptr<player> const &, std::shared_ptr<file_track> const &, std::shared_ptr<marker_pool> const &,
-           std::shared_ptr<edge_holder> const &);
+    jumper(player *, file_track const *, marker_pool const *, edge_holder const *);
 
     std::optional<frame_index_t> _previous_jumpable_frame() const;
     std::optional<frame_index_t> _next_jumpable_frame() const;

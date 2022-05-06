@@ -20,12 +20,11 @@ class player;
 struct time_editor_closer final {
     [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(std::string const &project_id,
                                                                          identifier const level_instance_id,
-                                                                         std::shared_ptr<time_editor> const &);
+                                                                         time_editor *);
 
-    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(
-        identifier const level_instance_id, std::shared_ptr<time_editor> const &,
-        std::shared_ptr<time_editor_level_router> const &, std::shared_ptr<responder_stack> const &,
-        std::shared_ptr<timing> const &, std::shared_ptr<player> const &);
+    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(identifier const level_instance_id,
+                                                                         time_editor *, time_editor_level_router *,
+                                                                         responder_stack *, timing *, player *);
 
     void finish();
     void cancel();
@@ -37,18 +36,17 @@ struct time_editor_closer final {
     identifier const _level_instance_id;
 
     struct dependencies {
-        std::weak_ptr<time_editor> editor;
-        std::weak_ptr<time_editor_level_router> router;
-        std::weak_ptr<responder_stack> responder_stack;
-        std::weak_ptr<timing> timing;
-        std::weak_ptr<player> player;
+        time_editor *const editor;
+        time_editor_level_router *const router;
+        responder_stack *const responder_stack;
+        timing *const timing;
+        player *const player;
     };
 
     std::optional<dependencies> _dependencies;
 
-    time_editor_closer(identifier const level_instance_id, std::shared_ptr<time_editor> const &,
-                       std::shared_ptr<time_editor_level_router> const &, std::shared_ptr<responder_stack> const &,
-                       std::shared_ptr<timing> const &, std::shared_ptr<player> const &);
+    time_editor_closer(identifier const level_instance_id, time_editor *, time_editor_level_router *, responder_stack *,
+                       timing *, player *);
 
     void _finalize();
 };

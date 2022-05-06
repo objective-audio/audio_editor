@@ -12,7 +12,7 @@ using namespace yas::ae;
 
 std::shared_ptr<time_editor_level_router> time_editor_level_router::make_shared(std::string const &identifier) {
     auto shared = std::shared_ptr<time_editor_level_router>(new time_editor_level_router{identifier});
-    shared->_weak_pool = shared;
+    shared->_weak_router = shared;
     return shared;
 }
 

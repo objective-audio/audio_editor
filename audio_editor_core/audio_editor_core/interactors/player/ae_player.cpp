@@ -12,7 +12,7 @@ using namespace yas;
 using namespace yas::ae;
 
 player::player(std::shared_ptr<playing::coordinator> const &coordinator, std::string const &project_id,
-               std::shared_ptr<scrolling_for_player> const &scrolling)
+               scrolling_for_player *scrolling)
     : _project_id(project_id), _coordinator(coordinator), _scrolling(scrolling) {
     scrolling
         ->observe([this](scrolling_event const &event) {
@@ -53,10 +53,7 @@ void player::reset_timeline() {
 }
 
 void player::set_playing(bool const is_playing) {
-    if (auto const scrolling = this->_scrolling.lock()) {
-        scrolling->set_is_enabled(!is_playing);
-    }
-
+    this->_scrolling->set_is_enabled(!is_playing);
     this->_coordinator->set_playing(is_playing);
 }
 
@@ -72,11 +69,7 @@ void player::seek(frame_index_t const frame) {
 }
 
 bool player::is_scrolling() const {
-    if (auto const scrolling = this->_scrolling.lock()) {
-        return scrolling->is_began();
-    } else {
-        return false;
-    }
+    return this->_scrolling->is_began();
 }
 
 frame_index_t player::current_frame() const {
@@ -103,7 +96,7 @@ void player::_update_reserved_frame_if_began(double const delta_time) {
 }
 
 std::shared_ptr<player> player::make_shared(url const &root_url, std::string const &identifier,
-                                            std::shared_ptr<scrolling_for_player> const &scrolling) {
+                                            scrolling_for_player *scrolling) {
     return make_shared(
         playing::coordinator::make_shared(
             root_url.path(), playing::renderer::make_shared(audio::mac_device::renewable_default_output_device())),
@@ -111,7 +104,6 @@ std::shared_ptr<player> player::make_shared(url const &root_url, std::string con
 }
 
 std::shared_ptr<player> player::make_shared(std::shared_ptr<playing::coordinator> const &coordinator,
-                                            std::string const &identifier,
-                                            std::shared_ptr<scrolling_for_player> const &scrolling) {
+                                            std::string const &identifier, scrolling_for_player *scrolling) {
     return std::shared_ptr<player>(new player{coordinator, identifier, scrolling});
 }

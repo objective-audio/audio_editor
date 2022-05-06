@@ -11,13 +11,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_responder> time_editor_responder::make_shared(
-    std::shared_ptr<time_editor> const &editor, std::shared_ptr<time_editor_closer> const &closer) {
+std::shared_ptr<time_editor_responder> time_editor_responder::make_shared(time_editor *editor,
+                                                                          time_editor_closer *closer) {
     return std::shared_ptr<time_editor_responder>(new time_editor_responder{editor, closer});
 }
 
-time_editor_responder::time_editor_responder(std::shared_ptr<time_editor> const &editor,
-                                             std::shared_ptr<time_editor_closer> const &closer)
+time_editor_responder::time_editor_responder(time_editor *editor, time_editor_closer *closer)
     : _editor(editor), _closer(closer) {
 }
 
@@ -82,49 +81,42 @@ std::optional<ae::action> time_editor_responder::to_action(ae::key const &key) {
 }
 
 void time_editor_responder::handle_action(ae::action const &action) {
-    auto const editor = this->_editor.lock();
-    auto const closer = this->_closer.lock();
-    if (!editor || !closer) {
-        assertion_failure_if_not_test();
-        return;
-    }
-
     auto const responding = this->responding_to_action(action);
     switch (responding) {
         case responding::accepting: {
             switch (action.kind) {
                 case action_kind::finish_time_editing:
-                    closer->finish();
+                    this->_closer->finish();
                     break;
                 case action_kind::cancel_time_editing:
-                    closer->cancel();
+                    this->_closer->cancel();
                     break;
                 case action_kind::move_to_previous_time_unit:
-                    editor->move_to_previous_unit();
+                    this->_editor->move_to_previous_unit();
                     break;
                 case action_kind::move_to_next_time_unit:
-                    editor->move_to_next_unit();
+                    this->_editor->move_to_next_unit();
                     break;
                 case action_kind::input_time:
-                    editor->input_number(std::stoi(action.value));
+                    this->_editor->input_number(std::stoi(action.value));
                     break;
                 case action_kind::delete_time:
-                    editor->delete_number();
+                    this->_editor->delete_number();
                     break;
                 case action_kind::increment_time:
-                    editor->increment_number();
+                    this->_editor->increment_number();
                     break;
                 case action_kind::decrement_time:
-                    editor->decrement_number();
+                    this->_editor->decrement_number();
                     break;
                 case action_kind::change_time_sign_to_plus:
-                    editor->change_sign_to_plus();
+                    this->_editor->change_sign_to_plus();
                     break;
                 case action_kind::change_time_sign_to_minus:
-                    editor->change_sign_to_minus();
+                    this->_editor->change_sign_to_minus();
                     break;
                 case action_kind::select_time_unit:
-                    editor->set_unit_idx(std::stoi(action.value));
+                    this->_editor->set_unit_idx(std::stoi(action.value));
                     break;
 
                 case action_kind::toggle_play:
@@ -168,40 +160,33 @@ void time_editor_responder::handle_action(ae::action const &action) {
 }
 
 responding time_editor_responder::responding_to_action(ae::action const &action) {
-    auto const editor = this->_editor.lock();
-    auto const closer = this->_closer.lock();
-    if (!editor || !closer) {
-        assertion_failure_if_not_test();
-        return responding::fallthrough;
-    }
-
     static auto const to_responding = [](bool const &flag) {
         return flag ? responding::accepting : responding::blocking;
     };
 
     switch (action.kind) {
         case action_kind::finish_time_editing:
-            return to_responding(closer->can_finish());
+            return to_responding(this->_closer->can_finish());
         case action_kind::cancel_time_editing:
-            return to_responding(closer->can_cancel());
+            return to_responding(this->_closer->can_cancel());
         case action_kind::move_to_previous_time_unit:
-            return to_responding(editor->can_move_to_previous_unit());
+            return to_responding(this->_editor->can_move_to_previous_unit());
         case action_kind::move_to_next_time_unit:
-            return to_responding(editor->can_move_to_next_unit());
+            return to_responding(this->_editor->can_move_to_next_unit());
         case action_kind::input_time:
-            return to_responding(editor->can_input_number());
+            return to_responding(this->_editor->can_input_number());
         case action_kind::delete_time:
-            return to_responding(editor->can_delete_number());
+            return to_responding(this->_editor->can_delete_number());
         case action_kind::increment_time:
-            return to_responding(editor->can_increment_number());
+            return to_responding(this->_editor->can_increment_number());
         case action_kind::decrement_time:
-            return to_responding(editor->can_decrement_number());
+            return to_responding(this->_editor->can_decrement_number());
         case action_kind::change_time_sign_to_plus:
-            return to_responding(editor->can_change_sign_to_plus());
+            return to_responding(this->_editor->can_change_sign_to_plus());
         case action_kind::change_time_sign_to_minus:
-            return to_responding(editor->can_change_sign_to_minus());
+            return to_responding(this->_editor->can_change_sign_to_minus());
         case action_kind::select_time_unit:
-            return to_responding(editor->can_set_unit_idx());
+            return to_responding(this->_editor->can_set_unit_idx());
 
             // 以下、project_editor用
         case action_kind::toggle_play:
