@@ -21,6 +21,6 @@ time_editor_level::time_editor_level(std::string const &project_id, number_compo
                                      std::optional<std::size_t> const unit_idx)
     : project_id(project_id),
       editor(time_editor::make_shared(components, unit_idx)),
-      closer(time_editor_closer::make_shared(project_id, this->instance_id, this->editor)),
-      responder(time_editor_responder::make_shared(this->editor, this->closer)) {
+      closer(time_editor_closer::make_shared(project_id, this->instance_id, this->editor.get())),
+      responder(time_editor_responder::make_shared(this->editor.get(), this->closer.get())) {
 }

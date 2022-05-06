@@ -92,8 +92,9 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
     auto const status = ae::project_status::make_shared();
 
-    auto const launcher = project_launcher::make_shared("test_uuid", file_url, project_url, file_importer, file_loader,
-                                                        responder_stack, editor_level_pool, status);
+    auto const launcher =
+        project_launcher::make_shared("test_uuid", file_url, project_url.get(), file_importer.get(), file_loader.get(),
+                                      responder_stack.get(), editor_level_pool.get(), status.get());
 
     XCTAssertTrue(launcher != nullptr);
 }
@@ -119,8 +120,9 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
         return false;
     };
 
-    auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
-                                                        file_loader, responder_stack, editor_level_pool, status);
+    auto const launcher =
+        project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url.get(), file_importer.get(),
+                                      file_loader.get(), responder_stack.get(), editor_level_pool.get(), status.get());
     launcher->launch();
 
     XCTAssertTrue(called.has_value());
@@ -142,8 +144,9 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     file_importer->import_handler = [](url const &, url const &) { return true; };
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
-    auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
-                                                        file_loader, responder_stack, editor_level_pool, status);
+    auto const launcher =
+        project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url.get(), file_importer.get(),
+                                      file_loader.get(), responder_stack.get(), editor_level_pool.get(), status.get());
     launcher->launch();
 
     std::vector<project_state> called;
@@ -195,8 +198,9 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     file_importer->import_handler = [](url const &, url const &) { return false; };
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
-    auto const launcher = project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url, file_importer,
-                                                        file_loader, responder_stack, editor_level_pool, status);
+    auto const launcher =
+        project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url.get(), file_importer.get(),
+                                      file_loader.get(), responder_stack.get(), editor_level_pool.get(), status.get());
     launcher->launch();
 
     std::vector<project_state> called;

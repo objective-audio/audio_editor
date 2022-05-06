@@ -12,22 +12,16 @@ using namespace yas::ae;
 
 std::shared_ptr<playing_toggler> playing_toggler::make_shared(std::string const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return make_shared(project_level->player);
+    return make_shared(project_level->player.get());
 }
 
-std::shared_ptr<playing_toggler> playing_toggler::make_shared(
-    std::shared_ptr<player_for_playing_toggler> const &player) {
+std::shared_ptr<playing_toggler> playing_toggler::make_shared(player_for_playing_toggler *player) {
     return std::shared_ptr<playing_toggler>(new playing_toggler{player});
 }
 
-playing_toggler::playing_toggler(std::shared_ptr<player_for_playing_toggler> const &player) : _player(player) {
+playing_toggler::playing_toggler(player_for_playing_toggler *player) : _player(player) {
 }
 
 void playing_toggler::toggle_playing() {
-    auto const player = this->_player.lock();
-    if (!player) {
-        return;
-    }
-
-    player->set_playing(!player->is_playing());
+    this->_player->set_playing(!this->_player->is_playing());
 }

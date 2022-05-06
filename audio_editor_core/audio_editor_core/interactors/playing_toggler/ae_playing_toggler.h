@@ -11,14 +11,13 @@
 namespace yas::ae {
 struct playing_toggler final {
     [[nodiscard]] static std::shared_ptr<playing_toggler> make_shared(std::string const &project_id);
-    [[nodiscard]] static std::shared_ptr<playing_toggler> make_shared(
-        std::shared_ptr<player_for_playing_toggler> const &);
+    [[nodiscard]] static std::shared_ptr<playing_toggler> make_shared(player_for_playing_toggler *);
 
     void toggle_playing();
 
    private:
-    std::weak_ptr<player_for_playing_toggler> const _player;
+    player_for_playing_toggler *const _player;
 
-    playing_toggler(std::shared_ptr<player_for_playing_toggler> const &);
+    playing_toggler(player_for_playing_toggler *);
 };
 }  // namespace yas::ae

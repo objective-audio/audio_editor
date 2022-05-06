@@ -12,27 +12,23 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_launcher> project_launcher::make_shared(
-    std::string const &project_id, url const &file_url,
-    std::shared_ptr<project_url_for_project_launcher> const &project_url,
-    std::shared_ptr<file_importer_for_project_launcher> const &file_importer,
-    std::shared_ptr<file_loader_for_project_launcher> const &file_loader,
-    std::shared_ptr<responder_stack_for_project_launcher> const &responder_stack,
-    std::shared_ptr<project_editor_level_pool_for_project_launcher> const &editor_level_pool,
-    std::shared_ptr<project_status_for_project_launcher> const &status) {
+    std::string const &project_id, url const &file_url, project_url_for_project_launcher const *project_url,
+    file_importer_for_project_launcher *file_importer, file_loader_for_project_launcher *file_loader,
+    responder_stack_for_project_launcher *responder_stack,
+    project_editor_level_pool_for_project_launcher *editor_level_pool, project_status_for_project_launcher *status) {
     auto launcher = std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
         project_id, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
     launcher->_weak_launcher = launcher;
     return launcher;
 }
 
-project_launcher::project_launcher(
-    std::string const &project_id, url const &file_url,
-    std::shared_ptr<project_url_for_project_launcher> const &project_url,
-    std::shared_ptr<file_importer_for_project_launcher> const &file_importer,
-    std::shared_ptr<file_loader_for_project_launcher> const &file_loader,
-    std::shared_ptr<responder_stack_for_project_launcher> const &responder_stack,
-    std::shared_ptr<project_editor_level_pool_for_project_launcher> const &editor_level_pool,
-    std::shared_ptr<project_status_for_project_launcher> const &status)
+project_launcher::project_launcher(std::string const &project_id, url const &file_url,
+                                   project_url_for_project_launcher const *project_url,
+                                   file_importer_for_project_launcher *file_importer,
+                                   file_loader_for_project_launcher *file_loader,
+                                   responder_stack_for_project_launcher *responder_stack,
+                                   project_editor_level_pool_for_project_launcher *editor_level_pool,
+                                   project_status_for_project_launcher *status)
     : _project_id(project_id),
       _file_url(file_url),
       _project_url(project_url),
@@ -44,66 +40,55 @@ project_launcher::project_launcher(
 }
 
 void project_launcher::launch() {
-    auto const status = this->_status.lock();
-    auto const file_importer = this->_file_importer.lock();
-    if (!status || !file_importer) {
+    if (this->_status->state() != project_state::launching) {
         assertion_failure_if_not_test();
         return;
     }
 
-    if (status->state() != project_state::launching) {
-        assertion_failure_if_not_test();
-        return;
-    }
+    this->_status->set_state(project_state::loading);
 
-    status->set_state(project_state::loading);
+    this->_file_importer->import(
+        {.identifier = this->_project_id,
+         .src_url = this->_file_url,
+         .dst_url = this->_project_url->editing_file(),
+         .completion = [weak = this->_weak_launcher](bool const result) {
+             auto const launcher = weak.lock();
+             if (!launcher) {
+                 return;
+             }
 
-    file_importer->import({.identifier = this->_project_id,
-                           .src_url = this->_file_url,
-                           .dst_url = this->_project_url->editing_file(),
-                           .completion = [weak = this->_weak_launcher](bool const result) {
-                               auto const launcher = weak.lock();
-                               if (!launcher) {
-                                   return;
-                               }
+             auto *status = launcher->_status;
+             auto *file_loader = launcher->_file_loader;
+             auto *editor_level_pool = launcher->_editor_level_pool;
+             auto *responder_stack = launcher->_responder_stack;
 
-                               auto const status = launcher->_status.lock();
-                               auto const file_loader = launcher->_file_loader.lock();
-                               auto const editor_level_pool = launcher->_editor_level_pool.lock();
-                               auto const responder_stack = launcher->_responder_stack.lock();
-                               if (!status || !file_loader || !editor_level_pool || !responder_stack) {
-                                   assertion_failure_if_not_test();
-                                   return;
-                               }
+             auto const &state = status->state();
+             switch (state) {
+                 case project_state::loading: {
+                     if (result) {
+                         auto const editing_file_url = launcher->_project_url->editing_file();
+                         if (auto const file_info = file_loader->load_file_info(editing_file_url)) {
+                             editor_level_pool->add_level(file_info.value());
 
-                               auto const &state = status->state();
-                               switch (state) {
-                                   case project_state::loading: {
-                                       if (result) {
-                                           auto const editing_file_url = launcher->_project_url->editing_file();
-                                           if (auto const file_info = file_loader->load_file_info(editing_file_url)) {
-                                               editor_level_pool->add_level(file_info.value());
+                             auto const level = editor_level_pool->level();
+                             if (level) {
+                                 responder_stack->push_responder(level->instance_id, level->responder);
+                             }
 
-                                               auto const level = editor_level_pool->level();
-                                               if (level) {
-                                                   responder_stack->push_responder(level->instance_id,
-                                                                                   level->responder);
-                                               }
+                             status->set_state(project_state::editing);
+                         } else {
+                             status->set_state(project_state::failure);
+                         }
+                     } else {
+                         status->set_state(project_state::failure);
+                     }
+                 } break;
 
-                                               status->set_state(project_state::editing);
-                                           } else {
-                                               status->set_state(project_state::failure);
-                                           }
-                                       } else {
-                                           status->set_state(project_state::failure);
-                                       }
-                                   } break;
-
-                                   case project_state::launching:
-                                   case project_state::editing:
-                                   case project_state::failure:
-                                   case project_state::closing:
-                                       break;
-                               }
-                           }});
+                 case project_state::launching:
+                 case project_state::editing:
+                 case project_state::failure:
+                 case project_state::closing:
+                     break;
+             }
+         }});
 }

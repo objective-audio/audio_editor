@@ -14,20 +14,18 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
-    std::shared_ptr<project_editor> const &editor, std::shared_ptr<playing_toggler> const &toggler,
-    std::shared_ptr<nudge_settings> const &nudge_settings, std::shared_ptr<nudger> const &nudger,
-    std::shared_ptr<jumper> const &jumper, std::shared_ptr<edge_editor> const &edge_editor) {
+std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(project_editor *editor,
+                                                                                playing_toggler *toggler,
+                                                                                nudge_settings *nudge_settings,
+                                                                                nudger *nudger, jumper *jumper,
+                                                                                edge_editor *edge_editor) {
     return std::shared_ptr<project_editor_responder>(
         new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper, edge_editor});
 }
 
-project_editor_responder::project_editor_responder(std::shared_ptr<project_editor> const &editor,
-                                                   std::shared_ptr<playing_toggler> const &toggler,
-                                                   std::shared_ptr<nudge_settings> const &nudge_settings,
-                                                   std::shared_ptr<nudger> const &nudger,
-                                                   std::shared_ptr<jumper> const &jumper,
-                                                   std::shared_ptr<edge_editor> const &edge_editor)
+project_editor_responder::project_editor_responder(project_editor *editor, playing_toggler *toggler,
+                                                   nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
+                                                   edge_editor *edge_editor)
     : _editor(editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
@@ -102,115 +100,103 @@ std::optional<ae::action> project_editor_responder::to_action(ae::key const &key
 }
 
 void project_editor_responder::handle_action(ae::action const &action) {
-    auto const editor = this->_editor.lock();
-    auto const nudger = this->_nudger.lock();
-    auto const nudge_settings = this->_nudge_settings.lock();
-    auto const jumper = this->_jumper.lock();
-    auto const edge_editor = this->_edge_editor.lock();
-
-    if (!editor || !nudger || !nudge_settings || !jumper || !edge_editor) {
-        return;
-    }
-
     auto const responding = this->responding_to_action(action);
     switch (responding) {
         case responding::accepting: {
             switch (action.kind) {
                 case action_kind::toggle_play:
-                    if (auto const &toggler = this->_playing_toggler.lock()) {
-                        toggler->toggle_playing();
-                    }
+                    this->_playing_toggler->toggle_playing();
                     break;
                 case action_kind::nudge_previous:
-                    nudger->nudge_previous(1);
+                    this->_nudger->nudge_previous(1);
                     break;
                 case action_kind::nudge_next:
-                    nudger->nudge_next(1);
+                    this->_nudger->nudge_next(1);
                     break;
                 case action_kind::nudge_previous_more:
-                    nudger->nudge_previous(10);
+                    this->_nudger->nudge_previous(10);
                     break;
                 case action_kind::nudge_next_more:
-                    nudger->nudge_next(10);
+                    this->_nudger->nudge_next(10);
                     break;
                 case action_kind::rotate_nudging_next_unit:
-                    nudge_settings->rotate_next_unit();
+                    this->_nudge_settings->rotate_next_unit();
                     break;
                 case action_kind::rotate_nudging_previous_unit:
-                    nudge_settings->rotate_previous_unit();
+                    this->_nudge_settings->rotate_previous_unit();
                     break;
                 case action_kind::rotate_timing_fraction:
-                    editor->rotate_timing_fraction();
+                    this->_editor->rotate_timing_fraction();
                     break;
                 case action_kind::jump_previous:
-                    jumper->jump_to_previous_edge();
+                    this->_jumper->jump_to_previous_edge();
                     break;
                 case action_kind::jump_next:
-                    jumper->jump_to_next_edge();
+                    this->_jumper->jump_to_next_edge();
                     break;
                 case action_kind::jump_to_beginning:
-                    jumper->jump_to_beginning();
+                    this->_jumper->jump_to_beginning();
                     break;
                 case action_kind::jump_to_end:
-                    jumper->jump_to_end();
+                    this->_jumper->jump_to_end();
                     break;
                 case action_kind::drop_head:
-                    editor->drop_head();
+                    this->_editor->drop_head();
                     break;
                 case action_kind::split:
-                    editor->split();
+                    this->_editor->split();
                     break;
                 case action_kind::drop_tail:
-                    editor->drop_tail();
+                    this->_editor->drop_tail();
                     break;
                 case action_kind::erase:
-                    editor->erase();
+                    this->_editor->erase();
                     break;
                 case action_kind::insert_marker:
-                    editor->insert_marker();
+                    this->_editor->insert_marker();
                     break;
                 case action_kind::set_begin_edge:
-                    edge_editor->set_begin();
+                    this->_edge_editor->set_begin();
                     break;
                 case action_kind::set_end_edge:
-                    edge_editor->set_end();
+                    this->_edge_editor->set_end();
                     break;
                 case action_kind::return_to_zero:
-                    editor->return_to_zero();
+                    this->_editor->return_to_zero();
                     break;
                 case action_kind::go_to_marker:
-                    editor->go_to_marker(std::stoi(action.value));
+                    this->_editor->go_to_marker(std::stoi(action.value));
                     break;
                 case action_kind::undo:
-                    editor->undo();
+                    this->_editor->undo();
                     break;
                 case action_kind::redo:
-                    editor->redo();
+                    this->_editor->redo();
                     break;
                 case action_kind::select_file_for_export:
-                    editor->select_file_for_export();
+                    this->_editor->select_file_for_export();
                     break;
                 case action_kind::export_to_file:
-                    editor->export_to_file(url::file_url(action.value));
+                    this->_editor->export_to_file(url::file_url(action.value));
                     break;
                 case action_kind::cut:
-                    editor->cut_and_offset();
+                    this->_editor->cut_and_offset();
                     break;
                 case action_kind::copy:
-                    editor->copy();
+                    this->_editor->copy();
                     break;
                 case action_kind::paste:
-                    editor->paste_and_offset();
+                    this->_editor->paste_and_offset();
                     break;
                 case action_kind::begin_module_renaming:
-                    editor->begin_module_renaming(action.value);
+                    this->_editor->begin_module_renaming(action.value);
                     break;
 
                 case action_kind::begin_time_editing:
-                    editor->begin_time_editing(std::nullopt);
+                    this->_editor->begin_time_editing(std::nullopt);
                     break;
                 case action_kind::select_time_unit:
-                    editor->select_time_unit(std::stoi(action.value));
+                    this->_editor->select_time_unit(std::stoi(action.value));
                     break;
 
                     // 以下、time_editor用
@@ -235,15 +221,6 @@ void project_editor_responder::handle_action(ae::action const &action) {
 }
 
 responding project_editor_responder::responding_to_action(ae::action const &action) {
-    auto const editor = this->_editor.lock();
-    auto const nudger = this->_nudger.lock();
-    auto const jumper = this->_jumper.lock();
-    auto const edge_editor = this->_edge_editor.lock();
-
-    if (!editor || !nudger || !jumper || !edge_editor) {
-        return responding::fallthrough;
-    }
-
     static auto const to_responding = [](bool const &flag) {
         return flag ? responding::accepting : responding::blocking;
     };
@@ -255,7 +232,7 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
         case action_kind::nudge_next:
         case action_kind::nudge_previous_more:
         case action_kind::nudge_next_more:
-            return to_responding(nudger->can_nudge());
+            return to_responding(this->_nudger->can_nudge());
         case action_kind::rotate_nudging_next_unit:
         case action_kind::rotate_nudging_previous_unit:
             return responding::accepting;
@@ -263,63 +240,63 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return responding::accepting;
 
         case action_kind::jump_previous:
-            return to_responding(jumper->can_jump_to_previous_edge());
+            return to_responding(this->_jumper->can_jump_to_previous_edge());
         case action_kind::jump_next:
-            return to_responding(jumper->can_jump_to_next_edge());
+            return to_responding(this->_jumper->can_jump_to_next_edge());
         case action_kind::jump_to_beginning:
-            return to_responding(jumper->can_jump_to_beginnig());
+            return to_responding(this->_jumper->can_jump_to_beginnig());
         case action_kind::jump_to_end:
-            return to_responding(jumper->can_jump_to_end());
+            return to_responding(this->_jumper->can_jump_to_end());
 
         case action_kind::drop_head:
-            return to_responding(editor->can_split());
+            return to_responding(this->_editor->can_split());
         case action_kind::split:
-            return to_responding(editor->can_split());
+            return to_responding(this->_editor->can_split());
         case action_kind::drop_tail:
-            return to_responding(editor->can_split());
+            return to_responding(this->_editor->can_split());
 
         case action_kind::erase:
-            return to_responding(editor->can_erase());
+            return to_responding(this->_editor->can_erase());
 
         case action_kind::insert_marker:
-            return to_responding(editor->can_insert_marker());
+            return to_responding(this->_editor->can_insert_marker());
 
         case action_kind::return_to_zero:
-            return to_responding(editor->can_return_to_zero());
+            return to_responding(this->_editor->can_return_to_zero());
         case action_kind::go_to_marker:
-            return to_responding(editor->can_go_to_marker(std::stoi(action.value)));
+            return to_responding(this->_editor->can_go_to_marker(std::stoi(action.value)));
 
         case action_kind::undo:
-            return to_responding(editor->can_undo());
+            return to_responding(this->_editor->can_undo());
         case action_kind::redo:
-            return to_responding(editor->can_redo());
+            return to_responding(this->_editor->can_redo());
 
         case action_kind::select_file_for_export:
-            return to_responding(editor->can_select_file_for_export());
+            return to_responding(this->_editor->can_select_file_for_export());
         case action_kind::export_to_file:
-            return to_responding(editor->can_export_to_file());
+            return to_responding(this->_editor->can_export_to_file());
 
         case action_kind::cut:
-            return to_responding(editor->can_cut());
+            return to_responding(this->_editor->can_cut());
         case action_kind::copy:
-            return to_responding(editor->can_copy());
+            return to_responding(this->_editor->can_copy());
         case action_kind::paste:
-            return to_responding(editor->can_paste());
+            return to_responding(this->_editor->can_paste());
 
         case action_kind::begin_module_renaming:
-            return to_responding(editor->can_begin_time_editing());
+            return to_responding(this->_editor->can_begin_time_editing());
 
         case action_kind::cancel_time_editing:
-            return to_responding(editor->can_end_time_editing());
+            return to_responding(this->_editor->can_end_time_editing());
         case action_kind::begin_time_editing:
-            return to_responding(editor->can_begin_time_editing());
+            return to_responding(this->_editor->can_begin_time_editing());
         case action_kind::select_time_unit:
-            return to_responding(editor->can_select_time_unit());
+            return to_responding(this->_editor->can_select_time_unit());
 
         case action_kind::set_begin_edge:
-            return to_responding(edge_editor->can_set_begin());
+            return to_responding(this->_edge_editor->can_set_begin());
         case action_kind::set_end_edge:
-            return to_responding(edge_editor->can_set_end());
+            return to_responding(this->_edge_editor->can_set_end());
 
             // 以下、time_editor用
         case action_kind::finish_time_editing:
