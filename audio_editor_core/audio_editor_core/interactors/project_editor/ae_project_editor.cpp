@@ -207,56 +207,6 @@ void project_editor::rotate_timing_fraction() {
     }
 }
 
-bool project_editor::can_jump_to_previous_edge() const {
-    return this->_previous_jumpable_frame().has_value();
-}
-
-bool project_editor::can_jump_to_next_edge() const {
-    return this->_next_jumpable_frame().has_value();
-}
-
-bool project_editor::can_jump_to_beginnig() const {
-    if (auto const edge = this->_first_edge().has_value()) {
-        if (edge != this->_player->current_frame()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool project_editor::can_jump_to_end() const {
-    if (auto const edge = this->_last_edge().has_value()) {
-        if (edge != this->_player->current_frame()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void project_editor::jump_to_previous_edge() {
-    if (auto const edge = this->_previous_jumpable_frame()) {
-        this->_player->seek(edge.value());
-    }
-}
-
-void project_editor::jump_to_next_edge() {
-    if (auto const edge = this->_next_jumpable_frame()) {
-        this->_player->seek(edge.value());
-    }
-}
-
-void project_editor::jump_to_beginning() {
-    if (auto const edge = this->_first_edge()) {
-        this->_player->seek(edge.value());
-    }
-}
-
-void project_editor::jump_to_end() {
-    if (auto const edge = this->_last_edge()) {
-        this->_player->seek(edge.value());
-    }
-}
-
 bool project_editor::can_split() const {
     if (!this->_can_editing()) {
         return false;
@@ -749,64 +699,6 @@ void project_editor::select_time_unit(std::size_t const unit_idx) {
 }
 
 #pragma mark - private
-
-std::optional<frame_index_t> project_editor::_previous_jumpable_frame() const {
-    frame_index_t const current_frame = this->_player->current_frame();
-
-    std::optional<frame_index_t> result{std::nullopt};
-
-    std::initializer_list<std::shared_ptr<jumpable_on_project_editor>> const editors{
-        this->_file_track, this->_marker_pool, this->_edge_editor};
-
-    for (auto const &editor : editors) {
-        if (auto const frame = editor->previous_jumpable_frame(current_frame)) {
-            if (result.has_value()) {
-                result = std::max(result.value(), frame.value());
-            } else {
-                result = frame.value();
-            }
-        }
-    }
-
-    return result;
-}
-
-std::optional<frame_index_t> project_editor::_next_jumpable_frame() const {
-    frame_index_t const current_frame = this->_player->current_frame();
-
-    std::optional<frame_index_t> result{std::nullopt};
-
-    std::initializer_list<std::shared_ptr<jumpable_on_project_editor>> const editors{
-        this->_file_track, this->_marker_pool, this->_edge_editor};
-
-    for (auto const &editor : editors) {
-        if (auto const frame = editor->next_jumpable_frame(current_frame)) {
-            if (result.has_value()) {
-                result = std::min(result.value(), frame.value());
-            } else {
-                result = frame.value();
-            }
-        }
-    }
-
-    return result;
-}
-
-std::optional<frame_index_t> project_editor::_first_edge() const {
-    if (auto const module = this->_file_track->first_module()) {
-        return module.value().range.frame;
-    } else {
-        return std::nullopt;
-    }
-}
-
-std::optional<frame_index_t> project_editor::_last_edge() const {
-    if (auto const module = this->_file_track->last_module()) {
-        return module.value().range.next_frame();
-    } else {
-        return std::nullopt;
-    }
-}
 
 bool project_editor::_can_editing() const {
     return !this->_exporter->is_exporting();

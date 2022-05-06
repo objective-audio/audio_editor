@@ -4,6 +4,7 @@
 
 #include "ae_project_editor_responder.h"
 
+#include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_playing_toggler.h>
@@ -14,16 +15,18 @@ using namespace yas::ae;
 
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
     std::shared_ptr<project_editor> const &editor, std::shared_ptr<playing_toggler> const &toggler,
-    std::shared_ptr<nudge_settings> const &nudge_settings, std::shared_ptr<nudger> const &nudger) {
+    std::shared_ptr<nudge_settings> const &nudge_settings, std::shared_ptr<nudger> const &nudger,
+    std::shared_ptr<jumper> const &jumper) {
     return std::shared_ptr<project_editor_responder>(
-        new project_editor_responder{editor, toggler, nudge_settings, nudger});
+        new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper});
 }
 
 project_editor_responder::project_editor_responder(std::shared_ptr<project_editor> const &editor,
                                                    std::shared_ptr<playing_toggler> const &toggler,
                                                    std::shared_ptr<nudge_settings> const &nudge_settings,
-                                                   std::shared_ptr<nudger> const &nudger)
-    : _editor(editor), _playing_toggler(toggler), _nudge_settings(nudge_settings), _nudger(nudger) {
+                                                   std::shared_ptr<nudger> const &nudger,
+                                                   std::shared_ptr<jumper> const &jumper)
+    : _editor(editor), _playing_toggler(toggler), _nudge_settings(nudge_settings), _nudger(nudger), _jumper(jumper) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -95,8 +98,9 @@ void project_editor_responder::handle_action(ae::action const &action) {
     auto const editor = this->_editor.lock();
     auto const nudger = this->_nudger.lock();
     auto const nudge_settings = this->_nudge_settings.lock();
+    auto const jumper = this->_jumper.lock();
 
-    if (!editor || !nudger || !nudge_settings) {
+    if (!editor || !nudger || !nudge_settings || !jumper) {
         return;
     }
 
@@ -131,16 +135,16 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     editor->rotate_timing_fraction();
                     break;
                 case action_kind::jump_previous:
-                    editor->jump_to_previous_edge();
+                    jumper->jump_to_previous_edge();
                     break;
                 case action_kind::jump_next:
-                    editor->jump_to_next_edge();
+                    jumper->jump_to_next_edge();
                     break;
                 case action_kind::jump_to_beginning:
-                    editor->jump_to_beginning();
+                    jumper->jump_to_beginning();
                     break;
                 case action_kind::jump_to_end:
-                    editor->jump_to_end();
+                    jumper->jump_to_end();
                     break;
                 case action_kind::drop_head:
                     editor->drop_head();
@@ -225,7 +229,9 @@ void project_editor_responder::handle_action(ae::action const &action) {
 responding project_editor_responder::responding_to_action(ae::action const &action) {
     auto const editor = this->_editor.lock();
     auto const nudger = this->_nudger.lock();
-    if (!editor || !nudger) {
+    auto const jumper = this->_jumper.lock();
+
+    if (!editor || !nudger || !jumper) {
         return responding::fallthrough;
     }
 
@@ -248,13 +254,13 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return responding::accepting;
 
         case action_kind::jump_previous:
-            return to_responding(editor->can_jump_to_previous_edge());
+            return to_responding(jumper->can_jump_to_previous_edge());
         case action_kind::jump_next:
-            return to_responding(editor->can_jump_to_next_edge());
+            return to_responding(jumper->can_jump_to_next_edge());
         case action_kind::jump_to_beginning:
-            return to_responding(editor->can_jump_to_beginnig());
+            return to_responding(jumper->can_jump_to_beginnig());
         case action_kind::jump_to_end:
-            return to_responding(editor->can_jump_to_end());
+            return to_responding(jumper->can_jump_to_end());
 
         case action_kind::drop_head:
             return to_responding(editor->can_split());

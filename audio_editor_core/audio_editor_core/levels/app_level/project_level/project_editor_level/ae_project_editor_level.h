@@ -25,6 +25,7 @@ class playing_toggler;
 class time_editor_level_router;
 class timeline_updater;
 class nudger;
+class jumper;
 class project_editor;
 class project_editor_responder;
 class project_editor_launcher;
@@ -49,6 +50,7 @@ struct project_editor_level final {
     std::shared_ptr<time_editor_level_router> const time_editor_level_router;
     std::shared_ptr<timeline_updater> const timeline_updater;
     std::shared_ptr<nudger> const nudger;
+    std::shared_ptr<jumper> const jumper;
     std::shared_ptr<project_editor_launcher> const launcher;
     std::shared_ptr<project_editor> const editor;
     std::shared_ptr<project_editor_responder> const responder;

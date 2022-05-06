@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
@@ -48,12 +49,13 @@ project_editor_level::project_editor_level(std::string const &project_id, ae::fi
       time_editor_level_router(time_editor_level_router::make_shared(project_id)),
       timeline_updater(timeline_updater::make_shared(project_id, file_info)),
       nudger(nudger::make_shared(project_id, this->nudge_settings)),
+      jumper(jumper::make_shared(project_id, this->file_track, this->marker_pool, this->edge_editor)),
       launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_updater, this->database,
                                                     this->file_track, this->edge_editor)),
       editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_editor,
                                          this->pasteboard, this->database, this->exporter, this->timing,
                                          this->time_editor_level_router, this->timeline_updater)),
       responder(project_editor_responder::make_shared(this->editor, this->playing_toggler, this->nudge_settings,
-                                                      this->nudger)) {
+                                                      this->nudger, this->jumper)) {
     this->launcher->launch();
 }
