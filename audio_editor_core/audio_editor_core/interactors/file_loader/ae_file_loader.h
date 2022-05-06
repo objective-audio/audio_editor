@@ -10,9 +10,9 @@
 
 namespace yas::ae {
 struct file_loader final : file_loader_for_project_launcher {
-    std::optional<file_info> load_file_info(url const &) const override;
+    [[nodiscard]] std::optional<file_info> load_file_info(url const &) const override;
 
-    static std::shared_ptr<file_loader> make_shared();
+    [[nodiscard]] static std::shared_ptr<file_loader> make_shared();
 
    private:
     file_loader();

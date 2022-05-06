@@ -8,12 +8,12 @@
 
 namespace yas::ae {
 struct system_url final {
-    url document_directory() const;
-    url app_directory() const;
-    url playing_directory() const;
-    url project_directory(std::string const &project_id) const;
+    [[nodiscard]] url document_directory() const;
+    [[nodiscard]] url app_directory() const;
+    [[nodiscard]] url playing_directory() const;
+    [[nodiscard]] url project_directory(std::string const &project_id) const;
 
-    static std::shared_ptr<system_url> make_shared();
+    [[nodiscard]] static std::shared_ptr<system_url> make_shared();
 
    private:
     system_url();
