@@ -15,7 +15,7 @@ struct file_importer final : file_importer_for_project_launcher, file_importer_f
     void import(file_importing_context &&) override;
     void cancel(std::string const &) override;
 
-    static std::shared_ptr<file_importer> make_shared(workable_ptr const &, uint32_t const priority);
+    [[nodiscard]] static std::shared_ptr<file_importer> make_shared(workable_ptr const &, uint32_t const priority);
 
    private:
     workable_ptr _worker;

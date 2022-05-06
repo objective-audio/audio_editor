@@ -8,38 +8,38 @@
 
 namespace yas::ae {
 struct color final {
-    static std::shared_ptr<color> make_shared();
+    [[nodiscard]] static std::shared_ptr<color> make_shared();
 
-    ui::color background() const;
+    [[nodiscard]] ui::color background() const;
 
-    ui::color playing_line_pausing() const;
-    ui::color playing_line_playing() const;
-    ui::color playing_line_scroling() const;
+    [[nodiscard]] ui::color playing_line_pausing() const;
+    [[nodiscard]] ui::color playing_line_playing() const;
+    [[nodiscard]] ui::color playing_line_scroling() const;
 
-    ui::color module_frame() const;
-    ui::color module_bg() const;
-    ui::color module_name() const;
-    ui::color waveform() const;
+    [[nodiscard]] ui::color module_frame() const;
+    [[nodiscard]] ui::color module_bg() const;
+    [[nodiscard]] ui::color module_name() const;
+    [[nodiscard]] ui::color waveform() const;
 
-    ui::color edge_line() const;
-    ui::color edge_text() const;
+    [[nodiscard]] ui::color edge_line() const;
+    [[nodiscard]] ui::color edge_text() const;
 
-    ui::color marker_triangle() const;
-    ui::color marker_line() const;
+    [[nodiscard]] ui::color marker_triangle() const;
+    [[nodiscard]] ui::color marker_line() const;
 
-    ui::color modal_bg() const;
+    [[nodiscard]] ui::color modal_bg() const;
 
-    ui::color time_text() const;
-    ui::color time_selected_text() const;
-    ui::color time_nudging_line() const;
-    ui::color time_bg() const;
-    ui::color time_bg_tracking() const;
-    ui::color time_unit() const;
-    ui::color time_unit_tracking() const;
-    ui::color time_unit_selected() const;
-    ui::color time_unit_selected_tracking() const;
+    [[nodiscard]] ui::color time_text() const;
+    [[nodiscard]] ui::color time_selected_text() const;
+    [[nodiscard]] ui::color time_nudging_line() const;
+    [[nodiscard]] ui::color time_bg() const;
+    [[nodiscard]] ui::color time_bg_tracking() const;
+    [[nodiscard]] ui::color time_unit() const;
+    [[nodiscard]] ui::color time_unit_tracking() const;
+    [[nodiscard]] ui::color time_unit_selected() const;
+    [[nodiscard]] ui::color time_unit_selected_tracking() const;
 
-    ui::color debug_text() const;
+    [[nodiscard]] ui::color debug_text() const;
 
    private:
     color();

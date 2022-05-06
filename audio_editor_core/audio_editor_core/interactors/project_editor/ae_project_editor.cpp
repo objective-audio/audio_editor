@@ -37,15 +37,14 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
-    std::shared_ptr<nudge_settings_for_project_editor> const &nudge_settings,
     std::shared_ptr<timing_for_project_editor> const &timing,
     std::shared_ptr<time_editor_level_router> const &time_editor_level_router,
     std::shared_ptr<timeline_updater> const &timeline_updater) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<project_editor>(
         new project_editor{file_info, project_level->player, file_track, marker_pool, edge_editor, pasteboard, database,
-                           exporter, project_level->dialog_presenter, project_level->sheet_presenter, nudge_settings,
-                           timing, project_level->responder_stack, time_editor_level_router, timeline_updater});
+                           exporter, project_level->dialog_presenter, project_level->sheet_presenter, timing,
+                           project_level->responder_stack, time_editor_level_router, timeline_updater});
 }
 
 project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
@@ -57,7 +56,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<sheet_presenter> const &sheet_presenter,
-                               std::shared_ptr<nudge_settings_for_project_editor> const &nudge_settings,
                                std::shared_ptr<timing_for_project_editor> const &timing,
                                std::shared_ptr<responder_stack> const &responder_stack,
                                std::shared_ptr<time_editor_level_router> const &time_editor_level_router,
@@ -72,7 +70,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
       _exporter(exporter),
       _dialog_presenter(dialog_presenter),
       _sheet_presenter(sheet_presenter),
-      _nudge_settings(nudge_settings),
       _timing(timing),
       _responder_stack(responder_stack),
       _time_editor_level_router(time_editor_level_router),
@@ -194,41 +191,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
         })
         .end()
         ->add_to(this->_pool);
-}
-
-bool project_editor::can_nudge() const {
-    return !this->_player->is_playing();
-}
-
-void project_editor::nudge_previous(uint32_t const offset_count) {
-    if (!this->can_nudge()) {
-        return;
-    }
-
-    frame_index_t const current_frame = this->_player->current_frame();
-
-    if (auto const prev_frame = this->_nudge_settings->previous_frame(current_frame, offset_count)) {
-        this->_player->seek(prev_frame.value());
-    }
-}
-
-void project_editor::nudge_next(uint32_t const offset_count) {
-    if (!this->can_nudge()) {
-        return;
-    }
-
-    frame_index_t const current_frame = this->_player->current_frame();
-    if (auto const next_frame = this->_nudge_settings->next_frame(current_frame, offset_count)) {
-        this->_player->seek(next_frame.value());
-    }
-}
-
-void project_editor::rotate_nudging_next_unit() {
-    this->_nudge_settings->rotate_next_unit();
-}
-
-void project_editor::rotate_nudging_previous_unit() {
-    this->_nudge_settings->rotate_previous_unit();
 }
 
 void project_editor::rotate_timing_fraction() {

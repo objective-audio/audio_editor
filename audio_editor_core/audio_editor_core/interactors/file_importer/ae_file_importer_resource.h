@@ -16,10 +16,10 @@ struct file_importer_resource final {
     void push_context_on_main(file_importing_context &&);
     void cancel_on_main(std::string const &identifier);
 
-    std::optional<file_importing_context> pull_context_on_task();
-    std::vector<std::string> pull_cancel_ids();
+    [[nodiscard]] std::optional<file_importing_context> pull_context_on_task();
+    [[nodiscard]] std::vector<std::string> pull_cancel_ids();
 
-    static std::shared_ptr<file_importer_resource> make_shared();
+    [[nodiscard]] static std::shared_ptr<file_importer_resource> make_shared();
 
    private:
     std::mutex _mutex;
