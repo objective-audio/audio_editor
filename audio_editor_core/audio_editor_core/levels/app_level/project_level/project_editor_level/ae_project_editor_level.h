@@ -17,7 +17,7 @@ class timing;
 class nudge_settings;
 class file_track;
 class marker_pool;
-class edge_editor;
+class edge_holder;
 class pasteboard;
 class database;
 class exporter;
@@ -42,7 +42,7 @@ struct project_editor_level final {
     std::shared_ptr<nudge_settings> const nudge_settings;
     std::shared_ptr<file_track> const file_track;
     std::shared_ptr<marker_pool> const marker_pool;
-    std::shared_ptr<edge_editor> const edge_editor;
+    std::shared_ptr<edge_holder> const edge_holder;
     std::shared_ptr<pasteboard> const pasteboard;
     std::shared_ptr<database> const database;
     std::shared_ptr<exporter> const exporter;

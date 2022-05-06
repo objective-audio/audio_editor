@@ -4,7 +4,7 @@
 
 #include "ae_jumper.h"
 
-#include <audio_editor_core/ae_edge_editor.h>
+#include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>
@@ -17,21 +17,21 @@ using namespace yas::ae;
 std::shared_ptr<jumper> jumper::make_shared(std::string const &project_id,
                                             std::shared_ptr<file_track> const &file_track,
                                             std::shared_ptr<marker_pool> const &marker_pool,
-                                            std::shared_ptr<edge_editor> const &edge_editor) {
+                                            std::shared_ptr<edge_holder> const &edge_holder) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return make_shared(project_level->player, file_track, marker_pool, edge_editor);
+    return make_shared(project_level->player, file_track, marker_pool, edge_holder);
 }
 
 std::shared_ptr<jumper> jumper::make_shared(std::shared_ptr<player> const &player,
                                             std::shared_ptr<file_track> const &file_track,
                                             std::shared_ptr<marker_pool> const &marker_pool,
-                                            std::shared_ptr<edge_editor> const &edge_editor) {
-    return std::shared_ptr<jumper>(new jumper{player, file_track, marker_pool, edge_editor});
+                                            std::shared_ptr<edge_holder> const &edge_holder) {
+    return std::shared_ptr<jumper>(new jumper{player, file_track, marker_pool, edge_holder});
 }
 
 jumper::jumper(std::shared_ptr<player> const &player, std::shared_ptr<file_track> const &file_track,
-               std::shared_ptr<marker_pool> const &marker_pool, std::shared_ptr<edge_editor> const &edge_editor)
-    : _player(player), _file_track(file_track), _marker_pool(marker_pool), _edge_editor(edge_editor) {
+               std::shared_ptr<marker_pool> const &marker_pool, std::shared_ptr<edge_holder> const &edge_holder)
+    : _player(player), _file_track(file_track), _marker_pool(marker_pool), _edge_holder(edge_holder) {
 }
 
 bool jumper::can_jump_to_previous_edge() const {
@@ -130,9 +130,9 @@ std::optional<frame_index_t> jumper::_previous_jumpable_frame() const {
     auto const player = this->_player.lock();
     auto const file_track = this->_file_track.lock();
     auto const marker_pool = this->_marker_pool.lock();
-    auto const edge_editor = this->_edge_editor.lock();
+    auto const edge_holder = this->_edge_holder.lock();
 
-    if (!player || !file_track || !marker_pool || !edge_editor) {
+    if (!player || !file_track || !marker_pool || !edge_holder) {
         assertion_failure_if_not_test();
         return std::nullopt;
     }
@@ -142,7 +142,7 @@ std::optional<frame_index_t> jumper::_previous_jumpable_frame() const {
     std::optional<frame_index_t> result{std::nullopt};
 
     std::initializer_list<std::shared_ptr<jumpable_on_project_editor>> const editors{file_track, marker_pool,
-                                                                                     edge_editor};
+                                                                                     edge_holder};
 
     for (auto const &editor : editors) {
         if (auto const frame = editor->previous_jumpable_frame(current_frame)) {
@@ -161,9 +161,9 @@ std::optional<frame_index_t> jumper::_next_jumpable_frame() const {
     auto const player = this->_player.lock();
     auto const file_track = this->_file_track.lock();
     auto const marker_pool = this->_marker_pool.lock();
-    auto const edge_editor = this->_edge_editor.lock();
+    auto const edge_holder = this->_edge_holder.lock();
 
-    if (!player || !file_track || !marker_pool || !edge_editor) {
+    if (!player || !file_track || !marker_pool || !edge_holder) {
         assertion_failure_if_not_test();
         return std::nullopt;
     }
@@ -173,7 +173,7 @@ std::optional<frame_index_t> jumper::_next_jumpable_frame() const {
     std::optional<frame_index_t> result{std::nullopt};
 
     std::initializer_list<std::shared_ptr<jumpable_on_project_editor>> const editors{file_track, marker_pool,
-                                                                                     edge_editor};
+                                                                                     edge_holder};
 
     for (auto const &editor : editors) {
         if (auto const frame = editor->next_jumpable_frame(current_frame)) {

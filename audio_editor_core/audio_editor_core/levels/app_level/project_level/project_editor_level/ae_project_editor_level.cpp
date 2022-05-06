@@ -5,7 +5,7 @@
 #include "ae_project_editor_level.h"
 
 #include <audio_editor_core/ae_database.h>
-#include <audio_editor_core/ae_edge_editor.h>
+#include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
@@ -41,7 +41,7 @@ project_editor_level::project_editor_level(std::string const &project_id, ae::fi
       nudge_settings(nudge_settings::make_shared(this->timing)),
       file_track(file_track::make_shared()),
       marker_pool(marker_pool::make_shared()),
-      edge_editor(edge_editor::make_shared()),
+      edge_holder(edge_holder::make_shared()),
       pasteboard(pasteboard::make_shared()),
       database(database::make_shared(project_url->db_file())),
       exporter(exporter::make_shared()),
@@ -49,10 +49,10 @@ project_editor_level::project_editor_level(std::string const &project_id, ae::fi
       time_editor_level_router(time_editor_level_router::make_shared(project_id)),
       timeline_updater(timeline_updater::make_shared(project_id, file_info)),
       nudger(nudger::make_shared(project_id, this->nudge_settings)),
-      jumper(jumper::make_shared(project_id, this->file_track, this->marker_pool, this->edge_editor)),
+      jumper(jumper::make_shared(project_id, this->file_track, this->marker_pool, this->edge_holder)),
       launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_updater, this->database,
-                                                    this->file_track, this->edge_editor)),
-      editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_editor,
+                                                    this->file_track, this->edge_holder)),
+      editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_holder,
                                          this->pasteboard, this->database, this->exporter, this->timing,
                                          this->time_editor_level_router, this->timeline_updater)),
       responder(project_editor_responder::make_shared(this->editor, this->playing_toggler, this->nudge_settings,
