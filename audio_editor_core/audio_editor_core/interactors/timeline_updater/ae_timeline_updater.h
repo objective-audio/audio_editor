@@ -1,5 +1,5 @@
 //
-//  ae_timeline_processor.h
+//  ae_timeline_updater.h
 //
 
 #pragma once
@@ -10,11 +10,11 @@
 #include <processing/yas_processing_ptr.h>
 
 namespace yas::ae {
-struct timeline_processor final {
-    [[nodiscard]] static std::shared_ptr<timeline_processor> make_shared(std::string const &project_id,
-                                                                         ae::file_info const &);
-    [[nodiscard]] static std::shared_ptr<timeline_processor> make_shared(url const &editing_file_url,
-                                                                         ae::file_info const &);
+struct timeline_updater final {
+    [[nodiscard]] static std::shared_ptr<timeline_updater> make_shared(std::string const &project_id,
+                                                                       ae::file_info const &);
+    [[nodiscard]] static std::shared_ptr<timeline_updater> make_shared(url const &editing_file_url,
+                                                                       ae::file_info const &);
 
     proc::timeline_ptr const &timeline() const;
 
@@ -29,6 +29,6 @@ struct timeline_processor final {
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
 
-    timeline_processor(url const &editing_file_url, ae::file_info const &);
+    timeline_updater(url const &editing_file_url, ae::file_info const &);
 };
 }  // namespace yas::ae
