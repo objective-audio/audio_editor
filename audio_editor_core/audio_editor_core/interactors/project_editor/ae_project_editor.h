@@ -26,15 +26,6 @@ struct project_editor final {
 
     void rotate_timing_fraction();
 
-    [[nodiscard]] bool can_jump_to_previous_edge() const;
-    [[nodiscard]] bool can_jump_to_next_edge() const;
-    [[nodiscard]] bool can_jump_to_beginnig() const;
-    [[nodiscard]] bool can_jump_to_end() const;
-    void jump_to_previous_edge();
-    void jump_to_next_edge();
-    void jump_to_beginning();
-    void jump_to_end();
-
     [[nodiscard]] bool can_split() const;
     void split();
     void drop_head();
