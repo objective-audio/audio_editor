@@ -14,11 +14,11 @@ void file_importer_resource::push_context_on_main(file_importing_context &&conte
     this->_contexts.emplace_back(std::move(context));
 }
 
-void file_importer_resource::cancel_on_main(std::string const &identifier) {
+void file_importer_resource::cancel_on_main(project_id const &project_id) {
     std::lock_guard<std::mutex> lock(this->_mutex);
     std::erase_if(this->_contexts,
-                  [&identifier](file_importing_context const &context) { return context.identifier == identifier; });
-    this->_cancel_ids.emplace_back(identifier);
+                  [&project_id](file_importing_context const &context) { return context.project_id == project_id; });
+    this->_cancel_ids.emplace_back(project_id.raw_value);
 }
 
 std::optional<file_importing_context> file_importer_resource::pull_context_on_task() {

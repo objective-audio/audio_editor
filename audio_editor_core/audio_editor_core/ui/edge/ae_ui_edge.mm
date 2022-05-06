@@ -22,7 +22,7 @@ std::shared_ptr<ui_edge> ui_edge::make_shared(ui_project_id const &project_id) {
     auto const begin_edge = ui_edge_element::make_shared("BEGIN", args, project_id.view_id);
     auto const end_edge = ui_edge_element::make_shared("END", args, project_id.view_id);
 
-    auto const presenter = edge_presenter::make_shared(project_id.identifier, ui_root_level->display_space);
+    auto const presenter = edge_presenter::make_shared(project_id.project_id, ui_root_level->display_space);
     return std::shared_ptr<ui_edge>(new ui_edge{presenter, begin_edge, end_edge});
 }
 

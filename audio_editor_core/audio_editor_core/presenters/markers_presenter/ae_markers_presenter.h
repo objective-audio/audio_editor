@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_marker_location_pool.h>
 #include <audio_editor_core/ae_markers_presenter_dependency.h>
+#include <audio_editor_core/ae_project_id.h>
 
 namespace yas::ae {
 class display_space;
@@ -14,7 +15,7 @@ class player;
 class marker_pool;
 
 struct markers_presenter final {
-    [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(std::string const &project_id,
+    [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(project_id const &project_id,
                                                                         std::shared_ptr<display_space> const &);
 
     [[nodiscard]] std::vector<std::optional<marker_location>> locations() const;

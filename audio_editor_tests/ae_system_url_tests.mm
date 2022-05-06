@@ -33,7 +33,7 @@ using namespace yas::ae;
 
 - (void)test_project_directory {
     auto const system_url = system_url::make_shared();
-    auto const project_url = system_url->project_directory("TEST_PROJECT_ID");
+    auto const project_url = system_url->project_directory({"TEST_PROJECT_ID"});
 
     XCTAssertEqual(project_url.last_path_component(), "TEST_PROJECT_ID");
 

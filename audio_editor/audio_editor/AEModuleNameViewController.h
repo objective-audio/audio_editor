@@ -4,6 +4,7 @@
 
 #import <Cocoa/Cocoa.h>
 #include <audio_editor_core/ae_common_types.h>
+#include <audio_editor_core/ae_project_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,7 +18,7 @@ enum class module_name_vc_event {
 
 @interface AEModuleNameViewController : NSViewController
 
-+ (instancetype)instantiateWithProjectId:(std::string const &)project_id
++ (instancetype)instantiateWithProjectId:(yas::ae::project_id const &)project_id
                              moduleRange:(yas::ae::time::range const)module_range;
 
 - (yas::observing::endable)observe_event:(std::function<void(yas::ae::module_name_vc_event const &)> &&)handler;

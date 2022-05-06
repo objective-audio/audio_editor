@@ -15,7 +15,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(std::string const &project_id,
+std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(project_id const &project_id,
                                                                     identifier const level_instance_id,
                                                                     time_editor *editor) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);

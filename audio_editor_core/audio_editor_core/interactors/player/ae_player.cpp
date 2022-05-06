@@ -11,7 +11,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-player::player(std::shared_ptr<playing::coordinator> const &coordinator, std::string const &project_id,
+player::player(std::shared_ptr<playing::coordinator> const &coordinator, project_id const &project_id,
                scrolling_for_player *scrolling)
     : _project_id(project_id), _coordinator(coordinator), _scrolling(scrolling) {
     scrolling
@@ -44,7 +44,7 @@ void player::begin_rendering() {
 
 void player::set_timeline(proc::timeline_ptr const &time_line, playing::sample_rate_t const sample_rate,
                           audio::pcm_format const pcm_format) {
-    this->_coordinator->set_timeline(time_line, this->_project_id);
+    this->_coordinator->set_timeline(time_line, this->_project_id.raw_value);
     this->_coordinator->set_timeline_format(sample_rate, pcm_format);
 }
 
@@ -95,15 +95,15 @@ void player::_update_reserved_frame_if_began(double const delta_time) {
     }
 }
 
-std::shared_ptr<player> player::make_shared(url const &root_url, std::string const &identifier,
+std::shared_ptr<player> player::make_shared(url const &root_url, project_id const &project_id,
                                             scrolling_for_player *scrolling) {
     return make_shared(
         playing::coordinator::make_shared(
             root_url.path(), playing::renderer::make_shared(audio::mac_device::renewable_default_output_device())),
-        identifier, scrolling);
+        project_id, scrolling);
 }
 
 std::shared_ptr<player> player::make_shared(std::shared_ptr<playing::coordinator> const &coordinator,
-                                            std::string const &identifier, scrolling_for_player *scrolling) {
-    return std::shared_ptr<player>(new player{coordinator, identifier, scrolling});
+                                            project_id const &project_id, scrolling_for_player *scrolling) {
+    return std::shared_ptr<player>(new player{coordinator, project_id, scrolling});
 }

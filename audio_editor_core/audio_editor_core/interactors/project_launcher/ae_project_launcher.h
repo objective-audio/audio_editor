@@ -4,24 +4,27 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_project_launcher_dependency.h>
 #include <audio_editor_core/ae_project_state.h>
 #include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
 struct project_launcher final {
-    [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(
-        std::string const &project_id, url const &file_url, project_url_for_project_launcher const *,
-        file_importer_for_project_launcher *, file_loader_for_project_launcher *,
-        responder_stack_for_project_launcher *, project_editor_level_pool_for_project_launcher *,
-        project_status_for_project_launcher *);
+    [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(project_id const &, url const &file_url,
+                                                                       project_url_for_project_launcher const *,
+                                                                       file_importer_for_project_launcher *,
+                                                                       file_loader_for_project_launcher *,
+                                                                       responder_stack_for_project_launcher *,
+                                                                       project_editor_level_pool_for_project_launcher *,
+                                                                       project_status_for_project_launcher *);
 
     void launch();
 
    private:
     std::weak_ptr<project_launcher> _weak_launcher;
 
-    std::string const _project_id;
+    project_id const _project_id;
     url const _file_url;
 
     project_url_for_project_launcher const *const _project_url;
@@ -33,7 +36,7 @@ struct project_launcher final {
 
     observing::canceller_pool _pool;
 
-    project_launcher(std::string const &project_id, url const &file_url, project_url_for_project_launcher const *,
+    project_launcher(project_id const &, url const &file_url, project_url_for_project_launcher const *,
                      file_importer_for_project_launcher *, file_loader_for_project_launcher *,
                      responder_stack_for_project_launcher *, project_editor_level_pool_for_project_launcher *,
                      project_status_for_project_launcher *);

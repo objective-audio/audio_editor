@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_info.h>
+#include <audio_editor_core/ae_project_id.h>
 #include <cpp_utils/yas_url.h>
 
 namespace yas::ae {
@@ -15,7 +16,7 @@ class file_track;
 class edge_holder;
 
 struct project_editor_launcher final {
-    [[nodiscard]] static std::shared_ptr<project_editor_launcher> make_shared(std::string const &project_id,
+    [[nodiscard]] static std::shared_ptr<project_editor_launcher> make_shared(project_id const &project_id,
                                                                               ae::file_info const &, timeline_updater *,
                                                                               database *, file_track *, edge_holder *);
 

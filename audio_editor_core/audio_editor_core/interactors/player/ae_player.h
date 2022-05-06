@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_playing_toggler_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
+#include <audio_editor_core/ae_project_id.h>
 
 #include <memory>
 
@@ -30,13 +31,13 @@ struct player final : player_for_project_editor, player_for_playing_toggler {
 
     [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
 
-    [[nodiscard]] static std::shared_ptr<player> make_shared(url const &root_url, std::string const &project_id,
+    [[nodiscard]] static std::shared_ptr<player> make_shared(url const &root_url, project_id const &project_id,
                                                              scrolling_for_player *);
     [[nodiscard]] static std::shared_ptr<player> make_shared(std::shared_ptr<playing::coordinator> const &,
-                                                             std::string const &identifier, scrolling_for_player *);
+                                                             project_id const &project_id, scrolling_for_player *);
 
    private:
-    std::string const _project_id;
+    project_id const _project_id;
     std::shared_ptr<playing::coordinator> const _coordinator;
     scrolling_for_player *const _scrolling;
 
@@ -45,7 +46,7 @@ struct player final : player_for_project_editor, player_for_playing_toggler {
 
     observing::canceller_pool _pool;
 
-    player(std::shared_ptr<playing::coordinator> const &, std::string const &identifier, scrolling_for_player *);
+    player(std::shared_ptr<playing::coordinator> const &, project_id const &, scrolling_for_player *);
 
     player(player const &) = delete;
     player(player &&) = delete;

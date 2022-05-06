@@ -23,7 +23,7 @@ using namespace yas::ae;
 @end
 
 @implementation AEMetalViewController {
-    std::string _project_id;
+    project_id _project_id;
     std::weak_ptr<ui_root_level> _root_level;
     std::shared_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
@@ -46,7 +46,7 @@ using namespace yas::ae;
     app_level::global()->ui_root_level_collector->remove_level_for_view_id(self.project_view_id);
 }
 
-- (void)setupWithProjectID:(std::string const &)project_id {
+- (void)setupWithProjectID:(project_id const &)project_id {
     self->_project_id = project_id;
 
     auto const metal_system = ui::metal_system::make_shared(
@@ -54,7 +54,7 @@ using namespace yas::ae;
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
     auto const &ui_root_level_collector = app_level::global()->ui_root_level_collector;
-    ui_root_level_collector->add_level(standard, {.identifier = project_id, .view_id = self.project_view_id});
+    ui_root_level_collector->add_level(standard, {.project_id = project_id, .view_id = self.project_view_id});
     self->_root_level = ui_root_level_collector->level_for_view_id(self.project_view_id);
 
     auto const &project_level = hierarchy::project_level_for_id(project_id);

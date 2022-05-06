@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
+#include <audio_editor_core/ae_project_id.h>
 
 #include <memory>
 #include <optional>
@@ -16,7 +17,7 @@ class marker_pool;
 class edge_holder;
 
 struct jumper final {
-    [[nodiscard]] static std::shared_ptr<jumper> make_shared(std::string const &project_id, file_track const *,
+    [[nodiscard]] static std::shared_ptr<jumper> make_shared(project_id const &project_id, file_track const *,
                                                              marker_pool const *, edge_holder const *);
     [[nodiscard]] static std::shared_ptr<jumper> make_shared(player *, file_track const *, marker_pool const *,
                                                              edge_holder const *);

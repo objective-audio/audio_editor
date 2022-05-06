@@ -4,19 +4,23 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_id.h>
+
 #include <string>
 
 namespace yas::ae {
 struct file_importer_for_project_closer {
     virtual ~file_importer_for_project_closer() = default;
 
-    virtual void cancel(std::string const &) = 0;
+    virtual void cancel(project_id const &) = 0;
 };
+
+class project_id;
 
 struct project_level_collector_for_project_closer {
     virtual ~project_level_collector_for_project_closer() = default;
 
-    virtual void remove_level(std::string const &project_id) = 0;
+    virtual void remove_level(ae::project_id const &project_id) = 0;
 };
 
 struct project_editor_level_pool_for_project_closer {

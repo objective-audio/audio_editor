@@ -11,7 +11,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<scroll_gesture_controller> scroll_gesture_controller::make_shared(std::string const &project_id) {
+std::shared_ptr<scroll_gesture_controller> scroll_gesture_controller::make_shared(project_id const &project_id) {
     auto const project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<scroll_gesture_controller>(new scroll_gesture_controller{project_level->scrolling});
 }

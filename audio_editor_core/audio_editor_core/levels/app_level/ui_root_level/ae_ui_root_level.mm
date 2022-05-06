@@ -32,7 +32,7 @@ ui_root_level::ui_root_level(std::shared_ptr<ui::standard> const &standard, ui_p
                                                    ui::static_mesh_index_data::make_shared(2))),
       display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
       keyboard(ae::keyboard::make_shared(standard->event_manager())),
-      pinch_gesture_controller(pinch_gesture_controller::make_shared(project_id.identifier)),
+      pinch_gesture_controller(pinch_gesture_controller::make_shared(project_id.project_id)),
       editing_root_level_pool(ui_editing_root_level_pool::make_shared(project_id)),
       root(ui_root::make_shared(standard, project_id, this->editing_root_level_pool)) {
     this->vertical_line_data->vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {

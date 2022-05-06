@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_id.h>
+
 #include <string>
 
 namespace yas::ae {
@@ -14,6 +16,6 @@ enum class project_level_collector_event_type {
 
 struct project_level_collector_event final {
     project_level_collector_event_type type;
-    std::string project_id;
+    project_id project_id;
 };
 }  // namespace yas::ae

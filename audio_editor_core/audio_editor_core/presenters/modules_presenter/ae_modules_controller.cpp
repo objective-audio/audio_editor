@@ -10,7 +10,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<modules_controller> modules_controller::make_shared(
-    std::string const &project_id, std::shared_ptr<module_location_pool> const &location_pool) {
+    project_id const &project_id, std::shared_ptr<module_location_pool> const &location_pool) {
     auto const action_controller = action_controller::make_shared(project_id);
     return std::shared_ptr<modules_controller>(new modules_controller{action_controller, location_pool});
 }

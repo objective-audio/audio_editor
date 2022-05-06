@@ -13,14 +13,14 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_closer> project_closer::make_shared(
-    std::string const &project_id, file_importer_for_project_closer *file_importer,
+    project_id const &project_id, file_importer_for_project_closer *file_importer,
     project_level_collector_for_project_closer *project_level_collector,
     project_editor_level_pool_for_project_closer *editor_level_pool, project_status_for_project_closer *status) {
     return std::shared_ptr<project_closer>(
         new project_closer{project_id, file_importer, project_level_collector, editor_level_pool, status});
 }
 
-project_closer::project_closer(std::string const &project_id, file_importer_for_project_closer *file_importer,
+project_closer::project_closer(project_id const &project_id, file_importer_for_project_closer *file_importer,
                                project_level_collector_for_project_closer *project_level_collector,
                                project_editor_level_pool_for_project_closer *editor_level_pool,
                                project_status_for_project_closer *status)

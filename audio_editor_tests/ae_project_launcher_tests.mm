@@ -93,8 +93,8 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const status = ae::project_status::make_shared();
 
     auto const launcher =
-        project_launcher::make_shared("test_uuid", file_url, project_url.get(), file_importer.get(), file_loader.get(),
-                                      responder_stack.get(), editor_level_pool.get(), status.get());
+        project_launcher::make_shared({"test_uuid"}, file_url, project_url.get(), file_importer.get(),
+                                      file_loader.get(), responder_stack.get(), editor_level_pool.get(), status.get());
 
     XCTAssertTrue(launcher != nullptr);
 }
@@ -121,7 +121,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     };
 
     auto const launcher =
-        project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url.get(), file_importer.get(),
+        project_launcher::make_shared({"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(),
                                       file_loader.get(), responder_stack.get(), editor_level_pool.get(), status.get());
     launcher->launch();
 
@@ -145,7 +145,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     file_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
 
     auto const launcher =
-        project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url.get(), file_importer.get(),
+        project_launcher::make_shared({"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(),
                                       file_loader.get(), responder_stack.get(), editor_level_pool.get(), status.get());
     launcher->launch();
 
@@ -199,7 +199,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     file_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
 
     auto const launcher =
-        project_launcher::make_shared("TEST_PROJECT_ID", src_file_url, project_url.get(), file_importer.get(),
+        project_launcher::make_shared({"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(),
                                       file_loader.get(), responder_stack.get(), editor_level_pool.get(), status.get());
     launcher->launch();
 

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_id.h>
 #include <cpp_utils/yas_index_range.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -15,7 +16,7 @@ class time_editor_level;
 class time_editor_level_router;
 
 struct time_presenter final {
-    [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(std::string const project_id);
+    [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(project_id const &);
 
     [[nodiscard]] std::string time_text() const;
     [[nodiscard]] std::vector<index_range> time_text_unit_ranges() const;

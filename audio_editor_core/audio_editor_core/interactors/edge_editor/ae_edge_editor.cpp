@@ -13,7 +13,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<edge_editor> edge_editor::make_shared(std::string const &project_id, edge_holder *holder,
+std::shared_ptr<edge_editor> edge_editor::make_shared(project_id const &project_id, edge_holder *holder,
                                                       exporter const *exporter) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<edge_editor>(new edge_editor{holder, project_level->player.get(), exporter});

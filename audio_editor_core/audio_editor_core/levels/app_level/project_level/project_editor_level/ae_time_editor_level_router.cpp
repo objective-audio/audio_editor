@@ -10,14 +10,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_level_router> time_editor_level_router::make_shared(std::string const &identifier) {
-    auto shared = std::shared_ptr<time_editor_level_router>(new time_editor_level_router{identifier});
+std::shared_ptr<time_editor_level_router> time_editor_level_router::make_shared(project_id const &project_id) {
+    auto shared = std::shared_ptr<time_editor_level_router>(new time_editor_level_router{project_id});
     shared->_weak_router = shared;
     return shared;
 }
 
-time_editor_level_router::time_editor_level_router(std::string const &identifier)
-    : _identifier(identifier),
+time_editor_level_router::time_editor_level_router(project_id const &project_id)
+    : _project_id(project_id),
       _level(observing::value ::holder<std::shared_ptr<time_editor_level>>::make_shared(nullptr)) {
 }
 
@@ -27,7 +27,7 @@ void time_editor_level_router::add_level(number_components const &components,
         throw std::runtime_error("level is not null.");
     }
 
-    this->_level->set_value(time_editor_level::make_shared(this->_identifier, components, unit_idx));
+    this->_level->set_value(time_editor_level::make_shared(this->_project_id, components, unit_idx));
 }
 
 void time_editor_level_router::remove_level() {

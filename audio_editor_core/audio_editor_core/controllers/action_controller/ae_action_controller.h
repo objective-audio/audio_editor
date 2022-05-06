@@ -6,12 +6,13 @@
 
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_keyboard_types.h>
+#include <audio_editor_core/ae_project_id.h>
 
 namespace yas::ae {
 class responder_stack;
 
 struct action_controller final {
-    [[nodiscard]] static std::shared_ptr<action_controller> make_shared(std::string const &project_id);
+    [[nodiscard]] static std::shared_ptr<action_controller> make_shared(project_id const &project_id);
 
     void handle_action(action const &);
     void handle_key(ae::key const);

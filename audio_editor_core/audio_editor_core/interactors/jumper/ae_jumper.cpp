@@ -14,7 +14,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<jumper> jumper::make_shared(std::string const &project_id, file_track const *file_track,
+std::shared_ptr<jumper> jumper::make_shared(project_id const &project_id, file_track const *file_track,
                                             marker_pool const *marker_pool, edge_holder const *edge_holder) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return make_shared(project_level->player.get(), file_track, marker_pool, edge_holder);

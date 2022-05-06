@@ -9,12 +9,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor_level_pool> project_editor_level_pool::make_shared(std::string const &identifier) {
-    return std::shared_ptr<project_editor_level_pool>(new project_editor_level_pool{identifier});
+std::shared_ptr<project_editor_level_pool> project_editor_level_pool::make_shared(project_id const &project_id) {
+    return std::shared_ptr<project_editor_level_pool>(new project_editor_level_pool{project_id});
 }
 
-project_editor_level_pool::project_editor_level_pool(std::string const &identifier)
-    : _identifier(identifier),
+project_editor_level_pool::project_editor_level_pool(project_id const &project_id)
+    : _project_id(project_id),
       _editor_level(observing::value::holder<std::shared_ptr<project_editor_level>>::make_shared(nullptr)) {
 }
 
@@ -23,7 +23,7 @@ void project_editor_level_pool::add_level(file_info const &file_info) {
         throw std::runtime_error("editor_level is not null.");
     }
 
-    this->_editor_level->set_value(project_editor_level::make_shared(this->_identifier, file_info));
+    this->_editor_level->set_value(project_editor_level::make_shared(this->_project_id, file_info));
 }
 
 void project_editor_level_pool::remove_level() {

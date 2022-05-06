@@ -6,13 +6,14 @@
 
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_editing_root_presenter_types.h>
+#include <audio_editor_core/ae_project_id.h>
 
 namespace yas::ae {
 class player;
 class responder_stack;
 
 struct editing_root_presenter final {
-    [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(std::string const &project_id);
+    [[nodiscard]] static std::shared_ptr<editing_root_presenter> make_shared(project_id const &project_id);
 
     [[nodiscard]] playing_line_state_t playing_line_state() const;
 
