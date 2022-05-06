@@ -4,6 +4,8 @@
 
 #include "ae_project_editor_responder.h"
 
+#include <audio_editor_core/ae_nudge_settings.h>
+#include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_editor.h>
 
@@ -11,13 +13,17 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
-    std::shared_ptr<project_editor> const &editor, std::shared_ptr<playing_toggler> const &toggler) {
-    return std::shared_ptr<project_editor_responder>(new project_editor_responder{editor, toggler});
+    std::shared_ptr<project_editor> const &editor, std::shared_ptr<playing_toggler> const &toggler,
+    std::shared_ptr<nudge_settings> const &nudge_settings, std::shared_ptr<nudger> const &nudger) {
+    return std::shared_ptr<project_editor_responder>(
+        new project_editor_responder{editor, toggler, nudge_settings, nudger});
 }
 
 project_editor_responder::project_editor_responder(std::shared_ptr<project_editor> const &editor,
-                                                   std::shared_ptr<playing_toggler> const &toggler)
-    : _editor(editor), _playing_toggler(toggler) {
+                                                   std::shared_ptr<playing_toggler> const &toggler,
+                                                   std::shared_ptr<nudge_settings> const &nudge_settings,
+                                                   std::shared_ptr<nudger> const &nudger)
+    : _editor(editor), _playing_toggler(toggler), _nudge_settings(nudge_settings), _nudger(nudger) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -87,7 +93,10 @@ std::optional<ae::action> project_editor_responder::to_action(ae::key const &key
 
 void project_editor_responder::handle_action(ae::action const &action) {
     auto const editor = this->_editor.lock();
-    if (!editor) {
+    auto const nudger = this->_nudger.lock();
+    auto const nudge_settings = this->_nudge_settings.lock();
+
+    if (!editor || !nudger || !nudge_settings) {
         return;
     }
 
@@ -101,22 +110,22 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     }
                     break;
                 case action_kind::nudge_previous:
-                    editor->nudge_previous(1);
+                    nudger->nudge_previous(1);
                     break;
                 case action_kind::nudge_next:
-                    editor->nudge_next(1);
+                    nudger->nudge_next(1);
                     break;
                 case action_kind::nudge_previous_more:
-                    editor->nudge_previous(10);
+                    nudger->nudge_previous(10);
                     break;
                 case action_kind::nudge_next_more:
-                    editor->nudge_next(10);
+                    nudger->nudge_next(10);
                     break;
                 case action_kind::rotate_nudging_next_unit:
-                    editor->rotate_nudging_next_unit();
+                    nudge_settings->rotate_next_unit();
                     break;
                 case action_kind::rotate_nudging_previous_unit:
-                    editor->rotate_nudging_previous_unit();
+                    nudge_settings->rotate_previous_unit();
                     break;
                 case action_kind::rotate_timing_fraction:
                     editor->rotate_timing_fraction();
@@ -215,7 +224,8 @@ void project_editor_responder::handle_action(ae::action const &action) {
 
 responding project_editor_responder::responding_to_action(ae::action const &action) {
     auto const editor = this->_editor.lock();
-    if (!editor) {
+    auto const nudger = this->_nudger.lock();
+    if (!editor || !nudger) {
         return responding::fallthrough;
     }
 
@@ -230,7 +240,7 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
         case action_kind::nudge_next:
         case action_kind::nudge_previous_more:
         case action_kind::nudge_next_more:
-            return to_responding(editor->can_nudge());
+            return to_responding(nudger->can_nudge());
         case action_kind::rotate_nudging_next_unit:
         case action_kind::rotate_nudging_previous_unit:
             return responding::accepting;

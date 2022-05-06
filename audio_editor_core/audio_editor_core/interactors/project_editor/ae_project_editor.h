@@ -21,14 +21,8 @@ struct project_editor final {
         std::shared_ptr<marker_pool_for_project_editor> const &,
         std::shared_ptr<edge_editor_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
         std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
-        std::shared_ptr<nudge_settings_for_project_editor> const &, std::shared_ptr<timing_for_project_editor> const &,
-        std::shared_ptr<time_editor_level_router> const &, std::shared_ptr<timeline_updater> const &);
-
-    [[nodiscard]] bool can_nudge() const;
-    void nudge_previous(uint32_t const offset_count);
-    void nudge_next(uint32_t const offset_count);
-    void rotate_nudging_next_unit();
-    void rotate_nudging_previous_unit();
+        std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<time_editor_level_router> const &,
+        std::shared_ptr<timeline_updater> const &);
 
     void rotate_timing_fraction();
 
@@ -116,7 +110,6 @@ struct project_editor final {
     std::shared_ptr<exporter_for_project_editor> const _exporter;
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
     std::shared_ptr<sheet_presenter> const _sheet_presenter;
-    std::shared_ptr<nudge_settings_for_project_editor> const _nudge_settings;
     std::shared_ptr<timing_for_project_editor> const _timing;
     std::weak_ptr<responder_stack> const _responder_stack;
     std::shared_ptr<time_editor_level_router> const _time_editor_level_router;
@@ -131,9 +124,9 @@ struct project_editor final {
                    std::shared_ptr<pasteboard_for_project_editor> const &,
                    std::shared_ptr<database_for_project_editor> const &,
                    std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<dialog_presenter> const &,
-                   std::shared_ptr<sheet_presenter> const &, std::shared_ptr<nudge_settings_for_project_editor> const &,
-                   std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<responder_stack> const &,
-                   std::shared_ptr<time_editor_level_router> const &, std::shared_ptr<timeline_updater> const &);
+                   std::shared_ptr<sheet_presenter> const &, std::shared_ptr<timing_for_project_editor> const &,
+                   std::shared_ptr<responder_stack> const &, std::shared_ptr<time_editor_level_router> const &,
+                   std::shared_ptr<timeline_updater> const &);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

@@ -9,10 +9,14 @@
 namespace yas::ae {
 class project_editor;
 class playing_toggler;
+class nudge_settings;
+class nudger;
 
 struct project_editor_responder final : responder {
-    [[nodiscard]] static std::shared_ptr<project_editor_responder> make_shared(
-        std::shared_ptr<project_editor> const &, std::shared_ptr<playing_toggler> const &);
+    [[nodiscard]] static std::shared_ptr<project_editor_responder> make_shared(std::shared_ptr<project_editor> const &,
+                                                                               std::shared_ptr<playing_toggler> const &,
+                                                                               std::shared_ptr<nudge_settings> const &,
+                                                                               std::shared_ptr<nudger> const &);
 
     std::optional<ae::action> to_action(ae::key const &) override;
     void handle_action(ae::action const &) override;
@@ -22,7 +26,10 @@ struct project_editor_responder final : responder {
     identifier const _responder_id;
     std::weak_ptr<project_editor> const _editor;
     std::weak_ptr<playing_toggler> const _playing_toggler;
+    std::weak_ptr<nudge_settings> const _nudge_settings;
+    std::weak_ptr<nudger> const _nudger;
 
-    project_editor_responder(std::shared_ptr<project_editor> const &, std::shared_ptr<playing_toggler> const &);
+    project_editor_responder(std::shared_ptr<project_editor> const &, std::shared_ptr<playing_toggler> const &,
+                             std::shared_ptr<nudge_settings> const &, std::shared_ptr<nudger> const &);
 };
 }  // namespace yas::ae

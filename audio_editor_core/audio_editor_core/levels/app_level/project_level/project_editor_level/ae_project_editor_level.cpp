@@ -11,6 +11,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_nudge_settings.h>
+#include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_editor.h>
@@ -46,11 +47,13 @@ project_editor_level::project_editor_level(std::string const &project_id, ae::fi
       playing_toggler(playing_toggler::make_shared(project_id)),
       time_editor_level_router(time_editor_level_router::make_shared(project_id)),
       timeline_updater(timeline_updater::make_shared(project_id, file_info)),
+      nudger(nudger::make_shared(project_id, this->nudge_settings)),
       launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_updater, this->database,
                                                     this->file_track, this->edge_editor)),
       editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_editor,
-                                         this->pasteboard, this->database, this->exporter, this->nudge_settings,
-                                         this->timing, this->time_editor_level_router, this->timeline_updater)),
-      responder(project_editor_responder::make_shared(this->editor, this->playing_toggler)) {
+                                         this->pasteboard, this->database, this->exporter, this->timing,
+                                         this->time_editor_level_router, this->timeline_updater)),
+      responder(project_editor_responder::make_shared(this->editor, this->playing_toggler, this->nudge_settings,
+                                                      this->nudger)) {
     this->launcher->launch();
 }

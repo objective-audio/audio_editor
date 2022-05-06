@@ -52,6 +52,8 @@
 		B6370CD4279BA06C00449D03 /* ae_time_editor_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6370CD2279BA06C00449D03 /* ae_time_editor_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B63D7162282244D3004235BD /* ae_time_editor_closer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B63D7160282244D3004235BD /* ae_time_editor_closer.cpp */; };
 		B63D7163282244D3004235BD /* ae_time_editor_closer.h in Headers */ = {isa = PBXBuildFile; fileRef = B63D7161282244D3004235BD /* ae_time_editor_closer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B644411D2824C967001AFE8B /* ae_nudger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B644411B2824C967001AFE8B /* ae_nudger.cpp */; };
+		B644411E2824C967001AFE8B /* ae_nudger.h in Headers */ = {isa = PBXBuildFile; fileRef = B644411C2824C967001AFE8B /* ae_nudger.h */; };
 		B64504AE2719C4D9009E05D6 /* ae_module_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AD2719C4D9009E05D6 /* ae_module_location.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B64504B02719C4E4009E05D6 /* ae_marker_location.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504AF2719C4E4009E05D6 /* ae_marker_location.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B64504B3271A7316009E05D6 /* ae_markers_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B64504B1271A7316009E05D6 /* ae_markers_presenter.h */; };
@@ -344,6 +346,8 @@
 		B6370CD2279BA06C00449D03 /* ae_time_editor_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_editor_utils.h; sourceTree = "<group>"; };
 		B63D7160282244D3004235BD /* ae_time_editor_closer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_time_editor_closer.cpp; sourceTree = "<group>"; };
 		B63D7161282244D3004235BD /* ae_time_editor_closer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_time_editor_closer.h; sourceTree = "<group>"; };
+		B644411B2824C967001AFE8B /* ae_nudger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudger.cpp; sourceTree = "<group>"; };
+		B644411C2824C967001AFE8B /* ae_nudger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudger.h; sourceTree = "<group>"; };
 		B64504AD2719C4D9009E05D6 /* ae_module_location.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_module_location.h; sourceTree = "<group>"; };
 		B64504AF2719C4E4009E05D6 /* ae_marker_location.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_marker_location.h; sourceTree = "<group>"; };
 		B64504B1271A7316009E05D6 /* ae_markers_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_markers_presenter.h; sourceTree = "<group>"; };
@@ -824,6 +828,15 @@
 			path = time_editor_closer;
 			sourceTree = "<group>";
 		};
+		B644411A2824C95B001AFE8B /* nudger */ = {
+			isa = PBXGroup;
+			children = (
+				B644411B2824C967001AFE8B /* ae_nudger.cpp */,
+				B644411C2824C967001AFE8B /* ae_nudger.h */,
+			);
+			path = nudger;
+			sourceTree = "<group>";
+		};
 		B64504B5271A7322009E05D6 /* markers_presenter */ = {
 			isa = PBXGroup;
 			children = (
@@ -875,6 +888,7 @@
 				B6D55910281F848100C9427C /* playing_toggler */,
 				B61759692823BCAD00AC880B /* project_editor_launcher */,
 				B617596E2823BF8E00AC880B /* timeline_updater */,
+				B644411A2824C95B001AFE8B /* nudger */,
 				B6EA40DB2641721100BF3D06 /* project_editor */,
 				B6F3D6A627E2111E0013E00B /* project_editor_responder */,
 				B6370CC62798522100449D03 /* time_editor */,
@@ -1604,6 +1618,7 @@
 				B6B9736127006FF500E1BD12 /* ae_ui_button_utils.h in Headers */,
 				B66ED64027D1BC4200E1DFA7 /* ae_responder.h in Headers */,
 				B6966F4E2732319500A90733 /* ae_db_types.h in Headers */,
+				B644411E2824C967001AFE8B /* ae_nudger.h in Headers */,
 				B66F5D6827AE2EA900441616 /* ae_color.h in Headers */,
 				B695A38D27658C6C004CB28F /* ae_ui_module_waveforms.h in Headers */,
 				B60204D6263AAEC600CFC752 /* ae_editing_root_presenter.h in Headers */,
@@ -1802,6 +1817,7 @@
 				B6966F37272E4D8400A90733 /* ae_database.cpp in Sources */,
 				B66ED63427CDCEC200E1DFA7 /* ae_ui_editing_root_level.mm in Sources */,
 				B6DC2CC327B64A87000EF5F9 /* ae_edge_presenter.cpp in Sources */,
+				B644411D2824C967001AFE8B /* ae_nudger.cpp in Sources */,
 				B6F09CE727E84F1300638C6A /* ae_ui_marker_element.mm in Sources */,
 				B66ED63D27D0FCBC00E1DFA7 /* ae_responder_stack.cpp in Sources */,
 				B617596C2823BCD400AC880B /* ae_project_editor_launcher.cpp in Sources */,
