@@ -4,6 +4,7 @@
 
 #include "ae_project_editor_responder.h"
 
+#include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
@@ -16,17 +17,23 @@ using namespace yas::ae;
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
     std::shared_ptr<project_editor> const &editor, std::shared_ptr<playing_toggler> const &toggler,
     std::shared_ptr<nudge_settings> const &nudge_settings, std::shared_ptr<nudger> const &nudger,
-    std::shared_ptr<jumper> const &jumper) {
+    std::shared_ptr<jumper> const &jumper, std::shared_ptr<edge_editor> const &edge_editor) {
     return std::shared_ptr<project_editor_responder>(
-        new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper});
+        new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper, edge_editor});
 }
 
 project_editor_responder::project_editor_responder(std::shared_ptr<project_editor> const &editor,
                                                    std::shared_ptr<playing_toggler> const &toggler,
                                                    std::shared_ptr<nudge_settings> const &nudge_settings,
                                                    std::shared_ptr<nudger> const &nudger,
-                                                   std::shared_ptr<jumper> const &jumper)
-    : _editor(editor), _playing_toggler(toggler), _nudge_settings(nudge_settings), _nudger(nudger), _jumper(jumper) {
+                                                   std::shared_ptr<jumper> const &jumper,
+                                                   std::shared_ptr<edge_editor> const &edge_editor)
+    : _editor(editor),
+      _playing_toggler(toggler),
+      _nudge_settings(nudge_settings),
+      _nudger(nudger),
+      _jumper(jumper),
+      _edge_editor(edge_editor) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -99,8 +106,9 @@ void project_editor_responder::handle_action(ae::action const &action) {
     auto const nudger = this->_nudger.lock();
     auto const nudge_settings = this->_nudge_settings.lock();
     auto const jumper = this->_jumper.lock();
+    auto const edge_editor = this->_edge_editor.lock();
 
-    if (!editor || !nudger || !nudge_settings || !jumper) {
+    if (!editor || !nudger || !nudge_settings || !jumper || !edge_editor) {
         return;
     }
 
@@ -162,10 +170,10 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     editor->insert_marker();
                     break;
                 case action_kind::set_begin_edge:
-                    editor->set_begin_edge();
+                    edge_editor->set_begin();
                     break;
                 case action_kind::set_end_edge:
-                    editor->set_end_edge();
+                    edge_editor->set_end();
                     break;
                 case action_kind::return_to_zero:
                     editor->return_to_zero();
@@ -230,8 +238,9 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
     auto const editor = this->_editor.lock();
     auto const nudger = this->_nudger.lock();
     auto const jumper = this->_jumper.lock();
+    auto const edge_editor = this->_edge_editor.lock();
 
-    if (!editor || !nudger || !jumper) {
+    if (!editor || !nudger || !jumper || !edge_editor) {
         return responding::fallthrough;
     }
 
@@ -308,9 +317,9 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return to_responding(editor->can_select_time_unit());
 
         case action_kind::set_begin_edge:
-            return to_responding(editor->can_set_begin_edge());
+            return to_responding(edge_editor->can_set_begin());
         case action_kind::set_end_edge:
-            return to_responding(editor->can_set_end_edge());
+            return to_responding(edge_editor->can_set_end());
 
             // 以下、time_editor用
         case action_kind::finish_time_editing:

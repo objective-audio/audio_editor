@@ -348,46 +348,6 @@ void project_editor::insert_marker() {
     });
 }
 
-bool project_editor::can_set_begin_edge() const {
-    if (!this->_can_editing()) {
-        return false;
-    }
-
-    auto const current_frame = this->_player->current_frame();
-    auto const begin_frame = this->_edge_holder->edge().begin_frame;
-
-    return current_frame != begin_frame;
-}
-
-bool project_editor::can_set_end_edge() const {
-    if (!this->_can_editing()) {
-        return false;
-    }
-
-    auto const current_frame = this->_player->current_frame();
-    auto const end_frame = this->_edge_holder->edge().end_frame;
-
-    return current_frame != end_frame;
-}
-
-void project_editor::set_begin_edge() {
-    if (!this->can_set_begin_edge()) {
-        return;
-    }
-
-    auto const current_frame = this->_player->current_frame();
-    this->_edge_holder->set_begin_frame(current_frame);
-}
-
-void project_editor::set_end_edge() {
-    if (!this->can_set_end_edge()) {
-        return;
-    }
-
-    auto const current_frame = this->_player->current_frame();
-    this->_edge_holder->set_end_frame(current_frame);
-}
-
 bool project_editor::can_return_to_zero() const {
     return this->_player->current_frame() != 0;
 }
