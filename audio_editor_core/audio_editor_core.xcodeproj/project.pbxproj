@@ -81,6 +81,8 @@
 		B6604F9426477483003439F1 /* ae_file_track_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6604F9226477464003439F1 /* ae_file_track_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6624D4A274A54D3001A7BED /* ae_db_pasting_subject.h in Headers */ = {isa = PBXBuildFile; fileRef = B6624D48274A54D3001A7BED /* ae_db_pasting_subject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6624D4B274A54D3001A7BED /* ae_db_pasting_subject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6624D49274A54D3001A7BED /* ae_db_pasting_subject.cpp */; };
+		B66471752824EDC300DF84C4 /* ae_edge_editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B66471732824EDC300DF84C4 /* ae_edge_editor.cpp */; };
+		B66471762824EDC300DF84C4 /* ae_edge_editor.h in Headers */ = {isa = PBXBuildFile; fileRef = B66471742824EDC300DF84C4 /* ae_edge_editor.h */; };
 		B666CDE82634125E00C1693D /* ae_system_url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B666CDE62634125E00C1693D /* ae_system_url.cpp */; };
 		B666CDE92634125E00C1693D /* ae_system_url.h in Headers */ = {isa = PBXBuildFile; fileRef = B666CDE72634125E00C1693D /* ae_system_url.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B666CE0B263424FF00C1693D /* ae_file_importer_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B666CE0A263424FF00C1693D /* ae_file_importer_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -377,6 +379,8 @@
 		B6604F9226477464003439F1 /* ae_file_track_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_track_types.h; sourceTree = "<group>"; };
 		B6624D48274A54D3001A7BED /* ae_db_pasting_subject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_db_pasting_subject.h; sourceTree = "<group>"; };
 		B6624D49274A54D3001A7BED /* ae_db_pasting_subject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_db_pasting_subject.cpp; sourceTree = "<group>"; };
+		B66471732824EDC300DF84C4 /* ae_edge_editor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_edge_editor.cpp; sourceTree = "<group>"; };
+		B66471742824EDC300DF84C4 /* ae_edge_editor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_edge_editor.h; sourceTree = "<group>"; };
 		B666CDE62634125E00C1693D /* ae_system_url.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_system_url.cpp; sourceTree = "<group>"; };
 		B666CDE72634125E00C1693D /* ae_system_url.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_system_url.h; sourceTree = "<group>"; };
 		B666CE0A263424FF00C1693D /* ae_file_importer_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_importer_types.h; sourceTree = "<group>"; };
@@ -876,7 +880,8 @@
 				B68483FB27C5BBE700792D17 /* app_launcher */,
 				B6E9035F2745346900DE821F /* exporter */,
 				B666CE08263424DA00C1693D /* file_importer */,
-				B6F4D97627B3DE2000AE7D5D /* edge */,
+				B6F4D97627B3DE2000AE7D5D /* edge_holder */,
+				B66471722824EDB100DF84C4 /* edge_editor */,
 				B6B002B5263BC7220013E6D0 /* file_loader */,
 				B6604F7C2646D7C7003439F1 /* file_track */,
 				B64E9FC52650EDB300758FE8 /* marker_pool */,
@@ -1007,6 +1012,15 @@
 				B6604F7F2646D7DF003439F1 /* ae_file_track.h */,
 			);
 			path = file_track;
+			sourceTree = "<group>";
+		};
+		B66471722824EDB100DF84C4 /* edge_editor */ = {
+			isa = PBXGroup;
+			children = (
+				B66471732824EDC300DF84C4 /* ae_edge_editor.cpp */,
+				B66471742824EDC300DF84C4 /* ae_edge_editor.h */,
+			);
+			path = edge_editor;
 			sourceTree = "<group>";
 		};
 		B666CE08263424DA00C1693D /* file_importer */ = {
@@ -1526,7 +1540,7 @@
 			path = project_editor_responder;
 			sourceTree = "<group>";
 		};
-		B6F4D97627B3DE2000AE7D5D /* edge */ = {
+		B6F4D97627B3DE2000AE7D5D /* edge_holder */ = {
 			isa = PBXGroup;
 			children = (
 				B6F4D98327B6026F00AE7D5D /* ae_edge_holder_types.h */,
@@ -1535,7 +1549,7 @@
 				B6F4D97727B3DE2F00AE7D5D /* ae_edge.cpp */,
 				B6F4D97827B3DE2F00AE7D5D /* ae_edge.h */,
 			);
-			path = edge;
+			path = edge_holder;
 			sourceTree = "<group>";
 		};
 		B6F8A597281D0F2700EDE909 /* project_closer */ = {
@@ -1667,6 +1681,7 @@
 				B6813580271F0745009CC0FC /* ae_zooming.h in Headers */,
 				B68C3E702707EE4100888A53 /* ae_ui_track.h in Headers */,
 				B6F3D6A527E20BA00013E00B /* ae_time_editor_responder.h in Headers */,
+				B66471762824EDC300DF84C4 /* ae_edge_editor.h in Headers */,
 				B66ED63027CDCC4800E1DFA7 /* ae_ui_editing_root_level_pool.h in Headers */,
 				B66ED63727CE4EA400E1DFA7 /* ae_ui_project_id.h in Headers */,
 				B6DC2CC427B64A87000EF5F9 /* ae_edge_presenter.h in Headers */,
@@ -1907,6 +1922,7 @@
 				B6A997B92629C07600DAC3FE /* ae_app_level.cpp in Sources */,
 				B666F17C2759CCEA0040D306 /* ae_display_space.mm in Sources */,
 				B6604F802646D7DF003439F1 /* ae_file_track.cpp in Sources */,
+				B66471752824EDC300DF84C4 /* ae_edge_editor.cpp in Sources */,
 				B6B002B8263BC7320013E6D0 /* ae_file_loader.cpp in Sources */,
 				B68E852527BF4DB200074894 /* ae_ui_edge_element.mm in Sources */,
 				B6EA40DE2641722600BF3D06 /* ae_project_editor.cpp in Sources */,
