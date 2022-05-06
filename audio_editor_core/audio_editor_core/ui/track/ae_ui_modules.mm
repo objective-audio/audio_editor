@@ -28,8 +28,8 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &project
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
     auto const modules_presenter =
-        modules_presenter::make_shared(project_id.identifier, ui_root_level->display_space, location_pool);
-    auto const modules_controller = modules_controller::make_shared(project_id.identifier, location_pool);
+        modules_presenter::make_shared(project_id.project_id, ui_root_level->display_space, location_pool);
+    auto const modules_controller = modules_controller::make_shared(project_id.project_id, location_pool);
     return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, modules_controller, ui_root_level->standard,
                                                       app_level->color, ui_root_level->font_atlas_14, waveforms});
 }

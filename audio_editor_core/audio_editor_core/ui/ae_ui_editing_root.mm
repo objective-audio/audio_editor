@@ -28,8 +28,8 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id cons
     auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
-    auto const presenter = editing_root_presenter::make_shared(project_id.identifier);
-    auto const action_controller = action_controller::make_shared(project_id.identifier);
+    auto const presenter = editing_root_presenter::make_shared(project_id.project_id);
+    auto const action_controller = action_controller::make_shared(project_id.project_id);
 
     return std::shared_ptr<ui_editing_root>(new ui_editing_root{
         ui_root_level->standard, ui_root_level->font_atlas_14, app_level->color, presenter, action_controller,

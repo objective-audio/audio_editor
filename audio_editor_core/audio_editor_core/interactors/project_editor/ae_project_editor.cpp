@@ -30,7 +30,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor> project_editor::make_shared(
-    std::string const &project_id, ae::file_info const &file_info,
+    project_id const &project_id, ae::file_info const &file_info,
     std::shared_ptr<file_track_for_project_editor> const &file_track,
     std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
     std::shared_ptr<edge_holder_for_project_editor> const &edge_holder,

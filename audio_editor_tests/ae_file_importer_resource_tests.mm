@@ -41,11 +41,11 @@ using namespace yas::ae;
     auto const resource = file_importer_resource::make_shared();
 
     resource->push_context_on_main(
-        {.identifier = "0", .src_url = url("test/src0.wav"), .dst_url = url("test/dst0.caf")});
+        {.project_id = "0", .src_url = url("test/src0.wav"), .dst_url = url("test/dst0.caf")});
     resource->push_context_on_main(
-        {.identifier = "1", .src_url = url("test/src1.wav"), .dst_url = url("test/dst1.caf")});
+        {.project_id = "1", .src_url = url("test/src1.wav"), .dst_url = url("test/dst1.caf")});
 
-    resource->cancel_on_main("0");
+    resource->cancel_on_main({"0"});
 
     auto const context1 = resource->pull_context_on_task();
 
@@ -57,8 +57,8 @@ using namespace yas::ae;
 - (void)test_pull_cancel_ids {
     auto const resource = file_importer_resource::make_shared();
 
-    resource->cancel_on_main("2");
-    resource->cancel_on_main("3");
+    resource->cancel_on_main({"2"});
+    resource->cancel_on_main({"3"});
 
     auto const ids = resource->pull_cancel_ids();
 
@@ -72,8 +72,8 @@ using namespace yas::ae;
 - (void)test_clear_cancel_ids_at_pull_context {
     auto const resource = file_importer_resource::make_shared();
 
-    resource->cancel_on_main("4");
-    resource->cancel_on_main("5");
+    resource->cancel_on_main({"4"});
+    resource->cancel_on_main({"5"});
 
     auto const context = resource->pull_context_on_task();
 

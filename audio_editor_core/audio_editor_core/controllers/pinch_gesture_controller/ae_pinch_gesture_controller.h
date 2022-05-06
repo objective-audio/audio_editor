@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_keyboard_types.h>
+#include <audio_editor_core/ae_project_id.h>
 
 #include <memory>
 
@@ -13,7 +14,7 @@ namespace yas::ae {
 class zooming_pair;
 
 struct pinch_gesture_controller final {
-    [[nodiscard]] static std::shared_ptr<pinch_gesture_controller> make_shared(std::string const &project_id);
+    [[nodiscard]] static std::shared_ptr<pinch_gesture_controller> make_shared(project_id const &project_id);
 
     void handle_gesture(pinch_gesture const &);
     void handle_modifier(modifier_event_state const &);

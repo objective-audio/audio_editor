@@ -16,7 +16,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(
-    std::string const &project_id, std::shared_ptr<display_space> const &display_space,
+    project_id const &project_id, std::shared_ptr<display_space> const &display_space,
     std::shared_ptr<module_location_pool> const &location_pool) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_id.h>
+
 #include <memory>
 
 namespace yas::ae {
@@ -11,7 +13,7 @@ class player;
 class nudge_settings;
 
 struct nudger final {
-    [[nodiscard]] static std::shared_ptr<nudger> make_shared(std::string const &project_id, nudge_settings *);
+    [[nodiscard]] static std::shared_ptr<nudger> make_shared(project_id const &project_id, nudge_settings *);
     [[nodiscard]] static std::shared_ptr<nudger> make_shared(player *, nudge_settings *);
 
     [[nodiscard]] bool can_nudge() const;

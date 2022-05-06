@@ -23,7 +23,7 @@ using namespace yas::ae;
     observing::canceller_pool _pool;
 }
 
-- (void)setupWithProjectID:(std::string const &)project_id {
+- (void)setupWithProjectID:(project_id const &)project_id {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
 
     self->_context_menu_presenter = project_level->context_menu_presenter;

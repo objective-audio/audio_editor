@@ -12,7 +12,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_launcher> project_launcher::make_shared(
-    std::string const &project_id, url const &file_url, project_url_for_project_launcher const *project_url,
+    project_id const &project_id, url const &file_url, project_url_for_project_launcher const *project_url,
     file_importer_for_project_launcher *file_importer, file_loader_for_project_launcher *file_loader,
     responder_stack_for_project_launcher *responder_stack,
     project_editor_level_pool_for_project_launcher *editor_level_pool, project_status_for_project_launcher *status) {
@@ -22,7 +22,7 @@ std::shared_ptr<project_launcher> project_launcher::make_shared(
     return launcher;
 }
 
-project_launcher::project_launcher(std::string const &project_id, url const &file_url,
+project_launcher::project_launcher(project_id const &project_id, url const &file_url,
                                    project_url_for_project_launcher const *project_url,
                                    file_importer_for_project_launcher *file_importer,
                                    file_loader_for_project_launcher *file_loader,
@@ -48,7 +48,7 @@ void project_launcher::launch() {
     this->_status->set_state(project_state::loading);
 
     this->_file_importer->import(
-        {.identifier = this->_project_id,
+        {.project_id = this->_project_id,
          .src_url = this->_file_url,
          .dst_url = this->_project_url->editing_file(),
          .completion = [weak = this->_weak_launcher](bool const result) {

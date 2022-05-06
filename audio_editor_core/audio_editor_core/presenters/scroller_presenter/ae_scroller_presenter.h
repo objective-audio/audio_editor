@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_info.h>
+#include <audio_editor_core/ae_project_id.h>
 
 #include <memory>
 
@@ -13,7 +14,7 @@ class player;
 class zooming_pair;
 
 struct scroller_presenter final {
-    [[nodiscard]] static std::shared_ptr<scroller_presenter> make_shared(std::string const &project_id);
+    [[nodiscard]] static std::shared_ptr<scroller_presenter> make_shared(project_id const &project_id);
 
     [[nodiscard]] float current_position() const;
     [[nodiscard]] double horizontal_zooming_scale() const;

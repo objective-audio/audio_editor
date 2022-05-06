@@ -17,7 +17,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor_launcher> project_editor_launcher::make_shared(
-    std::string const &project_id, ae::file_info const &file_info, timeline_updater *updater, database *database,
+    project_id const &project_id, ae::file_info const &file_info, timeline_updater *updater, database *database,
     file_track *file_track, edge_holder *edge_holder) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &project_url = project_level->project_url;

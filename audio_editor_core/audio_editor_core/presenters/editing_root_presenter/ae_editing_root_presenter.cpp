@@ -11,7 +11,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(std::string const &project_id) {
+std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(project_id const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<editing_root_presenter>(
         new editing_root_presenter{project_level->player, project_level->responder_stack});

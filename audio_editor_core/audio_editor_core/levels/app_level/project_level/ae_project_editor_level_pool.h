@@ -8,14 +8,12 @@
 #include <audio_editor_core/ae_project_launcher_dependency.h>
 #include <observing/yas_observing_umbrella.h>
 
-#include <memory>
-
 namespace yas::ae {
 class project_editor_level;
 
 struct project_editor_level_pool final : project_editor_level_pool_for_project_launcher,
                                          project_editor_level_pool_for_project_closer {
-    [[nodiscard]] static std::shared_ptr<project_editor_level_pool> make_shared(std::string const &identifier);
+    [[nodiscard]] static std::shared_ptr<project_editor_level_pool> make_shared(project_id const &);
 
     void add_level(file_info const &) override;
     void remove_level() override;
@@ -25,10 +23,10 @@ struct project_editor_level_pool final : project_editor_level_pool_for_project_l
     observing::syncable observe_level(std::function<void(std::shared_ptr<project_editor_level> const &)> &&);
 
    private:
-    std::string const _identifier;
+    project_id const _project_id;
 
     observing::value::holder_ptr<std::shared_ptr<project_editor_level>> const _editor_level;
 
-    project_editor_level_pool(std::string const &identifier);
+    project_editor_level_pool(project_id const &);
 };
 }  // namespace yas::ae

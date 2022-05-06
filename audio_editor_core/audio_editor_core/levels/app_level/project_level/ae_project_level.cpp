@@ -25,11 +25,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_level> project_level::make_shared(std::string const &project_id, url const &file_url) {
+std::shared_ptr<project_level> project_level::make_shared(ae::project_id const &project_id, url const &file_url) {
     return std::shared_ptr<project_level>(new project_level{project_id, file_url, app_level::global()});
 }
 
-project_level::project_level(std::string const &project_id, url const &file_url,
+project_level::project_level(ae::project_id const &project_id, url const &file_url,
                              std::shared_ptr<app_level> const &app_level)
     : project_id(project_id),
       file_url(file_url),

@@ -10,7 +10,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<action_controller> action_controller::make_shared(std::string const &project_id) {
+std::shared_ptr<action_controller> action_controller::make_shared(project_id const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<action_controller>(new action_controller{project_level->responder_stack});
 }

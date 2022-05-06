@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_location_pool.h>
+#include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
 #include <cpp_utils/yas_url.h>
 
@@ -13,7 +14,7 @@ class waveform_mesh_importer;
 
 struct module_waveforms_presenter final {
     [[nodiscard]] static std::shared_ptr<module_waveforms_presenter> make_shared(
-        std::string const &project_id, std::shared_ptr<module_location_pool> const &);
+        project_id const &project_id, std::shared_ptr<module_location_pool> const &);
 
     void import(std::size_t const, module_location const &);
     void cancel_import(identifier const &);

@@ -10,6 +10,6 @@
 
 namespace yas::ae::hierarchy {
 [[nodiscard]] std::shared_ptr<app_level> const &app_level();
-[[nodiscard]] std::shared_ptr<project_level> const &project_level_for_id(std::string const &);
-[[nodiscard]] std::shared_ptr<project_editor_level> const &project_editor_level_for_id(std::string const &);
+[[nodiscard]] std::shared_ptr<project_level> const &project_level_for_id(project_id const &);
+[[nodiscard]] std::shared_ptr<project_editor_level> const &project_editor_level_for_id(project_id const &);
 }  // namespace yas::ae::hierarchy

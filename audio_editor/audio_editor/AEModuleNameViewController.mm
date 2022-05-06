@@ -29,7 +29,7 @@ struct module_name_vc_cpp {
     module_name_vc_cpp _cpp;
 }
 
-+ (instancetype)instantiateWithProjectId:(std::string const &)project_id moduleRange:(time::range const)module_range {
++ (instancetype)instantiateWithProjectId:(project_id const &)project_id moduleRange:(time::range const)module_range {
     auto *const storyboard = [NSStoryboard storyboardWithName:@"ModuleName" bundle:nil];
     AEModuleNameViewController *vc = [storyboard instantiateInitialController];
     vc->_cpp.presenter = module_name_presenter::make_shared(project_id, module_range);

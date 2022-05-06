@@ -19,7 +19,7 @@ std::shared_ptr<ui_root> ui_root::make_shared(
     std::shared_ptr<ui::standard> const &standard, ui_project_id const &project_id,
     std::shared_ptr<ui_editing_root_level_pool> const &ui_editing_root_level_pool) {
     auto const &app_level = hierarchy::app_level();
-    auto const presenter = root_presenter::make_shared(project_id.identifier);
+    auto const presenter = root_presenter::make_shared(project_id.project_id);
     return std::shared_ptr<ui_root>(new ui_root{app_level->color, standard, presenter, ui_editing_root_level_pool});
 }
 

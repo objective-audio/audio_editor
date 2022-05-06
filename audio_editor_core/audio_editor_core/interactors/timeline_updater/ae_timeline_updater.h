@@ -6,12 +6,13 @@
 
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_file_track_types.h>
+#include <audio_editor_core/ae_project_id.h>
 #include <cpp_utils/yas_url.h>
 #include <processing/yas_processing_ptr.h>
 
 namespace yas::ae {
 struct timeline_updater final {
-    [[nodiscard]] static std::shared_ptr<timeline_updater> make_shared(std::string const &project_id,
+    [[nodiscard]] static std::shared_ptr<timeline_updater> make_shared(project_id const &project_id,
                                                                        ae::file_info const &);
     [[nodiscard]] static std::shared_ptr<timeline_updater> make_shared(url const &editing_file_url,
                                                                        ae::file_info const &);

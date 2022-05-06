@@ -15,7 +15,7 @@ using namespace yas::ae;
 std::shared_ptr<ui_track> ui_track::make_shared(ui_project_id const &project_id,
                                                 std::shared_ptr<ui_modules> const &modules) {
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
-    auto const presenter = track_presenter::make_shared(project_id.identifier);
+    auto const presenter = track_presenter::make_shared(project_id.project_id);
     return std::shared_ptr<ui_track>(
         new ui_track{ui_root_level->standard, ui_root_level->display_space, presenter, modules});
 }

@@ -18,8 +18,8 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &project_id) {
-    auto const presenter = time_presenter::make_shared(project_id.identifier);
-    auto const action_controller = action_controller::make_shared(project_id.identifier);
+    auto const presenter = time_presenter::make_shared(project_id.project_id);
+    auto const action_controller = action_controller::make_shared(project_id.project_id);
 
     auto const &app_level = app_level::global();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);

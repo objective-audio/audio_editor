@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
+#include <audio_editor_core/ae_project_id.h>
 
 #include <memory>
 #include <string>
@@ -13,7 +14,7 @@ namespace yas::ae {
 class file_track;
 
 struct module_name_presenter final {
-    [[nodiscard]] static std::shared_ptr<module_name_presenter> make_shared(std::string const &project_id,
+    [[nodiscard]] static std::shared_ptr<module_name_presenter> make_shared(project_id const &project_id,
                                                                             time::range const module_range);
 
     std::string const &name() const;

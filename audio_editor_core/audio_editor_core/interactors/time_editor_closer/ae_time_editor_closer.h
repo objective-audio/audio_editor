@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_id.h>
 #include <cpp_utils/yas_identifier.h>
 
 #include <memory>
@@ -18,7 +19,7 @@ class timing;
 class player;
 
 struct time_editor_closer final {
-    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(std::string const &project_id,
+    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(project_id const &project_id,
                                                                          identifier const level_instance_id,
                                                                          time_editor *);
 

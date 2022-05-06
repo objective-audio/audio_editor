@@ -30,7 +30,7 @@ void project_level_collector::add_level(url const &file_url) {
 
 std::shared_ptr<project_level> project_level_collector::add_and_return_level(url const &file_url) {
     auto const identifier = this->_uuid_generator->generate();
-    auto const project_level = project_level::make_shared(identifier, file_url);
+    auto const project_level = project_level::make_shared({.raw_value = identifier}, file_url);
     auto const &project_id = project_level->project_id;
 
     this->_project_levels->insert_or_replace(project_id, std::make_pair(project_level, nullptr));
@@ -38,11 +38,11 @@ std::shared_ptr<project_level> project_level_collector::add_and_return_level(url
     return project_level;
 }
 
-void project_level_collector::remove_level(std::string const &project_id) {
+void project_level_collector::remove_level(ae::project_id const &project_id) {
     this->_project_levels->erase(project_id);
 }
 
-std::shared_ptr<project_level> const &project_level_collector::level_for_id(std::string const &project_id) const {
+std::shared_ptr<project_level> const &project_level_collector::level_for_id(ae::project_id const &project_id) const {
     if (this->_project_levels->contains(project_id)) {
         return this->_project_levels->at(project_id).first;
     } else {
