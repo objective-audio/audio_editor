@@ -22,7 +22,7 @@
 #include <audio_editor_core/ae_time_editor_level.h>
 #include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_time_editor_responder.h>
-#include <audio_editor_core/ae_timeline_processor.h>
+#include <audio_editor_core/ae_timeline_updater.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
 
@@ -40,12 +40,12 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<nudge_settings_for_project_editor> const &nudge_settings,
     std::shared_ptr<timing_for_project_editor> const &timing,
     std::shared_ptr<time_editor_level_router> const &time_editor_level_router,
-    std::shared_ptr<timeline_processor> const &timeline_processor) {
+    std::shared_ptr<timeline_updater> const &timeline_updater) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<project_editor>(
         new project_editor{file_info, project_level->player, file_track, marker_pool, edge_editor, pasteboard, database,
                            exporter, project_level->dialog_presenter, project_level->sheet_presenter, nudge_settings,
-                           timing, project_level->responder_stack, time_editor_level_router, timeline_processor});
+                           timing, project_level->responder_stack, time_editor_level_router, timeline_updater});
 }
 
 project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
@@ -61,7 +61,7 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
                                std::shared_ptr<timing_for_project_editor> const &timing,
                                std::shared_ptr<responder_stack> const &responder_stack,
                                std::shared_ptr<time_editor_level_router> const &time_editor_level_router,
-                               std::shared_ptr<timeline_processor> const &timeline_processor)
+                               std::shared_ptr<timeline_updater> const &timeline_updater)
     : _file_info(file_info),
       _player(player),
       _file_track(file_track),
@@ -76,12 +76,12 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
       _timing(timing),
       _responder_stack(responder_stack),
       _time_editor_level_router(time_editor_level_router),
-      _timeline_processor(timeline_processor) {
+      _timeline_updater(timeline_updater) {
     this->_file_track
         ->observe_event([this](file_track_event const &event) {
             switch (event.type) {
                 case file_track_event_type::any: {
-                    this->_timeline_processor->replace(event.modules);
+                    this->_timeline_updater->replace(event.modules);
 
                     for (auto const &pair : event.modules) {
                         auto const &file_module = pair.second;
@@ -89,16 +89,16 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
                     }
                 } break;
                 case file_track_event_type::reverted: {
-                    this->_timeline_processor->replace(event.modules);
+                    this->_timeline_updater->replace(event.modules);
                 } break;
                 case file_track_event_type::inserted: {
                     auto const &file_module = event.module.value();
-                    this->_timeline_processor->insert(file_module);
+                    this->_timeline_updater->insert(file_module);
                     this->_database->add_module(file_module);
                 } break;
                 case file_track_event_type::erased: {
                     auto const &range = event.module.value().range;
-                    this->_timeline_processor->erase(range);
+                    this->_timeline_updater->erase(range);
                     this->_database->remove_module(range);
                 } break;
                 case file_track_event_type::detail_updated: {
@@ -576,7 +576,7 @@ void project_editor::export_to_file(url const &export_url) {
                                   .pcm_format = audio::pcm_format::float32,
                                   .channel_count = this->_file_info.channel_count};
 
-    this->_exporter->begin(export_url, this->_timeline_processor->timeline(), format, range.value());
+    this->_exporter->begin(export_url, this->_timeline_updater->timeline(), format, range.value());
 }
 
 bool project_editor::can_cut() const {

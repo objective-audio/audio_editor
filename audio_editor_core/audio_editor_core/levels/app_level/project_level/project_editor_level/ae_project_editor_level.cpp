@@ -18,7 +18,7 @@
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_time_editor_level_router.h>
-#include <audio_editor_core/ae_timeline_processor.h>
+#include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
@@ -45,12 +45,12 @@ project_editor_level::project_editor_level(std::string const &project_id, ae::fi
       exporter(exporter::make_shared()),
       playing_toggler(playing_toggler::make_shared(project_id)),
       time_editor_level_router(time_editor_level_router::make_shared(project_id)),
-      timeline_processor(timeline_processor::make_shared(project_id, file_info)),
-      launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_processor, this->database,
+      timeline_updater(timeline_updater::make_shared(project_id, file_info)),
+      launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_updater, this->database,
                                                     this->file_track, this->edge_editor)),
       editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_editor,
                                          this->pasteboard, this->database, this->exporter, this->nudge_settings,
-                                         this->timing, this->time_editor_level_router, this->timeline_processor)),
+                                         this->timing, this->time_editor_level_router, this->timeline_updater)),
       responder(project_editor_responder::make_shared(this->editor, this->playing_toggler)) {
     this->launcher->launch();
 }
