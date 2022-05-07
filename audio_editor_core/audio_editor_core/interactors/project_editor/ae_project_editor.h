@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_responder.h>
 
 namespace yas::ae {
-class sheet_presenter;
 class dialog_presenter;
 class timeline_updater;
 class editing_status;
@@ -69,7 +68,6 @@ struct project_editor final {
     std::shared_ptr<database_for_project_editor> const _database;
     std::shared_ptr<exporter_for_project_editor> const _exporter;
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
-    std::shared_ptr<sheet_presenter> const _sheet_presenter;
     std::shared_ptr<timing_for_project_editor> const _timing;
     std::shared_ptr<timeline_updater> const _timeline_updater;
     editing_status const *const _editing_status;
@@ -83,8 +81,8 @@ struct project_editor final {
                    std::shared_ptr<pasteboard_for_project_editor> const &,
                    std::shared_ptr<database_for_project_editor> const &,
                    std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<dialog_presenter> const &,
-                   std::shared_ptr<sheet_presenter> const &, std::shared_ptr<timing_for_project_editor> const &,
-                   std::shared_ptr<timeline_updater> const &, editing_status const *);
+                   std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<timeline_updater> const &,
+                   editing_status const *);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

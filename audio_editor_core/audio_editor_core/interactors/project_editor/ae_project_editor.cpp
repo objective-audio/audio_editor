@@ -17,7 +17,6 @@
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_responder_stack.h>
-#include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_closer.h>
 #include <audio_editor_core/ae_time_editor_level.h>
@@ -41,9 +40,9 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<timing_for_project_editor> const &timing, std::shared_ptr<timeline_updater> const &timeline_updater,
     editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<project_editor>(new project_editor{
-        file_info, project_level->player, file_track, marker_pool, edge_holder, pasteboard, database, exporter,
-        project_level->dialog_presenter, project_level->sheet_presenter, timing, timeline_updater, editing_status});
+    return std::shared_ptr<project_editor>(
+        new project_editor{file_info, project_level->player, file_track, marker_pool, edge_holder, pasteboard, database,
+                           exporter, project_level->dialog_presenter, timing, timeline_updater, editing_status});
 }
 
 project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
@@ -54,7 +53,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
                                std::shared_ptr<database_for_project_editor> const &database,
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
-                               std::shared_ptr<sheet_presenter> const &sheet_presenter,
                                std::shared_ptr<timing_for_project_editor> const &timing,
                                std::shared_ptr<timeline_updater> const &timeline_updater,
                                editing_status const *editing_status)
@@ -67,7 +65,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
       _database(database),
       _exporter(exporter),
       _dialog_presenter(dialog_presenter),
-      _sheet_presenter(sheet_presenter),
       _timing(timing),
       _timeline_updater(timeline_updater),
       _editing_status(editing_status) {
