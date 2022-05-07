@@ -561,14 +561,6 @@ bool project_editor::can_begin_time_editing() const {
     return this->_time_editor_level_router->level() == nullptr;
 }
 
-bool project_editor::can_end_time_editing() const {
-    return this->_time_editor_level_router->level() != nullptr;
-}
-
-bool project_editor::can_input_time_number() const {
-    return this->_time_editor_level_router->level() != nullptr;
-}
-
 bool project_editor::can_select_time_unit() const {
     return this->can_begin_time_editing();
 }
@@ -587,66 +579,6 @@ void project_editor::begin_time_editing(std::optional<std::size_t> const unit_id
 
     if (auto const responder_stack = this->_responder_stack.lock()) {
         responder_stack->push_responder(level->instance_id, level->responder);
-    }
-}
-
-void project_editor::finish_time_editing() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->closer->finish();
-    }
-}
-
-void project_editor::cancel_time_editing() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->closer->cancel();
-    }
-}
-
-void project_editor::input_time_number(uint32_t const number) {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->input_number(number);
-    }
-}
-
-void project_editor::delete_time_number() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->delete_number();
-    }
-}
-
-void project_editor::increment_time_number() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->increment_number();
-    }
-}
-
-void project_editor::decrement_time_number() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->decrement_number();
-    }
-}
-
-void project_editor::move_to_previous_time_unit() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->move_to_previous_unit();
-    }
-}
-
-void project_editor::move_to_next_time_unit() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->move_to_next_unit();
-    }
-}
-
-void project_editor::change_time_sign_to_plus() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->change_sign_to_plus();
-    }
-}
-
-void project_editor::change_time_sign_to_minus() {
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->change_sign_to_minus();
     }
 }
 

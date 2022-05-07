@@ -286,8 +286,6 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
         case action_kind::begin_module_renaming:
             return to_responding(this->_editor->can_begin_time_editing());
 
-        case action_kind::cancel_time_editing:
-            return to_responding(this->_editor->can_end_time_editing());
         case action_kind::begin_time_editing:
             return to_responding(this->_editor->can_begin_time_editing());
         case action_kind::select_time_unit:
@@ -300,6 +298,7 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
 
             // 以下、time_editor用
         case action_kind::finish_time_editing:
+        case action_kind::cancel_time_editing:
         case action_kind::move_to_previous_time_unit:
         case action_kind::move_to_next_time_unit:
         case action_kind::input_time:

@@ -69,20 +69,8 @@ struct project_editor final {
     void begin_module_renaming(std::string const &range);
 
     [[nodiscard]] bool can_begin_time_editing() const;
-    [[nodiscard]] bool can_end_time_editing() const;
-    [[nodiscard]] bool can_input_time_number() const;
     [[nodiscard]] bool can_select_time_unit() const;
     void begin_time_editing(std::optional<std::size_t> const unit_idx);
-    void finish_time_editing();
-    void cancel_time_editing();
-    void input_time_number(uint32_t const);
-    void delete_time_number();
-    void increment_time_number();
-    void decrement_time_number();
-    void move_to_previous_time_unit();
-    void move_to_next_time_unit();
-    void change_time_sign_to_plus();
-    void change_time_sign_to_minus();
     void select_time_unit(std::size_t const);
 
    private:
