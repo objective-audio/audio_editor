@@ -19,8 +19,7 @@ struct project_editor final {
         std::shared_ptr<marker_pool_for_project_editor> const &,
         std::shared_ptr<edge_holder_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
         std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
-        std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<timeline_updater> const &,
-        editing_status const *);
+        std::shared_ptr<timeline_updater> const &, editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -32,12 +31,6 @@ struct project_editor final {
     [[nodiscard]] bool can_erase() const;
     void erase();
     void erase_and_offset();
-
-    [[nodiscard]] bool can_return_to_zero() const;
-    void return_to_zero();
-
-    [[nodiscard]] bool can_go_to_marker(std::size_t const) const;
-    void go_to_marker(std::size_t const);
 
     [[nodiscard]] bool can_undo() const;
     void undo();
@@ -68,7 +61,6 @@ struct project_editor final {
     std::shared_ptr<database_for_project_editor> const _database;
     std::shared_ptr<exporter_for_project_editor> const _exporter;
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
-    std::shared_ptr<timing_for_project_editor> const _timing;
     std::shared_ptr<timeline_updater> const _timeline_updater;
     editing_status const *const _editing_status;
 
@@ -81,8 +73,7 @@ struct project_editor final {
                    std::shared_ptr<pasteboard_for_project_editor> const &,
                    std::shared_ptr<database_for_project_editor> const &,
                    std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<dialog_presenter> const &,
-                   std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<timeline_updater> const &,
-                   editing_status const *);
+                   std::shared_ptr<timeline_updater> const &, editing_status const *);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

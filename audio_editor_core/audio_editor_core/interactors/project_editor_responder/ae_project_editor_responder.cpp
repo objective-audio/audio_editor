@@ -172,10 +172,10 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     this->_edge_editor->set_end();
                     break;
                 case action_kind::return_to_zero:
-                    this->_editor->return_to_zero();
+                    this->_jumper->return_to_zero();
                     break;
                 case action_kind::go_to_marker:
-                    this->_editor->go_to_marker(std::stoi(action.value));
+                    this->_jumper->go_to_marker(std::stoi(action.value));
                     break;
                 case action_kind::undo:
                     this->_editor->undo();
@@ -272,9 +272,9 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return to_responding(this->_marker_editor->can_insert_marker());
 
         case action_kind::return_to_zero:
-            return to_responding(this->_editor->can_return_to_zero());
+            return to_responding(this->_jumper->can_return_to_zero());
         case action_kind::go_to_marker:
-            return to_responding(this->_editor->can_go_to_marker(std::stoi(action.value)));
+            return to_responding(this->_jumper->can_go_to_marker(std::stoi(action.value)));
 
         case action_kind::undo:
             return to_responding(this->_editor->can_undo());

@@ -37,12 +37,11 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
-    std::shared_ptr<timing_for_project_editor> const &timing, std::shared_ptr<timeline_updater> const &timeline_updater,
-    editing_status const *editing_status) {
+    std::shared_ptr<timeline_updater> const &timeline_updater, editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<project_editor>(
         new project_editor{file_info, project_level->player, file_track, marker_pool, edge_holder, pasteboard, database,
-                           exporter, project_level->dialog_presenter, timing, timeline_updater, editing_status});
+                           exporter, project_level->dialog_presenter, timeline_updater, editing_status});
 }
 
 project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
@@ -53,7 +52,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
                                std::shared_ptr<database_for_project_editor> const &database,
                                std::shared_ptr<exporter_for_project_editor> const &exporter,
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
-                               std::shared_ptr<timing_for_project_editor> const &timing,
                                std::shared_ptr<timeline_updater> const &timeline_updater,
                                editing_status const *editing_status)
     : _file_info(file_info),
@@ -65,7 +63,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
       _database(database),
       _exporter(exporter),
       _dialog_presenter(dialog_presenter),
-      _timing(timing),
       _timeline_updater(timeline_updater),
       _editing_status(editing_status) {
     this->_file_track
@@ -305,38 +302,6 @@ void project_editor::erase_and_offset() {
 
     if (auto const &module = previous_module) {
         this->_player->seek(module->range.next_frame());
-    }
-}
-
-bool project_editor::can_return_to_zero() const {
-    return this->_player->current_frame() != 0;
-}
-
-void project_editor::return_to_zero() {
-    if (!this->can_return_to_zero()) {
-        return;
-    }
-
-    this->_player->seek(0);
-}
-
-bool project_editor::can_go_to_marker(std::size_t const marker_idx) const {
-    auto const &marker_pool = this->_marker_pool;
-    if (auto const marker = marker_pool->marker_at(marker_idx)) {
-        return this->_player->current_frame() != marker->frame;
-    } else {
-        return false;
-    }
-}
-
-void project_editor::go_to_marker(std::size_t const marker_idx) {
-    if (!this->can_go_to_marker(marker_idx)) {
-        return;
-    }
-
-    auto const &marker_pool = this->_marker_pool;
-    if (auto const marker = marker_pool->marker_at(marker_idx)) {
-        this->_player->seek(marker->frame);
     }
 }
 

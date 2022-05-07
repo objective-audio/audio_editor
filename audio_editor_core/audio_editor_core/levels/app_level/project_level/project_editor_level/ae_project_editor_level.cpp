@@ -66,8 +66,8 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
                                                this->editing_status.get())),
       module_renaming_launcher(module_renaming_launcher::make_shared(project_id, this->editing_status.get())),
       editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_holder,
-                                         this->pasteboard, this->database, this->exporter, this->timing,
-                                         this->timeline_updater, this->editing_status.get())),
+                                         this->pasteboard, this->database, this->exporter, this->timeline_updater,
+                                         this->editing_status.get())),
       responder(project_editor_responder::make_shared(
           this->editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
           this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),
