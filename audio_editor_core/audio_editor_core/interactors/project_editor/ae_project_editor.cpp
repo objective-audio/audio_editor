@@ -30,29 +30,21 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor> project_editor::make_shared(
-    project_id const &project_id, ae::file_info const &file_info,
-    std::shared_ptr<file_track_for_project_editor> const &file_track,
-    std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
-    std::shared_ptr<edge_holder_for_project_editor> const &edge_holder,
-    std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
-    std::shared_ptr<database_for_project_editor> const &database,
-    std::shared_ptr<exporter_for_project_editor> const &exporter,
-    std::shared_ptr<timeline_updater> const &timeline_updater, editing_status const *editing_status) {
+    project_id const &project_id, ae::file_info const &file_info, file_track_for_project_editor *file_track,
+    marker_pool_for_project_editor *marker_pool, edge_holder_for_project_editor *edge_holder,
+    pasteboard_for_project_editor *pasteboard, database_for_project_editor *database,
+    exporter_for_project_editor *exporter, timeline_updater *timeline_updater, editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<project_editor>(
-        new project_editor{file_info, project_level->player, file_track, marker_pool, edge_holder, pasteboard, database,
-                           exporter, project_level->dialog_presenter, timeline_updater, editing_status});
+    return std::shared_ptr<project_editor>(new project_editor{
+        file_info, project_level->player.get(), file_track, marker_pool, edge_holder, pasteboard, database, exporter,
+        project_level->dialog_presenter.get(), timeline_updater, editing_status});
 }
 
-project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
-                               std::shared_ptr<file_track_for_project_editor> const &file_track,
-                               std::shared_ptr<marker_pool_for_project_editor> const &marker_pool,
-                               std::shared_ptr<edge_holder_for_project_editor> const &edge_holder,
-                               std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
-                               std::shared_ptr<database_for_project_editor> const &database,
-                               std::shared_ptr<exporter_for_project_editor> const &exporter,
-                               std::shared_ptr<dialog_presenter> const &dialog_presenter,
-                               std::shared_ptr<timeline_updater> const &timeline_updater,
+project_editor::project_editor(ae::file_info const &file_info, player_for_project_editor *player,
+                               file_track_for_project_editor *file_track, marker_pool_for_project_editor *marker_pool,
+                               edge_holder_for_project_editor *edge_holder, pasteboard_for_project_editor *pasteboard,
+                               database_for_project_editor *database, exporter_for_project_editor *exporter,
+                               dialog_presenter *dialog_presenter, timeline_updater *timeline_updater,
                                editing_status const *editing_status)
     : _file_info(file_info),
       _player(player),

@@ -65,8 +65,9 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       marker_editor(marker_editor::make_shared(project_id, this->marker_pool.get(), this->database.get(),
                                                this->editing_status.get())),
       module_renaming_launcher(module_renaming_launcher::make_shared(project_id, this->editing_status.get())),
-      editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_holder,
-                                         this->pasteboard, this->database, this->exporter, this->timeline_updater,
+      editor(project_editor::make_shared(project_id, file_info, this->file_track.get(), this->marker_pool.get(),
+                                         this->edge_holder.get(), this->pasteboard.get(), this->database.get(),
+                                         this->exporter.get(), this->timeline_updater.get(),
                                          this->editing_status.get())),
       responder(project_editor_responder::make_shared(
           this->editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
