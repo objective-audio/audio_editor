@@ -15,11 +15,9 @@ class editing_status;
 
 struct project_editor final {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
-        project_id const &project_id, ae::file_info const &, std::shared_ptr<file_track_for_project_editor> const &,
-        std::shared_ptr<marker_pool_for_project_editor> const &,
-        std::shared_ptr<edge_holder_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
-        std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
-        std::shared_ptr<timeline_updater> const &, editing_status const *);
+        project_id const &project_id, ae::file_info const &, file_track_for_project_editor *,
+        marker_pool_for_project_editor *, edge_holder_for_project_editor *, pasteboard_for_project_editor *,
+        database_for_project_editor *, exporter_for_project_editor *, timeline_updater *, editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -53,27 +51,23 @@ struct project_editor final {
    private:
     identifier const _responder_id;
     ae::file_info const _file_info;
-    std::shared_ptr<player_for_project_editor> const _player;
-    std::shared_ptr<file_track_for_project_editor> const _file_track;
-    std::shared_ptr<marker_pool_for_project_editor> const _marker_pool;
-    std::shared_ptr<edge_holder_for_project_editor> const _edge_holder;
-    std::shared_ptr<pasteboard_for_project_editor> const _pasteboard;
-    std::shared_ptr<database_for_project_editor> const _database;
-    std::shared_ptr<exporter_for_project_editor> const _exporter;
-    std::shared_ptr<dialog_presenter> const _dialog_presenter;
-    std::shared_ptr<timeline_updater> const _timeline_updater;
+    player_for_project_editor *const _player;
+    file_track_for_project_editor *const _file_track;
+    marker_pool_for_project_editor *const _marker_pool;
+    edge_holder_for_project_editor *const _edge_holder;
+    pasteboard_for_project_editor *const _pasteboard;
+    database_for_project_editor *const _database;
+    exporter_for_project_editor *const _exporter;
+    dialog_presenter *const _dialog_presenter;
+    timeline_updater *const _timeline_updater;
     editing_status const *const _editing_status;
 
     observing::canceller_pool _pool;
 
-    project_editor(ae::file_info const &, std::shared_ptr<player_for_project_editor> const &,
-                   std::shared_ptr<file_track_for_project_editor> const &,
-                   std::shared_ptr<marker_pool_for_project_editor> const &,
-                   std::shared_ptr<edge_holder_for_project_editor> const &,
-                   std::shared_ptr<pasteboard_for_project_editor> const &,
-                   std::shared_ptr<database_for_project_editor> const &,
-                   std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<dialog_presenter> const &,
-                   std::shared_ptr<timeline_updater> const &, editing_status const *);
+    project_editor(ae::file_info const &, player_for_project_editor *, file_track_for_project_editor *,
+                   marker_pool_for_project_editor *, edge_holder_for_project_editor *, pasteboard_for_project_editor *,
+                   database_for_project_editor *, exporter_for_project_editor *, dialog_presenter *, timeline_updater *,
+                   editing_status const *);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;
