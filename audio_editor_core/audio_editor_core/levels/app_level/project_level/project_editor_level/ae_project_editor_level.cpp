@@ -71,6 +71,6 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       responder(project_editor_responder::make_shared(
           this->editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
           this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),
-          this->module_renaming_launcher.get())) {
+          this->module_renaming_launcher.get(), this->timing.get())) {
     this->launcher->launch();
 }

@@ -190,20 +190,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
         ->add_to(this->_pool);
 }
 
-void project_editor::rotate_timing_fraction() {
-    switch (this->_timing->fraction_kind()) {
-        case timing_fraction_kind::sample:
-            this->_timing->set_fraction_kind(timing_fraction_kind::milisecond);
-            break;
-        case timing_fraction_kind::milisecond:
-            this->_timing->set_fraction_kind(timing_fraction_kind::frame30);
-            break;
-        case timing_fraction_kind::frame30:
-            this->_timing->set_fraction_kind(timing_fraction_kind::sample);
-            break;
-    }
-}
-
 bool project_editor::can_split() const {
     if (!this->_editing_status->can_editing()) {
         return false;

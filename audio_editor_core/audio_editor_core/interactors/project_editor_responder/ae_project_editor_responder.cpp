@@ -13,6 +13,7 @@
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
+#include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -20,17 +21,17 @@ using namespace yas::ae;
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
     project_editor *editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
     edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
-    module_renaming_launcher *module_renaming_launcher) {
+    module_renaming_launcher *module_renaming_launcher, timing *timing) {
     return std::shared_ptr<project_editor_responder>(
         new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher,
-                                     marker_editor, module_renaming_launcher});
+                                     marker_editor, module_renaming_launcher, timing});
 }
 
 project_editor_responder::project_editor_responder(project_editor *editor, playing_toggler *toggler,
                                                    nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
                                                    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
                                                    marker_editor *marker_editor,
-                                                   module_renaming_launcher *module_renaming_launcher)
+                                                   module_renaming_launcher *module_renaming_launcher, timing *timing)
     : _editor(editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
@@ -39,7 +40,8 @@ project_editor_responder::project_editor_responder(project_editor *editor, playi
       _edge_editor(edge_editor),
       _time_editor_launcher(time_editor_launcher),
       _marker_editor(marker_editor),
-      _module_renaming_launcher(module_renaming_launcher) {
+      _module_renaming_launcher(module_renaming_launcher),
+      _timing(timing) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -134,7 +136,7 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     this->_nudge_settings->rotate_previous_unit();
                     break;
                 case action_kind::rotate_timing_fraction:
-                    this->_editor->rotate_timing_fraction();
+                    this->_timing->rotate_fraction();
                     break;
                 case action_kind::jump_previous:
                     this->_jumper->jump_to_previous_edge();

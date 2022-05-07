@@ -23,8 +23,6 @@ struct project_editor final {
         std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<timeline_updater> const &,
         editing_status const *);
 
-    void rotate_timing_fraction();
-
     [[nodiscard]] bool can_split() const;
     void split();
     void drop_head();
