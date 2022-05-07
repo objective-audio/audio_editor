@@ -38,13 +38,11 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
     std::shared_ptr<timing_for_project_editor> const &timing,
-    std::shared_ptr<time_editor_level_router> const &time_editor_level_router,
     std::shared_ptr<timeline_updater> const &timeline_updater) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<project_editor>(
-        new project_editor{file_info, project_level->player, file_track, marker_pool, edge_holder, pasteboard, database,
-                           exporter, project_level->dialog_presenter, project_level->sheet_presenter, timing,
-                           project_level->responder_stack, time_editor_level_router, timeline_updater});
+    return std::shared_ptr<project_editor>(new project_editor{
+        file_info, project_level->player, file_track, marker_pool, edge_holder, pasteboard, database, exporter,
+        project_level->dialog_presenter, project_level->sheet_presenter, timing, timeline_updater});
 }
 
 project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
@@ -57,8 +55,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<sheet_presenter> const &sheet_presenter,
                                std::shared_ptr<timing_for_project_editor> const &timing,
-                               std::shared_ptr<responder_stack> const &responder_stack,
-                               std::shared_ptr<time_editor_level_router> const &time_editor_level_router,
                                std::shared_ptr<timeline_updater> const &timeline_updater)
     : _file_info(file_info),
       _player(player),
@@ -71,8 +67,6 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
       _dialog_presenter(dialog_presenter),
       _sheet_presenter(sheet_presenter),
       _timing(timing),
-      _responder_stack(responder_stack),
-      _time_editor_level_router(time_editor_level_router),
       _timeline_updater(timeline_updater) {
     this->_file_track
         ->observe_event([this](file_track_event const &event) {
@@ -555,39 +549,6 @@ void project_editor::begin_module_renaming(std::string const &range) {
     }
 
     this->_sheet_presenter->notify_event({.kind = sheet_kind::module_name, .value = range});
-}
-
-bool project_editor::can_begin_time_editing() const {
-    return this->_time_editor_level_router->level() == nullptr;
-}
-
-bool project_editor::can_select_time_unit() const {
-    return this->can_begin_time_editing();
-}
-
-void project_editor::begin_time_editing(std::optional<std::size_t> const unit_idx) {
-    if (!this->can_begin_time_editing()) {
-        return;
-    }
-
-    auto const current_frame = this->_player->current_frame();
-    auto const components = this->_timing->components(current_frame);
-
-    this->_time_editor_level_router->add_level(components.raw_components(), unit_idx);
-
-    auto const &level = this->_time_editor_level_router->level();
-
-    if (auto const responder_stack = this->_responder_stack.lock()) {
-        responder_stack->push_responder(level->instance_id, level->responder);
-    }
-}
-
-void project_editor::select_time_unit(std::size_t const unit_idx) {
-    this->begin_time_editing(unit_idx);
-
-    if (auto const &level = this->_time_editor_level_router->level()) {
-        level->editor->set_unit_idx(unit_idx);
-    }
 }
 
 #pragma mark - private
