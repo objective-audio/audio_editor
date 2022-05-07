@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_edge_holder.h>
+#include <audio_editor_core/ae_editing_status.h>
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_file_track.h>
@@ -37,12 +38,12 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     std::shared_ptr<pasteboard_for_project_editor> const &pasteboard,
     std::shared_ptr<database_for_project_editor> const &database,
     std::shared_ptr<exporter_for_project_editor> const &exporter,
-    std::shared_ptr<timing_for_project_editor> const &timing,
-    std::shared_ptr<timeline_updater> const &timeline_updater) {
+    std::shared_ptr<timing_for_project_editor> const &timing, std::shared_ptr<timeline_updater> const &timeline_updater,
+    editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<project_editor>(new project_editor{
         file_info, project_level->player, file_track, marker_pool, edge_holder, pasteboard, database, exporter,
-        project_level->dialog_presenter, project_level->sheet_presenter, timing, timeline_updater});
+        project_level->dialog_presenter, project_level->sheet_presenter, timing, timeline_updater, editing_status});
 }
 
 project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<player_for_project_editor> const &player,
@@ -55,7 +56,8 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
                                std::shared_ptr<dialog_presenter> const &dialog_presenter,
                                std::shared_ptr<sheet_presenter> const &sheet_presenter,
                                std::shared_ptr<timing_for_project_editor> const &timing,
-                               std::shared_ptr<timeline_updater> const &timeline_updater)
+                               std::shared_ptr<timeline_updater> const &timeline_updater,
+                               editing_status const *editing_status)
     : _file_info(file_info),
       _player(player),
       _file_track(file_track),
@@ -67,7 +69,8 @@ project_editor::project_editor(ae::file_info const &file_info, std::shared_ptr<p
       _dialog_presenter(dialog_presenter),
       _sheet_presenter(sheet_presenter),
       _timing(timing),
-      _timeline_updater(timeline_updater) {
+      _timeline_updater(timeline_updater),
+      _editing_status(editing_status) {
     this->_file_track
         ->observe_event([this](file_track_event const &event) {
             switch (event.type) {
@@ -202,7 +205,7 @@ void project_editor::rotate_timing_fraction() {
 }
 
 bool project_editor::can_split() const {
-    if (!this->_can_editing()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 
@@ -281,7 +284,7 @@ void project_editor::drop_tail_and_offset() {
 }
 
 bool project_editor::can_erase() const {
-    if (!this->_can_editing()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 
@@ -355,7 +358,7 @@ void project_editor::go_to_marker(std::size_t const marker_idx) {
 }
 
 bool project_editor::can_undo() const {
-    if (!this->_can_editing()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 
@@ -371,7 +374,7 @@ void project_editor::undo() {
 }
 
 bool project_editor::can_redo() const {
-    if (!this->_can_editing()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 
@@ -399,7 +402,7 @@ void project_editor::select_file_for_export() {
 }
 
 bool project_editor::can_export_to_file() const {
-    if (!this->_can_editing()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 
@@ -447,7 +450,7 @@ void project_editor::cut_and_offset() {
 }
 
 bool project_editor::can_copy() const {
-    if (!this->_can_editing()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 
@@ -472,7 +475,7 @@ void project_editor::copy() {
 }
 
 bool project_editor::can_paste() const {
-    if (!this->_can_editing()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 
@@ -516,7 +519,7 @@ void project_editor::paste_and_offset() {
 }
 
 bool project_editor::can_begin_module_renaming() const {
-    if (!this->_can_editing()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 
@@ -529,10 +532,4 @@ void project_editor::begin_module_renaming(std::string const &range) {
     }
 
     this->_sheet_presenter->notify_event({.kind = sheet_kind::module_name, .value = range});
-}
-
-#pragma mark - private
-
-bool project_editor::_can_editing() const {
-    return !this->_exporter->is_exporting();
 }

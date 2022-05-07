@@ -33,6 +33,7 @@ class project_editor_responder;
 class project_editor_launcher;
 class time_editor_launcher;
 class marker_editor;
+class editing_status;
 
 struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id,
@@ -49,6 +50,7 @@ struct project_editor_level final {
     std::shared_ptr<pasteboard> const pasteboard;
     std::shared_ptr<database> const database;
     std::shared_ptr<exporter> const exporter;
+    std::shared_ptr<editing_status> const editing_status;
     std::shared_ptr<playing_toggler> const playing_toggler;
     std::shared_ptr<time_editor_level_router> const time_editor_level_router;
     std::shared_ptr<timeline_updater> const timeline_updater;

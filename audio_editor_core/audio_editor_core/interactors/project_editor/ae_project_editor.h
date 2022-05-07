@@ -12,6 +12,7 @@ namespace yas::ae {
 class sheet_presenter;
 class dialog_presenter;
 class timeline_updater;
+class editing_status;
 
 struct project_editor final {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
@@ -19,7 +20,8 @@ struct project_editor final {
         std::shared_ptr<marker_pool_for_project_editor> const &,
         std::shared_ptr<edge_holder_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
         std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
-        std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<timeline_updater> const &);
+        std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<timeline_updater> const &,
+        editing_status const *);
 
     void rotate_timing_fraction();
 
@@ -75,6 +77,7 @@ struct project_editor final {
     std::shared_ptr<sheet_presenter> const _sheet_presenter;
     std::shared_ptr<timing_for_project_editor> const _timing;
     std::shared_ptr<timeline_updater> const _timeline_updater;
+    editing_status const *const _editing_status;
 
     observing::canceller_pool _pool;
 
@@ -86,7 +89,7 @@ struct project_editor final {
                    std::shared_ptr<database_for_project_editor> const &,
                    std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<dialog_presenter> const &,
                    std::shared_ptr<sheet_presenter> const &, std::shared_ptr<timing_for_project_editor> const &,
-                   std::shared_ptr<timeline_updater> const &);
+                   std::shared_ptr<timeline_updater> const &, editing_status const *);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;
@@ -97,6 +100,5 @@ struct project_editor final {
     [[nodiscard]] std::optional<frame_index_t> _next_jumpable_frame() const;
     [[nodiscard]] std::optional<frame_index_t> _first_edge() const;
     [[nodiscard]] std::optional<frame_index_t> _last_edge() const;
-    [[nodiscard]] bool _can_editing() const;
 };
 }  // namespace yas::ae
