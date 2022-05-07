@@ -10,28 +10,28 @@
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_time_editor_launcher.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(project_editor *editor,
-                                                                                playing_toggler *toggler,
-                                                                                nudge_settings *nudge_settings,
-                                                                                nudger *nudger, jumper *jumper,
-                                                                                edge_editor *edge_editor) {
-    return std::shared_ptr<project_editor_responder>(
-        new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper, edge_editor});
+std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
+    project_editor *editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
+    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher) {
+    return std::shared_ptr<project_editor_responder>(new project_editor_responder{
+        editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher});
 }
 
 project_editor_responder::project_editor_responder(project_editor *editor, playing_toggler *toggler,
                                                    nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
-                                                   edge_editor *edge_editor)
+                                                   edge_editor *edge_editor, time_editor_launcher *time_editor_launcher)
     : _editor(editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
       _nudger(nudger),
       _jumper(jumper),
-      _edge_editor(edge_editor) {
+      _edge_editor(edge_editor),
+      _time_editor_launcher(time_editor_launcher) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -193,10 +193,10 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     break;
 
                 case action_kind::begin_time_editing:
-                    this->_editor->begin_time_editing(std::nullopt);
+                    this->_time_editor_launcher->begin_time_editing(std::nullopt);
                     break;
                 case action_kind::select_time_unit:
-                    this->_editor->select_time_unit(std::stoi(action.value));
+                    this->_time_editor_launcher->begin_time_editing(std::stoi(action.value));
                     break;
 
                     // 以下、time_editor用
@@ -284,14 +284,12 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return to_responding(this->_editor->can_paste());
 
         case action_kind::begin_module_renaming:
-            return to_responding(this->_editor->can_begin_time_editing());
+            return to_responding(this->_time_editor_launcher->can_begin_time_editing());
 
-        case action_kind::cancel_time_editing:
-            return to_responding(this->_editor->can_end_time_editing());
         case action_kind::begin_time_editing:
-            return to_responding(this->_editor->can_begin_time_editing());
+            return to_responding(this->_time_editor_launcher->can_begin_time_editing());
         case action_kind::select_time_unit:
-            return to_responding(this->_editor->can_select_time_unit());
+            return to_responding(this->_time_editor_launcher->can_begin_time_editing());
 
         case action_kind::set_begin_edge:
             return to_responding(this->_edge_editor->can_set_begin());
@@ -300,6 +298,7 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
 
             // 以下、time_editor用
         case action_kind::finish_time_editing:
+        case action_kind::cancel_time_editing:
         case action_kind::move_to_previous_time_unit:
         case action_kind::move_to_next_time_unit:
         case action_kind::input_time:

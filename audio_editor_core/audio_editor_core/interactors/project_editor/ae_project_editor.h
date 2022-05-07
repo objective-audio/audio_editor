@@ -9,9 +9,6 @@
 #include <audio_editor_core/ae_responder.h>
 
 namespace yas::ae {
-class time_editor;
-class time_editor_level_router;
-class responder_stack;
 class sheet_presenter;
 class dialog_presenter;
 class timeline_updater;
@@ -22,8 +19,7 @@ struct project_editor final {
         std::shared_ptr<marker_pool_for_project_editor> const &,
         std::shared_ptr<edge_holder_for_project_editor> const &, std::shared_ptr<pasteboard_for_project_editor> const &,
         std::shared_ptr<database_for_project_editor> const &, std::shared_ptr<exporter_for_project_editor> const &,
-        std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<time_editor_level_router> const &,
-        std::shared_ptr<timeline_updater> const &);
+        std::shared_ptr<timing_for_project_editor> const &, std::shared_ptr<timeline_updater> const &);
 
     void rotate_timing_fraction();
 
@@ -68,23 +64,6 @@ struct project_editor final {
     [[nodiscard]] bool can_begin_module_renaming() const;
     void begin_module_renaming(std::string const &range);
 
-    [[nodiscard]] bool can_begin_time_editing() const;
-    [[nodiscard]] bool can_end_time_editing() const;
-    [[nodiscard]] bool can_input_time_number() const;
-    [[nodiscard]] bool can_select_time_unit() const;
-    void begin_time_editing(std::optional<std::size_t> const unit_idx);
-    void finish_time_editing();
-    void cancel_time_editing();
-    void input_time_number(uint32_t const);
-    void delete_time_number();
-    void increment_time_number();
-    void decrement_time_number();
-    void move_to_previous_time_unit();
-    void move_to_next_time_unit();
-    void change_time_sign_to_plus();
-    void change_time_sign_to_minus();
-    void select_time_unit(std::size_t const);
-
    private:
     identifier const _responder_id;
     ae::file_info const _file_info;
@@ -98,8 +77,6 @@ struct project_editor final {
     std::shared_ptr<dialog_presenter> const _dialog_presenter;
     std::shared_ptr<sheet_presenter> const _sheet_presenter;
     std::shared_ptr<timing_for_project_editor> const _timing;
-    std::weak_ptr<responder_stack> const _responder_stack;
-    std::shared_ptr<time_editor_level_router> const _time_editor_level_router;
     std::shared_ptr<timeline_updater> const _timeline_updater;
 
     observing::canceller_pool _pool;
@@ -112,7 +89,6 @@ struct project_editor final {
                    std::shared_ptr<database_for_project_editor> const &,
                    std::shared_ptr<exporter_for_project_editor> const &, std::shared_ptr<dialog_presenter> const &,
                    std::shared_ptr<sheet_presenter> const &, std::shared_ptr<timing_for_project_editor> const &,
-                   std::shared_ptr<responder_stack> const &, std::shared_ptr<time_editor_level_router> const &,
                    std::shared_ptr<timeline_updater> const &);
 
     project_editor(project_editor const &) = delete;

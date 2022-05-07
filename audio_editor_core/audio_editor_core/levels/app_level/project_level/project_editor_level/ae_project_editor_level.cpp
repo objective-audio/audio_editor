@@ -20,6 +20,7 @@
 #include <audio_editor_core/ae_project_editor_launcher.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_time_editor_launcher.h>
 #include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
@@ -55,11 +56,13 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_updater.get(),
                                                     this->database.get(), this->file_track.get(),
                                                     this->edge_holder.get())),
+      time_editor_launcher(
+          time_editor_launcher::make_shared(project_id, this->timing.get(), this->time_editor_level_router.get())),
       editor(project_editor::make_shared(project_id, file_info, this->file_track, this->marker_pool, this->edge_holder,
                                          this->pasteboard, this->database, this->exporter, this->timing,
-                                         this->time_editor_level_router, this->timeline_updater)),
-      responder(project_editor_responder::make_shared(this->editor.get(), this->playing_toggler.get(),
-                                                      this->nudge_settings.get(), this->nudger.get(),
-                                                      this->jumper.get(), this->edge_editor.get())) {
+                                         this->timeline_updater)),
+      responder(project_editor_responder::make_shared(
+          this->editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
+          this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get())) {
     this->launcher->launch();
 }

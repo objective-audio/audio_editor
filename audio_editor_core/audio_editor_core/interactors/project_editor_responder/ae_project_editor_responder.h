@@ -13,11 +13,12 @@ class nudge_settings;
 class nudger;
 class jumper;
 class edge_editor;
+class time_editor_launcher;
 
 struct project_editor_responder final : responder {
     [[nodiscard]] static std::shared_ptr<project_editor_responder> make_shared(project_editor *, playing_toggler *,
                                                                                nudge_settings *, nudger *, jumper *,
-                                                                               edge_editor *);
+                                                                               edge_editor *, time_editor_launcher *);
 
     std::optional<ae::action> to_action(ae::key const &) override;
     void handle_action(ae::action const &) override;
@@ -31,7 +32,9 @@ struct project_editor_responder final : responder {
     nudger *const _nudger;
     jumper *const _jumper;
     edge_editor *const _edge_editor;
+    time_editor_launcher *const _time_editor_launcher;
 
-    project_editor_responder(project_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *);
+    project_editor_responder(project_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
+                             time_editor_launcher *);
 };
 }  // namespace yas::ae
