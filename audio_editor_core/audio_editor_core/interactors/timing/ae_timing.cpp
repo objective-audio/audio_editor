@@ -27,6 +27,20 @@ void timing::set_fraction_kind(timing_fraction_kind const kind) {
     this->_fraction_kind->set_value(kind);
 }
 
+void timing::rotate_fraction() {
+    switch (this->fraction_kind()) {
+        case timing_fraction_kind::sample:
+            this->set_fraction_kind(timing_fraction_kind::milisecond);
+            break;
+        case timing_fraction_kind::milisecond:
+            this->set_fraction_kind(timing_fraction_kind::frame30);
+            break;
+        case timing_fraction_kind::frame30:
+            this->set_fraction_kind(timing_fraction_kind::sample);
+            break;
+    }
+}
+
 timing_fraction_kind timing::fraction_kind() const {
     return this->_fraction_kind->value();
 }

@@ -80,6 +80,40 @@ void jumper::jump_to_end() {
     }
 }
 
+bool jumper::can_return_to_zero() const {
+    return this->_player->current_frame() != 0;
+}
+
+void jumper::return_to_zero() {
+    if (!this->can_return_to_zero()) {
+        return;
+    }
+
+    this->_player->seek(0);
+}
+
+bool jumper::can_go_to_marker(std::size_t const marker_idx) const {
+    auto const &marker_pool = this->_marker_pool;
+    if (auto const marker = marker_pool->marker_at(marker_idx)) {
+        return this->_player->current_frame() != marker->frame;
+    } else {
+        return false;
+    }
+}
+
+void jumper::go_to_marker(std::size_t const marker_idx) {
+    if (!this->can_go_to_marker(marker_idx)) {
+        return;
+    }
+
+    auto const &marker_pool = this->_marker_pool;
+    if (auto const marker = marker_pool->marker_at(marker_idx)) {
+        this->_player->seek(marker->frame);
+    }
+}
+
+#pragma mark - Private
+
 std::optional<frame_index_t> jumper::_previous_jumpable_frame() const {
     frame_index_t const current_frame = this->_player->current_frame();
 

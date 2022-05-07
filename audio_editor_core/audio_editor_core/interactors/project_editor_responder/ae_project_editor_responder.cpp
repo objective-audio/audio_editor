@@ -13,6 +13,7 @@
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
+#include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -20,17 +21,17 @@ using namespace yas::ae;
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
     project_editor *editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
     edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
-    module_renaming_launcher *module_renaming_launcher) {
+    module_renaming_launcher *module_renaming_launcher, timing *timing) {
     return std::shared_ptr<project_editor_responder>(
         new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher,
-                                     marker_editor, module_renaming_launcher});
+                                     marker_editor, module_renaming_launcher, timing});
 }
 
 project_editor_responder::project_editor_responder(project_editor *editor, playing_toggler *toggler,
                                                    nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
                                                    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
                                                    marker_editor *marker_editor,
-                                                   module_renaming_launcher *module_renaming_launcher)
+                                                   module_renaming_launcher *module_renaming_launcher, timing *timing)
     : _editor(editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
@@ -39,7 +40,8 @@ project_editor_responder::project_editor_responder(project_editor *editor, playi
       _edge_editor(edge_editor),
       _time_editor_launcher(time_editor_launcher),
       _marker_editor(marker_editor),
-      _module_renaming_launcher(module_renaming_launcher) {
+      _module_renaming_launcher(module_renaming_launcher),
+      _timing(timing) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -134,7 +136,7 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     this->_nudge_settings->rotate_previous_unit();
                     break;
                 case action_kind::rotate_timing_fraction:
-                    this->_editor->rotate_timing_fraction();
+                    this->_timing->rotate_fraction();
                     break;
                 case action_kind::jump_previous:
                     this->_jumper->jump_to_previous_edge();
@@ -170,10 +172,10 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     this->_edge_editor->set_end();
                     break;
                 case action_kind::return_to_zero:
-                    this->_editor->return_to_zero();
+                    this->_jumper->return_to_zero();
                     break;
                 case action_kind::go_to_marker:
-                    this->_editor->go_to_marker(std::stoi(action.value));
+                    this->_jumper->go_to_marker(std::stoi(action.value));
                     break;
                 case action_kind::undo:
                     this->_editor->undo();
@@ -270,9 +272,9 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return to_responding(this->_marker_editor->can_insert_marker());
 
         case action_kind::return_to_zero:
-            return to_responding(this->_editor->can_return_to_zero());
+            return to_responding(this->_jumper->can_return_to_zero());
         case action_kind::go_to_marker:
-            return to_responding(this->_editor->can_go_to_marker(std::stoi(action.value)));
+            return to_responding(this->_jumper->can_go_to_marker(std::stoi(action.value)));
 
         case action_kind::undo:
             return to_responding(this->_editor->can_undo());

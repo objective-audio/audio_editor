@@ -31,6 +31,12 @@ struct jumper final {
     void jump_to_beginning();
     void jump_to_end();
 
+    [[nodiscard]] bool can_return_to_zero() const;
+    void return_to_zero();
+
+    [[nodiscard]] bool can_go_to_marker(std::size_t const) const;
+    void go_to_marker(std::size_t const);
+
    private:
     player *_player;
     file_track const *const _file_track;

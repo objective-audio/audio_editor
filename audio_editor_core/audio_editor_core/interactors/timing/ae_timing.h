@@ -16,6 +16,7 @@ struct timing final : timing_for_project_editor {
     [[nodiscard]] sample_rate_t sample_rate() const override;
 
     void set_fraction_kind(timing_fraction_kind const) override;
+    void rotate_fraction();
     [[nodiscard]] timing_fraction_kind fraction_kind() const override;
     [[nodiscard]] observing::syncable observe_fraction_kind(
         std::function<void(timing_fraction_kind const &)> &&) override;
