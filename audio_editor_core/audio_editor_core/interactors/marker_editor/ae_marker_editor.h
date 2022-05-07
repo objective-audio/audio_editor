@@ -12,11 +12,11 @@ namespace yas::ae {
 class player;
 class marker_pool;
 class database;
-class exporter;
+class editing_status;
 
 struct marker_editor final {
     [[nodiscard]] static std::shared_ptr<marker_editor> make_shared(project_id const &, marker_pool *, database *,
-                                                                    exporter const *);
+                                                                    editing_status const *);
 
     [[nodiscard]] bool can_insert_marker() const;
     void insert_marker();
@@ -25,10 +25,8 @@ struct marker_editor final {
     player const *const _player;
     marker_pool *const _marker_pool;
     database *const _database;
-    exporter const *const _exporter;
+    editing_status const *const _editing_status;
 
-    marker_editor(player const *, marker_pool *, database *, exporter const *);
-
-    bool _can_editing() const;
+    marker_editor(player const *, marker_pool *, database *, editing_status const *);
 };
 }  // namespace yas::ae
