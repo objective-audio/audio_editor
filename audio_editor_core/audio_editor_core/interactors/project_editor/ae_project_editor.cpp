@@ -322,26 +322,6 @@ void project_editor::erase_and_offset() {
     }
 }
 
-bool project_editor::can_insert_marker() const {
-    if (!this->_can_editing()) {
-        return false;
-    }
-
-    auto const current_frame = this->_player->current_frame();
-    return this->_marker_pool->markers().count(current_frame) == 0;
-}
-
-void project_editor::insert_marker() {
-    if (!this->can_insert_marker()) {
-        return;
-    }
-
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
-        this->_marker_pool->insert_marker(marker{.frame = current_frame});
-    });
-}
-
 bool project_editor::can_return_to_zero() const {
     return this->_player->current_frame() != 0;
 }

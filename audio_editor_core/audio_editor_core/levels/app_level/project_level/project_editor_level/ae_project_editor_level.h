@@ -32,6 +32,7 @@ class project_editor;
 class project_editor_responder;
 class project_editor_launcher;
 class time_editor_launcher;
+class marker_editor;
 
 struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id,
@@ -57,6 +58,7 @@ struct project_editor_level final {
     std::shared_ptr<jumper> const jumper;
     std::shared_ptr<project_editor_launcher> const launcher;
     std::shared_ptr<time_editor_launcher> const time_editor_launcher;
+    std::shared_ptr<marker_editor> const marker_editor;
     std::shared_ptr<project_editor> const editor;
     std::shared_ptr<project_editor_responder> const responder;
 

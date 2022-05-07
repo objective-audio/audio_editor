@@ -34,9 +34,6 @@ struct project_editor final {
     void erase();
     void erase_and_offset();
 
-    [[nodiscard]] bool can_insert_marker() const;
-    void insert_marker();
-
     [[nodiscard]] bool can_return_to_zero() const;
     void return_to_zero();
 
