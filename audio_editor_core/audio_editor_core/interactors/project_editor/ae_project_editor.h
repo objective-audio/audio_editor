@@ -60,9 +60,6 @@ struct project_editor final {
     [[nodiscard]] bool can_paste() const;
     void paste_and_offset();
 
-    [[nodiscard]] bool can_begin_module_renaming() const;
-    void begin_module_renaming(std::string const &range);
-
    private:
     identifier const _responder_id;
     ae::file_info const _file_info;

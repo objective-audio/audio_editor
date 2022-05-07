@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_editor.h>
+#include <audio_editor_core/ae_module_renaming_launcher.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_playing_toggler.h>
@@ -18,15 +19,18 @@ using namespace yas::ae;
 
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
     project_editor *editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
-    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor) {
-    return std::shared_ptr<project_editor_responder>(new project_editor_responder{
-        editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher, marker_editor});
+    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
+    module_renaming_launcher *module_renaming_launcher) {
+    return std::shared_ptr<project_editor_responder>(
+        new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher,
+                                     marker_editor, module_renaming_launcher});
 }
 
 project_editor_responder::project_editor_responder(project_editor *editor, playing_toggler *toggler,
                                                    nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
                                                    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
-                                                   marker_editor *marker_editor)
+                                                   marker_editor *marker_editor,
+                                                   module_renaming_launcher *module_renaming_launcher)
     : _editor(editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
@@ -34,7 +38,8 @@ project_editor_responder::project_editor_responder(project_editor *editor, playi
       _jumper(jumper),
       _edge_editor(edge_editor),
       _time_editor_launcher(time_editor_launcher),
-      _marker_editor(marker_editor) {
+      _marker_editor(marker_editor),
+      _module_renaming_launcher(module_renaming_launcher) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -192,7 +197,7 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     this->_editor->paste_and_offset();
                     break;
                 case action_kind::begin_module_renaming:
-                    this->_editor->begin_module_renaming(action.value);
+                    this->_module_renaming_launcher->begin_module_renaming(action.value);
                     break;
 
                 case action_kind::begin_time_editing:
@@ -287,7 +292,7 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return to_responding(this->_editor->can_paste());
 
         case action_kind::begin_module_renaming:
-            return to_responding(this->_time_editor_launcher->can_begin_time_editing());
+            return to_responding(this->_module_renaming_launcher->can_begin_module_renaming());
 
         case action_kind::begin_time_editing:
             return to_responding(this->_time_editor_launcher->can_begin_time_editing());
