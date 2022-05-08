@@ -10,7 +10,7 @@
 #include <audio_editor_core/ae_window_presenter_dependency.h>
 
 namespace yas::ae {
-struct project_launcher final {
+struct project_launcher final : std::enable_shared_from_this<project_launcher> {
     [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(project_id const &, url const &file_url,
                                                                        project_url_for_project_launcher const *,
                                                                        file_importer_for_project_launcher *,
@@ -22,8 +22,6 @@ struct project_launcher final {
     void launch();
 
    private:
-    std::weak_ptr<project_launcher> _weak_launcher;
-
     project_id const _project_id;
     url const _file_url;
 

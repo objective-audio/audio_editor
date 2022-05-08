@@ -18,7 +18,7 @@ class manager;
 }  // namespace yas::db
 
 namespace yas::ae {
-struct database final : database_for_project_editor {
+struct database final : std::enable_shared_from_this<database>, database_for_project_editor {
     [[nodiscard]] static std::shared_ptr<database> make_shared(url const &db_file_url);
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);
 
@@ -47,7 +47,6 @@ struct database final : database_for_project_editor {
     [[nodiscard]] observing::endable observe_reverted(std::function<void(void)> &&) override;
 
    private:
-    std::weak_ptr<database> _weak_database;
     std::size_t _processing_count = 0;
     std::shared_ptr<db::manager> const _manager;
     db_modules_map _modules;
@@ -61,7 +60,7 @@ struct database final : database_for_project_editor {
 
     database(std::shared_ptr<db::manager> const &);
 
-    void _setup(std::weak_ptr<database>);
+    void _setup();
     void _increment_processing_count();
     void _decrement_processing_count();
 

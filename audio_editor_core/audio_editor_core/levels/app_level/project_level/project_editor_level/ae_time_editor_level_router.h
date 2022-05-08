@@ -22,8 +22,6 @@ struct time_editor_level_router final {
     [[nodiscard]] observing::syncable observe_level(std::function<void(std::shared_ptr<time_editor_level> const &)> &&);
 
    private:
-    std::weak_ptr<time_editor_level_router> _weak_router;
-
     project_id const _project_id;
 
     observing::value::holder_ptr<std::shared_ptr<time_editor_level>> const _level;

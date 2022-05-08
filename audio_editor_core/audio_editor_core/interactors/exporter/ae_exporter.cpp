@@ -13,9 +13,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<exporter> exporter::make_shared() {
-    auto shared = std::shared_ptr<exporter>(new exporter{});
-    shared->_weak_exporter = shared;
-    return shared;
+    return std::shared_ptr<exporter>(new exporter{});
 }
 
 exporter::exporter()
@@ -39,7 +37,7 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
 
     this->_queue->push_back(
         task<std::nullptr_t>::make_shared([timeline = std::move(timeline), format, export_url, range,
-                                           weak_exporter = this->_weak_exporter](auto const &) {
+                                           weak_exporter = this->weak_from_this()](auto const &) {
             assert(!thread::is_main());
 
             exporting_result result{nullptr};

@@ -14,9 +14,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<waveform_mesh_importer> waveform_mesh_importer::make_shared(url const &url) {
-    auto shared = std::shared_ptr<waveform_mesh_importer>(new waveform_mesh_importer{url});
-    shared->_weak_importer = shared;
-    return shared;
+    return std::shared_ptr<waveform_mesh_importer>(new waveform_mesh_importer{url});
 }
 
 waveform_mesh_importer::waveform_mesh_importer(url const &url)
@@ -29,7 +27,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
     this->_task_queue->cancel([&location](auto const &identifier) { return location.identifier == identifier; });
 
     auto const task = yas::task<identifier>::make_shared(
-        [idx, location, url = this->_url, weak_importer = this->_weak_importer](yas::task<identifier> const &task) {
+        [idx, location, url = this->_url, weak_importer = this->weak_from_this()](yas::task<identifier> const &task) {
             if (weak_importer.expired()) {
                 return;
             }
