@@ -57,7 +57,7 @@ struct project_editor_level final {
     std::shared_ptr<editing_status> const editing_status;
     std::shared_ptr<playing_toggler> const playing_toggler;
     std::shared_ptr<time_editor_level_router> const time_editor_level_router;
-    std::shared_ptr<timeline_holder> const timeline_updater;
+    std::shared_ptr<timeline_holder> const timeline_holder;
     std::shared_ptr<nudger> const nudger;
     std::shared_ptr<edge_holder> const edge_holder;
     std::shared_ptr<edge_editor> const edge_editor;

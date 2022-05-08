@@ -30,22 +30,22 @@ using namespace yas::ae;
 std::shared_ptr<project_editor> project_editor::make_shared(
     project_id const &project_id, file_track_for_project_editor *file_track,
     marker_pool_for_project_editor *marker_pool, pasteboard_for_project_editor *pasteboard,
-    database_for_project_editor *database, timeline_holder *timeline_updater, editing_status const *editing_status) {
+    database_for_project_editor *database, timeline_holder *timeline_holder, editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<project_editor>(new project_editor{project_level->player.get(), file_track, marker_pool,
-                                                              pasteboard, database, timeline_updater, editing_status});
+                                                              pasteboard, database, timeline_holder, editing_status});
 }
 
 project_editor::project_editor(player_for_project_editor *player, file_track_for_project_editor *file_track,
                                marker_pool_for_project_editor *marker_pool, pasteboard_for_project_editor *pasteboard,
-                               database_for_project_editor *database, timeline_holder *timeline_updater,
+                               database_for_project_editor *database, timeline_holder *timeline_holder,
                                editing_status const *editing_status)
     : _player(player),
       _file_track(file_track),
       _marker_pool(marker_pool),
       _pasteboard(pasteboard),
       _database(database),
-      _timeline_holder(timeline_updater),
+      _timeline_holder(timeline_holder),
       _editing_status(editing_status) {
     this->_file_track
         ->observe_event([this](file_track_event const &event) {

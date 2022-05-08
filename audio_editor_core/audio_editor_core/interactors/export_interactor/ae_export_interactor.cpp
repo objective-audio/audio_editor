@@ -19,22 +19,22 @@ std::shared_ptr<export_interactor> export_interactor::make_shared(project_id con
                                                                   file_info const &file_info,
                                                                   editing_status const *editing_status,
                                                                   edge_holder const *edge_holder, exporter *exporter,
-                                                                  timeline_holder const *timeline_updater) {
+                                                                  timeline_holder const *timeline_holder) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::make_shared<export_interactor>(file_info, project_level->dialog_presenter.get(), editing_status,
-                                               edge_holder, project_level->player.get(), exporter, timeline_updater);
+                                               edge_holder, project_level->player.get(), exporter, timeline_holder);
 }
 
 export_interactor::export_interactor(file_info const &file_info, dialog_presenter *dialog_presenter,
                                      editing_status const *editing_status, edge_holder const *edge_holder,
-                                     player *player, exporter *exporter, timeline_holder const *timeline_updater)
+                                     player *player, exporter *exporter, timeline_holder const *timeline_holder)
     : _file_info(file_info),
       _dialog_presenter(dialog_presenter),
       _editing_status(editing_status),
       _edge_holder(edge_holder),
       _player(player),
       _exporter(exporter),
-      _timeline_holder(timeline_updater) {
+      _timeline_holder(timeline_holder) {
 }
 
 bool export_interactor::can_select_file_for_export() const {
