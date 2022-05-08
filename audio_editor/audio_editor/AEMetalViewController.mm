@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root_level.h>
-#include <audio_editor_core/ae_ui_root_level_collector.h>
+#include <audio_editor_core/ae_ui_root_level_router.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #include <objc_utils/yas_objc_unowned.h>
 #import "AEMetalView.h"
@@ -43,7 +43,7 @@ using namespace yas::ae;
 }
 
 - (void)dealloc {
-    app_level::global()->ui_root_level_collector->remove_level_for_view_id(self.project_view_id);
+    app_level::global()->ui_root_level_router->remove_level_for_view_id(self.project_view_id);
 }
 
 - (void)setupWithProjectID:(project_id const &)project_id {
@@ -53,9 +53,9 @@ using namespace yas::ae;
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
-    auto const &ui_root_level_collector = app_level::global()->ui_root_level_collector;
-    ui_root_level_collector->add_level(standard, {.project_id = project_id, .view_id = self.project_view_id});
-    self->_root_level = ui_root_level_collector->level_for_view_id(self.project_view_id);
+    auto const &ui_root_level_router = app_level::global()->ui_root_level_router;
+    ui_root_level_router->add_level(standard, {.project_id = project_id, .view_id = self.project_view_id});
+    self->_root_level = ui_root_level_router->level_for_view_id(self.project_view_id);
 
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     self->_action_controller = action_controller::make_shared(project_id);

@@ -1,5 +1,5 @@
 //
-//  ae_ui_root_level_collector.h
+//  ae_ui_root_level_router.h
 //
 
 #pragma once
@@ -13,8 +13,8 @@
 namespace yas::ae {
 class ui_root_level;
 
-struct ui_root_level_collector {
-    [[nodiscard]] static std::shared_ptr<ui_root_level_collector> make_shared();
+struct ui_root_level_router {
+    [[nodiscard]] static std::shared_ptr<ui_root_level_router> make_shared();
 
     void add_level(std::shared_ptr<ui::standard> const &, ui_project_id const &project_id);
     [[nodiscard]] std::shared_ptr<ui_root_level> const &level_for_view_id(uintptr_t const project_view_id) const;
@@ -23,6 +23,6 @@ struct ui_root_level_collector {
    private:
     std::map<uintptr_t, std::shared_ptr<ui_root_level>> _ui_roots;
 
-    ui_root_level_collector();
+    ui_root_level_router();
 };
 }  // namespace yas::ae
