@@ -20,7 +20,7 @@
 #include <audio_editor_core/ae_time_editor_level.h>
 #include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_time_editor_responder.h>
-#include <audio_editor_core/ae_timeline_updater.h>
+#include <audio_editor_core/ae_timeline_holder.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
 
@@ -30,8 +30,8 @@ using namespace yas::ae;
 std::shared_ptr<project_editor> project_editor::make_shared(
     project_id const &project_id, ae::file_info const &file_info, file_track_for_project_editor *file_track,
     marker_pool_for_project_editor *marker_pool, edge_holder_for_project_editor *edge_holder,
-    pasteboard_for_project_editor *pasteboard, database_for_project_editor *database,
-    timeline_updater *timeline_updater, editing_status const *editing_status) {
+    pasteboard_for_project_editor *pasteboard, database_for_project_editor *database, timeline_holder *timeline_updater,
+    editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     return std::shared_ptr<project_editor>(new project_editor{file_info, project_level->player.get(), file_track,
                                                               marker_pool, edge_holder, pasteboard, database,
@@ -41,7 +41,7 @@ std::shared_ptr<project_editor> project_editor::make_shared(
 project_editor::project_editor(ae::file_info const &file_info, player_for_project_editor *player,
                                file_track_for_project_editor *file_track, marker_pool_for_project_editor *marker_pool,
                                edge_holder_for_project_editor *edge_holder, pasteboard_for_project_editor *pasteboard,
-                               database_for_project_editor *database, timeline_updater *timeline_updater,
+                               database_for_project_editor *database, timeline_holder *timeline_updater,
                                editing_status const *editing_status)
     : _file_info(file_info),
       _player(player),
@@ -50,13 +50,13 @@ project_editor::project_editor(ae::file_info const &file_info, player_for_projec
       _edge_holder(edge_holder),
       _pasteboard(pasteboard),
       _database(database),
-      _timeline_updater(timeline_updater),
+      _timeline_holder(timeline_updater),
       _editing_status(editing_status) {
     this->_file_track
         ->observe_event([this](file_track_event const &event) {
             switch (event.type) {
                 case file_track_event_type::any: {
-                    this->_timeline_updater->replace(event.modules);
+                    this->_timeline_holder->replace(event.modules);
 
                     for (auto const &pair : event.modules) {
                         auto const &file_module = pair.second;
@@ -64,16 +64,16 @@ project_editor::project_editor(ae::file_info const &file_info, player_for_projec
                     }
                 } break;
                 case file_track_event_type::reverted: {
-                    this->_timeline_updater->replace(event.modules);
+                    this->_timeline_holder->replace(event.modules);
                 } break;
                 case file_track_event_type::inserted: {
                     auto const &file_module = event.module.value();
-                    this->_timeline_updater->insert(file_module);
+                    this->_timeline_holder->insert(file_module);
                     this->_database->add_module(file_module);
                 } break;
                 case file_track_event_type::erased: {
                     auto const &range = event.module.value().range;
-                    this->_timeline_updater->erase(range);
+                    this->_timeline_holder->erase(range);
                     this->_database->remove_module(range);
                 } break;
                 case file_track_event_type::detail_updated: {
