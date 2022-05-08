@@ -36,6 +36,7 @@ class marker_editor;
 class editing_status;
 class module_renaming_launcher;
 class export_interactor;
+class database_updater;
 
 struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id,
@@ -65,6 +66,7 @@ struct project_editor_level final {
     std::shared_ptr<marker_editor> const marker_editor;
     std::shared_ptr<module_renaming_launcher> const module_renaming_launcher;
     std::shared_ptr<export_interactor> const export_interactor;
+    std::shared_ptr<database_updater> const database_updater;
     std::shared_ptr<project_editor> const editor;
     std::shared_ptr<project_editor_responder> const responder;
 
