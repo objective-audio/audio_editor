@@ -17,13 +17,12 @@ class time_editor_launcher;
 class marker_editor;
 class module_renaming_launcher;
 class timing;
+class export_interactor;
 
 struct project_editor_responder final : responder {
-    [[nodiscard]] static std::shared_ptr<project_editor_responder> make_shared(project_editor *, playing_toggler *,
-                                                                               nudge_settings *, nudger *, jumper *,
-                                                                               edge_editor *, time_editor_launcher *,
-                                                                               marker_editor *,
-                                                                               module_renaming_launcher *, timing *);
+    [[nodiscard]] static std::shared_ptr<project_editor_responder> make_shared(
+        project_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
+        time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *, export_interactor *);
 
     std::optional<ae::action> to_action(ae::key const &) override;
     void handle_action(ae::action const &) override;
@@ -41,8 +40,10 @@ struct project_editor_responder final : responder {
     marker_editor *const _marker_editor;
     module_renaming_launcher *const _module_renaming_launcher;
     timing *_timing;
+    export_interactor *_export_interactor;
 
     project_editor_responder(project_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
-                             time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *);
+                             time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *,
+                             export_interactor *);
 };
 }  // namespace yas::ae

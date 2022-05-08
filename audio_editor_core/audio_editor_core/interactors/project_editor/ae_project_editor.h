@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_responder.h>
 
 namespace yas::ae {
-class dialog_presenter;
 class timeline_updater;
 class editing_status;
 
@@ -17,7 +16,7 @@ struct project_editor final {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         project_id const &project_id, ae::file_info const &, file_track_for_project_editor *,
         marker_pool_for_project_editor *, edge_holder_for_project_editor *, pasteboard_for_project_editor *,
-        database_for_project_editor *, exporter_for_project_editor *, timeline_updater *, editing_status const *);
+        database_for_project_editor *, timeline_updater *, editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -36,11 +35,6 @@ struct project_editor final {
     [[nodiscard]] bool can_redo() const;
     void redo();
 
-    [[nodiscard]] bool can_select_file_for_export() const;
-    void select_file_for_export();
-    [[nodiscard]] bool can_export_to_file() const;
-    void export_to_file(url const &);
-
     [[nodiscard]] bool can_cut() const;
     void cut_and_offset();
     [[nodiscard]] bool can_copy() const;
@@ -57,8 +51,6 @@ struct project_editor final {
     edge_holder_for_project_editor *const _edge_holder;
     pasteboard_for_project_editor *const _pasteboard;
     database_for_project_editor *const _database;
-    exporter_for_project_editor *const _exporter;
-    dialog_presenter *const _dialog_presenter;
     timeline_updater *const _timeline_updater;
     editing_status const *const _editing_status;
 
@@ -66,8 +58,7 @@ struct project_editor final {
 
     project_editor(ae::file_info const &, player_for_project_editor *, file_track_for_project_editor *,
                    marker_pool_for_project_editor *, edge_holder_for_project_editor *, pasteboard_for_project_editor *,
-                   database_for_project_editor *, exporter_for_project_editor *, dialog_presenter *, timeline_updater *,
-                   editing_status const *);
+                   database_for_project_editor *, timeline_updater *, editing_status const *);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;
