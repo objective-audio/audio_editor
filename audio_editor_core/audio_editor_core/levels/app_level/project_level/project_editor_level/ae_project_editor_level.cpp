@@ -25,6 +25,7 @@
 #include <audio_editor_core/ae_project_editor_launcher.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
 #include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_timeline_holder.h>
@@ -73,6 +74,8 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       database_updater(database_updater::make_shared(this->file_track.get(), this->marker_pool.get(),
                                                      this->edge_holder.get(), this->pasteboard.get(),
                                                      this->database.get())),
+      reverter(reverter::make_shared(this->database.get(), this->file_track.get(), this->marker_pool.get(),
+                                     this->pasteboard.get(), this->edge_holder.get())),
       editor(project_editor::make_shared(project_id, file_info, this->file_track.get(), this->marker_pool.get(),
                                          this->edge_holder.get(), this->pasteboard.get(), this->database.get(),
                                          this->timeline_updater.get(), this->editing_status.get())),
