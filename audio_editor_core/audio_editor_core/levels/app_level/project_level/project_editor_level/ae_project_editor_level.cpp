@@ -29,6 +29,7 @@
 #include <audio_editor_core/ae_time_editor_launcher.h>
 #include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_timeline_holder.h>
+#include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
@@ -74,11 +75,11 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       database_updater(database_updater::make_shared(this->file_track.get(), this->marker_pool.get(),
                                                      this->edge_holder.get(), this->pasteboard.get(),
                                                      this->database.get())),
+      timeline_updater(timeline_updater::make_shared(this->file_track.get(), this->timeline_holder.get())),
       reverter(reverter::make_shared(this->database.get(), this->file_track.get(), this->marker_pool.get(),
                                      this->pasteboard.get(), this->edge_holder.get())),
       editor(project_editor::make_shared(project_id, this->file_track.get(), this->marker_pool.get(),
-                                         this->pasteboard.get(), this->database.get(), this->timeline_holder.get(),
-                                         this->editing_status.get())),
+                                         this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       responder(project_editor_responder::make_shared(
           this->editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
           this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),

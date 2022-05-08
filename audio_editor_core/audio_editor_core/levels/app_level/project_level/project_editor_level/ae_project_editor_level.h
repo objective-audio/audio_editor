@@ -38,6 +38,7 @@ class module_renaming_launcher;
 class export_interactor;
 class database_updater;
 class reverter;
+class timeline_updater;
 
 struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id,
@@ -68,6 +69,7 @@ struct project_editor_level final {
     std::shared_ptr<module_renaming_launcher> const module_renaming_launcher;
     std::shared_ptr<export_interactor> const export_interactor;
     std::shared_ptr<database_updater> const database_updater;
+    std::shared_ptr<timeline_updater> const timeline_updater;
     std::shared_ptr<reverter> const reverter;
     std::shared_ptr<project_editor> const editor;
     std::shared_ptr<project_editor_responder> const responder;
