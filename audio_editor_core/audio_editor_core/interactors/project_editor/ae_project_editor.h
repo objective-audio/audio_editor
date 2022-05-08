@@ -9,14 +9,14 @@
 #include <audio_editor_core/ae_responder.h>
 
 namespace yas::ae {
-class timeline_updater;
+class timeline_holder;
 class editing_status;
 
 struct project_editor final {
     [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
         project_id const &project_id, ae::file_info const &, file_track_for_project_editor *,
         marker_pool_for_project_editor *, edge_holder_for_project_editor *, pasteboard_for_project_editor *,
-        database_for_project_editor *, timeline_updater *, editing_status const *);
+        database_for_project_editor *, timeline_holder *, editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -51,14 +51,14 @@ struct project_editor final {
     edge_holder_for_project_editor *const _edge_holder;
     pasteboard_for_project_editor *const _pasteboard;
     database_for_project_editor *const _database;
-    timeline_updater *const _timeline_updater;
+    timeline_holder *const _timeline_holder;
     editing_status const *const _editing_status;
 
     observing::canceller_pool _pool;
 
     project_editor(ae::file_info const &, player_for_project_editor *, file_track_for_project_editor *,
                    marker_pool_for_project_editor *, edge_holder_for_project_editor *, pasteboard_for_project_editor *,
-                   database_for_project_editor *, timeline_updater *, editing_status const *);
+                   database_for_project_editor *, timeline_holder *, editing_status const *);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

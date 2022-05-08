@@ -1,8 +1,8 @@
 //
-//  ae_timeline_updater.cpp
+//  ae_timeline_holder.cpp
 //
 
-#include "ae_timeline_updater.h"
+#include "ae_timeline_holder.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_editor_utils.h>
@@ -12,19 +12,19 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<timeline_updater> timeline_updater::make_shared(project_id const &project_id,
-                                                                ae::file_info const &file_info) {
+std::shared_ptr<timeline_holder> timeline_holder::make_shared(project_id const &project_id,
+                                                              ae::file_info const &file_info) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &project_url = project_level->project_url;
     return make_shared(project_url->editing_file(), file_info);
 }
 
-std::shared_ptr<timeline_updater> timeline_updater::make_shared(url const &editing_file_url,
-                                                                ae::file_info const &file_info) {
-    return std::shared_ptr<timeline_updater>(new timeline_updater{editing_file_url, file_info});
+std::shared_ptr<timeline_holder> timeline_holder::make_shared(url const &editing_file_url,
+                                                              ae::file_info const &file_info) {
+    return std::shared_ptr<timeline_holder>(new timeline_holder{editing_file_url, file_info});
 }
 
-timeline_updater::timeline_updater(url const &editing_file_url, ae::file_info const &file_info)
+timeline_holder::timeline_holder(url const &editing_file_url, ae::file_info const &file_info)
     : _timeline(proc::timeline::make_shared()),
       _track(proc::track::make_shared()),
       _editing_file_url(editing_file_url),
@@ -32,11 +32,11 @@ timeline_updater::timeline_updater(url const &editing_file_url, ae::file_info co
     this->_timeline->insert_track(0, this->_track);
 }
 
-proc::timeline_ptr const &timeline_updater::timeline() const {
+proc::timeline_ptr const &timeline_holder::timeline() const {
     return this->_timeline;
 }
 
-void timeline_updater::replace(file_track_module_map_t const &modules) {
+void timeline_holder::replace(file_track_module_map_t const &modules) {
     this->_timeline->erase_track(0);
     this->_track = proc::track::make_shared();
 
@@ -52,7 +52,7 @@ void timeline_updater::replace(file_track_module_map_t const &modules) {
     this->_timeline->insert_track(0, this->_track);
 }
 
-void timeline_updater::insert(file_module const &file_module) {
+void timeline_holder::insert(file_module const &file_module) {
     if (auto const &track = this->_track) {
         auto const url = this->_editing_file_url;
         auto const ch_count = this->_file_info.channel_count;
@@ -63,7 +63,7 @@ void timeline_updater::insert(file_module const &file_module) {
     }
 }
 
-void timeline_updater::erase(time::range const &range) {
+void timeline_holder::erase(time::range const &range) {
     if (auto const &track = this->_track) {
         track->erase_modules_for_range(range);
     }

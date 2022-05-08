@@ -26,7 +26,7 @@
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
 #include <audio_editor_core/ae_time_editor_level_router.h>
-#include <audio_editor_core/ae_timeline_updater.h>
+#include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
@@ -53,7 +53,7 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       editing_status(editing_status::make_shared(this->exporter.get())),
       playing_toggler(playing_toggler::make_shared(project_id)),
       time_editor_level_router(time_editor_level_router::make_shared(project_id)),
-      timeline_updater(timeline_updater::make_shared(project_id, file_info)),
+      timeline_updater(timeline_holder::make_shared(project_id, file_info)),
       nudger(nudger::make_shared(project_id, this->nudge_settings.get())),
       edge_holder(edge_holder::make_shared()),
       edge_editor(edge_editor::make_shared(project_id, this->edge_holder.get(), this->editing_status.get())),

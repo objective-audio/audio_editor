@@ -10,14 +10,14 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_url.h>
-#include <audio_editor_core/ae_timeline_updater.h>
+#include <audio_editor_core/ae_timeline_holder.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor_launcher> project_editor_launcher::make_shared(
-    project_id const &project_id, ae::file_info const &file_info, timeline_updater *updater, database *database,
+    project_id const &project_id, ae::file_info const &file_info, timeline_holder *updater, database *database,
     file_track *file_track, edge_holder *edge_holder) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &project_url = project_level->project_url;
@@ -27,12 +27,12 @@ std::shared_ptr<project_editor_launcher> project_editor_launcher::make_shared(
 }
 
 project_editor_launcher::project_editor_launcher(ae::file_info const &file_info, url const &editing_file_url,
-                                                 player *player, timeline_updater *updater, database *database,
+                                                 player *player, timeline_holder *updater, database *database,
                                                  file_track *file_track, edge_holder *edge_holder)
     : _file_info(file_info),
       _editing_file_url(editing_file_url),
       _player(player),
-      _timeline_updater(updater),
+      _timeline_holder(updater),
       _database(database),
       _file_track(file_track),
       _edge_holder(edge_holder) {
@@ -51,6 +51,6 @@ void project_editor_launcher::launch() {
         this->_edge_holder->set_edge({.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
     });
 
-    this->_player->set_timeline(this->_timeline_updater->timeline(), file_info.sample_rate, audio::pcm_format::float32);
+    this->_player->set_timeline(this->_timeline_holder->timeline(), file_info.sample_rate, audio::pcm_format::float32);
     this->_player->begin_rendering();
 }
