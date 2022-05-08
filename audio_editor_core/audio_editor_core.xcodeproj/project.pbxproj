@@ -761,13 +761,13 @@
 			path = project_editor_launcher;
 			sourceTree = "<group>";
 		};
-		B617596E2823BF8E00AC880B /* timeline_updater */ = {
+		B617596E2823BF8E00AC880B /* timeline_holder */ = {
 			isa = PBXGroup;
 			children = (
 				B617596F2823C30700AC880B /* ae_timeline_holder.cpp */,
 				B61759702823C30700AC880B /* ae_timeline_holder.h */,
 			);
-			path = timeline_updater;
+			path = timeline_holder;
 			sourceTree = "<group>";
 		};
 		B62D8F9C2723AEBA00779D42 /* pinch_gesture_controller */ = {
@@ -926,7 +926,7 @@
 				B62D8FA42723CE4D00779D42 /* zooming */,
 				B6D55910281F848100C9427C /* playing_toggler */,
 				B61759692823BCAD00AC880B /* project_editor_launcher */,
-				B617596E2823BF8E00AC880B /* timeline_updater */,
+				B617596E2823BF8E00AC880B /* timeline_holder */,
 				B644411A2824C95B001AFE8B /* nudger */,
 				B69ED0C52824D6D600AC9AB1 /* jumper */,
 				B6EA40DB2641721100BF3D06 /* project_editor */,
