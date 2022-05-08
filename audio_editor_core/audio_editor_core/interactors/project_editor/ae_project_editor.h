@@ -64,10 +64,5 @@ struct project_editor final {
     project_editor(project_editor &&) = delete;
     project_editor &operator=(project_editor const &) = delete;
     project_editor &operator=(project_editor &&) = delete;
-
-    [[nodiscard]] std::optional<frame_index_t> _previous_jumpable_frame() const;
-    [[nodiscard]] std::optional<frame_index_t> _next_jumpable_frame() const;
-    [[nodiscard]] std::optional<frame_index_t> _first_edge() const;
-    [[nodiscard]] std::optional<frame_index_t> _last_edge() const;
 };
 }  // namespace yas::ae
