@@ -57,11 +57,6 @@ project_editor::project_editor(ae::file_info const &file_info, player_for_projec
             switch (event.type) {
                 case file_track_event_type::any: {
                     this->_timeline_holder->replace(event.modules);
-
-                    for (auto const &pair : event.modules) {
-                        auto const &file_module = pair.second;
-                        this->_database->add_module(file_module);
-                    }
                 } break;
                 case file_track_event_type::reverted: {
                     this->_timeline_holder->replace(event.modules);
@@ -69,68 +64,12 @@ project_editor::project_editor(ae::file_info const &file_info, player_for_projec
                 case file_track_event_type::inserted: {
                     auto const &file_module = event.module.value();
                     this->_timeline_holder->insert(file_module);
-                    this->_database->add_module(file_module);
                 } break;
                 case file_track_event_type::erased: {
                     auto const &range = event.module.value().range;
                     this->_timeline_holder->erase(range);
-                    this->_database->remove_module(range);
                 } break;
-                case file_track_event_type::detail_updated: {
-                    auto const &file_module = event.module.value();
-                    this->_database->update_module_detail(file_module);
-                } break;
-            }
-        })
-        .sync()
-        ->add_to(this->_pool);
-
-    this->_marker_pool
-        ->observe_event([this](marker_pool_event const &event) {
-            switch (event.type) {
-                case marker_pool_event_type::any:
-                    if (event.markers.size() > 0) {
-                        for (auto const &pair : event.markers) {
-                            this->_database->add_marker(pair.second);
-                        }
-                    }
-                    break;
-                case marker_pool_event_type::reverted:
-                    break;
-                case marker_pool_event_type::inserted:
-                    this->_database->add_marker(event.marker.value());
-                    break;
-                case marker_pool_event_type::erased:
-                    this->_database->remove_marker(event.marker.value().frame);
-                    break;
-            }
-        })
-        .sync()
-        ->add_to(this->_pool);
-
-    this->_edge_holder
-        ->observe_event([this](edge_holder_event const &event) {
-            switch (event.type) {
-                case edge_holder_event_type::updated:
-                    this->_database->set_edge(event.edge);
-                    break;
-
-                case edge_holder_event_type::fetched:
-                case edge_holder_event_type::reverted:
-                    break;
-            }
-        })
-        .sync()
-        ->add_to(this->_pool);
-
-    this->_pasteboard
-        ->observe_event([this](pasteboard_event const &event) {
-            switch (event) {
-                case pasteboard_event::file_module:
-                    this->_database->set_pasting_data(this->_pasteboard->data());
-                    break;
-                case pasteboard_event::fetched:
-                case pasteboard_event::reverted:
+                case file_track_event_type::detail_updated:
                     break;
             }
         })
