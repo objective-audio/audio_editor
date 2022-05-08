@@ -189,7 +189,7 @@ using namespace yas::ae;
 - (void)showSelectFileForExportDialog {
     auto *const panel = [NSSavePanel savePanel];
     panel.canCreateDirectories = YES;
-    panel.allowedFileTypes = @[@"wav"];
+    panel.allowedContentTypes = @[UTTypeAudio];
     panel.nameFieldStringValue = @"Untitled";
 
     if ([panel runModal] == NSModalResponseOK) {
