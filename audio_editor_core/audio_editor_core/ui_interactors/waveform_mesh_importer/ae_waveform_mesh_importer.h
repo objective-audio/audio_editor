@@ -11,7 +11,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct waveform_mesh_importer final {
+struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh_importer> {
     using event = waveform_mesh_importer_event;
 
     [[nodiscard]] static std::shared_ptr<waveform_mesh_importer> make_shared(url const &);
@@ -24,7 +24,6 @@ struct waveform_mesh_importer final {
 
    private:
     url const _url;
-    std::weak_ptr<waveform_mesh_importer> _weak_importer;
     observing::notifier_ptr<event> const _notifier;
     std::shared_ptr<task_queue<identifier>> const _task_queue;
 

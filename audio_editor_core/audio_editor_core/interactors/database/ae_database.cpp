@@ -21,7 +21,7 @@ std::shared_ptr<database> database::make_shared(url const &db_file_url) {
 
 std::shared_ptr<database> database::make_shared(std::shared_ptr<db::manager> const &manager) {
     auto db = std::shared_ptr<database>(new database{manager});
-    db->_setup(db);
+    db->_setup();
     return db;
 }
 
@@ -121,7 +121,7 @@ void database::_save() {
         this->_increment_processing_count();
 
         this->_manager->save(db::no_cancellation,
-                             [weak_db = this->_weak_database](db::manager_map_result_t result) mutable {
+                             [weak_db = this->weak_from_this()](db::manager_map_result_t result) mutable {
                                  if (auto db = weak_db.lock()) {
                                      db->_decrement_processing_count();
                                  }
@@ -165,12 +165,10 @@ observing::endable database::observe_reverted(std::function<void(void)> &&handle
     return this->_reverted_notifier->observe([handler = std::move(handler)](auto const &) { handler(); });
 }
 
-void database::_setup(std::weak_ptr<database> weak_db) {
-    this->_weak_database = std::move(weak_db);
-
+void database::_setup() {
     this->_increment_processing_count();
 
-    this->_manager->setup([weak_db = this->_weak_database](db::manager_result_t result) mutable {
+    this->_manager->setup([weak_db = this->weak_from_this()](db::manager_result_t result) mutable {
         if (auto database = weak_db.lock()) {
             database->_decrement_processing_count();
         }
@@ -213,7 +211,7 @@ void database::_revert(db::integer::type const revert_id) {
                 db::select_option{.table = db_constants::module_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->_weak_database](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -243,7 +241,7 @@ void database::_revert(db::integer::type const revert_id) {
                 db::select_option{.table = db_constants::marker_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->_weak_database](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -273,7 +271,7 @@ void database::_revert(db::integer::type const revert_id) {
                 db::select_option{.table = db_constants::pasting_subject_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->_weak_database](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -291,7 +289,7 @@ void database::_revert(db::integer::type const revert_id) {
             }
         });
 
-    this->_manager->execute(db::no_cancellation, [weak_db = this->_weak_database](auto const &) {
+    this->_manager->execute(db::no_cancellation, [weak_db = this->weak_from_this()](auto const &) {
         assert(!thread::is_main());
 
         thread::perform_sync_on_main([weak_db] {

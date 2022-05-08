@@ -16,10 +16,8 @@ std::shared_ptr<project_launcher> project_launcher::make_shared(
     file_importer_for_project_launcher *file_importer, file_loader_for_project_launcher *file_loader,
     responder_stack_for_project_launcher *responder_stack,
     project_editor_level_pool_for_project_launcher *editor_level_pool, project_status_for_project_launcher *status) {
-    auto launcher = std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
+    return std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
         project_id, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
-    launcher->_weak_launcher = launcher;
-    return launcher;
 }
 
 project_launcher::project_launcher(project_id const &project_id, url const &file_url,
@@ -51,7 +49,7 @@ void project_launcher::launch() {
         {.project_id = this->_project_id,
          .src_url = this->_file_url,
          .dst_url = this->_project_url->editing_file(),
-         .completion = [weak = this->_weak_launcher](bool const result) {
+         .completion = [weak = this->weak_from_this()](bool const result) {
              auto const launcher = weak.lock();
              if (!launcher) {
                  return;

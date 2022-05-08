@@ -11,9 +11,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<time_editor_level_router> time_editor_level_router::make_shared(project_id const &project_id) {
-    auto shared = std::shared_ptr<time_editor_level_router>(new time_editor_level_router{project_id});
-    shared->_weak_router = shared;
-    return shared;
+    return std::shared_ptr<time_editor_level_router>(new time_editor_level_router{project_id});
 }
 
 time_editor_level_router::time_editor_level_router(project_id const &project_id)

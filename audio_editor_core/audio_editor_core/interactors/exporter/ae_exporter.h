@@ -8,7 +8,7 @@
 #include <cpp_utils/yas_task_queue.h>
 
 namespace yas::ae {
-struct exporter final : exporter_for_project_editor {
+struct exporter final : std::enable_shared_from_this<exporter>, exporter_for_project_editor {
     [[nodiscard]] static std::shared_ptr<exporter> make_shared();
 
     void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &,
@@ -20,8 +20,6 @@ struct exporter final : exporter_for_project_editor {
     [[nodiscard]] exporting_result last_result() const;
 
    private:
-    std::weak_ptr<exporter> _weak_exporter;
-
     exporting_result _last_result;
     observing::value::holder_ptr<bool> const _is_exporting;
 
