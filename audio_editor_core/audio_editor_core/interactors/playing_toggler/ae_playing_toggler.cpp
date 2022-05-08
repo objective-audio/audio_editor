@@ -12,11 +12,7 @@ using namespace yas::ae;
 
 std::shared_ptr<playing_toggler> playing_toggler::make_shared(project_id const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return make_shared(project_level->player.get());
-}
-
-std::shared_ptr<playing_toggler> playing_toggler::make_shared(player_for_playing_toggler *player) {
-    return std::shared_ptr<playing_toggler>(new playing_toggler{player});
+    return std::make_shared<playing_toggler>(project_level->player.get());
 }
 
 playing_toggler::playing_toggler(player_for_playing_toggler *player) : _player(player) {

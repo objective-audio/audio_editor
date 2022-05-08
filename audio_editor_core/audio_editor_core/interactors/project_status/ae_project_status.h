@@ -13,6 +13,8 @@ namespace yas::ae {
 struct project_status final : project_status_for_project_closer, project_status_for_project_launcher {
     [[nodiscard]] static std::shared_ptr<project_status> make_shared();
 
+    project_status();
+
     [[nodiscard]] project_state const &state() const override;
     void set_state(project_state const &) override;
 
@@ -20,7 +22,5 @@ struct project_status final : project_status_for_project_closer, project_status_
 
    private:
     observing::value::holder_ptr<project_state> const _state;
-
-    project_status();
 };
 }  // namespace yas::ae

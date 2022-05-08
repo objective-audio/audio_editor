@@ -23,9 +23,9 @@ std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
     project_editor *editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
     edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
     module_renaming_launcher *module_renaming_launcher, timing *timing, export_interactor *export_interactor) {
-    return std::shared_ptr<project_editor_responder>(
-        new project_editor_responder{editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher,
-                                     marker_editor, module_renaming_launcher, timing, export_interactor});
+    return std::make_shared<project_editor_responder>(editor, toggler, nudge_settings, nudger, jumper, edge_editor,
+                                                      time_editor_launcher, marker_editor, module_renaming_launcher,
+                                                      timing, export_interactor);
 }
 
 project_editor_responder::project_editor_responder(project_editor *editor, playing_toggler *toggler,

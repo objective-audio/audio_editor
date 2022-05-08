@@ -11,6 +11,8 @@ namespace yas::ae {
 struct exporter final : std::enable_shared_from_this<exporter>, exporter_for_project_editor {
     [[nodiscard]] static std::shared_ptr<exporter> make_shared();
 
+    exporter();
+
     void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &,
                time::range const &) override;
 
@@ -24,7 +26,5 @@ struct exporter final : std::enable_shared_from_this<exporter>, exporter_for_pro
     observing::value::holder_ptr<bool> const _is_exporting;
 
     std::shared_ptr<task_queue<std::nullptr_t>> const _queue;
-
-    exporter();
 };
 }  // namespace yas::ae

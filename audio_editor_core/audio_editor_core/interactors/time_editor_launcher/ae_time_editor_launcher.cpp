@@ -20,8 +20,8 @@ std::shared_ptr<time_editor_launcher> time_editor_launcher::make_shared(project_
                                                                         timing const *timing,
                                                                         time_editor_level_router *router) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<time_editor_launcher>(
-        new time_editor_launcher{project_level->player.get(), timing, router, project_level->responder_stack.get()});
+    return std::make_shared<time_editor_launcher>(project_level->player.get(), timing, router,
+                                                  project_level->responder_stack.get());
 }
 
 time_editor_launcher::time_editor_launcher(player const *player, timing const *timing, time_editor_level_router *router,

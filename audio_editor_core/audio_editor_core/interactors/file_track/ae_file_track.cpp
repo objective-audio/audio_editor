@@ -10,6 +10,10 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<file_track> file_track::make_shared() {
+    return std::make_shared<file_track>();
+}
+
 file_track::file_track() {
     this->_event_fetcher = observing::fetcher<file_track_event>::make_shared(
         [this] { return file_track_event{.type = file_track_event_type::any, .modules = this->_modules}; });
@@ -217,8 +221,4 @@ void file_track::_move_modules_after(frame_index_t const frame, frame_index_t co
 
 observing::syncable file_track::observe_event(std::function<void(file_track_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
-}
-
-std::shared_ptr<file_track> file_track::make_shared() {
-    return std::shared_ptr<file_track>(new file_track{});
 }

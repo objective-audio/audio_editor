@@ -11,7 +11,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<timing> timing::make_shared(sample_rate_t const sample_rate) {
-    return std::shared_ptr<timing>(new timing{sample_rate});
+    return std::make_shared<timing>(sample_rate);
 }
 
 timing::timing(sample_rate_t const sample_rate)

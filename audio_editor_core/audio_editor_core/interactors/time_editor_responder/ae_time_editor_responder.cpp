@@ -13,7 +13,7 @@ using namespace yas::ae;
 
 std::shared_ptr<time_editor_responder> time_editor_responder::make_shared(time_editor *editor,
                                                                           time_editor_closer *closer) {
-    return std::shared_ptr<time_editor_responder>(new time_editor_responder{editor, closer});
+    return std::make_shared<time_editor_responder>(editor, closer);
 }
 
 time_editor_responder::time_editor_responder(time_editor *editor, time_editor_closer *closer)

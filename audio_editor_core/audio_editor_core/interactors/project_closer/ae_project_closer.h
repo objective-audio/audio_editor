@@ -22,6 +22,10 @@ struct project_closer final : project_closer_for_window_presenter {
                                                                      project_editor_level_pool_for_project_closer *,
                                                                      project_status_for_project_closer *);
 
+    project_closer(project_id const &project_id, file_importer_for_project_closer *,
+                   project_level_router_for_project_closer *, project_editor_level_pool_for_project_closer *,
+                   project_status_for_project_closer *);
+
     [[nodiscard]] bool can_close() const override;
     void request_close() override;
 
@@ -32,9 +36,5 @@ struct project_closer final : project_closer_for_window_presenter {
     project_level_router_for_project_closer *const _project_level_router;
     project_editor_level_pool_for_project_closer *const _editor_level_pool;
     project_status_for_project_closer *const _status;
-
-    project_closer(project_id const &project_id, file_importer_for_project_closer *,
-                   project_level_router_for_project_closer *, project_editor_level_pool_for_project_closer *,
-                   project_status_for_project_closer *);
 };
 }  // namespace yas::ae

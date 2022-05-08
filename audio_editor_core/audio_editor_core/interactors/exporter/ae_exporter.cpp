@@ -13,7 +13,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<exporter> exporter::make_shared() {
-    return std::shared_ptr<exporter>(new exporter{});
+    return std::make_shared<exporter>();
 }
 
 exporter::exporter()

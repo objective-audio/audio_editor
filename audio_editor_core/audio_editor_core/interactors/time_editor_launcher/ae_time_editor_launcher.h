@@ -19,6 +19,8 @@ struct time_editor_launcher final {
     [[nodiscard]] static std::shared_ptr<time_editor_launcher> make_shared(project_id const &, timing const *,
                                                                            time_editor_level_router *);
 
+    time_editor_launcher(player const *, timing const *, time_editor_level_router *, responder_stack *);
+
     bool can_begin_time_editing() const;
     void begin_time_editing(std::optional<std::size_t> const unit_idx);
 
@@ -27,7 +29,5 @@ struct time_editor_launcher final {
     timing const *const _timing;
     time_editor_level_router *const _router;
     responder_stack *const _responder_stack;
-
-    time_editor_launcher(player const *, timing const *, time_editor_level_router *, responder_stack *);
 };
 }  // namespace yas::ae

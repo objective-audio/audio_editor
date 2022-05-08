@@ -13,6 +13,8 @@ namespace yas::ae {
 struct timing final : timing_for_project_editor {
     [[nodiscard]] static std::shared_ptr<timing> make_shared(sample_rate_t const);
 
+    timing(sample_rate_t const);
+
     [[nodiscard]] sample_rate_t sample_rate() const override;
 
     void set_fraction_kind(timing_fraction_kind const) override;
@@ -29,7 +31,5 @@ struct timing final : timing_for_project_editor {
    private:
     sample_rate_t const _sample_rate;
     observing::value::holder_ptr<timing_fraction_kind> const _fraction_kind;
-
-    timing(sample_rate_t const);
 };
 }  // namespace yas::ae

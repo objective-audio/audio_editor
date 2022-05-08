@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_status> project_status::make_shared() {
-    return std::shared_ptr<project_status>(new project_status{});
+    return std::make_shared<project_status>();
 }
 
 project_status::project_status()

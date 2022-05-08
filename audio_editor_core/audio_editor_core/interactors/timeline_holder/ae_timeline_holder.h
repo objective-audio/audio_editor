@@ -14,8 +14,8 @@ namespace yas::ae {
 struct timeline_holder final {
     [[nodiscard]] static std::shared_ptr<timeline_holder> make_shared(project_id const &project_id,
                                                                       ae::file_info const &);
-    [[nodiscard]] static std::shared_ptr<timeline_holder> make_shared(url const &editing_file_url,
-                                                                      ae::file_info const &);
+
+    timeline_holder(url const &editing_file_url, ae::file_info const &);
 
     proc::timeline_ptr const &timeline() const;
 
@@ -29,7 +29,5 @@ struct timeline_holder final {
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
-
-    timeline_holder(url const &editing_file_url, ae::file_info const &);
 };
 }  // namespace yas::ae

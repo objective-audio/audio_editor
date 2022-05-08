@@ -10,6 +10,10 @@
 
 namespace yas::ae {
 struct marker_pool final : marker_pool_for_project_editor {
+    [[nodiscard]] static std::shared_ptr<marker_pool> make_shared();
+
+    marker_pool();
+
     void revert_markers(std::vector<marker> &&) override;
     void insert_marker(marker const &) override;
     void erase_at(frame_index_t const) override;
@@ -27,13 +31,9 @@ struct marker_pool final : marker_pool_for_project_editor {
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) override;
 
-    [[nodiscard]] static std::shared_ptr<marker_pool> make_shared();
-
    private:
     observing::map::holder_ptr<frame_index_t, marker> const _markers;
     observing::fetcher_ptr<marker_pool_event> _fetcher;
     observing::canceller_pool _pool;
-
-    marker_pool();
 };
 }  // namespace yas::ae
