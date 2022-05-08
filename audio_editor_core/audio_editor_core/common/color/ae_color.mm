@@ -19,10 +19,13 @@ static ui::color to_color(NSString *name) {
     static NSBundle *const bundle = [NSBundle bundleForClass:[AudioEditorCoreDummyClassForBundle class]];
 
     @autoreleasepool {
-        NSAppearance.currentAppearance = NSApp.effectiveAppearance;
+        __block NSColor *nsColor = nil;
 
-        NSColor *const nsColor = [[NSColor colorNamed:name
-                                               bundle:bundle] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        NSAppearance *appearance = NSApp.effectiveAppearance ?: NSAppearance.currentDrawingAppearance;
+
+        [appearance performAsCurrentDrawingAppearance:^{
+            nsColor = [[NSColor colorNamed:name bundle:bundle] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]];
+        }];
 
         if (!nsColor) {
             throw std::runtime_error("color not found.");
