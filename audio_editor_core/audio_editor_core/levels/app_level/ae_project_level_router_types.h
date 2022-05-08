@@ -1,5 +1,5 @@
 //
-//  ae_project_level_collector_types.h
+//  ae_project_level_router_types.h
 //
 
 #pragma once
@@ -9,13 +9,13 @@
 #include <string>
 
 namespace yas::ae {
-enum class project_level_collector_event_type {
+enum class project_level_router_event_type {
     inserted,
     erased,
 };
 
-struct project_level_collector_event final {
-    project_level_collector_event_type type;
+struct project_level_router_event final {
+    project_level_router_event_type type;
     project_id project_id;
 };
 }  // namespace yas::ae
