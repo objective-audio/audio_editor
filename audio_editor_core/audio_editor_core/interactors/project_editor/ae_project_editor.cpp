@@ -5,10 +5,8 @@
 #include "ae_project_editor.h"
 
 #include <audio_editor_core/ae_database.h>
-#include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
-#include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_loader.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
@@ -33,18 +31,17 @@ std::shared_ptr<project_editor> project_editor::make_shared(
     project_id const &project_id, ae::file_info const &file_info, file_track_for_project_editor *file_track,
     marker_pool_for_project_editor *marker_pool, edge_holder_for_project_editor *edge_holder,
     pasteboard_for_project_editor *pasteboard, database_for_project_editor *database,
-    exporter_for_project_editor *exporter, timeline_updater *timeline_updater, editing_status const *editing_status) {
+    timeline_updater *timeline_updater, editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<project_editor>(new project_editor{
-        file_info, project_level->player.get(), file_track, marker_pool, edge_holder, pasteboard, database, exporter,
-        project_level->dialog_presenter.get(), timeline_updater, editing_status});
+    return std::shared_ptr<project_editor>(new project_editor{file_info, project_level->player.get(), file_track,
+                                                              marker_pool, edge_holder, pasteboard, database,
+                                                              timeline_updater, editing_status});
 }
 
 project_editor::project_editor(ae::file_info const &file_info, player_for_project_editor *player,
                                file_track_for_project_editor *file_track, marker_pool_for_project_editor *marker_pool,
                                edge_holder_for_project_editor *edge_holder, pasteboard_for_project_editor *pasteboard,
-                               database_for_project_editor *database, exporter_for_project_editor *exporter,
-                               dialog_presenter *dialog_presenter, timeline_updater *timeline_updater,
+                               database_for_project_editor *database, timeline_updater *timeline_updater,
                                editing_status const *editing_status)
     : _file_info(file_info),
       _player(player),
@@ -53,8 +50,6 @@ project_editor::project_editor(ae::file_info const &file_info, player_for_projec
       _edge_holder(edge_holder),
       _pasteboard(pasteboard),
       _database(database),
-      _exporter(exporter),
-      _dialog_presenter(dialog_presenter),
       _timeline_updater(timeline_updater),
       _editing_status(editing_status) {
     this->_file_track
@@ -327,45 +322,6 @@ void project_editor::redo() {
     }
 
     this->_database->redo();
-}
-
-bool project_editor::can_select_file_for_export() const {
-    return this->can_export_to_file();
-}
-
-void project_editor::select_file_for_export() {
-    if (!this->can_select_file_for_export()) {
-        return;
-    }
-
-    this->_dialog_presenter->notify_event(dialog_event::select_file_for_export);
-}
-
-bool project_editor::can_export_to_file() const {
-    if (!this->_editing_status->can_editing()) {
-        return false;
-    }
-
-    return this->_edge_holder->edge().range().has_value();
-}
-
-void project_editor::export_to_file(url const &export_url) {
-    if (!this->can_export_to_file()) {
-        return;
-    }
-
-    auto const range = this->_edge_holder->edge().range();
-    if (!range.has_value()) {
-        return;
-    }
-
-    this->_player->set_playing(false);
-
-    exporting_format const format{.sample_rate = this->_file_info.sample_rate,
-                                  .pcm_format = audio::pcm_format::float32,
-                                  .channel_count = this->_file_info.channel_count};
-
-    this->_exporter->begin(export_url, this->_timeline_updater->timeline(), format, range.value());
 }
 
 bool project_editor::can_cut() const {

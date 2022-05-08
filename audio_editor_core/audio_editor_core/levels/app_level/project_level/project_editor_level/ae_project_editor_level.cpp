@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
+#include <audio_editor_core/ae_export_interactor.h>
 #include <audio_editor_core/ae_exporter.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
@@ -65,13 +66,15 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       marker_editor(marker_editor::make_shared(project_id, this->marker_pool.get(), this->database.get(),
                                                this->editing_status.get())),
       module_renaming_launcher(module_renaming_launcher::make_shared(project_id, this->editing_status.get())),
+      export_interactor(export_interactor::make_shared(project_id, file_info, this->editing_status.get(),
+                                                       this->edge_holder.get(), this->exporter.get(),
+                                                       this->timeline_updater.get())),
       editor(project_editor::make_shared(project_id, file_info, this->file_track.get(), this->marker_pool.get(),
                                          this->edge_holder.get(), this->pasteboard.get(), this->database.get(),
-                                         this->exporter.get(), this->timeline_updater.get(),
-                                         this->editing_status.get())),
+                                         this->timeline_updater.get(), this->editing_status.get())),
       responder(project_editor_responder::make_shared(
           this->editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
           this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),
-          this->module_renaming_launcher.get(), this->timing.get())) {
+          this->module_renaming_launcher.get(), this->timing.get(), this->export_interactor.get())) {
     this->launcher->launch();
 }
