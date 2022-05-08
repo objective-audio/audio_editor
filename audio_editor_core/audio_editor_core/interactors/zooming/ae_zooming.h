@@ -10,6 +10,8 @@ namespace yas::ae {
 struct zooming final {
     [[nodiscard]] static std::shared_ptr<zooming> make_shared();
 
+    zooming();
+
     void begin();
     void set_magnification(double const);
     void end();
@@ -23,7 +25,5 @@ struct zooming final {
 
     std::optional<double> _began_scale = std::nullopt;
     std::optional<double> _magnification = std::nullopt;
-
-    zooming();
 };
 }  // namespace yas::ae

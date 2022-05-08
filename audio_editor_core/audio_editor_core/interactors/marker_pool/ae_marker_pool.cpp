@@ -9,6 +9,10 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<marker_pool> marker_pool::make_shared() {
+    return std::make_shared<marker_pool>();
+}
+
 marker_pool::marker_pool() : _markers(observing::map::holder<frame_index_t, marker>::make_shared()) {
 }
 
@@ -130,8 +134,4 @@ observing::syncable marker_pool::observe_event(std::function<void(marker_pool_ev
     }
 
     return this->_fetcher->observe(std::move(handler));
-}
-
-std::shared_ptr<marker_pool> marker_pool::make_shared() {
-    return std::shared_ptr<marker_pool>(new marker_pool{});
 }

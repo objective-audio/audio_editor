@@ -21,9 +21,9 @@ std::shared_ptr<project_editor_launcher> project_editor_launcher::make_shared(
     file_track *file_track, edge_holder *edge_holder) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &project_url = project_level->project_url;
-    return std::shared_ptr<project_editor_launcher>(new project_editor_launcher{file_info, project_url->editing_file(),
-                                                                                project_level->player.get(), updater,
-                                                                                database, file_track, edge_holder});
+    return std::make_shared<project_editor_launcher>(file_info, project_url->editing_file(),
+                                                     project_level->player.get(), updater, database, file_track,
+                                                     edge_holder);
 }
 
 project_editor_launcher::project_editor_launcher(ae::file_info const &file_info, url const &editing_file_url,

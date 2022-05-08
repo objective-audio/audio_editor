@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<edge_holder> edge_holder::make_shared() {
-    return std::shared_ptr<edge_holder>(new edge_holder{});
+    return std::make_shared<edge_holder>();
 }
 
 edge_holder::edge_holder() : _edge(ae::edge::zero()) {

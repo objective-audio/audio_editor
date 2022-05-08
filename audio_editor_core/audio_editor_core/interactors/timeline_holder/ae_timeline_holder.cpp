@@ -16,12 +16,7 @@ std::shared_ptr<timeline_holder> timeline_holder::make_shared(project_id const &
                                                               ae::file_info const &file_info) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &project_url = project_level->project_url;
-    return make_shared(project_url->editing_file(), file_info);
-}
-
-std::shared_ptr<timeline_holder> timeline_holder::make_shared(url const &editing_file_url,
-                                                              ae::file_info const &file_info) {
-    return std::shared_ptr<timeline_holder>(new timeline_holder{editing_file_url, file_info});
+    return std::make_shared<timeline_holder>(project_url->editing_file(), file_info);
 }
 
 timeline_holder::timeline_holder(url const &editing_file_url, ae::file_info const &file_info)

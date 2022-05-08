@@ -16,8 +16,7 @@ using namespace yas::ae;
 std::shared_ptr<database_updater> database_updater::make_shared(file_track *file_track, marker_pool *marker_pool,
                                                                 edge_holder *edge_holder, pasteboard *pasteboard,
                                                                 database *database) {
-    return std::shared_ptr<database_updater>(
-        new database_updater{file_track, marker_pool, edge_holder, pasteboard, database});
+    return std::make_shared<database_updater>(file_track, marker_pool, edge_holder, pasteboard, database);
 }
 
 database_updater::database_updater(file_track *file_track, marker_pool *marker_pool, edge_holder *edge_holder,

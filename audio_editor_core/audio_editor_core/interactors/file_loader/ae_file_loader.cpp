@@ -9,6 +9,10 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<file_loader> file_loader::make_shared() {
+    return std::make_shared<file_loader>();
+}
+
 file_loader::file_loader() {
 }
 
@@ -25,8 +29,4 @@ std::optional<file_info> file_loader::load_file_info(url const &url) const {
     return file_info{.sample_rate = static_cast<uint32_t>(std::round(processing_format.sample_rate())),
                      .channel_count = processing_format.channel_count(),
                      .length = static_cast<uint64_t>(file->processing_length())};
-}
-
-std::shared_ptr<file_loader> file_loader::make_shared() {
-    return std::shared_ptr<file_loader>(new file_loader{});
 }

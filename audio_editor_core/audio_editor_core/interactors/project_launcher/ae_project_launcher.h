@@ -19,6 +19,11 @@ struct project_launcher final : std::enable_shared_from_this<project_launcher> {
                                                                        project_editor_level_pool_for_project_launcher *,
                                                                        project_status_for_project_launcher *);
 
+    project_launcher(project_id const &, url const &file_url, project_url_for_project_launcher const *,
+                     file_importer_for_project_launcher *, file_loader_for_project_launcher *,
+                     responder_stack_for_project_launcher *, project_editor_level_pool_for_project_launcher *,
+                     project_status_for_project_launcher *);
+
     void launch();
 
    private:
@@ -33,11 +38,6 @@ struct project_launcher final : std::enable_shared_from_this<project_launcher> {
     project_status_for_project_launcher *const _status;
 
     observing::canceller_pool _pool;
-
-    project_launcher(project_id const &, url const &file_url, project_url_for_project_launcher const *,
-                     file_importer_for_project_launcher *, file_loader_for_project_launcher *,
-                     responder_stack_for_project_launcher *, project_editor_level_pool_for_project_launcher *,
-                     project_status_for_project_launcher *);
 
     project_launcher(project_launcher const &) = delete;
     project_launcher(project_launcher &&) = delete;

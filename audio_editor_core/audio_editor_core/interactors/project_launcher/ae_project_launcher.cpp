@@ -16,8 +16,8 @@ std::shared_ptr<project_launcher> project_launcher::make_shared(
     file_importer_for_project_launcher *file_importer, file_loader_for_project_launcher *file_loader,
     responder_stack_for_project_launcher *responder_stack,
     project_editor_level_pool_for_project_launcher *editor_level_pool, project_status_for_project_launcher *status) {
-    return std::shared_ptr<ae::project_launcher>(new ae::project_launcher{
-        project_id, file_url, project_url, file_importer, file_loader, responder_stack, editor_level_pool, status});
+    return std::make_shared<ae::project_launcher>(project_id, file_url, project_url, file_importer, file_loader,
+                                                  responder_stack, editor_level_pool, status);
 }
 
 project_launcher::project_launcher(project_id const &project_id, url const &file_url,

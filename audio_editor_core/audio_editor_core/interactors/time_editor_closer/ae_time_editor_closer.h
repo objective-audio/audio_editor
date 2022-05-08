@@ -23,9 +23,8 @@ struct time_editor_closer final {
                                                                          identifier const level_instance_id,
                                                                          time_editor *);
 
-    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(identifier const level_instance_id,
-                                                                         time_editor *, time_editor_level_router *,
-                                                                         responder_stack *, timing *, player *);
+    time_editor_closer(identifier const level_instance_id, time_editor *, time_editor_level_router *, responder_stack *,
+                       timing *, player *);
 
     void finish();
     void cancel();
@@ -45,9 +44,6 @@ struct time_editor_closer final {
     };
 
     std::optional<dependencies> _dependencies;
-
-    time_editor_closer(identifier const level_instance_id, time_editor *, time_editor_level_router *, responder_stack *,
-                       timing *, player *);
 
     void _finalize();
 };

@@ -14,7 +14,7 @@ static std::vector<std::string> const _zero_string_vector{"0"};
 
 std::shared_ptr<time_editor> time_editor::make_shared(number_components const &components,
                                                       std::optional<std::size_t> const unit_idx) {
-    return std::shared_ptr<time_editor>(new time_editor{components, unit_idx});
+    return std::make_shared<time_editor>(components, unit_idx);
 }
 
 time_editor::time_editor(number_components const &components, std::optional<std::size_t> const unit_idx)

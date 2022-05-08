@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<pasteboard> pasteboard::make_shared() {
-    return std::shared_ptr<pasteboard>(new pasteboard{});
+    return std::make_shared<pasteboard>();
 }
 
 pasteboard::pasteboard()

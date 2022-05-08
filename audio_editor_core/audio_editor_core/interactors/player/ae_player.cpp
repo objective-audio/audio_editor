@@ -11,6 +11,14 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<player> player::make_shared(url const &root_url, project_id const &project_id,
+                                            scrolling_for_player *scrolling) {
+    return std::make_shared<player>(
+        playing::coordinator::make_shared(
+            root_url.path(), playing::renderer::make_shared(audio::mac_device::renewable_default_output_device())),
+        project_id, scrolling);
+}
+
 player::player(std::shared_ptr<playing::coordinator> const &coordinator, project_id const &project_id,
                scrolling_for_player *scrolling)
     : _project_id(project_id), _coordinator(coordinator), _scrolling(scrolling) {
@@ -93,17 +101,4 @@ void player::_update_reserved_frame_if_began(double const delta_time) {
         auto const reserving_time = reserved_time + delta_time;
         this->_reserved_frame = static_cast<int64_t>(reserving_time * sample_rate);
     }
-}
-
-std::shared_ptr<player> player::make_shared(url const &root_url, project_id const &project_id,
-                                            scrolling_for_player *scrolling) {
-    return make_shared(
-        playing::coordinator::make_shared(
-            root_url.path(), playing::renderer::make_shared(audio::mac_device::renewable_default_output_device())),
-        project_id, scrolling);
-}
-
-std::shared_ptr<player> player::make_shared(std::shared_ptr<playing::coordinator> const &coordinator,
-                                            project_id const &project_id, scrolling_for_player *scrolling) {
-    return std::shared_ptr<player>(new player{coordinator, project_id, scrolling});
 }

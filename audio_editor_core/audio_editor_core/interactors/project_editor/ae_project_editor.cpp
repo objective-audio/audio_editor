@@ -28,26 +28,21 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor> project_editor::make_shared(
-    project_id const &project_id, ae::file_info const &file_info, file_track_for_project_editor *file_track,
-    marker_pool_for_project_editor *marker_pool, edge_holder_for_project_editor *edge_holder,
-    pasteboard_for_project_editor *pasteboard, database_for_project_editor *database, timeline_holder *timeline_updater,
-    editing_status const *editing_status) {
+    project_id const &project_id, file_track_for_project_editor *file_track,
+    marker_pool_for_project_editor *marker_pool, pasteboard_for_project_editor *pasteboard,
+    database_for_project_editor *database, timeline_holder *timeline_updater, editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<project_editor>(new project_editor{file_info, project_level->player.get(), file_track,
-                                                              marker_pool, edge_holder, pasteboard, database,
-                                                              timeline_updater, editing_status});
+    return std::shared_ptr<project_editor>(new project_editor{project_level->player.get(), file_track, marker_pool,
+                                                              pasteboard, database, timeline_updater, editing_status});
 }
 
-project_editor::project_editor(ae::file_info const &file_info, player_for_project_editor *player,
-                               file_track_for_project_editor *file_track, marker_pool_for_project_editor *marker_pool,
-                               edge_holder_for_project_editor *edge_holder, pasteboard_for_project_editor *pasteboard,
+project_editor::project_editor(player_for_project_editor *player, file_track_for_project_editor *file_track,
+                               marker_pool_for_project_editor *marker_pool, pasteboard_for_project_editor *pasteboard,
                                database_for_project_editor *database, timeline_holder *timeline_updater,
                                editing_status const *editing_status)
-    : _file_info(file_info),
-      _player(player),
+    : _player(player),
       _file_track(file_track),
       _marker_pool(marker_pool),
-      _edge_holder(edge_holder),
       _pasteboard(pasteboard),
       _database(database),
       _timeline_holder(timeline_updater),
@@ -74,39 +69,6 @@ project_editor::project_editor(ae::file_info const &file_info, player_for_projec
             }
         })
         .sync()
-        ->add_to(this->_pool);
-
-    this->_database
-        ->observe_reverted([this] {
-            std::vector<file_module> file_modules;
-
-            for (auto const &pair : this->_database->modules()) {
-                if (auto file_module = pair.second.file_module()) {
-                    file_modules.emplace_back(std::move(file_module.value()));
-                }
-            }
-
-            this->_file_track->revert_modules_and_notify(std::move(file_modules));
-
-            std::vector<marker> markers;
-
-            for (auto const &pair : this->_database->markers()) {
-                if (auto const marker = pair.second.marker()) {
-                    markers.emplace_back(std::move(marker.value()));
-                }
-            }
-
-            this->_marker_pool->revert_markers(std::move(markers));
-
-            if (auto const &db_edge = this->_database->edge()) {
-                this->_edge_holder->revert_edge(db_edge.value().edge());
-            } else {
-                this->_edge_holder->revert_edge(ae::edge::zero());
-            }
-
-            this->_pasteboard->revert_data(this->_database->pasting_data());
-        })
-        .end()
         ->add_to(this->_pool);
 }
 

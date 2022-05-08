@@ -10,7 +10,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<editing_status> editing_status::make_shared(exporter const *exporter) {
-    return std::shared_ptr<editing_status>(new editing_status{exporter});
+    return std::make_shared<editing_status>(exporter);
 }
 
 editing_status::editing_status(exporter const *exporter) : _exporter(exporter) {

@@ -20,6 +20,9 @@ struct project_editor_launcher final {
                                                                               ae::file_info const &, timeline_holder *,
                                                                               database *, file_track *, edge_holder *);
 
+    project_editor_launcher(ae::file_info const &, url const &editing_file_url, player *, timeline_holder *, database *,
+                            file_track *, edge_holder *);
+
     void launch();
 
    private:
@@ -30,8 +33,5 @@ struct project_editor_launcher final {
     database *const _database;
     file_track *const _file_track;
     edge_holder *const _edge_holder;
-
-    project_editor_launcher(ae::file_info const &, url const &editing_file_url, player *, timeline_holder *, database *,
-                            file_track *, edge_holder *);
 };
 }  // namespace yas::ae

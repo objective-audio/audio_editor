@@ -20,17 +20,9 @@ std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(project_id c
                                                                     time_editor *editor) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return make_shared(level_instance_id, editor, editor_level->time_editor_level_router.get(),
-                       project_level->responder_stack.get(), editor_level->timing.get(), project_level->player.get());
-}
-
-std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(identifier const level_instance_id,
-                                                                    time_editor *editor,
-                                                                    time_editor_level_router *router,
-                                                                    responder_stack *responder_stack, timing *timing,
-                                                                    player *player) {
-    return std::shared_ptr<time_editor_closer>(
-        new time_editor_closer{level_instance_id, editor, router, responder_stack, timing, player});
+    return std::make_shared<time_editor_closer>(level_instance_id, editor, editor_level->time_editor_level_router.get(),
+                                                project_level->responder_stack.get(), editor_level->timing.get(),
+                                                project_level->player.get());
 }
 
 time_editor_closer::time_editor_closer(identifier const level_instance_id, time_editor *editor,

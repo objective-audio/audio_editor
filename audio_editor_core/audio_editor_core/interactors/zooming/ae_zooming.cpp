@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<zooming> zooming::make_shared() {
-    return std::shared_ptr<zooming>(new zooming{});
+    return std::make_shared<zooming>();
 }
 
 zooming::zooming() : _scale(observing::value::holder<double>::make_shared(1.0)) {

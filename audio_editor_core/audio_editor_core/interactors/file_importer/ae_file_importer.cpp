@@ -12,6 +12,10 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<file_importer> file_importer::make_shared(workable_ptr const &worker, uint32_t const priority) {
+    return std::make_shared<file_importer>(worker, priority);
+}
+
 file_importer::file_importer(workable_ptr const &worker, uint32_t const priority)
     : _worker(worker), _priority(priority), _resource(file_importer_resource::make_shared()) {
     this->_worker->add_task(this->_priority, [resource = this->_resource] {
@@ -109,8 +113,4 @@ void file_importer::import(file_importing_context &&context) {
 
 void file_importer::cancel(project_id const &cancel_id) {
     this->_resource->cancel_on_main(cancel_id);
-}
-
-std::shared_ptr<file_importer> file_importer::make_shared(workable_ptr const &worker, uint32_t const priority) {
-    return std::shared_ptr<file_importer>(new file_importer{worker, priority});
 }

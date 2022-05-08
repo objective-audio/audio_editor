@@ -14,6 +14,11 @@
 
 namespace yas::ae {
 struct player final : player_for_project_editor, player_for_playing_toggler {
+    [[nodiscard]] static std::shared_ptr<player> make_shared(url const &root_url, project_id const &project_id,
+                                                             scrolling_for_player *);
+
+    player(std::shared_ptr<playing::coordinator> const &, project_id const &, scrolling_for_player *);
+
     void begin_rendering() override;
 
     void set_timeline(std::shared_ptr<proc::timeline> const &, playing::sample_rate_t const,
@@ -31,11 +36,6 @@ struct player final : player_for_project_editor, player_for_playing_toggler {
 
     [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
 
-    [[nodiscard]] static std::shared_ptr<player> make_shared(url const &root_url, project_id const &project_id,
-                                                             scrolling_for_player *);
-    [[nodiscard]] static std::shared_ptr<player> make_shared(std::shared_ptr<playing::coordinator> const &,
-                                                             project_id const &project_id, scrolling_for_player *);
-
    private:
     project_id const _project_id;
     std::shared_ptr<playing::coordinator> const _coordinator;
@@ -45,8 +45,6 @@ struct player final : player_for_project_editor, player_for_playing_toggler {
     std::optional<frame_index_t> _seeking_frame = std::nullopt;
 
     observing::canceller_pool _pool;
-
-    player(std::shared_ptr<playing::coordinator> const &, project_id const &, scrolling_for_player *);
 
     player(player const &) = delete;
     player(player &&) = delete;

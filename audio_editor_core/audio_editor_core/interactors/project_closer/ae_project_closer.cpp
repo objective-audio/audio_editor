@@ -16,8 +16,7 @@ std::shared_ptr<project_closer> project_closer::make_shared(
     project_id const &project_id, file_importer_for_project_closer *file_importer,
     project_level_router_for_project_closer *project_level_router,
     project_editor_level_pool_for_project_closer *editor_level_pool, project_status_for_project_closer *status) {
-    return std::shared_ptr<project_closer>(
-        new project_closer{project_id, file_importer, project_level_router, editor_level_pool, status});
+    return std::make_shared<project_closer>(project_id, file_importer, project_level_router, editor_level_pool, status);
 }
 
 project_closer::project_closer(project_id const &project_id, file_importer_for_project_closer *file_importer,

@@ -10,6 +10,10 @@
 
 namespace yas::ae {
 struct file_track final : file_track_for_project_editor {
+    [[nodiscard]] static std::shared_ptr<file_track> make_shared();
+
+    file_track();
+
     [[nodiscard]] file_track_module_map_t const &modules() const override;
 
     void revert_modules_and_notify(std::vector<file_module> &&) override;
@@ -39,14 +43,10 @@ struct file_track final : file_track_for_project_editor {
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&) override;
 
-    [[nodiscard]] static std::shared_ptr<file_track> make_shared();
-
    private:
     file_track_module_map_t _modules;
 
     observing::fetcher_ptr<file_track_event> _event_fetcher;
-
-    file_track();
 
     file_track(file_track const &) = delete;
     file_track(file_track &&) = delete;
