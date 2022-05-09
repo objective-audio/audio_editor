@@ -13,6 +13,7 @@
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
 #include <audio_editor_core/ae_timing.h>
 
@@ -22,10 +23,11 @@ using namespace yas::ae;
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
     project_editor *editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
     edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
-    module_renaming_launcher *module_renaming_launcher, timing *timing, export_interactor *export_interactor) {
+    module_renaming_launcher *module_renaming_launcher, timing *timing, export_interactor *export_interactor,
+    reverter *reverter) {
     return std::make_shared<project_editor_responder>(editor, toggler, nudge_settings, nudger, jumper, edge_editor,
                                                       time_editor_launcher, marker_editor, module_renaming_launcher,
-                                                      timing, export_interactor);
+                                                      timing, export_interactor, reverter);
 }
 
 project_editor_responder::project_editor_responder(project_editor *editor, playing_toggler *toggler,
@@ -33,7 +35,7 @@ project_editor_responder::project_editor_responder(project_editor *editor, playi
                                                    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
                                                    marker_editor *marker_editor,
                                                    module_renaming_launcher *module_renaming_launcher, timing *timing,
-                                                   export_interactor *export_interactor)
+                                                   export_interactor *export_interactor, reverter *reverter)
     : _editor(editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
@@ -44,7 +46,8 @@ project_editor_responder::project_editor_responder(project_editor *editor, playi
       _marker_editor(marker_editor),
       _module_renaming_launcher(module_renaming_launcher),
       _timing(timing),
-      _export_interactor(export_interactor) {
+      _export_interactor(export_interactor),
+      _reverter(reverter) {
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
@@ -181,10 +184,10 @@ void project_editor_responder::handle_action(ae::action const &action) {
                     this->_jumper->go_to_marker(std::stoi(action.value));
                     break;
                 case action_kind::undo:
-                    this->_editor->undo();
+                    this->_reverter->undo();
                     break;
                 case action_kind::redo:
-                    this->_editor->redo();
+                    this->_reverter->redo();
                     break;
                 case action_kind::select_file_for_export:
                     this->_export_interactor->select_file_for_export();
@@ -280,9 +283,9 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return to_responding(this->_jumper->can_go_to_marker(std::stoi(action.value)));
 
         case action_kind::undo:
-            return to_responding(this->_editor->can_undo());
+            return to_responding(this->_reverter->can_undo());
         case action_kind::redo:
-            return to_responding(this->_editor->can_redo());
+            return to_responding(this->_reverter->can_redo());
 
         case action_kind::select_file_for_export:
             return to_responding(this->_export_interactor->can_select_file_for_export());
