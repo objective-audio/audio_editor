@@ -8,12 +8,19 @@
 #include <audio_editor_core/ae_project_id.h>
 
 namespace yas::ae {
+class player;
+class file_track;
+class marker_pool;
+class pasteboard;
+class database;
 class editing_status;
 
 struct project_editor final {
-    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(
-        project_id const &project_id, file_track_for_project_editor *, marker_pool_for_project_editor *,
-        pasteboard_for_project_editor *, database_for_project_editor *, editing_status const *);
+    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(project_id const &project_id, file_track *,
+                                                                     marker_pool *, pasteboard *, database *,
+                                                                     editing_status const *);
+
+    project_editor(player *, file_track *, marker_pool *, pasteboard *, database *, editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -34,17 +41,14 @@ struct project_editor final {
     void paste_and_offset();
 
    private:
-    player_for_project_editor *const _player;
-    file_track_for_project_editor *const _file_track;
-    marker_pool_for_project_editor *const _marker_pool;
-    pasteboard_for_project_editor *const _pasteboard;
-    database_for_project_editor *const _database;
+    player *const _player;
+    file_track *const _file_track;
+    marker_pool *const _marker_pool;
+    pasteboard *const _pasteboard;
+    database *const _database;
     editing_status const *const _editing_status;
 
     observing::canceller_pool _pool;
-
-    project_editor(player_for_project_editor *, file_track_for_project_editor *, marker_pool_for_project_editor *,
-                   pasteboard_for_project_editor *, database_for_project_editor *, editing_status const *);
 
     project_editor(project_editor const &) = delete;
     project_editor(project_editor &&) = delete;

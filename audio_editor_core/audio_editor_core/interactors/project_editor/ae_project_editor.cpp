@@ -26,20 +26,16 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor> project_editor::make_shared(project_id const &project_id,
-                                                            file_track_for_project_editor *file_track,
-                                                            marker_pool_for_project_editor *marker_pool,
-                                                            pasteboard_for_project_editor *pasteboard,
-                                                            database_for_project_editor *database,
-                                                            editing_status const *editing_status) {
+std::shared_ptr<project_editor> project_editor::make_shared(project_id const &project_id, file_track *file_track,
+                                                            marker_pool *marker_pool, pasteboard *pasteboard,
+                                                            database *database, editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<project_editor>(
-        new project_editor{project_level->player.get(), file_track, marker_pool, pasteboard, database, editing_status});
+    return std::make_shared<project_editor>(project_level->player.get(), file_track, marker_pool, pasteboard, database,
+                                            editing_status);
 }
 
-project_editor::project_editor(player_for_project_editor *player, file_track_for_project_editor *file_track,
-                               marker_pool_for_project_editor *marker_pool, pasteboard_for_project_editor *pasteboard,
-                               database_for_project_editor *database, editing_status const *editing_status)
+project_editor::project_editor(player *player, file_track *file_track, marker_pool *marker_pool, pasteboard *pasteboard,
+                               database *database, editing_status const *editing_status)
     : _player(player),
       _file_track(file_track),
       _marker_pool(marker_pool),
