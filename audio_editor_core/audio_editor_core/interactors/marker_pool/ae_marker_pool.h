@@ -10,7 +10,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct marker_pool final : marker_pool_for_project_editor, jumpable_on_project_editor {
+struct marker_pool final : marker_pool_for_project_editor, jumpable_on_jumper {
     [[nodiscard]] static std::shared_ptr<marker_pool> make_shared();
 
     marker_pool();

@@ -10,7 +10,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct edge_holder final : edge_holder_for_project_editor, jumpable_on_project_editor {
+struct edge_holder final : edge_holder_for_project_editor, jumpable_on_jumper {
     [[nodiscard]] static std::shared_ptr<edge_holder> make_shared();
 
     edge_holder();

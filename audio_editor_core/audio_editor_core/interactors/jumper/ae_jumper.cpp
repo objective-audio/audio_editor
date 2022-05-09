@@ -114,8 +114,8 @@ std::optional<frame_index_t> jumper::_previous_jumpable_frame() const {
 
     std::optional<frame_index_t> result{std::nullopt};
 
-    std::initializer_list<jumpable_on_project_editor const *> const editors{this->_file_track, this->_marker_pool,
-                                                                            this->_edge_holder};
+    std::initializer_list<jumpable_on_jumper const *> const editors{this->_file_track, this->_marker_pool,
+                                                                    this->_edge_holder};
 
     for (auto const &editor : editors) {
         if (auto const frame = editor->previous_jumpable_frame(current_frame)) {
@@ -135,8 +135,8 @@ std::optional<frame_index_t> jumper::_next_jumpable_frame() const {
 
     std::optional<frame_index_t> result{std::nullopt};
 
-    std::initializer_list<jumpable_on_project_editor const *> const editors{this->_file_track, this->_marker_pool,
-                                                                            this->_edge_holder};
+    std::initializer_list<jumpable_on_jumper const *> const editors{this->_file_track, this->_marker_pool,
+                                                                    this->_edge_holder};
 
     for (auto const &editor : editors) {
         if (auto const frame = editor->next_jumpable_frame(current_frame)) {

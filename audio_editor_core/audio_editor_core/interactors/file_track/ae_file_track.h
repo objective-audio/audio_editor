@@ -10,7 +10,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct file_track final : file_track_for_project_editor, jumpable_on_project_editor {
+struct file_track final : file_track_for_project_editor, jumpable_on_jumper {
     [[nodiscard]] static std::shared_ptr<file_track> make_shared();
 
     file_track();
