@@ -5,11 +5,12 @@
 #pragma once
 
 #include <audio_editor_core/ae_edge_holder_types.h>
+#include <audio_editor_core/ae_jumper_dependency.h>
 #include <audio_editor_core/ae_project_editor_dependency.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct edge_holder final : edge_holder_for_project_editor {
+struct edge_holder final : edge_holder_for_project_editor, jumpable_on_project_editor {
     [[nodiscard]] static std::shared_ptr<edge_holder> make_shared();
 
     edge_holder();

@@ -22,13 +22,6 @@ class timeline;
 }
 
 namespace yas::ae {
-struct jumpable_on_project_editor {
-    virtual ~jumpable_on_project_editor() = default;
-
-    [[nodiscard]] virtual std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const = 0;
-    [[nodiscard]] virtual std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const = 0;
-};
-
 struct player_for_project_editor {
     virtual ~player_for_project_editor() = default;
 
@@ -47,7 +40,7 @@ struct player_for_project_editor {
     [[nodiscard]] virtual observing::syncable observe_is_playing(std::function<void(bool const &)> &&) = 0;
 };
 
-struct file_track_for_project_editor : jumpable_on_project_editor {
+struct file_track_for_project_editor {
     virtual ~file_track_for_project_editor() = default;
 
     [[nodiscard]] virtual file_track_module_map_t const &modules() const = 0;
@@ -76,7 +69,7 @@ struct file_track_for_project_editor : jumpable_on_project_editor {
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(file_track_event const &)> &&) = 0;
 };
 
-struct marker_pool_for_project_editor : jumpable_on_project_editor {
+struct marker_pool_for_project_editor {
     virtual ~marker_pool_for_project_editor() = default;
 
     virtual void revert_markers(std::vector<marker> &&) = 0;
@@ -94,7 +87,7 @@ struct marker_pool_for_project_editor : jumpable_on_project_editor {
     [[nodiscard]] virtual observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&) = 0;
 };
 
-struct edge_holder_for_project_editor : jumpable_on_project_editor {
+struct edge_holder_for_project_editor {
     virtual ~edge_holder_for_project_editor() = default;
 
     [[nodiscard]] virtual ae::edge const &edge() const = 0;

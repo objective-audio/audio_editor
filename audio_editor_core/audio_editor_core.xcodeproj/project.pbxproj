@@ -197,6 +197,7 @@
 		B69E476B2827E00F002F2AFF /* ae_reverter.h in Headers */ = {isa = PBXBuildFile; fileRef = B69E47692827E00F002F2AFF /* ae_reverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69E476F282809CC002F2AFF /* ae_timeline_updater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69E476D282809CC002F2AFF /* ae_timeline_updater.cpp */; };
 		B69E4770282809CC002F2AFF /* ae_timeline_updater.h in Headers */ = {isa = PBXBuildFile; fileRef = B69E476E282809CC002F2AFF /* ae_timeline_updater.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B69E47722828C22F002F2AFF /* ae_jumper_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B69E47712828C22D002F2AFF /* ae_jumper_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69ED0C82824D6E400AC9AB1 /* ae_jumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69ED0C62824D6E400AC9AB1 /* ae_jumper.cpp */; };
 		B69ED0C92824D6E400AC9AB1 /* ae_jumper.h in Headers */ = {isa = PBXBuildFile; fileRef = B69ED0C72824D6E400AC9AB1 /* ae_jumper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A123772788373E00F31B31 /* ae_nudge_settings_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A123762788373E00F31B31 /* ae_nudge_settings_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -513,6 +514,7 @@
 		B69E47692827E00F002F2AFF /* ae_reverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_reverter.h; sourceTree = "<group>"; };
 		B69E476D282809CC002F2AFF /* ae_timeline_updater.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_timeline_updater.cpp; sourceTree = "<group>"; };
 		B69E476E282809CC002F2AFF /* ae_timeline_updater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_timeline_updater.h; sourceTree = "<group>"; };
+		B69E47712828C22D002F2AFF /* ae_jumper_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_jumper_dependency.h; sourceTree = "<group>"; };
 		B69ED0C62824D6E400AC9AB1 /* ae_jumper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_jumper.cpp; sourceTree = "<group>"; };
 		B69ED0C72824D6E400AC9AB1 /* ae_jumper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_jumper.h; sourceTree = "<group>"; };
 		B6A123762788373E00F31B31 /* ae_nudge_settings_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudge_settings_dependency.h; sourceTree = "<group>"; };
@@ -1303,6 +1305,7 @@
 		B69ED0C52824D6D600AC9AB1 /* jumper */ = {
 			isa = PBXGroup;
 			children = (
+				B69E47712828C22D002F2AFF /* ae_jumper_dependency.h */,
 				B69ED0C62824D6E400AC9AB1 /* ae_jumper.cpp */,
 				B69ED0C72824D6E400AC9AB1 /* ae_jumper.h */,
 			);
@@ -1725,6 +1728,7 @@
 				B6F5264B27925EAD00688339 /* ae_number_components.h in Headers */,
 				B6C3926A2741442400ACFFF4 /* ae_action_controller.h in Headers */,
 				B6966F45272EDB2F00A90733 /* ae_db_module.h in Headers */,
+				B69E47722828C22F002F2AFF /* ae_jumper_dependency.h in Headers */,
 				B62EF82F27C9F85600A27948 /* ae_hierarchy.h in Headers */,
 				B6F4D98427B6027200AE7D5D /* ae_edge_holder_types.h in Headers */,
 				B6E8995D2688806E00BBFA73 /* ae_ui_editing_root_utils.h in Headers */,
