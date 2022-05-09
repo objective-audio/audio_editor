@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_holder.h>
+#include <audio_editor_core/ae_editing_status.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
@@ -14,17 +15,19 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<reverter> reverter::make_shared(database *database, file_track *file_track, marker_pool *marker_pool,
-                                                pasteboard *pasteboard, edge_holder *edge_holder) {
-    return std::make_shared<reverter>(database, file_track, marker_pool, pasteboard, edge_holder);
+                                                pasteboard *pasteboard, edge_holder *edge_holder,
+                                                editing_status const *editing_status) {
+    return std::make_shared<reverter>(database, file_track, marker_pool, pasteboard, edge_holder, editing_status);
 }
 
 reverter::reverter(database *database, file_track *file_track, marker_pool *marker_pool, pasteboard *pasteboard,
-                   edge_holder *edge_holder)
+                   edge_holder *edge_holder, editing_status const *editing_status)
     : _database(database),
       _file_track(file_track),
       _marker_pool(marker_pool),
       _pasteboard(pasteboard),
-      _edge_holder(edge_holder) {
+      _edge_holder(edge_holder),
+      _editing_status(editing_status) {
     this->_database
         ->observe_reverted([this] {
             std::vector<file_module> file_modules;
@@ -57,4 +60,36 @@ reverter::reverter(database *database, file_track *file_track, marker_pool *mark
         })
         .end()
         ->add_to(this->_pool);
+}
+
+bool reverter::can_undo() const {
+    if (!this->_editing_status->can_editing()) {
+        return false;
+    }
+
+    return this->_database->can_undo();
+}
+
+void reverter::undo() {
+    if (!this->can_undo()) {
+        return;
+    }
+
+    this->_database->undo();
+}
+
+bool reverter::can_redo() const {
+    if (!this->_editing_status->can_editing()) {
+        return false;
+    }
+
+    return this->_database->can_redo();
+}
+
+void reverter::redo() {
+    if (!this->can_redo()) {
+        return;
+    }
+
+    this->_database->redo();
 }

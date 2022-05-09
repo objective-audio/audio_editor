@@ -26,12 +26,6 @@ struct project_editor final {
     void erase();
     void erase_and_offset();
 
-    [[nodiscard]] bool can_undo() const;
-    void undo();
-
-    [[nodiscard]] bool can_redo() const;
-    void redo();
-
     [[nodiscard]] bool can_cut() const;
     void cut_and_offset();
     [[nodiscard]] bool can_copy() const;

@@ -169,38 +169,6 @@ void project_editor::erase_and_offset() {
     }
 }
 
-bool project_editor::can_undo() const {
-    if (!this->_editing_status->can_editing()) {
-        return false;
-    }
-
-    return this->_database->can_undo();
-}
-
-void project_editor::undo() {
-    if (!this->can_undo()) {
-        return;
-    }
-
-    this->_database->undo();
-}
-
-bool project_editor::can_redo() const {
-    if (!this->_editing_status->can_editing()) {
-        return false;
-    }
-
-    return this->_database->can_redo();
-}
-
-void project_editor::redo() {
-    if (!this->can_redo()) {
-        return;
-    }
-
-    this->_database->redo();
-}
-
 bool project_editor::can_cut() const {
     return this->can_copy();
 }
