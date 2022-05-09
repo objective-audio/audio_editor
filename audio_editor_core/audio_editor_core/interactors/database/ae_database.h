@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_marker.h>
-#include <audio_editor_core/ae_project_editor_dependency.h>
 #include <cpp_utils/yas_delaying_caller.h>
 #include <cpp_utils/yas_url.h>
 
@@ -18,33 +17,33 @@ class manager;
 }  // namespace yas::db
 
 namespace yas::ae {
-struct database final : std::enable_shared_from_this<database>, database_for_project_editor {
+struct database final : std::enable_shared_from_this<database> {
     [[nodiscard]] static std::shared_ptr<database> make_shared(url const &db_file_url);
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);
 
-    [[nodiscard]] db_modules_map const &modules() const override;
-    [[nodiscard]] db_markers_map const &markers() const override;
-    [[nodiscard]] std::optional<db_edge> const &edge() const override;
-    [[nodiscard]] std::string const pasting_data() const override;
+    [[nodiscard]] db_modules_map const &modules() const;
+    [[nodiscard]] db_markers_map const &markers() const;
+    [[nodiscard]] std::optional<db_edge> const &edge() const;
+    [[nodiscard]] std::string const pasting_data() const;
     [[nodiscard]] bool is_processing() const;
 
-    void add_module(file_module const &) override;
-    void remove_module(time::range const &) override;
-    void update_module_detail(file_module const &) override;
-    void set_pasting_data(std::string const &) override;
-    void add_marker(marker const &) override;
-    void remove_marker(frame_index_t const &) override;
-    void set_edge(ae::edge const &) override;
+    void add_module(file_module const &);
+    void remove_module(time::range const &);
+    void update_module_detail(file_module const &);
+    void set_pasting_data(std::string const &);
+    void add_marker(marker const &);
+    void remove_marker(frame_index_t const &);
+    void set_edge(ae::edge const &);
 
-    void suspend_saving(std::function<void(void)> &&) override;
+    void suspend_saving(std::function<void(void)> &&);
 
-    [[nodiscard]] bool can_undo() const override;
-    void undo() override;
+    [[nodiscard]] bool can_undo() const;
+    void undo();
 
-    [[nodiscard]] bool can_redo() const override;
-    void redo() override;
+    [[nodiscard]] bool can_redo() const;
+    void redo();
 
-    [[nodiscard]] observing::endable observe_reverted(std::function<void(void)> &&) override;
+    [[nodiscard]] observing::endable observe_reverted(std::function<void(void)> &&);
 
    private:
     std::size_t _processing_count = 0;

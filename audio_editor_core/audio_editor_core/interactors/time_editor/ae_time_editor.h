@@ -5,9 +5,9 @@
 #pragma once
 
 #include <audio_editor_core/ae_number_components.h>
-#include <audio_editor_core/ae_project_editor_dependency.h>
 #include <audio_editor_core/ae_responder.h>
 #include <audio_editor_core/ae_time_editor_types.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct time_editor final {

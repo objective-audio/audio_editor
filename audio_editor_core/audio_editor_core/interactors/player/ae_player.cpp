@@ -50,7 +50,7 @@ void player::begin_rendering() {
     this->_coordinator->set_rendering(true);
 }
 
-void player::set_timeline(proc::timeline_ptr const &time_line, playing::sample_rate_t const sample_rate,
+void player::set_timeline(proc::timeline_ptr const &time_line, sample_rate_t const sample_rate,
                           audio::pcm_format const pcm_format) {
     this->_coordinator->set_timeline(time_line, this->_project_id.raw_value);
     this->_coordinator->set_timeline_format(sample_rate, pcm_format);
