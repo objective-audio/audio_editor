@@ -5,8 +5,8 @@
 #include "ae_timeline_holder.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_editor_utils.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_timeline_holder_utils.h>
 #include <processing/yas_processing_umbrella.h>
 
 using namespace yas;
@@ -40,7 +40,7 @@ void timeline_holder::replace(file_track_module_map_t const &modules) {
 
     for (auto const &pair : modules) {
         auto const &file_module = pair.second;
-        this->_track->push_back_module(project_editor_utils::make_module(file_module, url, ch_count),
+        this->_track->push_back_module(timeline_holder_utils::make_module(file_module, url, ch_count),
                                        file_module.range);
     }
 
@@ -52,7 +52,7 @@ void timeline_holder::insert(file_module const &file_module) {
         auto const url = this->_editing_file_url;
         auto const ch_count = this->_file_info.channel_count;
 
-        track->push_back_module(project_editor_utils::make_module(file_module, url, ch_count), file_module.range);
+        track->push_back_module(timeline_holder_utils::make_module(file_module, url, ch_count), file_module.range);
     } else {
         assert(0);
     }
