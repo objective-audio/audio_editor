@@ -6,6 +6,7 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #import <audio_editor_core/ae_app_level.h>
 #import <audio_editor_core/ae_app_presenter.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #import <cpp_utils/yas_cf_utils.h>
 #import <objc_utils/yas_objc_unowned.h>
 #import "AEWindowController.h"
@@ -20,17 +21,24 @@ using namespace yas::ae;
 @end
 
 @implementation AppDelegate {
-    app_presenter _presenter;
+    std::shared_ptr<app_presenter> _presenter;
     observing::canceller_pool _pool;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    if (NSClassFromString(@"XCTestCase") != nil) {
+        return;
+    }
+
+    hierarchy::app_level_router()->add_level();
+    self->_presenter = std::make_shared<app_presenter>();
+
     self.windowControllers = [[NSMutableSet alloc] init];
 
     auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
 
     self->_presenter
-        .observe_event([unowned](auto const &event) {
+        ->observe_event([unowned](auto const &event) {
             switch (event.type) {
                 case app_presenter_event_type::open_file_dialog: {
                     [unowned.object openFileDialog];
@@ -53,14 +61,14 @@ using namespace yas::ae;
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
     if (aSelector == @selector(openDocument:)) {
-        return self->_presenter.can_open_file_dialog();
+        return self->_presenter->can_open_file_dialog();
     } else {
         return [super respondsToSelector:aSelector];
     }
 }
 
 - (void)openDocument:(id)sender {
-    self->_presenter.open_file_dialog();
+    self->_presenter->open_file_dialog();
 }
 
 #pragma mark - private
@@ -74,7 +82,7 @@ using namespace yas::ae;
 
     if ([panel runModal] == NSModalResponseOK) {
         url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
-        self->_presenter.select_file(file_url);
+        self->_presenter->select_file(file_url);
     }
 }
 
