@@ -17,7 +17,6 @@ class ui_root_level_router;
 
 struct app_level final {
     [[nodiscard]] static std::shared_ptr<app_level> make_shared();
-    [[nodiscard]] static std::shared_ptr<app_level> const &global();
 
     std::shared_ptr<worker> const worker;
     std::shared_ptr<ae::system_url> const system_url;

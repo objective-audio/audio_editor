@@ -43,8 +43,10 @@ using namespace yas::ae;
     return reinterpret_cast<std::uintptr_t>(self);
 }
 
-- (void)dealloc {
-    app_level::global()->ui_root_level_router->remove_level_for_view_id(self.project_view_id);
+- (void)viewDidDisappear {
+    [super viewDidDisappear];
+
+    hierarchy::app_level()->ui_root_level_router->remove_level_for_view_id(self.project_view_id);
 }
 
 - (void)setupWithProjectID:(project_id const &)project_id {
@@ -54,7 +56,7 @@ using namespace yas::ae;
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
-    auto const &ui_root_level_router = app_level::global()->ui_root_level_router;
+    auto const &ui_root_level_router = hierarchy::app_level()->ui_root_level_router;
     ui_root_level_router->add_level(standard, {.project_id = project_id, .view_id = self.project_view_id});
     self->_root_level = ui_root_level_router->level_for_view_id(self.project_view_id);
 

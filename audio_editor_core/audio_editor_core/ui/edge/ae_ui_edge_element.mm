@@ -13,7 +13,7 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_edge_element> ui_edge_element::make_shared(std::string const &text, args const &args,
                                                               uintptr_t const project_view_id) {
-    auto const &app_level = app_level::global();
+    auto const &app_level = hierarchy::app_level();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_view_id);
 
     return std::shared_ptr<ui_edge_element>(

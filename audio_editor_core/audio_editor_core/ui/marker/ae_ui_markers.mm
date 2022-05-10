@@ -20,7 +20,7 @@ static std::size_t const reserving_interval = 10;
 }
 
 std::shared_ptr<ui_markers> ui_markers::make_shared(ui_project_id const &project_id) {
-    auto const &app_level = app_level::global();
+    auto const &app_level = hierarchy::app_level();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
     auto const presenter = markers_presenter::make_shared(project_id.project_id, ui_root_level->display_space);

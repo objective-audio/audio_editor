@@ -24,7 +24,7 @@ static std::size_t const reserving_interval = 100;
 std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &project_id,
                                                     std::shared_ptr<module_location_pool> const &location_pool,
                                                     std::shared_ptr<ui_module_waveforms> const &waveforms) {
-    auto const &app_level = app_level::global();
+    auto const &app_level = hierarchy::app_level();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
     auto const modules_presenter =

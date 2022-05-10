@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_file_loader.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_editor_level_pool.h>
@@ -26,7 +27,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_level> project_level::make_shared(ae::project_id const &project_id, url const &file_url) {
-    return std::shared_ptr<project_level>(new project_level{project_id, file_url, app_level::global()});
+    return std::shared_ptr<project_level>(new project_level{project_id, file_url, hierarchy::app_level()});
 }
 
 project_level::project_level(ae::project_id const &project_id, url const &file_url,
