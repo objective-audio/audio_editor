@@ -12,6 +12,7 @@
 #include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_time_presenter_utils.h>
 #include <audio_editor_core/ae_timing.h>
+#include <cpp_utils/yas_fast_each.h>
 
 using namespace yas;
 using namespace yas::ae;

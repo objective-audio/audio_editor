@@ -11,6 +11,7 @@
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_root_level_router.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
+#include <cpp_utils/yas_cf_utils.h>
 #include <objc_utils/yas_objc_unowned.h>
 #import "AEMetalView.h"
 #import "AEModuleNameViewController.h"
