@@ -23,14 +23,13 @@ struct time_editor_level final {
                                                                         number_components const &,
                                                                         std::optional<std::size_t> const unit_idx);
 
+    time_editor_level(ae::project_id const &project_id, number_components const &,
+                      std::optional<std::size_t> const unit_idx);
+
     identifier const instance_id;
     project_id const project_id;
     std::shared_ptr<time_editor> const editor;
     std::shared_ptr<time_editor_closer> const closer;
     std::shared_ptr<time_editor_responder> const responder;
-
-   private:
-    time_editor_level(ae::project_id const &project_id, number_components const &,
-                      std::optional<std::size_t> const unit_idx);
 };
 }  // namespace yas::ae

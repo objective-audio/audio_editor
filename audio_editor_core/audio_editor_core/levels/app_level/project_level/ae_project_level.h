@@ -29,6 +29,8 @@ class project_editor_level_pool;
 struct project_level final {
     [[nodiscard]] static std::shared_ptr<project_level> make_shared(project_id const &, url const &file_url);
 
+    project_level(ae::project_id const &, url const &file_url, std::shared_ptr<app_level> const &);
+
     ae::project_id const project_id;
     url const file_url;
 
@@ -44,8 +46,5 @@ struct project_level final {
     std::shared_ptr<ae::project_status> const status;
     std::shared_ptr<ae::project_closer> const closer;
     std::shared_ptr<ae::project_launcher> const launcher;
-
-   private:
-    project_level(ae::project_id const &identifier, url const &file_url, std::shared_ptr<app_level> const &);
 };
 }  // namespace yas::ae

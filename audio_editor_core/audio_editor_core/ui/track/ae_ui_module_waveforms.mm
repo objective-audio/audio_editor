@@ -16,7 +16,7 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
     ui_project_id const &project_id, std::shared_ptr<module_location_pool> const &location_pool) {
-    auto const &app_level = app_level::global();
+    auto const &app_level = hierarchy::app_level();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
     auto const presenter = module_waveforms_presenter::make_shared(project_id.project_id, location_pool);
 

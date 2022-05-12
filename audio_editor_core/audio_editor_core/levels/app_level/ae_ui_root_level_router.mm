@@ -9,7 +9,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_root_level_router> ui_root_level_router::make_shared() {
-    return std::shared_ptr<ui_root_level_router>(new ui_root_level_router{});
+    return std::make_shared<ui_root_level_router>();
 }
 
 ui_root_level_router::ui_root_level_router() {

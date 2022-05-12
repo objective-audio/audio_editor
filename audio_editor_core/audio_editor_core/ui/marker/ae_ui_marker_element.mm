@@ -12,7 +12,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(args const &args, uintptr_t const project_view_id) {
-    auto const &app_level = app_level::global();
+    auto const &app_level = hierarchy::app_level();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_view_id);
 
     return std::shared_ptr<ui_marker_element>(new ui_marker_element{

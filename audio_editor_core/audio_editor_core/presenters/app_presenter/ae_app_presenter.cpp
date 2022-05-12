@@ -6,12 +6,13 @@
 
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_app_presenter_utils.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_level_router.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-app_presenter::app_presenter() : app_presenter(app_level::global()->project_level_router) {
+app_presenter::app_presenter() : app_presenter(hierarchy::app_level()->project_level_router) {
 }
 
 app_presenter::app_presenter(std::shared_ptr<project_pool_for_app_presenter> const &pool) : _project_pool(pool) {

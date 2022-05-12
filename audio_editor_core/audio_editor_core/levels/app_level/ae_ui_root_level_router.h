@@ -16,13 +16,13 @@ class ui_root_level;
 struct ui_root_level_router {
     [[nodiscard]] static std::shared_ptr<ui_root_level_router> make_shared();
 
+    ui_root_level_router();
+
     void add_level(std::shared_ptr<ui::standard> const &, ui_project_id const &project_id);
     [[nodiscard]] std::shared_ptr<ui_root_level> const &level_for_view_id(uintptr_t const project_view_id) const;
     void remove_level_for_view_id(uintptr_t const project_view_id);
 
    private:
     std::map<uintptr_t, std::shared_ptr<ui_root_level>> _ui_roots;
-
-    ui_root_level_router();
 };
 }  // namespace yas::ae

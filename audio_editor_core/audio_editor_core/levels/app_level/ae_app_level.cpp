@@ -16,23 +16,28 @@
 using namespace yas;
 using namespace yas::ae;
 
-app_level::app_level()
-    : worker(worker::make_shared()),
-      system_url(system_url::make_shared()),
-      launcher(app_launcher::make_shared(worker, system_url)),
-      file_importer(file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing))),
-      file_loader(file_loader::make_shared()),
-      color(ae::color::make_shared()),
-      project_level_router(project_level_router::make_shared()),
-      ui_root_level_router(ui_root_level_router::make_shared()) {
-    this->launcher->launch();
+app_level::app_level(std::shared_ptr<yas::worker> const &worker, std::shared_ptr<ae::system_url> const &system_url,
+                     std::shared_ptr<ae::app_launcher> const &launcher,
+                     std::shared_ptr<ae::file_importer> const &file_importer,
+                     std::shared_ptr<ae::file_loader> const &file_loader, std::shared_ptr<ae::color> const &color,
+                     std::shared_ptr<ae::project_level_router> const &project_level_router,
+                     std::shared_ptr<ae::ui_root_level_router> const &ui_root_level_router)
+    : worker(worker),
+      system_url(system_url),
+      launcher(launcher),
+      file_importer(file_importer),
+      file_loader(file_loader),
+      color(color),
+      project_level_router(project_level_router),
+      ui_root_level_router(ui_root_level_router) {
 }
 
 std::shared_ptr<app_level> app_level::make_shared() {
-    return std::shared_ptr<app_level>(new app_level{});
-}
-
-std::shared_ptr<app_level> const &app_level::global() {
-    static std::shared_ptr<app_level> const _global = app_level::make_shared();
-    return _global;
+    auto const worker = worker::make_shared();
+    auto const system_url = system_url::make_shared();
+    return std::make_shared<app_level>(
+        worker, system_url, app_launcher::make_shared(worker, system_url),
+        file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing)),
+        file_loader::make_shared(), ae::color::make_shared(), project_level_router::make_shared(),
+        ui_root_level_router::make_shared());
 }

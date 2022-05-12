@@ -5,6 +5,7 @@
 #include "ae_ui_time.h"
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_color.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_time_presenter.h>
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
@@ -21,7 +22,7 @@ std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &project_id) {
     auto const presenter = time_presenter::make_shared(project_id.project_id);
     auto const action_controller = action_controller::make_shared(project_id.project_id);
 
-    auto const &app_level = app_level::global();
+    auto const &app_level = hierarchy::app_level();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
     return std::shared_ptr<ui_time>(

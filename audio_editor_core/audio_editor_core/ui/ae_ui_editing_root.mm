@@ -25,7 +25,7 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id cons
                                                               std::shared_ptr<ui_scroller> const &ui_scroller,
                                                               std::shared_ptr<ui_modal_bg> const &ui_modal_bg,
                                                               std::shared_ptr<ui_time> const &ui_time) {
-    auto const &app_level = app_level::global();
+    auto const &app_level = hierarchy::app_level();
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
     auto const presenter = editing_root_presenter::make_shared(project_id.project_id);
