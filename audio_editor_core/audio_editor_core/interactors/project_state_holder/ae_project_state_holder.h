@@ -1,5 +1,5 @@
 //
-//  ae_project_status.h
+//  ae_project_state_holder.h
 //
 
 #pragma once
@@ -10,10 +10,10 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct project_status final : project_status_for_project_closer, project_status_for_project_launcher {
-    [[nodiscard]] static std::shared_ptr<project_status> make_shared();
+struct project_state_holder final : project_state_holder_for_project_closer, project_state_holder_for_project_launcher {
+    [[nodiscard]] static std::shared_ptr<project_state_holder> make_shared();
 
-    project_status();
+    project_state_holder();
 
     [[nodiscard]] project_state const &state() const override;
     void set_state(project_state const &) override;

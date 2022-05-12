@@ -272,8 +272,8 @@
 		B6CFC64127EF517400F0E1B7 /* ae_sheet_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CFC63F27EF517400F0E1B7 /* ae_sheet_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CFC64327EF51C900F0E1B7 /* ae_sheet_event.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CFC64227EF51C900F0E1B7 /* ae_sheet_event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CFC64627EF54DB00F0E1B7 /* ae_sheet_event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6CFC64427EF54DB00F0E1B7 /* ae_sheet_event.cpp */; };
-		B6D26B3E281CF8FB00417E5D /* ae_project_status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D26B3C281CF8FB00417E5D /* ae_project_status.cpp */; };
-		B6D26B3F281CF8FB00417E5D /* ae_project_status.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D26B3D281CF8FB00417E5D /* ae_project_status.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6D26B3E281CF8FB00417E5D /* ae_project_state_holder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D26B3C281CF8FB00417E5D /* ae_project_state_holder.cpp */; };
+		B6D26B3F281CF8FB00417E5D /* ae_project_state_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D26B3D281CF8FB00417E5D /* ae_project_state_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6D385312649623A005ADD0B /* ae_timeline_holder_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D3852F2649623A005ADD0B /* ae_timeline_holder_utils.cpp */; };
 		B6D385322649623A005ADD0B /* ae_timeline_holder_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D385302649623A005ADD0B /* ae_timeline_holder_utils.h */; };
 		B6D55913281F849500C9427C /* ae_playing_toggler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D55911281F849500C9427C /* ae_playing_toggler.cpp */; };
@@ -592,8 +592,8 @@
 		B6CFC63F27EF517400F0E1B7 /* ae_sheet_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_sheet_presenter.h; sourceTree = "<group>"; };
 		B6CFC64227EF51C900F0E1B7 /* ae_sheet_event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_sheet_event.h; sourceTree = "<group>"; };
 		B6CFC64427EF54DB00F0E1B7 /* ae_sheet_event.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_sheet_event.cpp; sourceTree = "<group>"; };
-		B6D26B3C281CF8FB00417E5D /* ae_project_status.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_status.cpp; sourceTree = "<group>"; };
-		B6D26B3D281CF8FB00417E5D /* ae_project_status.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_status.h; sourceTree = "<group>"; };
+		B6D26B3C281CF8FB00417E5D /* ae_project_state_holder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_state_holder.cpp; sourceTree = "<group>"; };
+		B6D26B3D281CF8FB00417E5D /* ae_project_state_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_state_holder.h; sourceTree = "<group>"; };
 		B6D3852F2649623A005ADD0B /* ae_timeline_holder_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_timeline_holder_utils.cpp; sourceTree = "<group>"; };
 		B6D385302649623A005ADD0B /* ae_timeline_holder_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_timeline_holder_utils.h; sourceTree = "<group>"; };
 		B6D55911281F849500C9427C /* ae_playing_toggler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_playing_toggler.cpp; sourceTree = "<group>"; };
@@ -933,7 +933,7 @@
 				B6C9A7242640476A00585FDF /* player */,
 				B6DC5F49281E31E500B40A0F /* project_launcher */,
 				B6F8A597281D0F2700EDE909 /* project_closer */,
-				B6D26B3B281CF8ED00417E5D /* project_status */,
+				B6D26B3B281CF8ED00417E5D /* project_state_holder */,
 				B61262F52782FC310019B364 /* nudge_settings */,
 				B62D8FA52723CE5100779D42 /* scrolling */,
 				B6BF1099278549B8000553ED /* timing */,
@@ -1562,14 +1562,14 @@
 			path = sheet_presenter;
 			sourceTree = "<group>";
 		};
-		B6D26B3B281CF8ED00417E5D /* project_status */ = {
+		B6D26B3B281CF8ED00417E5D /* project_state_holder */ = {
 			isa = PBXGroup;
 			children = (
 				B668BE10262DD2FA0021AD20 /* ae_project_state.h */,
-				B6D26B3C281CF8FB00417E5D /* ae_project_status.cpp */,
-				B6D26B3D281CF8FB00417E5D /* ae_project_status.h */,
+				B6D26B3C281CF8FB00417E5D /* ae_project_state_holder.cpp */,
+				B6D26B3D281CF8FB00417E5D /* ae_project_state_holder.h */,
 			);
-			path = project_status;
+			path = project_state_holder;
 			sourceTree = "<group>";
 		};
 		B6D55910281F848100C9427C /* playing_toggler */ = {
@@ -1796,7 +1796,7 @@
 				B69E4770282809CC002F2AFF /* ae_timeline_updater.h in Headers */,
 				B617596D2823BCD400AC880B /* ae_project_editor_launcher.h in Headers */,
 				B629D7722717101300EE379A /* ae_ui_markers.h in Headers */,
-				B6D26B3F281CF8FB00417E5D /* ae_project_status.h in Headers */,
+				B6D26B3F281CF8FB00417E5D /* ae_project_state_holder.h in Headers */,
 				B6BE6BA1273681090097C99D /* ae_window_presenter_dependency.h in Headers */,
 				B695A3892764D87E004CB28F /* ae_display_space_types.h in Headers */,
 				B6CCC490274BC16C00B563C8 /* ae_pasteboard_types.h in Headers */,
@@ -2026,7 +2026,7 @@
 				B60AEF0C27EACE3A000D2019 /* ae_ui_modal_bg.mm in Sources */,
 				B6F3D6A427E20BA00013E00B /* ae_time_editor_responder.cpp in Sources */,
 				B68483FE27C5BBF800792D17 /* ae_app_launcher.cpp in Sources */,
-				B6D26B3E281CF8FB00417E5D /* ae_project_status.cpp in Sources */,
+				B6D26B3E281CF8FB00417E5D /* ae_project_state_holder.cpp in Sources */,
 				B64504BB271A94D2009E05D6 /* ae_modules_presenter.cpp in Sources */,
 				B6F3D6A927E211360013E00B /* ae_project_editor_responder.cpp in Sources */,
 				B6D98A2127E0BD1A0034AD7C /* ae_ui_event_utils.cpp in Sources */,

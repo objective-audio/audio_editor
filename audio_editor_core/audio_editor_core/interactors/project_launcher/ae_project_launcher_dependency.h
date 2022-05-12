@@ -61,8 +61,8 @@ struct project_editor_level_pool_for_project_launcher {
 
 enum class project_state;
 
-struct project_status_for_project_launcher {
-    virtual ~project_status_for_project_launcher() = default;
+struct project_state_holder_for_project_launcher {
+    virtual ~project_state_holder_for_project_launcher() = default;
 
     [[nodiscard]] virtual project_state const &state() const = 0;
     virtual void set_state(project_state const &) = 0;
