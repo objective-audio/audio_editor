@@ -12,12 +12,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_level_router> project_level_router::make_shared() {
-    return make_shared(uuid_generator::make_shared());
-}
-
-std::shared_ptr<project_level_router> project_level_router::make_shared(
-    std::shared_ptr<uuid_generatable> const &uuid_generator) {
-    return std::shared_ptr<project_level_router>(new project_level_router{uuid_generator});
+    return std::make_shared<project_level_router>(uuid_generator::make_shared());
 }
 
 project_level_router::project_level_router(std::shared_ptr<uuid_generatable> const &uuid_generator)
