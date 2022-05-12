@@ -30,4 +30,7 @@ void app_launcher::launch() {
     file_manager::remove_contents_in_directory(system_url->app_directory().path());
 
     worker->start();
+
+    this->_system_url.reset();
+    this->_worker.reset();
 }

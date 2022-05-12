@@ -4,6 +4,7 @@
 
 #include "ae_app_level_router.h"
 
+#include <audio_editor_core/ae_app_launcher.h>
 #include <audio_editor_core/ae_app_level.h>
 #include <cpp_utils/yas_assertion.h>
 
@@ -27,4 +28,5 @@ void app_level_router::add_level() {
         return;
     }
     this->_level = app_level::make_shared();
+    this->_level->launcher->launch();
 }

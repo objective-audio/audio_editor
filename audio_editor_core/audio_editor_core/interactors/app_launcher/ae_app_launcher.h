@@ -18,7 +18,7 @@ struct app_launcher final {
     void launch();
 
    private:
-    std::weak_ptr<workable> const _worker;
-    std::weak_ptr<ae::system_url> const _system_url;
+    std::weak_ptr<workable> _worker;
+    std::weak_ptr<ae::system_url> _system_url;
 };
 }  // namespace yas::ae
