@@ -44,6 +44,8 @@ struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id,
                                                                            file_info const &);
 
+    project_editor_level(ae::project_id const &identifier, ae::file_info const &, std::shared_ptr<project_url> const &);
+
     identifier const instance_id;
     ae::project_id const project_id;
     file_info const file_info;
@@ -73,8 +75,5 @@ struct project_editor_level final {
     std::shared_ptr<reverter> const reverter;
     std::shared_ptr<project_editor> const editor;
     std::shared_ptr<project_editor_responder> const responder;
-
-   private:
-    project_editor_level(ae::project_id const &identifier, ae::file_info const &, std::shared_ptr<project_url> const &);
 };
 }  // namespace yas::ae

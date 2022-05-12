@@ -38,8 +38,7 @@ using namespace yas::ae;
 std::shared_ptr<project_editor_level> project_editor_level::make_shared(ae::project_id const &project_id,
                                                                         ae::file_info const &file_info) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<project_editor_level>(
-        new project_editor_level{project_id, file_info, project_level->project_url});
+    return std::make_shared<project_editor_level>(project_id, file_info, project_level->project_url);
 }
 
 project_editor_level::project_editor_level(ae::project_id const &project_id, ae::file_info const &file_info,
