@@ -15,7 +15,7 @@
 #include <audio_editor_core/ae_project_editor_level_pool.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_level_router.h>
-#include <audio_editor_core/ae_project_status.h>
+#include <audio_editor_core/ae_project_state_holder.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_scrolling.h>
@@ -43,12 +43,12 @@ project_level::project_level(ae::project_id const &project_id, url const &file_u
       sheet_presenter(sheet_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       editor_level_pool(project_editor_level_pool::make_shared(project_id)),
-      status(project_status::make_shared()),
+      state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
                                          app_level->project_level_router.get(), this->editor_level_pool.get(),
-                                         this->status.get())),
+                                         this->state_holder.get())),
       launcher(project_launcher::make_shared(project_id, file_url, this->project_url.get(),
                                              app_level->file_importer.get(), app_level->file_info_loader.get(),
                                              this->responder_stack.get(), this->editor_level_pool.get(),
-                                             this->status.get())) {
+                                             this->state_holder.get())) {
 }

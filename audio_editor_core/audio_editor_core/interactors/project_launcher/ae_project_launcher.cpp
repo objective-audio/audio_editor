@@ -15,9 +15,10 @@ std::shared_ptr<project_launcher> project_launcher::make_shared(
     project_id const &project_id, url const &file_url, project_url_for_project_launcher const *project_url,
     file_importer_for_project_launcher *file_importer, file_info_loader_for_project_launcher const *file_info_loader,
     responder_stack_for_project_launcher *responder_stack,
-    project_editor_level_pool_for_project_launcher *editor_level_pool, project_status_for_project_launcher *status) {
+    project_editor_level_pool_for_project_launcher *editor_level_pool,
+    project_state_holder_for_project_launcher *state_holder) {
     return std::make_shared<ae::project_launcher>(project_id, file_url, project_url, file_importer, file_info_loader,
-                                                  responder_stack, editor_level_pool, status);
+                                                  responder_stack, editor_level_pool, state_holder);
 }
 
 project_launcher::project_launcher(project_id const &project_id, url const &file_url,
@@ -26,7 +27,7 @@ project_launcher::project_launcher(project_id const &project_id, url const &file
                                    file_info_loader_for_project_launcher const *file_info_loader,
                                    responder_stack_for_project_launcher *responder_stack,
                                    project_editor_level_pool_for_project_launcher *editor_level_pool,
-                                   project_status_for_project_launcher *status)
+                                   project_state_holder_for_project_launcher *state_holder)
     : _project_id(project_id),
       _file_url(file_url),
       _project_url(project_url),
@@ -34,16 +35,16 @@ project_launcher::project_launcher(project_id const &project_id, url const &file
       _file_info_loader(file_info_loader),
       _responder_stack(responder_stack),
       _editor_level_pool(editor_level_pool),
-      _status(status) {
+      _state_holder(state_holder) {
 }
 
 void project_launcher::launch() {
-    if (this->_status->state() != project_state::launching) {
+    if (this->_state_holder->state() != project_state::launching) {
         assertion_failure_if_not_test();
         return;
     }
 
-    this->_status->set_state(project_state::loading);
+    this->_state_holder->set_state(project_state::loading);
 
     this->_file_importer->import(
         {.project_id = this->_project_id,
@@ -55,12 +56,12 @@ void project_launcher::launch() {
                  return;
              }
 
-             auto *status = launcher->_status;
+             auto *state_holder = launcher->_state_holder;
              auto const *file_info_loader = launcher->_file_info_loader;
              auto *editor_level_pool = launcher->_editor_level_pool;
              auto *responder_stack = launcher->_responder_stack;
 
-             auto const &state = status->state();
+             auto const &state = state_holder->state();
              switch (state) {
                  case project_state::loading: {
                      if (result) {
@@ -73,12 +74,12 @@ void project_launcher::launch() {
                                  responder_stack->push_responder(level->instance_id, level->responder);
                              }
 
-                             status->set_state(project_state::editing);
+                             state_holder->set_state(project_state::editing);
                          } else {
-                             status->set_state(project_state::failure);
+                             state_holder->set_state(project_state::failure);
                          }
                      } else {
-                         status->set_state(project_state::failure);
+                         state_holder->set_state(project_state::failure);
                      }
                  } break;
 
