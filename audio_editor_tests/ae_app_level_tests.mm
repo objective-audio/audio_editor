@@ -23,7 +23,7 @@ using namespace yas::ae;
     XCTAssertTrue(app_level->system_url != nullptr);
     XCTAssertTrue(app_level->launcher != nullptr);
     XCTAssertTrue(app_level->file_importer != nullptr);
-    XCTAssertTrue(app_level->file_loader != nullptr);
+    XCTAssertTrue(app_level->file_info_loader != nullptr);
     XCTAssertTrue(app_level->color != nullptr);
 
     XCTAssertTrue(app_level->project_level_router != nullptr);

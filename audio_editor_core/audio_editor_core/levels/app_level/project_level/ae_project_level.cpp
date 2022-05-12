@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_context_menu_presenter.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_file_importer.h>
-#include <audio_editor_core/ae_file_loader.h>
+#include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_closer.h>
@@ -47,7 +47,8 @@ project_level::project_level(ae::project_id const &project_id, url const &file_u
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
                                          app_level->project_level_router.get(), this->editor_level_pool.get(),
                                          this->status.get())),
-      launcher(project_launcher::make_shared(
-          project_id, file_url, this->project_url.get(), app_level->file_importer.get(), app_level->file_loader.get(),
-          this->responder_stack.get(), this->editor_level_pool.get(), this->status.get())) {
+      launcher(project_launcher::make_shared(project_id, file_url, this->project_url.get(),
+                                             app_level->file_importer.get(), app_level->file_info_loader.get(),
+                                             this->responder_stack.get(), this->editor_level_pool.get(),
+                                             this->status.get())) {
 }

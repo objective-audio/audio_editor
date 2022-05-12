@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
-#include <audio_editor_core/ae_file_loader.h>
+#include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>

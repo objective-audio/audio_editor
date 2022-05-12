@@ -35,8 +35,8 @@ struct file_importer_for_project_launcher {
     virtual void import(file_importing_context &&) = 0;
 };
 
-struct file_loader_for_project_launcher {
-    virtual ~file_loader_for_project_launcher() = default;
+struct file_info_loader_for_project_launcher {
+    virtual ~file_info_loader_for_project_launcher() = default;
 
     [[nodiscard]] virtual std::optional<file_info> load_file_info(url const &) const = 0;
 };
