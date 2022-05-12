@@ -27,7 +27,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_level> project_level::make_shared(ae::project_id const &project_id, url const &file_url) {
-    return std::shared_ptr<project_level>(new project_level{project_id, file_url, hierarchy::app_level()});
+    return std::make_shared<project_level>(project_id, file_url, hierarchy::app_level());
 }
 
 project_level::project_level(ae::project_id const &project_id, url const &file_url,
@@ -50,5 +50,4 @@ project_level::project_level(ae::project_id const &project_id, url const &file_u
       launcher(project_launcher::make_shared(
           project_id, file_url, this->project_url.get(), app_level->file_importer.get(), app_level->file_loader.get(),
           this->responder_stack.get(), this->editor_level_pool.get(), this->status.get())) {
-    this->launcher->launch();
 }

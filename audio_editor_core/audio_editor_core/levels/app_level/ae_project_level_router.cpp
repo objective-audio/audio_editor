@@ -5,6 +5,7 @@
 #include "ae_project_level_router.h"
 
 #include <audio_editor_core/ae_project_closer.h>
+#include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_level.h>
 #include <audio_editor_core/ae_uuid_generator.h>
 
@@ -29,6 +30,8 @@ std::shared_ptr<project_level> project_level_router::add_and_return_level(url co
     auto const &project_id = project_level->project_id;
 
     this->_project_levels->insert_or_replace(project_id, std::make_pair(project_level, nullptr));
+
+    project_level->launcher->launch();
 
     return project_level;
 }
