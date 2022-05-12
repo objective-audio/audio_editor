@@ -14,7 +14,7 @@
 		B6455D4027DDB9B600044716 /* ae_ui_event_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6455D3F27DDB9B600044716 /* ae_ui_event_utils_tests.mm */; };
 		B64A4F7F2777FCCD00A959DD /* ae_module_location_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64A4F7E2777FCCD00A959DD /* ae_module_location_tests.mm */; };
 		B64A4F812777FE4400A959DD /* ae_marker_location_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64A4F802777FE4400A959DD /* ae_marker_location_tests.mm */; };
-		B64E2121263C44A300B1BF51 /* ae_file_loader_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */; };
+		B64E2121263C44A300B1BF51 /* ae_file_info_loader_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64E2120263C44A300B1BF51 /* ae_file_info_loader_tests.mm */; };
 		B64E94FF2653F29F0056F511 /* ae_marker_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B64E94FE2653F29F0056F511 /* ae_marker_pool_tests.mm */; };
 		B6604F8E26476FD5003439F1 /* ae_file_track_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6604F8D26476FD5003439F1 /* ae_file_track_tests.mm */; };
 		B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B666CDF22634152600C1693D /* ae_system_url_tests.mm */; };
@@ -61,7 +61,7 @@
 		B6455D3F27DDB9B600044716 /* ae_ui_event_utils_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_ui_event_utils_tests.mm; path = ../../audio_editor_tests/ae_ui_event_utils_tests.mm; sourceTree = "<group>"; };
 		B64A4F7E2777FCCD00A959DD /* ae_module_location_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_module_location_tests.mm; path = ../../audio_editor_tests/ae_module_location_tests.mm; sourceTree = "<group>"; };
 		B64A4F802777FE4400A959DD /* ae_marker_location_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_marker_location_tests.mm; path = ../../audio_editor_tests/ae_marker_location_tests.mm; sourceTree = "<group>"; };
-		B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_loader_tests.mm; path = ../../audio_editor_tests/ae_file_loader_tests.mm; sourceTree = "<group>"; };
+		B64E2120263C44A300B1BF51 /* ae_file_info_loader_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_info_loader_tests.mm; path = ../../audio_editor_tests/ae_file_info_loader_tests.mm; sourceTree = "<group>"; };
 		B64E94FE2653F29F0056F511 /* ae_marker_pool_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_marker_pool_tests.mm; path = ../../audio_editor_tests/ae_marker_pool_tests.mm; sourceTree = "<group>"; };
 		B6604F8D26476FD5003439F1 /* ae_file_track_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_file_track_tests.mm; path = ../../audio_editor_tests/ae_file_track_tests.mm; sourceTree = "<group>"; };
 		B666CDF22634152600C1693D /* ae_system_url_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_system_url_tests.mm; path = ../../audio_editor_tests/ae_system_url_tests.mm; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 				B666F17D275A50B90040D306 /* ae_display_space_tests.mm */,
 				B69708F62639B1060045E975 /* ae_file_importer_resource_tests.mm */,
 				B69708FC263A5FCA0045E975 /* ae_file_importer_tests.mm */,
-				B64E2120263C44A300B1BF51 /* ae_file_loader_tests.mm */,
+				B64E2120263C44A300B1BF51 /* ae_file_info_loader_tests.mm */,
 				B61E3235264ACAC9000DB2B1 /* ae_file_module_tests.mm */,
 				B61E3241264ACD42000DB2B1 /* ae_file_module_utils_tests.mm */,
 				B6604F8D26476FD5003439F1 /* ae_file_track_tests.mm */,
@@ -290,7 +290,7 @@
 				B69708FD263A5FCA0045E975 /* ae_file_importer_tests.mm in Sources */,
 				B6F4D98627B6465400AE7D5D /* ae_edge_tests.mm in Sources */,
 				B666CE3D2634FEF300C1693D /* ae_uuid_generator_tests.mm in Sources */,
-				B64E2121263C44A300B1BF51 /* ae_file_loader_tests.mm in Sources */,
+				B64E2121263C44A300B1BF51 /* ae_file_info_loader_tests.mm in Sources */,
 				B66F5D6E27AE5D3700441616 /* ae_color_tests.mm in Sources */,
 				B6A1237E27887BF800F31B31 /* ae_scrolling_tests.mm in Sources */,
 				B6A1237C27883C4100F31B31 /* ae_timing_tests.mm in Sources */,

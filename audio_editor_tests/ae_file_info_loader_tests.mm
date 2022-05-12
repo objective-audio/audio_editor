@@ -1,5 +1,5 @@
 //
-//  ae_file_loader_tests.mm
+//  ae_file_info_loader_tests.mm
 //
 
 #import <XCTest/XCTest.h>
@@ -10,11 +10,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-@interface ae_file_loader_tests : XCTestCase
+@interface ae_file_info_loader_tests : XCTestCase
 
 @end
 
-@implementation ae_file_loader_tests
+@implementation ae_file_info_loader_tests
 
 - (void)setUp {
     [super setUp];
@@ -45,7 +45,7 @@ using namespace yas::ae;
 
     file->close();
 
-    auto const loader = file_loader::make_shared();
+    auto const loader = file_info_loader::make_shared();
     auto const file_info = loader->load_file_info(url);
 
     XCTAssertEqual(file_info.value().sample_rate, 48000);

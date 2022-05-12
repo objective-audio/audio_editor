@@ -14,13 +14,13 @@ struct project_launcher final : std::enable_shared_from_this<project_launcher> {
     [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(project_id const &, url const &file_url,
                                                                        project_url_for_project_launcher const *,
                                                                        file_importer_for_project_launcher *,
-                                                                       file_loader_for_project_launcher *,
+                                                                       file_info_loader_for_project_launcher const *,
                                                                        responder_stack_for_project_launcher *,
                                                                        project_editor_level_pool_for_project_launcher *,
                                                                        project_status_for_project_launcher *);
 
     project_launcher(project_id const &, url const &file_url, project_url_for_project_launcher const *,
-                     file_importer_for_project_launcher *, file_loader_for_project_launcher *,
+                     file_importer_for_project_launcher *, file_info_loader_for_project_launcher const *,
                      responder_stack_for_project_launcher *, project_editor_level_pool_for_project_launcher *,
                      project_status_for_project_launcher *);
 
@@ -32,7 +32,7 @@ struct project_launcher final : std::enable_shared_from_this<project_launcher> {
 
     project_url_for_project_launcher const *const _project_url;
     file_importer_for_project_launcher *const _file_importer;
-    file_loader_for_project_launcher *const _file_loader;
+    file_info_loader_for_project_launcher const *const _file_info_loader;
     responder_stack_for_project_launcher *const _responder_stack;
     project_editor_level_pool_for_project_launcher *const _editor_level_pool;
     project_status_for_project_launcher *const _status;
