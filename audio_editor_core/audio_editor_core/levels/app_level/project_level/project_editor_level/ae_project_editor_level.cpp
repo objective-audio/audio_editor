@@ -11,6 +11,8 @@
 #include <audio_editor_core/ae_editing_status.h>
 #include <audio_editor_core/ae_export_interactor.h>
 #include <audio_editor_core/ae_exporter.h>
+#include <audio_editor_core/ae_file_module_loader.h>
+#include <audio_editor_core/ae_file_module_loading_state_holder.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_jumper.h>
@@ -63,9 +65,6 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       edge_holder(edge_holder::make_shared()),
       edge_editor(edge_editor::make_shared(project_id, this->edge_holder.get(), this->editing_status.get())),
       jumper(jumper::make_shared(project_id, this->file_track.get(), this->marker_pool.get(), this->edge_holder.get())),
-      launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_holder.get(),
-                                                    this->database.get(), this->file_track.get(),
-                                                    this->edge_holder.get())),
       time_editor_launcher(
           time_editor_launcher::make_shared(project_id, this->timing.get(), this->time_editor_level_router.get())),
       marker_editor(marker_editor::make_shared(project_id, this->marker_pool.get(), this->database.get(),
@@ -80,8 +79,15 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       timeline_updater(timeline_updater::make_shared(this->file_track.get(), this->timeline_holder.get())),
       reverter(reverter::make_shared(this->database.get(), this->file_track.get(), this->marker_pool.get(),
                                      this->pasteboard.get(), this->edge_holder.get(), this->editing_status.get())),
+      file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
+      file_module_loader(file_module_loader::make_shared(project_id, this->file_module_loading_state_holder.get(),
+                                                         this->database.get(), this->file_track.get(),
+                                                         this->edge_holder.get(), this->timeline_holder.get())),
       track_editor(track_editor::make_shared(project_id, this->file_track.get(), this->marker_pool.get(),
                                              this->pasteboard.get(), this->database.get(), this->editing_status.get())),
+      launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_holder.get(),
+                                                    this->database.get(), this->file_track.get(),
+                                                    this->edge_holder.get(), this->file_module_loader.get())),
       responder(project_editor_responder::make_shared(
           this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
           this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),

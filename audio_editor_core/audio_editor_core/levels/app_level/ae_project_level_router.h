@@ -20,7 +20,6 @@ struct project_level_router final : project_pool_for_app_presenter, project_leve
     project_level_router(std::shared_ptr<uuid_generatable> const &, std::shared_ptr<file_info_loader> const &);
 
     void add_level(url const &file_url) override;
-    std::shared_ptr<project_level> add_and_return_level(url const &file_url);
     void remove_level(ae::project_id const &project_id) override;
 
     [[nodiscard]] std::shared_ptr<project_level> const &level_for_id(ae::project_id const &) const;
