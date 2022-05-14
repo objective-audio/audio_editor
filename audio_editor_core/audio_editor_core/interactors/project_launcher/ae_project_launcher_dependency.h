@@ -20,21 +20,6 @@ class timeline;
 }
 
 namespace yas::ae {
-struct project_url_for_project_launcher {
-    virtual ~project_url_for_project_launcher() = default;
-
-    [[nodiscard]] virtual url const &root_directory() const = 0;
-    [[nodiscard]] virtual url editing_file() const = 0;
-    [[nodiscard]] virtual url playing_directory() const = 0;
-    [[nodiscard]] virtual url db_file() const = 0;
-};
-
-struct file_importer_for_project_launcher {
-    virtual ~file_importer_for_project_launcher() = default;
-
-    virtual void import(file_importing_context &&) = 0;
-};
-
 struct file_info_loader_for_project_launcher {
     virtual ~file_info_loader_for_project_launcher() = default;
 
