@@ -30,7 +30,7 @@ class nudger;
 class jumper;
 class edge_holder;
 class edge_editor;
-class project_editor;
+class track_editor;
 class project_editor_responder;
 class project_editor_launcher;
 class time_editor_launcher;
@@ -77,7 +77,7 @@ struct project_editor_level final {
     std::shared_ptr<database_updater> const database_updater;
     std::shared_ptr<timeline_updater> const timeline_updater;
     std::shared_ptr<reverter> const reverter;
-    std::shared_ptr<project_editor> const editor;
+    std::shared_ptr<track_editor> const track_editor;
     std::shared_ptr<project_editor_responder> const responder;
 };
 }  // namespace yas::ae

@@ -21,7 +21,6 @@
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_playing_toggler.h>
-#include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_launcher.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_format.h>
@@ -32,6 +31,7 @@
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
+#include <audio_editor_core/ae_track_editor.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -81,10 +81,10 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       timeline_updater(timeline_updater::make_shared(this->file_track.get(), this->timeline_holder.get())),
       reverter(reverter::make_shared(this->database.get(), this->file_track.get(), this->marker_pool.get(),
                                      this->pasteboard.get(), this->edge_holder.get(), this->editing_status.get())),
-      editor(project_editor::make_shared(project_id, this->file_track.get(), this->marker_pool.get(),
-                                         this->pasteboard.get(), this->database.get(), this->editing_status.get())),
+      track_editor(track_editor::make_shared(project_id, this->file_track.get(), this->marker_pool.get(),
+                                             this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       responder(project_editor_responder::make_shared(
-          this->editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
+          this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
           this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),
           this->module_renaming_launcher.get(), this->timing.get(), this->export_interactor.get(),
           this->reverter.get())) {

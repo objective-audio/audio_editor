@@ -1,8 +1,8 @@
 //
-//  ae_project_editor.cpp
+//  ae_track_editor.cpp
 //
 
-#include "ae_project_editor.h"
+#include "ae_track_editor.h"
 
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_holder.h>
@@ -26,16 +26,16 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor> project_editor::make_shared(project_id const &project_id, file_track *file_track,
-                                                            marker_pool *marker_pool, pasteboard *pasteboard,
-                                                            database *database, editing_status const *editing_status) {
+std::shared_ptr<track_editor> track_editor::make_shared(project_id const &project_id, file_track *file_track,
+                                                        marker_pool *marker_pool, pasteboard *pasteboard,
+                                                        database *database, editing_status const *editing_status) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<project_editor>(project_level->player.get(), file_track, marker_pool, pasteboard, database,
-                                            editing_status);
+    return std::make_shared<track_editor>(project_level->player.get(), file_track, marker_pool, pasteboard, database,
+                                          editing_status);
 }
 
-project_editor::project_editor(player *player, file_track *file_track, marker_pool *marker_pool, pasteboard *pasteboard,
-                               database *database, editing_status const *editing_status)
+track_editor::track_editor(player *player, file_track *file_track, marker_pool *marker_pool, pasteboard *pasteboard,
+                           database *database, editing_status const *editing_status)
     : _player(player),
       _file_track(file_track),
       _marker_pool(marker_pool),
@@ -44,7 +44,7 @@ project_editor::project_editor(player *player, file_track *file_track, marker_po
       _editing_status(editing_status) {
 }
 
-bool project_editor::can_split() const {
+bool track_editor::can_split() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -54,7 +54,7 @@ bool project_editor::can_split() const {
     return file_track->splittable_module_at(current_frame).has_value();
 }
 
-void project_editor::split() {
+void track_editor::split() {
     if (!this->can_split()) {
         return;
     }
@@ -65,7 +65,7 @@ void project_editor::split() {
     });
 }
 
-void project_editor::drop_head() {
+void track_editor::drop_head() {
     if (!this->can_split()) {
         return;
     }
@@ -76,7 +76,7 @@ void project_editor::drop_head() {
     });
 }
 
-void project_editor::drop_tail() {
+void track_editor::drop_tail() {
     if (!this->can_split()) {
         return;
     }
@@ -87,7 +87,7 @@ void project_editor::drop_tail() {
     });
 }
 
-void project_editor::drop_head_and_offset() {
+void track_editor::drop_head_and_offset() {
     if (!this->can_split()) {
         return;
     }
@@ -107,7 +107,7 @@ void project_editor::drop_head_and_offset() {
     this->_player->seek(seek_frame);
 }
 
-void project_editor::drop_tail_and_offset() {
+void track_editor::drop_tail_and_offset() {
     if (!this->can_split()) {
         return;
     }
@@ -123,7 +123,7 @@ void project_editor::drop_tail_and_offset() {
     });
 }
 
-bool project_editor::can_erase() const {
+bool track_editor::can_erase() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -132,7 +132,7 @@ bool project_editor::can_erase() const {
     return this->_file_track->module_at(current_frame).has_value();
 }
 
-void project_editor::erase() {
+void track_editor::erase() {
     if (!this->can_erase()) {
         return;
     }
@@ -143,7 +143,7 @@ void project_editor::erase() {
     });
 }
 
-void project_editor::erase_and_offset() {
+void track_editor::erase_and_offset() {
     if (!this->can_erase()) {
         return;
     }
@@ -165,11 +165,11 @@ void project_editor::erase_and_offset() {
     }
 }
 
-bool project_editor::can_cut() const {
+bool track_editor::can_cut() const {
     return this->can_copy();
 }
 
-void project_editor::cut_and_offset() {
+void track_editor::cut_and_offset() {
     if (!this->can_cut()) {
         return;
     }
@@ -186,7 +186,7 @@ void project_editor::cut_and_offset() {
     });
 }
 
-bool project_editor::can_copy() const {
+bool track_editor::can_copy() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -196,7 +196,7 @@ bool project_editor::can_copy() const {
     return file_track->module_at(current_frame).has_value();
 }
 
-void project_editor::copy() {
+void track_editor::copy() {
     if (!this->can_copy()) {
         return;
     }
@@ -211,7 +211,7 @@ void project_editor::copy() {
     });
 }
 
-bool project_editor::can_paste() const {
+bool track_editor::can_paste() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -237,7 +237,7 @@ bool project_editor::can_paste() const {
     return false;
 }
 
-void project_editor::paste_and_offset() {
+void track_editor::paste_and_offset() {
     if (!this->can_paste()) {
         return;
     }

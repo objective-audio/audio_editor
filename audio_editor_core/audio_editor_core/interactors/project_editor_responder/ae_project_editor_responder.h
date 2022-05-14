@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_responder.h>
 
 namespace yas::ae {
-class project_editor;
+class track_editor;
 class playing_toggler;
 class nudge_settings;
 class nudger;
@@ -22,10 +22,10 @@ class reverter;
 
 struct project_editor_responder final : responder {
     [[nodiscard]] static std::shared_ptr<project_editor_responder> make_shared(
-        project_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
-        time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *, export_interactor *, reverter *);
+        track_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *, time_editor_launcher *,
+        marker_editor *, module_renaming_launcher *, timing *, export_interactor *, reverter *);
 
-    project_editor_responder(project_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
+    project_editor_responder(track_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
                              time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *,
                              export_interactor *, reverter *);
 
@@ -35,7 +35,7 @@ struct project_editor_responder final : responder {
 
    private:
     identifier const _responder_id;
-    project_editor *const _editor;
+    track_editor *const _editor;
     playing_toggler *const _playing_toggler;
     nudge_settings *const _nudge_settings;
     nudger *const _nudger;

@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_editor.h>
+#include <audio_editor_core/ae_track_editor.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
