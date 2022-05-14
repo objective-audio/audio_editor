@@ -48,11 +48,18 @@ file_importer::file_importer(workable_ptr const &worker, uint32_t const priority
         }
 
         src_file = src_file_result.value();
-        auto const &src_file_format = src_file.value()->file_format();
-        auto const &proc_format = src_file.value()->processing_format();
+        auto const &src_proc_format = src_file.value()->processing_format();
+
+        audio::format const proc_format{
+            audio::format::args{.sample_rate = static_cast<double>(context.project_format.sample_rate),
+                                .channel_count = context.project_format.channel_count,
+                                .pcm_format = src_proc_format.pcm_format(),
+                                .interleaved = src_proc_format.is_interleaved()}};
+
+        src_file.value()->set_processing_format(proc_format);
 
         auto const dst_settings =
-            audio::wave_file_settings(src_file_format.sample_rate(), src_file_format.channel_count(), 32);
+            audio::wave_file_settings(context.project_format.sample_rate, context.project_format.channel_count, 32);
 
         auto const dst_directory = context.dst_url.deleting_last_path_component();
         if (auto result = file_manager::create_directory_if_not_exists(dst_directory.path()); result.is_error()) {

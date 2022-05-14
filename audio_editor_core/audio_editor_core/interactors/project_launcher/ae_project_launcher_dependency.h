@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_edge_presenter_dependency.h>
 #include <audio_editor_core/ae_file_importer_types.h>
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_markers_presenter_dependency.h>
 #include <audio_editor_core/ae_modules_presenter_dependency.h>
 #include <audio_editor_core/ae_player_dependency.h>
+#include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
 #include <cpp_utils/yas_identifier.h>
 #include <cpp_utils/yas_url.h>
@@ -54,7 +54,7 @@ class project_editor_level;
 struct project_editor_level_pool_for_project_launcher {
     virtual ~project_editor_level_pool_for_project_launcher() = default;
 
-    virtual void add_level(file_info const &) = 0;
+    virtual void add_level(project_format const &, file_info const &) = 0;
 
     [[nodiscard]] virtual std::shared_ptr<project_editor_level> const &level() const = 0;
 };

@@ -24,6 +24,7 @@
 #include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_project_editor_launcher.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
+#include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
@@ -36,14 +37,17 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor_level> project_editor_level::make_shared(ae::project_id const &project_id,
+                                                                        ae::project_format const &project_format,
                                                                         ae::file_info const &file_info) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<project_editor_level>(project_id, file_info, project_level->project_url);
+    return std::make_shared<project_editor_level>(project_id, project_format, file_info, project_level->project_url);
 }
 
-project_editor_level::project_editor_level(ae::project_id const &project_id, ae::file_info const &file_info,
+project_editor_level::project_editor_level(ae::project_id const &project_id, ae::project_format const &project_format,
+                                           ae::file_info const &file_info,
                                            std::shared_ptr<project_url> const &project_url)
     : project_id(project_id),
+      project_format(project_format),
       file_info(file_info),
       timing(timing::make_shared(file_info.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),
@@ -68,9 +72,9 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       marker_editor(marker_editor::make_shared(project_id, this->marker_pool.get(), this->database.get(),
                                                this->editing_status.get())),
       module_renaming_launcher(module_renaming_launcher::make_shared(project_id, this->editing_status.get())),
-      export_interactor(export_interactor::make_shared(project_id, file_info, this->editing_status.get(),
-                                                       this->edge_holder.get(), this->exporter.get(),
-                                                       this->timeline_holder.get())),
+      export_interactor(export_interactor::make_shared(project_id, project_format, file_info,
+                                                       this->editing_status.get(), this->edge_holder.get(),
+                                                       this->exporter.get(), this->timeline_holder.get())),
       database_updater(database_updater::make_shared(this->file_track.get(), this->marker_pool.get(),
                                                      this->edge_holder.get(), this->pasteboard.get(),
                                                      this->database.get())),

@@ -64,9 +64,11 @@ struct responder_stack_stub final : responder_stack_for_project_launcher {
 };
 
 struct project_editor_level_pool_stub final : project_editor_level_pool_for_project_launcher {
+    std::optional<project_format> project_format_value{std::nullopt};
     std::optional<file_info> file_info_value{std::nullopt};
 
-    void add_level(file_info const &file_info) override {
+    void add_level(project_format const &project_format, file_info const &file_info) override {
+        this->project_format_value = project_format;
         this->file_info_value = file_info;
     }
 
