@@ -18,12 +18,12 @@ project_editor_level_pool::project_editor_level_pool(project_id const &project_i
       _editor_level(observing::value::holder<std::shared_ptr<project_editor_level>>::make_shared(nullptr)) {
 }
 
-void project_editor_level_pool::add_level(project_format const &project_format, file_info const &file_info) {
+void project_editor_level_pool::add_level(file_info const &file_info) {
     if (this->_editor_level->value() != nullptr) {
         throw std::runtime_error("editor_level is not null.");
     }
 
-    this->_editor_level->set_value(project_editor_level::make_shared(this->_project_id, project_format, file_info));
+    this->_editor_level->set_value(project_editor_level::make_shared(this->_project_id, file_info));
 }
 
 void project_editor_level_pool::remove_level() {

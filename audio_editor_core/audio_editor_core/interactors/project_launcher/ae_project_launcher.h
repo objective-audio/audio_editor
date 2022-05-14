@@ -11,23 +11,22 @@
 
 namespace yas::ae {
 struct project_launcher final : std::enable_shared_from_this<project_launcher> {
-    [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(project_id const &, url const &file_url,
-                                                                       project_url_for_project_launcher const *,
-                                                                       file_importer_for_project_launcher *,
-                                                                       file_info_loader_for_project_launcher const *,
-                                                                       responder_stack_for_project_launcher *,
-                                                                       project_editor_level_pool_for_project_launcher *,
-                                                                       project_state_holder_for_project_launcher *);
+    [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(
+        project_id const &, project_format const &, url const &file_url, project_url_for_project_launcher const *,
+        file_importer_for_project_launcher *, file_info_loader_for_project_launcher const *,
+        responder_stack_for_project_launcher *, project_editor_level_pool_for_project_launcher *,
+        project_state_holder_for_project_launcher *);
 
-    project_launcher(project_id const &, url const &file_url, project_url_for_project_launcher const *,
-                     file_importer_for_project_launcher *, file_info_loader_for_project_launcher const *,
-                     responder_stack_for_project_launcher *, project_editor_level_pool_for_project_launcher *,
-                     project_state_holder_for_project_launcher *);
+    project_launcher(project_id const &, project_format const &, url const &file_url,
+                     project_url_for_project_launcher const *, file_importer_for_project_launcher *,
+                     file_info_loader_for_project_launcher const *, responder_stack_for_project_launcher *,
+                     project_editor_level_pool_for_project_launcher *, project_state_holder_for_project_launcher *);
 
     void launch();
 
    private:
     project_id const _project_id;
+    project_format const _project_format;
     url const _file_url;
 
     project_url_for_project_launcher const *const _project_url;

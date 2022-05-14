@@ -44,14 +44,13 @@ class timeline_updater;
 
 struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id,
-                                                                           project_format const &, file_info const &);
+                                                                           file_info const &);
 
     project_editor_level(ae::project_id const &, project_format const &, ae::file_info const &,
                          std::shared_ptr<project_url> const &);
 
     identifier const instance_id;
     ae::project_id const project_id;
-    ae::project_format const project_format;
     file_info const file_info;
 
     std::shared_ptr<timing> const timing;
