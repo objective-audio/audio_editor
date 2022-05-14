@@ -16,7 +16,7 @@ using namespace yas::ae;
 @implementation ae_common_utils_tests
 
 - (void)test_reserving_count {
-    XCTAssertEqual(common_utils::reserving_count(0, 2), 0);
+    XCTAssertEqual(common_utils::reserving_count(0, 2), 2);
     XCTAssertEqual(common_utils::reserving_count(1, 2), 2);
     XCTAssertEqual(common_utils::reserving_count(2, 2), 2);
     XCTAssertEqual(common_utils::reserving_count(3, 2), 4);
