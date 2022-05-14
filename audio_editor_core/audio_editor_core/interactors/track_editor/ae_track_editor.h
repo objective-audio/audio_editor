@@ -1,5 +1,5 @@
 //
-//  ae_project_editor.h
+//  ae_track_editor.h
 //
 
 #pragma once
@@ -15,12 +15,12 @@ class pasteboard;
 class database;
 class editing_status;
 
-struct project_editor final {
-    [[nodiscard]] static std::shared_ptr<project_editor> make_shared(project_id const &project_id, file_track *,
-                                                                     marker_pool *, pasteboard *, database *,
-                                                                     editing_status const *);
+struct track_editor final {
+    [[nodiscard]] static std::shared_ptr<track_editor> make_shared(project_id const &project_id, file_track *,
+                                                                   marker_pool *, pasteboard *, database *,
+                                                                   editing_status const *);
 
-    project_editor(player *, file_track *, marker_pool *, pasteboard *, database *, editing_status const *);
+    track_editor(player *, file_track *, marker_pool *, pasteboard *, database *, editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -50,9 +50,9 @@ struct project_editor final {
 
     observing::canceller_pool _pool;
 
-    project_editor(project_editor const &) = delete;
-    project_editor(project_editor &&) = delete;
-    project_editor &operator=(project_editor const &) = delete;
-    project_editor &operator=(project_editor &&) = delete;
+    track_editor(track_editor const &) = delete;
+    track_editor(track_editor &&) = delete;
+    track_editor &operator=(track_editor const &) = delete;
+    track_editor &operator=(track_editor &&) = delete;
 };
 }  // namespace yas::ae

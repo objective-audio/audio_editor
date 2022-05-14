@@ -12,31 +12,31 @@
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_playing_toggler.h>
-#include <audio_editor_core/ae_project_editor.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
 #include <audio_editor_core/ae_timing.h>
+#include <audio_editor_core/ae_track_editor.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
-    project_editor *editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
-    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
+    track_editor *track_editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger,
+    jumper *jumper, edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
     module_renaming_launcher *module_renaming_launcher, timing *timing, export_interactor *export_interactor,
     reverter *reverter) {
-    return std::make_shared<project_editor_responder>(editor, toggler, nudge_settings, nudger, jumper, edge_editor,
-                                                      time_editor_launcher, marker_editor, module_renaming_launcher,
-                                                      timing, export_interactor, reverter);
+    return std::make_shared<project_editor_responder>(track_editor, toggler, nudge_settings, nudger, jumper,
+                                                      edge_editor, time_editor_launcher, marker_editor,
+                                                      module_renaming_launcher, timing, export_interactor, reverter);
 }
 
-project_editor_responder::project_editor_responder(project_editor *editor, playing_toggler *toggler,
+project_editor_responder::project_editor_responder(track_editor *track_editor, playing_toggler *toggler,
                                                    nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
                                                    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
                                                    marker_editor *marker_editor,
                                                    module_renaming_launcher *module_renaming_launcher, timing *timing,
                                                    export_interactor *export_interactor, reverter *reverter)
-    : _editor(editor),
+    : _editor(track_editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
       _nudger(nudger),
