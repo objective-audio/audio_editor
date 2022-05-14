@@ -37,17 +37,16 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor_level> project_editor_level::make_shared(ae::project_id const &project_id,
-                                                                        ae::project_format const &project_format,
                                                                         ae::file_info const &file_info) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<project_editor_level>(project_id, project_format, file_info, project_level->project_url);
+    return std::make_shared<project_editor_level>(project_id, project_level->project_format, file_info,
+                                                  project_level->project_url);
 }
 
 project_editor_level::project_editor_level(ae::project_id const &project_id, ae::project_format const &project_format,
                                            ae::file_info const &file_info,
                                            std::shared_ptr<project_url> const &project_url)
     : project_id(project_id),
-      project_format(project_format),
       file_info(file_info),
       timing(timing::make_shared(file_info.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),

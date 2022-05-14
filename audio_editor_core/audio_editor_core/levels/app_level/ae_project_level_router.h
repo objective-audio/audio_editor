@@ -12,11 +12,12 @@
 namespace yas::ae {
 class project_level;
 class uuid_generatable;
+class file_info_loader;
 
 struct project_level_router final : project_pool_for_app_presenter, project_level_router_for_project_closer {
-    [[nodiscard]] static std::shared_ptr<project_level_router> make_shared();
+    [[nodiscard]] static std::shared_ptr<project_level_router> make_shared(std::shared_ptr<file_info_loader> const &);
 
-    project_level_router(std::shared_ptr<uuid_generatable> const &);
+    project_level_router(std::shared_ptr<uuid_generatable> const &, std::shared_ptr<file_info_loader> const &);
 
     void add_level(url const &file_url) override;
     std::shared_ptr<project_level> add_and_return_level(url const &file_url);
@@ -31,6 +32,7 @@ struct project_level_router final : project_pool_for_app_presenter, project_leve
 
    private:
     std::shared_ptr<uuid_generatable> const _uuid_generator;
+    std::weak_ptr<file_info_loader> const _file_info_loader;
 
     using project_levels_t =
         observing::map::holder<ae::project_id, std::pair<std::shared_ptr<project_level>, observing::cancellable_ptr>>;

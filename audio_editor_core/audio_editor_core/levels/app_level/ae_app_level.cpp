@@ -36,9 +36,10 @@ app_level::app_level(std::shared_ptr<yas::worker> const &worker, std::shared_ptr
 std::shared_ptr<app_level> app_level::make_shared() {
     auto const worker = worker::make_shared();
     auto const system_url = system_url::make_shared();
+    auto const file_info_loader = file_info_loader::make_shared();
     return std::make_shared<app_level>(
         worker, system_url, app_launcher::make_shared(worker, system_url),
-        file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing)),
-        file_info_loader::make_shared(), ae::color::make_shared(), project_level_router::make_shared(),
+        file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing)), file_info_loader,
+        ae::color::make_shared(), project_level_router::make_shared(file_info_loader),
         ui_root_level_router::make_shared());
 }

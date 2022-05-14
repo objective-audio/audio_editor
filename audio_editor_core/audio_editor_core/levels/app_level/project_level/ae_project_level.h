@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
 #include <cpp_utils/yas_url.h>
 
@@ -27,11 +28,14 @@ class project_launcher;
 class project_editor_level_pool;
 
 struct project_level final {
-    [[nodiscard]] static std::shared_ptr<project_level> make_shared(project_id const &, url const &file_url);
+    [[nodiscard]] static std::shared_ptr<project_level> make_shared(project_id const &, project_format const &,
+                                                                    url const &file_url);
 
-    project_level(ae::project_id const &, url const &file_url, std::shared_ptr<app_level> const &);
+    project_level(ae::project_id const &, project_format const &, url const &file_url,
+                  std::shared_ptr<app_level> const &);
 
     ae::project_id const project_id;
+    project_format const project_format;
     url const file_url;
 
     std::shared_ptr<ae::project_url> const project_url;

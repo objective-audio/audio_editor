@@ -54,7 +54,7 @@ class project_editor_level;
 struct project_editor_level_pool_for_project_launcher {
     virtual ~project_editor_level_pool_for_project_launcher() = default;
 
-    virtual void add_level(project_format const &, file_info const &) = 0;
+    virtual void add_level(file_info const &) = 0;
 
     [[nodiscard]] virtual std::shared_ptr<project_editor_level> const &level() const = 0;
 };
