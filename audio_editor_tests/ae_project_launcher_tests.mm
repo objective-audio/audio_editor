@@ -64,11 +64,9 @@ struct responder_stack_stub final : responder_stack_for_project_launcher {
 };
 
 struct project_editor_level_pool_stub final : project_editor_level_pool_for_project_launcher {
-    std::optional<project_format> project_format_value{std::nullopt};
     std::optional<file_info> file_info_value{std::nullopt};
 
-    void add_level(project_format const &project_format, file_info const &file_info) override {
-        this->project_format_value = project_format;
+    void add_level(file_info const &file_info) override {
         this->file_info_value = file_info;
     }
 
@@ -87,6 +85,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 
 - (void)test_make_shared {
     auto const file_url = url::file_url("/test/path/file.wav");
+    auto const project_format = ae::project_format{.sample_rate = 48000, .channel_count = 2};
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_info_loader = std::make_shared<test_utils::file_info_loader_stub>();
@@ -94,15 +93,16 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const editor_level_pool = std::make_shared<test_utils::project_editor_level_pool_stub>();
     auto const state_holder = ae::project_state_holder::make_shared();
 
-    auto const launcher = project_launcher::make_shared({"test_uuid"}, file_url, project_url.get(), file_importer.get(),
-                                                        file_info_loader.get(), responder_stack.get(),
-                                                        editor_level_pool.get(), state_holder.get());
+    auto const launcher = project_launcher::make_shared(
+        {"test_uuid"}, project_format, file_url, project_url.get(), file_importer.get(), file_info_loader.get(),
+        responder_stack.get(), editor_level_pool.get(), state_holder.get());
 
     XCTAssertTrue(launcher != nullptr);
 }
 
 - (void)test_loading {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
+    auto const project_format = ae::project_format{.sample_rate = 48000, .channel_count = 1};
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_info_loader = std::make_shared<test_utils::file_info_loader_stub>();
@@ -131,8 +131,8 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     };
 
     auto const launcher = project_launcher::make_shared(
-        {"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(), file_info_loader.get(),
-        responder_stack.get(), editor_level_pool.get(), state_holder.get());
+        {"TEST_PROJECT_ID"}, project_format, src_file_url, project_url.get(), file_importer.get(),
+        file_info_loader.get(), responder_stack.get(), editor_level_pool.get(), state_holder.get());
     launcher->launch();
 
     XCTAssertTrue(called.has_value());
@@ -144,6 +144,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 
 - (void)test_import_success {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
+    auto const project_format = ae::project_format{.sample_rate = 48000, .channel_count = 1};
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_info_loader = std::make_shared<test_utils::file_info_loader_stub>();
@@ -162,8 +163,8 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     };
 
     auto const launcher = project_launcher::make_shared(
-        {"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(), file_info_loader.get(),
-        responder_stack.get(), editor_level_pool.get(), state_holder.get());
+        {"TEST_PROJECT_ID"}, project_format, src_file_url, project_url.get(), file_importer.get(),
+        file_info_loader.get(), responder_stack.get(), editor_level_pool.get(), state_holder.get());
     launcher->launch();
 
     std::vector<project_state> called;
@@ -205,6 +206,7 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
 
 - (void)test_import_failure {
     auto const src_file_url = url::file_url("/test/path/src_file.wav");
+    auto const project_format = ae::project_format{.sample_rate = 96000, .channel_count = 2};
     auto const project_url = std::make_shared<test_utils::project_url_stub>();
     auto const file_importer = std::make_shared<test_utils::file_importer_stub>();
     auto const file_info_loader = std::make_shared<test_utils::file_info_loader_stub>();
@@ -223,8 +225,8 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     };
 
     auto const launcher = project_launcher::make_shared(
-        {"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(), file_info_loader.get(),
-        responder_stack.get(), editor_level_pool.get(), state_holder.get());
+        {"TEST_PROJECT_ID"}, project_format, src_file_url, project_url.get(), file_importer.get(),
+        file_info_loader.get(), responder_stack.get(), editor_level_pool.get(), state_holder.get());
     launcher->launch();
 
     std::vector<project_state> called;
