@@ -11,7 +11,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::test_utils::file_importer {
-double const sample_rate = 48000.0;
+uint32_t const sample_rate = 48000.0;
 uint32_t const ch_count = 2;
 audio::pcm_format const pcm_format = audio::pcm_format::int16;
 }
@@ -37,6 +37,8 @@ audio::pcm_format const pcm_format = audio::pcm_format::int16;
     double const sample_rate = test_utils::file_importer::sample_rate;
     uint32_t const ch_count = test_utils::file_importer::ch_count;
     audio::pcm_format const pcm_format = test_utils::file_importer::pcm_format;
+    project_format const project_format{.sample_rate = test_utils::file_importer::sample_rate,
+                                        .channel_count = test_utils::file_importer::ch_count};
 
     auto const test_url = test_utils::test_url();
     auto const src_url = test_url.appending("src.wav");
@@ -53,11 +55,13 @@ audio::pcm_format const pcm_format = audio::pcm_format::int16;
 
     auto expectation = [self expectationWithDescription:@""];
 
-    importer->import(
-        {.src_url = src_url, .dst_url = dst_url, .completion = [&results, &expectation](bool const result) {
-             results.emplace_back(result);
-             [expectation fulfill];
-         }});
+    importer->import({.src_url = src_url,
+                      .dst_url = dst_url,
+                      .project_format = project_format,
+                      .completion = [&results, &expectation](bool const result) {
+                          results.emplace_back(result);
+                          [expectation fulfill];
+                      }});
 
     worker->process();
 

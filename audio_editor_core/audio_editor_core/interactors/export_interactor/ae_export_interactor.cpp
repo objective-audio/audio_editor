@@ -16,19 +16,23 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<export_interactor> export_interactor::make_shared(project_id const &project_id,
+                                                                  project_format const &project_format,
                                                                   file_info const &file_info,
                                                                   editing_status const *editing_status,
                                                                   edge_holder const *edge_holder, exporter *exporter,
                                                                   timeline_holder const *timeline_holder) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<export_interactor>(file_info, project_level->dialog_presenter.get(), editing_status,
-                                               edge_holder, project_level->player.get(), exporter, timeline_holder);
+    return std::make_shared<export_interactor>(project_format, file_info, project_level->dialog_presenter.get(),
+                                               editing_status, edge_holder, project_level->player.get(), exporter,
+                                               timeline_holder);
 }
 
-export_interactor::export_interactor(file_info const &file_info, dialog_presenter *dialog_presenter,
-                                     editing_status const *editing_status, edge_holder const *edge_holder,
-                                     player *player, exporter *exporter, timeline_holder const *timeline_holder)
-    : _file_info(file_info),
+export_interactor::export_interactor(project_format const &project_format, file_info const &file_info,
+                                     dialog_presenter *dialog_presenter, editing_status const *editing_status,
+                                     edge_holder const *edge_holder, player *player, exporter *exporter,
+                                     timeline_holder const *timeline_holder)
+    : _project_format(project_format),
+      _file_info(file_info),
       _dialog_presenter(dialog_presenter),
       _editing_status(editing_status),
       _edge_holder(edge_holder),
@@ -69,9 +73,9 @@ void export_interactor::export_to_file(url const &export_url) {
 
     this->_player->set_playing(false);
 
-    exporting_format const format{.sample_rate = this->_file_info.sample_rate,
+    exporting_format const format{.sample_rate = this->_project_format.sample_rate,
                                   .pcm_format = audio::pcm_format::float32,
-                                  .channel_count = this->_file_info.channel_count};
+                                  .channel_count = this->_project_format.channel_count};
 
     this->_exporter->begin(export_url, this->_timeline_holder->timeline(), format, range.value());
 }

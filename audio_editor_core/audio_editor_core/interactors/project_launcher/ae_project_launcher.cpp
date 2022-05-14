@@ -44,13 +44,23 @@ void project_launcher::launch() {
         return;
     }
 
+    auto const file_info = this->_file_info_loader->load_file_info(this->_file_url);
+    if (!file_info.has_value()) {
+        assertion_failure_if_not_test();
+        return;
+    }
+
     this->_state_holder->set_state(project_state::loading);
+
+    project_format project_format{.sample_rate = file_info.value().sample_rate,
+                                  .channel_count = file_info.value().channel_count};
 
     this->_file_importer->import(
         {.project_id = this->_project_id,
          .src_url = this->_file_url,
          .dst_url = this->_project_url->editing_file(),
-         .completion = [weak = this->weak_from_this()](bool const result) {
+         .project_format = project_format,
+         .completion = [weak = this->weak_from_this(), project_format = std::move(project_format)](bool const result) {
              auto const launcher = weak.lock();
              if (!launcher) {
                  return;
@@ -67,7 +77,7 @@ void project_launcher::launch() {
                      if (result) {
                          auto const editing_file_url = launcher->_project_url->editing_file();
                          if (auto const file_info = file_info_loader->load_file_info(editing_file_url)) {
-                             editor_level_pool->add_level(file_info.value());
+                             editor_level_pool->add_level(project_format, file_info.value());
 
                              auto const level = editor_level_pool->level();
                              if (level) {
