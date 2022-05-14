@@ -4,14 +4,14 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_launcher_dependency.h>
+#include <cpp_utils/yas_url.h>
 
 namespace yas::ae {
-struct project_url final : project_url_for_project_launcher {
-    url const &root_directory() const override;
-    url editing_file() const override;
-    url playing_directory() const override;
-    url db_file() const override;
+struct project_url final {
+    url const &root_directory() const;
+    url editing_file() const;
+    url playing_directory() const;
+    url db_file() const;
 
     static std::shared_ptr<project_url> make_shared(url const &root);
 
