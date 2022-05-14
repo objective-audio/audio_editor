@@ -51,10 +51,10 @@ struct file_importer_stub final : file_importer_for_project_launcher {
 };
 
 struct file_info_loader_stub final : file_info_loader_for_project_launcher {
-    std::optional<file_info> file_info_value = std::nullopt;
+    std::function<std::optional<file_info>(url const &)> load_handler = [](url const &) { return std::nullopt; };
 
-    std::optional<file_info> load_file_info(url const &) const override {
-        return this->file_info_value;
+    std::optional<file_info> load_file_info(url const &url) const override {
+        return this->load_handler(url);
     }
 };
 
@@ -122,6 +122,14 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
         return false;
     };
 
+    file_info_loader->load_handler = [&src_file_url](url const &url) {
+        if (url == src_file_url) {
+            return std::make_optional<file_info>({.sample_rate = 48000, .channel_count = 1, .length = 2});
+        } else {
+            return std::optional<file_info>(std::nullopt);
+        }
+    };
+
     auto const launcher = project_launcher::make_shared(
         {"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(), file_info_loader.get(),
         responder_stack.get(), editor_level_pool.get(), state_holder.get());
@@ -144,7 +152,14 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const state_holder = ae::project_state_holder::make_shared();
 
     file_importer->import_handler = [](url const &, url const &) { return true; };
-    file_info_loader->file_info_value = {.sample_rate = 48000, .channel_count = 1, .length = 2};
+
+    file_info_loader->load_handler = [&src_file_url](url const &url) {
+        if (url == src_file_url || url == url::file_url("/test/root/editing.caf")) {
+            return std::make_optional<file_info>({.sample_rate = 48000, .channel_count = 1, .length = 2});
+        } else {
+            return std::optional<file_info>(std::nullopt);
+        }
+    };
 
     auto const launcher = project_launcher::make_shared(
         {"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(), file_info_loader.get(),
@@ -198,7 +213,14 @@ struct project_editor_level_pool_stub final : project_editor_level_pool_for_proj
     auto const state_holder = ae::project_state_holder::make_shared();
 
     file_importer->import_handler = [](url const &, url const &) { return false; };
-    file_info_loader->file_info_value = {.sample_rate = 96000, .channel_count = 2, .length = 3};
+
+    file_info_loader->load_handler = [&src_file_url](url const &url) {
+        if (url == src_file_url || url == url::file_url("/test/root/editing.caf")) {
+            return std::make_optional<file_info>({.sample_rate = 96000, .channel_count = 2, .length = 3});
+        } else {
+            return std::optional<file_info>(std::nullopt);
+        }
+    };
 
     auto const launcher = project_launcher::make_shared(
         {"TEST_PROJECT_ID"}, src_file_url, project_url.get(), file_importer.get(), file_info_loader.get(),
