@@ -11,6 +11,6 @@ std::size_t common_utils::reserving_count(std::size_t const count, std::size_t c
     if (count > 0) {
         return ((count / interval) + (count % interval ? 1 : 0)) * interval;
     } else {
-        return 0;
+        return interval;
     }
 }
