@@ -41,6 +41,8 @@ class export_interactor;
 class database_updater;
 class reverter;
 class timeline_updater;
+class file_module_loading_state_holder;
+class file_module_loader;
 
 struct project_editor_level final {
     [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id,
@@ -68,7 +70,6 @@ struct project_editor_level final {
     std::shared_ptr<edge_holder> const edge_holder;
     std::shared_ptr<edge_editor> const edge_editor;
     std::shared_ptr<jumper> const jumper;
-    std::shared_ptr<project_editor_launcher> const launcher;
     std::shared_ptr<time_editor_launcher> const time_editor_launcher;
     std::shared_ptr<marker_editor> const marker_editor;
     std::shared_ptr<module_renaming_launcher> const module_renaming_launcher;
@@ -76,7 +77,10 @@ struct project_editor_level final {
     std::shared_ptr<database_updater> const database_updater;
     std::shared_ptr<timeline_updater> const timeline_updater;
     std::shared_ptr<reverter> const reverter;
+    std::shared_ptr<file_module_loading_state_holder> const file_module_loading_state_holder;
+    std::shared_ptr<file_module_loader> const file_module_loader;
     std::shared_ptr<track_editor> const track_editor;
+    std::shared_ptr<project_editor_launcher> const launcher;
     std::shared_ptr<project_editor_responder> const responder;
 };
 }  // namespace yas::ae

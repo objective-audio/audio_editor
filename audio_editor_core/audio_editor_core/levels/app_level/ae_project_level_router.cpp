@@ -26,20 +26,16 @@ project_level_router::project_level_router(std::shared_ptr<uuid_generatable> con
 }
 
 void project_level_router::add_level(url const &file_url) {
-    this->add_and_return_level(file_url);
-}
-
-std::shared_ptr<project_level> project_level_router::add_and_return_level(url const &file_url) {
     auto const file_info_loader = this->_file_info_loader.lock();
     if (!file_info_loader) {
         assertion_failure_if_not_test();
-        return nullptr;
+        return;
     }
 
     auto const file_info = file_info_loader->load_file_info(file_url);
     if (!file_info.has_value()) {
         assertion_failure_if_not_test();
-        return nullptr;
+        return;
     }
 
     project_format const format{.sample_rate = file_info.value().sample_rate,
@@ -52,8 +48,6 @@ std::shared_ptr<project_level> project_level_router::add_and_return_level(url co
     this->_project_levels->insert_or_replace(project_id, std::make_pair(project_level, nullptr));
 
     project_level->launcher->launch();
-
-    return project_level;
 }
 
 void project_level_router::remove_level(ae::project_id const &project_id) {
