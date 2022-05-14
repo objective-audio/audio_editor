@@ -85,9 +85,7 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
                                                          this->edge_holder.get(), this->timeline_holder.get())),
       track_editor(track_editor::make_shared(project_id, this->file_track.get(), this->marker_pool.get(),
                                              this->pasteboard.get(), this->database.get(), this->editing_status.get())),
-      launcher(project_editor_launcher::make_shared(project_id, file_info, this->timeline_holder.get(),
-                                                    this->database.get(), this->file_track.get(),
-                                                    this->edge_holder.get(), this->file_module_loader.get())),
+      launcher(project_editor_launcher::make_shared(project_id, this->file_module_loader.get())),
       responder(project_editor_responder::make_shared(
           this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
           this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),
