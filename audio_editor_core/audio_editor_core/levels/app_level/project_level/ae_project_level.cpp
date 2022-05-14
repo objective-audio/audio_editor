@@ -50,8 +50,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
                                          app_level->project_level_router.get(), this->editor_level_pool.get(),
                                          this->state_holder.get())),
-      launcher(project_launcher::make_shared(project_id, project_format, file_url, this->project_url.get(),
-                                             app_level->file_importer.get(), app_level->file_info_loader.get(),
+      launcher(project_launcher::make_shared(project_id, file_url, app_level->file_info_loader.get(),
                                              this->responder_stack.get(), this->editor_level_pool.get(),
                                              this->state_holder.get())) {
 }
