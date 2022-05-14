@@ -4,15 +4,8 @@
 
 #include "ae_project_editor_launcher.h"
 
-#include <audio_editor_core/ae_database.h>
-#include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_file_module_loader.h>
-#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_url.h>
-#include <audio_editor_core/ae_timeline_holder.h>
-#include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;

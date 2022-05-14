@@ -4,16 +4,10 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_project_id.h>
 #include <cpp_utils/yas_url.h>
 
 namespace yas::ae {
-class player;
-class timeline_holder;
-class database;
-class file_track;
-class edge_holder;
 class file_module_loader;
 
 struct project_editor_launcher final {
