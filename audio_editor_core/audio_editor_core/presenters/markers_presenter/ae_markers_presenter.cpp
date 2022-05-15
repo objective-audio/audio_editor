@@ -17,19 +17,19 @@ std::shared_ptr<markers_presenter> markers_presenter::make_shared(project_id con
                                                                   std::shared_ptr<display_space> const &display_space) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return std::shared_ptr<markers_presenter>(new markers_presenter{editor_level->file_info, project_level->player,
-                                                                    editor_level->marker_pool, display_space});
+    return std::shared_ptr<markers_presenter>(new markers_presenter{
+        project_level->project_format, project_level->player, editor_level->marker_pool, display_space});
 }
 
-markers_presenter::markers_presenter(file_info const &file_info, std::shared_ptr<player> const &player,
+markers_presenter::markers_presenter(project_format const &project_format, std::shared_ptr<player> const &player,
                                      std::shared_ptr<marker_pool> const &marker_pool,
                                      std::shared_ptr<display_space> const &display_space)
-    : _file_info(file_info),
+    : _project_format(project_format),
       _player(player),
       _marker_pool(marker_pool),
       _display_space(display_space),
       _location_pool(marker_location_pool::make_shared()) {
-    auto const sample_rate = this->_file_info.sample_rate;
+    auto const sample_rate = this->_project_format.sample_rate;
 
     marker_pool
         ->observe_event([this, sample_rate](marker_pool_event const &event) {
@@ -85,7 +85,7 @@ void markers_presenter::update_if_needed() {
 
 std::optional<time::range> markers_presenter::_space_range() const {
     if (auto const player = this->_player.lock()) {
-        auto const sample_rate = this->_file_info.sample_rate;
+        auto const sample_rate = this->_project_format.sample_rate;
         auto const current_frame = player->current_frame();
         return this->_display_space->frame_range(sample_rate, current_frame);
     } else {
@@ -111,7 +111,7 @@ void markers_presenter::_update_all_locations(update_type const type) {
 
         auto const locations = filter_map<marker_location>(
             marker_pool->markers(),
-            [&space_range_value, sample_rate = this->_file_info.sample_rate, &scale](auto const &pair) {
+            [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale](auto const &pair) {
                 if (space_range_value.is_contain(pair.second.frame)) {
                     return std::make_optional(marker_location::make_value(pair.second.identifier, pair.second.frame,
                                                                           sample_rate, scale.width));

@@ -38,19 +38,16 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor_level> project_editor_level::make_shared(ae::project_id const &project_id,
-                                                                        ae::file_info const &file_info) {
+std::shared_ptr<project_editor_level> project_editor_level::make_shared(ae::project_id const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<project_editor_level>(project_id, project_level->project_format, file_info,
+    return std::make_shared<project_editor_level>(project_id, project_level->project_format,
                                                   project_level->project_url);
 }
 
 project_editor_level::project_editor_level(ae::project_id const &project_id, ae::project_format const &project_format,
-                                           ae::file_info const &file_info,
                                            std::shared_ptr<project_url> const &project_url)
     : project_id(project_id),
-      file_info(file_info),
-      timing(timing::make_shared(file_info.sample_rate)),
+      timing(timing::make_shared(project_format.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),
       file_track(file_track::make_shared()),
       marker_pool(marker_pool::make_shared()),
@@ -60,7 +57,7 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       editing_status(editing_status::make_shared(this->exporter.get())),
       playing_toggler(playing_toggler::make_shared(project_id)),
       time_editor_level_router(time_editor_level_router::make_shared(project_id)),
-      timeline_holder(timeline_holder::make_shared(project_id, file_info)),
+      timeline_holder(timeline_holder::make_shared(project_id)),
       nudger(nudger::make_shared(project_id, this->nudge_settings.get())),
       edge_holder(edge_holder::make_shared()),
       edge_editor(edge_editor::make_shared(project_id, this->edge_holder.get(), this->editing_status.get())),
@@ -70,9 +67,9 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
       marker_editor(marker_editor::make_shared(project_id, this->marker_pool.get(), this->database.get(),
                                                this->editing_status.get())),
       module_renaming_launcher(module_renaming_launcher::make_shared(project_id, this->editing_status.get())),
-      export_interactor(export_interactor::make_shared(project_id, project_format, file_info,
-                                                       this->editing_status.get(), this->edge_holder.get(),
-                                                       this->exporter.get(), this->timeline_holder.get())),
+      export_interactor(export_interactor::make_shared(project_id, project_format, this->editing_status.get(),
+                                                       this->edge_holder.get(), this->exporter.get(),
+                                                       this->timeline_holder.get())),
       database_updater(database_updater::make_shared(this->file_track.get(), this->marker_pool.get(),
                                                      this->edge_holder.get(), this->pasteboard.get(),
                                                      this->database.get())),

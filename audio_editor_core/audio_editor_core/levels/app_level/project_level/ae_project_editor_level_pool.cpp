@@ -23,7 +23,7 @@ void project_editor_level_pool::add_level(file_info const &file_info) {
         throw std::runtime_error("editor_level is not null.");
     }
 
-    this->_editor_level->set_value(project_editor_level::make_shared(this->_project_id, file_info));
+    this->_editor_level->set_value(project_editor_level::make_shared(this->_project_id));
 }
 
 void project_editor_level_pool::remove_level() {

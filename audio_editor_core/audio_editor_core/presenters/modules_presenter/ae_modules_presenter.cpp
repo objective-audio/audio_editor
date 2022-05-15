@@ -21,19 +21,19 @@ std::shared_ptr<modules_presenter> modules_presenter::make_shared(
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
     return std::shared_ptr<modules_presenter>(new modules_presenter{
-        editor_level->file_info, project_level->player, editor_level->file_track, display_space, location_pool});
+        project_level->project_format, project_level->player, editor_level->file_track, display_space, location_pool});
 }
 
-modules_presenter::modules_presenter(file_info const &file_info, std::shared_ptr<player> const &player,
+modules_presenter::modules_presenter(project_format const &project_format, std::shared_ptr<player> const &player,
                                      std::shared_ptr<file_track> const &file_track,
                                      std::shared_ptr<display_space> const &display_space,
                                      std::shared_ptr<module_location_pool> const &location_pool)
-    : _file_info(file_info),
+    : _project_format(project_format),
       _player(player),
       _file_track(file_track),
       _display_space(display_space),
       _location_pool(location_pool) {
-    auto const sample_rate = this->_file_info.sample_rate;
+    auto const sample_rate = this->_project_format.sample_rate;
 
     file_track
         ->observe_event([this, sample_rate](file_track_event const &event) {
@@ -86,7 +86,7 @@ void modules_presenter::update_if_needed() {
 
 std::optional<time::range> modules_presenter::_space_range() const {
     if (auto const player = this->_player.lock()) {
-        auto const sample_rate = this->_file_info.sample_rate;
+        auto const sample_rate = this->_project_format.sample_rate;
         auto const current_frame = player->current_frame();
         return this->_display_space->frame_range(sample_rate, current_frame);
     } else {
@@ -111,7 +111,7 @@ void modules_presenter::_update_all_locations(bool const force) {
 
         auto const locations = filter_map<module_location>(
             file_track->modules(),
-            [&space_range_value, sample_rate = this->_file_info.sample_rate, &scale](auto const &module) {
+            [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale](auto const &module) {
                 if (module.first.is_overlap(space_range_value)) {
                     return std::make_optional(
                         module_location::make_value(module.second, sample_rate, space_range_value, scale));

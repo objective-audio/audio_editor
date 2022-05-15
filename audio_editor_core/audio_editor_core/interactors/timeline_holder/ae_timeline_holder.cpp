@@ -12,18 +12,17 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<timeline_holder> timeline_holder::make_shared(project_id const &project_id,
-                                                              ae::file_info const &file_info) {
+std::shared_ptr<timeline_holder> timeline_holder::make_shared(project_id const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &project_url = project_level->project_url;
-    return std::make_shared<timeline_holder>(project_url->editing_file(), file_info);
+    return std::make_shared<timeline_holder>(project_url->editing_file(), project_level->project_format);
 }
 
-timeline_holder::timeline_holder(url const &editing_file_url, ae::file_info const &file_info)
+timeline_holder::timeline_holder(url const &editing_file_url, project_format const &project_format)
     : _timeline(proc::timeline::make_shared()),
       _track(proc::track::make_shared()),
       _editing_file_url(editing_file_url),
-      _file_info(file_info) {
+      _project_format(project_format) {
     this->_timeline->insert_track(0, this->_track);
 }
 
@@ -36,7 +35,7 @@ void timeline_holder::replace(file_track_module_map_t const &modules) {
     this->_track = proc::track::make_shared();
 
     auto const url = this->_editing_file_url;
-    auto const ch_count = this->_file_info.channel_count;
+    auto const ch_count = this->_project_format.channel_count;
 
     for (auto const &pair : modules) {
         auto const &file_module = pair.second;
@@ -50,7 +49,7 @@ void timeline_holder::replace(file_track_module_map_t const &modules) {
 void timeline_holder::insert(file_module const &file_module) {
     if (auto const &track = this->_track) {
         auto const url = this->_editing_file_url;
-        auto const ch_count = this->_file_info.channel_count;
+        auto const ch_count = this->_project_format.channel_count;
 
         track->push_back_module(timeline_holder_utils::make_module(file_module, url, ch_count), file_module.range);
     } else {
