@@ -50,7 +50,7 @@ project_editor_level::project_editor_level(ae::project_id const &project_id, ae:
                                            std::shared_ptr<project_url> const &project_url)
     : project_id(project_id),
       file_info(file_info),
-      timing(timing::make_shared(file_info.sample_rate)),
+      timing(timing::make_shared(project_format.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),
       file_track(file_track::make_shared()),
       marker_pool(marker_pool::make_shared()),
