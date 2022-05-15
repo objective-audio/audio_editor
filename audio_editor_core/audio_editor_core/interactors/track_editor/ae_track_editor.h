@@ -16,9 +16,8 @@ class database;
 class editing_status;
 
 struct track_editor final {
-    [[nodiscard]] static std::shared_ptr<track_editor> make_shared(project_id const &project_id, file_track *,
-                                                                   marker_pool *, pasteboard *, database *,
-                                                                   editing_status const *);
+    [[nodiscard]] static std::shared_ptr<track_editor> make_shared(player *, file_track *, marker_pool *, pasteboard *,
+                                                                   database *, editing_status const *);
 
     track_editor(player *, file_track *, marker_pool *, pasteboard *, database *, editing_status const *);
 

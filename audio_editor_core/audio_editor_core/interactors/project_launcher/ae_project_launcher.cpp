@@ -12,24 +12,24 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_launcher> project_launcher::make_shared(
-    project_id const &project_id, url const &file_url, file_info_loader_for_project_launcher const *file_info_loader,
-    responder_stack_for_project_launcher *responder_stack,
-    project_editor_level_pool_for_project_launcher *editor_level_pool,
-    project_state_holder_for_project_launcher *state_holder) {
-    return std::make_shared<ae::project_launcher>(project_id, file_url, file_info_loader, responder_stack,
-                                                  editor_level_pool, state_holder);
+    identifier const &instance_id, url const &file_url, file_info_loader_for_project_launcher const *file_info_loader,
+    responder_stack_for_project_launcher *responder_stack, project_state_holder_for_project_launcher *state_holder,
+    std::shared_ptr<project_editor_responder> const &responder) {
+    return std::make_shared<ae::project_launcher>(instance_id, file_url, file_info_loader, responder_stack,
+                                                  state_holder, responder);
 }
 
-project_launcher::project_launcher(project_id const &project_id, url const &file_url,
+project_launcher::project_launcher(identifier const &instance_id, url const &file_url,
                                    file_info_loader_for_project_launcher const *file_info_loader,
                                    responder_stack_for_project_launcher *responder_stack,
-                                   project_editor_level_pool_for_project_launcher *editor_level_pool,
-                                   project_state_holder_for_project_launcher *state_holder)
-    : _file_url(file_url),
+                                   project_state_holder_for_project_launcher *state_holder,
+                                   std::shared_ptr<project_editor_responder> const &responder)
+    : _instance_id(instance_id),
+      _file_url(file_url),
       _file_info_loader(file_info_loader),
       _responder_stack(responder_stack),
-      _editor_level_pool(editor_level_pool),
-      _state_holder(state_holder) {
+      _state_holder(state_holder),
+      _responder(responder) {
 }
 
 void project_launcher::launch() {
@@ -45,14 +45,15 @@ void project_launcher::launch() {
         return;
     }
 
+    auto const responder = this->_responder.lock();
+    if (!responder) {
+        assertion_failure_if_not_test();
+        return;
+    }
+
     this->_state_holder->set_state(project_state::loading);
 
-    this->_editor_level_pool->add_level(file_info.value());
-
-    auto const &level = this->_editor_level_pool->level();
-    if (level) {
-        this->_responder_stack->push_responder(level->instance_id, level->responder);
-    }
+    this->_responder_stack->push_responder(this->_instance_id, responder);
 
     this->_state_holder->set_state(project_state::editing);
 }

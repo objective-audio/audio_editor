@@ -13,10 +13,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<edge_editor> edge_editor::make_shared(project_id const &project_id, edge_holder *holder,
+std::shared_ptr<edge_editor> edge_editor::make_shared(edge_holder *holder, player const *player,
                                                       editing_status const *editing_status) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<edge_editor>(holder, project_level->player.get(), editing_status);
+    return std::make_shared<edge_editor>(holder, player, editing_status);
 }
 
 edge_editor::edge_editor(edge_holder *holder, player const *player, editing_status const *editing_status)

@@ -15,15 +15,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<export_interactor> export_interactor::make_shared(project_id const &project_id,
-                                                                  project_format const &project_format,
-
-                                                                  editing_status const *editing_status,
-                                                                  edge_holder const *edge_holder, exporter *exporter,
-                                                                  timeline_holder const *timeline_holder) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<export_interactor>(project_format, project_level->dialog_presenter.get(), editing_status,
-                                               edge_holder, project_level->player.get(), exporter, timeline_holder);
+std::shared_ptr<export_interactor> export_interactor::make_shared(
+    project_format const &project_format, dialog_presenter *dialog_presenter, editing_status const *editing_status,
+    edge_holder const *edge_holder, player *player, exporter *exporter, timeline_holder const *timeline_holder) {
+    return std::make_shared<export_interactor>(project_format, dialog_presenter, editing_status, edge_holder, player,
+                                               exporter, timeline_holder);
 }
 
 export_interactor::export_interactor(project_format const &project_format, dialog_presenter *dialog_presenter,

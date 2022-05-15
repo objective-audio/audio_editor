@@ -14,6 +14,5 @@ struct hierarchy final {
     [[nodiscard]] static std::shared_ptr<app_level_router> const &app_level_router();
     [[nodiscard]] static std::shared_ptr<app_level> const &app_level();
     [[nodiscard]] static std::shared_ptr<project_level> const &project_level_for_id(project_id const &);
-    [[nodiscard]] static std::shared_ptr<project_editor_level> const &project_editor_level_for_id(project_id const &);
 };
 }  // namespace yas::ae

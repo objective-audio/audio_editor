@@ -16,9 +16,8 @@ using namespace yas::ae;
 std::shared_ptr<markers_presenter> markers_presenter::make_shared(project_id const &project_id,
                                                                   std::shared_ptr<display_space> const &display_space) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
     return std::shared_ptr<markers_presenter>(new markers_presenter{
-        project_level->project_format, project_level->player, editor_level->marker_pool, display_space});
+        project_level->project_format, project_level->player, project_level->marker_pool, display_space});
 }
 
 markers_presenter::markers_presenter(project_format const &project_format, std::shared_ptr<player> const &player,

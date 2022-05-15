@@ -11,7 +11,7 @@ namespace yas::ae {
 class file_module_loader;
 
 struct project_editor_launcher final {
-    [[nodiscard]] static std::shared_ptr<project_editor_launcher> make_shared(project_id const &project_id,
+    [[nodiscard]] static std::shared_ptr<project_editor_launcher> make_shared(url const &file_url,
                                                                               file_module_loader *);
 
     project_editor_launcher(url const &file_url, file_module_loader *);

@@ -16,8 +16,9 @@ class time_editor_level_router;
 class responder_stack;
 
 struct time_editor_launcher final {
-    [[nodiscard]] static std::shared_ptr<time_editor_launcher> make_shared(project_id const &, timing const *,
-                                                                           time_editor_level_router *);
+    [[nodiscard]] static std::shared_ptr<time_editor_launcher> make_shared(player const *, timing const *,
+                                                                           time_editor_level_router *,
+                                                                           responder_stack *);
 
     time_editor_launcher(player const *, timing const *, time_editor_level_router *, responder_stack *);
 

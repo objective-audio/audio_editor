@@ -26,12 +26,10 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<track_editor> track_editor::make_shared(project_id const &project_id, file_track *file_track,
+std::shared_ptr<track_editor> track_editor::make_shared(player *player, file_track *file_track,
                                                         marker_pool *marker_pool, pasteboard *pasteboard,
                                                         database *database, editing_status const *editing_status) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<track_editor>(project_level->player.get(), file_track, marker_pool, pasteboard, database,
-                                          editing_status);
+    return std::make_shared<track_editor>(player, file_track, marker_pool, pasteboard, database, editing_status);
 }
 
 track_editor::track_editor(player *player, file_track *file_track, marker_pool *marker_pool, pasteboard *pasteboard,

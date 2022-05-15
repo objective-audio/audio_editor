@@ -14,6 +14,8 @@ class number_components;
 struct time_editor_level_router final {
     [[nodiscard]] static std::shared_ptr<time_editor_level_router> make_shared(project_id const &);
 
+    time_editor_level_router(project_id const &identifier);
+
     void add_level(number_components const &, std::optional<std::size_t> const unit_idx);
     void remove_level();
 
@@ -25,7 +27,5 @@ struct time_editor_level_router final {
     project_id const _project_id;
 
     observing::value::holder_ptr<std::shared_ptr<time_editor_level>> const _level;
-
-    time_editor_level_router(project_id const &identifier);
 };
 }  // namespace yas::ae

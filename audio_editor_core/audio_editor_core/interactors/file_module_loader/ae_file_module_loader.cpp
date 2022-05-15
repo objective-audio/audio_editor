@@ -20,16 +20,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<file_module_loader> file_module_loader::make_shared(project_id const &project_id,
-                                                                    file_module_loading_state_holder *state_holder,
-                                                                    database *database, file_track *file_track,
-                                                                    edge_holder *edge_holder,
-                                                                    timeline_holder const *timeline_holder) {
+std::shared_ptr<file_module_loader> file_module_loader::make_shared(
+    project_id const &project_id, project_url const *project_url, project_format const &project_format, player *player,
+    file_module_loading_state_holder *state_holder, database *database, file_track *file_track,
+    edge_holder *edge_holder, timeline_holder const *timeline_holder) {
     auto const &app_level = hierarchy::app_level();
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return make_shared(project_id, project_level->project_url.get(), project_level->project_format,
-                       app_level->file_importer.get(), app_level->file_info_loader.get(), project_level->player.get(),
-                       state_holder, database, file_track, edge_holder, timeline_holder);
+    return make_shared(project_id, project_url, project_format, app_level->file_importer.get(),
+                       app_level->file_info_loader.get(), player, state_holder, database, file_track, edge_holder,
+                       timeline_holder);
 }
 
 std::shared_ptr<file_module_loader> file_module_loader::make_shared(

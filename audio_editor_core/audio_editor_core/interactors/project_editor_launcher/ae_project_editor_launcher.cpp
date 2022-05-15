@@ -10,10 +10,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_editor_launcher> project_editor_launcher::make_shared(project_id const &project_id,
+std::shared_ptr<project_editor_launcher> project_editor_launcher::make_shared(url const &file_url,
                                                                               file_module_loader *file_module_loader) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<project_editor_launcher>(project_level->file_url, file_module_loader);
+    return std::make_shared<project_editor_launcher>(file_url, file_module_loader);
 }
 
 project_editor_launcher::project_editor_launcher(url const &file_url, file_module_loader *file_module_loader)

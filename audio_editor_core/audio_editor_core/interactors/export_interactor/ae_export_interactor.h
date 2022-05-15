@@ -20,9 +20,9 @@ class exporter;
 class timeline_holder;
 
 struct export_interactor final {
-    [[nodiscard]] static std::shared_ptr<export_interactor> make_shared(project_id const &, project_format const &,
+    [[nodiscard]] static std::shared_ptr<export_interactor> make_shared(project_format const &, dialog_presenter *,
                                                                         editing_status const *, edge_holder const *,
-                                                                        exporter *, timeline_holder const *);
+                                                                        player *, exporter *, timeline_holder const *);
 
     export_interactor(project_format const &, dialog_presenter *, editing_status const *, edge_holder const *, player *,
                       exporter *, timeline_holder const *);

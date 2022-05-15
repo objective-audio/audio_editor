@@ -13,10 +13,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<marker_editor> marker_editor::make_shared(project_id const &project_id, marker_pool *marker_pool,
+std::shared_ptr<marker_editor> marker_editor::make_shared(player const *player, marker_pool *marker_pool,
                                                           database *database, editing_status const *editing_status) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<marker_editor>(project_level->player.get(), marker_pool, database, editing_status);
+    return std::make_shared<marker_editor>(player, marker_pool, database, editing_status);
 }
 
 marker_editor::marker_editor(player const *player, marker_pool *marker_pool, database *database,

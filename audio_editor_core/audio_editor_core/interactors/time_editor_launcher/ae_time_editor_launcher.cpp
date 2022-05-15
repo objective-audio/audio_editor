@@ -16,12 +16,10 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_launcher> time_editor_launcher::make_shared(project_id const &project_id,
-                                                                        timing const *timing,
-                                                                        time_editor_level_router *router) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<time_editor_launcher>(project_level->player.get(), timing, router,
-                                                  project_level->responder_stack.get());
+std::shared_ptr<time_editor_launcher> time_editor_launcher::make_shared(player const *player, timing const *timing,
+                                                                        time_editor_level_router *router,
+                                                                        responder_stack *responder_stack) {
+    return std::make_shared<time_editor_launcher>(player, timing, router, responder_stack);
 }
 
 time_editor_launcher::time_editor_launcher(player const *player, timing const *timing, time_editor_level_router *router,

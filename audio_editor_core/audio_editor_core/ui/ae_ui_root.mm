@@ -12,6 +12,8 @@
 #include <audio_editor_core/ae_ui_editing_root_level.h>
 #include <audio_editor_core/ae_ui_editing_root_level_pool.h>
 
+#include <cpp_utils/yas_assertion.h>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -31,30 +33,6 @@ ui_root::ui_root(std::shared_ptr<ae::color> const &color, std::shared_ptr<ui::st
       _color(color),
       _background(standard->view_look()->background()),
       _ui_editing_root_level_pool(ui_editing_root_level_pool) {
-    presenter
-        ->observe_is_editing([this](bool const &is_editing) {
-            auto const &pool = this->_ui_editing_root_level_pool.lock();
-            if (!pool) {
-                return;
-            }
-
-            if (is_editing) {
-                if (pool->level() == nullptr) {
-                    pool->add_level();
-
-                    auto const &level = pool->level();
-                    this->_root_node->add_sub_node(level->editing_root->node);
-                }
-            } else {
-                if (auto const &level = pool->level()) {
-                    level->editing_root->node->remove_from_super_node();
-                    pool->remove_level();
-                }
-            }
-        })
-        .sync()
-        ->add_to(this->_pool);
-
     standard->view_look()
         ->observe_appearance([this](auto const &) {
             if (auto const background = this->_background.lock()) {
@@ -63,6 +41,16 @@ ui_root::ui_root(std::shared_ptr<ae::color> const &color, std::shared_ptr<ui::st
         })
         .sync()
         ->add_to(this->_pool);
+}
+
+void ui_root::setup() {
+    auto const &pool = this->_ui_editing_root_level_pool.lock();
+    if (!pool || !pool->level()) {
+        assertion_failure_if_not_test();
+        return;
+    }
+
+    this->_root_node->add_sub_node(pool->level()->editing_root->node);
 }
 
 bool ui_root::responds_to_action(action const action) {

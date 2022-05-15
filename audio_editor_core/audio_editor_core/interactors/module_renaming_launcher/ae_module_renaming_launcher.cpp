@@ -11,10 +11,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<module_renaming_launcher> module_renaming_launcher::make_shared(project_id const &project_id,
+std::shared_ptr<module_renaming_launcher> module_renaming_launcher::make_shared(sheet_presenter *sheet_presenter,
                                                                                 editing_status const *editing_status) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<module_renaming_launcher>(project_level->sheet_presenter.get(), editing_status);
+    return std::make_shared<module_renaming_launcher>(sheet_presenter, editing_status);
 }
 
 module_renaming_launcher::module_renaming_launcher(sheet_presenter *sheet_presenter,
