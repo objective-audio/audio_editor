@@ -14,14 +14,15 @@ using namespace yas::ae;
 
 std::shared_ptr<edge_presenter> edge_presenter::make_shared(project_id const &project_id,
                                                             std::shared_ptr<display_space> const &display_space) {
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
     return std::shared_ptr<edge_presenter>(
-        new edge_presenter{editor_level->file_info, editor_level->edge_holder, display_space});
+        new edge_presenter{project_level->project_format, editor_level->edge_holder, display_space});
 }
 
-edge_presenter::edge_presenter(file_info const &file_info, std::shared_ptr<edge_holder> const &edge_holder,
+edge_presenter::edge_presenter(project_format const &project_format, std::shared_ptr<edge_holder> const &edge_holder,
                                std::shared_ptr<display_space> const &display_space)
-    : _file_info(file_info),
+    : _project_format(project_format),
       _locations(observing::value::holder<edge_locations>::make_shared({.begin = {.x = 0}, .end = {.x = 0}})),
       _edge_holder(edge_holder),
       _display_space(display_space) {
@@ -45,7 +46,7 @@ observing::syncable edge_presenter::observe_locations(std::function<void(edge_lo
 void edge_presenter::_update_locations() {
     if (auto const edge_holder = this->_edge_holder.lock()) {
         auto const &edge = edge_holder->edge();
-        auto const sample_rate = this->_file_info.sample_rate;
+        auto const sample_rate = this->_project_format.sample_rate;
         auto const &scale = this->_display_space->scale();
 
         this->_locations->set_value({.begin = edge_location::make_value(edge.begin_frame, sample_rate, scale),
