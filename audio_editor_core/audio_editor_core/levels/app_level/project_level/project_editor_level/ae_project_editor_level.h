@@ -45,15 +45,12 @@ class file_module_loading_state_holder;
 class file_module_loader;
 
 struct project_editor_level final {
-    [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id,
-                                                                           file_info const &);
+    [[nodiscard]] static std::shared_ptr<project_editor_level> make_shared(ae::project_id const &project_id);
 
-    project_editor_level(ae::project_id const &, project_format const &, ae::file_info const &,
-                         std::shared_ptr<project_url> const &);
+    project_editor_level(ae::project_id const &, project_format const &, std::shared_ptr<project_url> const &);
 
     identifier const instance_id;
     ae::project_id const project_id;
-    file_info const file_info;
 
     std::shared_ptr<timing> const timing;
     std::shared_ptr<nudge_settings> const nudge_settings;
