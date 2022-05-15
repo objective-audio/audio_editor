@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_marker_location_pool.h>
 #include <audio_editor_core/ae_markers_presenter_dependency.h>
+#include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
 
 namespace yas::ae {
@@ -18,13 +18,16 @@ struct markers_presenter final {
     [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(project_id const &project_id,
                                                                         std::shared_ptr<display_space> const &);
 
+    markers_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,
+                      std::shared_ptr<display_space> const &);
+
     [[nodiscard]] std::vector<std::optional<marker_location>> locations() const;
     [[nodiscard]] observing::syncable observe_locations(std::function<void(marker_location_pool_event const &)> &&);
 
     void update_if_needed();
 
    private:
-    file_info const _file_info;
+    project_format const _project_format;
     std::weak_ptr<player> const _player;
     std::weak_ptr<marker_pool> const _marker_pool;
     std::shared_ptr<display_space> const _display_space;
@@ -33,9 +36,6 @@ struct markers_presenter final {
 
     std::optional<frame_index_t> _last_frame = std::nullopt;
     std::optional<time::range> _last_space_range = std::nullopt;
-
-    markers_presenter(file_info const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,
-                      std::shared_ptr<display_space> const &);
 
     markers_presenter(markers_presenter const &) = delete;
     markers_presenter(markers_presenter &&) = delete;
