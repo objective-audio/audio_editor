@@ -14,7 +14,7 @@ class player;
 class editing_status;
 
 struct edge_editor final {
-    [[nodiscard]] static std::shared_ptr<edge_editor> make_shared(project_id const &project_id, edge_holder *,
+    [[nodiscard]] static std::shared_ptr<edge_editor> make_shared(edge_holder *, player const *,
                                                                   editing_status const *);
 
     edge_editor(edge_holder *, player const *, editing_status const *);

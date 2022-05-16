@@ -34,16 +34,6 @@ struct responder_stack_for_project_launcher {
     virtual void push_responder(identifier const &, std::shared_ptr<ae::responder> const &) = 0;
 };
 
-class project_editor_level;
-
-struct project_editor_level_pool_for_project_launcher {
-    virtual ~project_editor_level_pool_for_project_launcher() = default;
-
-    virtual void add_level(file_info const &) = 0;
-
-    [[nodiscard]] virtual std::shared_ptr<project_editor_level> const &level() const = 0;
-};
-
 enum class project_state;
 
 struct project_state_holder_for_project_launcher {

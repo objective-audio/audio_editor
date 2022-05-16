@@ -12,10 +12,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<timeline_holder> timeline_holder::make_shared(project_id const &project_id) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    auto const &project_url = project_level->project_url;
-    return std::make_shared<timeline_holder>(project_url->editing_file(), project_level->project_format);
+std::shared_ptr<timeline_holder> timeline_holder::make_shared(url const &editing_file_url,
+                                                              project_format const &project_format) {
+    return std::make_shared<timeline_holder>(editing_file_url, project_format);
 }
 
 timeline_holder::timeline_holder(url const &editing_file_url, project_format const &project_format)

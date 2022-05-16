@@ -5,7 +5,6 @@
 #include "ae_project_closer.h"
 
 #include <audio_editor_core/ae_file_importer.h>
-#include <audio_editor_core/ae_project_editor_level_pool.h>
 #include <audio_editor_core/ae_project_state_holder.h>
 #include <cpp_utils/yas_assertion.h>
 
@@ -15,20 +14,16 @@ using namespace yas::ae;
 std::shared_ptr<project_closer> project_closer::make_shared(
     project_id const &project_id, file_importer_for_project_closer *file_importer,
     project_level_router_for_project_closer *project_level_router,
-    project_editor_level_pool_for_project_closer *editor_level_pool,
     project_state_holder_for_project_closer *state_holder) {
-    return std::make_shared<project_closer>(project_id, file_importer, project_level_router, editor_level_pool,
-                                            state_holder);
+    return std::make_shared<project_closer>(project_id, file_importer, project_level_router, state_holder);
 }
 
 project_closer::project_closer(project_id const &project_id, file_importer_for_project_closer *file_importer,
                                project_level_router_for_project_closer *project_level_router,
-                               project_editor_level_pool_for_project_closer *editor_level_pool,
                                project_state_holder_for_project_closer *state_holder)
     : _project_id(project_id),
       _file_importer(file_importer),
       _project_level_router(project_level_router),
-      _editor_level_pool(editor_level_pool),
       _status(state_holder) {
 }
 
@@ -45,7 +40,6 @@ void project_closer::request_close() {
             this->_status->set_state(project_state::closing);
             break;
         case project_state::editing:
-            this->_editor_level_pool->remove_level();
             this->_status->set_state(project_state::closing);
             break;
         case project_state::launching:

@@ -13,7 +13,7 @@ class sheet_presenter;
 class editing_status;
 
 struct module_renaming_launcher final {
-    [[nodiscard]] static std::shared_ptr<module_renaming_launcher> make_shared(project_id const &,
+    [[nodiscard]] static std::shared_ptr<module_renaming_launcher> make_shared(sheet_presenter *,
                                                                                editing_status const *);
 
     module_renaming_launcher(sheet_presenter *, editing_status const *);

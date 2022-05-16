@@ -13,7 +13,7 @@ class player;
 class nudge_settings;
 
 struct nudger final {
-    [[nodiscard]] static std::shared_ptr<nudger> make_shared(project_id const &project_id, nudge_settings *);
+    [[nodiscard]] static std::shared_ptr<nudger> make_shared(player *, nudge_settings *);
 
     nudger(player *, nudge_settings *);
 

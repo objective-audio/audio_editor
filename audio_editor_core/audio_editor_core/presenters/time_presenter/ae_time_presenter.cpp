@@ -19,10 +19,9 @@ using namespace yas::ae;
 
 std::shared_ptr<time_presenter> time_presenter::make_shared(project_id const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    auto const &editor_level = hierarchy::project_editor_level_for_id(project_id);
-    return std::shared_ptr<time_presenter>(new time_presenter{editor_level->timing, project_level->player,
-                                                              editor_level->nudge_settings,
-                                                              editor_level->time_editor_level_router});
+    return std::shared_ptr<time_presenter>(new time_presenter{project_level->timing, project_level->player,
+                                                              project_level->nudge_settings,
+                                                              project_level->time_editor_level_router});
 }
 
 time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::shared_ptr<player> const &player,

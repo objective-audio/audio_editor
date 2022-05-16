@@ -14,11 +14,11 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(ui_project_id const &project_id) {
     auto const &app_level = hierarchy::app_level();
-    auto const &project_editor_level = hierarchy::project_editor_level_for_id(project_id.project_id);
+    auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
     auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
     auto const action_controller = action_controller::make_shared(project_id.project_id);
-    return std::shared_ptr<ui_modal_bg>(new ui_modal_bg{
-        ui_root_level->standard, app_level->color, project_editor_level->time_editor_level_router, action_controller});
+    return std::shared_ptr<ui_modal_bg>(new ui_modal_bg{ui_root_level->standard, app_level->color,
+                                                        project_level->time_editor_level_router, action_controller});
 }
 
 ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,

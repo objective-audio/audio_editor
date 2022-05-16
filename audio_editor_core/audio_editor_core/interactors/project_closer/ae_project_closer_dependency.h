@@ -23,12 +23,6 @@ struct project_level_router_for_project_closer {
     virtual void remove_level(ae::project_id const &project_id) = 0;
 };
 
-struct project_editor_level_pool_for_project_closer {
-    virtual ~project_editor_level_pool_for_project_closer() = default;
-
-    virtual void remove_level() = 0;
-};
-
 enum class project_state;
 
 struct project_state_holder_for_project_closer {

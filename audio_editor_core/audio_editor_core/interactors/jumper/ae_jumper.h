@@ -18,8 +18,8 @@ class marker_pool;
 class edge_holder;
 
 struct jumper final {
-    [[nodiscard]] static std::shared_ptr<jumper> make_shared(project_id const &project_id, file_track const *,
-                                                             marker_pool const *, edge_holder const *);
+    [[nodiscard]] static std::shared_ptr<jumper> make_shared(player *, file_track const *, marker_pool const *,
+                                                             edge_holder const *);
 
     jumper(player *, file_track const *, marker_pool const *, edge_holder const *);
 

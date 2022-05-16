@@ -12,9 +12,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<nudger> nudger::make_shared(project_id const &project_id, nudge_settings *settings) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<nudger>(project_level->player.get(), settings);
+std::shared_ptr<nudger> nudger::make_shared(player *player, nudge_settings *settings) {
+    return std::make_shared<nudger>(player, settings);
 }
 
 nudger::nudger(player *player, nudge_settings *settings) : _player(player), _settings(settings) {
