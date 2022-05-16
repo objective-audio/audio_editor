@@ -11,12 +11,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(args const &args, uintptr_t const project_view_id) {
+std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(args const &args,
+                                                                  std::shared_ptr<ui::standard> const &standard,
+                                                                  std::shared_ptr<ui::font_atlas> const &font_atlas) {
     auto const &app_level = hierarchy::app_level();
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_view_id);
 
-    return std::shared_ptr<ui_marker_element>(new ui_marker_element{
-        ui_root_level->standard, ui_root_level->font_atlas_14, app_level->color, std::move(args)});
+    return std::shared_ptr<ui_marker_element>(
+        new ui_marker_element{standard, font_atlas, app_level->color, std::move(args)});
 }
 
 ui_marker_element::ui_marker_element(std::shared_ptr<ui::standard> const &standard,

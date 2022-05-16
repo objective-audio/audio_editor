@@ -15,14 +15,13 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_scroller> ui_scroller::make_shared(ui_project_id const &project_id,
+                                                      std::shared_ptr<ui::standard> const &standard,
                                                       std::shared_ptr<ui_track> const &track,
                                                       std::shared_ptr<ui_edge> const &edge,
                                                       std::shared_ptr<ui_markers> const &markers) {
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
     auto const presenter = scroller_presenter::make_shared(project_id.project_id);
     auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id.project_id);
-    return std::shared_ptr<ui_scroller>(
-        new ui_scroller{ui_root_level->standard, presenter, scroll_gestore_controller, track, edge, markers});
+    return std::make_shared<ui_scroller>(standard, presenter, scroll_gestore_controller, track, edge, markers);
 }
 
 ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard,

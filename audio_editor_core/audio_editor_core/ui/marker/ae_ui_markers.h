@@ -16,7 +16,14 @@ class ui_marker_element;
 class ui_mesh_data;
 
 struct ui_markers final {
-    [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(ui_project_id const &project_id);
+    [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(
+        ui_project_id const &project_id, std::shared_ptr<ae::display_space> const &,
+        std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &,
+        std::shared_ptr<ui_mesh_data> const &vertical_line_data);
+
+    ui_markers(std::shared_ptr<markers_presenter> const &, std::shared_ptr<ui::standard> const &,
+               std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ae::color> const &,
+               std::shared_ptr<ui_mesh_data> const &);
 
     std::shared_ptr<ui::node> const node;
 
@@ -25,7 +32,8 @@ struct ui_markers final {
                           std::vector<std::pair<std::size_t, marker_location>> const &inserted);
 
    private:
-    uintptr_t const _project_view_id;
+    std::shared_ptr<ui::standard> const _standard;
+    std::shared_ptr<ui::font_atlas> const _font_atlas;
     std::shared_ptr<markers_presenter> const _presenter;
     std::shared_ptr<ae::color> const _color;
 
@@ -35,10 +43,6 @@ struct ui_markers final {
     std::shared_ptr<ui_mesh_data> const _triangle_data;
 
     observing::canceller_pool _pool;
-
-    ui_markers(uintptr_t const project_view_id, std::shared_ptr<markers_presenter> const &,
-               std::shared_ptr<ui::standard> const &, std::shared_ptr<ae::color> const &,
-               std::shared_ptr<ui_mesh_data> const &);
 
     void _set_count(std::size_t const);
 };

@@ -21,19 +21,19 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &project_id,
-                                                              std::shared_ptr<ui_scroller> const &ui_scroller,
-                                                              std::shared_ptr<ui_modal_bg> const &ui_modal_bg,
-                                                              std::shared_ptr<ui_time> const &ui_time) {
+std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(
+    ui_project_id const &project_id, std::shared_ptr<ui::standard> const &standard,
+    std::shared_ptr<ui::font_atlas> const &font_atlas,
+    std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
+    std::shared_ptr<ae::keyboard> const &keyboard, std::shared_ptr<ui_scroller> const &ui_scroller,
+    std::shared_ptr<ui_modal_bg> const &ui_modal_bg, std::shared_ptr<ui_time> const &ui_time) {
     auto const &app_level = hierarchy::app_level();
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
     auto const presenter = editing_root_presenter::make_shared(project_id.project_id);
     auto const action_controller = action_controller::make_shared(project_id.project_id);
 
-    return std::shared_ptr<ui_editing_root>(new ui_editing_root{
-        ui_root_level->standard, ui_root_level->font_atlas_14, app_level->color, presenter, action_controller,
-        ui_root_level->pinch_gesture_controller, ui_root_level->keyboard, ui_scroller, ui_modal_bg, ui_time});
+    return std::make_shared<ui_editing_root>(standard, font_atlas, app_level->color, presenter, action_controller,
+                                             pinch_gesture_controller, keyboard, ui_scroller, ui_modal_bg, ui_time);
 }
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,

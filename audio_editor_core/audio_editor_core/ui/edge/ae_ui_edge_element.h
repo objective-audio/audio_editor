@@ -15,8 +15,12 @@ struct ui_edge_element final {
         std::shared_ptr<ui_mesh_data> const &vertical_line_data;
     };
 
-    [[nodiscard]] static std::shared_ptr<ui_edge_element> make_shared(std::string const &text, args const &args,
-                                                                      uintptr_t const project_view_id);
+    [[nodiscard]] static std::shared_ptr<ui_edge_element> make_shared(
+        std::string const &text, args const &args, std::shared_ptr<ui::standard> const &standard,
+        std::shared_ptr<ui::font_atlas> const &font_atlas);
+
+    ui_edge_element(std::string const &text, std::shared_ptr<ui::standard> const &,
+                    std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ae::color> const &, args const &args);
 
     std::shared_ptr<ui::node> const node;
 
@@ -26,8 +30,5 @@ struct ui_edge_element final {
     std::shared_ptr<ae::color> const _color;
 
     observing::canceller_pool _pool;
-
-    ui_edge_element(std::string const &text, std::shared_ptr<ui::standard> const &,
-                    std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ae::color> const &, args const &args);
 };
 }  // namespace yas::ae

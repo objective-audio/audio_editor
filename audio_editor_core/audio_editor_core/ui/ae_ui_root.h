@@ -17,7 +17,7 @@ class color;
 struct ui_root final {
     [[nodiscard]] static std::shared_ptr<ui_root> make_shared(std::shared_ptr<ui::standard> const &,
                                                               ui_project_id const &project_id,
-                                                              std::shared_ptr<ui_editing_root_level_pool> const &);
+                                                              std::shared_ptr<ui_editing_root> const &);
 
     void setup();
 
@@ -28,10 +28,10 @@ struct ui_root final {
     std::shared_ptr<ui::node> const _root_node;
     std::shared_ptr<ae::color> const _color;
     std::weak_ptr<ui::background> const _background;
-    std::weak_ptr<ui_editing_root_level_pool> const _ui_editing_root_level_pool;
+    std::weak_ptr<ui_editing_root> const _editing_root;
     observing::canceller_pool _pool;
 
     ui_root(std::shared_ptr<ae::color> const &, std::shared_ptr<ui::standard> const &,
-            std::shared_ptr<root_presenter> const &, std::shared_ptr<ui_editing_root_level_pool> const &);
+            std::shared_ptr<root_presenter> const &, std::shared_ptr<ui_editing_root> const &);
 };
 }  // namespace yas::ae

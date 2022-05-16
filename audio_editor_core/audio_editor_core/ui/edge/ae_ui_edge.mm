@@ -13,17 +13,18 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_edge> ui_edge::make_shared(ui_project_id const &project_id) {
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
-    auto const &vertical_line_data = ui_root_level->vertical_line_data;
-
+std::shared_ptr<ui_edge> ui_edge::make_shared(ui_project_id const &project_id,
+                                              std::shared_ptr<ui_mesh_data> const &vertical_line_data,
+                                              std::shared_ptr<ae::display_space> const &display_space,
+                                              std::shared_ptr<ui::standard> const &standard,
+                                              std::shared_ptr<ui::font_atlas> const &font_atlas) {
     ui_edge_element::args const args{.vertical_line_data = vertical_line_data};
 
-    auto const begin_edge = ui_edge_element::make_shared("BEGIN", args, project_id.view_id);
-    auto const end_edge = ui_edge_element::make_shared("END", args, project_id.view_id);
+    auto const begin_edge = ui_edge_element::make_shared("BEGIN", args, standard, font_atlas);
+    auto const end_edge = ui_edge_element::make_shared("END", args, standard, font_atlas);
 
-    auto const presenter = edge_presenter::make_shared(project_id.project_id, ui_root_level->display_space);
-    return std::shared_ptr<ui_edge>(new ui_edge{presenter, begin_edge, end_edge});
+    auto const presenter = edge_presenter::make_shared(project_id.project_id, display_space);
+    return std::make_shared<ui_edge>(presenter, begin_edge, end_edge);
 }
 
 ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui_edge_element> const &begin_edge,

@@ -3,7 +3,6 @@
 //
 
 #include "ae_ui_root_level_router.h"
-#include <audio_editor_core/ae_ui_editing_root_level_pool.h>
 #include <audio_editor_core/ae_ui_root.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 
@@ -22,7 +21,6 @@ void ui_root_level_router::add_level(std::shared_ptr<ui::standard> const &standa
 
     auto const level = ui_root_level::make_shared(standard, project_id);
     this->_ui_roots.emplace(project_id.view_id, level);
-    level->editing_root_level_pool->add_level();
     level->root->setup();
 }
 

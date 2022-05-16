@@ -16,7 +16,12 @@ class display_space;
 
 struct ui_track final {
     [[nodiscard]] static std::shared_ptr<ui_track> make_shared(ui_project_id const &project_id,
+                                                               std::shared_ptr<ui::standard> const &,
+                                                               std::shared_ptr<display_space> const &,
                                                                std::shared_ptr<ui_modules> const &);
+
+    ui_track(std::shared_ptr<ui::standard> const &, std::shared_ptr<display_space> const &,
+             std::shared_ptr<track_presenter> const &, std::shared_ptr<ui_modules> const &);
 
     std::shared_ptr<ui::node> const node;
 
@@ -27,9 +32,6 @@ struct ui_track final {
     std::shared_ptr<ui_modules> const _modules;
 
     observing::canceller_pool _pool;
-
-    ui_track(std::shared_ptr<ui::standard> const &, std::shared_ptr<display_space> const &,
-             std::shared_ptr<track_presenter> const &, std::shared_ptr<ui_modules> const &);
 
     void _update_scale();
 };

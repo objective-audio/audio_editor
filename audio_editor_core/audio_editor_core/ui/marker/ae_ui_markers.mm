@@ -19,21 +19,24 @@ namespace yas::ae::ui_markers_constants {
 static std::size_t const reserving_interval = 10;
 }
 
-std::shared_ptr<ui_markers> ui_markers::make_shared(ui_project_id const &project_id) {
+std::shared_ptr<ui_markers> ui_markers::make_shared(ui_project_id const &project_id,
+                                                    std::shared_ptr<ae::display_space> const &display_space,
+                                                    std::shared_ptr<ui::standard> const &standard,
+                                                    std::shared_ptr<ui::font_atlas> const &font_atlas,
+                                                    std::shared_ptr<ui_mesh_data> const &vertical_line_data) {
     auto const &app_level = hierarchy::app_level();
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
-    auto const presenter = markers_presenter::make_shared(project_id.project_id, ui_root_level->display_space);
+    auto const presenter = markers_presenter::make_shared(project_id.project_id, display_space);
     auto const &color = app_level->color;
-    return std::shared_ptr<ui_markers>(new ui_markers{project_id.view_id, presenter, ui_root_level->standard, color,
-                                                      ui_root_level->vertical_line_data});
+    return std::make_shared<ui_markers>(presenter, standard, font_atlas, color, vertical_line_data);
 }
 
-ui_markers::ui_markers(uintptr_t const project_view_id, std::shared_ptr<markers_presenter> const &presenter,
-                       std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
-                       std::shared_ptr<ui_mesh_data> const &vertical_line_data)
+ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
+                       std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::font_atlas> const &font_atlas,
+                       std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_mesh_data> const &vertical_line_data)
     : node(ui::node::make_shared()),
-      _project_view_id(project_view_id),
+      _standard(standard),
+      _font_atlas(font_atlas),
       _presenter(presenter),
       _color(color),
       _top_guide(standard->view_look()->view_layout_guide()->top()),
@@ -129,7 +132,7 @@ void ui_markers::_set_count(std::size_t const location_count) {
 
         auto each = make_fast_each(location_count - prev_element_count);
         while (yas_each_next(each)) {
-            auto element = ui_marker_element::make_shared(args, this->_project_view_id);
+            auto element = ui_marker_element::make_shared(args, this->_standard, this->_font_atlas);
             element->node->set_is_enabled(false);
             this->node->add_sub_node(element->node);
             this->_elements.emplace_back(std::move(element));
