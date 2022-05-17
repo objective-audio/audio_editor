@@ -13,7 +13,13 @@ class action_controller;
 class color;
 
 struct ui_time final {
-    [[nodiscard]] static std::shared_ptr<ui_time> make_shared(ui_project_id const &project_id);
+    [[nodiscard]] static std::shared_ptr<ui_time> make_shared(ui_project_id const &,
+                                                              std::shared_ptr<ui::standard> const &,
+                                                              std::shared_ptr<ui::texture> const &);
+
+    ui_time(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::texture> const &,
+            std::shared_ptr<ae::color> const &, std::shared_ptr<time_presenter> const &,
+            std::shared_ptr<action_controller> const &);
 
     std::shared_ptr<ui::node> const node;
 
@@ -36,10 +42,6 @@ struct ui_time final {
     std::shared_ptr<ui::strings> const _time_strings;
 
     observing::canceller_pool _pool;
-
-    ui_time(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::texture> const &,
-            std::shared_ptr<ae::color> const &, std::shared_ptr<time_presenter> const &,
-            std::shared_ptr<action_controller> const &);
 
     void _resize_buttons();
     void _update_button_positions();

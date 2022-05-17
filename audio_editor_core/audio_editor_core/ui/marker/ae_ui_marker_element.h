@@ -16,7 +16,9 @@ struct ui_marker_element final {
         std::shared_ptr<ui_mesh_data> const &triangle_data;
     };
 
-    [[nodiscard]] static std::shared_ptr<ui_marker_element> make_shared(args const &, uintptr_t const project_view_id);
+    [[nodiscard]] static std::shared_ptr<ui_marker_element> make_shared(args const &,
+                                                                        std::shared_ptr<ui::standard> const &,
+                                                                        std::shared_ptr<ui::font_atlas> const &);
 
     std::shared_ptr<ui::node> const node;
 

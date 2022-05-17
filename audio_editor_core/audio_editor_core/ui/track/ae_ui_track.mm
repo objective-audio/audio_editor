@@ -13,11 +13,11 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_track> ui_track::make_shared(ui_project_id const &project_id,
+                                                std::shared_ptr<ui::standard> const &standard,
+                                                std::shared_ptr<display_space> const &display_space,
                                                 std::shared_ptr<ui_modules> const &modules) {
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
     auto const presenter = track_presenter::make_shared(project_id.project_id);
-    return std::shared_ptr<ui_track>(
-        new ui_track{ui_root_level->standard, ui_root_level->display_space, presenter, modules});
+    return std::make_shared<ui_track>(standard, display_space, presenter, modules);
 }
 
 ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<display_space> const &display_space,

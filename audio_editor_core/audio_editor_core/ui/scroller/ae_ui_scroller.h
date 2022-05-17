@@ -16,9 +16,14 @@ class ui_markers;
 
 struct ui_scroller final {
     [[nodiscard]] static std::shared_ptr<ui_scroller> make_shared(ui_project_id const &,
+                                                                  std::shared_ptr<ui::standard> const &,
                                                                   std::shared_ptr<ui_track> const &,
                                                                   std::shared_ptr<ui_edge> const &,
                                                                   std::shared_ptr<ui_markers> const &);
+
+    ui_scroller(std::shared_ptr<ui::standard> const &, std::shared_ptr<scroller_presenter> const &,
+                std::shared_ptr<scroll_gesture_controller> const &, std::shared_ptr<ui_track> const &,
+                std::shared_ptr<ui_edge> const &, std::shared_ptr<ui_markers> const &);
 
     std::shared_ptr<ui::node> const node;
 
@@ -31,9 +36,5 @@ struct ui_scroller final {
     std::shared_ptr<ui_markers> const _markers;
 
     observing::canceller_pool _pool;
-
-    ui_scroller(std::shared_ptr<ui::standard> const &, std::shared_ptr<scroller_presenter> const &,
-                std::shared_ptr<scroll_gesture_controller> const &, std::shared_ptr<ui_track> const &,
-                std::shared_ptr<ui_edge> const &, std::shared_ptr<ui_markers> const &);
 };
 }  // namespace yas::ae

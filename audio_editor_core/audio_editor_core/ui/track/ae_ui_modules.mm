@@ -22,16 +22,17 @@ static std::size_t const reserving_interval = 100;
 }
 
 std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &project_id,
+                                                    std::shared_ptr<display_space> const &display_space,
+                                                    std::shared_ptr<ui::standard> const &standard,
+                                                    std::shared_ptr<ui::font_atlas> const &font_atlas,
                                                     std::shared_ptr<module_location_pool> const &location_pool,
                                                     std::shared_ptr<ui_module_waveforms> const &waveforms) {
     auto const &app_level = hierarchy::app_level();
-    auto const &ui_root_level = ui_hierarchy::root_level_for_view_id(project_id.view_id);
 
-    auto const modules_presenter =
-        modules_presenter::make_shared(project_id.project_id, ui_root_level->display_space, location_pool);
+    auto const modules_presenter = modules_presenter::make_shared(project_id.project_id, display_space, location_pool);
     auto const modules_controller = modules_controller::make_shared(project_id.project_id, location_pool);
-    return std::shared_ptr<ui_modules>(new ui_modules{modules_presenter, modules_controller, ui_root_level->standard,
-                                                      app_level->color, ui_root_level->font_atlas_14, waveforms});
+    return std::make_shared<ui_modules>(modules_presenter, modules_controller, standard, app_level->color, font_atlas,
+                                        waveforms);
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
