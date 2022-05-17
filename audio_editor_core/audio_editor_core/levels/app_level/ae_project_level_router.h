@@ -13,13 +13,15 @@ namespace yas::ae {
 class project_level;
 class uuid_generatable;
 class file_info_loader;
+class project_id;
+class project_format;
 
 struct project_level_router final : project_level_router_for_app_presenter, project_level_router_for_project_closer {
     [[nodiscard]] static std::shared_ptr<project_level_router> make_shared(std::shared_ptr<file_info_loader> const &);
 
     project_level_router(std::shared_ptr<uuid_generatable> const &, std::shared_ptr<file_info_loader> const &);
 
-    void add_level(url const &file_url) override;
+    void add_level(url const &file_url, project_id const &, project_format const &);
     void remove_level(ae::project_id const &project_id) override;
 
     [[nodiscard]] std::shared_ptr<project_level> const &level_for_id(ae::project_id const &) const;
