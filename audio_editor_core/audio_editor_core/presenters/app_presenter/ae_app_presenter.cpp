@@ -15,7 +15,8 @@ using namespace yas::ae;
 app_presenter::app_presenter() : app_presenter(hierarchy::app_level()->project_level_router) {
 }
 
-app_presenter::app_presenter(std::shared_ptr<project_pool_for_app_presenter> const &pool) : _project_pool(pool) {
+app_presenter::app_presenter(std::shared_ptr<project_level_router_for_app_presenter> const &pool)
+    : _project_pool(pool) {
 }
 
 bool app_presenter::can_open_file_dialog() const {

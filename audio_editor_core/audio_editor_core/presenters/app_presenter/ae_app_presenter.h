@@ -10,7 +10,7 @@
 namespace yas::ae {
 struct app_presenter final {
     app_presenter();
-    explicit app_presenter(std::shared_ptr<project_pool_for_app_presenter> const &);
+    explicit app_presenter(std::shared_ptr<project_level_router_for_app_presenter> const &);
 
     [[nodiscard]] bool can_open_file_dialog() const;
     void open_file_dialog();
@@ -19,7 +19,7 @@ struct app_presenter final {
     [[nodiscard]] observing::syncable observe_event(std::function<void(app_presenter_event const &)> &&);
 
    private:
-    std::weak_ptr<project_pool_for_app_presenter> _project_pool;
+    std::weak_ptr<project_level_router_for_app_presenter> _project_pool;
     observing::notifier_ptr<app_presenter_event> const _event_notifier =
         observing::notifier<app_presenter_event>::make_shared();
 

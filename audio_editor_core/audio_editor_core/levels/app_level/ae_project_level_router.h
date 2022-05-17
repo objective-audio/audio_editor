@@ -14,7 +14,7 @@ class project_level;
 class uuid_generatable;
 class file_info_loader;
 
-struct project_level_router final : project_pool_for_app_presenter, project_level_router_for_project_closer {
+struct project_level_router final : project_level_router_for_app_presenter, project_level_router_for_project_closer {
     [[nodiscard]] static std::shared_ptr<project_level_router> make_shared(std::shared_ptr<file_info_loader> const &);
 
     project_level_router(std::shared_ptr<uuid_generatable> const &, std::shared_ptr<file_info_loader> const &);
