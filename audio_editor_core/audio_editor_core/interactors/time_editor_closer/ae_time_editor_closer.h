@@ -13,7 +13,7 @@
 namespace yas::ae {
 class time_editor;
 class time_editor_state;
-class time_editor_level_router;
+class project_sub_level_router;
 class responder_stack;
 class timing;
 class player;
@@ -23,7 +23,7 @@ struct time_editor_closer final {
                                                                          identifier const level_instance_id,
                                                                          time_editor *);
 
-    time_editor_closer(identifier const level_instance_id, time_editor *, time_editor_level_router *, responder_stack *,
+    time_editor_closer(identifier const level_instance_id, time_editor *, project_sub_level_router *, responder_stack *,
                        timing *, player *);
 
     void finish();
@@ -37,7 +37,7 @@ struct time_editor_closer final {
 
     struct dependencies {
         time_editor *const editor;
-        time_editor_level_router *const router;
+        project_sub_level_router *const router;
         responder_stack *const responder_stack;
         timing *const timing;
         player *const player;

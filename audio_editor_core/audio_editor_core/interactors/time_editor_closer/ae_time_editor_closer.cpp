@@ -6,9 +6,9 @@
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
+#include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_time_editor.h>
-#include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_timing.h>
 #include <cpp_utils/yas_assertion.h>
 
@@ -19,13 +19,13 @@ std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(project_id c
                                                                     identifier const level_instance_id,
                                                                     time_editor *editor) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<time_editor_closer>(
-        level_instance_id, editor, project_level->time_editor_level_router.get(), project_level->responder_stack.get(),
-        project_level->timing.get(), project_level->player.get());
+    return std::make_shared<time_editor_closer>(level_instance_id, editor, project_level->sub_level_router.get(),
+                                                project_level->responder_stack.get(), project_level->timing.get(),
+                                                project_level->player.get());
 }
 
 time_editor_closer::time_editor_closer(identifier const level_instance_id, time_editor *editor,
-                                       time_editor_level_router *router, responder_stack *responder_stack,
+                                       project_sub_level_router *router, responder_stack *responder_stack,
                                        timing *timing, player *player)
     : _level_instance_id(level_instance_id), _dependencies({editor, router, responder_stack, timing, player}) {
 }
@@ -77,7 +77,7 @@ void time_editor_closer::_finalize() {
     this->_dependencies.reset();
 
     responder_stack->pop_responder(this->_level_instance_id);
-    router->remove_level();
+    router->remove_time_editor();
 }
 
 bool time_editor_closer::can_finish() {

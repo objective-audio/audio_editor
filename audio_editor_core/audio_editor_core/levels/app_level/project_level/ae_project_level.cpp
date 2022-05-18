@@ -35,6 +35,7 @@
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_level_router.h>
 #include <audio_editor_core/ae_project_state_holder.h>
+#include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_reverter.h>
@@ -42,7 +43,6 @@
 #include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
-#include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
@@ -83,7 +83,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       exporter(exporter::make_shared()),
       editing_status(editing_status::make_shared(this->exporter.get())),
       playing_toggler(playing_toggler::make_shared(this->player.get())),
-      time_editor_level_router(time_editor_level_router::make_shared(project_id)),
+      sub_level_router(project_sub_level_router::make_shared(project_id)),
       timeline_holder(timeline_holder::make_shared(this->project_url->editing_file(), this->project_format)),
       nudger(nudger::make_shared(this->player.get(), this->nudge_settings.get())),
       edge_holder(edge_holder::make_shared()),
@@ -91,7 +91,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       jumper(jumper::make_shared(this->player.get(), this->file_track.get(), this->marker_pool.get(),
                                  this->edge_holder.get())),
       time_editor_launcher(time_editor_launcher::make_shared(
-          this->player.get(), this->timing.get(), this->time_editor_level_router.get(), this->responder_stack.get())),
+          this->player.get(), this->timing.get(), this->sub_level_router.get(), this->responder_stack.get())),
       marker_editor(marker_editor::make_shared(this->player.get(), this->marker_pool.get(), this->database.get(),
                                                this->editing_status.get())),
       module_renaming_launcher(

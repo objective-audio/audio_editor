@@ -7,9 +7,9 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_player.h>
+#include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_level.h>
-#include <audio_editor_core/ae_time_editor_level_router.h>
 #include <audio_editor_core/ae_time_presenter_utils.h>
 #include <audio_editor_core/ae_timing.h>
 #include <cpp_utils/yas_fast_each.h>
@@ -19,25 +19,28 @@ using namespace yas::ae;
 
 std::shared_ptr<time_presenter> time_presenter::make_shared(project_id const &project_id) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<time_presenter>(new time_presenter{project_level->timing, project_level->player,
-                                                              project_level->nudge_settings,
-                                                              project_level->time_editor_level_router});
+    return std::shared_ptr<time_presenter>(new time_presenter{
+        project_level->timing, project_level->player, project_level->nudge_settings, project_level->sub_level_router});
 }
 
 time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::shared_ptr<player> const &player,
                                std::shared_ptr<nudge_settings> const &nudge_settings,
-                               std::shared_ptr<time_editor_level_router> const &time_editor_level_router)
+                               std::shared_ptr<project_sub_level_router> const &project_sub_level_router)
     : _timing(timing),
       _player(player),
       _nudge_settings(nudge_settings),
-      _time_editor_level_router(time_editor_level_router) {
+      _project_sub_level_router(project_sub_level_router) {
     this->_range_fetcher =
         observing::fetcher<std::optional<index_range>>::make_shared([this] { return this->editing_time_text_range(); });
 
-    time_editor_level_router
-        ->observe_level([this, cancellable = observing::cancellable_ptr{nullptr}](
-                            std::shared_ptr<time_editor_level> const &level) mutable {
-            if (level) {
+    project_sub_level_router
+        ->observe([this, cancellable = observing::cancellable_ptr{nullptr}](auto const &) mutable {
+            auto const &router = this->_project_sub_level_router.lock();
+            if (!router) {
+                return;
+            }
+
+            if (auto const &level = router->time_editor_level()) {
                 cancellable =
                     level->editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
             } else {
@@ -121,8 +124,8 @@ observing::syncable time_presenter::observe_nudging_unit_index(std::function<voi
 }
 
 std::shared_ptr<time_editor_level> const &time_presenter::_level() const {
-    if (auto const router = this->_time_editor_level_router.lock()) {
-        return router->level();
+    if (auto const router = this->_project_sub_level_router.lock()) {
+        return router->time_editor_level();
     }
 
     static std::shared_ptr<time_editor_level> const null_level;
