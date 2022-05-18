@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_app_level_router.h>
-#include <audio_editor_core/ae_project_editor_level.h>
 #include <audio_editor_core/ae_project_level.h>
 
 namespace yas::ae {
