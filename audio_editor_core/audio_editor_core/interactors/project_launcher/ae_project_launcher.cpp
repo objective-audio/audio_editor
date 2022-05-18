@@ -4,7 +4,6 @@
 
 #include "ae_project_launcher.h"
 
-#include <audio_editor_core/ae_project_editor_level.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <cpp_utils/yas_assertion.h>
 
