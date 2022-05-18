@@ -8,14 +8,18 @@
 #include <audio_editor_core/ae_app_presenter_utils.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_level_router.h>
+#include <audio_editor_core/ae_project_preparer.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-app_presenter::app_presenter() : app_presenter(hierarchy::app_level()->project_level_router) {
+app_presenter::app_presenter()
+    : app_presenter(hierarchy::app_level()->project_level_router, hierarchy::app_level()->project_preparer) {
 }
 
-app_presenter::app_presenter(std::shared_ptr<project_pool_for_app_presenter> const &pool) : _project_pool(pool) {
+app_presenter::app_presenter(std::shared_ptr<project_level_router_for_app_presenter> const &pool,
+                             std::shared_ptr<project_preparer> const &preparer)
+    : _project_pool(pool), _project_preparer(preparer) {
 }
 
 bool app_presenter::can_open_file_dialog() const {
@@ -29,8 +33,8 @@ void app_presenter::open_file_dialog() {
 }
 
 void app_presenter::select_file(url const &file_url) {
-    if (auto const pool = this->_project_pool.lock()) {
-        pool->add_level(file_url);
+    if (auto const preparer = this->_project_preparer.lock()) {
+        preparer->prepare(file_url);
     }
 }
 

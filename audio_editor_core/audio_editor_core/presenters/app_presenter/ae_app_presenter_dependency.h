@@ -9,10 +9,9 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct project_pool_for_app_presenter {
-    virtual ~project_pool_for_app_presenter() = default;
+struct project_level_router_for_app_presenter {
+    virtual ~project_level_router_for_app_presenter() = default;
 
-    virtual void add_level(url const &file_url) = 0;
     [[nodiscard]] virtual observing::syncable observe_event(
         std::function<void(project_level_router_event const &)> &&) = 0;
 };
