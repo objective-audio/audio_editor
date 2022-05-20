@@ -733,7 +733,6 @@
 				B65ABF5C2834A5050096B6C7 /* ae_project_sub_level_router.cpp */,
 				B65ABF5D2834A5050096B6C7 /* ae_project_sub_level_router.h */,
 				B6A21C7A2834A6320028C40E /* ae_project_sub_level.h */,
-				B69D8C5027CB6AC600CA30DE /* time_editor_level */,
 			);
 			path = project_level;
 			sourceTree = "<group>";
@@ -1135,6 +1134,9 @@
 				B63D1E8D282AA943005F606E /* ae_app_level_router.cpp */,
 				B63D1E8E282AA943005F606E /* ae_app_level_router.h */,
 				B68483F527C5B1E500792D17 /* app_level */,
+				B6137F6927C7B22C0097A3C6 /* project_level */,
+				B69D8C5027CB6AC600CA30DE /* time_editor_level */,
+				B66ED62427CCFBF600E1DFA7 /* ui_root_level */,
 			);
 			path = levels;
 			sourceTree = "<group>";
@@ -1150,8 +1152,6 @@
 				B668BE24262F32B60021AD20 /* ae_project_level_router.h */,
 				B68E852027BD255900074894 /* ae_ui_root_level_router.h */,
 				B68E851F27BD255900074894 /* ae_ui_root_level_router.mm */,
-				B6137F6927C7B22C0097A3C6 /* project_level */,
-				B66ED62427CCFBF600E1DFA7 /* ui_root_level */,
 			);
 			path = app_level;
 			sourceTree = "<group>";
