@@ -40,7 +40,6 @@
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_scrolling.h>
-#include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
 #include <audio_editor_core/ae_timeline_holder.h>
@@ -69,7 +68,6 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       player(player::make_shared(app_level->system_url->playing_directory(), project_id, this->scrolling.get())),
       responder_stack(responder_stack::make_shared()),
       dialog_presenter(dialog_presenter::make_shared()),
-      sheet_presenter(sheet_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),

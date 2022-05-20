@@ -6,7 +6,7 @@
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_dialog_presenter.h>
-#include <audio_editor_core/ae_sheet_presenter.h>
+#include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_root_level_router.h>
@@ -82,14 +82,25 @@ using namespace yas::ae;
         .end()
         ->add_to(self->_pool);
 
-    project_level->sheet_presenter
-        ->observe_event([unowned_self](sheet_event const &event) {
+    auto const sub_level_router = project_level->sub_level_router;
+
+    sub_level_router
+        ->observe([unowned_self, weak_router = to_weak(sub_level_router)](auto const &) {
+            auto const router = weak_router.lock();
+            if (!router) {
+                return;
+            }
+
             auto *const self = unowned_self.object;
 
-            switch (event.kind) {
-                case sheet_kind_escape::module_name:
-                    [self showModuleNameSheetWithValue:event.value];
-                    break;
+            if (!router->sub_level().has_value()) {
+                [self hideModal];
+            } else if (auto const level = router->sheet_level()) {
+                switch (level->content.kind) {
+                    case sheet_kind::module_name:
+                        [self showModuleNameSheetWithValue:level->content.value];
+                        break;
+                }
             }
         })
         .end()
@@ -212,20 +223,13 @@ using namespace yas::ae;
 
     auto *const vc = [AEModuleNameViewController instantiateWithProjectId:self->_project_id moduleRange:range];
 
-    auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
-    auto *const unowned_vc = [[YASUnownedObject<AEModuleNameViewController *> alloc] initWithObject:vc];
-
-    [vc observe_event:[unowned_self, unowned_vc](auto const &) {
-        auto *const self = unowned_self.object;
-        auto *const vc = unowned_vc.object;
-
-        [self dismissViewController:vc];
-
-        self->_sheet_canceller = nullptr;
-    }].end()
-        ->set_to(self->_sheet_canceller);
-
     [self presentViewControllerAsSheet:vc];
+}
+
+- (void)hideModal {
+    for (NSViewController *modal in self.presentedViewControllers) {
+        [self dismissViewController:modal];
+    }
 }
 
 @end
