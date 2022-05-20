@@ -18,6 +18,9 @@ class project_sub_level_router;
 struct time_presenter final {
     [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(project_id const &);
 
+    time_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &,
+                   std::shared_ptr<nudge_settings> const &, std::shared_ptr<project_sub_level_router> const &);
+
     [[nodiscard]] std::string time_text() const;
     [[nodiscard]] std::vector<index_range> time_text_unit_ranges() const;
     [[nodiscard]] std::optional<std::size_t> editing_unit_index() const;
@@ -37,9 +40,6 @@ struct time_presenter final {
     observing::fetcher_ptr<std::optional<index_range>> _range_fetcher;
 
     observing::canceller_pool _pool;
-
-    time_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &,
-                   std::shared_ptr<nudge_settings> const &, std::shared_ptr<project_sub_level_router> const &);
 
     std::shared_ptr<time_editor_level> const &_level() const;
 };
