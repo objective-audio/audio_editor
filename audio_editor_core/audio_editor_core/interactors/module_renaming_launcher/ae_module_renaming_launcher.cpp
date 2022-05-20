@@ -34,5 +34,5 @@ void module_renaming_launcher::begin_module_renaming(std::string const &range) {
         return;
     }
 
-    this->_sheet_presenter->notify_event({.kind = sheet_kind::module_name, .value = range});
+    this->_sheet_presenter->notify_event({.kind = sheet_kind_escape::module_name, .value = range});
 }

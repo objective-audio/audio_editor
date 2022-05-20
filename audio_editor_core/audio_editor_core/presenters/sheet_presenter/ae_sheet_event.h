@@ -7,10 +7,10 @@
 #include <string>
 
 namespace yas::ae {
-enum class sheet_kind { module_name };
+enum class sheet_kind_escape { module_name };
 
 struct sheet_event final {
-    sheet_kind kind;
+    sheet_kind_escape kind;
     std::string value = "";
 };
 }  // namespace yas::ae

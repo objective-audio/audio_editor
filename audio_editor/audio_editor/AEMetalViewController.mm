@@ -87,7 +87,7 @@ using namespace yas::ae;
             auto *const self = unowned_self.object;
 
             switch (event.kind) {
-                case sheet_kind::module_name:
+                case sheet_kind_escape::module_name:
                     [self showModuleNameSheetWithValue:event.value];
                     break;
             }
