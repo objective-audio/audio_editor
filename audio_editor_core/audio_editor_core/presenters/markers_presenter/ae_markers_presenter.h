@@ -30,7 +30,7 @@ struct markers_presenter final {
     project_format const _project_format;
     std::weak_ptr<player> const _player;
     std::weak_ptr<marker_pool> const _marker_pool;
-    std::shared_ptr<display_space> const _display_space;
+    std::weak_ptr<display_space> const _display_space;
     std::shared_ptr<marker_location_pool> const _location_pool;
     observing::canceller_pool _canceller_pool;
 

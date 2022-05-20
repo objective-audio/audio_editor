@@ -26,7 +26,7 @@ struct module_waveforms_presenter final {
 
    private:
     std::shared_ptr<waveform_mesh_importer> const _mesh_importer;
-    std::shared_ptr<module_location_pool> const _location_pool;
+    std::weak_ptr<module_location_pool> const _location_pool;
 
     module_waveforms_presenter(url const &, std::shared_ptr<module_location_pool> const &);
 };

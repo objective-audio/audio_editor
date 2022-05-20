@@ -37,10 +37,19 @@ observing::endable module_waveforms_presenter::observe_mesh_importer(
 }
 
 std::vector<std::optional<module_location>> const &module_waveforms_presenter::locations() const {
-    return this->_location_pool->elements();
+    if (auto const location_pool = this->_location_pool.lock()) {
+        return location_pool->elements();
+    } else {
+        static std::vector<std::optional<module_location>> const _empty;
+        return _empty;
+    }
 }
 
 observing::syncable module_waveforms_presenter::observe_locations(
     std::function<void(module_location_pool_event const &)> &&handler) {
-    return this->_location_pool->observe_event(std::move(handler));
+    if (auto const location_pool = this->_location_pool.lock()) {
+        return location_pool->observe_event(std::move(handler));
+    } else {
+        return observing::syncable{};
+    }
 }
