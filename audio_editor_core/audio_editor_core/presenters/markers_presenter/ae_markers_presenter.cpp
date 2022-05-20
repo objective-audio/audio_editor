@@ -32,6 +32,12 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
 
     marker_pool
         ->observe_event([this, sample_rate](marker_pool_event const &event) {
+            auto const display_space = this->_display_space.lock();
+
+            if (!display_space) {
+                return;
+            }
+
             switch (event.type) {
                 case marker_pool_event_type::any:
                 case marker_pool_event_type::reverted:
@@ -45,7 +51,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                     if (auto const space_range = this->_space_range();
                         space_range.has_value() && space_range.value().is_contain(marker.frame)) {
                         this->_location_pool->insert(marker_location::make_value(
-                            marker.identifier, marker.frame, sample_rate, this->_display_space->scale().width));
+                            marker.identifier, marker.frame, sample_rate, display_space->scale().width));
                     }
                     break;
             }
@@ -83,10 +89,13 @@ void markers_presenter::update_if_needed() {
 }
 
 std::optional<time::range> markers_presenter::_space_range() const {
-    if (auto const player = this->_player.lock()) {
+    auto const player = this->_player.lock();
+    auto const display_space = this->_display_space.lock();
+
+    if (player && display_space) {
         auto const sample_rate = this->_project_format.sample_rate;
         auto const current_frame = player->current_frame();
-        return this->_display_space->frame_range(sample_rate, current_frame);
+        return display_space->frame_range(sample_rate, current_frame);
     } else {
         return std::nullopt;
     }
@@ -94,11 +103,12 @@ std::optional<time::range> markers_presenter::_space_range() const {
 
 void markers_presenter::_update_all_locations(update_type const type) {
     auto const space_range = this->_space_range();
-    auto const scale = this->_display_space->scale();
     auto const marker_pool = this->_marker_pool.lock();
     auto const player = this->_player.lock();
+    auto const display_space = this->_display_space.lock();
 
-    if (marker_pool && player && space_range.has_value()) {
+    if (marker_pool && player && space_range.has_value() && display_space) {
+        auto const scale = display_space->scale();
         auto const current_frame = player->current_frame();
 
         if (space_range == this->_last_space_range && current_frame == this->_last_frame &&
