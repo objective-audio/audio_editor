@@ -6,23 +6,23 @@
 
 #include <audio_editor_core/ae_editing_status.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_sheet_presenter.h>
+#include <audio_editor_core/ae_project_sub_level_router.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<module_renaming_launcher> module_renaming_launcher::make_shared(sheet_presenter *sheet_presenter,
+std::shared_ptr<module_renaming_launcher> module_renaming_launcher::make_shared(project_sub_level_router *router,
                                                                                 editing_status const *editing_status) {
-    return std::make_shared<module_renaming_launcher>(sheet_presenter, editing_status);
+    return std::make_shared<module_renaming_launcher>(router, editing_status);
 }
 
-module_renaming_launcher::module_renaming_launcher(sheet_presenter *sheet_presenter,
+module_renaming_launcher::module_renaming_launcher(project_sub_level_router *router,
                                                    editing_status const *editing_status)
-    : _sheet_presenter(sheet_presenter), _editing_status(editing_status) {
+    : _router(router), _editing_status(editing_status) {
 }
 
 bool module_renaming_launcher::can_begin_module_renaming() const {
-    if (!this->_editing_status->can_editing()) {
+    if (!this->_editing_status->can_editing() || this->_router->sub_level().has_value()) {
         return false;
     }
 
@@ -34,5 +34,5 @@ void module_renaming_launcher::begin_module_renaming(std::string const &range) {
         return;
     }
 
-    this->_sheet_presenter->notify_event({.kind = sheet_kind_escape::module_name, .value = range});
+    this->_router->add_sheet({.kind = sheet_kind::module_name, .value = range});
 }

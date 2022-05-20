@@ -22,6 +22,10 @@ project_sub_level_router::project_sub_level_router(project_id const &project_id)
       _sub_level(observing::value::holder<std::optional<project_sub_level>>::make_shared(std::nullopt)) {
 }
 
+std::optional<project_sub_level> const &project_sub_level_router::sub_level() const {
+    return this->_sub_level->value();
+}
+
 void project_sub_level_router::add_time_editor(number_components const &components,
                                                std::optional<std::size_t> const unit_idx) {
     if (this->_sub_level->value().has_value()) {
