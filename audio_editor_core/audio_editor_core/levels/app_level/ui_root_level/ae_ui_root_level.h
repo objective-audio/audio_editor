@@ -42,7 +42,7 @@ struct ui_root_level {
     std::shared_ptr<ae::keyboard> const keyboard;
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
 
-    std::shared_ptr<module_location_pool> const location_pool;
+    std::shared_ptr<module_location_pool> const module_location_pool;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<ui_module_waveforms> const waveforms;
     std::shared_ptr<ui_modules> const modules;
