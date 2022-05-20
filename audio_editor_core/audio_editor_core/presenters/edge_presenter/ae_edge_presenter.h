@@ -29,7 +29,7 @@ struct edge_presenter final {
 
     project_format const _project_format;
     std::weak_ptr<edge_holder> const _edge_holder;
-    std::shared_ptr<display_space> const _display_space;
+    std::weak_ptr<display_space> const _display_space;
 
     observing::canceller_pool _pool;
 

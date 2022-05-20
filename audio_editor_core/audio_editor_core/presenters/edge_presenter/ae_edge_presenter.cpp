@@ -43,10 +43,13 @@ observing::syncable edge_presenter::observe_locations(std::function<void(edge_lo
 }
 
 void edge_presenter::_update_locations() {
-    if (auto const edge_holder = this->_edge_holder.lock()) {
+    auto const edge_holder = this->_edge_holder.lock();
+    auto const display_space = this->_display_space.lock();
+
+    if (edge_holder && display_space) {
         auto const &edge = edge_holder->edge();
         auto const sample_rate = this->_project_format.sample_rate;
-        auto const &scale = this->_display_space->scale();
+        auto const &scale = display_space->scale();
 
         this->_locations->set_value({.begin = edge_location::make_value(edge.begin_frame, sample_rate, scale),
                                      .end = edge_location::make_value(edge.end_frame, sample_rate, scale)});
