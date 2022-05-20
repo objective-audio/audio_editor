@@ -35,14 +35,11 @@ std::string const &module_name_presenter::name() const {
     return empty_name;
 }
 
-void module_name_presenter::set_name(std::string const &name) {
+void module_name_presenter::done(std::string const &name) {
     if (auto const file_track = this->_file_track.lock()) {
         file_track->set_module_name_and_notify(this->_module_range, name);
     }
-}
 
-void module_name_presenter::done(std::string const &name) {
-    this->set_name(name);
     this->_finalize();
 }
 

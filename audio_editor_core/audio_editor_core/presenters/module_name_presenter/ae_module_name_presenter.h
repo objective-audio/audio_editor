@@ -22,7 +22,6 @@ struct module_name_presenter final {
                           std::shared_ptr<project_sub_level_router> const &);
 
     std::string const &name() const;
-    void set_name(std::string const &);
 
     void done(std::string const &);
     void cancel();

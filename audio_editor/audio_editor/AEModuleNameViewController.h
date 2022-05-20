@@ -21,8 +21,6 @@ enum class module_name_vc_event {
 + (instancetype)instantiateWithProjectId:(yas::ae::project_id const &)project_id
                              moduleRange:(yas::ae::time::range const)module_range;
 
-- (yas::observing::endable)observe_event:(std::function<void(yas::ae::module_name_vc_event const &)> &&)handler;
-
 @end
 
 NS_ASSUME_NONNULL_END
