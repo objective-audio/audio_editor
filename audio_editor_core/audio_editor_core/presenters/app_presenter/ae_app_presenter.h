@@ -11,7 +11,8 @@ namespace yas::ae {
 class project_preparer;
 
 struct app_presenter final {
-    app_presenter();
+    [[nodiscard]] static std::shared_ptr<app_presenter> make_shared();
+
     app_presenter(std::shared_ptr<project_level_router_for_app_presenter> const &,
                   std::shared_ptr<project_preparer> const &);
 
