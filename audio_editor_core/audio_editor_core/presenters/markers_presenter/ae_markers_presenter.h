@@ -16,10 +16,11 @@ class marker_pool;
 
 struct markers_presenter final {
     [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(project_id const &project_id,
-                                                                        std::shared_ptr<display_space> const &);
+                                                                        std::shared_ptr<display_space> const &,
+                                                                        std::shared_ptr<marker_location_pool> const &);
 
     markers_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,
-                      std::shared_ptr<display_space> const &);
+                      std::shared_ptr<display_space> const &, std::shared_ptr<marker_location_pool> const &);
 
     [[nodiscard]] std::vector<std::optional<marker_location>> locations() const;
     [[nodiscard]] observing::syncable observe_locations(std::function<void(marker_location_pool_event const &)> &&);

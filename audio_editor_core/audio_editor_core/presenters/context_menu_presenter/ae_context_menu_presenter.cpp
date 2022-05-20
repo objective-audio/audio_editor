@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<context_menu_presenter> context_menu_presenter::make_shared() {
-    return std::shared_ptr<context_menu_presenter>(new context_menu_presenter{});
+    return std::make_shared<context_menu_presenter>();
 }
 
 context_menu_presenter::context_menu_presenter()

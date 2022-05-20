@@ -21,12 +21,13 @@ static std::size_t const reserving_interval = 10;
 
 std::shared_ptr<ui_markers> ui_markers::make_shared(ui_project_id const &project_id,
                                                     std::shared_ptr<ae::display_space> const &display_space,
+                                                    std::shared_ptr<marker_location_pool> const &location_pool,
                                                     std::shared_ptr<ui::standard> const &standard,
                                                     std::shared_ptr<ui::font_atlas> const &font_atlas,
                                                     std::shared_ptr<ui_mesh_data> const &vertical_line_data) {
     auto const &app_level = hierarchy::app_level();
 
-    auto const presenter = markers_presenter::make_shared(project_id.project_id, display_space);
+    auto const presenter = markers_presenter::make_shared(project_id.project_id, display_space, location_pool);
     auto const &color = app_level->color;
     return std::make_shared<ui_markers>(presenter, standard, font_atlas, color, vertical_line_data);
 }

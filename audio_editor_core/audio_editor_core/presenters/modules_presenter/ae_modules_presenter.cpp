@@ -19,8 +19,8 @@ std::shared_ptr<modules_presenter> modules_presenter::make_shared(
     project_id const &project_id, std::shared_ptr<display_space> const &display_space,
     std::shared_ptr<module_location_pool> const &location_pool) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<modules_presenter>(new modules_presenter{
-        project_level->project_format, project_level->player, project_level->file_track, display_space, location_pool});
+    return std::make_shared<modules_presenter>(project_level->project_format, project_level->player,
+                                               project_level->file_track, display_space, location_pool);
 }
 
 modules_presenter::modules_presenter(project_format const &project_format, std::shared_ptr<player> const &player,

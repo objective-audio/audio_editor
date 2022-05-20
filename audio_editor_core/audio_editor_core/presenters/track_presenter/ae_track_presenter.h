@@ -16,13 +16,13 @@ class zooming_pair;
 struct track_presenter final {
     [[nodiscard]] static std::shared_ptr<track_presenter> make_shared(project_id const &project_id);
 
+    track_presenter(std::shared_ptr<zooming_pair> const &);
+
     [[nodiscard]] ae::zooming_scale zooming_scale() const;
     [[nodiscard]] observing::syncable observe_zooming_scale(std::function<void(ae::zooming_scale const &)> &&);
 
    private:
     std::weak_ptr<zooming_pair> const _zooming_pair;
-
-    track_presenter(std::shared_ptr<zooming_pair> const &);
 
     track_presenter(track_presenter const &) = delete;
     track_presenter(track_presenter &&) = delete;

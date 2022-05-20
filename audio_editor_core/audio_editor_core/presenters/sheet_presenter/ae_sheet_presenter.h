@@ -11,13 +11,13 @@ namespace yas::ae {
 struct sheet_presenter final {
     [[nodiscard]] static std::shared_ptr<sheet_presenter> make_shared();
 
+    sheet_presenter();
+
     void notify_event(sheet_event const &);
 
     observing::endable observe_event(std::function<void(sheet_event const &)> &&);
 
    private:
     observing::notifier_ptr<sheet_event> const _event_notifier;
-
-    sheet_presenter();
 };
 }  // namespace yas::ae

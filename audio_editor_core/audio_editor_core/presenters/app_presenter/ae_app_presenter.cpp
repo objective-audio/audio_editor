@@ -13,8 +13,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-app_presenter::app_presenter()
-    : app_presenter(hierarchy::app_level()->project_level_router, hierarchy::app_level()->project_preparer) {
+std::shared_ptr<app_presenter> app_presenter::make_shared() {
+    return std::make_shared<app_presenter>(hierarchy::app_level()->project_level_router,
+                                           hierarchy::app_level()->project_preparer);
 }
 
 app_presenter::app_presenter(std::shared_ptr<project_level_router_for_app_presenter> const &pool,

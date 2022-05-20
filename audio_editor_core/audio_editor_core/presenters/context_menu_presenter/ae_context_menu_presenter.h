@@ -11,6 +11,8 @@ namespace yas::ae {
 struct context_menu_presenter final {
     [[nodiscard]] static std::shared_ptr<context_menu_presenter> make_shared();
 
+    context_menu_presenter();
+
     std::optional<context_menu> const &context_menu() const;
     void set_context_menu(std::optional<ae::context_menu> const &);
 
@@ -18,7 +20,5 @@ struct context_menu_presenter final {
 
    private:
     observing::value::holder_ptr<std::optional<ae::context_menu>> const _value;
-
-    context_menu_presenter();
 };
 }  // namespace yas::ae

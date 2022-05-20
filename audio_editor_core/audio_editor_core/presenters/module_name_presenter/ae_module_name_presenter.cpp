@@ -13,7 +13,7 @@ using namespace yas::ae;
 std::shared_ptr<module_name_presenter> module_name_presenter::make_shared(project_id const &project_id,
                                                                           time::range const module_range) {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<module_name_presenter>(new module_name_presenter{module_range, project_level->file_track});
+    return std::make_shared<module_name_presenter>(module_range, project_level->file_track);
 }
 
 module_name_presenter::module_name_presenter(time::range const &module_range,

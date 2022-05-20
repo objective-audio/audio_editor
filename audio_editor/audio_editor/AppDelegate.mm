@@ -31,7 +31,7 @@ using namespace yas::ae;
     }
 
     hierarchy::app_level_router()->add_level();
-    self->_presenter = std::make_shared<app_presenter>();
+    self->_presenter = app_presenter::make_shared();
 
     self.windowControllers = [[NSMutableSet alloc] init];
 

@@ -12,28 +12,35 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<module_waveforms_presenter> module_waveforms_presenter::make_shared(
-    project_id const &project_id, std::shared_ptr<module_location_pool> const &location_pool) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    auto const url = project_level->project_url->editing_file();
-    return std::shared_ptr<module_waveforms_presenter>(new module_waveforms_presenter{url, location_pool});
+    project_id const &project_id, std::shared_ptr<module_location_pool> const &location_pool,
+    std::shared_ptr<waveform_mesh_importer> const &importer) {
+    return std::make_shared<module_waveforms_presenter>(location_pool, importer);
 }
 
-module_waveforms_presenter::module_waveforms_presenter(url const &url,
-                                                       std::shared_ptr<module_location_pool> const &location_pool)
-    : _mesh_importer(waveform_mesh_importer::make_shared(url)), _location_pool(location_pool) {
+module_waveforms_presenter::module_waveforms_presenter(std::shared_ptr<module_location_pool> const &location_pool,
+                                                       std::shared_ptr<waveform_mesh_importer> const &importer)
+    : _mesh_importer(importer), _location_pool(location_pool) {
 }
 
 void module_waveforms_presenter::import(std::size_t const idx, module_location const &location) {
-    this->_mesh_importer->import(idx, location);
+    if (auto const importer = this->_mesh_importer.lock()) {
+        importer->import(idx, location);
+    }
 }
 
 void module_waveforms_presenter::cancel_import(identifier const &identifier) {
-    this->_mesh_importer->cancel(identifier);
+    if (auto const importer = this->_mesh_importer.lock()) {
+        importer->cancel(identifier);
+    }
 }
 
 observing::endable module_waveforms_presenter::observe_mesh_importer(
     std::function<void(waveform_mesh_importer_event const &)> &&handler) {
-    return this->_mesh_importer->observe(std::move(handler));
+    if (auto const importer = this->_mesh_importer.lock()) {
+        return importer->observe(std::move(handler));
+    } else {
+        return observing::endable{};
+    }
 }
 
 std::vector<std::optional<module_location>> const &module_waveforms_presenter::locations() const {

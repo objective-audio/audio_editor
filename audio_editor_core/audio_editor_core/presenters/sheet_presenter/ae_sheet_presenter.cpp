@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<sheet_presenter> sheet_presenter::make_shared() {
-    return std::shared_ptr<sheet_presenter>(new sheet_presenter{});
+    return std::make_shared<sheet_presenter>();
 }
 
 sheet_presenter::sheet_presenter() : _event_notifier(observing::notifier<sheet_event>::make_shared()) {

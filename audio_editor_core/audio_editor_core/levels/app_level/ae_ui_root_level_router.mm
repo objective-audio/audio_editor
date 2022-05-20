@@ -21,7 +21,6 @@ void ui_root_level_router::add_level(std::shared_ptr<ui::standard> const &standa
 
     auto const level = ui_root_level::make_shared(standard, project_id);
     this->_ui_roots.emplace(project_id.view_id, level);
-    level->root->setup();
 }
 
 std::shared_ptr<ui_root_level> const &ui_root_level_router::level_for_view_id(uintptr_t const project_view_id) const {

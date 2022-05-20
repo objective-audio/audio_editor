@@ -12,12 +12,13 @@
 namespace yas::ae {
 class module_location;
 class module_waveforms_presenter;
+class waveform_mesh_importer;
 class color;
 
 struct ui_module_waveforms final {
     [[nodiscard]] static std::shared_ptr<ui_module_waveforms> make_shared(
         ui_project_id const &project_id, std::shared_ptr<ui::standard> const &,
-        std::shared_ptr<module_location_pool> const &);
+        std::shared_ptr<module_location_pool> const &, std::shared_ptr<waveform_mesh_importer> const &importer);
 
     ui_module_waveforms(std::shared_ptr<ui::standard> const &, std::shared_ptr<ae::color> const &,
                         std::shared_ptr<module_waveforms_presenter> const &);

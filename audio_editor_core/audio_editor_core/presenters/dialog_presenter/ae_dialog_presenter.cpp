@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<dialog_presenter> dialog_presenter::make_shared() {
-    return std::shared_ptr<dialog_presenter>(new dialog_presenter{});
+    return std::make_shared<dialog_presenter>();
 }
 
 dialog_presenter::dialog_presenter() : _event_notifier(observing::notifier<dialog_event>::make_shared()) {

@@ -32,20 +32,15 @@ ui_root::ui_root(std::shared_ptr<ae::color> const &color, std::shared_ptr<ui::st
       _editing_root(editing_root) {
     standard->view_look()
         ->observe_appearance([this](auto const &) {
-            if (auto const background = this->_background.lock()) {
-                background->set_color(this->_color->background());
+            auto const background = this->_background.lock();
+            auto const color = this->_color.lock();
+
+            if (background && color) {
+                background->set_color(color->background());
             }
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-void ui_root::setup() {
-    auto const editing_root = this->_editing_root.lock();
-    if (!editing_root) {
-        assertion_failure_if_not_test();
-        return;
-    }
 
     this->_root_node->add_sub_node(editing_root->node);
 }
