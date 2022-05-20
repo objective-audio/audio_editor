@@ -4,31 +4,37 @@
 
 #include "ae_ui_root_level.h"
 #include <audio_editor_core/ae_display_space.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_keyboard.h>
-#include <audio_editor_core/ae_pinch_gesture_controller.h>
-#include <audio_editor_core/ae_ui_mesh_data.h>
-#include <audio_editor_core/ae_ui_root.h>
-
 #include <audio_editor_core/ae_module_location_pool.h>
+#include <audio_editor_core/ae_pinch_gesture_controller.h>
+#include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_ui_edge.h>
 #include <audio_editor_core/ae_ui_editing_root.h>
 #include <audio_editor_core/ae_ui_markers.h>
+#include <audio_editor_core/ae_ui_mesh_data.h>
 #include <audio_editor_core/ae_ui_modal_bg.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
 #include <audio_editor_core/ae_ui_modules.h>
+#include <audio_editor_core/ae_ui_root.h>
 #include <audio_editor_core/ae_ui_scroller.h>
 #include <audio_editor_core/ae_ui_time.h>
 #include <audio_editor_core/ae_ui_track.h>
+#include <audio_editor_core/ae_waveform_mesh_importer.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_root_level> ui_root_level::make_shared(std::shared_ptr<ui::standard> const &standard,
                                                           ui_project_id const &project_id) {
-    return std::shared_ptr<ui_root_level>(new ui_root_level{standard, project_id});
+    auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
+    auto const url = project_level->project_url->editing_file();
+    return std::shared_ptr<ui_root_level>(
+        new ui_root_level{standard, project_id, waveform_mesh_importer::make_shared(url)});
 }
 
-ui_root_level::ui_root_level(std::shared_ptr<ui::standard> const &standard, ui_project_id const &project_id)
+ui_root_level::ui_root_level(std::shared_ptr<ui::standard> const &standard, ui_project_id const &project_id,
+                             std::shared_ptr<waveform_mesh_importer> const &waveform_mesh_importer)
     : project_id(project_id),
       standard(standard),
       texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
@@ -44,7 +50,9 @@ ui_root_level::ui_root_level(std::shared_ptr<ui::standard> const &standard, ui_p
       keyboard(ae::keyboard::make_shared(standard->event_manager())),
       pinch_gesture_controller(pinch_gesture_controller::make_shared(project_id.project_id)),
       location_pool(module_location_pool::make_shared()),
-      waveforms(ui_module_waveforms::make_shared(project_id, this->standard, this->location_pool)),
+      waveforms_mesh_importer(waveform_mesh_importer),
+      waveforms(ui_module_waveforms::make_shared(project_id, this->standard, this->location_pool,
+                                                 this->waveforms_mesh_importer)),
       modules(ui_modules::make_shared(project_id, this->display_space, this->standard, this->font_atlas_14,
                                       this->location_pool, this->waveforms)),
       edge(ui_edge::make_shared(project_id, this->vertical_line_data, this->display_space, this->standard,

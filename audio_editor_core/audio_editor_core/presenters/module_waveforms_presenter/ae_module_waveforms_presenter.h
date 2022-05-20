@@ -14,7 +14,11 @@ class waveform_mesh_importer;
 
 struct module_waveforms_presenter final {
     [[nodiscard]] static std::shared_ptr<module_waveforms_presenter> make_shared(
-        project_id const &project_id, std::shared_ptr<module_location_pool> const &);
+        project_id const &project_id, std::shared_ptr<module_location_pool> const &,
+        std::shared_ptr<waveform_mesh_importer> const &);
+
+    module_waveforms_presenter(std::shared_ptr<module_location_pool> const &,
+                               std::shared_ptr<waveform_mesh_importer> const &);
 
     void import(std::size_t const, module_location const &);
     void cancel_import(identifier const &);
@@ -25,9 +29,7 @@ struct module_waveforms_presenter final {
         std::function<void(module_location_pool_event const &)> &&handler);
 
    private:
-    std::shared_ptr<waveform_mesh_importer> const _mesh_importer;
+    std::weak_ptr<waveform_mesh_importer> const _mesh_importer;
     std::weak_ptr<module_location_pool> const _location_pool;
-
-    module_waveforms_presenter(url const &, std::shared_ptr<module_location_pool> const &);
 };
 }  // namespace yas::ae

@@ -23,10 +23,15 @@ class ui_scroller;
 class ui_modal_bg;
 class ui_time;
 class ui_editing_root;
+class waveform_mesh_importer;
 
 struct ui_root_level {
     [[nodiscard]] static std::shared_ptr<ui_root_level> make_shared(std::shared_ptr<ui::standard> const &,
                                                                     ui_project_id const &project_id);
+
+    ui_root_level(std::shared_ptr<ui::standard> const &, ui_project_id const &project_id,
+                  std::shared_ptr<waveform_mesh_importer> const &);
+
     ui_project_id const project_id;
 
     std::shared_ptr<ui::standard> const standard;
@@ -38,6 +43,7 @@ struct ui_root_level {
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
 
     std::shared_ptr<module_location_pool> const location_pool;
+    std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<ui_module_waveforms> const waveforms;
     std::shared_ptr<ui_modules> const modules;
     std::shared_ptr<ui_edge> const edge;
@@ -50,8 +56,5 @@ struct ui_root_level {
 
     std::shared_ptr<ui_editing_root> const editing_root;
     std::shared_ptr<ui_root> const root;
-
-   private:
-    ui_root_level(std::shared_ptr<ui::standard> const &, ui_project_id const &project_id);
 };
 }  // namespace yas::ae
