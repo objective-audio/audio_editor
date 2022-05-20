@@ -18,8 +18,6 @@ struct ui_root final {
                                                               ui_project_id const &project_id,
                                                               std::shared_ptr<ui_editing_root> const &);
 
-    void setup();
-
     [[nodiscard]] bool responds_to_action(action const);
 
    private:

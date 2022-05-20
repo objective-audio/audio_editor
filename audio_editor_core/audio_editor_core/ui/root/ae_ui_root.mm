@@ -41,14 +41,6 @@ ui_root::ui_root(std::shared_ptr<ae::color> const &color, std::shared_ptr<ui::st
         })
         .sync()
         ->add_to(this->_pool);
-}
-
-void ui_root::setup() {
-    auto const editing_root = this->_editing_root.lock();
-    if (!editing_root) {
-        assertion_failure_if_not_test();
-        return;
-    }
 
     this->_root_node->add_sub_node(editing_root->node);
 }
