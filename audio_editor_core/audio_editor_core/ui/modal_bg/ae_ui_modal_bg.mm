@@ -6,7 +6,7 @@
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_color.h>
-#include <audio_editor_core/ae_time_editor_level_router.h>
+#include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 
 using namespace yas;
@@ -17,12 +17,12 @@ std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(ui_project_id const &proje
     auto const &app_level = hierarchy::app_level();
     auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
     auto const action_controller = action_controller::make_shared(project_id.project_id);
-    return std::make_shared<ui_modal_bg>(standard, app_level->color, project_level->time_editor_level_router,
+    return std::make_shared<ui_modal_bg>(standard, app_level->color, project_level->sub_level_router,
                                          action_controller);
 }
 
 ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
-                         std::shared_ptr<time_editor_level_router> const &time_editor_level_pool,
+                         std::shared_ptr<project_sub_level_router> const &project_sub_level_router,
                          std::shared_ptr<action_controller> const &action_controller)
     : node(ui::node::make_shared()),
       _color(color),
@@ -44,9 +44,8 @@ ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::sha
         .end()
         ->add_to(this->_pool);
 
-    time_editor_level_pool
-        ->observe_level(
-            [this](auto const &level) { this->_button->rect_plane()->node()->set_is_enabled(level != nullptr); })
+    project_sub_level_router
+        ->observe([this](auto const &level) { this->_button->rect_plane()->node()->set_is_enabled(level.has_value()); })
         .sync()
         ->add_to(this->_pool);
 

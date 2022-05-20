@@ -35,7 +35,7 @@ class database;
 class exporter;
 class editing_status;
 class playing_toggler;
-class time_editor_level_router;
+class project_sub_level_router;
 class timeline_holder;
 class nudger;
 class edge_holder;
@@ -86,7 +86,7 @@ struct project_level final {
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<editing_status> const editing_status;
     std::shared_ptr<playing_toggler> const playing_toggler;
-    std::shared_ptr<time_editor_level_router> const time_editor_level_router;
+    std::shared_ptr<project_sub_level_router> const sub_level_router;
     std::shared_ptr<timeline_holder> const timeline_holder;
     std::shared_ptr<nudger> const nudger;
     std::shared_ptr<edge_holder> const edge_holder;
