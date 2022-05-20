@@ -36,28 +36,35 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
 
     file_track
         ->observe_event([this, sample_rate](file_track_event const &event) {
+            auto const location_pool = this->_location_pool.lock();
+            auto const display_space = this->_display_space.lock();
+
+            if (!location_pool || !display_space) {
+                return;
+            }
+
             switch (event.type) {
                 case file_track_event_type::any:
                 case file_track_event_type::reverted:
                     this->_update_all_locations(true);
                     break;
                 case file_track_event_type::erased:
-                    this->_location_pool->erase(event.module.value().identifier);
+                    location_pool->erase(event.module.value().identifier);
                     break;
                 case file_track_event_type::inserted: {
                     auto const &module = event.module.value();
                     auto const space_range = this->_space_range();
                     if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
-                        this->_location_pool->insert(module_location::make_value(
-                            module, sample_rate, space_range.value(), this->_display_space->scale().width));
+                        location_pool->insert(module_location::make_value(module, sample_rate, space_range.value(),
+                                                                          display_space->scale().width));
                     }
                 } break;
                 case file_track_event_type::detail_updated: {
                     auto const &module = event.module.value();
                     auto const space_range = this->_space_range();
                     if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
-                        this->_location_pool->replace(module_location::make_value(
-                            module, sample_rate, space_range.value(), this->_display_space->scale().width));
+                        location_pool->replace(module_location::make_value(module, sample_rate, space_range.value(),
+                                                                           display_space->scale().width));
                     }
                 } break;
             }
@@ -71,12 +78,21 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
 }
 
 std::vector<std::optional<module_location>> const &modules_presenter::locations() const {
-    return this->_location_pool->elements();
+    if (auto const location_pool = this->_location_pool.lock()) {
+        return location_pool->elements();
+    } else {
+        static std::vector<std::optional<module_location>> const _empty;
+        return _empty;
+    }
 }
 
 observing::syncable modules_presenter::observe_locations(
     std::function<void(module_location_pool_event const &)> &&handler) {
-    return this->_location_pool->observe_event(std::move(handler));
+    if (auto const location_pool = this->_location_pool.lock()) {
+        return location_pool->observe_event(std::move(handler));
+    } else {
+        return observing::syncable{};
+    }
 }
 
 void modules_presenter::update_if_needed() {
@@ -84,10 +100,12 @@ void modules_presenter::update_if_needed() {
 }
 
 std::optional<time::range> modules_presenter::_space_range() const {
-    if (auto const player = this->_player.lock()) {
+    auto const player = this->_player.lock();
+    auto const display_space = this->_display_space.lock();
+    if (player && display_space) {
         auto const sample_rate = this->_project_format.sample_rate;
         auto const current_frame = player->current_frame();
-        return this->_display_space->frame_range(sample_rate, current_frame);
+        return display_space->frame_range(sample_rate, current_frame);
     } else {
         return std::nullopt;
     }
@@ -97,8 +115,10 @@ void modules_presenter::_update_all_locations(bool const force) {
     auto const space_range = this->_space_range();
     auto const player = this->_player.lock();
     auto const file_track = this->_file_track.lock();
+    auto const display_space = this->_display_space.lock();
+    auto const location_pool = this->_location_pool.lock();
 
-    if (player && file_track && space_range.has_value()) {
+    if (player && file_track && space_range.has_value() && display_space && location_pool) {
         auto const current_frame = player->current_frame();
 
         if (space_range == this->_last_space_range && current_frame == this->_last_frame && !force) {
@@ -106,7 +126,7 @@ void modules_presenter::_update_all_locations(bool const force) {
         }
 
         auto const &space_range_value = space_range.value();
-        auto const scale = this->_display_space->scale().width;
+        auto const scale = display_space->scale().width;
 
         auto const locations = filter_map<module_location>(
             file_track->modules(),
@@ -119,7 +139,7 @@ void modules_presenter::_update_all_locations(bool const force) {
                 }
             });
 
-        this->_location_pool->update_all(locations);
+        location_pool->update_all(locations);
 
         this->_last_frame = current_frame;
         this->_last_space_range = space_range;
