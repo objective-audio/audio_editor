@@ -22,7 +22,7 @@ struct window_presenter final {
 
    private:
     url const _file_url;
-    std::shared_ptr<project_closer_for_window_presenter> _closer;
+    std::weak_ptr<project_closer_for_window_presenter> _closer;
 
     window_presenter(ae::project_id const &project_id, url const &file_url,
                      std::shared_ptr<project_closer_for_window_presenter> const &);

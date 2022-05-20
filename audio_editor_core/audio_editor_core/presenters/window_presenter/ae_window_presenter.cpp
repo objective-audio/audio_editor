@@ -31,8 +31,9 @@ std::string window_presenter::title() const {
 }
 
 bool window_presenter::should_close() {
-    auto const &closer = this->_closer;
-    if (closer->can_close()) {
+    auto const &closer = this->_closer.lock();
+
+    if (closer && closer->can_close()) {
         closer->request_close();
         return true;
     } else {
