@@ -10,20 +10,14 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<window_presenter> window_presenter::make_shared(ae::project_id const &project_id) {
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
+    return std::make_shared<window_presenter>(project_id, project_level->file_url, project_level->closer);
+}
+
 window_presenter::window_presenter(ae::project_id const &project_id, url const &file_url,
                                    std::shared_ptr<project_closer_for_window_presenter> const &closer)
     : project_id(project_id), _file_url(file_url), _closer(closer) {
-}
-
-std::shared_ptr<window_presenter> window_presenter::make_shared(ae::project_id const &project_id) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return make_shared(project_id, project_level->file_url, project_level->closer);
-}
-
-std::shared_ptr<window_presenter> window_presenter::make_shared(
-    ae::project_id const &project_id, url const &file_url,
-    std::shared_ptr<project_closer_for_window_presenter> const &closer) {
-    return std::shared_ptr<window_presenter>(new window_presenter{project_id, file_url, closer});
 }
 
 std::string window_presenter::title() const {
