@@ -11,7 +11,6 @@
 namespace yas::ae {
 class root_presenter;
 class ui_editing_root;
-class ui_editing_root_level_pool;
 class color;
 
 struct ui_root final {
