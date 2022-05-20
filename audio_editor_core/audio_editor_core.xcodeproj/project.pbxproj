@@ -687,36 +687,13 @@
 			isa = PBXGroup;
 			children = (
 				B6F09CE927E89C4F00638C6A /* common */,
-				B68483E727C4944100792D17 /* ae_action_utils.cpp */,
-				B68483E827C4944100792D17 /* ae_action_utils.h */,
-				B68483F227C50D1B00792D17 /* ae_action.cpp */,
-				B6693E58268814D2004C8F50 /* ae_action.h */,
-				B695A3882764D87E004CB28F /* ae_display_space_types.h */,
-				B666F1792759CCEA0040D306 /* ae_display_space.h */,
-				B666F17A2759CCEA0040D306 /* ae_display_space.mm */,
-				B6097BC0272535FE008A6D57 /* ae_gesture.cpp */,
-				B6813578271EE756009CC0FC /* ae_gesture.h */,
-				B657D4D326803C7B0048C6AD /* ae_keyboard_types.h */,
-				B657D4D526806DA90048C6AD /* ae_keyboard_utils.cpp */,
-				B657D4D626806DA90048C6AD /* ae_keyboard_utils.h */,
-				B657D4D0268037720048C6AD /* ae_keyboard.h */,
-				B657D4CF268037720048C6AD /* ae_keyboard.mm */,
-				B6B9735E27006FF500E1BD12 /* ae_ui_button_utils.cpp */,
-				B6B9735F27006FF500E1BD12 /* ae_ui_button_utils.h */,
-				B69C68A12670F5BF00C1083F /* ae_ui_button.h */,
-				B69C68A02670F5BF00C1083F /* ae_ui_button.mm */,
-				B6E8995A2688806E00BBFA73 /* ae_ui_editing_root_utils.cpp */,
-				B6E8995B2688806E00BBFA73 /* ae_ui_editing_root_utils.h */,
-				B605EA6F2657E5530031B177 /* ae_ui_editing_root.h */,
-				B605EA6E2657E5530031B177 /* ae_ui_editing_root.mm */,
-				B6D98A1F27E0BD1A0034AD7C /* ae_ui_event_utils.cpp */,
-				B6D98A2027E0BD1A0034AD7C /* ae_ui_event_utils.h */,
-				B6A55ECA266C81980039E56F /* ae_ui_layout_utils.cpp */,
-				B6A55EC9266C81960039E56F /* ae_ui_layout_utils.h */,
-				B68C3E7927088AEA00888A53 /* ae_ui_root.h */,
-				B68C3E7A27088AEA00888A53 /* ae_ui_root.mm */,
-				B6EE90DE27A25A26000470F3 /* ae_ui_types.cpp */,
-				B6EE90DC27A25A06000470F3 /* ae_ui_types.h */,
+				B68D82102837BBA100C2FC23 /* action */,
+				B68D820D2837BB8400C2FC23 /* display_space */,
+				B68D820F2837BB9800C2FC23 /* gesture */,
+				B68D820E2837BB9100C2FC23 /* keyboard */,
+				B68D82112837BBAC00C2FC23 /* button */,
+				B68D82122837BBB200C2FC23 /* editing_root */,
+				B68D82132837BBBD00C2FC23 /* root */,
 				B60AEF0927EACE2B000D2019 /* modal_bg */,
 				B6DC2CBB27B649C2000EF5F9 /* edge */,
 				B6F09CE427E84ECE00638C6A /* marker */,
@@ -1216,6 +1193,79 @@
 			path = controllers;
 			sourceTree = "<group>";
 		};
+		B68D820D2837BB8400C2FC23 /* display_space */ = {
+			isa = PBXGroup;
+			children = (
+				B695A3882764D87E004CB28F /* ae_display_space_types.h */,
+				B666F1792759CCEA0040D306 /* ae_display_space.h */,
+				B666F17A2759CCEA0040D306 /* ae_display_space.mm */,
+			);
+			path = display_space;
+			sourceTree = "<group>";
+		};
+		B68D820E2837BB9100C2FC23 /* keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				B657D4D326803C7B0048C6AD /* ae_keyboard_types.h */,
+				B657D4D526806DA90048C6AD /* ae_keyboard_utils.cpp */,
+				B657D4D626806DA90048C6AD /* ae_keyboard_utils.h */,
+				B657D4D0268037720048C6AD /* ae_keyboard.h */,
+				B657D4CF268037720048C6AD /* ae_keyboard.mm */,
+			);
+			path = keyboard;
+			sourceTree = "<group>";
+		};
+		B68D820F2837BB9800C2FC23 /* gesture */ = {
+			isa = PBXGroup;
+			children = (
+				B6097BC0272535FE008A6D57 /* ae_gesture.cpp */,
+				B6813578271EE756009CC0FC /* ae_gesture.h */,
+			);
+			path = gesture;
+			sourceTree = "<group>";
+		};
+		B68D82102837BBA100C2FC23 /* action */ = {
+			isa = PBXGroup;
+			children = (
+				B68483E727C4944100792D17 /* ae_action_utils.cpp */,
+				B68483E827C4944100792D17 /* ae_action_utils.h */,
+				B68483F227C50D1B00792D17 /* ae_action.cpp */,
+				B6693E58268814D2004C8F50 /* ae_action.h */,
+			);
+			path = action;
+			sourceTree = "<group>";
+		};
+		B68D82112837BBAC00C2FC23 /* button */ = {
+			isa = PBXGroup;
+			children = (
+				B6B9735E27006FF500E1BD12 /* ae_ui_button_utils.cpp */,
+				B6B9735F27006FF500E1BD12 /* ae_ui_button_utils.h */,
+				B69C68A12670F5BF00C1083F /* ae_ui_button.h */,
+				B69C68A02670F5BF00C1083F /* ae_ui_button.mm */,
+			);
+			path = button;
+			sourceTree = "<group>";
+		};
+		B68D82122837BBB200C2FC23 /* editing_root */ = {
+			isa = PBXGroup;
+			children = (
+				B6E8995A2688806E00BBFA73 /* ae_ui_editing_root_utils.cpp */,
+				B6E8995B2688806E00BBFA73 /* ae_ui_editing_root_utils.h */,
+				B605EA6F2657E5530031B177 /* ae_ui_editing_root.h */,
+				B605EA6E2657E5530031B177 /* ae_ui_editing_root.mm */,
+			);
+			path = editing_root;
+			sourceTree = "<group>";
+		};
+		B68D82132837BBBD00C2FC23 /* root */ = {
+			isa = PBXGroup;
+			children = (
+				B68C3E7927088AEA00888A53 /* ae_ui_root.h */,
+				B68C3E7A27088AEA00888A53 /* ae_ui_root.mm */,
+			);
+			path = root;
+			sourceTree = "<group>";
+		};
 		B695A38A27657A6E004CB28F /* recycle_pool */ = {
 			isa = PBXGroup;
 			children = (
@@ -1673,8 +1723,14 @@
 		B6F09CE927E89C4F00638C6A /* common */ = {
 			isa = PBXGroup;
 			children = (
+				B6EE90DE27A25A26000470F3 /* ae_ui_types.cpp */,
+				B6EE90DC27A25A06000470F3 /* ae_ui_types.h */,
 				B6F09CEB27E89C8C00638C6A /* ae_ui_mesh_data.h */,
 				B6F09CEA27E89C8C00638C6A /* ae_ui_mesh_data.mm */,
+				B6D98A1F27E0BD1A0034AD7C /* ae_ui_event_utils.cpp */,
+				B6D98A2027E0BD1A0034AD7C /* ae_ui_event_utils.h */,
+				B6A55ECA266C81980039E56F /* ae_ui_layout_utils.cpp */,
+				B6A55EC9266C81960039E56F /* ae_ui_layout_utils.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
