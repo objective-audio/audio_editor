@@ -67,6 +67,26 @@ std::shared_ptr<sheet_level> const &project_sub_level_router::sheet_level() cons
     return get_sheet_level(this->_sub_level->value());
 }
 
+void project_sub_level_router::add_dialog(dialog_content const content) {
+    if (this->_sub_level->value().has_value()) {
+        throw std::runtime_error("sub level is not null.");
+    }
+
+    this->_sub_level->set_value(dialog_level::make_shared(content));
+}
+
+void project_sub_level_router::remove_dialog() {
+    if (this->dialog_level() == nullptr) {
+        throw std::runtime_error("sheet_level is null.");
+    }
+
+    this->_sub_level->set_value(std::nullopt);
+}
+
+std::shared_ptr<dialog_level> const &project_sub_level_router::dialog_level() const {
+    return get_dialog_level(this->_sub_level->value());
+}
+
 observing::syncable project_sub_level_router::observe(
     std::function<void(std::optional<project_sub_level> const &)> &&handler) {
     return this->_sub_level->observe(std::move(handler));

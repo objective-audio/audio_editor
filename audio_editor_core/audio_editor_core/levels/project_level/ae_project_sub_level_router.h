@@ -24,6 +24,10 @@ struct project_sub_level_router final {
     void remove_sheet();
     std::shared_ptr<sheet_level> const &sheet_level() const;
 
+    void add_dialog(dialog_content const);
+    void remove_dialog();
+    std::shared_ptr<dialog_level> const &dialog_level() const;
+
     [[nodiscard]] observing::syncable observe(std::function<void(std::optional<project_sub_level> const &)> &&);
 
    private:
