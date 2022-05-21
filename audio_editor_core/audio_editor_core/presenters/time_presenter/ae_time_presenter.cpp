@@ -36,7 +36,7 @@ time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::share
     project_sub_level_router
         ->observe([this, cancellable = observing::cancellable_ptr{nullptr}](
                       std::optional<project_sub_level> const &sub_level) mutable {
-            if (auto const &level = get_time_editor_level(sub_level)) {
+            if (auto const &level = get_level<time_editor_level>(sub_level)) {
                 cancellable =
                     level->editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
             } else {

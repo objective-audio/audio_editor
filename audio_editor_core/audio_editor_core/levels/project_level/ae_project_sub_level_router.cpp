@@ -44,7 +44,7 @@ void project_sub_level_router::remove_time_editor() {
 }
 
 std::shared_ptr<time_editor_level> const &project_sub_level_router::time_editor_level() const {
-    return get_time_editor_level(this->_sub_level->value());
+    return get_level<ae::time_editor_level>(this->_sub_level->value());
 }
 
 void project_sub_level_router::add_sheet(sheet_content const &content) {
@@ -64,7 +64,7 @@ void project_sub_level_router::remove_sheet() {
 }
 
 std::shared_ptr<sheet_level> const &project_sub_level_router::sheet_level() const {
-    return get_sheet_level(this->_sub_level->value());
+    return get_level<ae::sheet_level>(this->_sub_level->value());
 }
 
 void project_sub_level_router::add_dialog(dialog_content const content) {
@@ -84,7 +84,7 @@ void project_sub_level_router::remove_dialog() {
 }
 
 std::shared_ptr<dialog_level> const &project_sub_level_router::dialog_level() const {
-    return get_dialog_level(this->_sub_level->value());
+    return get_level<ae::dialog_level>(this->_sub_level->value());
 }
 
 observing::syncable project_sub_level_router::observe(
