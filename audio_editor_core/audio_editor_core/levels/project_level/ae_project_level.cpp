@@ -8,7 +8,6 @@
 #include <audio_editor_core/ae_context_menu_presenter.h>
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_database_updater.h>
-#include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
@@ -67,7 +66,6 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_level->system_url->playing_directory(), project_id, this->scrolling.get())),
       responder_stack(responder_stack::make_shared()),
-      dialog_presenter(dialog_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
