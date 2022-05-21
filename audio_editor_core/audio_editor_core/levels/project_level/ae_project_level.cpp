@@ -95,7 +95,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       module_renaming_launcher(
           module_renaming_launcher::make_shared(this->sub_level_router.get(), this->editing_status.get())),
       export_interactor(export_interactor::make_shared(
-          project_format, this->dialog_presenter.get(), this->editing_status.get(), this->edge_holder.get(),
+          project_format, this->sub_level_router.get(), this->editing_status.get(), this->edge_holder.get(),
           this->player.get(), this->exporter.get(), this->timeline_holder.get())),
       database_updater(database_updater::make_shared(this->file_track.get(), this->marker_pool.get(),
                                                      this->edge_holder.get(), this->pasteboard.get(),

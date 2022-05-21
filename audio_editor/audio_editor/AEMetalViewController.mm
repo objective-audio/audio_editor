@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_root_level_router.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
+#include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <objc_utils/yas_objc_unowned.h>
 #import "AEMetalView.h"
@@ -25,6 +26,7 @@ using namespace yas::ae;
 @implementation AEMetalViewController {
     project_id _project_id;
     std::weak_ptr<ui_root_level> _root_level;
+    std::weak_ptr<project_sub_level_router> _project_sub_level_router;
     std::shared_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
     observing::cancellable_ptr _sheet_canceller;
@@ -61,6 +63,7 @@ using namespace yas::ae;
 
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     self->_action_controller = action_controller::make_shared(project_id);
+    self->_project_sub_level_router = project_level->sub_level_router;
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
@@ -194,6 +197,12 @@ using namespace yas::ae;
     if ([panel runModal] == NSModalResponseOK) {
         auto const path = to_string((__bridge CFStringRef)panel.URL.path);
         self->_action_controller->handle_action({action_kind::export_to_file, path});
+
+        if (auto const router = self->_project_sub_level_router.lock()) {
+            router->remove_dialog();
+        } else {
+            assertion_failure_if_not_test();
+        }
     }
 }
 
