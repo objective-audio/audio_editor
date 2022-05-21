@@ -1,11 +1,11 @@
 //
-//  ae_dialog_event.h
+//  ae_dialog_content.h
 //
 
 #pragma once
 
 namespace yas::ae {
-enum class dialog_event {
+enum class dialog_content {
     select_file_for_export,
 };
 }

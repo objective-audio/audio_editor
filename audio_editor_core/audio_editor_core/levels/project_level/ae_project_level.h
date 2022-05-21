@@ -19,7 +19,6 @@ class zooming_pair;
 class scrolling;
 class system_url;
 class player;
-class dialog_presenter;
 class context_menu_presenter;
 class responder_stack;
 class project_state_holder;
@@ -70,7 +69,6 @@ struct project_level final {
     std::shared_ptr<ae::scrolling> const scrolling;
     std::shared_ptr<ae::player> const player;
     std::shared_ptr<ae::responder_stack> const responder_stack;
-    std::shared_ptr<ae::dialog_presenter> const dialog_presenter;
     std::shared_ptr<ae::context_menu_presenter> const context_menu_presenter;
     std::shared_ptr<ae::project_state_holder> const state_holder;
     std::shared_ptr<ae::project_closer> const closer;

@@ -5,12 +5,12 @@
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
 #include <audio_editor_core/ae_action_controller.h>
-#include <audio_editor_core/ae_dialog_presenter.h>
 #include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_root_level_router.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
+#include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <objc_utils/yas_objc_unowned.h>
 #import "AEMetalView.h"
@@ -26,6 +26,7 @@ using namespace yas::ae;
 @implementation AEMetalViewController {
     project_id _project_id;
     std::weak_ptr<ui_root_level> _root_level;
+    std::weak_ptr<project_sub_level_router> _project_sub_level_router;
     std::shared_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
     observing::cancellable_ptr _sheet_canceller;
@@ -62,6 +63,7 @@ using namespace yas::ae;
 
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     self->_action_controller = action_controller::make_shared(project_id);
+    self->_project_sub_level_router = project_level->sub_level_router;
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
@@ -69,36 +71,22 @@ using namespace yas::ae;
 
     auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
 
-    project_level->dialog_presenter
-        ->observe_event([unowned_self](dialog_event const &event) {
+    project_level->sub_level_router
+        ->observe([unowned_self](std::optional<project_sub_level> const &sub_level) {
             auto *const self = unowned_self.object;
 
-            switch (event) {
-                case dialog_event::select_file_for_export: {
-                    [self showSelectFileForExportDialog];
-                } break;
-            }
-        })
-        .end()
-        ->add_to(self->_pool);
-
-    auto const sub_level_router = project_level->sub_level_router;
-
-    sub_level_router
-        ->observe([unowned_self, weak_router = to_weak(sub_level_router)](auto const &) {
-            auto const router = weak_router.lock();
-            if (!router) {
-                return;
-            }
-
-            auto *const self = unowned_self.object;
-
-            if (!router->sub_level().has_value()) {
+            if (!sub_level.has_value()) {
                 [self hideModal];
-            } else if (auto const level = router->sheet_level()) {
+            } else if (auto const &level = get_sheet_level(sub_level)) {
                 switch (level->content.kind) {
                     case sheet_kind::module_name:
                         [self showModuleNameSheetWithValue:level->content.value];
+                        break;
+                }
+            } else if (auto const &level = get_dialog_level(sub_level)) {
+                switch (level->content) {
+                    case dialog_content::select_file_for_export:
+                        [self showSelectFileForExportDialog];
                         break;
                 }
             }
@@ -206,10 +194,24 @@ using namespace yas::ae;
     panel.allowedContentTypes = @[UTTypeAudio];
     panel.nameFieldStringValue = @"Untitled";
 
-    if ([panel runModal] == NSModalResponseOK) {
-        auto const path = to_string((__bridge CFStringRef)panel.URL.path);
-        self->_action_controller->handle_action({action_kind::export_to_file, path});
-    }
+    auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
+    auto *const unowned_panel = [[YASUnownedObject<NSSavePanel *> alloc] initWithObject:panel];
+
+    [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
+        auto *const self = unowned_self.object;
+        auto *const panel = unowned_panel.object;
+
+        if (result == NSModalResponseOK) {
+            auto const path = to_string((__bridge CFStringRef)panel.URL.path);
+            self->_action_controller->handle_action({action_kind::export_to_file, path});
+        }
+
+        if (auto const router = self->_project_sub_level_router.lock()) {
+            router->remove_dialog();
+        } else {
+            assertion_failure_if_not_test();
+        }
+    }];
 }
 
 - (void)showModuleNameSheetWithValue:(std::string const &)value {
