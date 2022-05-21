@@ -34,13 +34,9 @@ time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::share
         observing::fetcher<std::optional<index_range>>::make_shared([this] { return this->editing_time_text_range(); });
 
     project_sub_level_router
-        ->observe([this, cancellable = observing::cancellable_ptr{nullptr}](auto const &) mutable {
-            auto const &router = this->_project_sub_level_router.lock();
-            if (!router) {
-                return;
-            }
-
-            if (auto const &level = router->time_editor_level()) {
+        ->observe([this, cancellable = observing::cancellable_ptr{nullptr}](
+                      std::optional<project_sub_level> const &sub_level) mutable {
+            if (auto const &level = get_time_editor_level(sub_level)) {
                 cancellable =
                     level->editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
             } else {
