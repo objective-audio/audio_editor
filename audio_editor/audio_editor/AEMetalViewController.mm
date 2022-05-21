@@ -85,17 +85,12 @@ using namespace yas::ae;
     auto const sub_level_router = project_level->sub_level_router;
 
     sub_level_router
-        ->observe([unowned_self, weak_router = to_weak(sub_level_router)](auto const &) {
-            auto const router = weak_router.lock();
-            if (!router) {
-                return;
-            }
-
+        ->observe([unowned_self](std::optional<project_sub_level> const &sub_level) {
             auto *const self = unowned_self.object;
 
-            if (!router->sub_level().has_value()) {
+            if (!sub_level.has_value()) {
                 [self hideModal];
-            } else if (auto const level = router->sheet_level()) {
+            } else if (auto const &level = get_sheet_level(sub_level)) {
                 switch (level->content.kind) {
                     case sheet_kind::module_name:
                         [self showModuleNameSheetWithValue:level->content.value];
