@@ -87,6 +87,26 @@ std::shared_ptr<dialog_level> const &project_sub_level_router::dialog_level() co
     return get_level<ae::dialog_level>(this->_sub_level->value());
 }
 
+void project_sub_level_router::add_context_menu(context_menu const &context_menu) {
+    if (this->_sub_level->value().has_value()) {
+        throw std::runtime_error("sub level is not null.");
+    }
+
+    this->_sub_level->set_value(context_menu_level::make_shared(context_menu));
+}
+
+void project_sub_level_router::remove_context_menu() {
+    if (this->context_menu_level() == nullptr) {
+        throw std::runtime_error("sheet_level is null.");
+    }
+
+    this->_sub_level->set_value(std::nullopt);
+}
+
+std::shared_ptr<context_menu_level> const &project_sub_level_router::context_menu_level() const {
+    return get_level<ae::context_menu_level>(this->_sub_level->value());
+}
+
 observing::syncable project_sub_level_router::observe(
     std::function<void(std::optional<project_sub_level> const &)> &&handler) {
     return this->_sub_level->observe(std::move(handler));

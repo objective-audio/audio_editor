@@ -28,6 +28,10 @@ struct project_sub_level_router final {
     void remove_dialog();
     std::shared_ptr<dialog_level> const &dialog_level() const;
 
+    void add_context_menu(context_menu const &);
+    void remove_context_menu();
+    std::shared_ptr<context_menu_level> const &context_menu_level() const;
+
     [[nodiscard]] observing::syncable observe(std::function<void(std::optional<project_sub_level> const &)> &&);
 
    private:
