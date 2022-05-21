@@ -69,22 +69,7 @@ using namespace yas::ae;
 
     auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
 
-    project_level->dialog_presenter
-        ->observe_event([unowned_self](dialog_event const &event) {
-            auto *const self = unowned_self.object;
-
-            switch (event) {
-                case dialog_event::select_file_for_export: {
-                    [self showSelectFileForExportDialog];
-                } break;
-            }
-        })
-        .end()
-        ->add_to(self->_pool);
-
-    auto const sub_level_router = project_level->sub_level_router;
-
-    sub_level_router
+    project_level->sub_level_router
         ->observe([unowned_self](std::optional<project_sub_level> const &sub_level) {
             auto *const self = unowned_self.object;
 
@@ -94,6 +79,12 @@ using namespace yas::ae;
                 switch (level->content.kind) {
                     case sheet_kind::module_name:
                         [self showModuleNameSheetWithValue:level->content.value];
+                        break;
+                }
+            } else if (auto const &level = get_dialog_level(sub_level)) {
+                switch (level->content) {
+                    case dialog_content::select_file_for_export:
+                        [self showSelectFileForExportDialog];
                         break;
                 }
             }
