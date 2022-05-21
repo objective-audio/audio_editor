@@ -35,7 +35,7 @@ export_interactor::export_interactor(project_format const &project_format, proje
 }
 
 bool export_interactor::can_select_file_for_export() const {
-    return this->can_export_to_file();
+    return this->can_export_to_file() && !this->_router->sub_level().has_value();
 }
 
 void export_interactor::select_file_for_export() {
@@ -47,7 +47,7 @@ void export_interactor::select_file_for_export() {
 }
 
 bool export_interactor::can_export_to_file() const {
-    if (!this->_editing_status->can_editing() || this->_router->sub_level().has_value()) {
+    if (!this->_editing_status->can_editing()) {
         return false;
     }
 

@@ -194,16 +194,24 @@ using namespace yas::ae;
     panel.allowedContentTypes = @[UTTypeAudio];
     panel.nameFieldStringValue = @"Untitled";
 
-    if ([panel runModal] == NSModalResponseOK) {
-        auto const path = to_string((__bridge CFStringRef)panel.URL.path);
-        self->_action_controller->handle_action({action_kind::export_to_file, path});
+    auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
+    auto *const unowned_panel = [[YASUnownedObject<NSSavePanel *> alloc] initWithObject:panel];
+
+    [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
+        auto *const self = unowned_self.object;
+        auto *const panel = unowned_panel.object;
+
+        if (result == NSModalResponseOK) {
+            auto const path = to_string((__bridge CFStringRef)panel.URL.path);
+            self->_action_controller->handle_action({action_kind::export_to_file, path});
+        }
 
         if (auto const router = self->_project_sub_level_router.lock()) {
             router->remove_dialog();
         } else {
             assertion_failure_if_not_test();
         }
-    }
+    }];
 }
 
 - (void)showModuleNameSheetWithValue:(std::string const &)value {
