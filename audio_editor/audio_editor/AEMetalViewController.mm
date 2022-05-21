@@ -77,13 +77,13 @@ using namespace yas::ae;
 
             if (!sub_level.has_value()) {
                 [self hideModal];
-            } else if (auto const &level = get_sheet_level(sub_level)) {
+            } else if (auto const &level = get_level<sheet_level>(sub_level)) {
                 switch (level->content.kind) {
                     case sheet_kind::module_name:
                         [self showModuleNameSheetWithValue:level->content.value];
                         break;
                 }
-            } else if (auto const &level = get_dialog_level(sub_level)) {
+            } else if (auto const &level = get_level<dialog_level>(sub_level)) {
                 switch (level->content) {
                     case dialog_content::select_file_for_export:
                         [self showSelectFileForExportDialog];
