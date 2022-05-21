@@ -44,12 +44,7 @@ void project_sub_level_router::remove_time_editor() {
 }
 
 std::shared_ptr<time_editor_level> const &project_sub_level_router::time_editor_level() const {
-    if (this->_sub_level->value().has_value() &&
-        std::holds_alternative<std::shared_ptr<ae::time_editor_level>>(this->_sub_level->value().value())) {
-        return std::get<std::shared_ptr<ae::time_editor_level>>(this->_sub_level->value().value());
-    } else {
-        return _null_time_editor_level;
-    }
+    return get_time_editor_level(this->_sub_level->value());
 }
 
 void project_sub_level_router::add_sheet(sheet_content const &content) {
@@ -69,12 +64,7 @@ void project_sub_level_router::remove_sheet() {
 }
 
 std::shared_ptr<sheet_level> const &project_sub_level_router::sheet_level() const {
-    if (this->_sub_level->value().has_value() &&
-        std::holds_alternative<std::shared_ptr<ae::sheet_level>>(this->_sub_level->value().value())) {
-        return std::get<std::shared_ptr<ae::sheet_level>>(this->_sub_level->value().value());
-    } else {
-        return _null_sheet_level;
-    }
+    return get_sheet_level(this->_sub_level->value());
 }
 
 observing::syncable project_sub_level_router::observe(
