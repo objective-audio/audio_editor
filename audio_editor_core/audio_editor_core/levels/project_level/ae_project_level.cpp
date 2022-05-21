@@ -40,7 +40,6 @@
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_scrolling.h>
-#include <audio_editor_core/ae_sheet_presenter.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_time_editor_launcher.h>
 #include <audio_editor_core/ae_timeline_holder.h>
@@ -69,7 +68,6 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       player(player::make_shared(app_level->system_url->playing_directory(), project_id, this->scrolling.get())),
       responder_stack(responder_stack::make_shared()),
       dialog_presenter(dialog_presenter::make_shared()),
-      sheet_presenter(sheet_presenter::make_shared()),
       context_menu_presenter(context_menu_presenter::make_shared()),
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
@@ -95,7 +93,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       marker_editor(marker_editor::make_shared(this->player.get(), this->marker_pool.get(), this->database.get(),
                                                this->editing_status.get())),
       module_renaming_launcher(
-          module_renaming_launcher::make_shared(this->sheet_presenter.get(), this->editing_status.get())),
+          module_renaming_launcher::make_shared(this->sub_level_router.get(), this->editing_status.get())),
       export_interactor(export_interactor::make_shared(
           project_format, this->dialog_presenter.get(), this->editing_status.get(), this->edge_holder.get(),
           this->player.get(), this->exporter.get(), this->timeline_holder.get())),

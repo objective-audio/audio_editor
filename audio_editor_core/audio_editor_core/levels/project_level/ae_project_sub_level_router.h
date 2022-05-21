@@ -14,10 +14,15 @@ struct project_sub_level_router final {
 
     project_sub_level_router(project_id const &);
 
+    std::optional<project_sub_level> const &sub_level() const;
+
     void add_time_editor(number_components const &, std::optional<std::size_t> const unit_idx);
     void remove_time_editor();
-
     std::shared_ptr<time_editor_level> const &time_editor_level() const;
+
+    void add_sheet(sheet_content const &);
+    void remove_sheet();
+    std::shared_ptr<sheet_level> const &sheet_level() const;
 
     [[nodiscard]] observing::syncable observe(std::function<void(std::optional<project_sub_level> const &)> &&);
 

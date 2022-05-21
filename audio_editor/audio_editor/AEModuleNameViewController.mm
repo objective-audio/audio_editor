@@ -12,9 +12,6 @@ using namespace yas::ae;
 namespace yas::ae {
 struct module_name_vc_cpp {
     std::shared_ptr<module_name_presenter> presenter;
-
-    observing::notifier_ptr<module_name_vc_event> const event_notifier =
-        observing::notifier<module_name_vc_event>::make_shared();
 };
 }
 
@@ -44,16 +41,11 @@ struct module_name_vc_cpp {
 }
 
 - (IBAction)done:(NSButton *)sender {
-    self->_cpp.presenter->set_name(to_string((__bridge CFStringRef)self.nameTextField.stringValue));
-    self->_cpp.event_notifier->notify(module_name_vc_event::done);
+    self->_cpp.presenter->done(to_string((__bridge CFStringRef)self.nameTextField.stringValue));
 }
 
 - (IBAction)cancel:(NSButton *)sender {
-    self->_cpp.event_notifier->notify(module_name_vc_event::canceled);
-}
-
-- (observing::endable)observe_event:(std::function<void(module_name_vc_event const &)> &&)handler {
-    return self->_cpp.event_notifier->observe(std::move(handler));
+    self->_cpp.presenter->cancel();
 }
 
 @end
