@@ -12,14 +12,14 @@
 
 namespace yas::ae {
 struct scroll_gesture_controller final {
-    [[nodiscard]] static std::shared_ptr<scroll_gesture_controller> make_shared(project_id const &project_id);
+    [[nodiscard]] static std::shared_ptr<scroll_gesture_controller> make_shared(scrolling_for_gesture_controller *);
+
+    scroll_gesture_controller(scrolling_for_gesture_controller *);
 
     void handle_gesture(scroll_gesture const &);
 
    private:
-    std::weak_ptr<scrolling_for_gesture_controller> const _scrolling;
-
-    scroll_gesture_controller(std::shared_ptr<scrolling_for_gesture_controller> const &);
+    scrolling_for_gesture_controller *const _scrolling;
 
     scroll_gesture_controller(scroll_gesture_controller const &) = delete;
     scroll_gesture_controller(scroll_gesture_controller &&) = delete;

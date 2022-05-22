@@ -11,22 +11,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(project_id const &project_id) {
-    auto const project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<pinch_gesture_controller>(new pinch_gesture_controller{project_level->zooming_pair});
+std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(zooming_pair *zooming_pair) {
+    return std::make_shared<pinch_gesture_controller>(zooming_pair);
 }
 
-pinch_gesture_controller::pinch_gesture_controller(std::shared_ptr<zooming_pair> const &zooming_pair)
-    : _zooming_pair(zooming_pair) {
+pinch_gesture_controller::pinch_gesture_controller(zooming_pair *zooming_pair) : _zooming_pair(zooming_pair) {
 }
 
 void pinch_gesture_controller::handle_gesture(pinch_gesture const &gesture) {
-    auto const zooming_pair = this->_zooming_pair.lock();
-    if (!zooming_pair) {
-        return;
-    }
-
-    auto const &zooming = this->_is_modified ? zooming_pair->vertical : zooming_pair->horizontal;
+    auto const &zooming = this->_is_modified ? this->_zooming_pair->vertical : this->_zooming_pair->horizontal;
 
     switch (gesture.state) {
         case gesture_state::began:
@@ -53,8 +46,6 @@ void pinch_gesture_controller::handle_modifier(modifier_event_state const &state
             break;
     }
 
-    if (auto const zooming_pair = this->_zooming_pair.lock()) {
-        zooming_pair->horizontal->end();
-        zooming_pair->vertical->end();
-    }
+    this->_zooming_pair->horizontal->end();
+    this->_zooming_pair->vertical->end();
 }

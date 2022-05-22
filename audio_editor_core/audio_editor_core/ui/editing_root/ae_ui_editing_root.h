@@ -24,8 +24,8 @@ struct ui_editing_root final {
 
     [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(
         ui_project_id const &, std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &,
-        std::shared_ptr<pinch_gesture_controller> const &, std::shared_ptr<ae::keyboard> const &,
-        std::shared_ptr<ui_scroller> const &, std::shared_ptr<ui_modal_bg> const &, std::shared_ptr<ui_time> const &);
+        std::shared_ptr<ae::keyboard> const &, std::shared_ptr<ui_scroller> const &,
+        std::shared_ptr<ui_modal_bg> const &, std::shared_ptr<ui_time> const &);
 
     ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &font_atlas,
                     std::shared_ptr<ae::color> const &, std::shared_ptr<editing_root_presenter> const &,

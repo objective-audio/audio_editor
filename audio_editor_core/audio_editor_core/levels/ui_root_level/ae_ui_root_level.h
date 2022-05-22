@@ -12,7 +12,6 @@
 namespace yas::ae {
 class display_space;
 class keyboard;
-class pinch_gesture_controller;
 class ui_root;
 class ui_mesh_data;
 class ui_module_waveforms;
@@ -41,7 +40,6 @@ struct ui_root_level {
     std::shared_ptr<ui_mesh_data> const vertical_line_data;
     std::shared_ptr<ae::display_space> const display_space;
     std::shared_ptr<ae::keyboard> const keyboard;
-    std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
 
     std::shared_ptr<module_location_pool> const module_location_pool;
     std::shared_ptr<marker_location_pool> const marker_location_pool;
