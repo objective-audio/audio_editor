@@ -4,6 +4,7 @@
 
 #include "ae_project_level.h"
 
+#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_database_updater.h>
@@ -68,6 +69,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
                                          app_level->project_level_router.get(), this->state_holder.get())),
+      action_controller(std::make_shared<ae::action_controller>(this->responder_stack.get())),
       timing(timing::make_shared(project_format.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),
       file_track(file_track::make_shared()),

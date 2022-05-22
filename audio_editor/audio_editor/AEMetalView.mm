@@ -21,16 +21,15 @@ using namespace yas::ae;
 @implementation AEMetalView {
     std::weak_ptr<project_sub_level_router> _router;
     std::optional<context_menu> _shown_context_menu;
-    std::shared_ptr<action_controller> _action_controller;
+    std::weak_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
 }
 
 - (void)setupWithProjectID:(project_id const &)project_id {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
     auto const &router = project_level->sub_level_router;
-    auto const action_controller = action_controller::make_shared(project_id);
 
-    [self setupWithRouter:router actionController:action_controller];
+    [self setupWithRouter:router actionController:project_level->action_controller];
 }
 
 - (void)setupWithRouter:(std::shared_ptr<project_sub_level_router> const &)router
@@ -107,7 +106,9 @@ using namespace yas::ae;
     auto const &idx = menuItem.tag;
     if (idx < context_menu.actions.size()) {
         if (auto const &action = context_menu.actions.at(idx)) {
-            self->_action_controller->handle_action(action.value());
+            if (auto const action_controller = self->_action_controller.lock()) {
+                action_controller->handle_action(action.value());
+            }
         }
     }
 

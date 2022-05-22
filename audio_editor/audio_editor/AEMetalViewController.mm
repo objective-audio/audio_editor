@@ -27,7 +27,7 @@ using namespace yas::ae;
     project_id _project_id;
     std::weak_ptr<ui_root_level> _root_level;
     std::weak_ptr<project_sub_level_router> _project_sub_level_router;
-    std::shared_ptr<action_controller> _action_controller;
+    std::weak_ptr<action_controller> _action_controller;
     observing::canceller_pool _pool;
     observing::cancellable_ptr _sheet_canceller;
 }
@@ -53,10 +53,10 @@ using namespace yas::ae;
 - (void)setupWithProjectID:(project_id const &)project_id {
     auto const &ui_root_level_router = hierarchy::app_level()->ui_root_level_router;
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-    auto const action_controller = action_controller::make_shared(project_id);
+
     [self setupWithProjectID:project_id
             uiRootLevelRouter:ui_root_level_router
-             actionController:action_controller
+             actionController:project_level->action_controller
         projectSubLevelRouter:project_level->sub_level_router];
 }
 
@@ -109,51 +109,75 @@ using namespace yas::ae;
 }
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
-    self->_action_controller->handle_action(action_kind::jump_previous);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::jump_previous);
+    }
 }
 
 - (IBAction)jumpNext:(NSMenuItem *)sender {
-    self->_action_controller->handle_action(action_kind::jump_next);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::jump_next);
+    }
 }
 
 - (IBAction)jumpToBeginning:(NSMenuItem *)sender {
-    self->_action_controller->handle_action(action_kind::jump_to_beginning);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::jump_to_beginning);
+    }
 }
 
 - (IBAction)jumpToEnd:(NSMenuItem *)sender {
-    self->_action_controller->handle_action(action_kind::jump_to_end);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::jump_to_end);
+    }
 }
 
 - (IBAction)insertMarker:(NSMenuItem *)sender {
-    self->_action_controller->handle_action(action_kind::insert_marker);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::insert_marker);
+    }
 }
 
 - (IBAction)returnToZero:(NSMenuItem *)sender {
-    self->_action_controller->handle_action(action_kind::return_to_zero);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::return_to_zero);
+    }
 }
 
 - (IBAction)undo:(NSMenuItem *)sender {
-    self->_action_controller->handle_action(action_kind::undo);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::undo);
+    }
 }
 
 - (IBAction)redo:(NSMenuItem *)sender {
-    self->_action_controller->handle_action(action_kind::redo);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::redo);
+    }
 }
 
 - (IBAction)exportToFile:(id)sender {
-    self->_action_controller->handle_action(action_kind::select_file_for_export);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::select_file_for_export);
+    }
 }
 
 - (IBAction)cut:(id)sender {
-    self->_action_controller->handle_action(action_kind::cut);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::cut);
+    }
 }
 
 - (IBAction)copy:(id)sender {
-    self->_action_controller->handle_action(action_kind::copy);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::copy);
+    }
 }
 
 - (IBAction)paste:(id)sender {
-    self->_action_controller->handle_action(action_kind::paste);
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::paste);
+    }
 }
 
 #pragma mark -
@@ -214,7 +238,9 @@ using namespace yas::ae;
 
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
-            self->_action_controller->handle_action({action_kind::export_to_file, path});
+            if (auto const action_controller = self->_action_controller.lock()) {
+                action_controller->handle_action({action_kind::export_to_file, path});
+            }
         }
 
         if (auto const router = self->_project_sub_level_router.lock()) {
