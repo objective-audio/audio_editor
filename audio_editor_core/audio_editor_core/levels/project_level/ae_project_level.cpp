@@ -73,7 +73,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
                                          app_level->project_level_router.get(), this->state_holder.get())),
       action_controller(ae::action_controller::make_shared(this->responder_stack.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(this->zooming_pair.get())),
-      scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(this->scrolling)),
+      scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(this->scrolling.get())),
       timing(timing::make_shared(project_format.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),
       file_track(file_track::make_shared()),

@@ -3,6 +3,7 @@
 //
 
 #include "ae_ui_scroller.h"
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_scroller_presenter.h>
 #include <audio_editor_core/ae_ui_edge.h>
@@ -20,8 +21,9 @@ std::shared_ptr<ui_scroller> ui_scroller::make_shared(ui_project_id const &proje
                                                       std::shared_ptr<ui_edge> const &edge,
                                                       std::shared_ptr<ui_markers> const &markers) {
     auto const presenter = scroller_presenter::make_shared(project_id.project_id);
-    auto const scroll_gestore_controller = scroll_gesture_controller::make_shared(project_id.project_id);
-    return std::make_shared<ui_scroller>(standard, presenter, scroll_gestore_controller, track, edge, markers);
+    auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
+    return std::make_shared<ui_scroller>(standard, presenter, project_level->scroll_gesture_controller, track, edge,
+                                         markers);
 }
 
 ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard,
