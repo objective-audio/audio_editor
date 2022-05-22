@@ -28,12 +28,13 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(
     std::shared_ptr<ae::keyboard> const &keyboard, std::shared_ptr<ui_scroller> const &ui_scroller,
     std::shared_ptr<ui_modal_bg> const &ui_modal_bg, std::shared_ptr<ui_time> const &ui_time) {
     auto const &app_level = hierarchy::app_level();
+    auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
 
     auto const presenter = editing_root_presenter::make_shared(project_id.project_id);
-    auto const action_controller = action_controller::make_shared(project_id.project_id);
 
-    return std::make_shared<ui_editing_root>(standard, font_atlas, app_level->color, presenter, action_controller,
-                                             pinch_gesture_controller, keyboard, ui_scroller, ui_modal_bg, ui_time);
+    return std::make_shared<ui_editing_root>(standard, font_atlas, app_level->color, presenter,
+                                             project_level->action_controller, pinch_gesture_controller, keyboard,
+                                             ui_scroller, ui_modal_bg, ui_time);
 }
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
@@ -81,7 +82,12 @@ void ui_editing_root::_setup_observing(std::shared_ptr<ui::standard> const &stan
         .end()
         ->add_to(this->_pool);
 
-    keyboard->observe_key([this](ae::key const &key) { this->_action_controller->handle_key(key); })
+    keyboard
+        ->observe_key([this](ae::key const &key) {
+            if (auto const action_controller = this->_action_controller.lock()) {
+                action_controller->handle_key(key);
+            }
+        })
         .end()
         ->add_to(this->_pool);
     keyboard

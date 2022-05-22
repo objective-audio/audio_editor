@@ -50,6 +50,7 @@ class file_module_loader;
 class track_editor;
 class project_editor_responder;
 class project_editor_launcher;
+class action_controller;
 
 struct project_level final {
     [[nodiscard]] static std::shared_ptr<project_level> make_shared(project_id const &, project_format const &,
@@ -70,6 +71,7 @@ struct project_level final {
     std::shared_ptr<ae::responder_stack> const responder_stack;
     std::shared_ptr<ae::project_state_holder> const state_holder;
     std::shared_ptr<ae::project_closer> const closer;
+    std::shared_ptr<ae::action_controller> const action_controller;
 
     std::shared_ptr<timing> const timing;
     std::shared_ptr<nudge_settings> const nudge_settings;

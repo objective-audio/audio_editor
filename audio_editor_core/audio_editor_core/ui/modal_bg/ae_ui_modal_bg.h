@@ -24,7 +24,7 @@ struct ui_modal_bg {
    private:
     std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui::button> const _button;
-    std::shared_ptr<action_controller> const _action_controller;
+    std::weak_ptr<action_controller> const _action_controller;
 
     observing::canceller_pool _pool;
 };

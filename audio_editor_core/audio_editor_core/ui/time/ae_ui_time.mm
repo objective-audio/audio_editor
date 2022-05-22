@@ -22,11 +22,11 @@ std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &project_id,
                                               std::shared_ptr<ui::standard> const &standard,
                                               std::shared_ptr<ui::texture> const &texture) {
     auto const presenter = time_presenter::make_shared(project_id.project_id);
-    auto const action_controller = action_controller::make_shared(project_id.project_id);
 
     auto const &app_level = hierarchy::app_level();
+    auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
 
-    return std::make_shared<ui_time>(standard, texture, app_level->color, presenter, action_controller);
+    return std::make_shared<ui_time>(standard, texture, app_level->color, presenter, project_level->action_controller);
 }
 
 ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::texture> const &texture,
@@ -62,7 +62,9 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
             switch (context.phase) {
                 case ui::button::phase::ended:
                     if (context.touch.touch_id == ui::touch_id::mouse_left()) {
-                        this->_action_controller->handle_action({action_kind::begin_time_editing});
+                        if (auto const action_controller = this->_action_controller.lock()) {
+                            action_controller->handle_action({action_kind::begin_time_editing});
+                        }
                     }
                     break;
                 default:
@@ -179,8 +181,10 @@ void ui_time::_resize_buttons() {
                                          case ui::button::phase::ended: {
                                              // 左クリック
                                              if (context.touch.touch_id == ui::touch_id::mouse_left()) {
-                                                 this->_action_controller->handle_action(
-                                                     {action_kind::select_time_unit, std::to_string(idx)});
+                                                 if (auto const action_controller = this->_action_controller.lock()) {
+                                                     action_controller->handle_action(
+                                                         {action_kind::select_time_unit, std::to_string(idx)});
+                                                 }
                                              }
                                          } break;
                                          default:

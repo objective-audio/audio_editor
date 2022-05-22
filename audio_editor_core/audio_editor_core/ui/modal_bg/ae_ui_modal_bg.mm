@@ -16,9 +16,8 @@ std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(ui_project_id const &proje
                                                       std::shared_ptr<ui::standard> const &standard) {
     auto const &app_level = hierarchy::app_level();
     auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
-    auto const action_controller = action_controller::make_shared(project_id.project_id);
     return std::make_shared<ui_modal_bg>(standard, app_level->color, project_level->sub_level_router,
-                                         action_controller);
+                                         project_level->action_controller);
 }
 
 ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
@@ -35,7 +34,9 @@ ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::sha
         ->observe([this](auto const &context) {
             switch (context.phase) {
                 case ui::button::phase::ended:
-                    this->_action_controller->handle_action({ae::action_kind::cancel_time_editing});
+                    if (auto const action_controller = this->_action_controller.lock()) {
+                        action_controller->handle_action({ae::action_kind::cancel_time_editing});
+                    }
                     break;
                 default:
                     break;

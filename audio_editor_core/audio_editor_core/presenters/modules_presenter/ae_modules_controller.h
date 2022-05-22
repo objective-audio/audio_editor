@@ -17,7 +17,7 @@ struct modules_controller final {
     void select_module_at(std::size_t const);
 
    private:
-    std::shared_ptr<action_controller> const _action_controller;
+    std::weak_ptr<action_controller> const _action_controller;
     std::shared_ptr<module_location_pool> const _location_pool;
 
     modules_controller(std::shared_ptr<action_controller> const &, std::shared_ptr<module_location_pool> const &);
