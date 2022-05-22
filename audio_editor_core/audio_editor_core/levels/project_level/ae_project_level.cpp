@@ -69,7 +69,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
                                          app_level->project_level_router.get(), this->state_holder.get())),
-      action_controller(std::make_shared<ae::action_controller>(this->responder_stack.get())),
+      action_controller(ae::action_controller::make_shared(this->responder_stack.get())),
       timing(timing::make_shared(project_format.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),
       file_track(file_track::make_shared()),
