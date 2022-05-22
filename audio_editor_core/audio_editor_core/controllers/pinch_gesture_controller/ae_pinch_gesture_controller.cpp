@@ -11,9 +11,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(project_id const &project_id) {
-    auto const project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<pinch_gesture_controller>(new pinch_gesture_controller{project_level->zooming_pair});
+std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(
+    std::shared_ptr<zooming_pair> const &zooming_pair) {
+    return std::make_shared<pinch_gesture_controller>(zooming_pair);
 }
 
 pinch_gesture_controller::pinch_gesture_controller(std::shared_ptr<zooming_pair> const &zooming_pair)

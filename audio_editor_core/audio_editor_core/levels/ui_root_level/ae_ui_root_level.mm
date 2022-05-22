@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_module_location_pool.h>
-#include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_ui_edge.h>
 #include <audio_editor_core/ae_ui_editing_root.h>
@@ -48,7 +47,6 @@ ui_root_level::ui_root_level(std::shared_ptr<ui::standard> const &standard, ui_p
                                                    ui::static_mesh_index_data::make_shared(2))),
       display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
       keyboard(ae::keyboard::make_shared(standard->event_manager())),
-      pinch_gesture_controller(pinch_gesture_controller::make_shared(project_id.project_id)),
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer),
@@ -64,9 +62,8 @@ ui_root_level::ui_root_level(std::shared_ptr<ui::standard> const &standard, ui_p
       scroller(ui_scroller::make_shared(project_id, this->standard, this->track, this->edge, this->markers)),
       modal_bg(ui_modal_bg::make_shared(project_id, this->standard)),
       time(ui_time::make_shared(project_id, this->standard, this->texture)),
-      editing_root(ui_editing_root::make_shared(project_id, this->standard, this->font_atlas_14,
-                                                this->pinch_gesture_controller, this->keyboard, this->scroller,
-                                                this->modal_bg, this->time)),
+      editing_root(ui_editing_root::make_shared(project_id, this->standard, this->font_atlas_14, this->keyboard,
+                                                this->scroller, this->modal_bg, this->time)),
       root(ui_root::make_shared(standard, project_id, this->editing_root)) {
     this->vertical_line_data->vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
         vertices.at(0).position = {0.0f, -0.5f};

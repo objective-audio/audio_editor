@@ -26,6 +26,7 @@
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_pasteboard.h>
+#include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_closer.h>
@@ -70,6 +71,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
                                          app_level->project_level_router.get(), this->state_holder.get())),
       action_controller(ae::action_controller::make_shared(this->responder_stack.get())),
+      pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(this->zooming_pair)),
       timing(timing::make_shared(project_format.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),
       file_track(file_track::make_shared()),

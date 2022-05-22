@@ -14,7 +14,9 @@ namespace yas::ae {
 class zooming_pair;
 
 struct pinch_gesture_controller final {
-    [[nodiscard]] static std::shared_ptr<pinch_gesture_controller> make_shared(project_id const &project_id);
+    [[nodiscard]] static std::shared_ptr<pinch_gesture_controller> make_shared(std::shared_ptr<zooming_pair> const &);
+
+    pinch_gesture_controller(std::shared_ptr<zooming_pair> const &);
 
     void handle_gesture(pinch_gesture const &);
     void handle_modifier(modifier_event_state const &);
@@ -22,8 +24,6 @@ struct pinch_gesture_controller final {
    private:
     std::weak_ptr<zooming_pair> const _zooming_pair;
     bool _is_modified = false;
-
-    pinch_gesture_controller(std::shared_ptr<zooming_pair> const &);
 
     pinch_gesture_controller(pinch_gesture_controller const &) = delete;
     pinch_gesture_controller(pinch_gesture_controller &&) = delete;
