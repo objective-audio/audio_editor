@@ -27,10 +27,16 @@ using namespace yas::ae;
 
 - (void)setupWithProjectID:(project_id const &)project_id {
     auto const &project_level = hierarchy::project_level_for_id(project_id);
-
     auto const &router = project_level->sub_level_router;
+    auto const action_controller = action_controller::make_shared(project_id);
+
+    [self setupWithRouter:router actionController:action_controller];
+}
+
+- (void)setupWithRouter:(std::shared_ptr<project_sub_level_router> const &)router
+       actionController:(std::shared_ptr<action_controller> const &)action_controller {
     self->_router = router;
-    self->_action_controller = action_controller::make_shared(project_id);
+    self->_action_controller = action_controller;
 
     auto *const unowned = [[YASUnownedObject<AEMetalView *> alloc] initWithObject:self];
 
