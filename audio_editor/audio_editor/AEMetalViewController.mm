@@ -51,19 +51,30 @@ using namespace yas::ae;
 }
 
 - (void)setupWithProjectID:(project_id const &)project_id {
+    auto const &ui_root_level_router = hierarchy::app_level()->ui_root_level_router;
+    auto const &project_level = hierarchy::project_level_for_id(project_id);
+    auto const action_controller = action_controller::make_shared(project_id);
+    [self setupWithProjectID:project_id
+            uiRootLevelRouter:ui_root_level_router
+             actionController:action_controller
+        projectSubLevelRouter:project_level->sub_level_router];
+}
+
+- (void)setupWithProjectID:(project_id const &)project_id
+         uiRootLevelRouter:(std::shared_ptr<ae::ui_root_level_router> const &)ui_root_level_router
+          actionController:(std::shared_ptr<action_controller> const &)action_controller
+     projectSubLevelRouter:(std::shared_ptr<project_sub_level_router> const &)project_sub_level_router {
     self->_project_id = project_id;
 
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
-    auto const &ui_root_level_router = hierarchy::app_level()->ui_root_level_router;
     ui_root_level_router->add_level(standard, {.project_id = project_id, .view_id = self.project_view_id});
     self->_root_level = ui_root_level_router->level_for_view_id(self.project_view_id);
 
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    self->_action_controller = action_controller::make_shared(project_id);
-    self->_project_sub_level_router = project_level->sub_level_router;
+    self->_action_controller = action_controller;
+    self->_project_sub_level_router = project_sub_level_router;
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
@@ -71,7 +82,7 @@ using namespace yas::ae;
 
     auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
 
-    project_level->sub_level_router
+    project_sub_level_router
         ->observe([unowned_self](std::optional<project_sub_level> const &sub_level) {
             auto *const self = unowned_self.object;
 
