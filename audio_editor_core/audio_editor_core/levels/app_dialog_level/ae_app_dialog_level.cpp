@@ -7,9 +7,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<app_dialog_level> app_dialog_level::make_shared() {
-    return std::make_shared<app_dialog_level>();
+std::shared_ptr<app_dialog_level> app_dialog_level::make_shared(app_dialog_content const content) {
+    return std::make_shared<app_dialog_level>(content);
 }
 
-app_dialog_level::app_dialog_level() {
+app_dialog_level::app_dialog_level(app_dialog_content const content) : content(content) {
 }
