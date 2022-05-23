@@ -47,6 +47,7 @@
 #include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
 #include <audio_editor_core/ae_track_editor.h>
+#include <audio_editor_core/ae_waveform_mesh_importer.h>
 #include <audio_editor_core/ae_zooming_pair.h>
 
 using namespace yas;
@@ -71,6 +72,9 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_level->file_importer.get(),
                                          app_level->project_level_router.get(), this->state_holder.get())),
+      module_location_pool(module_location_pool::make_shared()),
+      marker_location_pool(marker_location_pool::make_shared()),
+      waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url->editing_file())),
       action_controller(ae::action_controller::make_shared(this->responder_stack.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(this->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(this->scrolling.get())),
