@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_marker_location_pool.h>
+#include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
 #include <cpp_utils/yas_identifier.h>
@@ -53,6 +55,7 @@ class project_editor_launcher;
 class action_controller;
 class pinch_gesture_controller;
 class scroll_gesture_controller;
+class waveform_mesh_importer;
 
 struct project_level final {
     [[nodiscard]] static std::shared_ptr<project_level> make_shared(project_id const &, project_format const &,
@@ -73,6 +76,9 @@ struct project_level final {
     std::shared_ptr<ae::responder_stack> const responder_stack;
     std::shared_ptr<ae::project_state_holder> const state_holder;
     std::shared_ptr<ae::project_closer> const closer;
+    std::shared_ptr<module_location_pool> const module_location_pool;
+    std::shared_ptr<marker_location_pool> const marker_location_pool;
+    std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<ae::action_controller> const action_controller;
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
     std::shared_ptr<scroll_gesture_controller> const scroll_gesture_controller;
