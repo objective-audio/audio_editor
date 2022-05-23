@@ -8,6 +8,7 @@
 #import <audio_editor_core/ae_app_presenter.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #import <cpp_utils/yas_cf_utils.h>
+#include <cpp_utils/yas_unowned.h>
 #import <objc_utils/yas_objc_unowned.h>
 #import "AEWindowController.h"
 
@@ -35,7 +36,7 @@ using namespace yas::ae;
 
     self.windowControllers = [[NSMutableSet alloc] init];
 
-    auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
+    auto const unowned = make_unowned(self);
 
     self->_presenter
         ->observe_event([unowned](auto const &event) {
@@ -80,10 +81,15 @@ using namespace yas::ae;
     panel.canChooseDirectories = NO;
     panel.allowedContentTypes = @[UTTypeAudio];
 
-    if ([panel runModal] == NSModalResponseOK) {
-        url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
-        self->_presenter->select_file(file_url);
-    }
+    auto const unowned_self = make_unowned(self);
+    auto const unowned_panel = make_unowned(panel);
+
+    [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
+        if (result == NSModalResponseOK) {
+            url const file_url{to_string((__bridge CFStringRef)unowned_panel.object.URL.absoluteString)};
+            unowned_self.object->_presenter->select_file(file_url);
+        }
+    }];
 }
 
 - (void)makeAndShowWindowControllerWithProjectID:(project_id const &)project_id {
