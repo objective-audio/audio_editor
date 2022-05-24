@@ -243,7 +243,7 @@
 		B6B563C7271BD3FD0003ED60 /* ae_common_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6B563C5271BD3FD0003ED60 /* ae_common_utils.cpp */; };
 		B6B60363283BC9810070457F /* ae_app_dialog_level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6B60361283BC9810070457F /* ae_app_dialog_level.cpp */; };
 		B6B60364283BC9810070457F /* ae_app_dialog_level.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B60362283BC9810070457F /* ae_app_dialog_level.h */; };
-		B6B60366283BCC860070457F /* ae_app_dialog_content.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B60365283BCC860070457F /* ae_app_dialog_content.h */; };
+		B6B60366283BCC860070457F /* ae_app_dialog_content.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B60365283BCC860070457F /* ae_app_dialog_content.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6B60369283BCD790070457F /* ae_app_dialog_level_router.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6B60367283BCD790070457F /* ae_app_dialog_level_router.cpp */; };
 		B6B6036A283BCD790070457F /* ae_app_dialog_level_router.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B60368283BCD790070457F /* ae_app_dialog_level_router.h */; };
 		B6B9736027006FF500E1BD12 /* ae_ui_button_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6B9735E27006FF500E1BD12 /* ae_ui_button_utils.cpp */; };
