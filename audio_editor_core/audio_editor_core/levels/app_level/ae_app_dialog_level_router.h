@@ -22,6 +22,6 @@ struct app_dialog_level_router final {
     observing::syncable observe(std::function<void(std::optional<app_dialog_content> const &)> &&);
 
    private:
-    observing::value::holder_ptr<std::optional<std::shared_ptr<app_dialog_level>>> const _level;
+    observing::value::holder_ptr<std::shared_ptr<app_dialog_level>> const _level;
 };
 }  // namespace yas::ae

@@ -16,11 +16,11 @@ std::shared_ptr<app_dialog_level_router> app_dialog_level_router::make_shared() 
 }
 
 app_dialog_level_router::app_dialog_level_router()
-    : _level(observing::value::holder<std::optional<std::shared_ptr<app_dialog_level>>>::make_shared(std::nullopt)) {
+    : _level(observing::value::holder<std::shared_ptr<app_dialog_level>>::make_shared(nullptr)) {
 }
 
 void app_dialog_level_router::add_dialog(app_dialog_content const content) {
-    if (this->_level->value().has_value()) {
+    if (this->_level->value()) {
         throw std::runtime_error("level is not null.");
     }
 
@@ -34,12 +34,12 @@ void app_dialog_level_router::remove_dialog(app_dialog_content const content) {
         throw std::runtime_error("dialog_level is null.");
     }
 
-    this->_level->set_value(std::nullopt);
+    this->_level->set_value(nullptr);
 }
 
 std::shared_ptr<app_dialog_level> const &app_dialog_level_router::dialog_level() const {
-    if (this->_level->value().has_value()) {
-        return this->_level->value().value();
+    if (this->_level->value()) {
+        return this->_level->value();
     } else {
         return _null_dialog_level;
     }
@@ -47,12 +47,11 @@ std::shared_ptr<app_dialog_level> const &app_dialog_level_router::dialog_level()
 
 observing::syncable app_dialog_level_router::observe(
     std::function<void(std::optional<app_dialog_content> const &)> &&handler) {
-    return this->_level->observe(
-        [handler = std::move(handler)](std::optional<std::shared_ptr<app_dialog_level>> const &level) {
-            if (level.has_value()) {
-                handler(level.value()->content);
-            } else {
-                handler(std::nullopt);
-            }
-        });
+    return this->_level->observe([handler = std::move(handler)](std::shared_ptr<app_dialog_level> const &level) {
+        if (level) {
+            handler(level->content);
+        } else {
+            handler(std::nullopt);
+        }
+    });
 }
