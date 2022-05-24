@@ -57,7 +57,7 @@ using namespace yas::ae;
             if (content.has_value()) {
                 switch (content.value()) {
                     case app_dialog_content::audio_file: {
-                        [unowned.object openFileDialog];
+                        [unowned.object openAudioFileDialog];
                     } break;
                 }
             }
@@ -84,7 +84,7 @@ using namespace yas::ae;
 
 #pragma mark - private
 
-- (void)openFileDialog {
+- (void)openAudioFileDialog {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.allowsMultipleSelection = NO;
     panel.canChooseFiles = YES;
