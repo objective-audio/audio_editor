@@ -10,7 +10,7 @@
 #include <audio_editor_core/ae_ui_event_utils.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
-#include <objc_utils/yas_objc_unowned.h>
+#include <cpp_utils/yas_unowned.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -37,7 +37,7 @@ using namespace yas::ae;
     self->_router = router;
     self->_action_controller = action_controller;
 
-    auto *const unowned = [[YASUnownedObject<AEMetalView *> alloc] initWithObject:self];
+    auto *const unowned = make_unowned(self);
 
     router
         ->observe([unowned](std::optional<project_sub_level> const &sub_level) {

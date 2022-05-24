@@ -36,7 +36,7 @@ using namespace yas::ae;
 
     self.windowControllers = [[NSMutableSet alloc] init];
 
-    auto const unowned = make_unowned(self);
+    auto *const unowned = make_unowned(self);
 
     self->_presenter
         ->observe_window([unowned](auto const &event) {
