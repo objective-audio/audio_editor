@@ -37,17 +37,17 @@ bool app_presenter::can_open_audio_file_dialog() const {
 
 void app_presenter::open_audio_file_dialog() {
     if (auto const router = this->_dialog_level_router.lock()) {
-        router->add_dialog(app_dialog_content::open_audio_file);
+        router->add_dialog(app_dialog_content::audio_file);
     }
 }
 
 void app_presenter::did_close_audio_file_dialog() {
     if (auto const router = this->_dialog_level_router.lock()) {
-        router->remove_dialog(app_dialog_content::open_audio_file);
+        router->remove_dialog(app_dialog_content::audio_file);
     }
 }
 
-void app_presenter::select_file(url const &file_url) {
+void app_presenter::select_audio_file(url const &file_url) {
     if (auto const preparer = this->_project_preparer.lock()) {
         preparer->prepare(file_url);
     }

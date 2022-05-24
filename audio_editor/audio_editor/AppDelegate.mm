@@ -56,7 +56,7 @@ using namespace yas::ae;
         ->observe_dialog([unowned](std::optional<app_dialog_content> const content) {
             if (content.has_value()) {
                 switch (content.value()) {
-                    case app_dialog_content::open_audio_file: {
+                    case app_dialog_content::audio_file: {
                         [unowned.object openFileDialog];
                     } break;
                 }
@@ -99,7 +99,7 @@ using namespace yas::ae;
 
         if (result == NSModalResponseOK) {
             url const file_url{to_string((__bridge CFStringRef)unowned_panel.object.URL.absoluteString)};
-            unowned_self.object->_presenter->select_file(file_url);
+            unowned_self.object->_presenter->select_audio_file(file_url);
         }
     }];
 }
