@@ -19,7 +19,7 @@ struct app_dialog_level_router final {
     void remove_dialog(app_dialog_content const);
     std::shared_ptr<app_dialog_level> const &dialog_level() const;
 
-    observing::syncable observe(std::function<void(std::optional<std::shared_ptr<app_dialog_level>> const &)> &&);
+    observing::syncable observe(std::function<void(std::optional<app_dialog_content> const &)> &&);
 
    private:
     observing::value::holder_ptr<std::optional<std::shared_ptr<app_dialog_level>>> const _level;

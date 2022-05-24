@@ -46,6 +46,13 @@ std::shared_ptr<app_dialog_level> const &app_dialog_level_router::dialog_level()
 }
 
 observing::syncable app_dialog_level_router::observe(
-    std::function<void(std::optional<std::shared_ptr<app_dialog_level>> const &)> &&handler) {
-    return this->_level->observe(std::move(handler));
+    std::function<void(std::optional<app_dialog_content> const &)> &&handler) {
+    return this->_level->observe(
+        [handler = std::move(handler)](std::optional<std::shared_ptr<app_dialog_level>> const &level) {
+            if (level.has_value()) {
+                handler(level.value()->content);
+            } else {
+                handler(std::nullopt);
+            }
+        });
 }
