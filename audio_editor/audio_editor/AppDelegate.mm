@@ -8,6 +8,7 @@
 #import <audio_editor_core/ae_app_presenter.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #import <cpp_utils/yas_cf_utils.h>
+#include <cpp_utils/yas_unowned.h>
 #import <objc_utils/yas_objc_unowned.h>
 #import "AEWindowController.h"
 
@@ -35,20 +36,30 @@ using namespace yas::ae;
 
     self.windowControllers = [[NSMutableSet alloc] init];
 
-    auto unowned = [[YASUnownedObject<AppDelegate *> alloc] initWithObject:self];
+    auto const unowned = make_unowned(self);
 
     self->_presenter
         ->observe_event([unowned](auto const &event) {
             switch (event.type) {
-                case app_presenter_event_type::open_file_dialog: {
-                    [unowned.object openFileDialog];
-                } break;
                 case app_presenter_event_type::make_and_show_window_controller: {
                     [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
                 } break;
                 case app_presenter_event_type::dispose_window_controller: {
                     [unowned.object disposeWindowControllerWithProjectID:event.project_id];
                 } break;
+            }
+        })
+        .sync()
+        ->add_to(self->_pool);
+
+    self->_presenter
+        ->observe_dialog([unowned](std::optional<app_dialog_content> const content) {
+            if (content.has_value()) {
+                switch (content.value()) {
+                    case app_dialog_content::audio_file: {
+                        [unowned.object openFileDialog];
+                    } break;
+                }
             }
         })
         .sync()
@@ -61,14 +72,14 @@ using namespace yas::ae;
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
     if (aSelector == @selector(openDocument:)) {
-        return self->_presenter->can_open_file_dialog();
+        return self->_presenter->can_open_audio_file_dialog();
     } else {
         return [super respondsToSelector:aSelector];
     }
 }
 
 - (void)openDocument:(id)sender {
-    self->_presenter->open_file_dialog();
+    self->_presenter->open_audio_file_dialog();
 }
 
 #pragma mark - private
@@ -80,10 +91,17 @@ using namespace yas::ae;
     panel.canChooseDirectories = NO;
     panel.allowedContentTypes = @[UTTypeAudio];
 
-    if ([panel runModal] == NSModalResponseOK) {
-        url const file_url{to_string((__bridge CFStringRef)panel.URL.absoluteString)};
-        self->_presenter->select_file(file_url);
-    }
+    auto const unowned_self = make_unowned(self);
+    auto const unowned_panel = make_unowned(panel);
+
+    [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
+        unowned_self.object->_presenter->did_close_audio_file_dialog();
+
+        if (result == NSModalResponseOK) {
+            url const file_url{to_string((__bridge CFStringRef)unowned_panel.object.URL.absoluteString)};
+            unowned_self.object->_presenter->select_audio_file(file_url);
+        }
+    }];
 }
 
 - (void)makeAndShowWindowControllerWithProjectID:(project_id const &)project_id {
