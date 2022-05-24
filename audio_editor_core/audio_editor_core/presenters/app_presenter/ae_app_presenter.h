@@ -30,8 +30,6 @@ struct app_presenter final {
     std::weak_ptr<project_level_router_for_app_presenter> const _project_level_router;
     std::weak_ptr<app_dialog_level_router> const _dialog_level_router;
     std::weak_ptr<project_preparer> const _project_preparer;
-    observing::notifier_ptr<app_presenter_event> const _event_notifier =
-        observing::notifier<app_presenter_event>::make_shared();
 
     app_presenter(app_presenter const &) = delete;
     app_presenter(app_presenter &&) = delete;

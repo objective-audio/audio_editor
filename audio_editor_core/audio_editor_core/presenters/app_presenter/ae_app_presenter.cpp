@@ -55,13 +55,9 @@ void app_presenter::select_audio_file(url const &file_url) {
 
 observing::syncable app_presenter::observe_event(std::function<void(app_presenter_event const &)> &&handler) {
     if (auto const router = this->_project_level_router.lock()) {
-        auto syncable = router->observe_event([handler](project_level_router_event const &event) {
+        return router->observe_event([handler = std::move(handler)](project_level_router_event const &event) {
             handler(app_presenter_event{.type = to_presenter_event_type(event.type), .project_id = event.project_id});
         });
-
-        syncable.merge(this->_event_notifier->observe([handler](auto const &event) { handler(event); }));
-
-        return syncable;
     } else {
         return observing::syncable{};
     }
