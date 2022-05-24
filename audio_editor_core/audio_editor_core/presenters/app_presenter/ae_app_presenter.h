@@ -23,7 +23,7 @@ struct app_presenter final {
     void did_close_audio_file_dialog();
     void select_audio_file(url const &);
 
-    [[nodiscard]] observing::syncable observe_event(std::function<void(app_presenter_event const &)> &&);
+    [[nodiscard]] observing::syncable observe_window(std::function<void(app_presenter_window_event const &)> &&);
     [[nodiscard]] observing::syncable observe_dialog(std::function<void(std::optional<app_dialog_content>)> &&);
 
    private:

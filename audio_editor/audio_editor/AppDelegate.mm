@@ -39,12 +39,12 @@ using namespace yas::ae;
     auto const unowned = make_unowned(self);
 
     self->_presenter
-        ->observe_event([unowned](auto const &event) {
+        ->observe_window([unowned](auto const &event) {
             switch (event.type) {
-                case app_presenter_event_type::make_and_show_window_controller: {
+                case app_presenter_window_event_type::make_and_show_window_controller: {
                     [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
                 } break;
-                case app_presenter_event_type::dispose_window_controller: {
+                case app_presenter_window_event_type::dispose_window_controller: {
                     [unowned.object disposeWindowControllerWithProjectID:event.project_id];
                 } break;
             }

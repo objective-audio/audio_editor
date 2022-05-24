@@ -53,10 +53,11 @@ void app_presenter::select_audio_file(url const &file_url) {
     }
 }
 
-observing::syncable app_presenter::observe_event(std::function<void(app_presenter_event const &)> &&handler) {
+observing::syncable app_presenter::observe_window(std::function<void(app_presenter_window_event const &)> &&handler) {
     if (auto const router = this->_project_level_router.lock()) {
         return router->observe_event([handler = std::move(handler)](project_level_router_event const &event) {
-            handler(app_presenter_event{.type = to_presenter_event_type(event.type), .project_id = event.project_id});
+            handler(app_presenter_window_event{.type = to_presenter_event_type(event.type),
+                                               .project_id = event.project_id});
         });
     } else {
         return observing::syncable{};
