@@ -54,6 +54,19 @@ using namespace yas::ae;
         })
         .sync()
         ->add_to(self->_pool);
+
+    self->_presenter
+        ->observe_dialog([unowned](std::optional<app_dialog_content> const content) {
+            if (content.has_value()) {
+                switch (content.value()) {
+                    case app_dialog_content::open_audio_file: {
+                        [unowned.object openFileDialog];
+                    } break;
+                }
+            }
+        })
+        .sync()
+        ->add_to(self->_pool);
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

@@ -58,7 +58,8 @@ observing::syncable app_presenter::observe_event(std::function<void(app_presente
     }
 }
 
-observing::syncable app_presenter::observe_dialog(std::function<void(std::optional<app_dialog_content>)> &&handler) {
+observing::syncable app_presenter::observe_dialog(
+    std::function<void(std::optional<app_dialog_content> const)> &&handler) {
     if (auto const router = this->_dialog_level_router.lock()) {
         return router->observe(
             [handler = std::move(handler)](std::optional<std::shared_ptr<app_dialog_level>> const &level) {

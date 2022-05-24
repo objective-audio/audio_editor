@@ -23,7 +23,7 @@ struct app_presenter final {
     void select_file(url const &);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(app_presenter_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_dialog(std::function<void(std::optional<app_dialog_content>)> &&);
+    [[nodiscard]] observing::syncable observe_dialog(std::function<void(std::optional<app_dialog_content> const)> &&);
 
    private:
     std::weak_ptr<project_level_router_for_app_presenter> const _project_level_router;
