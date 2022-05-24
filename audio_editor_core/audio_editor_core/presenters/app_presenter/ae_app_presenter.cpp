@@ -41,9 +41,9 @@ void app_presenter::open_audio_file_dialog() {
     }
 }
 
-void app_presenter::did_close_audio_file_dialog() {
+void app_presenter::did_close_dialog(app_dialog_content const content) {
     if (auto const router = this->_dialog_level_router.lock()) {
-        router->remove_dialog(app_dialog_content::audio_file);
+        router->remove_dialog(content);
     }
 }
 

@@ -95,7 +95,7 @@ using namespace yas::ae;
     auto const unowned_panel = make_unowned(panel);
 
     [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
-        unowned_self.object->_presenter->did_close_audio_file_dialog();
+        unowned_self.object->_presenter->did_close_dialog(app_dialog_content::audio_file);
 
         if (result == NSModalResponseOK) {
             url const file_url{to_string((__bridge CFStringRef)unowned_panel.object.URL.absoluteString)};
