@@ -28,7 +28,9 @@ void app_dialog_level_router::add_dialog(app_dialog_content const content) {
 }
 
 void app_dialog_level_router::remove_dialog(app_dialog_content const content) {
-    if (this->dialog_level() == nullptr) {
+    auto const &level = this->dialog_level();
+
+    if (level == nullptr || level->content != content) {
         throw std::runtime_error("dialog_level is null.");
     }
 
