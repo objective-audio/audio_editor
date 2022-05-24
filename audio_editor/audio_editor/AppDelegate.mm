@@ -41,9 +41,6 @@ using namespace yas::ae;
     self->_presenter
         ->observe_event([unowned](auto const &event) {
             switch (event.type) {
-                case app_presenter_event_type::open_file_dialog: {
-                    [unowned.object openFileDialog];
-                } break;
                 case app_presenter_event_type::make_and_show_window_controller: {
                     [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
                 } break;
@@ -75,14 +72,14 @@ using namespace yas::ae;
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
     if (aSelector == @selector(openDocument:)) {
-        return self->_presenter->can_open_file_dialog();
+        return self->_presenter->can_open_audio_file_dialog();
     } else {
         return [super respondsToSelector:aSelector];
     }
 }
 
 - (void)openDocument:(id)sender {
-    self->_presenter->open_file_dialog();
+    self->_presenter->open_audio_file_dialog();
 }
 
 #pragma mark - private
@@ -98,6 +95,8 @@ using namespace yas::ae;
     auto const unowned_panel = make_unowned(panel);
 
     [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
+        unowned_self.object->_presenter->did_close_audio_file_dialog();
+
         if (result == NSModalResponseOK) {
             url const file_url{to_string((__bridge CFStringRef)unowned_panel.object.URL.absoluteString)};
             unowned_self.object->_presenter->select_file(file_url);

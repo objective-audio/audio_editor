@@ -18,8 +18,9 @@ struct app_presenter final {
     app_presenter(std::shared_ptr<project_level_router_for_app_presenter> const &,
                   std::shared_ptr<app_dialog_level_router> const &, std::shared_ptr<project_preparer> const &);
 
-    [[nodiscard]] bool can_open_file_dialog() const;
-    void open_file_dialog();
+    [[nodiscard]] bool can_open_audio_file_dialog() const;
+    void open_audio_file_dialog();
+    void did_close_audio_file_dialog();
     void select_file(url const &);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(app_presenter_event const &)> &&);

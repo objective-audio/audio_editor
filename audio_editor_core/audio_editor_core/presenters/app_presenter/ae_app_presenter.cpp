@@ -27,13 +27,23 @@ app_presenter::app_presenter(std::shared_ptr<project_level_router_for_app_presen
     : _project_level_router(pool), _dialog_level_router(dialog_level_router), _project_preparer(preparer) {
 }
 
-bool app_presenter::can_open_file_dialog() const {
-    return true;
+bool app_presenter::can_open_audio_file_dialog() const {
+    if (auto const router = this->_dialog_level_router.lock()) {
+        return router->dialog_level() == nullptr;
+    } else {
+        return false;
+    }
 }
 
-void app_presenter::open_file_dialog() {
-    if (this->can_open_file_dialog()) {
-        this->_event_notifier->notify(app_presenter_event{.type = app_presenter_event_type::open_file_dialog});
+void app_presenter::open_audio_file_dialog() {
+    if (auto const router = this->_dialog_level_router.lock()) {
+        router->add_dialog(app_dialog_content::open_audio_file);
+    }
+}
+
+void app_presenter::did_close_audio_file_dialog() {
+    if (auto const router = this->_dialog_level_router.lock()) {
+        router->remove_dialog(app_dialog_content::open_audio_file);
     }
 }
 
