@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_project_id.h>
 
 namespace yas::ae {
-class action_controller;
+class project_action_controller;
 
 struct modules_controller final {
     [[nodiscard]] static std::shared_ptr<modules_controller> make_shared(project_id const &project_id,
@@ -17,9 +17,10 @@ struct modules_controller final {
     void select_module_at(std::size_t const);
 
    private:
-    std::weak_ptr<action_controller> const _action_controller;
+    std::weak_ptr<project_action_controller> const _action_controller;
     std::shared_ptr<module_location_pool> const _location_pool;
 
-    modules_controller(std::shared_ptr<action_controller> const &, std::shared_ptr<module_location_pool> const &);
+    modules_controller(std::shared_ptr<project_action_controller> const &,
+                       std::shared_ptr<module_location_pool> const &);
 };
 }  // namespace yas::ae

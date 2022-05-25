@@ -3,9 +3,9 @@
 //
 
 #import "AEMetalView.h"
-#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_action_utils.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_project_action_controller.h>
 #include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_ui_event_utils.h>
 #include <cpp_utils/yas_assertion.h>
@@ -21,7 +21,7 @@ using namespace yas::ae;
 @implementation AEMetalView {
     std::weak_ptr<project_sub_level_router> _router;
     std::optional<context_menu> _shown_context_menu;
-    std::weak_ptr<action_controller> _action_controller;
+    std::weak_ptr<project_action_controller> _action_controller;
     observing::canceller_pool _pool;
 }
 
@@ -33,7 +33,7 @@ using namespace yas::ae;
 }
 
 - (void)setupWithRouter:(std::shared_ptr<project_sub_level_router> const &)router
-       actionController:(std::shared_ptr<action_controller> const &)action_controller {
+       actionController:(std::shared_ptr<project_action_controller> const &)action_controller {
     self->_router = router;
     self->_action_controller = action_controller;
 

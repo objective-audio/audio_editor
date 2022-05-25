@@ -3,9 +3,9 @@
 //
 
 #include "ae_ui_time.h"
-#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_project_action_controller.h>
 #include <audio_editor_core/ae_time_presenter.h>
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
@@ -31,7 +31,7 @@ std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &ui_project_id
 
 ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::texture> const &texture,
                  std::shared_ptr<ae::color> const &color, std::shared_ptr<time_presenter> const &presenter,
-                 std::shared_ptr<action_controller> const &action_controller)
+                 std::shared_ptr<project_action_controller> const &action_controller)
     : node(ui::node::make_shared()),
       _presenter(presenter),
       _action_controller(action_controller),
