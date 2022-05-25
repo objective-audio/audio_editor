@@ -21,7 +21,7 @@ namespace yas::ae::ui_modules_constants {
 static std::size_t const reserving_interval = 100;
 }
 
-std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &project_id,
+std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &ui_project_id,
                                                     std::shared_ptr<display_space> const &display_space,
                                                     std::shared_ptr<ui::standard> const &standard,
                                                     std::shared_ptr<ui::font_atlas> const &font_atlas,
@@ -29,8 +29,9 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &project
                                                     std::shared_ptr<ui_module_waveforms> const &waveforms) {
     auto const &app_level = hierarchy::app_level();
 
-    auto const modules_presenter = modules_presenter::make_shared(project_id.project_id, display_space, location_pool);
-    auto const modules_controller = modules_controller::make_shared(project_id.project_id, location_pool);
+    auto const modules_presenter =
+        modules_presenter::make_shared(ui_project_id.project_id, display_space, location_pool);
+    auto const modules_controller = modules_controller::make_shared(ui_project_id.project_id, location_pool);
     return std::make_shared<ui_modules>(modules_presenter, modules_controller, standard, app_level->color, font_atlas,
                                         waveforms);
 }

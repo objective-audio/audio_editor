@@ -12,7 +12,7 @@
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
-#include <objc_utils/yas_objc_unowned.h>
+#include <cpp_utils/yas_unowned.h>
 #import "AEMetalView.h"
 #import "AEModuleNameViewController.h"
 
@@ -80,7 +80,7 @@ using namespace yas::ae;
                              renderer:standard->renderer()
                         event_manager:standard->event_manager()];
 
-    auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
+    auto *const unowned_self = make_unowned(self);
 
     project_sub_level_router
         ->observe([unowned_self](std::optional<project_sub_level> const &sub_level) {
@@ -229,8 +229,8 @@ using namespace yas::ae;
     panel.allowedContentTypes = @[UTTypeAudio];
     panel.nameFieldStringValue = @"Untitled";
 
-    auto *const unowned_self = [[YASUnownedObject<AEMetalViewController *> alloc] initWithObject:self];
-    auto *const unowned_panel = [[YASUnownedObject<NSSavePanel *> alloc] initWithObject:panel];
+    auto *const unowned_self = make_unowned(self);
+    auto *const unowned_panel = make_unowned(panel);
 
     [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
         auto *const self = unowned_self.object;

@@ -12,10 +12,10 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(ui_project_id const &project_id,
+std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(ui_project_id const &ui_project_id,
                                                       std::shared_ptr<ui::standard> const &standard) {
     auto const &app_level = hierarchy::app_level();
-    auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
+    auto const &project_level = hierarchy::project_level_for_id(ui_project_id.project_id);
     return std::make_shared<ui_modal_bg>(standard, app_level->color, project_level->sub_level_router,
                                          project_level->action_controller);
 }

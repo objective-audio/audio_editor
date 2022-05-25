@@ -24,8 +24,8 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_root_level> ui_root_level::make_shared(std::shared_ptr<ui::standard> const &standard,
-                                                          ui_project_id const &project_id) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id.project_id);
+                                                          ui_project_id const &ui_project_id) {
+    auto const &project_level = hierarchy::project_level_for_id(ui_project_id.project_id);
     auto const url = project_level->project_url->editing_file();
     auto const &waveforms_mesh_importer = project_level->waveforms_mesh_importer;
 
@@ -39,14 +39,14 @@ std::shared_ptr<ui_root_level> ui_root_level::make_shared(std::shared_ptr<ui::st
         ui_mesh_data::make_shared(ui::primitive_type::line, ui::static_mesh_vertex_data::make_shared(2),
                                   ui::static_mesh_index_data::make_shared(2));
     auto const display_space = display_space::make_shared(standard->view_look()->view_layout_guide()->region());
-    auto const waveforms = ui_module_waveforms::make_shared(project_id, standard, project_level->module_location_pool,
-                                                            waveforms_mesh_importer);
-    auto const modules = ui_modules::make_shared(project_id, display_space, standard, font_atlas_14,
+    auto const waveforms = ui_module_waveforms::make_shared(
+        ui_project_id, standard, project_level->module_location_pool, waveforms_mesh_importer);
+    auto const modules = ui_modules::make_shared(ui_project_id, display_space, standard, font_atlas_14,
                                                  project_level->module_location_pool, waveforms);
-    auto const markers = ui_markers::make_shared(project_id, display_space, project_level->marker_location_pool,
+    auto const markers = ui_markers::make_shared(ui_project_id, display_space, project_level->marker_location_pool,
                                                  standard, font_atlas_14, vertical_line_data);
 
-    return std::make_shared<ui_root_level>(standard, project_id, texture, font_atlas_14, vertical_line_data,
+    return std::make_shared<ui_root_level>(standard, ui_project_id, texture, font_atlas_14, vertical_line_data,
                                            display_space, waveforms, modules, markers);
 }
 

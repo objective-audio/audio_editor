@@ -20,18 +20,16 @@ struct app_presenter final {
 
     [[nodiscard]] bool can_open_audio_file_dialog() const;
     void open_audio_file_dialog();
-    void did_close_audio_file_dialog();
+    void did_close_dialog(app_dialog_content const);
     void select_audio_file(url const &);
 
-    [[nodiscard]] observing::syncable observe_event(std::function<void(app_presenter_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_dialog(std::function<void(std::optional<app_dialog_content> const)> &&);
+    [[nodiscard]] observing::syncable observe_window(std::function<void(app_presenter_window_event const &)> &&);
+    [[nodiscard]] observing::syncable observe_dialog(std::function<void(std::optional<app_dialog_content>)> &&);
 
    private:
     std::weak_ptr<project_level_router_for_app_presenter> const _project_level_router;
     std::weak_ptr<app_dialog_level_router> const _dialog_level_router;
     std::weak_ptr<project_preparer> const _project_preparer;
-    observing::notifier_ptr<app_presenter_event> const _event_notifier =
-        observing::notifier<app_presenter_event>::make_shared();
 
     app_presenter(app_presenter const &) = delete;
     app_presenter(app_presenter &&) = delete;

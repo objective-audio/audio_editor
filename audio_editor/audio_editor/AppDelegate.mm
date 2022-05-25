@@ -36,15 +36,15 @@ using namespace yas::ae;
 
     self.windowControllers = [[NSMutableSet alloc] init];
 
-    auto const unowned = make_unowned(self);
+    auto *const unowned = make_unowned(self);
 
     self->_presenter
-        ->observe_event([unowned](auto const &event) {
+        ->observe_window([unowned](auto const &event) {
             switch (event.type) {
-                case app_presenter_event_type::make_and_show_window_controller: {
+                case app_presenter_window_event_type::make_and_show_window_controller: {
                     [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
                 } break;
-                case app_presenter_event_type::dispose_window_controller: {
+                case app_presenter_window_event_type::dispose_window_controller: {
                     [unowned.object disposeWindowControllerWithProjectID:event.project_id];
                 } break;
             }
@@ -57,7 +57,7 @@ using namespace yas::ae;
             if (content.has_value()) {
                 switch (content.value()) {
                     case app_dialog_content::audio_file: {
-                        [unowned.object openFileDialog];
+                        [unowned.object openAudioFileDialog];
                     } break;
                 }
             }
@@ -84,7 +84,7 @@ using namespace yas::ae;
 
 #pragma mark - private
 
-- (void)openFileDialog {
+- (void)openAudioFileDialog {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.allowsMultipleSelection = NO;
     panel.canChooseFiles = YES;
@@ -95,7 +95,7 @@ using namespace yas::ae;
     auto const unowned_panel = make_unowned(panel);
 
     [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
-        unowned_self.object->_presenter->did_close_audio_file_dialog();
+        unowned_self.object->_presenter->did_close_dialog(app_dialog_content::audio_file);
 
         if (result == NSModalResponseOK) {
             url const file_url{to_string((__bridge CFStringRef)unowned_panel.object.URL.absoluteString)};

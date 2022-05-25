@@ -41,9 +41,9 @@ void app_presenter::open_audio_file_dialog() {
     }
 }
 
-void app_presenter::did_close_audio_file_dialog() {
+void app_presenter::did_close_dialog(app_dialog_content const content) {
     if (auto const router = this->_dialog_level_router.lock()) {
-        router->remove_dialog(app_dialog_content::audio_file);
+        router->remove_dialog(content);
     }
 }
 
@@ -53,32 +53,20 @@ void app_presenter::select_audio_file(url const &file_url) {
     }
 }
 
-observing::syncable app_presenter::observe_event(std::function<void(app_presenter_event const &)> &&handler) {
-    if (auto const pool = this->_project_level_router.lock()) {
-        auto syncable = pool->observe_event([handler](project_level_router_event const &pool_event) {
-            handler(app_presenter_event{.type = to_presenter_event_type(pool_event.type),
-                                        .project_id = pool_event.project_id});
+observing::syncable app_presenter::observe_window(std::function<void(app_presenter_window_event const &)> &&handler) {
+    if (auto const router = this->_project_level_router.lock()) {
+        return router->observe_event([handler = std::move(handler)](project_level_router_event const &event) {
+            handler(app_presenter_window_event{.type = to_presenter_event_type(event.type),
+                                               .project_id = event.project_id});
         });
-
-        syncable.merge(this->_event_notifier->observe([handler](auto const &event) { handler(event); }));
-
-        return syncable;
     } else {
         return observing::syncable{};
     }
 }
 
-observing::syncable app_presenter::observe_dialog(
-    std::function<void(std::optional<app_dialog_content> const)> &&handler) {
+observing::syncable app_presenter::observe_dialog(std::function<void(std::optional<app_dialog_content>)> &&handler) {
     if (auto const router = this->_dialog_level_router.lock()) {
-        return router->observe(
-            [handler = std::move(handler)](std::optional<std::shared_ptr<app_dialog_level>> const &level) {
-                if (level.has_value()) {
-                    handler(level.value()->content);
-                } else {
-                    handler(std::nullopt);
-                }
-            });
+        return router->observe(std::move(handler));
     } else {
         return observing::syncable{};
     }
