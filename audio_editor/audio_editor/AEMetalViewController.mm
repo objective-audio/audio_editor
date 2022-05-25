@@ -4,7 +4,7 @@
 
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
-#include <audio_editor_core/ae_action_controller.h>
+#include <audio_editor_core/ae_project_action_controller.h>
 #include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root_level.h>
@@ -27,7 +27,7 @@ using namespace yas::ae;
     project_id _project_id;
     std::weak_ptr<ui_root_level> _root_level;
     std::weak_ptr<project_sub_level_router> _project_sub_level_router;
-    std::weak_ptr<action_controller> _action_controller;
+    std::weak_ptr<project_action_controller> _action_controller;
     observing::canceller_pool _pool;
     observing::cancellable_ptr _sheet_canceller;
 }
@@ -62,7 +62,7 @@ using namespace yas::ae;
 
 - (void)setupWithProjectID:(project_id const &)project_id
          uiRootLevelRouter:(std::shared_ptr<ae::ui_root_level_router> const &)ui_root_level_router
-          actionController:(std::shared_ptr<action_controller> const &)action_controller
+          actionController:(std::shared_ptr<project_action_controller> const &)action_controller
      projectSubLevelRouter:(std::shared_ptr<project_sub_level_router> const &)project_sub_level_router {
     self->_project_id = project_id;
 

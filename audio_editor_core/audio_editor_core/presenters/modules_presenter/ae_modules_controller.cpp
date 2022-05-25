@@ -4,8 +4,8 @@
 
 #include "ae_modules_controller.h"
 
-#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_project_action_controller.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
@@ -17,7 +17,7 @@ std::shared_ptr<modules_controller> modules_controller::make_shared(
     return std::shared_ptr<modules_controller>(new modules_controller{project_level->action_controller, location_pool});
 }
 
-modules_controller::modules_controller(std::shared_ptr<action_controller> const &action_controller,
+modules_controller::modules_controller(std::shared_ptr<project_action_controller> const &action_controller,
                                        std::shared_ptr<module_location_pool> const &location_pool)
     : _action_controller(action_controller), _location_pool(location_pool) {
 }

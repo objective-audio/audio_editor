@@ -4,7 +4,6 @@
 
 #include "ae_project_level.h"
 
-#include <audio_editor_core/ae_action_controller.h>
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_database_updater.h>
@@ -29,6 +28,7 @@
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_playing_toggler.h>
+#include <audio_editor_core/ae_project_action_controller.h>
 #include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_editor_launcher.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
@@ -75,7 +75,7 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url->editing_file())),
-      action_controller(ae::action_controller::make_shared(this->responder_stack.get())),
+      action_controller(ae::project_action_controller::make_shared(this->responder_stack.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(this->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(this->scrolling.get())),
       timing(timing::make_shared(project_format.sample_rate)),
