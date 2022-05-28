@@ -3,7 +3,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <audio_editor_core/audio_editor_core_umbrella.h>
+#import <audio_editor_core/ae_file_track.h>
 #import <cpp_utils/yas_identifier.h>
 
 using namespace yas;

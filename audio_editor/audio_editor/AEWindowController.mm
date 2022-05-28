@@ -3,7 +3,7 @@
 //
 
 #import "AEWindowController.h"
-#include <audio_editor_core/audio_editor_core_umbrella.h>
+#include <audio_editor_core/ae_window_presenter.h>
 #include <cpp_utils/yas_cf_utils.h>
 #import "AEMetalViewController.h"
 
