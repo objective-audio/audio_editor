@@ -827,7 +827,7 @@
 			isa = PBXGroup;
 			children = (
 				B668BE3C262F41110021AD20 /* app_presenter */,
-				B6DEAC692840E060001D7D53 /* project_format_presenter */,
+				B6DEAC692840E060001D7D53 /* project_setup_presenter */,
 				B6DC2CC027B64A69000EF5F9 /* edge_presenter */,
 				B60204D2263AAEA000CFC752 /* editing_root_presenter */,
 				B64504B5271A7322009E05D6 /* markers_presenter */,
@@ -1722,13 +1722,13 @@
 			path = project_launcher;
 			sourceTree = "<group>";
 		};
-		B6DEAC692840E060001D7D53 /* project_format_presenter */ = {
+		B6DEAC692840E060001D7D53 /* project_setup_presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B6DEAC6A2840E070001D7D53 /* ae_project_setup_presenter.cpp */,
 				B6DEAC6B2840E070001D7D53 /* ae_project_setup_presenter.h */,
 			);
-			path = project_format_presenter;
+			path = project_setup_presenter;
 			sourceTree = "<group>";
 		};
 		B6DEAC6E2840E296001D7D53 /* project_format_setup */ = {
