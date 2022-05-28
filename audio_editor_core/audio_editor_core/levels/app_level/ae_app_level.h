@@ -15,7 +15,7 @@ class file_info_loader;
 class color;
 class ui_root_level_router;
 class project_preparer;
-class app_dialog_level_router;
+class app_dialog_sub_level_router;
 
 struct app_level final {
     [[nodiscard]] static std::shared_ptr<app_level> make_shared();
@@ -23,7 +23,7 @@ struct app_level final {
     app_level(std::shared_ptr<worker> const &, std::shared_ptr<system_url> const &,
               std::shared_ptr<app_launcher> const &, std::shared_ptr<file_importer> const &,
               std::shared_ptr<file_info_loader> const &, std::shared_ptr<color> const &,
-              std::shared_ptr<project_level_router> const &, std::shared_ptr<app_dialog_level_router> const &,
+              std::shared_ptr<project_level_router> const &, std::shared_ptr<app_dialog_sub_level_router> const &,
               std::shared_ptr<ui_root_level_router> const &, std::shared_ptr<project_preparer> const &);
 
     std::shared_ptr<worker> const worker;
@@ -34,7 +34,7 @@ struct app_level final {
     std::shared_ptr<color> const color;
 
     std::shared_ptr<project_level_router> const project_level_router;
-    std::shared_ptr<app_dialog_level_router> const dialog_level_router;
+    std::shared_ptr<app_dialog_sub_level_router> const dialog_level_router;
     std::shared_ptr<ui_root_level_router> const ui_root_level_router;
 
     std::shared_ptr<project_preparer> const project_preparer;

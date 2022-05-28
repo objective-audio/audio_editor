@@ -13,6 +13,7 @@ class uuid_generatable;
 class system_url;
 class file_info_loader;
 class project_level_router;
+class project_format;
 
 struct project_preparer final {
     [[nodiscard]] static std::shared_ptr<project_preparer> make_shared(file_info_loader const *, ae::system_url const *,
@@ -22,6 +23,7 @@ struct project_preparer final {
                      project_level_router *);
 
     void prepare(url const &file_url);
+    void prepare(project_format const &, url const &file_url);
 
    private:
     std::shared_ptr<uuid_generatable> const _uuid_generator;

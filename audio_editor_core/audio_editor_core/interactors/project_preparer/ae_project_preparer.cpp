@@ -40,6 +40,10 @@ void project_preparer::prepare(url const &file_url) {
     project_format const format{.sample_rate = file_info.value().sample_rate,
                                 .channel_count = file_info.value().channel_count};
 
+    this->prepare(format, file_url);
+}
+
+void project_preparer::prepare(project_format const &format, url const &file_url) {
     auto const identifier = this->_uuid_generator->generate();
     project_id const project_id{.raw_value = identifier};
 
