@@ -82,7 +82,7 @@ using namespace yas::ae;
         ->add_to(self->_pool);
 }
 
-- (IBAction)sampleRetePopUpDidSelect:(NSPopUpButton *)popUp {
+- (IBAction)sampleRatePopUpDidSelect:(NSPopUpButton *)popUp {
     if (auto const setup = self->_setup.lock()) {
         setup->set_sample_rate_index(popUp.indexOfSelectedItem);
     }
