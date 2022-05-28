@@ -7,8 +7,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-static std::shared_ptr<app_dialog_level> const _null_dialog_level;
-
 std::shared_ptr<app_dialog_sub_level_router> app_dialog_sub_level_router::make_shared() {
     return std::make_shared<app_dialog_sub_level_router>();
 }
@@ -17,24 +15,8 @@ app_dialog_sub_level_router::app_dialog_sub_level_router()
     : _level(observing::value::holder<std::optional<app_dialog_sub_level>>::make_shared(std::nullopt)) {
 }
 
-void app_dialog_sub_level_router::add_dialog() {
-    if (this->_level->value()) {
-        throw std::runtime_error("level is not null.");
-    }
-
-    this->_level->set_value(app_dialog_level::make_shared());
-}
-
-void app_dialog_sub_level_router::remove_dialog() {
-    if (this->dialog_level() == nullptr) {
-        throw std::runtime_error("dialog_level is null.");
-    }
-
-    this->_level->set_value(std::nullopt);
-}
-
-std::shared_ptr<app_dialog_level> const &app_dialog_sub_level_router::dialog_level() const {
-    return get_level<app_dialog_level>(this->_level->value());
+std::optional<app_dialog_sub_level> const &app_dialog_sub_level_router::sub_level() const {
+    return this->_level->value();
 }
 
 void app_dialog_sub_level_router::add_project_format_dialog() {

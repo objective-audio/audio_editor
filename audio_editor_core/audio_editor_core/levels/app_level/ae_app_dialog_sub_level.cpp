@@ -17,6 +17,5 @@ std::shared_ptr<T> const &yas::get_level(std::optional<ae::app_dialog_sub_level>
     }
 }
 
-template std::shared_ptr<app_dialog_level> const &yas::get_level(std::optional<ae::app_dialog_sub_level> const &);
 template std::shared_ptr<project_setup_dialog_level> const &yas::get_level(
     std::optional<ae::app_dialog_sub_level> const &);
