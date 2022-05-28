@@ -61,7 +61,7 @@ using namespace yas::ae;
             } else if (auto const level = get_level<app_dialog_level>(sub_level)) {
                 [unowned.object openAudioFileDialog];
             } else if (auto const level = get_level<project_setup_dialog_level>(sub_level)) {
-                [unowned.object openProjectFormatDialog];
+                [unowned.object openProjectSetupDialog];
             }
         })
         .sync()
@@ -106,7 +106,7 @@ using namespace yas::ae;
     }];
 }
 
-- (void)openProjectFormatDialog {
+- (void)openProjectSetupDialog {
     auto const presenter = project_setup_presenter::make_shared();
 
     NSOpenPanel *panel = [NSOpenPanel openPanel];
