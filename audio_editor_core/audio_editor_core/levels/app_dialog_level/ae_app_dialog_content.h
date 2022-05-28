@@ -7,5 +7,6 @@
 namespace yas::ae {
 enum class app_dialog_content {
     audio_file,
+    project_format,
 };
 }  // namespace yas::ae

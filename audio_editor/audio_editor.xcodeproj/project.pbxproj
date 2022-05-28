@@ -36,6 +36,8 @@
 		B6A997B52629B75E00DAC3FE /* ui.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B6A997A32629B75E00DAC3FE /* ui.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B6CFC64C27EFDD2C00F0E1B7 /* ModuleName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6CFC64B27EFDD2C00F0E1B7 /* ModuleName.storyboard */; };
 		B6CFC64F27EFDF3400F0E1B7 /* AEModuleNameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6CFC64E27EFDF3400F0E1B7 /* AEModuleNameViewController.mm */; };
+		B6DEAC12283F97C0001D7D53 /* AEProjectFormatView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DEAC11283F97C0001D7D53 /* AEProjectFormatView.mm */; };
+		B6DEAC14283F97E4001D7D53 /* ProjectFormat.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6DEAC13283F97E4001D7D53 /* ProjectFormat.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -89,6 +91,9 @@
 		B6CFC64B27EFDD2C00F0E1B7 /* ModuleName.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ModuleName.storyboard; sourceTree = "<group>"; };
 		B6CFC64D27EFDF3400F0E1B7 /* AEModuleNameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEModuleNameViewController.h; sourceTree = "<group>"; };
 		B6CFC64E27EFDF3400F0E1B7 /* AEModuleNameViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AEModuleNameViewController.mm; sourceTree = "<group>"; };
+		B6DEAC10283F97C0001D7D53 /* AEProjectFormatView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEProjectFormatView.h; sourceTree = "<group>"; };
+		B6DEAC11283F97C0001D7D53 /* AEProjectFormatView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AEProjectFormatView.mm; sourceTree = "<group>"; };
+		B6DEAC13283F97E4001D7D53 /* ProjectFormat.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProjectFormat.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +145,8 @@
 				B69CF591262AE2EB007A0A75 /* AEWindowController.mm */,
 				B6CFC64D27EFDF3400F0E1B7 /* AEModuleNameViewController.h */,
 				B6CFC64E27EFDF3400F0E1B7 /* AEModuleNameViewController.mm */,
+				B6DEAC10283F97C0001D7D53 /* AEProjectFormatView.h */,
+				B6DEAC11283F97C0001D7D53 /* AEProjectFormatView.mm */,
 				B6A9971E2629B28300DAC3FE /* AppDelegate.h */,
 				B6A9971F2629B28300DAC3FE /* AppDelegate.mm */,
 				B6A997242629B28A00DAC3FE /* Assets.xcassets */,
@@ -149,6 +156,7 @@
 				B6A997262629B28A00DAC3FE /* Main.storyboard */,
 				B6690A26262A846600E86353 /* Window.storyboard */,
 				B6CFC64B27EFDD2C00F0E1B7 /* ModuleName.storyboard */,
+				B6DEAC13283F97E4001D7D53 /* ProjectFormat.xib */,
 			);
 			path = audio_editor;
 			sourceTree = "<group>";
@@ -232,6 +240,7 @@
 				B6A997252629B28A00DAC3FE /* Assets.xcassets in Resources */,
 				B6CFC64C27EFDD2C00F0E1B7 /* ModuleName.storyboard in Resources */,
 				B6A997282629B28A00DAC3FE /* Main.storyboard in Resources */,
+				B6DEAC14283F97E4001D7D53 /* ProjectFormat.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +273,7 @@
 			files = (
 				B69CF592262AE2EB007A0A75 /* AEWindowController.mm in Sources */,
 				B6CFC64F27EFDF3400F0E1B7 /* AEModuleNameViewController.mm in Sources */,
+				B6DEAC12283F97C0001D7D53 /* AEProjectFormatView.mm in Sources */,
 				B68483ED27C5010900792D17 /* AEMetalView.mm in Sources */,
 				B6A9972B2629B28A00DAC3FE /* main.m in Sources */,
 				B605EA6C2657C2FF0031B177 /* AEMetalViewController.mm in Sources */,

@@ -19,5 +19,5 @@ using project_sub_level = std::variant<std::shared_ptr<time_editor_level>, std::
 
 namespace yas {
 template <typename T>
-std::shared_ptr<T> const &get_level(std::optional<ae::project_sub_level> const &sub_level);
+std::shared_ptr<T> const &get_level(std::optional<ae::project_sub_level> const &);
 }  // namespace yas

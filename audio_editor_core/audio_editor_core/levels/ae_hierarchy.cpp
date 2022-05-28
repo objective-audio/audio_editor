@@ -4,6 +4,7 @@
 
 #include "ae_hierarchy.h"
 
+#include <audio_editor_core/ae_app_dialog_sub_level_router.h>
 #include <audio_editor_core/ae_project_level_router.h>
 
 using namespace yas;
@@ -17,6 +18,10 @@ std::shared_ptr<app_level_router> const &hierarchy::app_level_router() {
 
 std::shared_ptr<app_level> const &hierarchy::app_level() {
     return hierarchy::app_level_router()->level();
+}
+
+std::shared_ptr<project_setup_dialog_level> const &hierarchy::project_setup_dialog_level() {
+    return hierarchy::app_level()->dialog_level_router->project_setup_dialog_level();
 }
 
 std::shared_ptr<project_level> const &hierarchy::project_level_for_id(project_id const &project_id) {
