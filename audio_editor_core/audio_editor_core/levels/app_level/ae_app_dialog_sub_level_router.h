@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_app_dialog_content.h>
 #include <audio_editor_core/ae_app_dialog_sub_level.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -14,9 +13,7 @@ struct app_dialog_sub_level_router final {
 
     app_dialog_sub_level_router();
 
-    void add_dialog();
-    void remove_dialog();
-    std::shared_ptr<app_dialog_level> const &dialog_level() const;
+    [[nodiscard]] std::optional<app_dialog_sub_level> const &sub_level() const;
 
     void add_project_format_dialog();
     void remove_project_format_dialog();

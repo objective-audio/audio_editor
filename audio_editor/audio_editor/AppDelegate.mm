@@ -57,11 +57,9 @@ using namespace yas::ae;
     self->_presenter
         ->observe_dialog([unowned](std::optional<app_dialog_sub_level> const &sub_level) {
             if (!sub_level.has_value()) {
-                // do nothing.
-            } else if (auto const level = get_level<app_dialog_level>(sub_level)) {
-                [unowned.object openAudioFileDialog];
+                // panelは強制的に閉じれないので何もしない
             } else if (auto const level = get_level<project_setup_dialog_level>(sub_level)) {
-                [unowned.object openProjectFormatDialog];
+                [unowned.object openProjectSetupDialog];
             }
         })
         .sync()
@@ -86,27 +84,7 @@ using namespace yas::ae;
 
 #pragma mark - private
 
-- (void)openAudioFileDialog {
-    NSOpenPanel *panel = [NSOpenPanel openPanel];
-    panel.allowsMultipleSelection = NO;
-    panel.canChooseFiles = YES;
-    panel.canChooseDirectories = NO;
-    panel.allowedContentTypes = @[UTTypeAudio];
-
-    auto const unowned_self = make_unowned(self);
-    auto const unowned_panel = make_unowned(panel);
-
-    [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
-        if (result == NSModalResponseOK) {
-            url const file_url{to_string((__bridge CFStringRef)unowned_panel.object.URL.absoluteString)};
-            unowned_self.object->_presenter->select_audio_file(file_url);
-        }
-
-        unowned_self.object->_presenter->did_close_dialog();
-    }];
-}
-
-- (void)openProjectFormatDialog {
+- (void)openProjectSetupDialog {
     auto const presenter = project_setup_presenter::make_shared();
 
     NSOpenPanel *panel = [NSOpenPanel openPanel];

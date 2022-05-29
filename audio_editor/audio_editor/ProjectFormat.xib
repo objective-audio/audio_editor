@@ -13,10 +13,10 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3dC-29-IoM">
-                    <rect key="frame" x="20" y="15" width="340" height="50"/>
+                    <rect key="frame" x="20" y="17" width="340" height="48"/>
                     <subviews>
                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X5W-5B-bMX">
-                            <rect key="frame" x="0.0" y="30" width="192" height="20"/>
+                            <rect key="frame" x="0.0" y="28" width="192" height="20"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xOB-Ah-NJo">
                                     <rect key="frame" x="-2" y="2" width="88" height="16"/>
@@ -43,7 +43,7 @@
                                         </menu>
                                     </popUpButtonCell>
                                     <connections>
-                                        <action selector="sampleRetePopUpDidSelect:" target="0cC-5t-Ejh" id="c8s-wh-rdX"/>
+                                        <action selector="sampleRatePopUpDidSelect:" target="0cC-5t-Ejh" id="c8s-wh-rdX"/>
                                     </connections>
                                 </popUpButton>
                             </subviews>
@@ -57,10 +57,10 @@
                             </customSpacing>
                         </stackView>
                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nBs-aH-Jhn">
-                            <rect key="frame" x="0.0" y="0.0" width="340" height="22"/>
+                            <rect key="frame" x="0.0" y="0.0" width="340" height="20"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mna-R0-z10">
-                                    <rect key="frame" x="-2" y="3" width="101" height="16"/>
+                                    <rect key="frame" x="-2" y="2" width="101" height="16"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Channel Count :" id="8Ec-16-1rp">
                                         <font key="font" usesAppearanceFont="YES"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -68,7 +68,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Abf-u6-1mx">
-                                    <rect key="frame" x="103" y="-5" width="204" height="28"/>
+                                    <rect key="frame" x="103" y="-6" width="204" height="28"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="200" id="tgc-wo-GyC"/>
                                     </constraints>
@@ -78,14 +78,14 @@
                                     </connections>
                                 </slider>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GgN-DK-CfI">
-                                    <rect key="frame" x="310" y="-3" width="19" height="28"/>
+                                    <rect key="frame" x="310" y="-4" width="19" height="28"/>
                                     <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="4" doubleValue="1" id="xeT-Zi-ZYx"/>
                                     <connections>
                                         <action selector="channelStepperDidChange:" target="0cC-5t-Ejh" id="uJU-gn-euX"/>
                                     </connections>
                                 </stepper>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QHZ-cS-Bw4">
-                                    <rect key="frame" x="332" y="3" width="10" height="16"/>
+                                    <rect key="frame" x="332" y="2" width="10" height="16"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="1" id="lPp-yV-GtB">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

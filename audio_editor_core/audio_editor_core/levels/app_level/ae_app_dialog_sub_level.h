@@ -4,15 +4,13 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_app_dialog_level.h>
 #include <audio_editor_core/ae_project_setup_dialog_level.h>
 
 #include <optional>
 #include <variant>
 
 namespace yas::ae {
-using app_dialog_sub_level =
-    std::variant<std::shared_ptr<app_dialog_level>, std::shared_ptr<project_setup_dialog_level>>;
+using app_dialog_sub_level = std::variant<std::shared_ptr<project_setup_dialog_level>>;
 }
 
 namespace yas {

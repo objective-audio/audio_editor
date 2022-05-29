@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_project_action_controller.h>
 #include <audio_editor_core/ae_project_sub_level_router.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_ui_root.h>
 #include <audio_editor_core/ae_ui_root_level.h>
 #include <audio_editor_core/ae_ui_root_level_router.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>

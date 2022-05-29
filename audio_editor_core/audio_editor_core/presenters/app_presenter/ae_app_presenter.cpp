@@ -4,7 +4,6 @@
 
 #include "ae_app_presenter.h"
 
-#include <audio_editor_core/ae_app_dialog_level.h>
 #include <audio_editor_core/ae_app_dialog_sub_level_router.h>
 #include <audio_editor_core/ae_app_level.h>
 #include <audio_editor_core/ae_app_presenter_utils.h>
@@ -29,39 +28,15 @@ app_presenter::app_presenter(std::shared_ptr<project_level_router_for_app_presen
 
 bool app_presenter::can_open_dialog() const {
     if (auto const router = this->_dialog_level_router.lock()) {
-        return router->dialog_level() == nullptr;
+        return !router->sub_level().has_value();
     } else {
         return false;
-    }
-}
-
-void app_presenter::open_dialog() {
-    if (auto const router = this->_dialog_level_router.lock()) {
-        router->add_dialog();
     }
 }
 
 void app_presenter::open_project_setup_dialog() {
     if (auto const router = this->_dialog_level_router.lock()) {
         router->add_project_format_dialog();
-    }
-}
-
-void app_presenter::did_close_dialog() {
-    if (auto const router = this->_dialog_level_router.lock()) {
-        router->remove_dialog();
-    }
-}
-
-void app_presenter::select_audio_file(url const &file_url) {
-    if (auto const preparer = this->_project_preparer.lock()) {
-        preparer->prepare(file_url);
-    }
-}
-
-void app_presenter::select_project_directory(project_format const &format, url const &file_url) {
-    if (auto const preparer = this->_project_preparer.lock()) {
-        preparer->prepare(format, file_url);
     }
 }
 

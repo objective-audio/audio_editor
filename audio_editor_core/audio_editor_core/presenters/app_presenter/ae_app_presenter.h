@@ -12,7 +12,6 @@ namespace yas::ae {
 class project_preparer;
 class app_dialog_sub_level_router;
 class project_format;
-class app_dialog_level;
 
 struct app_presenter final {
     [[nodiscard]] static std::shared_ptr<app_presenter> make_shared();
@@ -21,11 +20,7 @@ struct app_presenter final {
                   std::shared_ptr<app_dialog_sub_level_router> const &, std::shared_ptr<project_preparer> const &);
 
     [[nodiscard]] bool can_open_dialog() const;
-    void open_dialog();
-    void did_close_dialog();
     void open_project_setup_dialog();
-    void select_audio_file(url const &);
-    void select_project_directory(project_format const &, url const &);
 
     [[nodiscard]] observing::syncable observe_window(std::function<void(app_presenter_window_event const &)> &&);
     [[nodiscard]] observing::syncable observe_dialog(
