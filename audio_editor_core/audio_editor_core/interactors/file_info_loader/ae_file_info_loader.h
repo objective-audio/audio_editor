@@ -8,12 +8,12 @@
 #include <audio_editor_core/ae_project_launcher_dependency.h>
 
 namespace yas::ae {
-struct file_info_loader final : file_info_loader_for_project_launcher {
+struct file_info_loader final {
     [[nodiscard]] static std::shared_ptr<file_info_loader> make_shared();
 
     file_info_loader();
 
-    [[nodiscard]] std::optional<file_info> load_file_info(url const &) const override;
+    [[nodiscard]] std::optional<file_info> load_file_info(url const &) const;
 
    private:
     file_info_loader(file_info_loader const &) = delete;

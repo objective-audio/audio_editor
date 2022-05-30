@@ -43,13 +43,20 @@ void project_preparer::prepare(url const &file_url) {
     this->prepare(format, file_url);
 }
 
-void project_preparer::prepare(project_format const &format, url const &file_url) {
+void project_preparer::prepare(project_format const &format, url const &project_url) {
     auto const identifier = this->_uuid_generator->generate();
     project_id const project_id{.raw_value = identifier};
 
-    auto const result =
-        file_manager::create_directory_if_not_exists(this->_system_url->project_directory(project_id).path());
-    if (result.is_error()) {
+    auto const exists = file_manager::content_exists(project_url.path());
+    if (exists.is_success()) {
+        switch (exists.value()) {
+            case file_manager::content_kind::directory:
+                break;
+            case file_manager::content_kind::file:
+                assertion_failure_if_not_test();
+                return;
+        }
+    } else {
         assertion_failure_if_not_test();
         return;
     }
@@ -59,5 +66,5 @@ void project_preparer::prepare(project_format const &format, url const &file_url
         return;
     }
 
-    this->_project_level_router->add_level(file_url, project_id, format);
+    this->_project_level_router->add_level(project_url, project_id, format);
 }

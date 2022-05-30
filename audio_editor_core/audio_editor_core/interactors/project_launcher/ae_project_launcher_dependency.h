@@ -15,17 +15,7 @@
 #include <cpp_utils/yas_identifier.h>
 #include <cpp_utils/yas_url.h>
 
-namespace yas::proc {
-class timeline;
-}
-
 namespace yas::ae {
-struct file_info_loader_for_project_launcher {
-    virtual ~file_info_loader_for_project_launcher() = default;
-
-    [[nodiscard]] virtual std::optional<file_info> load_file_info(url const &) const = 0;
-};
-
 class responder;
 
 struct responder_stack_for_project_launcher {

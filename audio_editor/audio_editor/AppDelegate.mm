@@ -89,9 +89,9 @@ using namespace yas::ae;
 
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.allowsMultipleSelection = NO;
-    panel.canChooseFiles = YES;       // NO
-    panel.canChooseDirectories = NO;  // YES
-    panel.canCreateDirectories = NO;  // YES
+    panel.canChooseFiles = NO;
+    panel.canChooseDirectories = YES;
+    panel.canCreateDirectories = YES;
     panel.accessoryView = [AEProjectFormatView instantiate];
 
     auto const unowned_self = make_unowned(self);

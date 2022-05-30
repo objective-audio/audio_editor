@@ -4,43 +4,40 @@
 
 #include "ae_project_launcher.h"
 
+#include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
+#include <audio_editor_core/ae_timeline_holder.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_launcher> project_launcher::make_shared(
-    identifier const &instance_id, url const &file_url, file_info_loader_for_project_launcher const *file_info_loader,
+    identifier const &instance_id, project_format const &project_format,
     responder_stack_for_project_launcher *responder_stack, project_state_holder_for_project_launcher *state_holder,
+    player *player, timeline_holder const *timeline_holder,
     std::shared_ptr<project_editor_responder> const &responder) {
-    return std::make_shared<ae::project_launcher>(instance_id, file_url, file_info_loader, responder_stack,
-                                                  state_holder, responder);
+    return std::make_shared<ae::project_launcher>(instance_id, project_format, responder_stack, state_holder, player,
+                                                  timeline_holder, responder);
 }
 
-project_launcher::project_launcher(identifier const &instance_id, url const &file_url,
-                                   file_info_loader_for_project_launcher const *file_info_loader,
+project_launcher::project_launcher(identifier const &instance_id, project_format const &project_format,
                                    responder_stack_for_project_launcher *responder_stack,
-                                   project_state_holder_for_project_launcher *state_holder,
+                                   project_state_holder_for_project_launcher *state_holder, player *player,
+                                   timeline_holder const *timeline_holder,
                                    std::shared_ptr<project_editor_responder> const &responder)
     : _instance_id(instance_id),
-      _file_url(file_url),
-      _file_info_loader(file_info_loader),
+      _project_format(project_format),
       _responder_stack(responder_stack),
       _state_holder(state_holder),
+      _player(player),
+      _timeline_holder(timeline_holder),
       _responder(responder) {
 }
 
 void project_launcher::launch() {
     if (this->_state_holder->state() != project_state::launching) {
         assertion_failure_if_not_test();
-        return;
-    }
-
-    auto const file_info = this->_file_info_loader->load_file_info(this->_file_url);
-    if (!file_info.has_value()) {
-        assertion_failure_if_not_test();
-        this->_state_holder->set_state(project_state::failure);
         return;
     }
 
@@ -53,6 +50,10 @@ void project_launcher::launch() {
     this->_state_holder->set_state(project_state::loading);
 
     this->_responder_stack->push_responder(this->_instance_id, responder);
+
+    this->_player->set_timeline(this->_timeline_holder->timeline(), this->_project_format.sample_rate,
+                                audio::pcm_format::float32);
+    this->_player->begin_rendering();
 
     this->_state_holder->set_state(project_state::editing);
 }

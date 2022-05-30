@@ -26,8 +26,9 @@ project_level_router::project_level_router(std::shared_ptr<uuid_generatable> con
     : _uuid_generator(uuid_generator), _file_info_loader(file_info_loader) {
 }
 
-void project_level_router::add_level(url const &file_url, project_id const &project_id, project_format const &format) {
-    auto const project_level = project_level::make_shared(project_id, format, file_url);
+void project_level_router::add_level(url const &project_url, project_id const &project_id,
+                                     project_format const &format) {
+    auto const project_level = project_level::make_shared(project_id, format, project_url);
 
     this->_project_levels->insert_or_replace(project_id, std::make_pair(project_level, nullptr));
 

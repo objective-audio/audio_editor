@@ -51,7 +51,7 @@ database_updater::database_updater(file_track *file_track, marker_pool *marker_p
                 } break;
             }
         })
-        .sync()
+        .end()
         ->add_to(this->_pool);
 
     this->_marker_pool
@@ -74,7 +74,7 @@ database_updater::database_updater(file_track *file_track, marker_pool *marker_p
                     break;
             }
         })
-        .sync()
+        .end()
         ->add_to(this->_pool);
 
     this->_edge_holder
@@ -89,7 +89,7 @@ database_updater::database_updater(file_track *file_track, marker_pool *marker_p
                     break;
             }
         })
-        .sync()
+        .end()
         ->add_to(this->_pool);
 
     this->_pasteboard
@@ -103,6 +103,6 @@ database_updater::database_updater(file_track *file_track, marker_pool *marker_p
                     break;
             }
         })
-        .sync()
+        .end()
         ->add_to(this->_pool);
 }

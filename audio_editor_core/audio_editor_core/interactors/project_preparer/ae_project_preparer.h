@@ -23,7 +23,7 @@ struct project_preparer final {
                      project_level_router *);
 
     void prepare(url const &file_url);
-    void prepare(project_format const &, url const &file_url);
+    void prepare(project_format const &, url const &project_url);
 
    private:
     std::shared_ptr<uuid_generatable> const _uuid_generator;
