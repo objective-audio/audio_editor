@@ -956,6 +956,7 @@
 				B6370CC62798522100449D03 /* time_editor */,
 				B6F3D6A127E20B870013E00B /* time_editor_responder */,
 				B63D715F282244C2004235BD /* time_editor_closer */,
+				B675F93B2765CB84002FE285 /* waveform_mesh_importer */,
 			);
 			path = interactors;
 			sourceTree = "<group>";
@@ -1021,14 +1022,6 @@
 				B66F5D6527AE2EA900441616 /* ae_color.mm */,
 			);
 			path = color;
-			sourceTree = "<group>";
-		};
-		B64C9FAD2820C53600E571D8 /* ui_interactors */ = {
-			isa = PBXGroup;
-			children = (
-				B675F93B2765CB84002FE285 /* waveform_mesh_importer */,
-			);
-			path = ui_interactors;
 			sourceTree = "<group>";
 		};
 		B64D080527F0222F00EB6FD5 /* module_name_presenter */ = {
@@ -1454,7 +1447,6 @@
 				B6A997452629B34E00DAC3FE /* Info.plist */,
 				B634FDB7263C2C0B0096E69F /* presenters */,
 				B605EA6D2657E51B0031B177 /* ui */,
-				B64C9FAD2820C53600E571D8 /* ui_interactors */,
 			);
 			path = audio_editor_core;
 			sourceTree = "<group>";
