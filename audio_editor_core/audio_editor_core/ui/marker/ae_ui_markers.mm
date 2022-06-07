@@ -10,7 +10,7 @@
 #include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_marker_element.h>
 #include <audio_editor_core/ae_ui_mesh_data.h>
-#include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_root_lifetime.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -25,10 +25,10 @@ std::shared_ptr<ui_markers> ui_markers::make_shared(ui_project_id const &ui_proj
                                                     std::shared_ptr<ui::standard> const &standard,
                                                     std::shared_ptr<ui::font_atlas> const &font_atlas,
                                                     std::shared_ptr<ui_mesh_data> const &vertical_line_data) {
-    auto const &app_level = hierarchy::app_level();
+    auto const &app_lifetime = hierarchy::app_lifetime();
 
     auto const presenter = markers_presenter::make_shared(ui_project_id.project_id, display_space, location_pool);
-    auto const &color = app_level->color;
+    auto const &color = app_lifetime->color;
     return std::make_shared<ui_markers>(presenter, standard, font_atlas, color, vertical_line_data);
 }
 

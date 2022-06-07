@@ -13,7 +13,7 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_modal_bg.h>
-#include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_root_lifetime.h>
 #include <audio_editor_core/ae_ui_scroller.h>
 #include <audio_editor_core/ae_ui_time.h>
 #include <audio_editor_core/ae_ui_track.h>
@@ -28,14 +28,14 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id cons
                                                               std::shared_ptr<ui_scroller> const &ui_scroller,
                                                               std::shared_ptr<ui_modal_bg> const &ui_modal_bg,
                                                               std::shared_ptr<ui_time> const &ui_time) {
-    auto const &app_level = hierarchy::app_level();
-    auto const &project_level = hierarchy::project_level_for_id(ui_project_id.project_id);
+    auto const &app_lifetime = hierarchy::app_lifetime();
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.project_id);
 
     auto const presenter = editing_root_presenter::make_shared(ui_project_id.project_id);
 
-    return std::make_shared<ui_editing_root>(standard, font_atlas, app_level->color, presenter,
-                                             project_level->action_controller, project_level->pinch_gesture_controller,
-                                             keyboard, ui_scroller, ui_modal_bg, ui_time);
+    return std::make_shared<ui_editing_root>(
+        standard, font_atlas, app_lifetime->color, presenter, project_lifetime->action_controller,
+        project_lifetime->pinch_gesture_controller, keyboard, ui_scroller, ui_modal_bg, ui_time);
 }
 
 ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,

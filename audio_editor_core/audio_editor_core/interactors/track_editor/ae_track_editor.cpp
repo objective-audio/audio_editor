@@ -16,7 +16,7 @@
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_closer.h>
-#include <audio_editor_core/ae_time_editor_level.h>
+#include <audio_editor_core/ae_time_editor_lifetime.h>
 #include <audio_editor_core/ae_time_editor_responder.h>
 #include <audio_editor_core/ae_timeline_holder_utils.h>
 #include <cpp_utils/yas_fast_each.h>

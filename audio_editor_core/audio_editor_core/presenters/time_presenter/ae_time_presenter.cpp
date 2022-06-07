@@ -7,9 +7,9 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_sub_level_router.h>
+#include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_time_editor.h>
-#include <audio_editor_core/ae_time_editor_level.h>
+#include <audio_editor_core/ae_time_editor_lifetime.h>
 #include <audio_editor_core/ae_time_presenter_utils.h>
 #include <audio_editor_core/ae_timing.h>
 #include <cpp_utils/yas_fast_each.h>
@@ -18,27 +18,27 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<time_presenter> time_presenter::make_shared(project_id const &project_id) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<time_presenter>(project_level->timing, project_level->player, project_level->nudge_settings,
-                                            project_level->sub_level_router);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    return std::make_shared<time_presenter>(project_lifetime->timing, project_lifetime->player,
+                                            project_lifetime->nudge_settings, project_lifetime->modal_lifecycle);
 }
 
 time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::shared_ptr<player> const &player,
                                std::shared_ptr<nudge_settings> const &nudge_settings,
-                               std::shared_ptr<project_sub_level_router> const &project_sub_level_router)
+                               std::shared_ptr<project_modal_lifecycle> const &project_modal_lifecycle)
     : _timing(timing),
       _player(player),
       _nudge_settings(nudge_settings),
-      _project_sub_level_router(project_sub_level_router) {
+      _project_modal_lifecycle(project_modal_lifecycle) {
     this->_range_fetcher =
         observing::fetcher<std::optional<index_range>>::make_shared([this] { return this->editing_time_text_range(); });
 
-    project_sub_level_router
+    project_modal_lifecycle
         ->observe([this, cancellable = observing::cancellable_ptr{nullptr}](
-                      std::optional<project_sub_level> const &sub_level) mutable {
-            if (auto const &level = get_level<time_editor_level>(sub_level)) {
+                      std::optional<project_sub_lifetime> const &sub_lifetime) mutable {
+            if (auto const &lifetime = get<time_editor_lifetime>(sub_lifetime)) {
                 cancellable =
-                    level->editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
+                    lifetime->editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
             } else {
                 cancellable = nullptr;
                 this->_range_fetcher->push();
@@ -49,8 +49,8 @@ time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::share
 }
 
 std::string time_presenter::time_text() const {
-    if (auto const &level = this->_level()) {
-        return time_presenter_utils::time_text(level->editor->editing_components());
+    if (auto const &lifetime = this->_lifetime()) {
+        return time_presenter_utils::time_text(lifetime->editor->editing_components());
     } else {
         auto const player = this->_player.lock();
         auto const timing = this->_timing.lock();
@@ -82,16 +82,16 @@ std::vector<index_range> time_presenter::time_text_unit_ranges() const {
 }
 
 std::optional<std::size_t> time_presenter::editing_unit_index() const {
-    if (auto const &level = this->_level()) {
-        return level->editor->unit_index();
+    if (auto const &lifetime = this->_lifetime()) {
+        return lifetime->editor->unit_index();
     } else {
         return std::nullopt;
     }
 }
 
 std::optional<index_range> time_presenter::editing_time_text_range() const {
-    if (auto &level = this->_level()) {
-        auto const &time_editor = level->editor;
+    if (auto &lifetime = this->_lifetime()) {
+        auto const &time_editor = lifetime->editor;
         return time_presenter_utils::to_time_text_range(time_editor->editing_components(), time_editor->unit_index());
     } else {
         return std::nullopt;
@@ -119,11 +119,11 @@ observing::syncable time_presenter::observe_nudging_unit_index(std::function<voi
     }
 }
 
-std::shared_ptr<time_editor_level> const &time_presenter::_level() const {
-    if (auto const router = this->_project_sub_level_router.lock()) {
-        return router->time_editor_level();
+std::shared_ptr<time_editor_lifetime> const &time_presenter::_lifetime() const {
+    if (auto const lifecycle = this->_project_modal_lifecycle.lock()) {
+        return lifecycle->time_editor_lifetime();
     }
 
-    static std::shared_ptr<time_editor_level> const null_level;
-    return null_level;
+    static std::shared_ptr<time_editor_lifetime> const null_lifetime;
+    return null_lifetime;
 }

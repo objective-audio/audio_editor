@@ -4,8 +4,8 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
-#include <audio_editor_core/ae_app_dialog_sub_level.h>
-#include <audio_editor_core/ae_app_level.h>
+#include <audio_editor_core/ae_app_dialog_sub_lifetime.h>
+#include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_app_presenter.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_setup_presenter.h>
@@ -33,7 +33,7 @@ using namespace yas::ae;
         return;
     }
 
-    hierarchy::app_level_router()->add_level();
+    hierarchy::app_lifecycle()->add();
     self->_presenter = app_presenter::make_shared();
 
     self.windowControllers = [[NSMutableSet alloc] init];
@@ -55,10 +55,10 @@ using namespace yas::ae;
         ->add_to(self->_pool);
 
     self->_presenter
-        ->observe_dialog([unowned](std::optional<app_dialog_sub_level> const &sub_level) {
-            if (!sub_level.has_value()) {
+        ->observe_dialog([unowned](std::optional<app_dialog_sub_lifetime> const &sub_lifetime) {
+            if (!sub_lifetime.has_value()) {
                 // panelは強制的に閉じれないので何もしない
-            } else if (auto const level = get_level<project_setup_dialog_level>(sub_level)) {
+            } else if (auto const lifetime = get<project_setup_dialog_lifetime>(sub_lifetime)) {
                 [unowned.object openProjectSetupDialog];
             }
         })

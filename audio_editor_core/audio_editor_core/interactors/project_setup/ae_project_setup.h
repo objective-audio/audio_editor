@@ -11,12 +11,12 @@
 namespace yas::ae {
 class project_format_setup;
 class project_preparer;
-class app_dialog_sub_level_router;
+class app_dialog_lifecycle;
 
 struct project_setup final {
     [[nodiscard]] static std::shared_ptr<project_setup> make_shared(project_format_setup *);
 
-    project_setup(project_format_setup *, project_preparer *, app_dialog_sub_level_router *);
+    project_setup(project_format_setup *, project_preparer *, app_dialog_lifecycle *);
 
     void select_directory(url const &);
     void finalize();
@@ -24,6 +24,6 @@ struct project_setup final {
    private:
     project_format_setup *const _format_setup;
     project_preparer *_preparer;
-    app_dialog_sub_level_router *_router;
+    app_dialog_lifecycle *_lifecycle;
 };
 }  // namespace yas::ae

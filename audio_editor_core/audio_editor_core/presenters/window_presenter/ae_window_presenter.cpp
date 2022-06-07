@@ -12,8 +12,8 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<window_presenter> window_presenter::make_shared(ae::project_id const &project_id) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<window_presenter>(project_id, project_level->project_url, project_level->closer);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    return std::make_shared<window_presenter>(project_id, project_lifetime->project_url, project_lifetime->closer);
 }
 
 window_presenter::window_presenter(ae::project_id const &project_id, std::shared_ptr<project_url> const &project_url,

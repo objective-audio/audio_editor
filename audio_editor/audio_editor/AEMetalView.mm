@@ -6,7 +6,7 @@
 #include <audio_editor_core/ae_action_utils.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_action_controller.h>
-#include <audio_editor_core/ae_project_sub_level_router.h>
+#include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_event_utils.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
@@ -19,31 +19,31 @@ using namespace yas::ae;
 @end
 
 @implementation AEMetalView {
-    std::weak_ptr<project_sub_level_router> _router;
+    std::weak_ptr<project_modal_lifecycle> _lifecycle;
     std::optional<context_menu> _shown_context_menu;
     std::weak_ptr<project_action_controller> _action_controller;
     observing::canceller_pool _pool;
 }
 
 - (void)setupWithProjectID:(project_id const &)project_id {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    auto const &router = project_level->sub_level_router;
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    auto const &lifecycle = project_lifetime->modal_lifecycle;
 
-    [self setupWithRouter:router actionController:project_level->action_controller];
+    [self setupWithLifecycle:lifecycle actionController:project_lifetime->action_controller];
 }
 
-- (void)setupWithRouter:(std::shared_ptr<project_sub_level_router> const &)router
-       actionController:(std::shared_ptr<project_action_controller> const &)action_controller {
-    self->_router = router;
+- (void)setupWithLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)lifecycle
+          actionController:(std::shared_ptr<project_action_controller> const &)action_controller {
+    self->_lifecycle = lifecycle;
     self->_action_controller = action_controller;
 
     auto *const unowned = make_unowned(self);
 
-    router
-        ->observe([unowned](std::optional<project_sub_level> const &sub_level) {
-            if (auto const &level = get_level<context_menu_level>(sub_level)) {
+    lifecycle
+        ->observe([unowned](std::optional<project_sub_lifetime> const &sub_lifetime) {
+            if (auto const &lifetime = get<context_menu_lifetime>(sub_lifetime)) {
                 auto *const view = unowned.object;
-                [view showContextMenu:level->context_menu];
+                [view showContextMenu:lifetime->context_menu];
             }
         })
         .end()
@@ -90,19 +90,19 @@ using namespace yas::ae;
 }
 
 - (void)contextMenuItemClicked:(NSMenuItem *)menuItem {
-    auto const router = self->_router.lock();
-    if (!router) {
+    auto const lifecycle = self->_lifecycle.lock();
+    if (!lifecycle) {
         assertion_failure_if_not_test();
         return;
     }
 
-    auto const &level = router->context_menu_level();
-    if (!level) {
+    auto const &lifetime = lifecycle->context_menu_lifetime();
+    if (!lifetime) {
         assertion_failure_if_not_test();
         return;
     }
 
-    auto const &context_menu = level->context_menu;
+    auto const &context_menu = lifetime->context_menu;
     auto const &idx = menuItem.tag;
     if (idx < context_menu.actions.size()) {
         if (auto const &action = context_menu.actions.at(idx)) {
@@ -128,13 +128,13 @@ using namespace yas::ae;
 
         AEMetalView *self = wself;
 
-        auto const router = self->_router.lock();
-        if (!router) {
+        auto const lifecycle = self->_lifecycle.lock();
+        if (!lifecycle) {
             assertion_failure_if_not_test();
             return;
         }
 
-        router->remove_context_menu();
+        lifecycle->remove_context_menu();
         self->_shown_context_menu = std::nullopt;
     });
 }

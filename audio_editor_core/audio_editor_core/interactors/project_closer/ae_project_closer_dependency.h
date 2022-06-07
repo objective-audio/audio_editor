@@ -17,10 +17,10 @@ struct file_importer_for_project_closer {
 
 class project_id;
 
-struct project_level_router_for_project_closer {
-    virtual ~project_level_router_for_project_closer() = default;
+struct project_lifecycle_for_project_closer {
+    virtual ~project_lifecycle_for_project_closer() = default;
 
-    virtual void remove_level(ae::project_id const &project_id) = 0;
+    virtual void remove_lifetime(ae::project_id const &project_id) = 0;
 };
 
 enum class project_state;

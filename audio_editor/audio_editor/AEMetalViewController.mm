@@ -5,11 +5,11 @@
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
 #include <audio_editor_core/ae_project_action_controller.h>
-#include <audio_editor_core/ae_project_sub_level_router.h>
+#include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root.h>
-#include <audio_editor_core/ae_ui_root_level.h>
-#include <audio_editor_core/ae_ui_root_level_router.h>
+#include <audio_editor_core/ae_ui_root_lifecycle.h>
+#include <audio_editor_core/ae_ui_root_lifetime.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
@@ -26,8 +26,8 @@ using namespace yas::ae;
 
 @implementation AEMetalViewController {
     project_id _project_id;
-    std::weak_ptr<ui_root_level> _root_level;
-    std::weak_ptr<project_sub_level_router> _project_sub_level_router;
+    std::weak_ptr<ui_root_lifetime> _root_lifetime;
+    std::weak_ptr<project_modal_lifecycle> _project_modal_lifecycle;
     std::weak_ptr<project_action_controller> _action_controller;
     observing::canceller_pool _pool;
     observing::cancellable_ptr _sheet_canceller;
@@ -48,34 +48,34 @@ using namespace yas::ae;
 - (void)viewDidDisappear {
     [super viewDidDisappear];
 
-    hierarchy::app_level()->ui_root_level_router->remove_level_for_view_id(self.project_view_id);
+    hierarchy::app_lifetime()->ui_root_lifecycle->remove_lifetime_for_view_id(self.project_view_id);
 }
 
 - (void)setupWithProjectID:(project_id const &)project_id {
-    auto const &ui_root_level_router = hierarchy::app_level()->ui_root_level_router;
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
+    auto const &ui_root_lifecycle = hierarchy::app_lifetime()->ui_root_lifecycle;
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
 
     [self setupWithProjectID:project_id
-            uiRootLevelRouter:ui_root_level_router
-             actionController:project_level->action_controller
-        projectSubLevelRouter:project_level->sub_level_router];
+              uiRootLifecycle:ui_root_lifecycle
+             actionController:project_lifetime->action_controller
+        projectModalLifecycle:project_lifetime->modal_lifecycle];
 }
 
 - (void)setupWithProjectID:(project_id const &)project_id
-         uiRootLevelRouter:(std::shared_ptr<ae::ui_root_level_router> const &)ui_root_level_router
+           uiRootLifecycle:(std::shared_ptr<ae::ui_root_lifecycle> const &)ui_root_lifecycle
           actionController:(std::shared_ptr<project_action_controller> const &)action_controller
-     projectSubLevelRouter:(std::shared_ptr<project_sub_level_router> const &)project_sub_level_router {
+     projectModalLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)project_modal_lifecycle {
     self->_project_id = project_id;
 
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
-    ui_root_level_router->add_level(standard, {.project_id = project_id, .view_id = self.project_view_id});
-    self->_root_level = ui_root_level_router->level_for_view_id(self.project_view_id);
+    ui_root_lifecycle->add_lifetime(standard, {.project_id = project_id, .view_id = self.project_view_id});
+    self->_root_lifetime = ui_root_lifecycle->lifetime_for_view_id(self.project_view_id);
 
     self->_action_controller = action_controller;
-    self->_project_sub_level_router = project_sub_level_router;
+    self->_project_modal_lifecycle = project_modal_lifecycle;
 
     [self configure_with_metal_system:metal_system
                              renderer:standard->renderer()
@@ -83,20 +83,20 @@ using namespace yas::ae;
 
     auto *const unowned_self = make_unowned(self);
 
-    project_sub_level_router
-        ->observe([unowned_self](std::optional<project_sub_level> const &sub_level) {
+    project_modal_lifecycle
+        ->observe([unowned_self](std::optional<project_sub_lifetime> const &sub_lifetime) {
             auto *const self = unowned_self.object;
 
-            if (!sub_level.has_value()) {
+            if (!sub_lifetime.has_value()) {
                 [self hideModal];
-            } else if (auto const &level = get_level<sheet_level>(sub_level)) {
-                switch (level->content.kind) {
+            } else if (auto const &lifetime = get<sheet_lifetime>(sub_lifetime)) {
+                switch (lifetime->content.kind) {
                     case sheet_kind::module_name:
-                        [self showModuleNameSheetWithValue:level->content.value];
+                        [self showModuleNameSheetWithValue:lifetime->content.value];
                         break;
                 }
-            } else if (auto const &level = get_level<dialog_level>(sub_level)) {
-                switch (level->content) {
+            } else if (auto const &lifetime = get<dialog_lifetime>(sub_lifetime)) {
+                switch (lifetime->content) {
                     case dialog_content::select_file_for_import:
                         [self showSelectFileForImportDialog];
                         break;
@@ -194,8 +194,8 @@ using namespace yas::ae;
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     if (auto const action = [self actionForSelector:menuItem.action]) {
-        if (auto const ui_root_level = self->_root_level.lock()) {
-            return ui_root_level->root->responds_to_action(action.value());
+        if (auto const ui_root_lifetime = self->_root_lifetime.lock()) {
+            return ui_root_lifetime->root->responds_to_action(action.value());
         }
     }
     return NO;
@@ -246,8 +246,8 @@ using namespace yas::ae;
         auto *const self = unowned_self.object;
         auto *const panel = unowned_panel.object;
 
-        if (auto const router = self->_project_sub_level_router.lock()) {
-            router->remove_dialog();
+        if (auto const lifecycle = self->_project_modal_lifecycle.lock()) {
+            lifecycle->remove_dialog();
         } else {
             assertion_failure_if_not_test();
         }
@@ -274,8 +274,8 @@ using namespace yas::ae;
         auto *const self = unowned_self.object;
         auto *const panel = unowned_panel.object;
 
-        if (auto const router = self->_project_sub_level_router.lock()) {
-            router->remove_dialog();
+        if (auto const lifecycle = self->_project_modal_lifecycle.lock()) {
+            lifecycle->remove_dialog();
         } else {
             assertion_failure_if_not_test();
         }

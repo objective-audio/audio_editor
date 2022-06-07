@@ -6,7 +6,7 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_mesh_data.h>
-#include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_root_lifetime.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -14,9 +14,9 @@ using namespace yas::ae;
 std::shared_ptr<ui_edge_element> ui_edge_element::make_shared(std::string const &text, args const &args,
                                                               std::shared_ptr<ui::standard> const &standard,
                                                               std::shared_ptr<ui::font_atlas> const &font_atlas) {
-    auto const &app_level = hierarchy::app_level();
+    auto const &app_lifetime = hierarchy::app_lifetime();
 
-    return std::make_shared<ui_edge_element>(text, standard, font_atlas, app_level->color, args);
+    return std::make_shared<ui_edge_element>(text, standard, font_atlas, app_lifetime->color, args);
 }
 
 ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::standard> const &standard,

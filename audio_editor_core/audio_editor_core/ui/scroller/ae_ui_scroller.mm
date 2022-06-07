@@ -21,8 +21,8 @@ std::shared_ptr<ui_scroller> ui_scroller::make_shared(ui_project_id const &ui_pr
                                                       std::shared_ptr<ui_edge> const &edge,
                                                       std::shared_ptr<ui_markers> const &markers) {
     auto const presenter = scroller_presenter::make_shared(ui_project_id.project_id);
-    auto const &project_level = hierarchy::project_level_for_id(ui_project_id.project_id);
-    return std::make_shared<ui_scroller>(standard, presenter, project_level->scroll_gesture_controller, track, edge,
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.project_id);
+    return std::make_shared<ui_scroller>(standard, presenter, project_lifetime->scroll_gesture_controller, track, edge,
                                          markers);
 }
 

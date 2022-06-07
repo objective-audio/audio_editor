@@ -12,7 +12,7 @@
 #include <memory>
 
 namespace yas::ae {
-class project_sub_level_router;
+class project_modal_lifecycle;
 class editing_status;
 class edge_holder;
 class player;
@@ -21,11 +21,11 @@ class timeline_holder;
 
 struct export_interactor final {
     [[nodiscard]] static std::shared_ptr<export_interactor> make_shared(project_format const &,
-                                                                        project_sub_level_router *,
+                                                                        project_modal_lifecycle *,
                                                                         editing_status const *, edge_holder const *,
                                                                         player *, exporter *, timeline_holder const *);
 
-    export_interactor(project_format const &, project_sub_level_router *, editing_status const *, edge_holder const *,
+    export_interactor(project_format const &, project_modal_lifecycle *, editing_status const *, edge_holder const *,
                       player *, exporter *, timeline_holder const *);
 
     [[nodiscard]] bool can_select_file_for_export() const;
@@ -35,7 +35,7 @@ struct export_interactor final {
 
    private:
     project_format const _project_format;
-    project_sub_level_router *const _router;
+    project_modal_lifecycle *const _lifecycle;
     editing_status const *const _editing_status;
     edge_holder const *const _edge_holder;
     player *const _player;

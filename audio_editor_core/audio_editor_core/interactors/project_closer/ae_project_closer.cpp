@@ -11,19 +11,19 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_closer> project_closer::make_shared(
-    project_id const &project_id, file_importer_for_project_closer *file_importer,
-    project_level_router_for_project_closer *project_level_router,
-    project_state_holder_for_project_closer *state_holder) {
-    return std::make_shared<project_closer>(project_id, file_importer, project_level_router, state_holder);
+std::shared_ptr<project_closer> project_closer::make_shared(project_id const &project_id,
+                                                            file_importer_for_project_closer *file_importer,
+                                                            project_lifecycle_for_project_closer *project_lifecycle,
+                                                            project_state_holder_for_project_closer *state_holder) {
+    return std::make_shared<project_closer>(project_id, file_importer, project_lifecycle, state_holder);
 }
 
 project_closer::project_closer(project_id const &project_id, file_importer_for_project_closer *file_importer,
-                               project_level_router_for_project_closer *project_level_router,
+                               project_lifecycle_for_project_closer *project_lifecycle,
                                project_state_holder_for_project_closer *state_holder)
     : _project_id(project_id),
       _file_importer(file_importer),
-      _project_level_router(project_level_router),
+      _project_lifecycle(project_lifecycle),
       _status(state_holder) {
 }
 
@@ -48,5 +48,5 @@ void project_closer::request_close() {
             break;
     }
 
-    this->_project_level_router->remove_level(this->_project_id);
+    this->_project_lifecycle->remove_lifetime(this->_project_id);
 }

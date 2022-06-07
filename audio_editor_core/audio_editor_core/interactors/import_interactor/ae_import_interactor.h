@@ -9,15 +9,15 @@
 #include <memory>
 
 namespace yas::ae {
-class project_sub_level_router;
+class project_modal_lifecycle;
 class editing_status;
 class file_module_loader;
 
 struct import_interactor final {
-    [[nodiscard]] static std::shared_ptr<import_interactor> make_shared(project_sub_level_router *,
+    [[nodiscard]] static std::shared_ptr<import_interactor> make_shared(project_modal_lifecycle *,
                                                                         editing_status const *, file_module_loader *);
 
-    import_interactor(project_sub_level_router *, editing_status const *, file_module_loader *);
+    import_interactor(project_modal_lifecycle *, editing_status const *, file_module_loader *);
 
     [[nodiscard]] bool can_select_file_for_import() const;
     void select_file_for_import();
@@ -25,7 +25,7 @@ struct import_interactor final {
     void import_from_file(url const &file_url);
 
    private:
-    project_sub_level_router *const _router;
+    project_modal_lifecycle *const _lifecycle;
     editing_status const *const _editing_status;
     file_module_loader *const _file_module_loader;
 };

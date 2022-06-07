@@ -46,7 +46,7 @@ using namespace yas::ae;
 }
 
 - (void)setup {
-    auto const &setup = hierarchy::project_setup_dialog_level()->format_setup;
+    auto const &setup = hierarchy::project_setup_dialog_lifetime()->format_setup;
     self->_setup = setup;
 
     [self.sampleRatePopUp removeAllItems];

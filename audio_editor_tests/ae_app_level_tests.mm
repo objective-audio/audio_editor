@@ -3,31 +3,31 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <audio_editor_core/ae_app_level.h>
+#import <audio_editor_core/ae_app_lifetime.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-@interface ae_app_level_tests : XCTestCase
+@interface ae_app_lifetime_tests : XCTestCase
 
 @end
 
-@implementation ae_app_level_tests
+@implementation ae_app_lifetime_tests
 
 - (void)test_make_shared {
-    auto const app_level = app_level::make_shared();
+    auto const lifetime = app_lifetime::make_shared();
 
-    XCTAssertTrue(app_level != nullptr);
+    XCTAssertTrue(lifetime != nullptr);
 
-    XCTAssertTrue(app_level->worker != nullptr);
-    XCTAssertTrue(app_level->system_url != nullptr);
-    XCTAssertTrue(app_level->launcher != nullptr);
-    XCTAssertTrue(app_level->file_importer != nullptr);
-    XCTAssertTrue(app_level->file_info_loader != nullptr);
-    XCTAssertTrue(app_level->color != nullptr);
+    XCTAssertTrue(lifetime->worker != nullptr);
+    XCTAssertTrue(lifetime->system_url != nullptr);
+    XCTAssertTrue(lifetime->launcher != nullptr);
+    XCTAssertTrue(lifetime->file_importer != nullptr);
+    XCTAssertTrue(lifetime->file_info_loader != nullptr);
+    XCTAssertTrue(lifetime->color != nullptr);
 
-    XCTAssertTrue(app_level->project_level_router != nullptr);
-    XCTAssertTrue(app_level->ui_root_level_router != nullptr);
+    XCTAssertTrue(lifetime->project_lifecycle != nullptr);
+    XCTAssertTrue(lifetime->ui_root_lifecycle != nullptr);
 }
 
 @end
