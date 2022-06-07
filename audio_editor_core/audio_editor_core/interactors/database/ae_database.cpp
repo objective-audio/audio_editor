@@ -142,7 +142,7 @@ void database::undo() {
         return;
     }
 
-    this->_revert(this->_current_save_id() - 1);
+    this->_revert(this->_current_save_id() - 1, false);
 }
 
 bool database::can_redo() const {
@@ -158,7 +158,7 @@ void database::redo() {
         return;
     }
 
-    this->_revert(this->_current_save_id() + 1);
+    this->_revert(this->_current_save_id() + 1, false);
 }
 
 observing::endable database::observe_reverted(std::function<void(void)> &&handler) {
@@ -169,8 +169,12 @@ void database::_setup() {
     this->_increment_processing_count();
 
     this->_manager->setup([weak_db = this->weak_from_this()](db::manager_result_t result) mutable {
-        if (auto database = weak_db.lock()) {
+        assert(thread::is_main());
+
+        if (auto const database = weak_db.lock()) {
             database->_decrement_processing_count();
+
+            database->_revert(database->_current_save_id(), true);
         }
     });
 }
@@ -191,8 +195,8 @@ db::integer::type const &database::_last_save_id() const {
     return this->_manager->last_save_id().get<db::integer>();
 }
 
-void database::_revert(db::integer::type const revert_id) {
-    if (this->_last_save_id() < revert_id || this->_current_save_id() == revert_id) {
+void database::_revert(db::integer::type const revert_id, bool const current_allowed) {
+    if (this->_last_save_id() < revert_id || (this->_current_save_id() == revert_id && !current_allowed)) {
         assertion_failure_if_not_test();
         return;
     }
@@ -231,6 +235,8 @@ void database::_revert(db::integer::type const revert_id) {
                 }
 
                 database->_modules = std::move(modules);
+            } else {
+                assertion_failure_if_not_test();
             }
         });
 
@@ -261,6 +267,8 @@ void database::_revert(db::integer::type const revert_id) {
                 }
 
                 database->_markers = std::move(markers);
+            } else {
+                assertion_failure_if_not_test();
             }
         });
 
@@ -286,6 +294,35 @@ void database::_revert(db::integer::type const revert_id) {
                         database->_pasting_subject.emplace(objects.at(0));
                     }
                 }
+            } else {
+                assertion_failure_if_not_test();
+            }
+        });
+
+    this->_manager->fetch_objects(
+        db::no_cancellation,
+        [] {
+            return db::to_fetch_option(
+                db::select_option{.table = db_constants::edge_name::entity,
+                                  .field_orders = {{db::object_id_field, db::order::ascending}}});
+        },
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+            assert(thread::is_main());
+
+            auto const database = weak_db.lock();
+            if (database && result) {
+                auto const &result_objects = result.value();
+
+                database->_edge.reset();
+
+                if (result_objects.contains(db_constants::edge_name::entity)) {
+                    auto const &objects = result_objects.at(db_constants::edge_name::entity);
+                    if (!objects.empty()) {
+                        database->_edge.emplace(objects.at(0));
+                    }
+                }
+            } else {
+                assertion_failure_if_not_test();
             }
         });
 
@@ -297,6 +334,8 @@ void database::_revert(db::integer::type const revert_id) {
             if (database) {
                 database->_reverted_notifier->notify();
                 database->_decrement_processing_count();
+            } else {
+                assertion_failure_if_not_test();
             }
         });
     });

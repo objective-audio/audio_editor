@@ -142,6 +142,8 @@ void time_editor_responder::handle_action(ae::action const &action) {
                 case action_kind::go_to_marker:
                 case action_kind::undo:
                 case action_kind::redo:
+                case action_kind::select_file_for_import:
+                case action_kind::import_from_file:
                 case action_kind::select_file_for_export:
                 case action_kind::export_to_file:
                 case action_kind::cut:
@@ -210,6 +212,8 @@ responding time_editor_responder::responding_to_action(ae::action const &action)
         case action_kind::go_to_marker:
         case action_kind::undo:
         case action_kind::redo:
+        case action_kind::select_file_for_import:
+        case action_kind::import_from_file:
         case action_kind::select_file_for_export:
         case action_kind::export_to_file:
         case action_kind::cut:

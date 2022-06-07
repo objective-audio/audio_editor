@@ -29,10 +29,6 @@ url system_url::playing_directory() const {
     return this->app_directory().appending("playing");
 }
 
-url system_url::project_directory(project_id const &project_id) const {
-    return this->app_directory().appending(project_id.raw_value);
-}
-
 std::shared_ptr<system_url> system_url::make_shared() {
     return std::shared_ptr<system_url>(new system_url{});
 }

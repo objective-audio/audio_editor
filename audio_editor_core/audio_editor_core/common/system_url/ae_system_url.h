@@ -12,7 +12,6 @@ struct system_url final {
     [[nodiscard]] url document_directory() const;
     [[nodiscard]] url app_directory() const;
     [[nodiscard]] url playing_directory() const;
-    [[nodiscard]] url project_directory(project_id const &project_id) const;
 
     [[nodiscard]] static std::shared_ptr<system_url> make_shared();
 

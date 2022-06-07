@@ -31,15 +31,4 @@ using namespace yas::ae;
     XCTAssertEqual(document_url.last_path_component(), "Documents");
 }
 
-- (void)test_project_directory {
-    auto const system_url = system_url::make_shared();
-    auto const project_url = system_url->project_directory({"TEST_PROJECT_ID"});
-
-    XCTAssertEqual(project_url.last_path_component(), "TEST_PROJECT_ID");
-
-    auto const app_url = project_url.deleting_last_path_component();
-
-    XCTAssertEqual(app_url.last_path_component(), "audio_editor_app");
-}
-
 @end

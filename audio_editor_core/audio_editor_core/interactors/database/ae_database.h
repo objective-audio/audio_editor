@@ -37,6 +37,8 @@ struct database final : std::enable_shared_from_this<database> {
 
     void suspend_saving(std::function<void(void)> &&);
 
+    void restore();
+
     [[nodiscard]] bool can_undo() const;
     void undo();
 
@@ -67,6 +69,6 @@ struct database final : std::enable_shared_from_this<database> {
     db::integer::type const &_last_save_id() const;
 
     void _save();
-    void _revert(db::integer::type const revert_id);
+    void _revert(db::integer::type const revert_id, bool const current_allowed);
 };
 }  // namespace yas::ae

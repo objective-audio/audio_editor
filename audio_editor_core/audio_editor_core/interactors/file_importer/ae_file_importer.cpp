@@ -9,6 +9,8 @@
 #include <cpp_utils/yas_file_manager.h>
 #include <cpp_utils/yas_thread.h>
 
+#include <thread>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -83,6 +85,8 @@ file_importer::file_importer(workable_ptr const &worker, uint32_t const priority
         audio::pcm_buffer copying_buffer{proc_format, max_copy_length};
 
         while (true) {
+            std::this_thread::yield();
+
             auto const cancel_ids = resource->pull_cancel_ids();
             if (contains(cancel_ids, context.project_id.raw_value)) {
                 wrapped_completion(false);
@@ -100,6 +104,8 @@ file_importer::file_importer(workable_ptr const &worker, uint32_t const priority
             if (copying_buffer.frame_length() == 0) {
                 break;
             }
+
+            std::this_thread::yield();
 
             auto write_result = dst_file.value()->write_from_buffer(copying_buffer);
             if (write_result.is_error()) {

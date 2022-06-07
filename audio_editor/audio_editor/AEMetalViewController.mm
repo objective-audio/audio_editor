@@ -97,6 +97,9 @@ using namespace yas::ae;
                 }
             } else if (auto const &level = get_level<dialog_level>(sub_level)) {
                 switch (level->content) {
+                    case dialog_content::select_file_for_import:
+                        [self showSelectFileForImportDialog];
+                        break;
                     case dialog_content::select_file_for_export:
                         [self showSelectFileForExportDialog];
                         break;
@@ -157,6 +160,12 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)importFromFile:(id)sender {
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::select_file_for_import);
+    }
+}
+
 - (IBAction)exportToFile:(id)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
         action_controller->handle_action(action_kind::select_file_for_export);
@@ -209,6 +218,8 @@ using namespace yas::ae;
         return action_kind::undo;
     } else if (selector == @selector(redo:)) {
         return action_kind::redo;
+    } else if (selector == @selector(importFromFile:)) {
+        return action_kind::select_file_for_import;
     } else if (selector == @selector(exportToFile:)) {
         return action_kind::select_file_for_export;
     } else if (selector == @selector(cut:)) {
@@ -224,6 +235,32 @@ using namespace yas::ae;
 
 #pragma mark -
 
+- (void)showSelectFileForImportDialog {
+    auto *const panel = [NSOpenPanel openPanel];
+    panel.allowedContentTypes = @[UTTypeAudio];
+
+    auto *const unowned_self = make_unowned(self);
+    auto *const unowned_panel = make_unowned(panel);
+
+    [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
+        auto *const self = unowned_self.object;
+        auto *const panel = unowned_panel.object;
+
+        if (auto const router = self->_project_sub_level_router.lock()) {
+            router->remove_dialog();
+        } else {
+            assertion_failure_if_not_test();
+        }
+
+        if (result == NSModalResponseOK) {
+            auto const path = to_string((__bridge CFStringRef)panel.URL.path);
+            if (auto const action_controller = self->_action_controller.lock()) {
+                action_controller->handle_action({action_kind::import_from_file, path});
+            }
+        }
+    }];
+}
+
 - (void)showSelectFileForExportDialog {
     auto *const panel = [NSSavePanel savePanel];
     panel.canCreateDirectories = YES;
@@ -237,17 +274,17 @@ using namespace yas::ae;
         auto *const self = unowned_self.object;
         auto *const panel = unowned_panel.object;
 
+        if (auto const router = self->_project_sub_level_router.lock()) {
+            router->remove_dialog();
+        } else {
+            assertion_failure_if_not_test();
+        }
+
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
             if (auto const action_controller = self->_action_controller.lock()) {
                 action_controller->handle_action({action_kind::export_to_file, path});
             }
-        }
-
-        if (auto const router = self->_project_sub_level_router.lock()) {
-            router->remove_dialog();
-        } else {
-            assertion_failure_if_not_test();
         }
     }];
 }

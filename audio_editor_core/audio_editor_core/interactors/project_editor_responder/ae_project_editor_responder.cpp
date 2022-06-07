@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_export_interactor.h>
+#include <audio_editor_core/ae_import_interactor.h>
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_editor.h>
 #include <audio_editor_core/ae_module_renaming_launcher.h>
@@ -23,11 +24,11 @@ using namespace yas::ae;
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
     track_editor *track_editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger,
     jumper *jumper, edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
-    module_renaming_launcher *module_renaming_launcher, timing *timing, export_interactor *export_interactor,
-    reverter *reverter) {
-    return std::make_shared<project_editor_responder>(track_editor, toggler, nudge_settings, nudger, jumper,
-                                                      edge_editor, time_editor_launcher, marker_editor,
-                                                      module_renaming_launcher, timing, export_interactor, reverter);
+    module_renaming_launcher *module_renaming_launcher, timing *timing, import_interactor *import_interactor,
+    export_interactor *export_interactor, reverter *reverter) {
+    return std::make_shared<project_editor_responder>(
+        track_editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher, marker_editor,
+        module_renaming_launcher, timing, import_interactor, export_interactor, reverter);
 }
 
 project_editor_responder::project_editor_responder(track_editor *track_editor, playing_toggler *toggler,
@@ -35,6 +36,7 @@ project_editor_responder::project_editor_responder(track_editor *track_editor, p
                                                    edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
                                                    marker_editor *marker_editor,
                                                    module_renaming_launcher *module_renaming_launcher, timing *timing,
+                                                   import_interactor *import_interactor,
                                                    export_interactor *export_interactor, reverter *reverter)
     : _editor(track_editor),
       _playing_toggler(toggler),
@@ -46,6 +48,7 @@ project_editor_responder::project_editor_responder(track_editor *track_editor, p
       _marker_editor(marker_editor),
       _module_renaming_launcher(module_renaming_launcher),
       _timing(timing),
+      _import_interactor(import_interactor),
       _export_interactor(export_interactor),
       _reverter(reverter) {
 }
@@ -189,6 +192,12 @@ void project_editor_responder::handle_action(ae::action const &action) {
                 case action_kind::redo:
                     this->_reverter->redo();
                     break;
+                case action_kind::select_file_for_import:
+                    this->_import_interactor->select_file_for_import();
+                    break;
+                case action_kind::import_from_file:
+                    this->_import_interactor->import_from_file(url::file_url(action.value));
+                    break;
                 case action_kind::select_file_for_export:
                     this->_export_interactor->select_file_for_export();
                     break;
@@ -287,6 +296,10 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
         case action_kind::redo:
             return to_responding(this->_reverter->can_redo());
 
+        case action_kind::select_file_for_import:
+            return to_responding(this->_import_interactor->can_select_file_for_import());
+        case action_kind::import_from_file:
+            return to_responding(this->_import_interactor->can_import_from_file());
         case action_kind::select_file_for_export:
             return to_responding(this->_export_interactor->can_select_file_for_export());
         case action_kind::export_to_file:

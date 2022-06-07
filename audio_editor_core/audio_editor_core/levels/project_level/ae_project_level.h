@@ -43,6 +43,7 @@ class jumper;
 class time_editor_launcher;
 class marker_editor;
 class module_renaming_launcher;
+class import_interactor;
 class export_interactor;
 class database_updater;
 class timeline_updater;
@@ -51,7 +52,6 @@ class file_module_loading_state_holder;
 class file_module_loader;
 class track_editor;
 class project_editor_responder;
-class project_editor_launcher;
 class project_action_controller;
 class pinch_gesture_controller;
 class scroll_gesture_controller;
@@ -59,15 +59,14 @@ class waveform_mesh_importer;
 
 struct project_level final {
     [[nodiscard]] static std::shared_ptr<project_level> make_shared(project_id const &, project_format const &,
-                                                                    url const &file_url);
+                                                                    url const &project_url);
 
-    project_level(ae::project_id const &, project_format const &, url const &file_url,
+    project_level(ae::project_id const &, project_format const &, url const &project_url,
                   std::shared_ptr<app_level> const &);
 
     identifier const instance_id;
     ae::project_id const project_id;
     project_format const project_format;
-    url const file_url;
 
     std::shared_ptr<ae::project_url> const project_url;
     std::shared_ptr<ae::zooming_pair> const zooming_pair;
@@ -107,8 +106,8 @@ struct project_level final {
     std::shared_ptr<reverter> const reverter;
     std::shared_ptr<file_module_loading_state_holder> const file_module_loading_state_holder;
     std::shared_ptr<file_module_loader> const file_module_loader;
+    std::shared_ptr<import_interactor> const import_interactor;
     std::shared_ptr<track_editor> const track_editor;
-    std::shared_ptr<project_editor_launcher> const editor_launcher;
     std::shared_ptr<project_editor_responder> const responder;
 
     std::shared_ptr<ae::project_launcher> const launcher;

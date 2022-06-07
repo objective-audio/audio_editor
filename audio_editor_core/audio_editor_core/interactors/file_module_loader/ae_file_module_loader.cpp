@@ -90,10 +90,6 @@ void file_module_loader::load(url const &src_url) {
                      loader->_edge_holder->set_edge(
                          {.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
                  });
-
-                 loader->_player->set_timeline(loader->_timeline_holder->timeline(), file_info.value().sample_rate,
-                                               audio::pcm_format::float32);
-                 loader->_player->begin_rendering();
              }
 
              loader->_state_holder->set_state(file_module_loading_state::loaded);

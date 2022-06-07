@@ -18,6 +18,7 @@
 #include <audio_editor_core/ae_file_module_loading_state_holder.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_import_interactor.h>
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_editor.h>
 #include <audio_editor_core/ae_marker_pool.h>
@@ -30,7 +31,6 @@
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_action_controller.h>
 #include <audio_editor_core/ae_project_closer.h>
-#include <audio_editor_core/ae_project_editor_launcher.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_level_router.h>
@@ -55,16 +55,15 @@ using namespace yas::ae;
 
 std::shared_ptr<project_level> project_level::make_shared(ae::project_id const &project_id,
                                                           ae::project_format const &project_format,
-                                                          url const &file_url) {
-    return std::make_shared<project_level>(project_id, project_format, file_url, hierarchy::app_level());
+                                                          url const &project_url) {
+    return std::make_shared<project_level>(project_id, project_format, project_url, hierarchy::app_level());
 }
 
 project_level::project_level(ae::project_id const &project_id, ae::project_format const &project_format,
-                             url const &file_url, std::shared_ptr<app_level> const &app_level)
+                             url const &project_url, std::shared_ptr<app_level> const &app_level)
     : project_id(project_id),
       project_format(project_format),
-      file_url(file_url),
-      project_url(project_url::make_shared(app_level->system_url->project_directory(project_id))),
+      project_url(project_url::make_shared(project_url)),
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_level->system_url->playing_directory(), project_id, this->scrolling.get())),
@@ -114,15 +113,16 @@ project_level::project_level(ae::project_id const &project_id, ae::project_forma
           project_id, this->project_url.get(), this->project_format, this->player.get(),
           this->file_module_loading_state_holder.get(), this->database.get(), this->file_track.get(),
           this->edge_holder.get(), this->timeline_holder.get())),
+      import_interactor(import_interactor::make_shared(this->sub_level_router.get(), this->editing_status.get(),
+                                                       this->file_module_loader.get())),
       track_editor(track_editor::make_shared(this->player.get(), this->file_track.get(), this->marker_pool.get(),
                                              this->pasteboard.get(), this->database.get(), this->editing_status.get())),
-      editor_launcher(project_editor_launcher::make_shared(file_url, this->file_module_loader.get())),
       responder(project_editor_responder::make_shared(
           this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
           this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),
-          this->module_renaming_launcher.get(), this->timing.get(), this->export_interactor.get(),
-          this->reverter.get())),
-      launcher(project_launcher::make_shared(this->instance_id, file_url, app_level->file_info_loader.get(),
-                                             this->responder_stack.get(), this->state_holder.get(), this->responder)) {
-    this->editor_launcher->launch();
+          this->module_renaming_launcher.get(), this->timing.get(), this->import_interactor.get(),
+          this->export_interactor.get(), this->reverter.get())),
+      launcher(project_launcher::make_shared(this->instance_id, this->project_format, this->responder_stack.get(),
+                                             this->state_holder.get(), this->player.get(), this->timeline_holder.get(),
+                                             this->responder)) {
 }
