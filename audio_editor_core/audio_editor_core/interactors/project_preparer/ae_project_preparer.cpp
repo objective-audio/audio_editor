@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_level_router.h>
+#include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_uuid_generator.h>
 #include <cpp_utils/yas_assertion.h>
@@ -17,17 +17,17 @@ using namespace yas::ae;
 
 std::shared_ptr<project_preparer> project_preparer::make_shared(file_info_loader const *file_info_loader,
                                                                 ae::system_url const *system_url,
-                                                                project_level_router *router) {
-    return std::make_shared<project_preparer>(uuid_generator::make_shared(), system_url, file_info_loader, router);
+                                                                project_lifecycle *lifecycle) {
+    return std::make_shared<project_preparer>(uuid_generator::make_shared(), system_url, file_info_loader, lifecycle);
 }
 
 project_preparer::project_preparer(std::shared_ptr<uuid_generatable> const &uuid_generator,
                                    ae::system_url const *system_url, file_info_loader const *file_info_loader,
-                                   project_level_router *router)
+                                   project_lifecycle *lifecycle)
     : _uuid_generator(uuid_generator),
       _system_url(system_url),
       _file_info_loader(file_info_loader),
-      _project_level_router(router) {
+      _project_lifecycle(lifecycle) {
 }
 
 void project_preparer::prepare(url const &file_url) {
@@ -61,10 +61,10 @@ void project_preparer::prepare(project_format const &format, url const &project_
         return;
     }
 
-    if (this->_project_level_router->level_for_id(project_id) != nullptr) {
+    if (this->_project_lifecycle->lifetime_for_id(project_id) != nullptr) {
         assertion_failure_if_not_test();
         return;
     }
 
-    this->_project_level_router->add_level(project_url, project_id, format);
+    this->_project_lifecycle->add_lifetime(project_url, project_id, format);
 }

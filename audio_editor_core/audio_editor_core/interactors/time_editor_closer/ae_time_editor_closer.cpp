@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_sub_level_router.h>
+#include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_timing.h>
@@ -16,18 +16,18 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(project_id const &project_id,
-                                                                    identifier const level_instance_id,
+                                                                    identifier const lifetime_instance_id,
                                                                     time_editor *editor) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<time_editor_closer>(level_instance_id, editor, project_level->sub_level_router.get(),
-                                                project_level->responder_stack.get(), project_level->timing.get(),
-                                                project_level->player.get());
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    return std::make_shared<time_editor_closer>(lifetime_instance_id, editor, project_lifetime->modal_lifecycle.get(),
+                                                project_lifetime->responder_stack.get(), project_lifetime->timing.get(),
+                                                project_lifetime->player.get());
 }
 
-time_editor_closer::time_editor_closer(identifier const level_instance_id, time_editor *editor,
-                                       project_sub_level_router *router, responder_stack *responder_stack,
+time_editor_closer::time_editor_closer(identifier const lifetime_instance_id, time_editor *editor,
+                                       project_modal_lifecycle *lifecycle, responder_stack *responder_stack,
                                        timing *timing, player *player)
-    : _level_instance_id(level_instance_id), _dependencies({editor, router, responder_stack, timing, player}) {
+    : _lifetime_instance_id(lifetime_instance_id), _dependencies({editor, lifecycle, responder_stack, timing, player}) {
 }
 
 void time_editor_closer::finish() {
@@ -71,13 +71,13 @@ void time_editor_closer::_finalize() {
     }
 
     auto const &dependencies = this->_dependencies.value();
-    auto *router = dependencies.router;
+    auto *lifecycle = dependencies.modal_lifecycle;
     auto *responder_stack = dependencies.responder_stack;
 
     this->_dependencies.reset();
 
-    responder_stack->pop_responder(this->_level_instance_id);
-    router->remove_time_editor();
+    responder_stack->pop_responder(this->_lifetime_instance_id);
+    lifecycle->remove_time_editor();
 }
 
 bool time_editor_closer::can_finish() {

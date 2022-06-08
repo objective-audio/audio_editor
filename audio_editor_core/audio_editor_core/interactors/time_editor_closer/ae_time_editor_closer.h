@@ -13,18 +13,18 @@
 namespace yas::ae {
 class time_editor;
 class time_editor_state;
-class project_sub_level_router;
+class project_modal_lifecycle;
 class responder_stack;
 class timing;
 class player;
 
 struct time_editor_closer final {
     [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(project_id const &project_id,
-                                                                         identifier const level_instance_id,
+                                                                         identifier const lifetime_instance_id,
                                                                          time_editor *);
 
-    time_editor_closer(identifier const level_instance_id, time_editor *, project_sub_level_router *, responder_stack *,
-                       timing *, player *);
+    time_editor_closer(identifier const lifetime_instance_id, time_editor *, project_modal_lifecycle *,
+                       responder_stack *, timing *, player *);
 
     void finish();
     void cancel();
@@ -33,11 +33,11 @@ struct time_editor_closer final {
     bool can_cancel();
 
    private:
-    identifier const _level_instance_id;
+    identifier const _lifetime_instance_id;
 
     struct dependencies {
         time_editor *const editor;
-        project_sub_level_router *const router;
+        project_modal_lifecycle *const modal_lifecycle;
         responder_stack *const responder_stack;
         timing *const timing;
         player *const player;

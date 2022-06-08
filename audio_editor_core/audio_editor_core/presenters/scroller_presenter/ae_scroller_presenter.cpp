@@ -12,9 +12,9 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<scroller_presenter> scroller_presenter::make_shared(project_id const &project_id) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::make_shared<scroller_presenter>(project_level->project_format, project_level->player,
-                                                project_level->zooming_pair);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    return std::make_shared<scroller_presenter>(project_lifetime->project_format, project_lifetime->player,
+                                                project_lifetime->zooming_pair);
 }
 
 scroller_presenter::scroller_presenter(project_format const &project_format, std::shared_ptr<player> const &player,

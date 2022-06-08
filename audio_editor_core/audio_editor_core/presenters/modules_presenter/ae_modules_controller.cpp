@@ -13,8 +13,9 @@ using namespace yas::ae;
 
 std::shared_ptr<modules_controller> modules_controller::make_shared(
     project_id const &project_id, std::shared_ptr<module_location_pool> const &location_pool) {
-    auto const &project_level = hierarchy::project_level_for_id(project_id);
-    return std::shared_ptr<modules_controller>(new modules_controller{project_level->action_controller, location_pool});
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    return std::shared_ptr<modules_controller>(
+        new modules_controller{project_lifetime->action_controller, location_pool});
 }
 
 modules_controller::modules_controller(std::shared_ptr<project_action_controller> const &action_controller,

@@ -12,7 +12,7 @@
 #include <audio_editor_core/ae_modules_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
-#include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_root_lifetime.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -27,13 +27,13 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &ui_proj
                                                     std::shared_ptr<ui::font_atlas> const &font_atlas,
                                                     std::shared_ptr<module_location_pool> const &location_pool,
                                                     std::shared_ptr<ui_module_waveforms> const &waveforms) {
-    auto const &app_level = hierarchy::app_level();
+    auto const &app_lifetime = hierarchy::app_lifetime();
 
     auto const modules_presenter =
         modules_presenter::make_shared(ui_project_id.project_id, display_space, location_pool);
     auto const modules_controller = modules_controller::make_shared(ui_project_id.project_id, location_pool);
-    return std::make_shared<ui_modules>(modules_presenter, modules_controller, standard, app_level->color, font_atlas,
-                                        waveforms);
+    return std::make_shared<ui_modules>(modules_presenter, modules_controller, standard, app_lifetime->color,
+                                        font_atlas, waveforms);
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,

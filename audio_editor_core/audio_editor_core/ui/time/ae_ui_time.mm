@@ -10,7 +10,7 @@
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
-#include <audio_editor_core/ae_ui_root_level.h>
+#include <audio_editor_core/ae_ui_root_lifetime.h>
 #include <audio_editor_core/ae_ui_time_constants.h>
 #include <audio_editor_core/ae_ui_types.h>
 #include <cpp_utils/yas_fast_each.h>
@@ -23,10 +23,11 @@ std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &ui_project_id
                                               std::shared_ptr<ui::texture> const &texture) {
     auto const presenter = time_presenter::make_shared(ui_project_id.project_id);
 
-    auto const &app_level = hierarchy::app_level();
-    auto const &project_level = hierarchy::project_level_for_id(ui_project_id.project_id);
+    auto const &app_lifetime = hierarchy::app_lifetime();
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.project_id);
 
-    return std::make_shared<ui_time>(standard, texture, app_level->color, presenter, project_level->action_controller);
+    return std::make_shared<ui_time>(standard, texture, app_lifetime->color, presenter,
+                                     project_lifetime->action_controller);
 }
 
 ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::texture> const &texture,

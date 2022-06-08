@@ -12,14 +12,14 @@ namespace yas::ae {
 class timing;
 class player;
 class nudge_settings;
-class time_editor_level;
-class project_sub_level_router;
+class time_editor_lifetime;
+class project_modal_lifecycle;
 
 struct time_presenter final {
     [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(project_id const &);
 
     time_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &,
-                   std::shared_ptr<nudge_settings> const &, std::shared_ptr<project_sub_level_router> const &);
+                   std::shared_ptr<nudge_settings> const &, std::shared_ptr<project_modal_lifecycle> const &);
 
     [[nodiscard]] std::string time_text() const;
     [[nodiscard]] std::vector<index_range> time_text_unit_ranges() const;
@@ -35,12 +35,12 @@ struct time_presenter final {
     std::weak_ptr<timing> const _timing;
     std::weak_ptr<player> const _player;
     std::weak_ptr<nudge_settings> const _nudge_settings;
-    std::weak_ptr<project_sub_level_router> const _project_sub_level_router;
+    std::weak_ptr<project_modal_lifecycle> const _project_modal_lifecycle;
 
     observing::fetcher_ptr<std::optional<index_range>> _range_fetcher;
 
     observing::canceller_pool _pool;
 
-    std::shared_ptr<time_editor_level> const &_level() const;
+    std::shared_ptr<time_editor_lifetime> const &_lifetime() const;
 };
 }  // namespace yas::ae

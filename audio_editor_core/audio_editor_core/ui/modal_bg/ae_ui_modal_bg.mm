@@ -6,7 +6,7 @@
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_project_action_controller.h>
-#include <audio_editor_core/ae_project_sub_level_router.h>
+#include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 
 using namespace yas;
@@ -14,14 +14,14 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(ui_project_id const &ui_project_id,
                                                       std::shared_ptr<ui::standard> const &standard) {
-    auto const &app_level = hierarchy::app_level();
-    auto const &project_level = hierarchy::project_level_for_id(ui_project_id.project_id);
-    return std::make_shared<ui_modal_bg>(standard, app_level->color, project_level->sub_level_router,
-                                         project_level->action_controller);
+    auto const &app_lifetime = hierarchy::app_lifetime();
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.project_id);
+    return std::make_shared<ui_modal_bg>(standard, app_lifetime->color, project_lifetime->modal_lifecycle,
+                                         project_lifetime->action_controller);
 }
 
 ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
-                         std::shared_ptr<project_sub_level_router> const &project_sub_level_router,
+                         std::shared_ptr<project_modal_lifecycle> const &project_modal_lifecycle,
                          std::shared_ptr<project_action_controller> const &action_controller)
     : node(ui::node::make_shared()),
       _color(color),
@@ -45,8 +45,10 @@ ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::sha
         .end()
         ->add_to(this->_pool);
 
-    project_sub_level_router
-        ->observe([this](auto const &level) { this->_button->rect_plane()->node()->set_is_enabled(level.has_value()); })
+    project_modal_lifecycle
+        ->observe([this](auto const &sub_lifetime) {
+            this->_button->rect_plane()->node()->set_is_enabled(sub_lifetime.has_value());
+        })
         .sync()
         ->add_to(this->_pool);
 

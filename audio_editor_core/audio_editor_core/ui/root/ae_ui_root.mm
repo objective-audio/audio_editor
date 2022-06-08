@@ -3,7 +3,7 @@
 //
 
 #include "ae_ui_root.h"
-#include <audio_editor_core/ae_app_level.h>
+#include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_hierarchy.h>
@@ -18,9 +18,9 @@ using namespace yas::ae;
 std::shared_ptr<ui_root> ui_root::make_shared(std::shared_ptr<ui::standard> const &standard,
                                               ui_project_id const &ui_project_id,
                                               std::shared_ptr<ui_editing_root> const &editing_root) {
-    auto const &app_level = hierarchy::app_level();
+    auto const &app_lifetime = hierarchy::app_lifetime();
     auto const presenter = root_presenter::make_shared(ui_project_id.project_id);
-    return std::shared_ptr<ui_root>(new ui_root{app_level->color, standard, presenter, editing_root});
+    return std::shared_ptr<ui_root>(new ui_root{app_lifetime->color, standard, presenter, editing_root});
 }
 
 ui_root::ui_root(std::shared_ptr<ae::color> const &color, std::shared_ptr<ui::standard> const &standard,
