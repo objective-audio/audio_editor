@@ -23,13 +23,12 @@ std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
     auto const system_url = system_url::make_shared();
     auto const file_info_loader = file_info_loader::make_shared();
     auto const project_lifecycle = project_lifecycle::make_shared(file_info_loader);
-    auto const dialog_lifecycle = app_dialog_lifecycle::make_shared();
-    auto const color = ae::color::make_shared();
 
     return std::make_shared<app_lifetime>(
         worker, system_url, app_launcher::make_shared(worker, system_url),
         file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing)), file_info_loader,
-        color, project_lifecycle, dialog_lifecycle, ui_root_lifecycle::make_shared(),
+        ae::color::make_shared(), project_lifecycle, app_dialog_lifecycle::make_shared(),
+        ui_root_lifecycle::make_shared(),
         project_preparer::make_shared(file_info_loader.get(), project_lifecycle.get()));
 }
 
