@@ -45,6 +45,9 @@ struct database final : std::enable_shared_from_this<database> {
     [[nodiscard]] bool can_redo() const;
     void redo();
 
+    [[nodiscard]] bool can_purge() const;
+    void purge();
+
     [[nodiscard]] observing::endable observe_reverted(std::function<void(void)> &&);
 
    private:

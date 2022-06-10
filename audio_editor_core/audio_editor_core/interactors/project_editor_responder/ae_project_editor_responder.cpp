@@ -192,6 +192,9 @@ void project_editor_responder::handle_action(ae::action const &action) {
                 case action_kind::redo:
                     this->_reverter->redo();
                     break;
+                case action_kind::purge:
+                    this->_reverter->purge();
+                    break;
                 case action_kind::select_file_for_import:
                     this->_import_interactor->select_file_for_import();
                     break;
@@ -295,6 +298,8 @@ responding project_editor_responder::responding_to_action(ae::action const &acti
             return to_responding(this->_reverter->can_undo());
         case action_kind::redo:
             return to_responding(this->_reverter->can_redo());
+        case action_kind::purge:
+            return to_responding(this->_reverter->can_purge());
 
         case action_kind::select_file_for_import:
             return to_responding(this->_import_interactor->can_select_file_for_import());
