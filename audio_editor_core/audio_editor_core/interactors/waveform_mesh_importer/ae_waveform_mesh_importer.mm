@@ -27,7 +27,6 @@ waveform_mesh_importer::waveform_mesh_importer(project_url const *project_url)
 void waveform_mesh_importer::import(std::size_t const idx, module_location const &location) {
     this->_task_queue->cancel([&location](auto const &identifier) { return location.identifier == identifier; });
 
-    // project_urlを値型にしてtask内でやりたい
     auto url = this->_project_url->editing_files_directory().appending(location.file_name);
 
     auto const task = yas::task<identifier>::make_shared(
