@@ -16,18 +16,13 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_preparer> project_preparer::make_shared(file_info_loader const *file_info_loader,
-                                                                ae::system_url const *system_url,
                                                                 project_lifecycle *lifecycle) {
-    return std::make_shared<project_preparer>(uuid_generator::make_shared(), system_url, file_info_loader, lifecycle);
+    return std::make_shared<project_preparer>(uuid_generator::make_shared(), file_info_loader, lifecycle);
 }
 
 project_preparer::project_preparer(std::shared_ptr<uuid_generatable> const &uuid_generator,
-                                   ae::system_url const *system_url, file_info_loader const *file_info_loader,
-                                   project_lifecycle *lifecycle)
-    : _uuid_generator(uuid_generator),
-      _system_url(system_url),
-      _file_info_loader(file_info_loader),
-      _project_lifecycle(lifecycle) {
+                                   file_info_loader const *file_info_loader, project_lifecycle *lifecycle)
+    : _uuid_generator(uuid_generator), _file_info_loader(file_info_loader), _project_lifecycle(lifecycle) {
 }
 
 void project_preparer::prepare(url const &file_url) {

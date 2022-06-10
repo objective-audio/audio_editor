@@ -30,7 +30,7 @@ std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
         worker, system_url, app_launcher::make_shared(worker, system_url),
         file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing)), file_info_loader,
         color, project_lifecycle, dialog_lifecycle, ui_root_lifecycle::make_shared(),
-        project_preparer::make_shared(file_info_loader.get(), system_url.get(), project_lifecycle.get()));
+        project_preparer::make_shared(file_info_loader.get(), project_lifecycle.get()));
 }
 
 app_lifetime::app_lifetime(std::shared_ptr<yas::worker> const &worker,
