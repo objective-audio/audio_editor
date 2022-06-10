@@ -93,3 +93,11 @@ void reverter::redo() {
 
     this->_database->redo();
 }
+
+bool reverter::can_purge() const {
+    return this->_database->can_purge();
+}
+
+void reverter::purge() {
+    this->_database->purge();
+}

@@ -190,6 +190,12 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)purge:(id)sender {
+    if (auto const action_controller = self->_action_controller.lock()) {
+        action_controller->handle_action(action_kind::purge);
+    }
+}
+
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -228,6 +234,8 @@ using namespace yas::ae;
         return action_kind::copy;
     } else if (selector == @selector(paste:)) {
         return action_kind::paste;
+    } else if (selector == @selector(purge:)) {
+        return action_kind::purge;
     }
 
     return std::nullopt;

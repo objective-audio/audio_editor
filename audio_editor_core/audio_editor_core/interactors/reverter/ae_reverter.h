@@ -26,6 +26,9 @@ struct reverter final {
     [[nodiscard]] bool can_redo() const;
     void redo();
 
+    [[nodiscard]] bool can_purge() const;
+    void purge();
+
    private:
     database *const _database;
     file_track *const _file_track;

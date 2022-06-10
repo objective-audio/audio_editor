@@ -161,6 +161,33 @@ void database::redo() {
     this->_revert(this->_current_save_id() + 1, false);
 }
 
+bool database::can_purge() const {
+    if (this->is_processing()) {
+        return false;
+    }
+
+    return this->_last_save_id() > 1;
+}
+
+void database::purge() {
+    if (!this->can_purge()) {
+        return;
+    }
+
+    this->_increment_processing_count();
+
+    this->_manager->purge(db::no_cancellation, [weak_db = this->weak_from_this()](db::manager_result_t const &result) {
+        assert(thread::is_main());
+
+        auto const database = weak_db.lock();
+        if (!database) {
+            return;
+        }
+
+        database->_decrement_processing_count();
+    });
+}
+
 observing::endable database::observe_reverted(std::function<void(void)> &&handler) {
     return this->_reverted_notifier->observe([handler = std::move(handler)](auto const &) { handler(); });
 }

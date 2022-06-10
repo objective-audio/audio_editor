@@ -31,6 +31,7 @@ enum class action_kind {
     go_to_marker,
     undo,
     redo,
+    purge,
     select_file_for_import,
     import_from_file,
     select_file_for_export,
