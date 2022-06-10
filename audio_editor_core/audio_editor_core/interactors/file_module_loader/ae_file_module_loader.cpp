@@ -15,6 +15,7 @@
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_timeline_holder.h>
+#include <audio_editor_core/ae_uuid_generator.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
@@ -25,28 +26,20 @@ std::shared_ptr<file_module_loader> file_module_loader::make_shared(
     file_module_loading_state_holder *state_holder, database *database, file_track *file_track,
     edge_holder *edge_holder, timeline_holder const *timeline_holder) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    return make_shared(project_id, project_url, project_format, app_lifetime->file_importer.get(),
-                       app_lifetime->file_info_loader.get(), player, state_holder, database, file_track, edge_holder,
-                       timeline_holder);
+    return std::make_shared<file_module_loader>(
+        uuid_generator::make_shared(), project_id, project_url, project_format, app_lifetime->file_importer.get(),
+        app_lifetime->file_info_loader.get(), player, state_holder, database, file_track, edge_holder, timeline_holder);
 }
 
-std::shared_ptr<file_module_loader> file_module_loader::make_shared(
-    project_id const &project_id, project_url const *project_url, project_format const &project_format,
-    file_importer *file_importer, file_info_loader const *file_info_loader, player *player,
-    file_module_loading_state_holder *state_holder, database *database, file_track *file_track,
-    edge_holder *edge_holder, timeline_holder const *timeline_holder) {
-    return std::make_shared<file_module_loader>(project_id, project_url, project_format, file_importer,
-                                                file_info_loader, player, state_holder, database, file_track,
-                                                edge_holder, timeline_holder);
-}
-
-file_module_loader::file_module_loader(project_id const &project_id, project_url const *project_url,
+file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &uuid_generator,
+                                       project_id const &project_id, project_url const *project_url,
                                        project_format const &project_format, file_importer *file_importer,
                                        file_info_loader const *file_info_loader, player *player,
                                        file_module_loading_state_holder *state_holder, database *database,
                                        file_track *file_track, edge_holder *edge_holder,
                                        timeline_holder const *timeline_holder)
-    : _project_id(project_id),
+    : _uuid_generator(uuid_generator),
+      _project_id(project_id),
       _project_url(project_url),
       _project_format(project_format),
       _file_importer(file_importer),
@@ -67,31 +60,37 @@ void file_module_loader::load(url const &src_url) {
 
     this->_state_holder->set_state(file_module_loading_state::loading);
 
+    auto const uuid = this->_uuid_generator->generate();
+    std::string const src_file_name = src_url.last_path_component();
+    std::string const dst_file_name = uuid + ".caf";
+    auto const dst_url = this->_project_url->editing_files_directory().appending(dst_file_name);
+
     this->_file_importer->import(
         {.project_id = this->_project_id,
          .src_url = src_url,
-         .dst_url = this->_project_url->editing_file(),
+         .dst_url = dst_url,
          .project_format = this->_project_format,
-         .completion = [weak = this->weak_from_this()](bool const result) {
+         .completion = [weak = this->weak_from_this(), dst_url, src_file_name, dst_file_name](bool const result) {
              auto const loader = weak.lock();
              if (!loader) {
                  assertion_failure_if_not_test();
                  return;
              }
 
-             auto const editing_file_url = loader->_project_url->editing_file();
-             if (auto const file_info = loader->_file_info_loader->load_file_info(editing_file_url)) {
-                 loader->_database->suspend_saving([&loader, &file_info = file_info.value(), &editing_file_url] {
-                     loader->_file_track->insert_module_and_notify(
-                         file_module{.name = editing_file_url.last_path_component(),
-                                     .range = time::range{0, file_info.length},
-                                     .file_frame = 0});
+             if (auto const file_info = loader->_file_info_loader->load_file_info(dst_url)) {
+                 loader->_database->suspend_saving(
+                     [&loader, &file_info = file_info.value(), &src_file_name, &dst_file_name] {
+                         loader->_file_track->insert_module_and_notify(
+                             file_module{.name = src_file_name,
+                                         .range = time::range{0, file_info.length},
+                                         .file_frame = 0,
+                                         .file_name = dst_file_name});
 
-                     loader->_edge_holder->set_edge(
-                         {.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
-                 });
+                         loader->_edge_holder->set_edge(
+                             {.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
+                     });
              }
 
-             loader->_state_holder->set_state(file_module_loading_state::loaded);
+             loader->_state_holder->set_state(file_module_loading_state::waiting);
          }});
 }

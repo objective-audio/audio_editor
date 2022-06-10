@@ -203,7 +203,10 @@ void track_editor::copy() {
         auto const current_frame = this->_player->current_frame();
         if (auto const file_module = file_track->module_at(current_frame)) {
             auto const &value = file_module.value();
-            this->_pasteboard->set_file_module({.file_frame = value.file_frame, .length = value.range.length});
+            this->_pasteboard->set_file_module({.name = value.name,
+                                                .file_frame = value.file_frame,
+                                                .length = value.range.length,
+                                                .file_name = value.file_name});
         }
     });
 }
@@ -244,8 +247,10 @@ void track_editor::paste_and_offset() {
             auto const module_value = module.value();
             auto const current_frame = this->_player->current_frame();
 
-            this->_file_track->split_and_insert_module_and_offset(
-                {.file_frame = module_value.file_frame, .range = {current_frame, module_value.length}});
+            this->_file_track->split_and_insert_module_and_offset({.name = module_value.name,
+                                                                   .file_frame = module_value.file_frame,
+                                                                   .range = {current_frame, module_value.length},
+                                                                   .file_name = module_value.file_name});
 
             this->_marker_pool->move_offset_from(current_frame, module_value.length);
         });

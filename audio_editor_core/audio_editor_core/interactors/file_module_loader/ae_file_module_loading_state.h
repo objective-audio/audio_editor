@@ -10,7 +10,6 @@ namespace yas::ae {
 enum class file_module_loading_state {
     waiting,
     loading,
-    loaded,
 };
 }
 

@@ -20,6 +20,7 @@ db_module db_module::create(db::manager_ptr const &manager, ae::file_module cons
     object->set_attribute_value(module_name::attribute::file_frame, db::value{file_module.file_frame});
     object->set_attribute_value(module_name::attribute::range_frame, db::value{file_module.range.frame});
     object->set_attribute_value(module_name::attribute::range_length, db::value{file_module.range.length});
+    object->set_attribute_value(module_name::attribute::file_name, db::value{file_module.file_name});
     return db_module{std::move(object)};
 }
 
@@ -28,15 +29,19 @@ std::optional<file_module> db_module::file_module() const {
     auto const &file_frame_value = this->_object->attribute_value(module_name::attribute::file_frame);
     auto const &range_frame_value = this->_object->attribute_value(module_name::attribute::range_frame);
     auto const &range_length_value = this->_object->attribute_value(module_name::attribute::range_length);
+    auto const &file_name_value = this->_object->attribute_value(module_name::attribute::file_name);
 
-    if (name_value && file_frame_value && range_frame_value && range_length_value) {
+    if (name_value && file_frame_value && range_frame_value && range_length_value && file_name_value) {
         if (auto const range_length = static_cast<proc::length_t>(range_length_value.get<db::integer>());
             range_length > 0) {
             auto name = name_value.get<db::text>();
             auto const file_frame = file_frame_value.get<db::integer>();
             auto const range_frame = range_frame_value.get<db::integer>();
-            return ae::file_module{
-                .name = std::move(name), .range = time::range{range_frame, range_length}, .file_frame = file_frame};
+            auto const file_name = file_name_value.get<db::text>();
+            return ae::file_module{.name = std::move(name),
+                                   .range = time::range{range_frame, range_length},
+                                   .file_frame = file_frame,
+                                   .file_name = file_name};
         }
     }
 

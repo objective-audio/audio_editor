@@ -7,11 +7,19 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<project_url> project_url::make_shared(url const &root) {
+    return std::shared_ptr<project_url>(new project_url{root});
+}
+
 project_url::project_url(url const &root) : _root(root) {
 }
 
 url const &project_url::root_directory() const {
     return this->_root;
+}
+
+url project_url::editing_files_directory() const {
+    return this->_root.appending("editing_files");
 }
 
 url project_url::editing_file() const {
@@ -24,8 +32,4 @@ url project_url::playing_directory() const {
 
 url project_url::db_file() const {
     return this->_root.appending("db.sqlite");
-}
-
-std::shared_ptr<project_url> project_url::make_shared(url const &root) {
-    return std::shared_ptr<project_url>(new project_url{root});
 }
