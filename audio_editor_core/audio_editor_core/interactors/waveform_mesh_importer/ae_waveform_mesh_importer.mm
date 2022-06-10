@@ -6,6 +6,7 @@
 #include <Accelerate/Accelerate.h>
 #include <audio/yas_audio_file.h>
 #include <audio/yas_audio_pcm_buffer.h>
+#include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_ui_track_constants.h>
 #include <cpp_utils/yas_thread.h>
 #include <ui/yas_ui_umbrella.h>
@@ -13,12 +14,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<waveform_mesh_importer> waveform_mesh_importer::make_shared(url const &url) {
-    return std::shared_ptr<waveform_mesh_importer>(new waveform_mesh_importer{url});
+std::shared_ptr<waveform_mesh_importer> waveform_mesh_importer::make_shared(project_url const *project_url) {
+    return std::make_shared<waveform_mesh_importer>(project_url);
 }
 
-waveform_mesh_importer::waveform_mesh_importer(url const &url)
-    : _url(url),
+waveform_mesh_importer::waveform_mesh_importer(project_url const *project_url)
+    : _project_url(project_url),
       _notifier(observing::notifier<event>::make_shared()),
       _task_queue(task_queue<identifier>::make_shared()) {
 }
@@ -26,8 +27,12 @@ waveform_mesh_importer::waveform_mesh_importer(url const &url)
 void waveform_mesh_importer::import(std::size_t const idx, module_location const &location) {
     this->_task_queue->cancel([&location](auto const &identifier) { return location.identifier == identifier; });
 
+    // project_urlを値型にしてtask内でやりたい
+    auto url = this->_project_url->editing_files_directory().appending(location.file_name);
+
     auto const task = yas::task<identifier>::make_shared(
-        [idx, location, url = this->_url, weak_importer = this->weak_from_this()](yas::task<identifier> const &task) {
+        [idx, location, url = std::move(url),
+         weak_importer = this->weak_from_this()](yas::task<identifier> const &task) {
             if (weak_importer.expired()) {
                 return;
             }

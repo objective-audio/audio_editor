@@ -12,16 +12,16 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<timeline_holder> timeline_holder::make_shared(url const &editing_file_url,
-                                                              project_format const &project_format) {
-    return std::make_shared<timeline_holder>(editing_file_url, project_format);
+std::shared_ptr<timeline_holder> timeline_holder::make_shared(project_format const &project_format,
+                                                              project_url const *project_url) {
+    return std::make_shared<timeline_holder>(project_format, project_url);
 }
 
-timeline_holder::timeline_holder(url const &editing_file_url, project_format const &project_format)
-    : _timeline(proc::timeline::make_shared()),
-      _track(proc::track::make_shared()),
-      _editing_file_url(editing_file_url),
-      _project_format(project_format) {
+timeline_holder::timeline_holder(project_format const &project_format, project_url const *project_url)
+    : _project_format(project_format),
+      _project_url(project_url),
+      _timeline(proc::timeline::make_shared()),
+      _track(proc::track::make_shared()) {
     this->_timeline->insert_track(0, this->_track);
 }
 
@@ -33,12 +33,11 @@ void timeline_holder::replace(file_track_module_map_t const &modules) {
     this->_timeline->erase_track(0);
     this->_track = proc::track::make_shared();
 
-    auto const url = this->_editing_file_url;
     auto const ch_count = this->_project_format.channel_count;
 
     for (auto const &pair : modules) {
         auto const &file_module = pair.second;
-        this->_track->push_back_module(timeline_holder_utils::make_module(file_module, url, ch_count),
+        this->_track->push_back_module(timeline_holder_utils::make_module(file_module, this->_project_url, ch_count),
                                        file_module.range);
     }
 
@@ -47,10 +46,10 @@ void timeline_holder::replace(file_track_module_map_t const &modules) {
 
 void timeline_holder::insert(file_module const &file_module) {
     if (auto const &track = this->_track) {
-        auto const url = this->_editing_file_url;
         auto const ch_count = this->_project_format.channel_count;
 
-        track->push_back_module(timeline_holder_utils::make_module(file_module, url, ch_count), file_module.range);
+        track->push_back_module(timeline_holder_utils::make_module(file_module, this->_project_url, ch_count),
+                                file_module.range);
     } else {
         assert(0);
     }

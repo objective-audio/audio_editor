@@ -25,13 +25,14 @@ struct module_location final {
     std::string name;
     time::range range;  // track内の位置
     frame_index_t file_frame;
+    std::string file_name;
     uint32_t sample_rate;
     std::vector<std::optional<mesh_element>> mesh_elements;
     float scale;
 
     [[nodiscard]] static module_location make_value(yas::identifier const &, std::string const &name,
                                                     time::range const &, frame_index_t const file_frame,
-                                                    uint32_t const sample_rate,
+                                                    std::string const &file_name, uint32_t const sample_rate,
                                                     std::vector<std::optional<mesh_element>> const &mesh_elements,
                                                     float const scale);
     [[nodiscard]] static module_location make_value(file_module const &, uint32_t const sample_rate,

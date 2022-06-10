@@ -51,7 +51,7 @@ using namespace yas::ae;
 
     XCTAssertFalse(pasteboard->file_module().has_value());
 
-    pasteboard->set_file_module({.file_frame = 1, .length = 2});
+    pasteboard->set_file_module({.file_frame = 1, .length = 2, .file_name = "test-name-1"});
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), pasteboard_event::file_module);
@@ -60,6 +60,7 @@ using namespace yas::ae;
     XCTAssertTrue(module.has_value());
     XCTAssertEqual(module.value().file_frame, 1);
     XCTAssertEqual(module.value().length, 2);
+    XCTAssertEqual(module.value().file_name, "test-name-1");
 }
 
 @end

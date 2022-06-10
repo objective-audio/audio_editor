@@ -15,6 +15,7 @@ namespace module_name {
         static std::string const file_frame = "file_frame";
         static std::string const range_frame = "range_frame";
         static std::string const range_length = "range_length";
+        static std::string const file_name = "file_name";
     }  // namespace attribute
 }  // namespace module_name
 

@@ -15,6 +15,7 @@ struct file_module final {
     std::string name;
     time::range range;
     frame_index_t file_frame;
+    std::string file_name;
 
     bool is_equal_location(file_module const &rhs) const;
 
