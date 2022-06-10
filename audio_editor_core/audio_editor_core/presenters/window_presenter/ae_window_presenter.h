@@ -23,7 +23,7 @@ struct window_presenter final {
     bool should_close();
 
    private:
-    std::shared_ptr<project_url> const _project_url;
+    std::weak_ptr<project_url> const _project_url;
     std::weak_ptr<project_closer_for_window_presenter> _closer;
 
     window_presenter(window_presenter const &) = delete;
