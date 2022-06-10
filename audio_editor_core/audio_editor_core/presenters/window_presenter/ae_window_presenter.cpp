@@ -22,7 +22,11 @@ window_presenter::window_presenter(ae::project_id const &project_id, std::shared
 }
 
 std::string window_presenter::title() const {
-    return this->_project_url->root_directory().last_path_component();
+    if (auto const project_url = this->_project_url.lock()) {
+        return project_url->root_directory().last_path_component();
+    } else {
+        return "";
+    }
 }
 
 bool window_presenter::should_close() {
