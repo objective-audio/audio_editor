@@ -19,10 +19,10 @@ std::shared_ptr<project_modal_lifecycle> project_modal_lifecycle::make_shared(pr
 
 project_modal_lifecycle::project_modal_lifecycle(project_id const &project_id)
     : _project_id(project_id),
-      _current(observing::value::holder<std::optional<project_sub_lifetime>>::make_shared(std::nullopt)) {
+      _current(observing::value::holder<std::optional<project_modal_sub_lifetime>>::make_shared(std::nullopt)) {
 }
 
-std::optional<project_sub_lifetime> const &project_modal_lifecycle::current() const {
+std::optional<project_modal_sub_lifetime> const &project_modal_lifecycle::current() const {
     return this->_current->value();
 }
 
@@ -108,6 +108,6 @@ std::shared_ptr<context_menu_lifetime> const &project_modal_lifecycle::context_m
 }
 
 observing::syncable project_modal_lifecycle::observe(
-    std::function<void(std::optional<project_sub_lifetime> const &)> &&handler) {
+    std::function<void(std::optional<project_modal_sub_lifetime> const &)> &&handler) {
     return this->_current->observe(std::move(handler));
 }

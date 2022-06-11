@@ -84,7 +84,7 @@ using namespace yas::ae;
     auto *const unowned_self = make_unowned(self);
 
     project_modal_lifecycle
-        ->observe([unowned_self](std::optional<project_sub_lifetime> const &sub_lifetime) {
+        ->observe([unowned_self](std::optional<project_modal_sub_lifetime> const &sub_lifetime) {
             auto *const self = unowned_self.object;
 
             if (!sub_lifetime.has_value()) {

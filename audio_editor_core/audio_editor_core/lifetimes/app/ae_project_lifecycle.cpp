@@ -16,14 +16,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_lifecycle> project_lifecycle::make_shared(
-    std::shared_ptr<file_info_loader> const &file_info_loader) {
-    return std::make_shared<project_lifecycle>(uuid_generator::make_shared(), file_info_loader);
+std::shared_ptr<project_lifecycle> project_lifecycle::make_shared() {
+    return std::make_shared<project_lifecycle>(uuid_generator::make_shared());
 }
 
-project_lifecycle::project_lifecycle(std::shared_ptr<uuid_generatable> const &uuid_generator,
-                                     std::shared_ptr<file_info_loader> const &file_info_loader)
-    : _uuid_generator(uuid_generator), _file_info_loader(file_info_loader) {
+project_lifecycle::project_lifecycle(std::shared_ptr<uuid_generatable> const &uuid_generator)
+    : _uuid_generator(uuid_generator) {
 }
 
 void project_lifecycle::add_lifetime(url const &project_url, project_id const &project_id,

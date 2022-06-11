@@ -17,9 +17,9 @@ class project_id;
 class project_format;
 
 struct project_lifecycle final : project_lifecycle_for_app_presenter, project_lifecycle_for_project_closer {
-    [[nodiscard]] static std::shared_ptr<project_lifecycle> make_shared(std::shared_ptr<file_info_loader> const &);
+    [[nodiscard]] static std::shared_ptr<project_lifecycle> make_shared();
 
-    project_lifecycle(std::shared_ptr<uuid_generatable> const &, std::shared_ptr<file_info_loader> const &);
+    project_lifecycle(std::shared_ptr<uuid_generatable> const &);
 
     void add_lifetime(url const &file_url, project_id const &, project_format const &);
     void remove_lifetime(ae::project_id const &project_id) override;
@@ -32,7 +32,6 @@ struct project_lifecycle final : project_lifecycle_for_app_presenter, project_li
 
    private:
     std::shared_ptr<uuid_generatable> const _uuid_generator;
-    std::weak_ptr<file_info_loader> const _file_info_loader;
 
     using project_lifetimes_t =
         observing::map::holder<ae::project_id,

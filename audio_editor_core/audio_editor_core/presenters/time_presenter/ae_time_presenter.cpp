@@ -35,7 +35,7 @@ time_presenter::time_presenter(std::shared_ptr<timing> const &timing, std::share
 
     project_modal_lifecycle
         ->observe([this, cancellable = observing::cancellable_ptr{nullptr}](
-                      std::optional<project_sub_lifetime> const &sub_lifetime) mutable {
+                      std::optional<project_modal_sub_lifetime> const &sub_lifetime) mutable {
             if (auto const &lifetime = get<time_editor_lifetime>(sub_lifetime)) {
                 cancellable =
                     lifetime->editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
