@@ -33,7 +33,6 @@
 #include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_launcher.h>
-#include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_project_state_holder.h>
 #include <audio_editor_core/ae_project_url.h>
@@ -48,29 +47,36 @@
 #include <audio_editor_core/ae_timing.h>
 #include <audio_editor_core/ae_track_editor.h>
 #include <audio_editor_core/ae_waveform_mesh_importer.h>
+#include <audio_editor_core/ae_window_lifecycle.h>
 #include <audio_editor_core/ae_zooming_pair.h>
 
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::project_id const &project_id) {
+    auto const window_lifetime = hierarchy::window_lifetime_for_id(project_id);
+
+    return make_shared(project_id, window_lifetime->project_format, window_lifetime->project_directory_url);
+}
+
 std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::project_id const &project_id,
                                                                 ae::project_format const &project_format,
-                                                                url const &project_url) {
-    return std::make_shared<project_lifetime>(project_id, project_format, project_url, hierarchy::app_lifetime());
+                                                                url const &project_dir_url) {
+    return std::make_shared<project_lifetime>(project_id, project_format, project_dir_url, hierarchy::app_lifetime());
 }
 
 project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project_format const &project_format,
-                                   url const &project_url, std::shared_ptr<app_lifetime> const &app_lifetime)
+                                   url const &project_dir_url, std::shared_ptr<app_lifetime> const &app_lifetime)
     : project_id(project_id),
       project_format(project_format),
-      project_url(project_url::make_shared(project_url)),
+      project_url(project_url::make_shared(project_dir_url)),
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_lifetime->system_url->playing_directory(), project_id, this->scrolling.get())),
       responder_stack(responder_stack::make_shared()),
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_lifetime->file_importer.get(),
-                                         app_lifetime->project_lifecycle.get(), this->state_holder.get())),
+                                         app_lifetime->window_lifecycle.get(), this->state_holder.get())),
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),

@@ -16,7 +16,7 @@ class project_format;
 struct app_presenter final {
     [[nodiscard]] static std::shared_ptr<app_presenter> make_shared();
 
-    app_presenter(std::shared_ptr<project_lifecycle_for_app_presenter> const &,
+    app_presenter(std::shared_ptr<window_lifecycle_for_app_presenter> const &,
                   std::shared_ptr<app_dialog_lifecycle> const &, std::shared_ptr<project_preparer> const &);
 
     [[nodiscard]] bool can_open_dialog() const;
@@ -27,7 +27,7 @@ struct app_presenter final {
         std::function<void(std::optional<app_dialog_sub_lifetime> const &)> &&);
 
    private:
-    std::weak_ptr<project_lifecycle_for_app_presenter> const _project_lifecycle;
+    std::weak_ptr<window_lifecycle_for_app_presenter> const _window_lifecycle;
     std::weak_ptr<app_dialog_lifecycle> const _dialog_lifecycle;
     std::weak_ptr<project_preparer> const _project_preparer;
 

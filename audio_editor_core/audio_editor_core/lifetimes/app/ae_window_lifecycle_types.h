@@ -1,5 +1,5 @@
 //
-//  ae_project_lifecycle_types.h
+//  ae_window_lifecycle_types.h
 //
 
 #pragma once
@@ -9,13 +9,13 @@
 #include <string>
 
 namespace yas::ae {
-enum class project_lifecycle_event_type {
+enum class window_lifecycle_event_type {
     inserted,
     erased,
 };
 
-struct project_lifecycle_event final {
-    project_lifecycle_event_type type;
+struct window_lifecycle_event final {
+    window_lifecycle_event_type type;
     project_id project_id;
 };
 }  // namespace yas::ae

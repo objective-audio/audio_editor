@@ -6,6 +6,8 @@
 
 #include <audio_editor_core/ae_app_dialog_lifecycle.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
+#include <audio_editor_core/ae_window_lifecycle.h>
+#include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -24,6 +26,10 @@ std::shared_ptr<project_setup_dialog_lifetime> const &hierarchy::project_setup_d
     return hierarchy::app_lifetime()->dialog_lifecycle->project_setup_dialog_lifetime();
 }
 
+std::shared_ptr<window_lifetime> const &hierarchy::window_lifetime_for_id(project_id const &project_id) {
+    return hierarchy::app_lifetime()->window_lifecycle->lifetime_for_id(project_id);
+}
+
 std::shared_ptr<project_lifetime> const &hierarchy::project_lifetime_for_id(project_id const &project_id) {
-    return hierarchy::app_lifetime()->project_lifecycle->lifetime_for_id(project_id);
+    return get<project_lifetime>(hierarchy::window_lifetime_for_id(project_id)->project_lifecycle->current());
 }

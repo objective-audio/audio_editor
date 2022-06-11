@@ -6,9 +6,9 @@
 
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_uuid_generator.h>
+#include <audio_editor_core/ae_window_lifecycle.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_file_manager.h>
 
@@ -16,26 +16,13 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_preparer> project_preparer::make_shared(file_info_loader const *file_info_loader,
-                                                                project_lifecycle *lifecycle) {
+                                                                window_lifecycle *lifecycle) {
     return std::make_shared<project_preparer>(uuid_generator::make_shared(), file_info_loader, lifecycle);
 }
 
 project_preparer::project_preparer(std::shared_ptr<uuid_generatable> const &uuid_generator,
-                                   file_info_loader const *file_info_loader, project_lifecycle *lifecycle)
-    : _uuid_generator(uuid_generator), _file_info_loader(file_info_loader), _project_lifecycle(lifecycle) {
-}
-
-void project_preparer::prepare(url const &file_url) {
-    auto const file_info = this->_file_info_loader->load_file_info(file_url);
-    if (!file_info.has_value()) {
-        assertion_failure_if_not_test();
-        return;
-    }
-
-    project_format const format{.sample_rate = file_info.value().sample_rate,
-                                .channel_count = file_info.value().channel_count};
-
-    this->prepare(format, file_url);
+                                   file_info_loader const *file_info_loader, window_lifecycle *lifecycle)
+    : _uuid_generator(uuid_generator), _file_info_loader(file_info_loader), _window_lifecycle(lifecycle) {
 }
 
 void project_preparer::prepare(project_format const &format, url const &project_url) {
@@ -56,10 +43,10 @@ void project_preparer::prepare(project_format const &format, url const &project_
         return;
     }
 
-    if (this->_project_lifecycle->lifetime_for_id(project_id) != nullptr) {
+    if (this->_window_lifecycle->lifetime_for_id(project_id) != nullptr) {
         assertion_failure_if_not_test();
         return;
     }
 
-    this->_project_lifecycle->add_lifetime(project_url, project_id, format);
+    this->_window_lifecycle->add_lifetime(project_url, project_id, format);
 }
