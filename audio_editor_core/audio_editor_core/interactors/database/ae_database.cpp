@@ -222,8 +222,8 @@ db::integer::type const &database::_last_save_id() const {
     return this->_manager->last_save_id().get<db::integer>();
 }
 
-void database::_revert(db::integer::type const revert_id, bool const current_allowed) {
-    if (this->_last_save_id() < revert_id || (this->_current_save_id() == revert_id && !current_allowed)) {
+void database::_revert(db::integer::type const revert_id, bool const is_initial) {
+    if (this->_last_save_id() < revert_id || (this->_current_save_id() == revert_id && !is_initial)) {
         assertion_failure_if_not_test();
         return;
     }
