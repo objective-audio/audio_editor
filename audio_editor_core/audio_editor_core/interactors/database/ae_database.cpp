@@ -242,7 +242,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                 db::select_option{.table = db_constants::module_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -274,7 +274,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                 db::select_option{.table = db_constants::marker_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -306,7 +306,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                 db::select_option{.table = db_constants::pasting_subject_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -333,7 +333,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                 db::select_option{.table = db_constants::edge_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
