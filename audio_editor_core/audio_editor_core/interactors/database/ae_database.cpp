@@ -370,6 +370,11 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
         thread::perform_sync_on_main([weak_db] {
             auto const database = weak_db.lock();
             if (database) {
+                if (!database->edge().has_value()) {
+                    database->set_edge(ae::edge::zero());
+                    database->_save();
+                }
+
                 database->_reverted_notifier->notify();
                 database->_decrement_processing_count();
             } else {
