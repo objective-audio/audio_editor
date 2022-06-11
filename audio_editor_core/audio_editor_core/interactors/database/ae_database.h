@@ -72,6 +72,6 @@ struct database final : std::enable_shared_from_this<database> {
     db::integer::type const &_last_save_id() const;
 
     void _save();
-    void _revert(db::integer::type const revert_id, bool const current_allowed);
+    void _revert(db::integer::type const revert_id, bool const is_initial);
 };
 }  // namespace yas::ae

@@ -122,6 +122,9 @@ void database::_save() {
 
         this->_manager->save(db::no_cancellation,
                              [weak_db = this->weak_from_this()](db::manager_map_result_t result) mutable {
+                                 if (!result) {
+                                     assertion_failure_if_not_test();
+                                 }
                                  if (auto db = weak_db.lock()) {
                                      db->_decrement_processing_count();
                                  }
@@ -134,7 +137,7 @@ bool database::can_undo() const {
         return false;
     }
 
-    return this->_current_save_id() > 0;
+    return this->_current_save_id() > 1;
 }
 
 void database::undo() {
@@ -179,6 +182,10 @@ void database::purge() {
     this->_manager->purge(db::no_cancellation, [weak_db = this->weak_from_this()](db::manager_result_t const &result) {
         assert(thread::is_main());
 
+        if (!result) {
+            assertion_failure_if_not_test();
+        }
+
         auto const database = weak_db.lock();
         if (!database) {
             return;
@@ -197,6 +204,10 @@ void database::_setup() {
 
     this->_manager->setup([weak_db = this->weak_from_this()](db::manager_result_t result) mutable {
         assert(thread::is_main());
+
+        if (!result) {
+            assertion_failure_if_not_test();
+        }
 
         if (auto const database = weak_db.lock()) {
             database->_decrement_processing_count();
@@ -222,8 +233,8 @@ db::integer::type const &database::_last_save_id() const {
     return this->_manager->last_save_id().get<db::integer>();
 }
 
-void database::_revert(db::integer::type const revert_id, bool const current_allowed) {
-    if (this->_last_save_id() < revert_id || (this->_current_save_id() == revert_id && !current_allowed)) {
+void database::_revert(db::integer::type const revert_id, bool const is_initial) {
+    if (this->_last_save_id() < revert_id || (this->_current_save_id() == revert_id && !is_initial)) {
         assertion_failure_if_not_test();
         return;
     }
@@ -242,7 +253,7 @@ void database::_revert(db::integer::type const revert_id, bool const current_all
                 db::select_option{.table = db_constants::module_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -274,7 +285,7 @@ void database::_revert(db::integer::type const revert_id, bool const current_all
                 db::select_option{.table = db_constants::marker_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -306,7 +317,7 @@ void database::_revert(db::integer::type const revert_id, bool const current_all
                 db::select_option{.table = db_constants::pasting_subject_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -333,7 +344,7 @@ void database::_revert(db::integer::type const revert_id, bool const current_all
                 db::select_option{.table = db_constants::edge_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) mutable {
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
             assert(thread::is_main());
 
             auto const database = weak_db.lock();
@@ -359,6 +370,11 @@ void database::_revert(db::integer::type const revert_id, bool const current_all
         thread::perform_sync_on_main([weak_db] {
             auto const database = weak_db.lock();
             if (database) {
+                if (!database->edge().has_value()) {
+                    database->set_edge(ae::edge::zero());
+                    database->_save();
+                }
+
                 database->_reverted_notifier->notify();
                 database->_decrement_processing_count();
             } else {
