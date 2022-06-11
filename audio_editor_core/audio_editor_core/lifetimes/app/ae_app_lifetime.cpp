@@ -22,7 +22,7 @@ std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
     auto const worker = worker::make_shared();
     auto const system_url = system_url::make_shared();
     auto const file_info_loader = file_info_loader::make_shared();
-    auto const project_lifecycle = project_lifecycle::make_shared(file_info_loader);
+    auto const project_lifecycle = project_lifecycle::make_shared();
 
     return std::make_shared<app_lifetime>(
         worker, system_url, app_launcher::make_shared(worker, system_url),
