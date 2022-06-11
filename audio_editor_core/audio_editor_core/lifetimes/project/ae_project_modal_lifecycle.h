@@ -14,7 +14,7 @@ struct project_modal_lifecycle final {
 
     project_modal_lifecycle(project_id const &);
 
-    std::optional<project_sub_lifetime> const &current() const;
+    std::optional<project_modal_sub_lifetime> const &current() const;
 
     void add_time_editor(number_components const &, std::optional<std::size_t> const unit_idx);
     void remove_time_editor();
@@ -32,11 +32,12 @@ struct project_modal_lifecycle final {
     void remove_context_menu();
     std::shared_ptr<context_menu_lifetime> const &context_menu_lifetime() const;
 
-    [[nodiscard]] observing::syncable observe(std::function<void(std::optional<project_sub_lifetime> const &)> &&);
+    [[nodiscard]] observing::syncable observe(
+        std::function<void(std::optional<project_modal_sub_lifetime> const &)> &&);
 
    private:
     project_id const _project_id;
 
-    observing::value::holder_ptr<std::optional<project_sub_lifetime>> const _current;
+    observing::value::holder_ptr<std::optional<project_modal_sub_lifetime>> const _current;
 };
 }  // namespace yas::ae

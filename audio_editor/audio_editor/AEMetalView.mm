@@ -40,7 +40,7 @@ using namespace yas::ae;
     auto *const unowned = make_unowned(self);
 
     lifecycle
-        ->observe([unowned](std::optional<project_sub_lifetime> const &sub_lifetime) {
+        ->observe([unowned](std::optional<project_modal_sub_lifetime> const &sub_lifetime) {
             if (auto const &lifetime = get<context_menu_lifetime>(sub_lifetime)) {
                 auto *const view = unowned.object;
                 [view showContextMenu:lifetime->context_menu];
