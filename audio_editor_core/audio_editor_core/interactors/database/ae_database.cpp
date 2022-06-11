@@ -134,7 +134,7 @@ bool database::can_undo() const {
         return false;
     }
 
-    return this->_current_save_id() > 0;
+    return this->_current_save_id() > 1;
 }
 
 void database::undo() {
