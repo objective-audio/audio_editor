@@ -122,6 +122,9 @@ void database::_save() {
 
         this->_manager->save(db::no_cancellation,
                              [weak_db = this->weak_from_this()](db::manager_map_result_t result) mutable {
+                                 if (!result) {
+                                     assertion_failure_if_not_test();
+                                 }
                                  if (auto db = weak_db.lock()) {
                                      db->_decrement_processing_count();
                                  }
@@ -179,6 +182,10 @@ void database::purge() {
     this->_manager->purge(db::no_cancellation, [weak_db = this->weak_from_this()](db::manager_result_t const &result) {
         assert(thread::is_main());
 
+        if (!result) {
+            assertion_failure_if_not_test();
+        }
+
         auto const database = weak_db.lock();
         if (!database) {
             return;
@@ -197,6 +204,10 @@ void database::_setup() {
 
     this->_manager->setup([weak_db = this->weak_from_this()](db::manager_result_t result) mutable {
         assert(thread::is_main());
+
+        if (!result) {
+            assertion_failure_if_not_test();
+        }
 
         if (auto const database = weak_db.lock()) {
             database->_decrement_processing_count();
