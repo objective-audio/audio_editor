@@ -4,7 +4,9 @@
 
 #import "AEWindowController.h"
 #include <audio_editor_core/ae_window_presenter.h>
+#include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
+#include <cpp_utils/yas_unowned.h>
 #import "AEMetalViewController.h"
 
 using namespace yas;
@@ -16,15 +18,28 @@ using namespace yas::ae;
 
 @implementation AEWindowController {
     std::shared_ptr<window_presenter> _presenter;
+    observing::canceller_pool _pool;
 }
 
 - (void)setupWithProjectID:(project_id const &)project_id {
     self->_presenter = window_presenter::make_shared(project_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
 
-    AEMetalViewController *content = (AEMetalViewController *)self.contentViewController;
-    NSAssert([content isKindOfClass:[AEMetalViewController class]], @"");
-    [content setupWithProjectID:project_id];
+    auto unowned = make_unowned(self);
+
+    self->_presenter
+        ->observe([unowned, project_id](const window_presenter_event &event) {
+            AEMetalViewController *content = (AEMetalViewController *)unowned.object.contentViewController;
+
+            if (![content isKindOfClass:[AEMetalViewController class]]) {
+                assertion_failure_if_not_test();
+                return;
+            }
+
+            [content setupWithProjectID:project_id];
+        })
+        .sync()
+        ->add_to(self->_pool);
 }
 
 - (project_id const &)project_id {

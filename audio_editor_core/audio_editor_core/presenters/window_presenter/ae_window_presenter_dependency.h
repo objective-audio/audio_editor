@@ -8,11 +8,4 @@
 
 #include <string>
 
-namespace yas::ae {
-struct project_closer_for_window_presenter {
-    virtual ~project_closer_for_window_presenter() = default;
-
-    [[nodiscard]] virtual bool can_close() const = 0;
-    virtual void request_close() = 0;
-};
-}  // namespace yas::ae
+namespace yas::ae {}  // namespace yas::ae

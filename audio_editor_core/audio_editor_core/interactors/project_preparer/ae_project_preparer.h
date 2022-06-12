@@ -12,20 +12,19 @@ namespace yas::ae {
 class uuid_generatable;
 class system_url;
 class file_info_loader;
-class project_lifecycle;
+class window_lifecycle;
 class project_format;
 
 struct project_preparer final {
-    [[nodiscard]] static std::shared_ptr<project_preparer> make_shared(file_info_loader const *, project_lifecycle *);
+    [[nodiscard]] static std::shared_ptr<project_preparer> make_shared(file_info_loader const *, window_lifecycle *);
 
-    project_preparer(std::shared_ptr<uuid_generatable> const &, file_info_loader const *, project_lifecycle *);
+    project_preparer(std::shared_ptr<uuid_generatable> const &, file_info_loader const *, window_lifecycle *);
 
-    void prepare(url const &file_url);
     void prepare(project_format const &, url const &project_url);
 
    private:
     std::shared_ptr<uuid_generatable> const _uuid_generator;
     file_info_loader const *const _file_info_loader;
-    project_lifecycle *const _project_lifecycle;
+    window_lifecycle *const _window_lifecycle;
 };
 }  // namespace yas::ae

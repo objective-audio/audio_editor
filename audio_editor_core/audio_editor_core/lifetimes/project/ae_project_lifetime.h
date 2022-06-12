@@ -58,10 +58,11 @@ class scroll_gesture_controller;
 class waveform_mesh_importer;
 
 struct project_lifetime final {
+    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(project_id const &);
     [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(project_id const &, project_format const &,
-                                                                       url const &project_url);
+                                                                       url const &project_dir_url);
 
-    project_lifetime(ae::project_id const &, project_format const &, url const &project_url,
+    project_lifetime(ae::project_id const &, project_format const &, url const &project_dir_url,
                      std::shared_ptr<app_lifetime> const &);
 
     identifier const instance_id;

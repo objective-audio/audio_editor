@@ -17,8 +17,8 @@ struct file_importer_for_project_closer {
 
 class project_id;
 
-struct project_lifecycle_for_project_closer {
-    virtual ~project_lifecycle_for_project_closer() = default;
+struct window_lifecycle_for_project_closer {
+    virtual ~window_lifecycle_for_project_closer() = default;
 
     virtual void remove_lifetime(ae::project_id const &project_id) = 0;
 };
