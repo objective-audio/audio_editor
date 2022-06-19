@@ -4,8 +4,8 @@
 
 #include "ae_pasteboard_types.h"
 
+#include <audio_editor_core/ae_json.h>
 #include <audio_editor_core/ae_pasteboard_constants.h>
-#include <audio_editor_core/ae_pasteboard_utils.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -13,24 +13,34 @@ using namespace yas::ae::pasteboard_constants;
 
 std::string pasting_file_module::data() const {
     assert(!this->file_name.empty());
-    std::map<std::string, std::string> map{{file_module_key::kind, file_module_kind::value},
-                                           {file_module_key::name, this->name},
-                                           {file_module_key::file_frame, std::to_string(this->file_frame)},
-                                           {file_module_key::length, std::to_string(this->length)},
-                                           {file_module_key::file_name, this->file_name}};
-    return pasteboard_utils::to_data_string(map);
+    json_map map{{file_module_key::kind, json_value{file_module_kind::value}},
+                 {file_module_key::name, json_value{this->name}},
+                 {file_module_key::file_frame, json_value{std::to_string(this->file_frame)}},
+                 {file_module_key::length, json_value{std::to_string(this->length)}},
+                 {file_module_key::file_name, json_value{this->file_name}}};
+    return to_json_string(json_value{std::move(map)});
 }
 
 std::optional<pasting_file_module> pasting_file_module::make_value(std::string const &data) {
-    auto const map = pasteboard_utils::to_data_map(data);
+    auto const json_value = to_json_value(data);
 
-    if (map.contains(file_module_key::kind) && map.at(file_module_key::kind) == file_module_kind::value &&
-        map.contains(file_module_key::name) && map.contains(file_module_key::file_frame) &&
-        map.contains(file_module_key::length) && map.contains(file_module_key::file_name)) {
-        auto const name = map.at(file_module_key::name);
-        auto const file_frame_string = map.at(file_module_key::file_frame);
-        auto const length_string = map.at(file_module_key::length);
-        auto const file_name = map.at(file_module_key::file_name);
+    if (!json_value.map.has_value()) {
+        return std::nullopt;
+    }
+
+    auto const &map_value = json_value.map.value();
+
+    if (map_value.contains(file_module_key::kind) && map_value.at(file_module_key::kind).string.has_value() &&
+        map_value.at(file_module_key::kind).string.value() == file_module_kind::value &&
+        map_value.contains(file_module_key::name) && map_value.at(file_module_key::name).string.has_value() &&
+        map_value.contains(file_module_key::file_frame) &&
+        map_value.at(file_module_key::file_frame).string.has_value() && map_value.contains(file_module_key::length) &&
+        map_value.at(file_module_key::length).string.has_value() && map_value.contains(file_module_key::file_name) &&
+        map_value.at(file_module_key::file_name).string.has_value()) {
+        auto const name = map_value.at(file_module_key::name).string.value();
+        auto const file_frame_string = map_value.at(file_module_key::file_frame).string.value();
+        auto const length_string = map_value.at(file_module_key::length).string.value();
+        auto const file_name = map_value.at(file_module_key::file_name).string.value();
         return pasting_file_module{.name = name,
                                    .file_frame = std::stoll(file_frame_string),
                                    .length = std::stoul(length_string),
