@@ -4,6 +4,7 @@
 
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
+#include <audio_editor_core/ae_json_utils.h>
 #include <audio_editor_core/ae_project_action_controller.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
@@ -298,15 +299,13 @@ using namespace yas::ae;
 }
 
 - (void)showModuleNameSheetWithValue:(std::string const &)value {
-    auto const splited = yas::split(value, ',');
-    if (splited.size() < 2) {
-        assert(0);
+    auto const range = to_time_range(value);
+    if (!range.has_value()) {
+        assertion_failure_if_not_test();
         return;
     }
 
-    time::range const range{std::stoi(splited.at(0)), std::stoull(splited.at(1))};
-
-    auto *const vc = [AEModuleNameViewController instantiateWithProjectId:self->_project_id moduleRange:range];
+    auto *const vc = [AEModuleNameViewController instantiateWithProjectId:self->_project_id moduleRange:range.value()];
 
     [self presentViewControllerAsSheet:vc];
 }
