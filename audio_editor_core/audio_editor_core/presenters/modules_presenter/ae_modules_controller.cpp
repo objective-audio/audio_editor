@@ -5,6 +5,7 @@
 #include "ae_modules_controller.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_json_utils.h>
 #include <audio_editor_core/ae_project_action_controller.h>
 #include <cpp_utils/yas_assertion.h>
 
@@ -34,9 +35,8 @@ void modules_controller::select_module_at(std::size_t const idx) {
     if (idx < locations.size()) {
         auto const &location = locations.at(idx);
         if (location.has_value()) {
-            auto const &range = location.value().range;
-            std::string value = std::to_string(range.frame) + "," + std::to_string(range.length);
-            action_controller->handle_action({action_kind::begin_module_renaming, std::move(value)});
+            action_controller->handle_action(
+                {action_kind::begin_module_renaming, to_json_string(location.value().range)});
         }
     }
 }
