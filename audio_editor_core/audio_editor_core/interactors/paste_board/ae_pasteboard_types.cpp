@@ -15,8 +15,8 @@ std::string pasting_file_module::data() const {
     assert(!this->file_name.empty());
     json_map map{{file_module_key::kind, json_value{file_module_kind::value}},
                  {file_module_key::name, json_value{this->name}},
-                 {file_module_key::file_frame, json_value{std::to_string(this->file_frame)}},
-                 {file_module_key::length, json_value{std::to_string(this->length)}},
+                 {file_module_key::file_frame, json_value{this->file_frame}},
+                 {file_module_key::length, json_value{int64_t(this->length)}},
                  {file_module_key::file_name, json_value{this->file_name}}};
     return to_json_string(json_value{std::move(map)});
 }
@@ -34,17 +34,15 @@ std::optional<pasting_file_module> pasting_file_module::make_value(std::string c
         map_value.at(file_module_key::kind).string.value() == file_module_kind::value &&
         map_value.contains(file_module_key::name) && map_value.at(file_module_key::name).string.has_value() &&
         map_value.contains(file_module_key::file_frame) &&
-        map_value.at(file_module_key::file_frame).string.has_value() && map_value.contains(file_module_key::length) &&
-        map_value.at(file_module_key::length).string.has_value() && map_value.contains(file_module_key::file_name) &&
+        map_value.at(file_module_key::file_frame).integer.has_value() && map_value.contains(file_module_key::length) &&
+        map_value.at(file_module_key::length).integer.has_value() && map_value.contains(file_module_key::file_name) &&
         map_value.at(file_module_key::file_name).string.has_value()) {
         auto const name = map_value.at(file_module_key::name).string.value();
-        auto const file_frame_string = map_value.at(file_module_key::file_frame).string.value();
-        auto const length_string = map_value.at(file_module_key::length).string.value();
+        auto const file_frame = map_value.at(file_module_key::file_frame).integer.value();
+        auto const length = map_value.at(file_module_key::length).integer.value();
         auto const file_name = map_value.at(file_module_key::file_name).string.value();
-        return pasting_file_module{.name = name,
-                                   .file_frame = std::stoll(file_frame_string),
-                                   .length = std::stoul(length_string),
-                                   .file_name = file_name};
+        return pasting_file_module{
+            .name = name, .file_frame = file_frame, .length = length_t(length), .file_name = file_name};
     }
 
     return std::nullopt;
