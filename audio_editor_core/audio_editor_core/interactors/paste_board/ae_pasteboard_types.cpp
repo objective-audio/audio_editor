@@ -4,8 +4,8 @@
 
 #include "ae_pasteboard_types.h"
 
-#include <audio_editor_core/ae_json.h>
 #include <audio_editor_core/ae_pasteboard_constants.h>
+#include <cpp_utils/yas_json.h>
 
 using namespace yas;
 using namespace yas::ae;
