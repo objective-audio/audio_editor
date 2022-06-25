@@ -34,9 +34,9 @@
 #include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
+#include <audio_editor_core/ae_project_receiver.h>
 #include <audio_editor_core/ae_project_state_holder.h>
 #include <audio_editor_core/ae_project_url.h>
-#include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_scrolling.h>
@@ -73,14 +73,13 @@ project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_lifetime->system_url->playing_directory(), project_id, this->scrolling.get())),
-      responder_stack(responder_stack::make_shared()),
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(project_id, app_lifetime->file_importer.get(),
                                          app_lifetime->window_lifecycle.get(), this->state_holder.get())),
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),
-      action_controller(ae::project_action_controller::make_shared(this->responder_stack.get())),
+      action_controller(ae::project_action_controller::make_shared(project_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(this->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(this->scrolling.get())),
       timing(timing::make_shared(project_format.sample_rate)),
@@ -99,8 +98,8 @@ project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project
       edge_editor(edge_editor::make_shared(this->edge_holder.get(), this->player.get(), this->editing_status.get())),
       jumper(jumper::make_shared(this->player.get(), this->file_track.get(), this->marker_pool.get(),
                                  this->edge_holder.get())),
-      time_editor_launcher(time_editor_launcher::make_shared(this->player.get(), this->timing.get(),
-                                                             this->modal_lifecycle.get(), this->responder_stack.get())),
+      time_editor_launcher(
+          time_editor_launcher::make_shared(this->player.get(), this->timing.get(), this->modal_lifecycle.get())),
       marker_editor(marker_editor::make_shared(this->player.get(), this->marker_pool.get(), this->database.get(),
                                                this->editing_status.get())),
       module_renaming_launcher(
@@ -124,11 +123,11 @@ project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project
       track_editor(track_editor::make_shared(this->player.get(), this->file_track.get(), this->marker_pool.get(),
                                              this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       responder(project_editor_responder::make_shared(
-          this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(), this->nudger.get(),
-          this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(), this->marker_editor.get(),
-          this->module_renaming_launcher.get(), this->timing.get(), this->import_interactor.get(),
-          this->export_interactor.get(), this->reverter.get())),
-      launcher(project_launcher::make_shared(this->instance_id, this->project_format, this->responder_stack.get(),
-                                             this->state_holder.get(), this->player.get(), this->timeline_holder.get(),
-                                             this->responder)) {
+          project_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
+          this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(),
+          this->marker_editor.get(), this->module_renaming_launcher.get(), this->timing.get(),
+          this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())),
+      receiver(project_receiver::make_shared(project_id, this->responder.get())),
+      launcher(project_launcher::make_shared(this->instance_id, this->project_format, this->state_holder.get(),
+                                             this->player.get(), this->timeline_holder.get(), this->responder)) {
 }

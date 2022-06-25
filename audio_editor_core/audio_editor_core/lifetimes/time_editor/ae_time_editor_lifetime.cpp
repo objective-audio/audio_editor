@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_closer.h>
+#include <audio_editor_core/ae_time_editor_receiver.h>
 #include <audio_editor_core/ae_time_editor_responder.h>
 
 using namespace yas;
@@ -22,5 +23,6 @@ time_editor_lifetime::time_editor_lifetime(ae::project_id const &project_id, num
     : project_id(project_id),
       editor(time_editor::make_shared(components, unit_idx)),
       closer(time_editor_closer::make_shared(project_id, this->instance_id, this->editor.get())),
-      responder(time_editor_responder::make_shared(this->editor.get(), this->closer.get())) {
+      responder(time_editor_responder::make_shared(project_id, this->editor.get(), this->closer.get())),
+      receiver(time_editor_receiver::make_shared(project_id, this->responder.get())) {
 }

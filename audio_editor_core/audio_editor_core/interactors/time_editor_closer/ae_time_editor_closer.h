@@ -14,7 +14,6 @@ namespace yas::ae {
 class time_editor;
 class time_editor_state;
 class project_modal_lifecycle;
-class responder_stack;
 class timing;
 class player;
 
@@ -23,8 +22,8 @@ struct time_editor_closer final {
                                                                          identifier const lifetime_instance_id,
                                                                          time_editor *);
 
-    time_editor_closer(identifier const lifetime_instance_id, time_editor *, project_modal_lifecycle *,
-                       responder_stack *, timing *, player *);
+    time_editor_closer(identifier const lifetime_instance_id, time_editor *, project_modal_lifecycle *, timing *,
+                       player *);
 
     void finish();
     void cancel();
@@ -38,7 +37,6 @@ struct time_editor_closer final {
     struct dependencies {
         time_editor *const editor;
         project_modal_lifecycle *const modal_lifecycle;
-        responder_stack *const responder_stack;
         timing *const timing;
         player *const player;
     };

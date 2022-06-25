@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
-#include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_timing.h>
 #include <cpp_utils/yas_assertion.h>
@@ -20,14 +19,12 @@ std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(project_id c
                                                                     time_editor *editor) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
     return std::make_shared<time_editor_closer>(lifetime_instance_id, editor, project_lifetime->modal_lifecycle.get(),
-                                                project_lifetime->responder_stack.get(), project_lifetime->timing.get(),
-                                                project_lifetime->player.get());
+                                                project_lifetime->timing.get(), project_lifetime->player.get());
 }
 
 time_editor_closer::time_editor_closer(identifier const lifetime_instance_id, time_editor *editor,
-                                       project_modal_lifecycle *lifecycle, responder_stack *responder_stack,
-                                       timing *timing, player *player)
-    : _lifetime_instance_id(lifetime_instance_id), _dependencies({editor, lifecycle, responder_stack, timing, player}) {
+                                       project_modal_lifecycle *lifecycle, timing *timing, player *player)
+    : _lifetime_instance_id(lifetime_instance_id), _dependencies({editor, lifecycle, timing, player}) {
 }
 
 void time_editor_closer::finish() {
@@ -72,11 +69,9 @@ void time_editor_closer::_finalize() {
 
     auto const &dependencies = this->_dependencies.value();
     auto *lifecycle = dependencies.modal_lifecycle;
-    auto *responder_stack = dependencies.responder_stack;
 
     this->_dependencies.reset();
 
-    responder_stack->pop_responder(this->_lifetime_instance_id);
     lifecycle->remove_time_editor();
 }
 

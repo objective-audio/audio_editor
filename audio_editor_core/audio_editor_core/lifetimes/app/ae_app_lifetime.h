@@ -17,6 +17,8 @@ class ui_root_lifecycle;
 class window_opener;
 class app_dialog_lifecycle;
 class window_lifecycle;
+class action_sender;
+class action_receiver_providable;
 
 struct app_lifetime final {
     [[nodiscard]] static std::shared_ptr<app_lifetime> make_shared();
@@ -25,7 +27,8 @@ struct app_lifetime final {
                  std::shared_ptr<app_launcher> const &, std::shared_ptr<file_importer> const &,
                  std::shared_ptr<file_info_loader> const &, std::shared_ptr<color> const &,
                  std::shared_ptr<window_lifecycle> const &, std::shared_ptr<app_dialog_lifecycle> const &,
-                 std::shared_ptr<ui_root_lifecycle> const &, std::shared_ptr<window_opener> const &);
+                 std::shared_ptr<ui_root_lifecycle> const &, std::shared_ptr<window_opener> const &,
+                 std::shared_ptr<action_sender> const &);
 
     std::shared_ptr<worker> const worker;
     std::shared_ptr<system_url> const system_url;
@@ -39,5 +42,7 @@ struct app_lifetime final {
     std::shared_ptr<ui_root_lifecycle> const ui_root_lifecycle;
 
     std::shared_ptr<window_opener> const window_opener;
+
+    std::shared_ptr<action_sender> const action_sender;
 };
 }  // namespace yas::ae

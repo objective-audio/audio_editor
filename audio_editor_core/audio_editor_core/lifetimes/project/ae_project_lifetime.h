@@ -21,7 +21,6 @@ class zooming_pair;
 class scrolling;
 class system_url;
 class player;
-class responder_stack;
 class project_state_holder;
 class project_closer;
 class project_launcher;
@@ -56,6 +55,7 @@ class project_action_controller;
 class pinch_gesture_controller;
 class scroll_gesture_controller;
 class waveform_mesh_importer;
+class project_receiver;
 
 struct project_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(project_id const &);
@@ -73,7 +73,6 @@ struct project_lifetime final {
     std::shared_ptr<ae::zooming_pair> const zooming_pair;
     std::shared_ptr<ae::scrolling> const scrolling;
     std::shared_ptr<ae::player> const player;
-    std::shared_ptr<ae::responder_stack> const responder_stack;
     std::shared_ptr<ae::project_state_holder> const state_holder;
     std::shared_ptr<ae::project_closer> const closer;
     std::shared_ptr<module_location_pool> const module_location_pool;
@@ -110,6 +109,7 @@ struct project_lifetime final {
     std::shared_ptr<import_interactor> const import_interactor;
     std::shared_ptr<track_editor> const track_editor;
     std::shared_ptr<project_editor_responder> const responder;
+    std::shared_ptr<project_receiver> const receiver;
 
     std::shared_ptr<ae::project_launcher> const launcher;
 };

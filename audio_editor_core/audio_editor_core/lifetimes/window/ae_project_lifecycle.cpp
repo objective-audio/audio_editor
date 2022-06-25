@@ -6,6 +6,8 @@
 
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_lifetime.h>
+#include <audio_editor_core/ae_project_modal_lifecycle.h>
+#include <audio_editor_core/ae_project_receiver.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -34,4 +36,26 @@ void project_lifecycle::switch_to_project() {
 observing::syncable project_lifecycle::observe(
     std::function<void(std::optional<project_sub_lifetime> const &)> &&handler) {
     return this->_current->observe(std::move(handler));
+}
+
+#pragma mark - action_receiver_provider
+
+std::optional<action_id> project_lifecycle::receivable_id() const {
+    return action_id{.project_id = this->project_id};
+}
+
+std::vector<action_receivable *> project_lifecycle::receivers() const {
+    if (auto const &lifetime = get<project_lifetime>(this->current())) {
+        return {lifetime->receiver.get()};
+    } else {
+        return {};
+    }
+}
+
+std::vector<action_receiver_providable *> project_lifecycle::sub_providers() const {
+    if (auto const &lifetime = get<project_lifetime>(this->current())) {
+        return {lifetime->modal_lifecycle.get()};
+    } else {
+        return {};
+    }
 }

@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_action_id.h>
+
+#include <optional>
 #include <string>
 
 namespace yas::ae {
@@ -57,9 +60,11 @@ enum class action_kind {
 
 struct action {
     action_kind kind;
+    std::optional<action_id> action_id;
     std::string value = "";
 
-    action(action_kind const kind);
-    action(action_kind const kind, std::string const &value);
+    action(action_kind const kind, std::optional<ae::action_id> const &, std::string const &value);
+
+    // ae_test_utilsにテスト用としてoperator==が定義されている
 };
 }  // namespace yas::ae

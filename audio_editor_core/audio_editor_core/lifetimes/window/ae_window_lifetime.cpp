@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_window_closer.h>
+#include <audio_editor_core/ae_window_receiver.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -20,17 +21,20 @@ std::shared_ptr<window_lifetime> window_lifetime::make_shared(ae::project_id con
     return std::make_shared<window_lifetime>(
         project_id, project_format, project_dir_url, ae::project_url::make_shared(project_dir_url),
         ae::project_lifecycle::make_shared(project_id),
-        ae::window_closer::make_shared(project_id, app_lifetime->window_lifecycle.get()));
+        ae::window_closer::make_shared(project_id, app_lifetime->window_lifecycle.get()),
+        ae::window_receiver::make_shared());
 }
 
 window_lifetime::window_lifetime(ae::project_id const &project_id, ae::project_format const &project_format,
                                  url const &project_dir_url, std::shared_ptr<ae::project_url> const &project_url,
                                  std::shared_ptr<ae::project_lifecycle> const &project_lifecycle,
-                                 std::shared_ptr<ae::window_closer> const &window_closer)
+                                 std::shared_ptr<ae::window_closer> const &window_closer,
+                                 std::shared_ptr<window_receiver> const &receiver)
     : project_id(project_id),
       project_format(project_format),
       project_directory_url(project_dir_url),
       project_url(project_url),
       project_lifecycle(project_lifecycle),
-      closer(window_closer) {
+      closer(window_closer),
+      receiver(receiver) {
 }

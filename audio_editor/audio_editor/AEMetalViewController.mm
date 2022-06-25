@@ -200,15 +200,16 @@ using namespace yas::ae;
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-    if (auto const action = [self actionForSelector:menuItem.action]) {
+    if (auto const action_kind = [self actionKindForSelector:menuItem.action]) {
         if (auto const ui_root_lifetime = self->_root_lifetime.lock()) {
-            return ui_root_lifetime->root->responds_to_action(action.value());
+            return ui_root_lifetime->root->responds_to_action(
+                {action_kind.value(), action_id{.project_id = self->_project_id}, ""});
         }
     }
     return NO;
 }
 
-- (std::optional<action>)actionForSelector:(SEL)selector {
+- (std::optional<action_kind>)actionKindForSelector:(SEL)selector {
     if (selector == @selector(jumpPrevious:)) {
         return action_kind::jump_previous;
     } else if (selector == @selector(jumpNext:)) {
@@ -264,7 +265,7 @@ using namespace yas::ae;
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
             if (auto const action_controller = self->_action_controller.lock()) {
-                action_controller->handle_action({action_kind::import_from_file, path});
+                action_controller->handle_action(action_kind::import_from_file, path);
             }
         }
     }];
@@ -292,7 +293,7 @@ using namespace yas::ae;
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
             if (auto const action_controller = self->_action_controller.lock()) {
-                action_controller->handle_action({action_kind::export_to_file, path});
+                action_controller->handle_action(action_kind::export_to_file, path);
             }
         }
     }];
