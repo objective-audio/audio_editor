@@ -1,8 +1,8 @@
 //
-//  ae_project_preparer.cpp
+//  ae_window_opener.cpp
 //
 
-#include "ae_project_preparer.h"
+#include "ae_window_opener.h"
 
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_hierarchy.h>
@@ -15,17 +15,17 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_preparer> project_preparer::make_shared(file_info_loader const *file_info_loader,
-                                                                window_lifecycle *lifecycle) {
-    return std::make_shared<project_preparer>(uuid_generator::make_shared(), file_info_loader, lifecycle);
+std::shared_ptr<window_opener> window_opener::make_shared(file_info_loader const *file_info_loader,
+                                                          window_lifecycle *lifecycle) {
+    return std::make_shared<window_opener>(uuid_generator::make_shared(), file_info_loader, lifecycle);
 }
 
-project_preparer::project_preparer(std::shared_ptr<uuid_generatable> const &uuid_generator,
-                                   file_info_loader const *file_info_loader, window_lifecycle *lifecycle)
+window_opener::window_opener(std::shared_ptr<uuid_generatable> const &uuid_generator,
+                             file_info_loader const *file_info_loader, window_lifecycle *lifecycle)
     : _uuid_generator(uuid_generator), _file_info_loader(file_info_loader), _window_lifecycle(lifecycle) {
 }
 
-void project_preparer::prepare(project_format const &format, url const &project_url) {
+void window_opener::open(project_format const &format, url const &project_url) {
     auto const identifier = this->_uuid_generator->generate();
     project_id const project_id{.raw_value = identifier};
 

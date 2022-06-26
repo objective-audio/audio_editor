@@ -14,7 +14,7 @@ class file_importer;
 class file_info_loader;
 class color;
 class ui_root_lifecycle;
-class project_preparer;
+class window_opener;
 class app_dialog_lifecycle;
 class window_lifecycle;
 
@@ -25,7 +25,7 @@ struct app_lifetime final {
                  std::shared_ptr<app_launcher> const &, std::shared_ptr<file_importer> const &,
                  std::shared_ptr<file_info_loader> const &, std::shared_ptr<color> const &,
                  std::shared_ptr<window_lifecycle> const &, std::shared_ptr<app_dialog_lifecycle> const &,
-                 std::shared_ptr<ui_root_lifecycle> const &, std::shared_ptr<project_preparer> const &);
+                 std::shared_ptr<ui_root_lifecycle> const &, std::shared_ptr<window_opener> const &);
 
     std::shared_ptr<worker> const worker;
     std::shared_ptr<system_url> const system_url;
@@ -38,6 +38,6 @@ struct app_lifetime final {
     std::shared_ptr<app_dialog_lifecycle> const dialog_lifecycle;
     std::shared_ptr<ui_root_lifecycle> const ui_root_lifecycle;
 
-    std::shared_ptr<project_preparer> const project_preparer;
+    std::shared_ptr<window_opener> const window_opener;
 };
 }  // namespace yas::ae
