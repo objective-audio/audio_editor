@@ -13,8 +13,5 @@ namespace yas::ae {
 struct context_menu final {
     std::string position;
     std::vector<std::optional<ae::action>> actions;
-
-    bool operator==(context_menu const &) const;
-    bool operator!=(context_menu const &) const;
 };
 }  // namespace yas::ae

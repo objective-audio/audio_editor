@@ -23,3 +23,16 @@ void test_utils::create_test_directory() {
 void test_utils::remove_contents_in_test_directory() {
     file_manager::remove_contents_in_directory(test_url().path());
 }
+
+bool operator==(yas::ae::action const &lhs, yas::ae::action const &rhs) {
+    return lhs.kind == rhs.kind && lhs.value == rhs.value;
+}
+
+bool operator==(std::optional<yas::ae::action> const &lhs, std::optional<yas::ae::action> const &rhs) {
+    if (lhs.has_value() && rhs.has_value()) {
+        return *lhs == *rhs;
+    } else if (!lhs.has_value() && !rhs.has_value()) {
+        return true;
+    }
+    return false;
+}

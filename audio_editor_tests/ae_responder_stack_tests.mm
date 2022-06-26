@@ -5,6 +5,7 @@
 #import <XCTest/XCTest.h>
 #include <audio_editor_core/ae_responder_stack.h>
 #include <vector>
+#include "ae_test_utils.h"
 
 using namespace yas;
 using namespace yas::ae;
