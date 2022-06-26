@@ -61,8 +61,5 @@ struct action {
 
     action(action_kind const kind);
     action(action_kind const kind, std::string const &value);
-
-    bool operator==(action const &) const;
-    bool operator!=(action const &) const;
 };
 }  // namespace yas::ae
