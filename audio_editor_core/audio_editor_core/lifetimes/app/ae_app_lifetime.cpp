@@ -10,10 +10,10 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_file_info_loader.h>
-#include <audio_editor_core/ae_project_preparer.h>
 #include <audio_editor_core/ae_system_url.h>
 #include <audio_editor_core/ae_ui_root_lifecycle.h>
 #include <audio_editor_core/ae_window_lifecycle.h>
+#include <audio_editor_core/ae_window_opener.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -28,8 +28,7 @@ std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
         worker, system_url, app_launcher::make_shared(worker, system_url),
         file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing)), file_info_loader,
         ae::color::make_shared(), window_lifecycle, app_dialog_lifecycle::make_shared(),
-        ui_root_lifecycle::make_shared(),
-        project_preparer::make_shared(file_info_loader.get(), window_lifecycle.get()));
+        ui_root_lifecycle::make_shared(), window_opener::make_shared(file_info_loader.get(), window_lifecycle.get()));
 }
 
 app_lifetime::app_lifetime(std::shared_ptr<yas::worker> const &worker,
@@ -41,7 +40,7 @@ app_lifetime::app_lifetime(std::shared_ptr<yas::worker> const &worker,
                            std::shared_ptr<ae::window_lifecycle> const &window_lifecycle,
                            std::shared_ptr<app_dialog_lifecycle> const &dialog_lifecycle,
                            std::shared_ptr<ae::ui_root_lifecycle> const &ui_root_lifecycle,
-                           std::shared_ptr<ae::project_preparer> const &project_preparer)
+                           std::shared_ptr<ae::window_opener> const &window_opener)
     : worker(worker),
       system_url(system_url),
       launcher(launcher),
@@ -51,5 +50,5 @@ app_lifetime::app_lifetime(std::shared_ptr<yas::worker> const &worker,
       window_lifecycle(window_lifecycle),
       dialog_lifecycle(dialog_lifecycle),
       ui_root_lifecycle(ui_root_lifecycle),
-      project_preparer(project_preparer) {
+      window_opener(window_opener) {
 }

@@ -10,7 +10,6 @@
 #include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
-#include <audio_editor_core/ae_uuid_generator.h>
 #include <audio_editor_core/ae_window_lifetime.h>
 #include <cpp_utils/yas_assertion.h>
 
@@ -18,11 +17,10 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<window_lifecycle> window_lifecycle::make_shared() {
-    return std::make_shared<window_lifecycle>(uuid_generator::make_shared());
+    return std::make_shared<window_lifecycle>();
 }
 
-window_lifecycle::window_lifecycle(std::shared_ptr<uuid_generatable> const &uuid_generator)
-    : _uuid_generator(uuid_generator) {
+window_lifecycle::window_lifecycle() {
 }
 
 void window_lifecycle::add_lifetime(url const &project_dir_url, project_id const &project_id,

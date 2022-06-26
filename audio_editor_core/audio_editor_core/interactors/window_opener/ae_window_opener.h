@@ -1,5 +1,5 @@
 //
-//  ae_project_preparer.h
+//  ae_window_opener.h
 //
 
 #pragma once
@@ -15,12 +15,12 @@ class file_info_loader;
 class window_lifecycle;
 class project_format;
 
-struct project_preparer final {
-    [[nodiscard]] static std::shared_ptr<project_preparer> make_shared(file_info_loader const *, window_lifecycle *);
+struct window_opener final {
+    [[nodiscard]] static std::shared_ptr<window_opener> make_shared(file_info_loader const *, window_lifecycle *);
 
-    project_preparer(std::shared_ptr<uuid_generatable> const &, file_info_loader const *, window_lifecycle *);
+    window_opener(std::shared_ptr<uuid_generatable> const &, file_info_loader const *, window_lifecycle *);
 
-    void prepare(project_format const &, url const &project_url);
+    void open(project_format const &, url const &project_url);
 
    private:
     std::shared_ptr<uuid_generatable> const _uuid_generator;
