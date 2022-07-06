@@ -80,7 +80,6 @@ observing::syncable window_lifecycle::observe_event(std::function<void(window_li
 #pragma mark - action_receiver_provider
 
 std::optional<action_id> window_lifecycle::receivable_id() const {
-#warning todo windowのinstance_idを含ませる
     return std::nullopt;
 }
 
