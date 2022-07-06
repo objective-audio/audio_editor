@@ -20,9 +20,9 @@ std::shared_ptr<window_lifetime> window_lifetime::make_shared(window_lifetime_id
 
     return std::make_shared<window_lifetime>(
         lifetime_id, project_format, project_dir_url, ae::project_url::make_shared(project_dir_url),
-        ae::project_lifecycle::make_shared(lifetime_id.project_id),
-        ae::window_closer::make_shared(lifetime_id.project_id, app_lifetime->window_lifecycle.get()),
-        ae::window_receiver::make_shared());
+        ae::project_lifecycle::make_shared(lifetime_id),
+        ae::window_closer::make_shared(lifetime_id, app_lifetime->window_lifecycle.get()),
+        ae::window_receiver::make_shared(lifetime_id));
 }
 
 window_lifetime::window_lifetime(window_lifetime_id const &lifetime_id, ae::project_format const &project_format,

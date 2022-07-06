@@ -12,7 +12,8 @@ struct window_lifetime_id final {
     identifier instance_id;
     project_id project_id;
 
-    bool operator==(window_lifetime_id const &);
-    bool operator!=(window_lifetime_id const &);
+    bool operator==(window_lifetime_id const &) const;
+    bool operator!=(window_lifetime_id const &) const;
+    bool operator<(window_lifetime_id const &) const;
 };
 }  // namespace yas::ae

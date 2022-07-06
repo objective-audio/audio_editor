@@ -13,11 +13,11 @@
 
 namespace yas::ae {
 struct project_lifecycle final : action_receiver_providable {
-    [[nodiscard]] static std::shared_ptr<project_lifecycle> make_shared(project_id const &);
+    [[nodiscard]] static std::shared_ptr<project_lifecycle> make_shared(window_lifetime_id const &);
 
-    project_lifecycle(project_id const &);
+    project_lifecycle(window_lifetime_id const &);
 
-    ae::project_id const project_id;
+    ae::window_lifetime_id const window_lifetime_id;
 
     [[nodiscard]] std::optional<project_sub_lifetime> const &current() const;
 

@@ -11,9 +11,9 @@
 
 namespace yas::ae {
 struct project_modal_lifecycle final : action_receiver_providable {
-    [[nodiscard]] static std::shared_ptr<project_modal_lifecycle> make_shared(project_id const &);
+    [[nodiscard]] static std::shared_ptr<project_modal_lifecycle> make_shared(window_lifetime_id const &);
 
-    project_modal_lifecycle(project_id const &);
+    project_modal_lifecycle(window_lifetime_id const &);
 
     std::optional<project_modal_sub_lifetime> const &current() const;
 
@@ -37,7 +37,7 @@ struct project_modal_lifecycle final : action_receiver_providable {
         std::function<void(std::optional<project_modal_sub_lifetime> const &)> &&);
 
    private:
-    project_id const _project_id;
+    window_lifetime_id const _window_lifetime_id;
 
     observing::value::holder_ptr<std::optional<project_modal_sub_lifetime>> const _current;
 

@@ -14,16 +14,17 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<window_presenter> window_presenter::make_shared(ae::project_id const &project_id) {
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_id);
-    return std::make_shared<window_presenter>(project_id, window_lifetime->project_url, window_lifetime->closer,
+std::shared_ptr<window_presenter> window_presenter::make_shared(ae::window_lifetime_id const &lifetime_id) {
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
+    return std::make_shared<window_presenter>(lifetime_id, window_lifetime->project_url, window_lifetime->closer,
                                               window_lifetime->project_lifecycle);
 }
 
-window_presenter::window_presenter(ae::project_id const &project_id, std::shared_ptr<project_url> const &project_url,
+window_presenter::window_presenter(ae::window_lifetime_id const &lifetime_id,
+                                   std::shared_ptr<project_url> const &project_url,
                                    std::shared_ptr<window_closer> const &closer,
                                    std::shared_ptr<project_lifecycle> const &project_lifecycle)
-    : project_id(project_id), _project_url(project_url), _closer(closer), _project_lifecycle(project_lifecycle) {
+    : lifetime_id(lifetime_id), _project_url(project_url), _closer(closer), _project_lifecycle(project_lifecycle) {
 }
 
 std::string window_presenter::title() const {

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 
 #include <string>
 
@@ -20,7 +20,7 @@ class project_id;
 struct window_lifecycle_for_project_closer {
     virtual ~window_lifecycle_for_project_closer() = default;
 
-    virtual void remove_lifetime(ae::project_id const &project_id) = 0;
+    virtual void remove_lifetime(window_lifetime_id const &) = 0;
 };
 
 enum class project_state;

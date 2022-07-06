@@ -52,33 +52,37 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::project_id const &project_id) {
-    auto const window_lifetime = hierarchy::window_lifetime_for_id(project_id);
+std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::window_lifetime_id const &window_lifetime_id) {
+    auto const window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
 
-    return make_shared(project_id, window_lifetime->project_format, window_lifetime->project_directory_url);
+    return make_shared(window_lifetime_id, window_lifetime->project_format, window_lifetime->project_directory_url);
 }
 
-std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::project_id const &project_id,
+std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::window_lifetime_id const &window_lifetime_id,
                                                                 ae::project_format const &project_format,
                                                                 url const &project_dir_url) {
-    return std::make_shared<project_lifetime>(project_id, project_format, project_dir_url, hierarchy::app_lifetime());
+    return std::make_shared<project_lifetime>(window_lifetime_id, project_format, project_dir_url,
+                                              hierarchy::app_lifetime());
 }
 
-project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project_format const &project_format,
-                                   url const &project_dir_url, std::shared_ptr<app_lifetime> const &app_lifetime)
-    : project_id(project_id),
+project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime_id,
+                                   ae::project_format const &project_format, url const &project_dir_url,
+                                   std::shared_ptr<app_lifetime> const &app_lifetime)
+    : window_lifetime_id(window_lifetime_id),
       project_format(project_format),
       project_url(project_url::make_shared(project_dir_url)),
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
-      player(player::make_shared(app_lifetime->system_url->playing_directory(), project_id, this->scrolling.get())),
+      player(player::make_shared(app_lifetime->system_url->playing_directory(), window_lifetime_id.project_id,
+                                 this->scrolling.get())),
       state_holder(project_state_holder::make_shared()),
-      closer(project_closer::make_shared(project_id, app_lifetime->file_importer.get(),
+      closer(project_closer::make_shared(window_lifetime_id, app_lifetime->file_importer.get(),
                                          app_lifetime->window_lifecycle.get(), this->state_holder.get())),
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),
-      action_controller(ae::project_action_controller::make_shared(project_id, app_lifetime->action_sender.get())),
+      action_controller(
+          ae::project_action_controller::make_shared(window_lifetime_id.project_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(this->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(this->scrolling.get())),
       timing(timing::make_shared(project_format.sample_rate)),
@@ -90,7 +94,7 @@ project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project
       exporter(exporter::make_shared()),
       editing_status(editing_status::make_shared(this->exporter.get())),
       playing_toggler(playing_toggler::make_shared(this->player.get())),
-      modal_lifecycle(project_modal_lifecycle::make_shared(project_id)),
+      modal_lifecycle(project_modal_lifecycle::make_shared(window_lifetime_id)),
       timeline_holder(timeline_holder::make_shared(this->project_format, this->project_url.get())),
       nudger(nudger::make_shared(this->player.get(), this->nudge_settings.get())),
       edge_holder(edge_holder::make_shared()),
@@ -114,7 +118,7 @@ project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project
                                      this->pasteboard.get(), this->edge_holder.get(), this->editing_status.get())),
       file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
       file_module_loader(file_module_loader::make_shared(
-          project_id, this->project_url.get(), this->project_format, this->player.get(),
+          window_lifetime_id.project_id, this->project_url.get(), this->project_format, this->player.get(),
           this->file_module_loading_state_holder.get(), this->database.get(), this->file_track.get(),
           this->edge_holder.get(), this->timeline_holder.get())),
       import_interactor(import_interactor::make_shared(this->modal_lifecycle.get(), this->editing_status.get(),
@@ -122,10 +126,10 @@ project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project
       track_editor(track_editor::make_shared(this->player.get(), this->file_track.get(), this->marker_pool.get(),
                                              this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       receiver(project_receiver::make_shared(
-          project_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
-          this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(),
-          this->marker_editor.get(), this->module_renaming_launcher.get(), this->timing.get(),
-          this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())),
-      launcher(project_launcher::make_shared(this->instance_id, this->project_format, this->state_holder.get(),
-                                             this->player.get(), this->timeline_holder.get())) {
+          window_lifetime_id.project_id, this->track_editor.get(), this->playing_toggler.get(),
+          this->nudge_settings.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
+          this->time_editor_launcher.get(), this->marker_editor.get(), this->module_renaming_launcher.get(),
+          this->timing.get(), this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())),
+      launcher(project_launcher::make_shared(this->project_format, this->state_holder.get(), this->player.get(),
+                                             this->timeline_holder.get())) {
 }

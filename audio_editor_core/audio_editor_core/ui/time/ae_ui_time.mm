@@ -21,10 +21,10 @@ using namespace yas::ae;
 std::shared_ptr<ui_time> ui_time::make_shared(ui_project_id const &ui_project_id,
                                               std::shared_ptr<ui::standard> const &standard,
                                               std::shared_ptr<ui::texture> const &texture) {
-    auto const presenter = time_presenter::make_shared(ui_project_id.project_id);
+    auto const presenter = time_presenter::make_shared(ui_project_id.window_lifetime_id);
 
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.project_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.window_lifetime_id);
 
     return std::make_shared<ui_time>(standard, texture, app_lifetime->color, presenter,
                                      project_lifetime->action_controller);

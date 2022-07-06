@@ -30,8 +30,8 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(ui_project_id const &ui_proj
     auto const &app_lifetime = hierarchy::app_lifetime();
 
     auto const modules_presenter =
-        modules_presenter::make_shared(ui_project_id.project_id, display_space, location_pool);
-    auto const modules_controller = modules_controller::make_shared(ui_project_id.project_id, location_pool);
+        modules_presenter::make_shared(ui_project_id.window_lifetime_id, display_space, location_pool);
+    auto const modules_controller = modules_controller::make_shared(ui_project_id.window_lifetime_id, location_pool);
     return std::make_shared<ui_modules>(modules_presenter, modules_controller, standard, app_lifetime->color,
                                         font_atlas, waveforms);
 }

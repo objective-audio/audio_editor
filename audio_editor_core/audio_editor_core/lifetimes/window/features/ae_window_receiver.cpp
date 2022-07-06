@@ -9,16 +9,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<window_receiver> window_receiver::make_shared() {
-    return std::make_shared<window_receiver>();
+std::shared_ptr<window_receiver> window_receiver::make_shared(window_lifetime_id const &lifetime_id) {
+    return std::make_shared<window_receiver>(lifetime_id);
 }
 
-window_receiver::window_receiver() {
+window_receiver::window_receiver(window_lifetime_id const &lifetime_id) : _lifetime_id(lifetime_id) {
 }
 
 std::optional<action_id> window_receiver::receivable_id() const {
-#warning todo windowのinstance_idを含ませる
-    return std::nullopt;
+    return action_id{.window_instance_id = this->_lifetime_id.instance_id, .project_id = this->_lifetime_id.project_id};
 }
 
 std::optional<ae::action> window_receiver::to_action(ae::key const &) const {

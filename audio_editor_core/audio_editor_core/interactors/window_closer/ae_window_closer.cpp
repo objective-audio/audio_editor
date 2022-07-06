@@ -9,13 +9,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<window_closer> window_closer::make_shared(project_id const &project_id,
+std::shared_ptr<window_closer> window_closer::make_shared(window_lifetime_id const &lifetime_id,
                                                           window_lifecycle *window_lifecycle) {
-    return std::make_shared<window_closer>(project_id, window_lifecycle);
+    return std::make_shared<window_closer>(lifetime_id, window_lifecycle);
 }
 
-window_closer::window_closer(project_id const &project_id, window_lifecycle *window_lifecycle)
-    : _project_id(project_id), _window_lifecycle(window_lifecycle) {
+window_closer::window_closer(window_lifetime_id const &lifetime_id, window_lifecycle *window_lifecycle)
+    : _lifetime_id(lifetime_id), _window_lifecycle(window_lifecycle) {
 }
 
 bool window_closer::can_close() const {
@@ -32,6 +32,6 @@ void window_closer::close_if_needed() {
         return;
     }
 
-    this->_window_lifecycle->remove_lifetime(this->_project_id);
+    this->_window_lifecycle->remove_lifetime(this->_lifetime_id);
     this->_window_lifecycle = nullptr;
 }

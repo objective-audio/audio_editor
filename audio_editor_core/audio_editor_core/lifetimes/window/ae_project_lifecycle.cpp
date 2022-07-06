@@ -12,12 +12,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_lifecycle> project_lifecycle::make_shared(ae::project_id const &project_id) {
-    return std::make_shared<project_lifecycle>(project_id);
+std::shared_ptr<project_lifecycle> project_lifecycle::make_shared(ae::window_lifetime_id const &window_lifetime_id) {
+    return std::make_shared<project_lifecycle>(window_lifetime_id);
 }
 
-project_lifecycle::project_lifecycle(ae::project_id const &project_id)
-    : project_id(project_id),
+project_lifecycle::project_lifecycle(ae::window_lifetime_id const &window_lifetime_id)
+    : window_lifetime_id(window_lifetime_id),
       _current(observing::value::holder<std::optional<project_sub_lifetime>>::make_shared(std::nullopt)) {
 }
 
@@ -26,7 +26,7 @@ std::optional<project_sub_lifetime> const &project_lifecycle::current() const {
 }
 
 void project_lifecycle::switch_to_project() {
-    auto const lifetime = project_lifetime::make_shared(this->project_id);
+    auto const lifetime = project_lifetime::make_shared(this->window_lifetime_id);
 
     this->_current->set_value(lifetime);
 
@@ -41,7 +41,7 @@ observing::syncable project_lifecycle::observe(
 #pragma mark - action_receiver_provider
 
 std::optional<action_id> project_lifecycle::receivable_id() const {
-    return action_id{.project_id = this->project_id};
+    return action_id{.project_id = this->window_lifetime_id.project_id};
 }
 
 std::vector<action_receivable *> project_lifecycle::receivers() const {

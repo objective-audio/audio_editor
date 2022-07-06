@@ -25,7 +25,7 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_root_lifetime> ui_root_lifetime::make_shared(std::shared_ptr<ui::standard> const &standard,
                                                                 ui_project_id const &ui_project_id) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.project_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.window_lifetime_id);
     auto const &waveforms_mesh_importer = project_lifetime->waveforms_mesh_importer;
 
     auto const texture = ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look());

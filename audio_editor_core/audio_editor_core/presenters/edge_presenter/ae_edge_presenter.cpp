@@ -12,9 +12,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<edge_presenter> edge_presenter::make_shared(project_id const &project_id,
+std::shared_ptr<edge_presenter> edge_presenter::make_shared(window_lifetime_id const &window_lifetime_id,
                                                             std::shared_ptr<display_space> const &display_space) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::shared_ptr<edge_presenter>(
         new edge_presenter{project_lifetime->project_format, project_lifetime->edge_holder, display_space});
 }

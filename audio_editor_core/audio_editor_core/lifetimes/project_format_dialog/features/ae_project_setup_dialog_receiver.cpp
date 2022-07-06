@@ -9,9 +9,18 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::shared_ptr<project_setup_dialog_receiver> project_setup_dialog_receiver::make_shared(
+    window_lifetime_id const &window_lifetime_id) {
+    return std::make_shared<project_setup_dialog_receiver>(window_lifetime_id);
+}
+
+project_setup_dialog_receiver::project_setup_dialog_receiver(window_lifetime_id const &window_lifetime_id)
+    : _window_lifetime_id(window_lifetime_id) {
+}
+
 std::optional<action_id> project_setup_dialog_receiver::receivable_id() const {
-#warning todo windowのinstance_idを含ませる
-    return std::nullopt;
+    return action_id{.window_instance_id = this->_window_lifetime_id.instance_id,
+                     .project_id = this->_window_lifetime_id.project_id};
 }
 
 std::optional<ae::action> project_setup_dialog_receiver::to_action(ae::key const &) const {
