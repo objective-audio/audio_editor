@@ -10,7 +10,7 @@
 		B60204D5263AAEC600CFC752 /* ae_editing_root_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B60204D3263AAEC600CFC752 /* ae_editing_root_presenter.cpp */; };
 		B60204D6263AAEC600CFC752 /* ae_editing_root_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B60204D4263AAEC600CFC752 /* ae_editing_root_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6047AE92875AC3000BC91F6 /* ae_window_lifetime_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6047AE72875AC3000BC91F6 /* ae_window_lifetime_id.cpp */; };
-		B6047AEA2875AC3000BC91F6 /* ae_window_lifetime_id.h in Headers */ = {isa = PBXBuildFile; fileRef = B6047AE82875AC3000BC91F6 /* ae_window_lifetime_id.h */; };
+		B6047AEA2875AC3000BC91F6 /* ae_window_lifetime_id.h in Headers */ = {isa = PBXBuildFile; fileRef = B6047AE82875AC3000BC91F6 /* ae_window_lifetime_id.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B605EA702657E5530031B177 /* ae_ui_editing_root.mm in Sources */ = {isa = PBXBuildFile; fileRef = B605EA6E2657E5530031B177 /* ae_ui_editing_root.mm */; };
 		B605EA712657E5530031B177 /* ae_ui_editing_root.h in Headers */ = {isa = PBXBuildFile; fileRef = B605EA6F2657E5530031B177 /* ae_ui_editing_root.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B606EB042747EDCF006C3DD2 /* ae_exporter_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B606EB032747EDCF006C3DD2 /* ae_exporter_types.h */; settings = {ATTRIBUTES = (Public, ); }; };

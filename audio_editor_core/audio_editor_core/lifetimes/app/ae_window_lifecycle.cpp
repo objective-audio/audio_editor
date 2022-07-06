@@ -27,7 +27,8 @@ window_lifecycle::window_lifecycle() {
 
 void window_lifecycle::add_lifetime(url const &project_dir_url, project_id const &project_id,
                                     project_format const &format) {
-    auto const lifetime = window_lifetime::make_shared(project_id, format, project_dir_url);
+    auto const lifetime =
+        window_lifetime::make_shared({.instance_id = identifier{}, .project_id = project_id}, format, project_dir_url);
 
     this->_window_lifetimes->insert_or_replace(project_id, std::make_pair(lifetime, nullptr));
 
