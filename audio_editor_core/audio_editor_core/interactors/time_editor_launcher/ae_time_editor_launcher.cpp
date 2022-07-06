@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_lifetime.h>
-#include <audio_editor_core/ae_time_editor_responder.h>
 #include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
