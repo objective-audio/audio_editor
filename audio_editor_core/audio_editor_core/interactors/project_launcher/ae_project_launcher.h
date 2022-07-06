@@ -16,12 +16,13 @@ class player;
 class timeline_holder;
 
 struct project_launcher final : std::enable_shared_from_this<project_launcher> {
-    [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(
-        identifier const &instance_id, project_format const &, project_state_holder_for_project_launcher *, player *,
-        timeline_holder const *, std::shared_ptr<project_editor_responder> const &);
+    [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(identifier const &instance_id,
+                                                                       project_format const &,
+                                                                       project_state_holder_for_project_launcher *,
+                                                                       player *, timeline_holder const *);
 
     project_launcher(identifier const &instance_id, project_format const &, project_state_holder_for_project_launcher *,
-                     player *, timeline_holder const *, std::shared_ptr<project_editor_responder> const &);
+                     player *, timeline_holder const *);
 
     void launch();
 
@@ -32,7 +33,6 @@ struct project_launcher final : std::enable_shared_from_this<project_launcher> {
     project_state_holder_for_project_launcher *const _state_holder;
     player *const _player;
     timeline_holder const *const _timeline_holder;
-    std::weak_ptr<project_editor_responder> const _responder;
 
     observing::canceller_pool _pool;
 

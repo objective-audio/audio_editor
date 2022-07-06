@@ -31,7 +31,6 @@
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_action_controller.h>
 #include <audio_editor_core/ae_project_closer.h>
-#include <audio_editor_core/ae_project_editor_responder.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_project_receiver.h>
@@ -122,12 +121,11 @@ project_lifetime::project_lifetime(ae::project_id const &project_id, ae::project
                                                        this->file_module_loader.get())),
       track_editor(track_editor::make_shared(this->player.get(), this->file_track.get(), this->marker_pool.get(),
                                              this->pasteboard.get(), this->database.get(), this->editing_status.get())),
-      responder(project_editor_responder::make_shared(
+      receiver(project_receiver::make_shared(
           project_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
           this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(),
           this->marker_editor.get(), this->module_renaming_launcher.get(), this->timing.get(),
           this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())),
-      receiver(project_receiver::make_shared(project_id, this->responder.get())),
       launcher(project_launcher::make_shared(this->instance_id, this->project_format, this->state_holder.get(),
-                                             this->player.get(), this->timeline_holder.get(), this->responder)) {
+                                             this->player.get(), this->timeline_holder.get())) {
 }
