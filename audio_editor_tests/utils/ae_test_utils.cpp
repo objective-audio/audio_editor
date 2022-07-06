@@ -24,8 +24,21 @@ void test_utils::remove_contents_in_test_directory() {
     file_manager::remove_contents_in_directory(test_url().path());
 }
 
+bool operator==(yas::ae::action_id const &lhs, yas::ae::action_id const &rhs) {
+    return lhs.project_id == rhs.project_id;
+}
+
+bool operator==(std::optional<yas::ae::action_id> const &lhs, std::optional<yas::ae::action_id> const &rhs) {
+    if (lhs.has_value() && rhs.has_value()) {
+        return *lhs == *rhs;
+    } else if (!lhs.has_value() && !rhs.has_value()) {
+        return true;
+    }
+    return false;
+}
+
 bool operator==(yas::ae::action const &lhs, yas::ae::action const &rhs) {
-    return lhs.kind == rhs.kind && lhs.value == rhs.value;
+    return lhs.kind == rhs.kind && lhs.action_id == rhs.action_id && lhs.value == rhs.value;
 }
 
 bool operator==(std::optional<yas::ae::action> const &lhs, std::optional<yas::ae::action> const &rhs) {

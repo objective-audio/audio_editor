@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_lifetime.h>
+#include <audio_editor_core/ae_time_editor_receiver.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -110,4 +111,22 @@ std::shared_ptr<context_menu_lifetime> const &project_modal_lifecycle::context_m
 observing::syncable project_modal_lifecycle::observe(
     std::function<void(std::optional<project_modal_sub_lifetime> const &)> &&handler) {
     return this->_current->observe(std::move(handler));
+}
+
+#pragma mark - action_receiver_provider
+
+std::optional<action_id> project_modal_lifecycle::receivable_id() const {
+    return action_id{.project_id = this->_project_id};
+}
+
+std::vector<action_receivable *> project_modal_lifecycle::receivers() const {
+    if (auto const &lifetime = get<ae::time_editor_lifetime>(this->current())) {
+        return {lifetime->receiver.get()};
+    } else {
+        return {};
+    }
+}
+
+std::vector<action_receiver_providable *> project_modal_lifecycle::sub_providers() const {
+    return {};
 }

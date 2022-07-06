@@ -22,23 +22,22 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_editor_responder> project_editor_responder::make_shared(
-    track_editor *track_editor, playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger,
-    jumper *jumper, edge_editor *edge_editor, time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
-    module_renaming_launcher *module_renaming_launcher, timing *timing, import_interactor *import_interactor,
-    export_interactor *export_interactor, reverter *reverter) {
+    project_id const &project_id, track_editor *track_editor, playing_toggler *toggler, nudge_settings *nudge_settings,
+    nudger *nudger, jumper *jumper, edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
+    marker_editor *marker_editor, module_renaming_launcher *module_renaming_launcher, timing *timing,
+    import_interactor *import_interactor, export_interactor *export_interactor, reverter *reverter) {
     return std::make_shared<project_editor_responder>(
-        track_editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher, marker_editor,
-        module_renaming_launcher, timing, import_interactor, export_interactor, reverter);
+        project_id, track_editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher,
+        marker_editor, module_renaming_launcher, timing, import_interactor, export_interactor, reverter);
 }
 
-project_editor_responder::project_editor_responder(track_editor *track_editor, playing_toggler *toggler,
-                                                   nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
-                                                   edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
-                                                   marker_editor *marker_editor,
-                                                   module_renaming_launcher *module_renaming_launcher, timing *timing,
-                                                   import_interactor *import_interactor,
-                                                   export_interactor *export_interactor, reverter *reverter)
-    : _editor(track_editor),
+project_editor_responder::project_editor_responder(
+    project_id const &project_id, track_editor *track_editor, playing_toggler *toggler, nudge_settings *nudge_settings,
+    nudger *nudger, jumper *jumper, edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
+    marker_editor *marker_editor, module_renaming_launcher *module_renaming_launcher, timing *timing,
+    import_interactor *import_interactor, export_interactor *export_interactor, reverter *reverter)
+    : _project_id(project_id),
+      _editor(track_editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
       _nudger(nudger),
@@ -54,57 +53,59 @@ project_editor_responder::project_editor_responder(track_editor *track_editor, p
 }
 
 std::optional<ae::action> project_editor_responder::to_action(ae::key const &key) {
+    std::optional<action_id> const action_id({.project_id = this->_project_id});
+
     switch (key) {
         case key::space:
-            return action_kind::toggle_play;
+            return action{action_kind::toggle_play, action_id, ""};
         case key::del:
-            return action_kind::erase;
+            return action{action_kind::erase, action_id, ""};
         case key::a:
-            return action_kind::drop_head;
+            return action{action_kind::drop_head, action_id, ""};
         case key::s:
-            return action_kind::split;
+            return action{action_kind::split, action_id, ""};
         case key::d:
-            return action_kind::drop_tail;
+            return action{action_kind::drop_tail, action_id, ""};
         case key::n:
-            return action_kind::rotate_nudging_next_unit;
+            return action{action_kind::rotate_nudging_next_unit, action_id, ""};
         case key::shift_n:
-            return action_kind::rotate_nudging_previous_unit;
+            return action{action_kind::rotate_nudging_previous_unit, action_id, ""};
         case key::f:
-            return action_kind::rotate_timing_fraction;
+            return action{action_kind::rotate_timing_fraction, action_id, ""};
         case key::t:
-            return action_kind::begin_time_editing;
+            return action{action_kind::begin_time_editing, action_id, ""};
         case key::left_bracket:
-            return action_kind::set_begin_edge;
+            return action{action_kind::set_begin_edge, action_id, ""};
         case key::right_bracket:
-            return action_kind::set_end_edge;
+            return action{action_kind::set_end_edge, action_id, ""};
         case key::left:
-            return action_kind::nudge_previous;
+            return action{action_kind::nudge_previous, action_id, ""};
         case key::right:
-            return action_kind::nudge_next;
+            return action{action_kind::nudge_next, action_id, ""};
         case key::shift_left:
-            return action_kind::nudge_previous_more;
+            return action{action_kind::nudge_previous_more, action_id, ""};
         case key::shift_right:
-            return action_kind::nudge_next_more;
+            return action{action_kind::nudge_next_more, action_id, ""};
         case key::num_0:
-            return action_kind::return_to_zero;
+            return action{action_kind::return_to_zero, action_id, ""};
         case key::num_1:
-            return action{action_kind::go_to_marker, "0"};
+            return action{action_kind::go_to_marker, action_id, "0"};
         case key::num_2:
-            return action{action_kind::go_to_marker, "1"};
+            return action{action_kind::go_to_marker, action_id, "1"};
         case key::num_3:
-            return action{action_kind::go_to_marker, "2"};
+            return action{action_kind::go_to_marker, action_id, "2"};
         case key::num_4:
-            return action{action_kind::go_to_marker, "3"};
+            return action{action_kind::go_to_marker, action_id, "3"};
         case key::num_5:
-            return action{action_kind::go_to_marker, "4"};
+            return action{action_kind::go_to_marker, action_id, "4"};
         case key::num_6:
-            return action{action_kind::go_to_marker, "5"};
+            return action{action_kind::go_to_marker, action_id, "5"};
         case key::num_7:
-            return action{action_kind::go_to_marker, "6"};
+            return action{action_kind::go_to_marker, action_id, "6"};
         case key::num_8:
-            return action{action_kind::go_to_marker, "7"};
+            return action{action_kind::go_to_marker, action_id, "7"};
         case key::num_9:
-            return action{action_kind::go_to_marker, "8"};
+            return action{action_kind::go_to_marker, action_id, "8"};
 
         case key::esc:
         case key::plus:

@@ -14,21 +14,18 @@ using namespace yas::ae;
 
 std::shared_ptr<project_launcher> project_launcher::make_shared(
     identifier const &instance_id, project_format const &project_format,
-    responder_stack_for_project_launcher *responder_stack, project_state_holder_for_project_launcher *state_holder,
-    player *player, timeline_holder const *timeline_holder,
+    project_state_holder_for_project_launcher *state_holder, player *player, timeline_holder const *timeline_holder,
     std::shared_ptr<project_editor_responder> const &responder) {
-    return std::make_shared<ae::project_launcher>(instance_id, project_format, responder_stack, state_holder, player,
-                                                  timeline_holder, responder);
+    return std::make_shared<ae::project_launcher>(instance_id, project_format, state_holder, player, timeline_holder,
+                                                  responder);
 }
 
 project_launcher::project_launcher(identifier const &instance_id, project_format const &project_format,
-                                   responder_stack_for_project_launcher *responder_stack,
                                    project_state_holder_for_project_launcher *state_holder, player *player,
                                    timeline_holder const *timeline_holder,
                                    std::shared_ptr<project_editor_responder> const &responder)
     : _instance_id(instance_id),
       _project_format(project_format),
-      _responder_stack(responder_stack),
       _state_holder(state_holder),
       _player(player),
       _timeline_holder(timeline_holder),
@@ -48,8 +45,6 @@ void project_launcher::launch() {
     }
 
     this->_state_holder->set_state(project_state::loading);
-
-    this->_responder_stack->push_responder(this->_instance_id, responder);
 
     this->_player->set_timeline(this->_timeline_holder->timeline(), this->_project_format.sample_rate,
                                 audio::pcm_format::float32);

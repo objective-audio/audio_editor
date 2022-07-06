@@ -17,13 +17,11 @@ class timeline_holder;
 
 struct project_launcher final : std::enable_shared_from_this<project_launcher> {
     [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(
-        identifier const &instance_id, project_format const &, responder_stack_for_project_launcher *,
-        project_state_holder_for_project_launcher *, player *, timeline_holder const *,
-        std::shared_ptr<project_editor_responder> const &);
+        identifier const &instance_id, project_format const &, project_state_holder_for_project_launcher *, player *,
+        timeline_holder const *, std::shared_ptr<project_editor_responder> const &);
 
-    project_launcher(identifier const &instance_id, project_format const &, responder_stack_for_project_launcher *,
-                     project_state_holder_for_project_launcher *, player *, timeline_holder const *,
-                     std::shared_ptr<project_editor_responder> const &);
+    project_launcher(identifier const &instance_id, project_format const &, project_state_holder_for_project_launcher *,
+                     player *, timeline_holder const *, std::shared_ptr<project_editor_responder> const &);
 
     void launch();
 
@@ -31,7 +29,6 @@ struct project_launcher final : std::enable_shared_from_this<project_launcher> {
     identifier const _instance_id;
     project_format const _project_format;
 
-    responder_stack_for_project_launcher *const _responder_stack;
     project_state_holder_for_project_launcher *const _state_holder;
     player *const _player;
     timeline_holder const *const _timeline_holder;

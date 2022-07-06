@@ -14,6 +14,7 @@ namespace yas::ae {
 class project_lifecycle;
 class window_closer;
 class project_url;
+class window_receiver;
 
 struct window_lifetime final {
     [[nodiscard]] static std::shared_ptr<window_lifetime> make_shared(ae::project_id const &, project_format const &,
@@ -21,7 +22,7 @@ struct window_lifetime final {
 
     window_lifetime(ae::project_id const &, project_format const &, url const &project_dir_url,
                     std::shared_ptr<project_url> const &, std::shared_ptr<project_lifecycle> const &,
-                    std::shared_ptr<window_closer> const &);
+                    std::shared_ptr<window_closer> const &, std::shared_ptr<window_receiver> const &);
 
     ae::project_id const project_id;
     project_format const project_format;
@@ -30,5 +31,6 @@ struct window_lifetime final {
     std::shared_ptr<project_url> const project_url;
     std::shared_ptr<project_lifecycle> const project_lifecycle;
     std::shared_ptr<window_closer> const closer;
+    std::shared_ptr<window_receiver> const receiver;
 };
 }  // namespace yas::ae

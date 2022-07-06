@@ -13,7 +13,6 @@
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_responder_stack.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_closer.h>
 #include <audio_editor_core/ae_time_editor_lifetime.h>

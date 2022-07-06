@@ -4,6 +4,8 @@
 
 #include "ae_app_dialog_lifecycle.h"
 
+#include <audio_editor_core/ae_action_id.h>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -45,4 +47,18 @@ observing::syncable app_dialog_lifecycle::observe(
         [handler = std::move(handler)](std::optional<app_dialog_sub_lifetime> const &sub_lifetime) {
             handler(sub_lifetime);
         });
+}
+
+#pragma mark - action_receiver_provider
+
+std::optional<action_id> app_dialog_lifecycle::receivable_id() const {
+    return std::nullopt;
+}
+
+std::vector<action_receivable *> app_dialog_lifecycle::receivers() const {
+    return {};
+}
+
+std::vector<action_receiver_providable *> app_dialog_lifecycle::sub_providers() const {
+    return {};
 }

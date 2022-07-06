@@ -6,17 +6,12 @@
 
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_keyboard_types.h>
+#include <audio_editor_core/ae_responding.h>
 #include <cpp_utils/yas_identifier.h>
 
 #include <optional>
 
 namespace yas::ae {
-enum class responding {
-    accepting,
-    blocking,
-    fallthrough,
-};
-
 struct responder {
     virtual ~responder() = default;
 

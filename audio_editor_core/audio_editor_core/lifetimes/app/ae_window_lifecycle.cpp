@@ -4,6 +4,7 @@
 
 #include "ae_window_lifecycle.h"
 
+#include <audio_editor_core/ae_action_id.h>
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_format.h>
@@ -11,6 +12,7 @@
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_window_lifetime.h>
+#include <audio_editor_core/ae_window_receiver.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
@@ -73,4 +75,29 @@ observing::syncable window_lifecycle::observe_event(std::function<void(window_li
             } break;
         }
     });
+}
+
+#pragma mark - action_receiver_provider
+
+std::optional<action_id> window_lifecycle::receivable_id() const {
+#warning todo windowのinstance_idを含ませる
+    return std::nullopt;
+}
+
+std::vector<action_receivable *> window_lifecycle::receivers() const {
+    std::vector<action_receivable *> result;
+    for (auto const &pair : this->_window_lifetimes->elements()) {
+        result.emplace_back(pair.second.first->receiver.get());
+    }
+    return result;
+}
+
+std::vector<action_receiver_providable *> window_lifecycle::sub_providers() const {
+    std::vector<action_receiver_providable *> result;
+
+    for (auto const &pair : this->_window_lifetimes->elements()) {
+        result.emplace_back(pair.second.first->project_lifecycle.get());
+    }
+
+    return result;
 }

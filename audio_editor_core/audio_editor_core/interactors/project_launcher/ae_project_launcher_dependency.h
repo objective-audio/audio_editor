@@ -16,14 +16,6 @@
 #include <cpp_utils/yas_url.h>
 
 namespace yas::ae {
-class responder;
-
-struct responder_stack_for_project_launcher {
-    virtual ~responder_stack_for_project_launcher() = default;
-
-    virtual void push_responder(identifier const &, std::shared_ptr<ae::responder> const &) = 0;
-};
-
 enum class project_state;
 
 struct project_state_holder_for_project_launcher {

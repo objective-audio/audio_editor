@@ -23,18 +23,21 @@ class reverter;
 
 struct project_editor_responder final : responder {
     [[nodiscard]] static std::shared_ptr<project_editor_responder> make_shared(
-        track_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *, time_editor_launcher *,
-        marker_editor *, module_renaming_launcher *, timing *, import_interactor *, export_interactor *, reverter *);
+        project_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
+        time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *, import_interactor *,
+        export_interactor *, reverter *);
 
-    project_editor_responder(track_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
-                             time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *,
-                             import_interactor *, export_interactor *, reverter *);
+    project_editor_responder(project_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *,
+                             jumper *, edge_editor *, time_editor_launcher *, marker_editor *,
+                             module_renaming_launcher *, timing *, import_interactor *, export_interactor *,
+                             reverter *);
 
     std::optional<ae::action> to_action(ae::key const &) override;
     void handle_action(ae::action const &) override;
     [[nodiscard]] responding responding_to_action(ae::action const &) override;
 
    private:
+    project_id const _project_id;
     identifier const _responder_id;
     track_editor *const _editor;
     playing_toggler *const _playing_toggler;
