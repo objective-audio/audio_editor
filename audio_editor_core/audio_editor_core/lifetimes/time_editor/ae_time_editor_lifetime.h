@@ -30,7 +30,6 @@ struct time_editor_lifetime final {
     project_id const project_id;
     std::shared_ptr<time_editor> const editor;
     std::shared_ptr<time_editor_closer> const closer;
-    std::shared_ptr<time_editor_responder> const responder;
     std::shared_ptr<time_editor_receiver> const receiver;
 };
 }  // namespace yas::ae

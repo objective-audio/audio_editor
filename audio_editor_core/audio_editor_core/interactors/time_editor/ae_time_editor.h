@@ -5,8 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_number_components.h>
-#include <audio_editor_core/ae_responder.h>
 #include <audio_editor_core/ae_time_editor_types.h>
+#include <cpp_utils/yas_identifier.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
