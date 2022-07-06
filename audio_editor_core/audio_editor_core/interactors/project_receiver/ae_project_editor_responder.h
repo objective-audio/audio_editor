@@ -4,7 +4,10 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_responder.h>
+#include <audio_editor_core/ae_action.h>
+#include <audio_editor_core/ae_keyboard_types.h>
+#include <audio_editor_core/ae_responding.h>
+#include <cpp_utils/yas_identifier.h>
 
 namespace yas::ae {
 class track_editor;
@@ -21,7 +24,7 @@ class import_interactor;
 class export_interactor;
 class reverter;
 
-struct project_editor_responder final : responder {
+struct project_editor_responder final {
     [[nodiscard]] static std::shared_ptr<project_editor_responder> make_shared(
         project_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *, edge_editor *,
         time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *, import_interactor *,
@@ -32,9 +35,9 @@ struct project_editor_responder final : responder {
                              module_renaming_launcher *, timing *, import_interactor *, export_interactor *,
                              reverter *);
 
-    std::optional<ae::action> to_action(ae::key const &) override;
-    void handle_action(ae::action const &) override;
-    [[nodiscard]] responding responding_to_action(ae::action const &) override;
+    std::optional<ae::action> to_action(ae::key const &);
+    void handle_action(ae::action const &);
+    [[nodiscard]] responding responding_to_action(ae::action const &);
 
    private:
     project_id const _project_id;
