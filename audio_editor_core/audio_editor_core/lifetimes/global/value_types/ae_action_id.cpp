@@ -4,7 +4,12 @@
 
 #include "ae_action_id.h"
 
-#warning todo lifetime_idを受け取って初期化する
+using namespace yas;
+using namespace yas::ae;
+
+action_id::action_id(window_lifetime_id const &lifetime_id)
+    : window_instance_id(lifetime_id.instance_id), project_id(lifetime_id.project_id) {
+}
 
 bool yas::is_match(std::optional<ae::action_id> const &lhs, std::optional<ae::action_id> const &rhs) {
     if (!lhs.has_value() || !rhs.has_value()) {

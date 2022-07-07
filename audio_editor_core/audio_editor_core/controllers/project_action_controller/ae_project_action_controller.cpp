@@ -10,13 +10,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_action_controller> project_action_controller::make_shared(project_id const &project_id,
-                                                                                  action_sender *action_sender) {
-    return std::make_shared<project_action_controller>(project_id, action_sender);
+std::shared_ptr<project_action_controller> project_action_controller::make_shared(
+    window_lifetime_id const &window_lifetime_id, action_sender *action_sender) {
+    return std::make_shared<project_action_controller>(window_lifetime_id, action_sender);
 }
 
-project_action_controller::project_action_controller(project_id const &project_id, action_sender *action_sender)
-    : _project_id(project_id), _action_sender(action_sender) {
+project_action_controller::project_action_controller(window_lifetime_id const &window_lifetime_id,
+                                                     action_sender *action_sender)
+    : _window_lifetime_id(window_lifetime_id), _action_sender(action_sender) {
 }
 
 void project_action_controller::handle_action(action const &action) {
@@ -24,11 +25,11 @@ void project_action_controller::handle_action(action const &action) {
 }
 
 void project_action_controller::handle_action(action_kind const &kind, std::string const &value) {
-    this->handle_action(action{kind, action_id{.project_id = this->_project_id}, value});
+    this->handle_action(action{kind, action_id{this->_window_lifetime_id}, value});
 }
 
 void project_action_controller::handle_key(ae::key const key) {
-    if (auto const action = this->_action_sender->to_action(key, action_id{.project_id = this->_project_id})) {
+    if (auto const action = this->_action_sender->to_action(key, action_id{this->_window_lifetime_id})) {
         this->_action_sender->handle_action(action.value());
     }
 }

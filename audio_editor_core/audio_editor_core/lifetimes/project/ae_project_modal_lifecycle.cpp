@@ -117,7 +117,7 @@ observing::syncable project_modal_lifecycle::observe(
 #pragma mark - action_receiver_provider
 
 std::optional<action_id> project_modal_lifecycle::receivable_id() const {
-    return action_id{.project_id = this->_window_lifetime_id.project_id};
+    return action_id{this->_window_lifetime_id};
 }
 
 std::vector<action_receivable *> project_modal_lifecycle::receivers() const {

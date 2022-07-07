@@ -82,7 +82,7 @@ project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),
       action_controller(
-          ae::project_action_controller::make_shared(window_lifetime_id.project_id, app_lifetime->action_sender.get())),
+          ae::project_action_controller::make_shared(window_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(this->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(this->scrolling.get())),
       timing(timing::make_shared(project_format.sample_rate)),
@@ -126,10 +126,10 @@ project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime
       track_editor(track_editor::make_shared(this->player.get(), this->file_track.get(), this->marker_pool.get(),
                                              this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       receiver(project_receiver::make_shared(
-          window_lifetime_id.project_id, this->track_editor.get(), this->playing_toggler.get(),
-          this->nudge_settings.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
-          this->time_editor_launcher.get(), this->marker_editor.get(), this->module_renaming_launcher.get(),
-          this->timing.get(), this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())),
+          window_lifetime_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
+          this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(),
+          this->marker_editor.get(), this->module_renaming_launcher.get(), this->timing.get(),
+          this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())),
       launcher(project_launcher::make_shared(this->project_format, this->state_holder.get(), this->player.get(),
                                              this->timeline_holder.get())) {
 }

@@ -17,7 +17,7 @@ window_receiver::window_receiver(window_lifetime_id const &lifetime_id) : _lifet
 }
 
 std::optional<action_id> window_receiver::receivable_id() const {
-    return action_id{.window_instance_id = this->_lifetime_id.instance_id, .project_id = this->_lifetime_id.project_id};
+    return action_id{this->_lifetime_id};
 }
 
 std::optional<ae::action> window_receiver::to_action(ae::key const &) const {

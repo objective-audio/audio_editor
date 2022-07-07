@@ -23,6 +23,5 @@ time_editor_lifetime::time_editor_lifetime(ae::window_lifetime_id const &window_
     : window_lifetime_id(window_lifetime_id),
       editor(time_editor::make_shared(components, unit_idx)),
       closer(time_editor_closer::make_shared(window_lifetime_id, this->instance_id, this->editor.get())),
-      receiver(
-          time_editor_receiver::make_shared(window_lifetime_id.project_id, this->editor.get(), this->closer.get())) {
+      receiver(time_editor_receiver::make_shared(window_lifetime_id, this->editor.get(), this->closer.get())) {
 }
