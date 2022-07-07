@@ -5,8 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_action_receiver_providable.h>
-#include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_project_modal_sub_lifetime.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {

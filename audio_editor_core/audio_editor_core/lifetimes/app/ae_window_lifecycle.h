@@ -7,14 +7,12 @@
 #include <audio_editor_core/ae_action_receiver_providable.h>
 #include <audio_editor_core/ae_app_presenter_dependency.h>
 #include <audio_editor_core/ae_project_closer_dependency.h>
-#include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_window_lifecycle_types.h>
 
 namespace yas::ae {
 class window_lifetime;
 class uuid_generatable;
 class file_info_loader;
-class project_id;
 class project_format;
 
 struct window_lifecycle final : window_lifecycle_for_app_presenter,

@@ -15,8 +15,6 @@ struct file_importer_for_project_closer {
     virtual void cancel(project_id const &) = 0;
 };
 
-class project_id;
-
 struct window_lifecycle_for_project_closer {
     virtual ~window_lifecycle_for_project_closer() = default;
 

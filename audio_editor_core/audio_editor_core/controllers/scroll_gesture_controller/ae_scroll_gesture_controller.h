@@ -5,7 +5,6 @@
 #pragma once
 
 #include <audio_editor_core/ae_gesture.h>
-#include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_scroll_gesture_controller_dependency.h>
 
 #include <memory>

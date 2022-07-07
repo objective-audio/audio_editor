@@ -19,8 +19,7 @@ std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
     std::shared_ptr<module_location_pool> const &location_pool,
     std::shared_ptr<waveform_mesh_importer> const &importer) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const presenter =
-        module_waveforms_presenter::make_shared(window_lifetime_id.project_id, location_pool, importer);
+    auto const presenter = module_waveforms_presenter::make_shared(location_pool, importer);
 
     return std::make_shared<ui_module_waveforms>(standard, app_lifetime->color, presenter);
 }
