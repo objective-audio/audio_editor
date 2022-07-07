@@ -44,10 +44,10 @@ using namespace yas::ae;
         ->observe_window([unowned](auto const &event) {
             switch (event.type) {
                 case app_presenter_window_event_type::make_and_show_window_controller: {
-                    [unowned.object makeAndShowWindowControllerWithProjectID:event.project_id];
+                    [unowned.object makeAndShowWindowControllerWithLifetimeID:event.lifetime_id];
                 } break;
                 case app_presenter_window_event_type::dispose_window_controller: {
-                    [unowned.object disposeWindowControllerWithProjectID:event.project_id];
+                    [unowned.object disposeWindowControllerWithLifetimeID:event.lifetime_id];
                 } break;
             }
         })
@@ -107,20 +107,20 @@ using namespace yas::ae;
     }];
 }
 
-- (void)makeAndShowWindowControllerWithProjectID:(project_id const &)project_id {
+- (void)makeAndShowWindowControllerWithLifetimeID:(window_lifetime_id const &)lifetime_id {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
     AEWindowController *windowController = [storyboard instantiateInitialController];
     NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
-    [windowController setupWithProjectID:project_id];
+    [windowController setupWithLifetimeID:lifetime_id];
     [self.windowControllers addObject:windowController];
     [windowController showWindow:nil];
 }
 
-- (void)disposeWindowControllerWithProjectID:(project_id const &)project_id {
+- (void)disposeWindowControllerWithLifetimeID:(window_lifetime_id const &)lifetime_id {
     NSMutableSet<AEWindowController *> *copiedWindowControllers = [self.windowControllers mutableCopy];
 
     for (AEWindowController *windowController in self.windowControllers) {
-        if (windowController.project_id == project_id) {
+        if (windowController.lifetime_id == lifetime_id) {
             [copiedWindowControllers removeObject:windowController];
         }
     }

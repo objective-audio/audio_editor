@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_ui_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_standard.h>
 
 #include <map>
@@ -18,11 +18,12 @@ struct ui_root_lifecycle {
 
     ui_root_lifecycle();
 
-    void add_lifetime(std::shared_ptr<ui::standard> const &, ui_project_id const &project_id);
-    [[nodiscard]] std::shared_ptr<ui_root_lifetime> const &lifetime_for_view_id(uintptr_t const project_view_id) const;
-    void remove_lifetime_for_view_id(uintptr_t const project_view_id);
+    void add_lifetime(std::shared_ptr<ui::standard> const &, window_lifetime_id const &);
+    [[nodiscard]] std::shared_ptr<ui_root_lifetime> const &lifetime_for_window_lifetime_id(
+        window_lifetime_id const &) const;
+    void remove_lifetime_for_window_lifetime_id(window_lifetime_id const &);
 
    private:
-    std::map<uintptr_t, std::shared_ptr<ui_root_lifetime>> _ui_roots;
+    std::map<window_lifetime_id, std::shared_ptr<ui_root_lifetime>> _ui_roots;
 };
 }  // namespace yas::ae

@@ -16,10 +16,10 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_root> ui_root::make_shared(std::shared_ptr<ui::standard> const &standard,
-                                              ui_project_id const &ui_project_id,
+                                              window_lifetime_id const &window_lifetime_id,
                                               std::shared_ptr<ui_editing_root> const &editing_root) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const presenter = root_presenter::make_shared(ui_project_id.window_lifetime_id.project_id);
+    auto const presenter = root_presenter::make_shared(window_lifetime_id.project_id);
     return std::shared_ptr<ui_root>(new ui_root{app_lifetime->color, standard, presenter, editing_root});
 }
 

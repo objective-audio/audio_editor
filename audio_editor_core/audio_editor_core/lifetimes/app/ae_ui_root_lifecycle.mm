@@ -16,25 +16,26 @@ std::shared_ptr<ui_root_lifecycle> ui_root_lifecycle::make_shared() {
 ui_root_lifecycle::ui_root_lifecycle() {
 }
 
-void ui_root_lifecycle::add_lifetime(std::shared_ptr<ui::standard> const &standard, ui_project_id const &project_id) {
-    assert(!this->_ui_roots.contains(project_id.view_id));
+void ui_root_lifecycle::add_lifetime(std::shared_ptr<ui::standard> const &standard,
+                                     window_lifetime_id const &window_lifetime_id) {
+    assert(!this->_ui_roots.contains(window_lifetime_id));
 
-    auto const lifetime = ui_root_lifetime::make_shared(standard, project_id);
-    this->_ui_roots.emplace(project_id.view_id, lifetime);
+    auto const lifetime = ui_root_lifetime::make_shared(standard, window_lifetime_id);
+    this->_ui_roots.emplace(window_lifetime_id, lifetime);
 }
 
-std::shared_ptr<ui_root_lifetime> const &ui_root_lifecycle::lifetime_for_view_id(
-    uintptr_t const project_view_id) const {
-    if (this->_ui_roots.contains(project_view_id)) {
-        return this->_ui_roots.at(project_view_id);
+std::shared_ptr<ui_root_lifetime> const &ui_root_lifecycle::lifetime_for_window_lifetime_id(
+    window_lifetime_id const &window_lifetime_id) const {
+    if (this->_ui_roots.contains(window_lifetime_id)) {
+        return this->_ui_roots.at(window_lifetime_id);
     } else {
         static std::shared_ptr<ui_root_lifetime> const _null_value = nullptr;
         return _null_value;
     }
 }
 
-void ui_root_lifecycle::remove_lifetime_for_view_id(uintptr_t const view_id) {
-    if (this->_ui_roots.contains(view_id)) {
-        this->_ui_roots.erase(view_id);
+void ui_root_lifecycle::remove_lifetime_for_window_lifetime_id(window_lifetime_id const &window_lifetime_id) {
+    if (this->_ui_roots.contains(window_lifetime_id)) {
+        this->_ui_roots.erase(window_lifetime_id);
     }
 }

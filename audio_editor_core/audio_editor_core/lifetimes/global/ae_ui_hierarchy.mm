@@ -9,6 +9,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_root_lifetime> const &ui_hierarchy::root_lifetime_for_view_id(uintptr_t const view_id) {
-    return hierarchy::app_lifetime()->ui_root_lifecycle->lifetime_for_view_id(view_id);
+std::shared_ptr<ui_root_lifetime> const &ui_hierarchy::root_lifetime_for_window_lifetime_id(
+    window_lifetime_id const &window_lifetime_id) {
+    return hierarchy::app_lifetime()->ui_root_lifecycle->lifetime_for_window_lifetime_id(window_lifetime_id);
 }

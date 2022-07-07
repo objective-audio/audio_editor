@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
-#include <audio_editor_core/ae_ui_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -15,7 +15,7 @@ class color;
 
 struct ui_root final {
     [[nodiscard]] static std::shared_ptr<ui_root> make_shared(std::shared_ptr<ui::standard> const &,
-                                                              ui_project_id const &project_id,
+                                                              window_lifetime_id const &,
                                                               std::shared_ptr<ui_editing_root> const &);
 
     [[nodiscard]] bool responds_to_action(action const);
