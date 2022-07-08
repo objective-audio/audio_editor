@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_action_receiver_providable.h>
 #include <audio_editor_core/ae_app_modal_sub_lifetime.h>
+#include <audio_editor_core/ae_app_sub_lifetime_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
@@ -17,7 +18,7 @@ struct app_modal_lifecycle final : action_receiver_providable {
     [[nodiscard]] std::optional<app_modal_sub_lifetime> const &current() const;
 
     void add_project_setup_dialog();
-    void remove_project_setup_dialog();
+    void remove_project_setup_dialog(project_setup_dialog_lifetime_id const &);
     [[nodiscard]] std::shared_ptr<project_setup_dialog_lifetime> const &project_setup_dialog_lifetime() const;
 
     [[nodiscard]] observing::syncable observe(std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&);

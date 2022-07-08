@@ -29,9 +29,13 @@ void app_modal_lifecycle::add_project_setup_dialog() {
     this->_current->set_value(project_setup_dialog_lifetime::make_shared({.instance = identifier{}}));
 }
 
-void app_modal_lifecycle::remove_project_setup_dialog() {
-    if (this->project_setup_dialog_lifetime() == nullptr) {
+void app_modal_lifecycle::remove_project_setup_dialog(project_setup_dialog_lifetime_id const &lifetime_id) {
+    auto const lifetime = this->project_setup_dialog_lifetime();
+
+    if (lifetime == nullptr) {
         throw std::runtime_error("project_setup_dialog_lifetime is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("project_setup_dialog_lifetime does not match id.");
     }
 
     this->_current->set_value(std::nullopt);
