@@ -52,7 +52,7 @@ observing::syncable app_presenter::observe_window(std::function<void(app_present
 }
 
 observing::syncable app_presenter::observe_dialog(
-    std::function<void(std::optional<app_dialog_sub_lifetime> const &)> &&handler) {
+    std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&handler) {
     if (auto const lifecycle = this->_dialog_lifecycle.lock()) {
         return lifecycle->observe(std::move(handler));
     } else {

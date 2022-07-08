@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action_receiver_providable.h>
-#include <audio_editor_core/ae_app_dialog_sub_lifetime.h>
+#include <audio_editor_core/ae_app_modal_sub_lifetime.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
@@ -14,16 +14,16 @@ struct app_modal_lifecycle final : action_receiver_providable {
 
     app_modal_lifecycle();
 
-    [[nodiscard]] std::optional<app_dialog_sub_lifetime> const &current() const;
+    [[nodiscard]] std::optional<app_modal_sub_lifetime> const &current() const;
 
     void add_project_format_dialog();
     void remove_project_format_dialog();
     std::shared_ptr<project_setup_dialog_lifetime> const &project_setup_dialog_lifetime() const;
 
-    observing::syncable observe(std::function<void(std::optional<app_dialog_sub_lifetime> const &)> &&);
+    observing::syncable observe(std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&);
 
    private:
-    observing::value::holder_ptr<std::optional<app_dialog_sub_lifetime>> const _current;
+    observing::value::holder_ptr<std::optional<app_modal_sub_lifetime>> const _current;
 
 #pragma mark - action_receiver_provider
 

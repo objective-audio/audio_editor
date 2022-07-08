@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_app_dialog_sub_lifetime.h>
+#include <audio_editor_core/ae_app_modal_sub_lifetime.h>
 #include <audio_editor_core/ae_app_presenter_dependency.h>
 #include <audio_editor_core/ae_app_presenter_types.h>
 
@@ -24,7 +24,7 @@ struct app_presenter final {
 
     [[nodiscard]] observing::syncable observe_window(std::function<void(app_presenter_window_event const &)> &&);
     [[nodiscard]] observing::syncable observe_dialog(
-        std::function<void(std::optional<app_dialog_sub_lifetime> const &)> &&);
+        std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&);
 
    private:
     std::weak_ptr<window_lifecycle_for_app_presenter> const _window_lifecycle;

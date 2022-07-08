@@ -14,10 +14,10 @@ std::shared_ptr<app_modal_lifecycle> app_modal_lifecycle::make_shared() {
 }
 
 app_modal_lifecycle::app_modal_lifecycle()
-    : _current(observing::value::holder<std::optional<app_dialog_sub_lifetime>>::make_shared(std::nullopt)) {
+    : _current(observing::value::holder<std::optional<app_modal_sub_lifetime>>::make_shared(std::nullopt)) {
 }
 
-std::optional<app_dialog_sub_lifetime> const &app_modal_lifecycle::current() const {
+std::optional<app_modal_sub_lifetime> const &app_modal_lifecycle::current() const {
     return this->_current->value();
 }
 
@@ -42,9 +42,9 @@ std::shared_ptr<project_setup_dialog_lifetime> const &app_modal_lifecycle::proje
 }
 
 observing::syncable app_modal_lifecycle::observe(
-    std::function<void(std::optional<app_dialog_sub_lifetime> const &)> &&handler) {
+    std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&handler) {
     return this->_current->observe(
-        [handler = std::move(handler)](std::optional<app_dialog_sub_lifetime> const &sub_lifetime) {
+        [handler = std::move(handler)](std::optional<app_modal_sub_lifetime> const &sub_lifetime) {
             handler(sub_lifetime);
         });
 }

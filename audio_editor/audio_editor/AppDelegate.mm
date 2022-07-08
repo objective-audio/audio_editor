@@ -4,8 +4,8 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
-#include <audio_editor_core/ae_app_dialog_sub_lifetime.h>
 #include <audio_editor_core/ae_app_lifetime.h>
+#include <audio_editor_core/ae_app_modal_sub_lifetime.h>
 #include <audio_editor_core/ae_app_presenter.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_setup_presenter.h>
@@ -55,7 +55,7 @@ using namespace yas::ae;
         ->add_to(self->_pool);
 
     self->_presenter
-        ->observe_dialog([unowned](std::optional<app_dialog_sub_lifetime> const &sub_lifetime) {
+        ->observe_dialog([unowned](std::optional<app_modal_sub_lifetime> const &sub_lifetime) {
             if (!sub_lifetime.has_value()) {
                 // panelは強制的に閉じれないので何もしない
             } else if (auto const lifetime = get<project_setup_dialog_lifetime>(sub_lifetime)) {
