@@ -59,7 +59,8 @@ void project_modal_lifecycle::add_sheet(sheet_content const &content) {
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(sheet_lifetime::make_shared(content));
+    this->_current->set_value(
+        sheet_lifetime::make_shared({.instance = identifier{}, .window = this->_window_lifetime_id}, content));
 }
 
 void project_modal_lifecycle::remove_sheet() {
