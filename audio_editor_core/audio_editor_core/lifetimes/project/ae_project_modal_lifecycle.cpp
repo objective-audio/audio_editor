@@ -86,7 +86,7 @@ void project_modal_lifecycle::add_dialog(dialog_content const content) {
 
 void project_modal_lifecycle::remove_dialog() {
     if (this->dialog_lifetime() == nullptr) {
-        throw std::runtime_error("sheet is null.");
+        throw std::runtime_error("dialog is null.");
     }
 
     this->_current->set_value(std::nullopt);
@@ -107,7 +107,7 @@ void project_modal_lifecycle::add_context_menu(context_menu const &context_menu)
 
 void project_modal_lifecycle::remove_context_menu() {
     if (this->context_menu_lifetime() == nullptr) {
-        throw std::runtime_error("sheet is null.");
+        throw std::runtime_error("context_menu is null.");
     }
 
     this->_current->set_value(std::nullopt);
