@@ -101,7 +101,8 @@ void project_modal_lifecycle::add_context_menu(context_menu const &context_menu)
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(context_menu_lifetime::make_shared(context_menu));
+    this->_current->set_value(context_menu_lifetime::make_shared(
+        {.instance = identifier{}, .window = this->_window_lifetime_id}, context_menu));
 }
 
 void project_modal_lifecycle::remove_context_menu() {
