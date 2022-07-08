@@ -39,11 +39,11 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
 }
 
 void project_modal_lifecycle::remove_time_editor(time_editor_lifetime_id const &lifetime_id) {
-    auto const current_lifetime = this->time_editor_lifetime();
+    auto const &lifetime = this->time_editor_lifetime();
 
-    if (current_lifetime == nullptr) {
+    if (lifetime == nullptr) {
         throw std::runtime_error("time_editor is null.");
-    } else if (current_lifetime->lifetime_id != lifetime_id) {
+    } else if (lifetime->lifetime_id != lifetime_id) {
         throw std::runtime_error("time_editor does not match id.");
     }
 

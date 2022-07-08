@@ -30,7 +30,7 @@ void app_modal_lifecycle::add_project_setup_dialog() {
 }
 
 void app_modal_lifecycle::remove_project_setup_dialog(project_setup_dialog_lifetime_id const &lifetime_id) {
-    auto const lifetime = this->project_setup_dialog_lifetime();
+    auto const &lifetime = this->project_setup_dialog_lifetime();
 
     if (lifetime == nullptr) {
         throw std::runtime_error("project_setup_dialog_lifetime is null.");
