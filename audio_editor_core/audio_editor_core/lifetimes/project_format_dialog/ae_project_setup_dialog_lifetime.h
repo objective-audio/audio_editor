@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_app_modal_sub_lifetime_id.h>
+#include <audio_editor_core/ae_app_sub_lifetime_id.h>
 
 #include <memory>
 
