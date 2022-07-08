@@ -88,9 +88,13 @@ void project_modal_lifecycle::add_dialog(dialog_content const content) {
         dialog_lifetime::make_shared({.instance = identifier{}, .window = this->_window_lifetime_id}, content));
 }
 
-void project_modal_lifecycle::remove_dialog() {
-    if (this->dialog_lifetime() == nullptr) {
+void project_modal_lifecycle::remove_dialog(dialog_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->dialog_lifetime();
+
+    if (lifetime == nullptr) {
         throw std::runtime_error("dialog is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("dialog does not match id.");
     }
 
     this->_current->set_value(std::nullopt);

@@ -26,7 +26,7 @@ struct project_modal_lifecycle final : action_receiver_providable {
     std::shared_ptr<sheet_lifetime> const &sheet_lifetime() const;
 
     void add_dialog(dialog_content const);
-    void remove_dialog();
+    void remove_dialog(dialog_lifetime_id const &);
     std::shared_ptr<dialog_lifetime> const &dialog_lifetime() const;
 
     void add_context_menu(context_menu const &);
