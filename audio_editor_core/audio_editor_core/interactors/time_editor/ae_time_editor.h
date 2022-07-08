@@ -47,7 +47,6 @@ struct time_editor final {
     [[nodiscard]] observing::syncable observe_editing_components(std::function<void(number_components const &)> &&);
 
    private:
-    identifier const _responder_id;
     number_components const _original_components;
     number_components _commited_components;
     observing::value::holder_ptr<std::size_t> const _unit_idx;

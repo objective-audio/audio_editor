@@ -34,12 +34,17 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(time_editor_lifetime::make_shared(this->_window_lifetime_id, components, unit_idx));
+    this->_current->set_value(time_editor_lifetime::make_shared(
+        {.instance = identifier{}, .window = this->_window_lifetime_id}, components, unit_idx));
 }
 
-void project_modal_lifecycle::remove_time_editor() {
-    if (this->time_editor_lifetime() == nullptr) {
+void project_modal_lifecycle::remove_time_editor(time_editor_lifetime_id const &lifetime_id) {
+    auto const current_lifetime = this->time_editor_lifetime();
+
+    if (current_lifetime == nullptr) {
         throw std::runtime_error("time_editor is null.");
+    } else if (current_lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("time_editor does not match id.");
     }
 
     this->_current->set_value(std::nullopt);
