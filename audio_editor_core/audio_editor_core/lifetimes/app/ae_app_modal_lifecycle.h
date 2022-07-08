@@ -18,9 +18,9 @@ struct app_modal_lifecycle final : action_receiver_providable {
 
     void add_project_setup_dialog();
     void remove_project_setup_dialog();
-    std::shared_ptr<project_setup_dialog_lifetime> const &project_setup_dialog_lifetime() const;
+    [[nodiscard]] std::shared_ptr<project_setup_dialog_lifetime> const &project_setup_dialog_lifetime() const;
 
-    observing::syncable observe(std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&);
+    [[nodiscard]] observing::syncable observe(std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&);
 
    private:
     observing::value::holder_ptr<std::optional<app_modal_sub_lifetime>> const _current;
