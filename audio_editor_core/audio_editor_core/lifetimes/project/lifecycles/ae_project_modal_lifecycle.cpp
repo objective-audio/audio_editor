@@ -63,9 +63,13 @@ void project_modal_lifecycle::add_sheet(sheet_content const &content) {
         sheet_lifetime::make_shared({.instance = identifier{}, .window = this->_window_lifetime_id}, content));
 }
 
-void project_modal_lifecycle::remove_sheet() {
-    if (this->sheet_lifetime() == nullptr) {
+void project_modal_lifecycle::remove_sheet(sheet_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->sheet_lifetime();
+
+    if (lifetime == nullptr) {
         throw std::runtime_error("sheet is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("sheet does not match id.");
     }
 
     this->_current->set_value(std::nullopt);

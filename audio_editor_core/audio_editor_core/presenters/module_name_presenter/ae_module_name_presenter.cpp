@@ -11,17 +11,17 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<module_name_presenter> module_name_presenter::make_shared(window_lifetime_id const &window_lifetime_id,
+std::shared_ptr<module_name_presenter> module_name_presenter::make_shared(sheet_lifetime_id const &lifetime_id,
                                                                           time::range const module_range) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<module_name_presenter>(module_range, project_lifetime->file_track,
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
+    return std::make_shared<module_name_presenter>(lifetime_id, module_range, project_lifetime->file_track,
                                                    project_lifetime->modal_lifecycle);
 }
 
-module_name_presenter::module_name_presenter(time::range const &module_range,
+module_name_presenter::module_name_presenter(sheet_lifetime_id const &lifetime_id, time::range const &module_range,
                                              std::shared_ptr<file_track> const &file_track,
                                              std::shared_ptr<project_modal_lifecycle> const &lifecycle)
-    : _module_range(module_range), _file_track(file_track), _lifecycle(lifecycle) {
+    : _lifetime_id(lifetime_id), _module_range(module_range), _file_track(file_track), _lifecycle(lifecycle) {
 }
 
 std::string const &module_name_presenter::name() const {
@@ -49,7 +49,7 @@ void module_name_presenter::cancel() {
 
 void module_name_presenter::_finalize() {
     if (auto const lifecycle = this->_lifecycle.lock()) {
-        lifecycle->remove_sheet();
+        lifecycle->remove_sheet(this->_lifetime_id);
     }
 
     this->_file_track.reset();

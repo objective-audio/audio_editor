@@ -4,7 +4,7 @@
 
 #import <Cocoa/Cocoa.h>
 #include <audio_editor_core/ae_common_types.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_window_sub_lifetime_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,8 +18,8 @@ enum class module_name_vc_event {
 
 @interface AEModuleNameViewController : NSViewController
 
-+ (instancetype)instantiateWithWindowLifetimeId:(yas::ae::window_lifetime_id const &)window_lifetime_id
-                                    moduleRange:(yas::ae::time::range const)module_range;
++ (instancetype)instantiateWithSheetLifetimeId:(yas::ae::sheet_lifetime_id const &)sheet_lifetime_id
+                                   moduleRange:(yas::ae::time::range const)module_range;
 
 @end
 
