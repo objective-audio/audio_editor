@@ -4,7 +4,7 @@
 
 #include "ae_hierarchy.h"
 
-#include <audio_editor_core/ae_app_dialog_lifecycle.h>
+#include <audio_editor_core/ae_app_modal_lifecycle.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <cpp_utils/yas_assertion.h>

@@ -1,5 +1,5 @@
 //
-//  ae_app_dialog_lifecycle.h
+//  ae_app_modal_lifecycle.h
 //
 
 #pragma once
@@ -9,10 +9,10 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct app_dialog_lifecycle final : action_receiver_providable {
-    [[nodiscard]] static std::shared_ptr<app_dialog_lifecycle> make_shared();
+struct app_modal_lifecycle final : action_receiver_providable {
+    [[nodiscard]] static std::shared_ptr<app_modal_lifecycle> make_shared();
 
-    app_dialog_lifecycle();
+    app_modal_lifecycle();
 
     [[nodiscard]] std::optional<app_dialog_sub_lifetime> const &current() const;
 
