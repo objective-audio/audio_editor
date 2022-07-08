@@ -21,7 +21,7 @@ std::optional<app_modal_sub_lifetime> const &app_modal_lifecycle::current() cons
     return this->_current->value();
 }
 
-void app_modal_lifecycle::add_project_format_dialog() {
+void app_modal_lifecycle::add_project_setup_dialog() {
     if (this->_current->value()) {
         throw std::runtime_error("current is not null.");
     }
@@ -29,7 +29,7 @@ void app_modal_lifecycle::add_project_format_dialog() {
     this->_current->set_value(project_setup_dialog_lifetime::make_shared({.instance = identifier{}}));
 }
 
-void app_modal_lifecycle::remove_project_format_dialog() {
+void app_modal_lifecycle::remove_project_setup_dialog() {
     if (this->project_setup_dialog_lifetime() == nullptr) {
         throw std::runtime_error("project_setup_dialog_lifetime is null.");
     }

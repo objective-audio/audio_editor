@@ -33,7 +33,7 @@ void project_setup::select_directory(url const &file_url) {
 
 void project_setup::finalize() {
     if (this->_lifecycle) {
-        this->_lifecycle->remove_project_format_dialog();
+        this->_lifecycle->remove_project_setup_dialog();
     }
 
     this->_lifecycle = nullptr;

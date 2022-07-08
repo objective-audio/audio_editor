@@ -36,7 +36,7 @@ bool app_presenter::can_open_dialog() const {
 
 void app_presenter::open_project_setup_dialog() {
     if (auto const lifecycle = this->_dialog_lifecycle.lock()) {
-        lifecycle->add_project_format_dialog();
+        lifecycle->add_project_setup_dialog();
     }
 }
 
