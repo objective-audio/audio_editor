@@ -17,4 +17,7 @@ struct window_sub_lifetime_id final {
 };
 
 using time_editor_lifetime_id = window_sub_lifetime_id;
+using sheet_lifetime_id = window_sub_lifetime_id;
+using dialog_lifetime_id = window_sub_lifetime_id;
+using context_menu_lifetime_id = window_sub_lifetime_id;
 }  // namespace yas::ae
