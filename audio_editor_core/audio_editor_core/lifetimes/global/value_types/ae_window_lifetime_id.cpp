@@ -16,5 +16,11 @@ bool window_lifetime_id::operator!=(window_lifetime_id const &rhs) const {
 }
 
 bool window_lifetime_id::operator<(window_lifetime_id const &rhs) const {
-    return this->instance_id < rhs.instance_id && this->project_id < rhs.project_id;
+    if (this->instance_id < rhs.instance_id) {
+        return true;
+    } else if (rhs.instance_id < this->instance_id) {
+        return false;
+    } else {
+        return this->project_id < rhs.project_id;
+    }
 }
