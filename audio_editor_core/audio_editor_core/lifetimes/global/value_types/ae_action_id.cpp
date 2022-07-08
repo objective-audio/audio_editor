@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 action_id::action_id(window_lifetime_id const &lifetime_id)
-    : window_instance(lifetime_id.instance), project(lifetime_id.project) {
+    : window(lifetime_id.instance), project(lifetime_id.project) {
 }
 
 bool yas::is_match(std::optional<ae::action_id> const &lhs, std::optional<ae::action_id> const &rhs) {
@@ -16,8 +16,8 @@ bool yas::is_match(std::optional<ae::action_id> const &lhs, std::optional<ae::ac
         return true;
     }
 
-    auto const &lhs_window_id = lhs.value().window_instance;
-    auto const &rhs_window_id = rhs.value().window_instance;
+    auto const &lhs_window_id = lhs.value().window;
+    auto const &rhs_window_id = rhs.value().window;
     if (lhs_window_id.has_value() && rhs_window_id.has_value() && lhs_window_id != rhs_window_id) {
         return false;
     }
