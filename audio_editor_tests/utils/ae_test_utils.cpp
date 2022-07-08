@@ -25,7 +25,7 @@ void test_utils::remove_contents_in_test_directory() {
 }
 
 bool operator==(yas::ae::action_id const &lhs, yas::ae::action_id const &rhs) {
-    return lhs.window_instance_id == rhs.window_instance_id && lhs.project_id == rhs.project_id;
+    return lhs.window_instance == rhs.window_instance && lhs.project == rhs.project;
 }
 
 bool operator==(std::optional<yas::ae::action_id> const &lhs, std::optional<yas::ae::action_id> const &rhs) {

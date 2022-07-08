@@ -37,7 +37,7 @@ void project_closer::request_close() {
         case project_state::closing:
             return;
         case project_state::loading:
-            this->_file_importer->cancel(this->_window_lifetime_id.project_id);
+            this->_file_importer->cancel(this->_window_lifetime_id.project);
             this->_status->set_state(project_state::closing);
             break;
         case project_state::editing:

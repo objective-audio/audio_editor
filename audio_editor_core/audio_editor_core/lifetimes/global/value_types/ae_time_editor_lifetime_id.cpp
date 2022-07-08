@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 bool time_editor_lifetime_id::operator==(time_editor_lifetime_id const &rhs) const {
-    return this->instance_id == rhs.instance_id && this->window == rhs.window;
+    return this->instance == rhs.instance && this->window == rhs.window;
 }
 
 bool time_editor_lifetime_id::operator!=(time_editor_lifetime_id const &rhs) const {
@@ -16,9 +16,9 @@ bool time_editor_lifetime_id::operator!=(time_editor_lifetime_id const &rhs) con
 }
 
 bool time_editor_lifetime_id::operator<(time_editor_lifetime_id const &rhs) const {
-    if (this->instance_id < rhs.instance_id) {
+    if (this->instance < rhs.instance) {
         return true;
-    } else if (rhs.instance_id < this->instance_id) {
+    } else if (rhs.instance < this->instance) {
         return false;
     } else {
         return this->window < rhs.window;

@@ -9,8 +9,8 @@
 
 namespace yas::ae {
 struct window_lifetime_id final {
-    identifier instance_id;
-    project_id project_id;
+    identifier instance;
+    project_id project;
 
     bool operator==(window_lifetime_id const &) const;
     bool operator!=(window_lifetime_id const &) const;

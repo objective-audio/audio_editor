@@ -8,7 +8,7 @@
 
 namespace yas::ae {
 struct time_editor_lifetime_id final {
-    identifier instance_id;
+    identifier instance;
     window_lifetime_id window;
 
     bool operator==(time_editor_lifetime_id const &) const;
