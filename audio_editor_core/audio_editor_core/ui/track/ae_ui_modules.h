@@ -5,8 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_location_pool.h>
-#include <audio_editor_core/ae_ui_project_id.h>
 #include <audio_editor_core/ae_ui_types.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -18,7 +18,7 @@ class ui_module_waveforms;
 class color;
 
 struct ui_modules final {
-    [[nodiscard]] static std::shared_ptr<ui_modules> make_shared(ui_project_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_modules> make_shared(window_lifetime_id const &,
                                                                  std::shared_ptr<display_space> const &,
                                                                  std::shared_ptr<ui::standard> const &,
                                                                  std::shared_ptr<ui::font_atlas> const &,

@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action.h>
-#include <audio_editor_core/ae_ui_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -23,7 +23,7 @@ struct ui_editing_root final {
     std::shared_ptr<ui::node> const node;
 
     [[nodiscard]] static std::shared_ptr<ui_editing_root> make_shared(
-        ui_project_id const &, std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &,
+        window_lifetime_id const &, std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &,
         std::shared_ptr<ae::keyboard> const &, std::shared_ptr<ui_scroller> const &,
         std::shared_ptr<ui_modal_bg> const &, std::shared_ptr<ui_time> const &);
 

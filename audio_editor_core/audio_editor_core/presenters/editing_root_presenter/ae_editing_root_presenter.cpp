@@ -12,15 +12,16 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(project_id const &project_id) {
+std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
+    window_lifetime_id const &window_lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
-    return std::make_shared<editing_root_presenter>(project_id, project_lifetime->player, app_lifetime->action_sender);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
+    return std::make_shared<editing_root_presenter>(project_lifetime->player, app_lifetime->action_sender);
 }
 
-editing_root_presenter::editing_root_presenter(project_id const &project_id, std::shared_ptr<player> const &player,
+editing_root_presenter::editing_root_presenter(std::shared_ptr<player> const &player,
                                                std::shared_ptr<action_sender> const &action_sender)
-    : _project_id(project_id), _player(player), _action_sender(action_sender) {
+    : _player(player), _action_sender(action_sender) {
 }
 
 playing_line_state_t editing_root_presenter::playing_line_state() const {

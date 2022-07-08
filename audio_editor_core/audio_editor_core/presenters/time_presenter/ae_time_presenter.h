@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <cpp_utils/yas_index_range.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -16,7 +16,7 @@ class time_editor_lifetime;
 class project_modal_lifecycle;
 
 struct time_presenter final {
-    [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(project_id const &);
+    [[nodiscard]] static std::shared_ptr<time_presenter> make_shared(window_lifetime_id const &);
 
     time_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &,
                    std::shared_ptr<nudge_settings> const &, std::shared_ptr<project_modal_lifecycle> const &);

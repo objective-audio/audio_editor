@@ -12,7 +12,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<module_waveforms_presenter> module_waveforms_presenter::make_shared(
-    project_id const &project_id, std::shared_ptr<module_location_pool> const &location_pool,
+    std::shared_ptr<module_location_pool> const &location_pool,
     std::shared_ptr<waveform_mesh_importer> const &importer) {
     return std::make_shared<module_waveforms_presenter>(location_pool, importer);
 }

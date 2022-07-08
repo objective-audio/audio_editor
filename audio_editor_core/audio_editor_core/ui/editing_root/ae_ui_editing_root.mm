@@ -21,7 +21,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id const &ui_project_id,
+std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(window_lifetime_id const &window_lifetime_id,
                                                               std::shared_ptr<ui::standard> const &standard,
                                                               std::shared_ptr<ui::font_atlas> const &font_atlas,
                                                               std::shared_ptr<ae::keyboard> const &keyboard,
@@ -29,9 +29,9 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(ui_project_id cons
                                                               std::shared_ptr<ui_modal_bg> const &ui_modal_bg,
                                                               std::shared_ptr<ui_time> const &ui_time) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.project_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
 
-    auto const presenter = editing_root_presenter::make_shared(ui_project_id.project_id);
+    auto const presenter = editing_root_presenter::make_shared(window_lifetime_id);
 
     return std::make_shared<ui_editing_root>(
         standard, font_atlas, app_lifetime->color, presenter, project_lifetime->action_controller,

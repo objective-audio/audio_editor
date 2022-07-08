@@ -23,22 +23,23 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_receiver> project_receiver::make_shared(
-    project_id const &project_id, track_editor *track_editor, playing_toggler *toggler, nudge_settings *nudge_settings,
-    nudger *nudger, jumper *jumper, edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
-    marker_editor *marker_editor, module_renaming_launcher *module_renaming_launcher, timing *timing,
-    import_interactor *import_interactor, export_interactor *export_interactor, reverter *reverter) {
+    window_lifetime_id const &window_lifetime_id, track_editor *track_editor, playing_toggler *toggler,
+    nudge_settings *nudge_settings, nudger *nudger, jumper *jumper, edge_editor *edge_editor,
+    time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
+    module_renaming_launcher *module_renaming_launcher, timing *timing, import_interactor *import_interactor,
+    export_interactor *export_interactor, reverter *reverter) {
     return std::make_shared<project_receiver>(
-        project_id, track_editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher,
+        window_lifetime_id, track_editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher,
         marker_editor, module_renaming_launcher, timing, import_interactor, export_interactor, reverter);
 }
 
-project_receiver::project_receiver(project_id const &project_id, track_editor *track_editor, playing_toggler *toggler,
-                                   nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
-                                   edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
+project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id, track_editor *track_editor,
+                                   playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger,
+                                   jumper *jumper, edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
                                    marker_editor *marker_editor, module_renaming_launcher *module_renaming_launcher,
                                    timing *timing, import_interactor *import_interactor,
                                    export_interactor *export_interactor, reverter *reverter)
-    : _project_id(project_id),
+    : _window_lifetime_id(window_lifetime_id),
       _editor(track_editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
@@ -55,11 +56,11 @@ project_receiver::project_receiver(project_id const &project_id, track_editor *t
 }
 
 std::optional<action_id> project_receiver::receivable_id() const {
-    return action_id{.project_id = this->_project_id};
+    return action_id{this->_window_lifetime_id};
 }
 
 std::optional<ae::action> project_receiver::to_action(ae::key const &key) const {
-    std::optional<action_id> const action_id({.project_id = this->_project_id});
+    std::optional<action_id> const action_id{this->_window_lifetime_id};
 
     switch (key) {
         case key::space:

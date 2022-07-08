@@ -43,7 +43,7 @@ void window_opener::open(project_format const &format, url const &project_url) {
         return;
     }
 
-    if (this->_window_lifecycle->lifetime_for_id(project_id) != nullptr) {
+    if (this->_window_lifecycle->has_lifetime_for_project_id(project_id)) {
         assertion_failure_if_not_test();
         return;
     }

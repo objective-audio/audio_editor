@@ -11,9 +11,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<module_name_presenter> module_name_presenter::make_shared(project_id const &project_id,
+std::shared_ptr<module_name_presenter> module_name_presenter::make_shared(window_lifetime_id const &window_lifetime_id,
                                                                           time::range const module_range) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<module_name_presenter>(module_range, project_lifetime->file_track,
                                                    project_lifetime->modal_lifecycle);
 }

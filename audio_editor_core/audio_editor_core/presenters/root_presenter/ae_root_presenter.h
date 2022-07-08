@@ -4,12 +4,11 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct root_presenter final {
-    [[nodiscard]] static std::shared_ptr<root_presenter> make_shared(project_id const &project_id);
+    [[nodiscard]] static std::shared_ptr<root_presenter> make_shared();
 
     root_presenter();
 

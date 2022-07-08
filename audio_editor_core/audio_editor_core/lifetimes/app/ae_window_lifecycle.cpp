@@ -27,24 +27,35 @@ window_lifecycle::window_lifecycle() {
 
 void window_lifecycle::add_lifetime(url const &project_dir_url, project_id const &project_id,
                                     project_format const &format) {
-    auto const lifetime = window_lifetime::make_shared(project_id, format, project_dir_url);
+    window_lifetime_id const lifetime_id{.instance_id = identifier{}, .project_id = project_id};
 
-    this->_window_lifetimes->insert_or_replace(project_id, std::make_pair(lifetime, nullptr));
+    auto const lifetime = window_lifetime::make_shared(lifetime_id, format, project_dir_url);
+
+    this->_window_lifetimes->insert_or_replace(lifetime_id, std::make_pair(lifetime, nullptr));
 
     lifetime->project_lifecycle->switch_to_project();
 }
 
-void window_lifecycle::remove_lifetime(ae::project_id const &project_id) {
-    this->_window_lifetimes->erase(project_id);
+void window_lifecycle::remove_lifetime(window_lifetime_id const &lifetime_id) {
+    this->_window_lifetimes->erase(lifetime_id);
 }
 
-std::shared_ptr<window_lifetime> const &window_lifecycle::lifetime_for_id(ae::project_id const &project_id) const {
-    if (this->_window_lifetimes->contains(project_id)) {
-        return this->_window_lifetimes->at(project_id).first;
+std::shared_ptr<window_lifetime> const &window_lifecycle::lifetime_for_id(window_lifetime_id const &lifetime_id) const {
+    if (this->_window_lifetimes->contains(lifetime_id)) {
+        return this->_window_lifetimes->at(lifetime_id).first;
     } else {
         static std::shared_ptr<window_lifetime> const empty = nullptr;
         return empty;
     }
+}
+
+bool window_lifecycle::has_lifetime_for_project_id(project_id const &project_id) const {
+    for (auto const &pair : this->_window_lifetimes->elements()) {
+        if (pair.first.project_id == project_id) {
+            return true;
+        }
+    }
+    return false;
 }
 
 std::size_t window_lifecycle::size() const {
@@ -58,20 +69,20 @@ observing::syncable window_lifecycle::observe_event(std::function<void(window_li
             case observing::map::event_type::any: {
                 for (auto const &pair : event.elements) {
                     handler(
-                        {.type = window_lifecycle_event_type::inserted, .project_id = pair.second.first->project_id});
+                        {.type = window_lifecycle_event_type::inserted, .lifetime_id = pair.second.first->lifetime_id});
                 }
             } break;
             case observing::map::event_type::inserted: {
                 handler(
-                    {.type = window_lifecycle_event_type::inserted, .project_id = event.inserted->first->project_id});
+                    {.type = window_lifecycle_event_type::inserted, .lifetime_id = event.inserted->first->lifetime_id});
             } break;
             case observing::map::event_type::replaced: {
-                handler({.type = window_lifecycle_event_type::erased, .project_id = event.erased->first->project_id});
+                handler({.type = window_lifecycle_event_type::erased, .lifetime_id = event.erased->first->lifetime_id});
                 handler(
-                    {.type = window_lifecycle_event_type::inserted, .project_id = event.inserted->first->project_id});
+                    {.type = window_lifecycle_event_type::inserted, .lifetime_id = event.inserted->first->lifetime_id});
             } break;
             case observing::map::event_type::erased: {
-                handler({.type = window_lifecycle_event_type::erased, .project_id = event.erased->first->project_id});
+                handler({.type = window_lifecycle_event_type::erased, .lifetime_id = event.erased->first->lifetime_id});
             } break;
         }
     });
@@ -80,7 +91,6 @@ observing::syncable window_lifecycle::observe_event(std::function<void(window_li
 #pragma mark - action_receiver_provider
 
 std::optional<action_id> window_lifecycle::receivable_id() const {
-#warning todo windowのinstance_idを含ませる
     return std::nullopt;
 }
 

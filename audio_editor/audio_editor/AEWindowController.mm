@@ -21,14 +21,14 @@ using namespace yas::ae;
     observing::canceller_pool _pool;
 }
 
-- (void)setupWithProjectID:(project_id const &)project_id {
-    self->_presenter = window_presenter::make_shared(project_id);
+- (void)setupWithLifetimeID:(window_lifetime_id const &)lifetime_id {
+    self->_presenter = window_presenter::make_shared(lifetime_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
 
     auto unowned = make_unowned(self);
 
     self->_presenter
-        ->observe([unowned, project_id](const window_presenter_event &event) {
+        ->observe([unowned, lifetime_id](const window_presenter_event &event) {
             AEMetalViewController *content = (AEMetalViewController *)unowned.object.contentViewController;
 
             if (![content isKindOfClass:[AEMetalViewController class]]) {
@@ -36,14 +36,14 @@ using namespace yas::ae;
                 return;
             }
 
-            [content setupWithProjectID:project_id];
+            [content setupWithWindowLifetimeID:lifetime_id];
         })
         .sync()
         ->add_to(self->_pool);
 }
 
-- (project_id const &)project_id {
-    return self->_presenter->project_id;
+- (window_lifetime_id const &)lifetime_id {
+    return self->_presenter->lifetime_id;
 }
 
 - (void)windowDidLoad {

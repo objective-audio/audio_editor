@@ -44,7 +44,7 @@ observing::syncable app_presenter::observe_window(std::function<void(app_present
     if (auto const lifecycle = this->_window_lifecycle.lock()) {
         return lifecycle->observe_event([handler = std::move(handler)](window_lifecycle_event const &event) {
             handler(app_presenter_window_event{.type = to_presenter_event_type(event.type),
-                                               .project_id = event.project_id});
+                                               .lifetime_id = event.lifetime_id});
         });
     } else {
         return observing::syncable{};

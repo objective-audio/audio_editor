@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_id.h>
 #include <cpp_utils/yas_url.h>
 
 namespace yas::ae {

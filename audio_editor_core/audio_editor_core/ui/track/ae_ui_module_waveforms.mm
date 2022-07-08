@@ -15,11 +15,11 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
-    ui_project_id const &ui_project_id, std::shared_ptr<ui::standard> const &standard,
+    window_lifetime_id const &window_lifetime_id, std::shared_ptr<ui::standard> const &standard,
     std::shared_ptr<module_location_pool> const &location_pool,
     std::shared_ptr<waveform_mesh_importer> const &importer) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const presenter = module_waveforms_presenter::make_shared(ui_project_id.project_id, location_pool, importer);
+    auto const presenter = module_waveforms_presenter::make_shared(location_pool, importer);
 
     return std::make_shared<ui_module_waveforms>(standard, app_lifetime->color, presenter);
 }

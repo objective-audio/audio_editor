@@ -12,11 +12,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_track> ui_track::make_shared(ui_project_id const &ui_project_id,
+std::shared_ptr<ui_track> ui_track::make_shared(window_lifetime_id const &window_lifetime_id,
                                                 std::shared_ptr<ui::standard> const &standard,
                                                 std::shared_ptr<display_space> const &display_space,
                                                 std::shared_ptr<ui_modules> const &modules) {
-    auto const presenter = track_presenter::make_shared(ui_project_id.project_id);
+    auto const presenter = track_presenter::make_shared(window_lifetime_id);
     return std::make_shared<ui_track>(standard, display_space, presenter, modules);
 }
 

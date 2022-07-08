@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_marker_location_pool.h>
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <cpp_utils/yas_identifier.h>
 #include <cpp_utils/yas_url.h>
 
@@ -57,15 +57,15 @@ class waveform_mesh_importer;
 class project_receiver;
 
 struct project_lifetime final {
-    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(project_id const &);
-    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(project_id const &, project_format const &,
+    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &,
+                                                                       project_format const &,
                                                                        url const &project_dir_url);
 
-    project_lifetime(ae::project_id const &, project_format const &, url const &project_dir_url,
+    project_lifetime(window_lifetime_id const &, project_format const &, url const &project_dir_url,
                      std::shared_ptr<app_lifetime> const &);
 
-    identifier const instance_id;
-    ae::project_id const project_id;
+    window_lifetime_id const window_lifetime_id;
     project_format const project_format;
 
     std::shared_ptr<ae::project_url> const project_url;

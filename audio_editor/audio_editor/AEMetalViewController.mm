@@ -26,7 +26,7 @@ using namespace yas::ae;
 @end
 
 @implementation AEMetalViewController {
-    project_id _project_id;
+    window_lifetime_id _window_lifetime_id;
     std::weak_ptr<ui_root_lifetime> _root_lifetime;
     std::weak_ptr<project_modal_lifecycle> _project_modal_lifecycle;
     std::weak_ptr<project_action_controller> _action_controller;
@@ -42,38 +42,34 @@ using namespace yas::ae;
     }
 }
 
-- (std::uintptr_t)project_view_id {
-    return reinterpret_cast<std::uintptr_t>(self);
-}
-
 - (void)viewDidDisappear {
     [super viewDidDisappear];
 
-    hierarchy::app_lifetime()->ui_root_lifecycle->remove_lifetime_for_view_id(self.project_view_id);
+    hierarchy::app_lifetime()->ui_root_lifecycle->remove_lifetime_for_window_lifetime_id(self->_window_lifetime_id);
 }
 
-- (void)setupWithProjectID:(project_id const &)project_id {
+- (void)setupWithWindowLifetimeID:(window_lifetime_id const &)lifetime_id {
     auto const &ui_root_lifecycle = hierarchy::app_lifetime()->ui_root_lifecycle;
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
 
-    [self setupWithProjectID:project_id
-              uiRootLifecycle:ui_root_lifecycle
-             actionController:project_lifetime->action_controller
-        projectModalLifecycle:project_lifetime->modal_lifecycle];
+    [self setupWithWindowLifetimeID:lifetime_id
+                    uiRootLifecycle:ui_root_lifecycle
+                   actionController:project_lifetime->action_controller
+              projectModalLifecycle:project_lifetime->modal_lifecycle];
 }
 
-- (void)setupWithProjectID:(project_id const &)project_id
-           uiRootLifecycle:(std::shared_ptr<ae::ui_root_lifecycle> const &)ui_root_lifecycle
-          actionController:(std::shared_ptr<project_action_controller> const &)action_controller
-     projectModalLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)project_modal_lifecycle {
-    self->_project_id = project_id;
+- (void)setupWithWindowLifetimeID:(window_lifetime_id const &)window_lifetime_id
+                  uiRootLifecycle:(std::shared_ptr<ae::ui_root_lifecycle> const &)ui_root_lifecycle
+                 actionController:(std::shared_ptr<project_action_controller> const &)action_controller
+            projectModalLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)project_modal_lifecycle {
+    self->_window_lifetime_id = window_lifetime_id;
 
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
-    ui_root_lifecycle->add_lifetime(standard, {.project_id = project_id, .view_id = self.project_view_id});
-    self->_root_lifetime = ui_root_lifecycle->lifetime_for_view_id(self.project_view_id);
+    ui_root_lifecycle->add_lifetime(standard, self->_window_lifetime_id);
+    self->_root_lifetime = ui_root_lifecycle->lifetime_for_window_lifetime_id(self->_window_lifetime_id);
 
     self->_action_controller = action_controller;
     self->_project_modal_lifecycle = project_modal_lifecycle;
@@ -110,7 +106,7 @@ using namespace yas::ae;
         .end()
         ->add_to(self->_pool);
 
-    [self.aeMetalView setupWithProjectID:project_id];
+    [self.aeMetalView setupWithWindowLifetimeID:window_lifetime_id];
 }
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
@@ -203,7 +199,7 @@ using namespace yas::ae;
     if (auto const action_kind = [self actionKindForSelector:menuItem.action]) {
         if (auto const ui_root_lifetime = self->_root_lifetime.lock()) {
             return ui_root_lifetime->root->responds_to_action(
-                {action_kind.value(), action_id{.project_id = self->_project_id}, ""});
+                {action_kind.value(), action_id{self->_window_lifetime_id}, ""});
         }
     }
     return NO;
@@ -306,7 +302,8 @@ using namespace yas::ae;
         return;
     }
 
-    auto *const vc = [AEModuleNameViewController instantiateWithProjectId:self->_project_id moduleRange:range.value()];
+    auto *const vc = [AEModuleNameViewController instantiateWithWindowLifetimeId:self->_window_lifetime_id
+                                                                     moduleRange:range.value()];
 
     [self presentViewControllerAsSheet:vc];
 }

@@ -11,22 +11,17 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_launcher> project_launcher::make_shared(identifier const &instance_id,
-                                                                project_format const &project_format,
+std::shared_ptr<project_launcher> project_launcher::make_shared(project_format const &project_format,
                                                                 project_state_holder_for_project_launcher *state_holder,
                                                                 player *player,
                                                                 timeline_holder const *timeline_holder) {
-    return std::make_shared<ae::project_launcher>(instance_id, project_format, state_holder, player, timeline_holder);
+    return std::make_shared<ae::project_launcher>(project_format, state_holder, player, timeline_holder);
 }
 
-project_launcher::project_launcher(identifier const &instance_id, project_format const &project_format,
+project_launcher::project_launcher(project_format const &project_format,
                                    project_state_holder_for_project_launcher *state_holder, player *player,
                                    timeline_holder const *timeline_holder)
-    : _instance_id(instance_id),
-      _project_format(project_format),
-      _state_holder(state_holder),
-      _player(player),
-      _timeline_holder(timeline_holder) {
+    : _project_format(project_format), _state_holder(state_holder), _player(player), _timeline_holder(timeline_holder) {
 }
 
 void project_launcher::launch() {

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_ui_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -15,7 +15,7 @@ class ui_edge;
 class ui_markers;
 
 struct ui_scroller final {
-    [[nodiscard]] static std::shared_ptr<ui_scroller> make_shared(ui_project_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_scroller> make_shared(window_lifetime_id const &,
                                                                   std::shared_ptr<ui::standard> const &,
                                                                   std::shared_ptr<ui_track> const &,
                                                                   std::shared_ptr<ui_edge> const &,

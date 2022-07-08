@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 
 #include <memory>
 #include <string>
@@ -15,7 +15,7 @@ class file_track;
 class project_modal_lifecycle;
 
 struct module_name_presenter final {
-    [[nodiscard]] static std::shared_ptr<module_name_presenter> make_shared(project_id const &project_id,
+    [[nodiscard]] static std::shared_ptr<module_name_presenter> make_shared(window_lifetime_id const &,
                                                                             time::range const module_range);
 
     module_name_presenter(time::range const &, std::shared_ptr<file_track> const &,

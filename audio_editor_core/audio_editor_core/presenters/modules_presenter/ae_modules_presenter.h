@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_modules_presenter_dependency.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 
 namespace yas::ae {
 class display_space;
@@ -15,7 +15,7 @@ class player;
 class file_track;
 
 struct modules_presenter final {
-    [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(project_id const &project_id,
+    [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(window_lifetime_id const &,
                                                                         std::shared_ptr<display_space> const &,
                                                                         std::shared_ptr<module_location_pool> const &);
 

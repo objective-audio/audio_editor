@@ -12,10 +12,10 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(ui_project_id const &ui_project_id,
+std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(window_lifetime_id const &window_lifetime_id,
                                                       std::shared_ptr<ui::standard> const &standard) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(ui_project_id.project_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<ui_modal_bg>(standard, app_lifetime->color, project_lifetime->modal_lifecycle,
                                          project_lifetime->action_controller);
 }

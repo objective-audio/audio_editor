@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {

@@ -19,7 +19,7 @@ namespace yas::ae::ui_markers_constants {
 static std::size_t const reserving_interval = 10;
 }
 
-std::shared_ptr<ui_markers> ui_markers::make_shared(ui_project_id const &ui_project_id,
+std::shared_ptr<ui_markers> ui_markers::make_shared(window_lifetime_id const &window_lifetime_id,
                                                     std::shared_ptr<ae::display_space> const &display_space,
                                                     std::shared_ptr<marker_location_pool> const &location_pool,
                                                     std::shared_ptr<ui::standard> const &standard,
@@ -27,7 +27,7 @@ std::shared_ptr<ui_markers> ui_markers::make_shared(ui_project_id const &ui_proj
                                                     std::shared_ptr<ui_mesh_data> const &vertical_line_data) {
     auto const &app_lifetime = hierarchy::app_lifetime();
 
-    auto const presenter = markers_presenter::make_shared(ui_project_id.project_id, display_space, location_pool);
+    auto const presenter = markers_presenter::make_shared(window_lifetime_id, display_space, location_pool);
     auto const &color = app_lifetime->color;
     return std::make_shared<ui_markers>(presenter, standard, font_atlas, color, vertical_line_data);
 }

@@ -9,7 +9,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<root_presenter> root_presenter::make_shared(project_id const &project_id) {
+std::shared_ptr<root_presenter> root_presenter::make_shared() {
     return std::make_shared<root_presenter>();
 }
 

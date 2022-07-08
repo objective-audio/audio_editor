@@ -14,12 +14,13 @@ using namespace yas::ae;
 static std::shared_ptr<time_editor_lifetime> const _null_time_editor_lifetime = nullptr;
 static std::shared_ptr<sheet_lifetime> const _null_sheet_lifetime = nullptr;
 
-std::shared_ptr<project_modal_lifecycle> project_modal_lifecycle::make_shared(project_id const &project_id) {
-    return std::make_shared<project_modal_lifecycle>(project_id);
+std::shared_ptr<project_modal_lifecycle> project_modal_lifecycle::make_shared(
+    window_lifetime_id const &window_lifetime_id) {
+    return std::make_shared<project_modal_lifecycle>(window_lifetime_id);
 }
 
-project_modal_lifecycle::project_modal_lifecycle(project_id const &project_id)
-    : _project_id(project_id),
+project_modal_lifecycle::project_modal_lifecycle(window_lifetime_id const &window_lifetime_id)
+    : _window_lifetime_id(window_lifetime_id),
       _current(observing::value::holder<std::optional<project_modal_sub_lifetime>>::make_shared(std::nullopt)) {
 }
 
@@ -33,7 +34,7 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(time_editor_lifetime::make_shared(this->_project_id, components, unit_idx));
+    this->_current->set_value(time_editor_lifetime::make_shared(this->_window_lifetime_id, components, unit_idx));
 }
 
 void project_modal_lifecycle::remove_time_editor() {
@@ -116,7 +117,7 @@ observing::syncable project_modal_lifecycle::observe(
 #pragma mark - action_receiver_provider
 
 std::optional<action_id> project_modal_lifecycle::receivable_id() const {
-    return action_id{.project_id = this->_project_id};
+    return action_id{this->_window_lifetime_id};
 }
 
 std::vector<action_receivable *> project_modal_lifecycle::receivers() const {

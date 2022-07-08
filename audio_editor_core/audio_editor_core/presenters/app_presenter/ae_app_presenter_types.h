@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 
 #include <string>
 
@@ -16,6 +16,6 @@ enum class app_presenter_window_event_type {
 
 struct app_presenter_window_event final {
     app_presenter_window_event_type type;
-    project_id project_id;
+    window_lifetime_id lifetime_id;
 };
 }  // namespace yas::ae

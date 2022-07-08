@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action_receivable.h>
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 
 namespace yas::ae {
 class track_editor;
@@ -23,19 +23,19 @@ class export_interactor;
 class reverter;
 
 struct project_receiver final : action_receivable {
-    [[nodiscard]] static std::shared_ptr<project_receiver> make_shared(project_id const &, track_editor *,
+    [[nodiscard]] static std::shared_ptr<project_receiver> make_shared(window_lifetime_id const &, track_editor *,
                                                                        playing_toggler *, nudge_settings *, nudger *,
                                                                        jumper *, edge_editor *, time_editor_launcher *,
                                                                        marker_editor *, module_renaming_launcher *,
                                                                        timing *, import_interactor *,
                                                                        export_interactor *, reverter *);
 
-    project_receiver(project_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *, jumper *,
-                     edge_editor *, time_editor_launcher *, marker_editor *, module_renaming_launcher *, timing *,
-                     import_interactor *, export_interactor *, reverter *);
+    project_receiver(window_lifetime_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *,
+                     jumper *, edge_editor *, time_editor_launcher *, marker_editor *, module_renaming_launcher *,
+                     timing *, import_interactor *, export_interactor *, reverter *);
 
    private:
-    project_id const _project_id;
+    window_lifetime_id const _window_lifetime_id;
     track_editor *const _editor;
     playing_toggler *const _playing_toggler;
     nudge_settings *const _nudge_settings;

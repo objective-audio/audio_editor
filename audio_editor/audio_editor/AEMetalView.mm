@@ -25,8 +25,8 @@ using namespace yas::ae;
     observing::canceller_pool _pool;
 }
 
-- (void)setupWithProjectID:(project_id const &)project_id {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_id);
+- (void)setupWithWindowLifetimeID:(window_lifetime_id const &)window_lifetime_id {
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     auto const &lifecycle = project_lifetime->modal_lifecycle;
 
     [self setupWithLifecycle:lifecycle actionController:project_lifetime->action_controller];
