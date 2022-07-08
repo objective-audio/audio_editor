@@ -26,7 +26,7 @@ void app_dialog_lifecycle::add_project_format_dialog() {
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(project_setup_dialog_lifetime::make_shared());
+    this->_current->set_value(project_setup_dialog_lifetime::make_shared({.instance = identifier{}}));
 }
 
 void app_dialog_lifecycle::remove_project_format_dialog() {
