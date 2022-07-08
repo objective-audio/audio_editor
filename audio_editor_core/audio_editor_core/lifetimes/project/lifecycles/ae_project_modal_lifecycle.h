@@ -30,7 +30,7 @@ struct project_modal_lifecycle final : action_receiver_providable {
     std::shared_ptr<dialog_lifetime> const &dialog_lifetime() const;
 
     void add_context_menu(context_menu const &);
-    void remove_context_menu();
+    void remove_context_menu(context_menu_lifetime_id const &);
     std::shared_ptr<context_menu_lifetime> const &context_menu_lifetime() const;
 
     [[nodiscard]] observing::syncable observe(

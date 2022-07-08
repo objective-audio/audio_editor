@@ -113,9 +113,13 @@ void project_modal_lifecycle::add_context_menu(context_menu const &context_menu)
         {.instance = identifier{}, .window = this->_window_lifetime_id}, context_menu));
 }
 
-void project_modal_lifecycle::remove_context_menu() {
-    if (this->context_menu_lifetime() == nullptr) {
+void project_modal_lifecycle::remove_context_menu(context_menu_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->context_menu_lifetime();
+
+    if (lifetime == nullptr) {
         throw std::runtime_error("context_menu is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("context_menu does not match id.");
     }
 
     this->_current->set_value(std::nullopt);
