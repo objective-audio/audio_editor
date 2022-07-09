@@ -58,9 +58,6 @@ class project_receiver;
 
 struct project_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &);
-    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &,
-                                                                       project_format const &,
-                                                                       url const &project_dir_url);
 
     project_lifetime(window_lifetime_id const &, project_format const &, url const &project_dir_url,
                      std::shared_ptr<app_lifetime> const &);

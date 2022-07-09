@@ -55,14 +55,8 @@ using namespace yas::ae;
 std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::window_lifetime_id const &window_lifetime_id) {
     auto const window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
 
-    return make_shared(window_lifetime_id, window_lifetime->project_format, window_lifetime->project_directory_url);
-}
-
-std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::window_lifetime_id const &window_lifetime_id,
-                                                                ae::project_format const &project_format,
-                                                                url const &project_dir_url) {
-    return std::make_shared<project_lifetime>(window_lifetime_id, project_format, project_dir_url,
-                                              hierarchy::app_lifetime());
+    return std::make_shared<project_lifetime>(window_lifetime_id, window_lifetime->project_format,
+                                              window_lifetime->project_directory_url, hierarchy::app_lifetime());
 }
 
 project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime_id,
