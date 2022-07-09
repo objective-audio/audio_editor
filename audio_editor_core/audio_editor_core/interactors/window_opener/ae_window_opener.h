@@ -9,7 +9,6 @@
 #include <memory>
 
 namespace yas::ae {
-class system_url;
 class file_info_loader;
 class window_lifecycle;
 class project_format;
