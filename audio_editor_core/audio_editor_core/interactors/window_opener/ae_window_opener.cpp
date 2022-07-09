@@ -6,9 +6,7 @@
 
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_id_generator.h>
 #include <audio_editor_core/ae_system_url.h>
-#include <audio_editor_core/ae_uuid_generator.h>
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_file_manager.h>
@@ -18,17 +16,11 @@ using namespace yas::ae;
 
 std::shared_ptr<window_opener> window_opener::make_shared(file_info_loader const *file_info_loader,
                                                           window_lifecycle *lifecycle) {
-    return std::make_shared<window_opener>(id_generator::make_shared(), uuid_generator::make_shared(), file_info_loader,
-                                           lifecycle);
+    return std::make_shared<window_opener>(file_info_loader, lifecycle);
 }
 
-window_opener::window_opener(std::shared_ptr<id_generatable> const &id_generator,
-                             std::shared_ptr<uuid_generatable> const &uuid_generator,
-                             file_info_loader const *file_info_loader, window_lifecycle *lifecycle)
-    : _id_generator(id_generator),
-      _uuid_generator(uuid_generator),
-      _file_info_loader(file_info_loader),
-      _window_lifecycle(lifecycle) {
+window_opener::window_opener(file_info_loader const *file_info_loader, window_lifecycle *lifecycle)
+    : _file_info_loader(file_info_loader), _window_lifecycle(lifecycle) {
 }
 
 void window_opener::open(project_format const &format, url const &project_url) {
@@ -46,9 +38,5 @@ void window_opener::open(project_format const &format, url const &project_url) {
         return;
     }
 
-    auto const instance_id = this->_id_generator->generate();
-    auto const project_raw_id = this->_uuid_generator->generate();
-    window_lifetime_id const lifetime_id{.instance = instance_id, .project = {.raw_value = project_raw_id}};
-
-    this->_window_lifecycle->add_lifetime(project_url, lifetime_id, format);
+    this->_window_lifecycle->add_lifetime(project_url, format);
 }

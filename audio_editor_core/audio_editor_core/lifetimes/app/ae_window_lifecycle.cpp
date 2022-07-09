@@ -6,11 +6,13 @@
 
 #include <audio_editor_core/ae_action_id.h>
 #include <audio_editor_core/ae_file_info_loader.h>
+#include <audio_editor_core/ae_id_generator.h>
 #include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
+#include <audio_editor_core/ae_uuid_generator.h>
 #include <audio_editor_core/ae_window_lifetime.h>
 #include <audio_editor_core/ae_window_receiver.h>
 #include <cpp_utils/yas_assertion.h>
@@ -19,14 +21,17 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<window_lifecycle> window_lifecycle::make_shared() {
-    return std::make_shared<window_lifecycle>();
+    return std::make_shared<window_lifecycle>(id_generator::make_shared(), uuid_generator::make_shared());
 }
 
-window_lifecycle::window_lifecycle() {
+window_lifecycle::window_lifecycle(std::shared_ptr<id_generatable> const &id_generator,
+                                   std::shared_ptr<uuid_generatable> const &uuid_generator)
+    : _id_generator(id_generator), _uuid_generator(uuid_generator) {
 }
 
-void window_lifecycle::add_lifetime(url const &project_dir_url, window_lifetime_id const &lifetime_id,
-                                    project_format const &format) {
+void window_lifecycle::add_lifetime(url const &project_dir_url, project_format const &format) {
+    window_lifetime_id const lifetime_id{.instance = this->_id_generator->generate(),
+                                         .project = {.raw_value = this->_uuid_generator->generate()}};
     auto const lifetime = window_lifetime::make_shared(lifetime_id, format, project_dir_url);
 
     this->_window_lifetimes->insert_or_replace(lifetime_id, std::make_pair(lifetime, nullptr));
