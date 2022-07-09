@@ -866,6 +866,15 @@
 			path = project_launch;
 			sourceTree = "<group>";
 		};
+		B61883F328796745006CF5AD /* lifecycles */ = {
+			isa = PBXGroup;
+			children = (
+				B6650BA32854C67A004BB7C9 /* ae_project_lifecycle.cpp */,
+				B6650BA42854C67A004BB7C9 /* ae_project_lifecycle.h */,
+			);
+			path = lifecycles;
+			sourceTree = "<group>";
+		};
 		B62D8F9C2723AEBA00779D42 /* pinch_gesture_controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -1212,8 +1221,7 @@
 			children = (
 				B6650B9B2854BE86004BB7C9 /* ae_window_lifetime.cpp */,
 				B6650B9C2854BE86004BB7C9 /* ae_window_lifetime.h */,
-				B6650BA32854C67A004BB7C9 /* ae_project_lifecycle.cpp */,
-				B6650BA42854C67A004BB7C9 /* ae_project_lifecycle.h */,
+				B61883F328796745006CF5AD /* lifecycles */,
 				B6B2D78B28687C8E008DF3F6 /* value_types */,
 				B6B2D78C28687C97008DF3F6 /* features */,
 			);
