@@ -36,7 +36,7 @@ void window_lifecycle::add_lifetime(url const &project_dir_url, project_format c
 
     this->_window_lifetimes->insert_or_replace(lifetime_id, std::make_pair(lifetime, nullptr));
 
-    lifetime->project_lifecycle->switch_to_project();
+    lifetime->project_lifecycle->switch_to_project_launch();
 }
 
 void window_lifecycle::remove_lifetime(window_lifetime_id const &lifetime_id) {

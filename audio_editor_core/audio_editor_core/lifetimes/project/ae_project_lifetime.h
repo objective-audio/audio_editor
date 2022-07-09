@@ -100,7 +100,5 @@ struct project_lifetime final {
     std::shared_ptr<import_interactor> const import_interactor;
     std::shared_ptr<track_editor> const track_editor;
     std::shared_ptr<project_receiver> const receiver;
-
-    std::shared_ptr<ae::project_launcher> const launcher;
 };
 }  // namespace yas::ae

@@ -12,14 +12,16 @@ namespace yas::ae {
 class project_editor_responder;
 class player;
 class timeline_holder;
+class project_lifecycle;
 
 struct project_launcher final : std::enable_shared_from_this<project_launcher> {
     [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(project_format const &,
                                                                        project_state_holder_for_project_launcher *,
-                                                                       player *, timeline_holder const *);
+                                                                       player *, timeline_holder const *,
+                                                                       project_lifecycle *);
 
     project_launcher(project_format const &, project_state_holder_for_project_launcher *, player *,
-                     timeline_holder const *);
+                     timeline_holder const *, project_lifecycle *);
 
     void launch();
 
@@ -29,6 +31,7 @@ struct project_launcher final : std::enable_shared_from_this<project_launcher> {
     project_state_holder_for_project_launcher *const _state_holder;
     player *const _player;
     timeline_holder const *const _timeline_holder;
+    project_lifecycle *const _project_lifecycle;
 
     observing::canceller_pool _pool;
 

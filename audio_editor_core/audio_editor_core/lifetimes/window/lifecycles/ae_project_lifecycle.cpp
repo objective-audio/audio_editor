@@ -30,14 +30,14 @@ void project_lifecycle::switch_to_project_launch() {
     auto const lifetime = project_launch_lifetime::make_shared(this->window_lifetime_id);
 
     this->_current->set_value(lifetime);
+
+    lifetime->launcher->launch();
 }
 
 void project_lifecycle::switch_to_project() {
     auto const lifetime = project_lifetime::make_shared(this->window_lifetime_id);
 
     this->_current->set_value(lifetime);
-
-    lifetime->launcher->launch();
 }
 
 observing::syncable project_lifecycle::observe(
