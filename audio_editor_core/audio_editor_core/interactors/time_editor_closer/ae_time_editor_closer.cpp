@@ -14,17 +14,17 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(window_lifetime_id const &window_lifetime_id,
+std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(time_editor_lifetime_id const &lifetime_id,
                                                                     identifier const lifetime_instance_id,
                                                                     time_editor *editor) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<time_editor_closer>(lifetime_instance_id, editor, project_lifetime->modal_lifecycle.get(),
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
+    return std::make_shared<time_editor_closer>(lifetime_id, editor, project_lifetime->modal_lifecycle.get(),
                                                 project_lifetime->timing.get(), project_lifetime->player.get());
 }
 
-time_editor_closer::time_editor_closer(identifier const lifetime_instance_id, time_editor *editor,
+time_editor_closer::time_editor_closer(time_editor_lifetime_id const &lifetime_id, time_editor *editor,
                                        project_modal_lifecycle *lifecycle, timing *timing, player *player)
-    : _lifetime_instance_id(lifetime_instance_id), _dependencies({editor, lifecycle, timing, player}) {
+    : _lifetime_id(lifetime_id), _dependencies({editor, lifecycle, timing, player}) {
 }
 
 void time_editor_closer::finish() {
@@ -72,7 +72,7 @@ void time_editor_closer::_finalize() {
 
     this->_dependencies.reset();
 
-    lifecycle->remove_time_editor();
+    lifecycle->remove_time_editor(this->_lifetime_id);
 }
 
 bool time_editor_closer::can_finish() {

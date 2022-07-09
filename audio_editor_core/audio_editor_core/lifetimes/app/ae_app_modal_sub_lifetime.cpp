@@ -1,14 +1,14 @@
 //
-//  ae_app_dialog_sub_lifetime.cpp
+//  ae_app_modal_sub_lifetime.cpp
 //
 
-#include "ae_app_dialog_sub_lifetime.h"
+#include "ae_app_modal_sub_lifetime.h"
 
 using namespace yas;
 using namespace yas::ae;
 
 template <typename T>
-std::shared_ptr<T> const &yas::get(std::optional<ae::app_dialog_sub_lifetime> const &sub_lifetime) {
+std::shared_ptr<T> const &yas::get(std::optional<ae::app_modal_sub_lifetime> const &sub_lifetime) {
     if (sub_lifetime.has_value() && std::holds_alternative<std::shared_ptr<T>>(sub_lifetime.value())) {
         return std::get<std::shared_ptr<T>>(sub_lifetime.value());
     } else {
@@ -18,4 +18,4 @@ std::shared_ptr<T> const &yas::get(std::optional<ae::app_dialog_sub_lifetime> co
 }
 
 template std::shared_ptr<project_setup_dialog_lifetime> const &yas::get(
-    std::optional<ae::app_dialog_sub_lifetime> const &);
+    std::optional<ae::app_modal_sub_lifetime> const &);

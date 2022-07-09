@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_window_sub_lifetime_id.h>
 #include <cpp_utils/yas_identifier.h>
 
 #include <memory>
@@ -18,12 +18,11 @@ class timing;
 class player;
 
 struct time_editor_closer final {
-    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(time_editor_lifetime_id const &,
                                                                          identifier const lifetime_instance_id,
                                                                          time_editor *);
 
-    time_editor_closer(identifier const lifetime_instance_id, time_editor *, project_modal_lifecycle *, timing *,
-                       player *);
+    time_editor_closer(time_editor_lifetime_id const &, time_editor *, project_modal_lifecycle *, timing *, player *);
 
     void finish();
     void cancel();
@@ -32,7 +31,7 @@ struct time_editor_closer final {
     bool can_cancel();
 
    private:
-    identifier const _lifetime_instance_id;
+    time_editor_lifetime_id const _lifetime_id;
 
     struct dependencies {
         time_editor *const editor;

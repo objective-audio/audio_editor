@@ -11,8 +11,8 @@
 
 namespace yas::ae {
 struct action_id final {
-    std::optional<identifier> window_instance_id;
-    std::optional<project_id> project_id;
+    std::optional<identifier> window;
+    std::optional<project_id> project;
 
     action_id(window_lifetime_id const &);
 

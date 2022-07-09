@@ -20,7 +20,7 @@ using namespace yas::ae;
 
 @implementation AEMetalView {
     std::weak_ptr<project_modal_lifecycle> _lifecycle;
-    std::optional<context_menu> _shown_context_menu;
+    std::optional<std::pair<context_menu_lifetime_id, context_menu>> _shown_context_menu;
     std::weak_ptr<project_action_controller> _action_controller;
     observing::canceller_pool _pool;
 }
@@ -43,17 +43,17 @@ using namespace yas::ae;
         ->observe([unowned](std::optional<project_modal_sub_lifetime> const &sub_lifetime) {
             if (auto const &lifetime = get<context_menu_lifetime>(sub_lifetime)) {
                 auto *const view = unowned.object;
-                [view showContextMenu:lifetime->context_menu];
+                [view showContextMenu:{lifetime->lifetime_id, lifetime->context_menu}];
             }
         })
         .end()
         ->add_to(self->_pool);
 }
 
-- (void)showContextMenu:(ae::context_menu const &)context_menu {
+- (void)showContextMenu:(std::pair<context_menu_lifetime_id, context_menu> const &)context_menu {
     self->_shown_context_menu = context_menu;
 
-    auto const position = ui_event_utils::to_position_from_event_string(context_menu.position);
+    auto const position = ui_event_utils::to_position_from_event_string(context_menu.second.position);
     auto const view_location = [self view_location_from_ui_position:position];
 
     auto *const menu = [[NSMenu alloc] initWithTitle:@""];
@@ -61,7 +61,7 @@ using namespace yas::ae;
 
     NSInteger idx = 0;
 
-    for (auto const &action : context_menu.actions) {
+    for (auto const &action : context_menu.second.actions) {
         if (action) {
             auto *const item = [[NSMenuItem alloc]
                 initWithTitle:(__bridge NSString *)to_cf_object(action_utils::to_context_menu_title(action.value()))
@@ -134,7 +134,13 @@ using namespace yas::ae;
             return;
         }
 
-        lifecycle->remove_context_menu();
+        if (!self->_shown_context_menu.has_value()) {
+            assertion_failure_if_not_test();
+            return;
+        }
+
+        auto const &lifetime_id = self->_shown_context_menu.value().first;
+        lifecycle->remove_context_menu(lifetime_id);
         self->_shown_context_menu = std::nullopt;
     });
 }

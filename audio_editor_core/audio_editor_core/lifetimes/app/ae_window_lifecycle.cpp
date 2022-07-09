@@ -27,7 +27,7 @@ window_lifecycle::window_lifecycle() {
 
 void window_lifecycle::add_lifetime(url const &project_dir_url, project_id const &project_id,
                                     project_format const &format) {
-    window_lifetime_id const lifetime_id{.instance_id = identifier{}, .project_id = project_id};
+    window_lifetime_id const lifetime_id{.instance = identifier{}, .project = project_id};
 
     auto const lifetime = window_lifetime::make_shared(lifetime_id, format, project_dir_url);
 
@@ -51,7 +51,7 @@ std::shared_ptr<window_lifetime> const &window_lifecycle::lifetime_for_id(window
 
 bool window_lifecycle::has_lifetime_for_project_id(project_id const &project_id) const {
     for (auto const &pair : this->_window_lifetimes->elements()) {
-        if (pair.first.project_id == project_id) {
+        if (pair.first.project == project_id) {
             return true;
         }
     }

@@ -4,8 +4,8 @@
 
 #include "ae_app_presenter.h"
 
-#include <audio_editor_core/ae_app_dialog_lifecycle.h>
 #include <audio_editor_core/ae_app_lifetime.h>
+#include <audio_editor_core/ae_app_modal_lifecycle.h>
 #include <audio_editor_core/ae_app_presenter_utils.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_window_lifecycle.h>
@@ -21,7 +21,7 @@ std::shared_ptr<app_presenter> app_presenter::make_shared() {
 }
 
 app_presenter::app_presenter(std::shared_ptr<window_lifecycle_for_app_presenter> const &window_lifecycle,
-                             std::shared_ptr<app_dialog_lifecycle> const &dialog_lifecycle,
+                             std::shared_ptr<app_modal_lifecycle> const &dialog_lifecycle,
                              std::shared_ptr<window_opener> const &opener)
     : _window_lifecycle(window_lifecycle), _dialog_lifecycle(dialog_lifecycle), _window_opener(opener) {
 }
@@ -36,7 +36,7 @@ bool app_presenter::can_open_dialog() const {
 
 void app_presenter::open_project_setup_dialog() {
     if (auto const lifecycle = this->_dialog_lifecycle.lock()) {
-        lifecycle->add_project_format_dialog();
+        lifecycle->add_project_setup_dialog();
     }
 }
 
@@ -52,7 +52,7 @@ observing::syncable app_presenter::observe_window(std::function<void(app_present
 }
 
 observing::syncable app_presenter::observe_dialog(
-    std::function<void(std::optional<app_dialog_sub_lifetime> const &)> &&handler) {
+    std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&handler) {
     if (auto const lifecycle = this->_dialog_lifecycle.lock()) {
         return lifecycle->observe(std::move(handler));
     } else {

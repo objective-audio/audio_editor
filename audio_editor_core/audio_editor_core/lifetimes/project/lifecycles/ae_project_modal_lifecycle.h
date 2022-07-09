@@ -18,19 +18,19 @@ struct project_modal_lifecycle final : action_receiver_providable {
     std::optional<project_modal_sub_lifetime> const &current() const;
 
     void add_time_editor(number_components const &, std::optional<std::size_t> const unit_idx);
-    void remove_time_editor();
+    void remove_time_editor(time_editor_lifetime_id const &);
     std::shared_ptr<time_editor_lifetime> const &time_editor_lifetime() const;
 
     void add_sheet(sheet_content const &);
-    void remove_sheet();
+    void remove_sheet(sheet_lifetime_id const &);
     std::shared_ptr<sheet_lifetime> const &sheet_lifetime() const;
 
     void add_dialog(dialog_content const);
-    void remove_dialog();
+    void remove_dialog(dialog_lifetime_id const &);
     std::shared_ptr<dialog_lifetime> const &dialog_lifetime() const;
 
     void add_context_menu(context_menu const &);
-    void remove_context_menu();
+    void remove_context_menu(context_menu_lifetime_id const &);
     std::shared_ptr<context_menu_lifetime> const &context_menu_lifetime() const;
 
     [[nodiscard]] observing::syncable observe(

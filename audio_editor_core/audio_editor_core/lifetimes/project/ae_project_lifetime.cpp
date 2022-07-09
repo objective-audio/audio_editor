@@ -73,7 +73,7 @@ project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime
       project_url(project_url::make_shared(project_dir_url)),
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
-      player(player::make_shared(app_lifetime->system_url->playing_directory(), window_lifetime_id.project_id,
+      player(player::make_shared(app_lifetime->system_url->playing_directory(), window_lifetime_id.project,
                                  this->scrolling.get())),
       state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(window_lifetime_id, app_lifetime->file_importer.get(),
@@ -118,7 +118,7 @@ project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime
                                      this->pasteboard.get(), this->edge_holder.get(), this->editing_status.get())),
       file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
       file_module_loader(file_module_loader::make_shared(
-          window_lifetime_id.project_id, this->project_url.get(), this->project_format, this->player.get(),
+          window_lifetime_id.project, this->project_url.get(), this->project_format, this->player.get(),
           this->file_module_loading_state_holder.get(), this->database.get(), this->file_track.get(),
           this->edge_holder.get(), this->timeline_holder.get())),
       import_interactor(import_interactor::make_shared(this->modal_lifecycle.get(), this->editing_status.get(),

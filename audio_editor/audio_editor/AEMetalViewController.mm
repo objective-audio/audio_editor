@@ -89,16 +89,16 @@ using namespace yas::ae;
             } else if (auto const &lifetime = get<sheet_lifetime>(sub_lifetime)) {
                 switch (lifetime->content.kind) {
                     case sheet_kind::module_name:
-                        [self showModuleNameSheetWithValue:lifetime->content.value];
+                        [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id value:lifetime->content.value];
                         break;
                 }
             } else if (auto const &lifetime = get<dialog_lifetime>(sub_lifetime)) {
                 switch (lifetime->content) {
                     case dialog_content::select_file_for_import:
-                        [self showSelectFileForImportDialog];
+                        [self showSelectFileForImportDialogWithLifetimeId:lifetime->lifetime_id];
                         break;
                     case dialog_content::select_file_for_export:
-                        [self showSelectFileForExportDialog];
+                        [self showSelectFileForExportDialogWithLifetimeId:lifetime->lifetime_id];
                         break;
                 }
             }
@@ -241,19 +241,19 @@ using namespace yas::ae;
 
 #pragma mark -
 
-- (void)showSelectFileForImportDialog {
+- (void)showSelectFileForImportDialogWithLifetimeId:(dialog_lifetime_id const &)lifetime_id {
     auto *const panel = [NSOpenPanel openPanel];
     panel.allowedContentTypes = @[UTTypeAudio];
 
     auto *const unowned_self = make_unowned(self);
     auto *const unowned_panel = make_unowned(panel);
 
-    [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
+    [panel beginWithCompletionHandler:[unowned_self, unowned_panel, lifetime_id](NSModalResponse result) {
         auto *const self = unowned_self.object;
         auto *const panel = unowned_panel.object;
 
         if (auto const lifecycle = self->_project_modal_lifecycle.lock()) {
-            lifecycle->remove_dialog();
+            lifecycle->remove_dialog(lifetime_id);
         } else {
             assertion_failure_if_not_test();
         }
@@ -267,7 +267,7 @@ using namespace yas::ae;
     }];
 }
 
-- (void)showSelectFileForExportDialog {
+- (void)showSelectFileForExportDialogWithLifetimeId:(dialog_lifetime_id const &)lifetime_id {
     auto *const panel = [NSSavePanel savePanel];
     panel.canCreateDirectories = YES;
     panel.allowedContentTypes = @[UTTypeAudio];
@@ -276,12 +276,12 @@ using namespace yas::ae;
     auto *const unowned_self = make_unowned(self);
     auto *const unowned_panel = make_unowned(panel);
 
-    [panel beginWithCompletionHandler:[unowned_self, unowned_panel](NSModalResponse result) {
+    [panel beginWithCompletionHandler:[unowned_self, unowned_panel, lifetime_id](NSModalResponse result) {
         auto *const self = unowned_self.object;
         auto *const panel = unowned_panel.object;
 
         if (auto const lifecycle = self->_project_modal_lifecycle.lock()) {
-            lifecycle->remove_dialog();
+            lifecycle->remove_dialog(lifetime_id);
         } else {
             assertion_failure_if_not_test();
         }
@@ -295,15 +295,14 @@ using namespace yas::ae;
     }];
 }
 
-- (void)showModuleNameSheetWithValue:(std::string const &)value {
+- (void)showModuleNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id value:(std::string const &)value {
     auto const range = to_time_range(value);
     if (!range.has_value()) {
         assertion_failure_if_not_test();
         return;
     }
 
-    auto *const vc = [AEModuleNameViewController instantiateWithWindowLifetimeId:self->_window_lifetime_id
-                                                                     moduleRange:range.value()];
+    auto *const vc = [AEModuleNameViewController instantiateWithSheetLifetimeId:lifetime_id moduleRange:range.value()];
 
     [self presentViewControllerAsSheet:vc];
 }

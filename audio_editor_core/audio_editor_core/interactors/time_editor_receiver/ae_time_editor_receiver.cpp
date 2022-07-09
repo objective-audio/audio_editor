@@ -11,23 +11,23 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_receiver> time_editor_receiver::make_shared(window_lifetime_id const &window_lifetime_id,
+std::shared_ptr<time_editor_receiver> time_editor_receiver::make_shared(time_editor_lifetime_id const &lifetime_id,
                                                                         time_editor *editor,
                                                                         time_editor_closer *closer) {
-    return std::make_shared<time_editor_receiver>(window_lifetime_id, editor, closer);
+    return std::make_shared<time_editor_receiver>(lifetime_id, editor, closer);
 }
 
-time_editor_receiver::time_editor_receiver(window_lifetime_id const &window_lifetime_id, time_editor *editor,
+time_editor_receiver::time_editor_receiver(time_editor_lifetime_id const &lifetime_id, time_editor *editor,
                                            time_editor_closer *closer)
-    : _window_lifetime_id(window_lifetime_id), _editor(editor), _closer(closer) {
+    : _lifetime_id(lifetime_id), _editor(editor), _closer(closer) {
 }
 
 std::optional<action_id> time_editor_receiver::receivable_id() const {
-    return action_id{this->_window_lifetime_id};
+    return action_id{this->_lifetime_id.window};
 }
 
 std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key) const {
-    std::optional<action_id> const action_id{this->_window_lifetime_id};
+    std::optional<action_id> const action_id{this->_lifetime_id.window};
 
     switch (key) {
         case ae::key::ret:

@@ -34,12 +34,17 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(time_editor_lifetime::make_shared(this->_window_lifetime_id, components, unit_idx));
+    this->_current->set_value(time_editor_lifetime::make_shared(
+        {.instance = identifier{}, .window = this->_window_lifetime_id}, components, unit_idx));
 }
 
-void project_modal_lifecycle::remove_time_editor() {
-    if (this->time_editor_lifetime() == nullptr) {
+void project_modal_lifecycle::remove_time_editor(time_editor_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->time_editor_lifetime();
+
+    if (lifetime == nullptr) {
         throw std::runtime_error("time_editor is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("time_editor does not match id.");
     }
 
     this->_current->set_value(std::nullopt);
@@ -54,12 +59,17 @@ void project_modal_lifecycle::add_sheet(sheet_content const &content) {
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(sheet_lifetime::make_shared(content));
+    this->_current->set_value(
+        sheet_lifetime::make_shared({.instance = identifier{}, .window = this->_window_lifetime_id}, content));
 }
 
-void project_modal_lifecycle::remove_sheet() {
-    if (this->sheet_lifetime() == nullptr) {
+void project_modal_lifecycle::remove_sheet(sheet_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->sheet_lifetime();
+
+    if (lifetime == nullptr) {
         throw std::runtime_error("sheet is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("sheet does not match id.");
     }
 
     this->_current->set_value(std::nullopt);
@@ -74,12 +84,17 @@ void project_modal_lifecycle::add_dialog(dialog_content const content) {
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(dialog_lifetime::make_shared(content));
+    this->_current->set_value(
+        dialog_lifetime::make_shared({.instance = identifier{}, .window = this->_window_lifetime_id}, content));
 }
 
-void project_modal_lifecycle::remove_dialog() {
-    if (this->dialog_lifetime() == nullptr) {
-        throw std::runtime_error("sheet is null.");
+void project_modal_lifecycle::remove_dialog(dialog_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->dialog_lifetime();
+
+    if (lifetime == nullptr) {
+        throw std::runtime_error("dialog is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("dialog does not match id.");
     }
 
     this->_current->set_value(std::nullopt);
@@ -94,12 +109,17 @@ void project_modal_lifecycle::add_context_menu(context_menu const &context_menu)
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(context_menu_lifetime::make_shared(context_menu));
+    this->_current->set_value(context_menu_lifetime::make_shared(
+        {.instance = identifier{}, .window = this->_window_lifetime_id}, context_menu));
 }
 
-void project_modal_lifecycle::remove_context_menu() {
-    if (this->context_menu_lifetime() == nullptr) {
-        throw std::runtime_error("sheet is null.");
+void project_modal_lifecycle::remove_context_menu(context_menu_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->context_menu_lifetime();
+
+    if (lifetime == nullptr) {
+        throw std::runtime_error("context_menu is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("context_menu does not match id.");
     }
 
     this->_current->set_value(std::nullopt);
