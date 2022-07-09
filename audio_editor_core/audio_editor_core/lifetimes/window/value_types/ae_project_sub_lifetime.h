@@ -4,13 +4,14 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_launch_lifetime.h>
 #include <audio_editor_core/ae_project_lifetime.h>
 
 #include <optional>
 #include <variant>
 
 namespace yas::ae {
-using project_sub_lifetime = std::variant<std::shared_ptr<project_lifetime>>;
+using project_sub_lifetime = std::variant<std::shared_ptr<project_launch_lifetime>, std::shared_ptr<project_lifetime>>;
 }
 
 namespace yas {
