@@ -13,8 +13,8 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<track_presenter> track_presenter::make_shared(window_lifetime_id const &window_lifetime_id) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<track_presenter>(project_lifetime->zooming_pair);
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
+    return std::make_shared<track_presenter>(window_lifetime->zooming_pair);
 }
 
 track_presenter::track_presenter(std::shared_ptr<zooming_pair> const &zooming_pair) : _zooming_pair(zooming_pair) {

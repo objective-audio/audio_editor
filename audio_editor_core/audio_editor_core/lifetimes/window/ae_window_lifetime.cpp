@@ -8,8 +8,10 @@
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_project_state_holder.h>
 #include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_window_closer.h>
 #include <audio_editor_core/ae_window_receiver.h>
+#include <audio_editor_core/ae_zooming_pair.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -37,6 +39,8 @@ window_lifetime::window_lifetime(window_lifetime_id const &lifetime_id, ae::proj
       project_directory_url(project_dir_url),
       project_url(project_url),
       project_state_holder(state_holder),
+      zooming_pair(zooming_pair::make_shared()),
+      scrolling(scrolling::make_shared()),
       project_lifecycle(project_lifecycle),
       closer(window_closer),
       receiver(receiver) {
