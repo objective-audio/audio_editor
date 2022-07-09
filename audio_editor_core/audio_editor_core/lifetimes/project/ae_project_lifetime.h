@@ -55,12 +55,12 @@ class pinch_gesture_controller;
 class scroll_gesture_controller;
 class waveform_mesh_importer;
 class project_receiver;
+class window_lifetime;
 
 struct project_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &);
 
-    project_lifetime(window_lifetime_id const &, project_format const &, url const &project_dir_url,
-                     std::shared_ptr<app_lifetime> const &);
+    project_lifetime(window_lifetime_id const &, window_lifetime *, app_lifetime *);
 
     window_lifetime_id const window_lifetime_id;
     project_format const project_format;
