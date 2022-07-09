@@ -69,7 +69,6 @@ struct project_lifetime final {
     std::shared_ptr<ae::zooming_pair> const zooming_pair;
     std::shared_ptr<ae::scrolling> const scrolling;
     std::shared_ptr<ae::player> const player;
-    std::shared_ptr<ae::project_state_holder> const state_holder;
     std::shared_ptr<ae::project_closer> const closer;
     std::shared_ptr<module_location_pool> const module_location_pool;
     std::shared_ptr<marker_location_pool> const marker_location_pool;

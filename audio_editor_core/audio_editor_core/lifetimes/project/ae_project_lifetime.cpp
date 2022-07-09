@@ -68,9 +68,9 @@ project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_lifetime->system_url->playing_directory(), window_lifetime_id.project,
                                  this->scrolling.get())),
-      state_holder(project_state_holder::make_shared()),
       closer(project_closer::make_shared(window_lifetime_id, app_lifetime->file_importer.get(),
-                                         app_lifetime->window_lifecycle.get(), this->state_holder.get())),
+                                         app_lifetime->window_lifecycle.get(),
+                                         window_lifetime->project_state_holder.get())),
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),
@@ -123,6 +123,6 @@ project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime
           this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(),
           this->marker_editor.get(), this->module_renaming_launcher.get(), this->timing.get(),
           this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())),
-      launcher(project_launcher::make_shared(this->project_format, this->state_holder.get(), this->player.get(),
-                                             this->timeline_holder.get())) {
+      launcher(project_launcher::make_shared(this->project_format, window_lifetime->project_state_holder.get(),
+                                             this->player.get(), this->timeline_holder.get())) {
 }
