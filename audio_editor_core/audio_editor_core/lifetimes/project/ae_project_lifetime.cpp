@@ -55,13 +55,11 @@ using namespace yas::ae;
 std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::window_lifetime_id const &window_lifetime_id) {
     auto const window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
 
-    return std::make_shared<project_lifetime>(window_lifetime_id, window_lifetime.get(),
-                                              hierarchy::app_lifetime().get());
+    return std::make_shared<project_lifetime>(window_lifetime.get(), hierarchy::app_lifetime().get());
 }
 
-project_lifetime::project_lifetime(ae::window_lifetime_id const &window_lifetime_id, window_lifetime *window_lifetime,
-                                   app_lifetime *app_lifetime)
-    : window_lifetime_id(window_lifetime_id),
+project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetime *app_lifetime)
+    : window_lifetime_id(window_lifetime->lifetime_id),
       project_format(window_lifetime->project_format),
       project_url(project_url::make_shared(window_lifetime->project_directory_url)),
       player(player::make_shared(app_lifetime->system_url->playing_directory(), window_lifetime_id.project,
