@@ -66,7 +66,6 @@ struct project_lifetime final {
     project_format const project_format;
 
     std::shared_ptr<ae::project_url> const project_url;
-    std::shared_ptr<ae::player> const player;
     std::shared_ptr<ae::project_closer> const closer;
     std::shared_ptr<module_location_pool> const module_location_pool;
     std::shared_ptr<marker_location_pool> const marker_location_pool;
@@ -85,7 +84,6 @@ struct project_lifetime final {
     std::shared_ptr<editing_status> const editing_status;
     std::shared_ptr<playing_toggler> const playing_toggler;
     std::shared_ptr<project_modal_lifecycle> const modal_lifecycle;
-    std::shared_ptr<timeline_holder> const timeline_holder;
     std::shared_ptr<nudger> const nudger;
     std::shared_ptr<edge_holder> const edge_holder;
     std::shared_ptr<edge_editor> const edge_editor;

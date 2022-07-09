@@ -14,7 +14,7 @@ using namespace yas::ae;
 std::shared_ptr<scroller_presenter> scroller_presenter::make_shared(window_lifetime_id const &window_lifetime_id) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<scroller_presenter>(project_lifetime->project_format, project_lifetime->player,
+    return std::make_shared<scroller_presenter>(project_lifetime->project_format, window_lifetime->player,
                                                 window_lifetime->zooming_pair);
 }
 

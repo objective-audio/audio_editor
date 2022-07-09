@@ -19,6 +19,8 @@ class window_receiver;
 class project_state_holder;
 class zooming_pair;
 class scrolling;
+class player;
+class timeline_holder;
 
 struct window_lifetime final {
     [[nodiscard]] static std::shared_ptr<window_lifetime> make_shared(window_lifetime_id const &,
@@ -35,6 +37,8 @@ struct window_lifetime final {
     std::shared_ptr<project_state_holder> const project_state_holder;
     std::shared_ptr<ae::zooming_pair> const zooming_pair;
     std::shared_ptr<ae::scrolling> const scrolling;
+    std::shared_ptr<ae::player> const player;
+    std::shared_ptr<timeline_holder> const timeline_holder;
     std::shared_ptr<project_lifecycle> const project_lifecycle;
     std::shared_ptr<window_closer> const closer;
     std::shared_ptr<window_receiver> const receiver;
