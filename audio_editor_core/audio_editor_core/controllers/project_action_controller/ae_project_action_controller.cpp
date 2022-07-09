@@ -25,7 +25,7 @@ void project_action_controller::handle_action(action const &action) {
 }
 
 void project_action_controller::handle_action(action_kind const &kind, std::string const &value) {
-    this->handle_action(action{kind, action_id{this->_window_lifetime_id}, value});
+    this->handle_action(action{kind, value, action_id{this->_window_lifetime_id}});
 }
 
 void project_action_controller::handle_key(ae::key const key) {
