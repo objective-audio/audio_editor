@@ -64,55 +64,55 @@ std::optional<ae::action> project_receiver::to_action(ae::key const &key) const 
 
     switch (key) {
         case key::space:
-            return action{action_kind::toggle_play, action_id, ""};
+            return action{action_kind::toggle_play, "", action_id};
         case key::del:
-            return action{action_kind::erase, action_id, ""};
+            return action{action_kind::erase, "", action_id};
         case key::a:
-            return action{action_kind::drop_head, action_id, ""};
+            return action{action_kind::drop_head, "", action_id};
         case key::s:
-            return action{action_kind::split, action_id, ""};
+            return action{action_kind::split, "", action_id};
         case key::d:
-            return action{action_kind::drop_tail, action_id, ""};
+            return action{action_kind::drop_tail, "", action_id};
         case key::n:
-            return action{action_kind::rotate_nudging_next_unit, action_id, ""};
+            return action{action_kind::rotate_nudging_next_unit, "", action_id};
         case key::shift_n:
-            return action{action_kind::rotate_nudging_previous_unit, action_id, ""};
+            return action{action_kind::rotate_nudging_previous_unit, "", action_id};
         case key::f:
-            return action{action_kind::rotate_timing_fraction, action_id, ""};
+            return action{action_kind::rotate_timing_fraction, "", action_id};
         case key::t:
-            return action{action_kind::begin_time_editing, action_id, ""};
+            return action{action_kind::begin_time_editing, "", action_id};
         case key::left_bracket:
-            return action{action_kind::set_begin_edge, action_id, ""};
+            return action{action_kind::set_begin_edge, "", action_id};
         case key::right_bracket:
-            return action{action_kind::set_end_edge, action_id, ""};
+            return action{action_kind::set_end_edge, "", action_id};
         case key::left:
-            return action{action_kind::nudge_previous, action_id, ""};
+            return action{action_kind::nudge_previous, "", action_id};
         case key::right:
-            return action{action_kind::nudge_next, action_id, ""};
+            return action{action_kind::nudge_next, "", action_id};
         case key::shift_left:
-            return action{action_kind::nudge_previous_more, action_id, ""};
+            return action{action_kind::nudge_previous_more, "", action_id};
         case key::shift_right:
-            return action{action_kind::nudge_next_more, action_id, ""};
+            return action{action_kind::nudge_next_more, "", action_id};
         case key::num_0:
-            return action{action_kind::return_to_zero, action_id, ""};
+            return action{action_kind::return_to_zero, "", action_id};
         case key::num_1:
-            return action{action_kind::go_to_marker, action_id, "0"};
+            return action{action_kind::go_to_marker, "0", action_id};
         case key::num_2:
-            return action{action_kind::go_to_marker, action_id, "1"};
+            return action{action_kind::go_to_marker, "1", action_id};
         case key::num_3:
-            return action{action_kind::go_to_marker, action_id, "2"};
+            return action{action_kind::go_to_marker, "2", action_id};
         case key::num_4:
-            return action{action_kind::go_to_marker, action_id, "3"};
+            return action{action_kind::go_to_marker, "3", action_id};
         case key::num_5:
-            return action{action_kind::go_to_marker, action_id, "4"};
+            return action{action_kind::go_to_marker, "4", action_id};
         case key::num_6:
-            return action{action_kind::go_to_marker, action_id, "5"};
+            return action{action_kind::go_to_marker, "5", action_id};
         case key::num_7:
-            return action{action_kind::go_to_marker, action_id, "6"};
+            return action{action_kind::go_to_marker, "6", action_id};
         case key::num_8:
-            return action{action_kind::go_to_marker, action_id, "7"};
+            return action{action_kind::go_to_marker, "7", action_id};
         case key::num_9:
-            return action{action_kind::go_to_marker, action_id, "8"};
+            return action{action_kind::go_to_marker, "8", action_id};
 
         case key::esc:
         case key::plus:
