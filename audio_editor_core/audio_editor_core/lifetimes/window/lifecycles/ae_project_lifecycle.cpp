@@ -4,6 +4,7 @@
 
 #include "ae_project_lifecycle.h"
 
+#include <audio_editor_core/ae_project_launch_lifetime.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_lifetime.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
@@ -23,6 +24,12 @@ project_lifecycle::project_lifecycle(ae::window_lifetime_id const &window_lifeti
 
 std::optional<project_sub_lifetime> const &project_lifecycle::current() const {
     return this->_current->value();
+}
+
+void project_lifecycle::switch_to_project_launch() {
+    auto const lifetime = project_launch_lifetime::make_shared(this->window_lifetime_id);
+
+    this->_current->set_value(lifetime);
 }
 
 void project_lifecycle::switch_to_project() {
