@@ -25,10 +25,8 @@ std::shared_ptr<window_lifecycle> window_lifecycle::make_shared() {
 window_lifecycle::window_lifecycle() {
 }
 
-void window_lifecycle::add_lifetime(url const &project_dir_url, project_id const &project_id,
+void window_lifecycle::add_lifetime(url const &project_dir_url, window_lifetime_id const &lifetime_id,
                                     project_format const &format) {
-    window_lifetime_id const lifetime_id{.instance = identifier{}, .project = project_id};
-
     auto const lifetime = window_lifetime::make_shared(lifetime_id, format, project_dir_url);
 
     this->_window_lifetimes->insert_or_replace(lifetime_id, std::make_pair(lifetime, nullptr));
@@ -47,15 +45,6 @@ std::shared_ptr<window_lifetime> const &window_lifecycle::lifetime_for_id(window
         static std::shared_ptr<window_lifetime> const empty = nullptr;
         return empty;
     }
-}
-
-bool window_lifecycle::has_lifetime_for_project_id(project_id const &project_id) const {
-    for (auto const &pair : this->_window_lifetimes->elements()) {
-        if (pair.first.project == project_id) {
-            return true;
-        }
-    }
-    return false;
 }
 
 std::size_t window_lifecycle::size() const {

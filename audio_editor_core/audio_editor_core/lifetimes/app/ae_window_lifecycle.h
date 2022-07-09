@@ -22,11 +22,10 @@ struct window_lifecycle final : window_lifecycle_for_app_presenter,
 
     window_lifecycle();
 
-    void add_lifetime(url const &project_dir_url, project_id const &, project_format const &);
+    void add_lifetime(url const &project_dir_url, window_lifetime_id const &, project_format const &);
     void remove_lifetime(window_lifetime_id const &) override;
 
     [[nodiscard]] std::shared_ptr<window_lifetime> const &lifetime_for_id(window_lifetime_id const &) const;
-    [[nodiscard]] bool has_lifetime_for_project_id(project_id const &) const;
 
     [[nodiscard]] std::size_t size() const;
 
