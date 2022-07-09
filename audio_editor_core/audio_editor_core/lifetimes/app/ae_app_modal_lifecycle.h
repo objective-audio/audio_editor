@@ -10,10 +10,12 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
+class id_generatable;
+
 struct app_modal_lifecycle final : action_receiver_providable {
     [[nodiscard]] static std::shared_ptr<app_modal_lifecycle> make_shared();
 
-    app_modal_lifecycle();
+    app_modal_lifecycle(std::shared_ptr<id_generatable> const &);
 
     [[nodiscard]] std::optional<app_modal_sub_lifetime> const &current() const;
 
@@ -24,6 +26,7 @@ struct app_modal_lifecycle final : action_receiver_providable {
     [[nodiscard]] observing::syncable observe(std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&);
 
    private:
+    std::shared_ptr<id_generatable> const _id_generator;
     observing::value::holder_ptr<std::optional<app_modal_sub_lifetime>> const _current;
 
 #pragma mark - action_receiver_provider

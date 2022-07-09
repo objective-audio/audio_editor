@@ -4,6 +4,7 @@
 
 #include "ae_project_modal_lifecycle.h"
 
+#include <audio_editor_core/ae_id_generator.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_lifetime.h>
 #include <audio_editor_core/ae_time_editor_receiver.h>
@@ -16,11 +17,13 @@ static std::shared_ptr<sheet_lifetime> const _null_sheet_lifetime = nullptr;
 
 std::shared_ptr<project_modal_lifecycle> project_modal_lifecycle::make_shared(
     window_lifetime_id const &window_lifetime_id) {
-    return std::make_shared<project_modal_lifecycle>(window_lifetime_id);
+    return std::make_shared<project_modal_lifecycle>(id_generator::make_shared(), window_lifetime_id);
 }
 
-project_modal_lifecycle::project_modal_lifecycle(window_lifetime_id const &window_lifetime_id)
-    : _window_lifetime_id(window_lifetime_id),
+project_modal_lifecycle::project_modal_lifecycle(std::shared_ptr<id_generatable> const &id_generator,
+                                                 window_lifetime_id const &window_lifetime_id)
+    : _id_generator(id_generator),
+      _window_lifetime_id(window_lifetime_id),
       _current(observing::value::holder<std::optional<project_modal_sub_lifetime>>::make_shared(std::nullopt)) {
 }
 
@@ -35,7 +38,7 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
     }
 
     this->_current->set_value(time_editor_lifetime::make_shared(
-        {.instance = identifier{}, .window = this->_window_lifetime_id}, components, unit_idx));
+        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, components, unit_idx));
 }
 
 void project_modal_lifecycle::remove_time_editor(time_editor_lifetime_id const &lifetime_id) {
@@ -59,8 +62,8 @@ void project_modal_lifecycle::add_sheet(sheet_content const &content) {
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(
-        sheet_lifetime::make_shared({.instance = identifier{}, .window = this->_window_lifetime_id}, content));
+    this->_current->set_value(sheet_lifetime::make_shared(
+        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, content));
 }
 
 void project_modal_lifecycle::remove_sheet(sheet_lifetime_id const &lifetime_id) {
@@ -84,8 +87,8 @@ void project_modal_lifecycle::add_dialog(dialog_content const content) {
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(
-        dialog_lifetime::make_shared({.instance = identifier{}, .window = this->_window_lifetime_id}, content));
+    this->_current->set_value(dialog_lifetime::make_shared(
+        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, content));
 }
 
 void project_modal_lifecycle::remove_dialog(dialog_lifetime_id const &lifetime_id) {
@@ -110,7 +113,7 @@ void project_modal_lifecycle::add_context_menu(context_menu const &context_menu)
     }
 
     this->_current->set_value(context_menu_lifetime::make_shared(
-        {.instance = identifier{}, .window = this->_window_lifetime_id}, context_menu));
+        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, context_menu));
 }
 
 void project_modal_lifecycle::remove_context_menu(context_menu_lifetime_id const &lifetime_id) {

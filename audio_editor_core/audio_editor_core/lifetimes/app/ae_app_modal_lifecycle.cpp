@@ -5,16 +5,18 @@
 #include "ae_app_modal_lifecycle.h"
 
 #include <audio_editor_core/ae_action_id.h>
+#include <audio_editor_core/ae_id_generator.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<app_modal_lifecycle> app_modal_lifecycle::make_shared() {
-    return std::make_shared<app_modal_lifecycle>();
+    return std::make_shared<app_modal_lifecycle>(id_generator::make_shared());
 }
 
-app_modal_lifecycle::app_modal_lifecycle()
-    : _current(observing::value::holder<std::optional<app_modal_sub_lifetime>>::make_shared(std::nullopt)) {
+app_modal_lifecycle::app_modal_lifecycle(std::shared_ptr<id_generatable> const &id_generator)
+    : _id_generator(id_generator),
+      _current(observing::value::holder<std::optional<app_modal_sub_lifetime>>::make_shared(std::nullopt)) {
 }
 
 std::optional<app_modal_sub_lifetime> const &app_modal_lifecycle::current() const {
@@ -26,7 +28,8 @@ void app_modal_lifecycle::add_project_setup_dialog() {
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(project_setup_dialog_lifetime::make_shared({.instance = identifier{}}));
+    this->_current->set_value(
+        project_setup_dialog_lifetime::make_shared({.instance = this->_id_generator->generate()}));
 }
 
 void app_modal_lifecycle::remove_project_setup_dialog(project_setup_dialog_lifetime_id const &lifetime_id) {
