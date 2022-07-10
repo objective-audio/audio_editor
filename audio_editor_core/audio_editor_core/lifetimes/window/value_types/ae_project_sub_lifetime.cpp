@@ -18,3 +18,4 @@ std::shared_ptr<T> const &yas::get(std::optional<ae::project_sub_lifetime> const
 }
 
 template std::shared_ptr<project_lifetime> const &yas::get(std::optional<ae::project_sub_lifetime> const &);
+template std::shared_ptr<project_launch_lifetime> const &yas::get(std::optional<ae::project_sub_lifetime> const &);
