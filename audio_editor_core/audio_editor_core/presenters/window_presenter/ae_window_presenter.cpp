@@ -5,7 +5,7 @@
 #include "ae_window_presenter.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_closer.h>
+#include <audio_editor_core/ae_project_launch_lifetime.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_window_closer.h>
@@ -51,8 +51,10 @@ observing::syncable window_presenter::observe(std::function<void(window_presente
         return lifecycle->observe([once_called = false, handler = std::move(handler)](
                                       std::optional<project_sub_lifetime> const &current) mutable {
             if (current.has_value() && !once_called) {
-                once_called = true;
-                handler(window_presenter_event::setup_view_controller);
+                if (get<project_lifetime>(current) != nullptr) {
+                    once_called = true;
+                    handler(window_presenter_event::setup_view_controller);
+                }
             }
         });
     } else {

@@ -15,8 +15,8 @@ using namespace yas::ae;
 std::shared_ptr<editing_root_presenter> editing_root_presenter::make_shared(
     window_lifetime_id const &window_lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<editing_root_presenter>(project_lifetime->player, app_lifetime->action_sender);
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
+    return std::make_shared<editing_root_presenter>(window_lifetime->player, app_lifetime->action_sender);
 }
 
 editing_root_presenter::editing_root_presenter(std::shared_ptr<player> const &player,

@@ -17,9 +17,10 @@ using namespace yas::ae;
 std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(time_editor_lifetime_id const &lifetime_id,
                                                                     identifier const lifetime_instance_id,
                                                                     time_editor *editor) {
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id.window);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
     return std::make_shared<time_editor_closer>(lifetime_id, editor, project_lifetime->modal_lifecycle.get(),
-                                                project_lifetime->timing.get(), project_lifetime->player.get());
+                                                project_lifetime->timing.get(), window_lifetime->player.get());
 }
 
 time_editor_closer::time_editor_closer(time_editor_lifetime_id const &lifetime_id, time_editor *editor,

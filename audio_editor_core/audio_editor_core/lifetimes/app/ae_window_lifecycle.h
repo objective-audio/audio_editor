@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_action_receiver_providable.h>
 #include <audio_editor_core/ae_app_presenter_dependency.h>
-#include <audio_editor_core/ae_project_closer_dependency.h>
 #include <audio_editor_core/ae_window_lifecycle_types.h>
 
 namespace yas::ae {
@@ -17,15 +16,13 @@ class uuid_generatable;
 class file_info_loader;
 class project_format;
 
-struct window_lifecycle final : window_lifecycle_for_app_presenter,
-                                window_lifecycle_for_project_closer,
-                                action_receiver_providable {
+struct window_lifecycle final : window_lifecycle_for_app_presenter, action_receiver_providable {
     [[nodiscard]] static std::shared_ptr<window_lifecycle> make_shared();
 
     window_lifecycle(std::shared_ptr<id_generatable> const &, std::shared_ptr<uuid_generatable> const &);
 
     void add_lifetime(url const &project_dir_url, project_format const &);
-    void remove_lifetime(window_lifetime_id const &) override;
+    void remove_lifetime(window_lifetime_id const &);
 
     [[nodiscard]] std::shared_ptr<window_lifetime> const &lifetime_for_id(window_lifetime_id const &) const;
 

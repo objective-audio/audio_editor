@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_action_id.h>
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_id_generator.h>
-#include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_project_launcher.h>
@@ -36,7 +35,7 @@ void window_lifecycle::add_lifetime(url const &project_dir_url, project_format c
 
     this->_window_lifetimes->insert_or_replace(lifetime_id, std::make_pair(lifetime, nullptr));
 
-    lifetime->project_lifecycle->switch_to_project();
+    lifetime->project_lifecycle->switch_to_project_launch();
 }
 
 void window_lifecycle::remove_lifetime(window_lifetime_id const &lifetime_id) {

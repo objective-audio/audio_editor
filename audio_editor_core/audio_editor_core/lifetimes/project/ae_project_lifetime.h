@@ -21,8 +21,6 @@ class zooming_pair;
 class scrolling;
 class system_url;
 class player;
-class project_state_holder;
-class project_closer;
 class project_launcher;
 class timing;
 class nudge_settings;
@@ -55,25 +53,17 @@ class pinch_gesture_controller;
 class scroll_gesture_controller;
 class waveform_mesh_importer;
 class project_receiver;
+class window_lifetime;
 
 struct project_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &);
-    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &,
-                                                                       project_format const &,
-                                                                       url const &project_dir_url);
 
-    project_lifetime(window_lifetime_id const &, project_format const &, url const &project_dir_url,
-                     std::shared_ptr<app_lifetime> const &);
+    project_lifetime(window_lifetime *, app_lifetime *);
 
     window_lifetime_id const window_lifetime_id;
     project_format const project_format;
 
     std::shared_ptr<ae::project_url> const project_url;
-    std::shared_ptr<ae::zooming_pair> const zooming_pair;
-    std::shared_ptr<ae::scrolling> const scrolling;
-    std::shared_ptr<ae::player> const player;
-    std::shared_ptr<ae::project_state_holder> const state_holder;
-    std::shared_ptr<ae::project_closer> const closer;
     std::shared_ptr<module_location_pool> const module_location_pool;
     std::shared_ptr<marker_location_pool> const marker_location_pool;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
@@ -91,7 +81,6 @@ struct project_lifetime final {
     std::shared_ptr<editing_status> const editing_status;
     std::shared_ptr<playing_toggler> const playing_toggler;
     std::shared_ptr<project_modal_lifecycle> const modal_lifecycle;
-    std::shared_ptr<timeline_holder> const timeline_holder;
     std::shared_ptr<nudger> const nudger;
     std::shared_ptr<edge_holder> const edge_holder;
     std::shared_ptr<edge_editor> const edge_editor;
@@ -108,7 +97,5 @@ struct project_lifetime final {
     std::shared_ptr<import_interactor> const import_interactor;
     std::shared_ptr<track_editor> const track_editor;
     std::shared_ptr<project_receiver> const receiver;
-
-    std::shared_ptr<ae::project_launcher> const launcher;
 };
 }  // namespace yas::ae

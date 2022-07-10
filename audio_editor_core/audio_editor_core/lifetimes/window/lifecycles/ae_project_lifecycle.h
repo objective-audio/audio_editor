@@ -21,6 +21,7 @@ struct project_lifecycle final : action_receiver_providable {
 
     [[nodiscard]] std::optional<project_sub_lifetime> const &current() const;
 
+    void switch_to_project_launch();
     void switch_to_project();
 
     [[nodiscard]] observing::syncable observe(std::function<void(std::optional<project_sub_lifetime> const &)> &&);

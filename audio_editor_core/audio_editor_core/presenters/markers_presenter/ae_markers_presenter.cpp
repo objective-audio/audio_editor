@@ -16,8 +16,9 @@ using namespace yas::ae;
 std::shared_ptr<markers_presenter> markers_presenter::make_shared(
     window_lifetime_id const &window_lifetime_id, std::shared_ptr<display_space> const &display_space,
     std::shared_ptr<marker_location_pool> const &location_pool) {
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<markers_presenter>(project_lifetime->project_format, project_lifetime->player,
+    return std::make_shared<markers_presenter>(project_lifetime->project_format, window_lifetime->player,
                                                project_lifetime->marker_pool, display_space, location_pool);
 }
 
