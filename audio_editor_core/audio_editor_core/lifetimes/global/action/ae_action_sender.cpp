@@ -24,7 +24,7 @@ std::optional<ae::action> action_sender::to_action(ae::key const &key, ae::actio
     auto const receivers = this->_root_provider->receivers(action_id);
 
     if (auto const &iterator = receivers.begin(); iterator != receivers.end()) {
-        return (*iterator)->to_action(key);
+        return (*iterator)->to_action(key, action_id);
     }
 
     return std::nullopt;

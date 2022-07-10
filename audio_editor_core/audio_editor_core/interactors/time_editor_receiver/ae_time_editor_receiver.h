@@ -24,7 +24,7 @@ struct time_editor_receiver : action_receivable {
     time_editor_closer *const _closer;
 
     std::optional<action_id> receivable_id() const override;
-    std::optional<ae::action> to_action(ae::key const &) const override;
+    std::optional<ae::action> to_action(ae::key const &, ae::action_id const &) const override;
     void handle_action(ae::action const &) const override;
     responding responding_to_action(ae::action const &) const override;
 };

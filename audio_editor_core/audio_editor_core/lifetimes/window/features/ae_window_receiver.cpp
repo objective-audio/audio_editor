@@ -20,7 +20,7 @@ std::optional<action_id> window_receiver::receivable_id() const {
     return action_id{this->_lifetime_id};
 }
 
-std::optional<ae::action> window_receiver::to_action(ae::key const &) const {
+std::optional<ae::action> window_receiver::to_action(ae::key const &, ae::action_id const &) const {
     return std::nullopt;
 }
 

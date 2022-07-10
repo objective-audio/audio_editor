@@ -17,7 +17,7 @@ struct project_setup_dialog_receiver final : action_receivable {
     window_lifetime_id const _window_lifetime_id;
 
     std::optional<action_id> receivable_id() const override;
-    std::optional<ae::action> to_action(ae::key const &) const override;
+    std::optional<ae::action> to_action(ae::key const &, ae::action_id const &) const override;
     void handle_action(ae::action const &) const override;
     responding responding_to_action(ae::action const &) const override;
 };
