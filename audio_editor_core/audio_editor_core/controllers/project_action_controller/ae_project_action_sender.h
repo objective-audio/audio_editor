@@ -1,5 +1,5 @@
 //
-//  ae_project_action_controller.h
+//  ae_project_action_sender.h
 //
 
 #pragma once
@@ -11,11 +11,11 @@
 namespace yas::ae {
 class action_sender;
 
-struct project_action_controller final {
-    [[nodiscard]] static std::shared_ptr<project_action_controller> make_shared(window_lifetime_id const &,
-                                                                                action_sender *);
+struct project_action_sender final {
+    [[nodiscard]] static std::shared_ptr<project_action_sender> make_shared(window_lifetime_id const &,
+                                                                            action_sender *);
 
-    project_action_controller(window_lifetime_id const &, action_sender *);
+    project_action_sender(window_lifetime_id const &, action_sender *);
 
     void send(action const &);
     void send(action_kind const &, std::string const &value = "");

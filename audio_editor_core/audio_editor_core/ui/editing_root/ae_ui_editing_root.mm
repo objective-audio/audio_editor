@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
-#include <audio_editor_core/ae_project_action_controller.h>
+#include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_ui_editing_root_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
@@ -42,7 +42,7 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<ui::font_atlas> const &font_atlas,
                                  std::shared_ptr<ae::color> const &color,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
-                                 std::shared_ptr<project_action_controller> const &action_controller,
+                                 std::shared_ptr<project_action_sender> const &action_controller,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
                                  std::shared_ptr<ae::keyboard> const &keyboard,
                                  std::shared_ptr<ui_scroller> const &scroller,

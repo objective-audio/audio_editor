@@ -5,7 +5,7 @@
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
 #include <audio_editor_core/ae_json_utils.h>
-#include <audio_editor_core/ae_project_action_controller.h>
+#include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root.h>
@@ -29,7 +29,7 @@ using namespace yas::ae;
     window_lifetime_id _window_lifetime_id;
     std::weak_ptr<ui_root_lifetime> _root_lifetime;
     std::weak_ptr<project_modal_lifecycle> _project_modal_lifecycle;
-    std::weak_ptr<project_action_controller> _action_controller;
+    std::weak_ptr<project_action_sender> _action_controller;
     observing::canceller_pool _pool;
     observing::cancellable_ptr _sheet_canceller;
 }
@@ -60,7 +60,7 @@ using namespace yas::ae;
 
 - (void)setupWithWindowLifetimeID:(window_lifetime_id const &)window_lifetime_id
                   uiRootLifecycle:(std::shared_ptr<ae::ui_root_lifecycle> const &)ui_root_lifecycle
-                 actionController:(std::shared_ptr<project_action_controller> const &)action_controller
+                 actionController:(std::shared_ptr<project_action_sender> const &)action_controller
             projectModalLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)project_modal_lifecycle {
     self->_window_lifetime_id = window_lifetime_id;
 

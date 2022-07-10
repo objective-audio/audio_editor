@@ -9,7 +9,7 @@
 
 namespace yas::ae {
 class time_presenter;
-class project_action_controller;
+class project_action_sender;
 class color;
 
 struct ui_time final {
@@ -19,7 +19,7 @@ struct ui_time final {
 
     ui_time(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::texture> const &,
             std::shared_ptr<ae::color> const &, std::shared_ptr<time_presenter> const &,
-            std::shared_ptr<project_action_controller> const &);
+            std::shared_ptr<project_action_sender> const &);
 
     std::shared_ptr<ui::node> const node;
 
@@ -30,7 +30,7 @@ struct ui_time final {
     };
 
     std::shared_ptr<time_presenter> const _presenter;
-    std::weak_ptr<project_action_controller> const _action_controller;
+    std::weak_ptr<project_action_sender> const _action_controller;
     std::weak_ptr<ui::standard> const _standard;
     std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui::font_atlas> const _font_atlas;

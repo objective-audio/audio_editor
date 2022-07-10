@@ -5,7 +5,7 @@
 #include "ae_ui_modal_bg.h"
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_color.h>
-#include <audio_editor_core/ae_project_action_controller.h>
+#include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 
@@ -22,7 +22,7 @@ std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(window_lifetime_id const &
 
 ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
                          std::shared_ptr<project_modal_lifecycle> const &project_modal_lifecycle,
-                         std::shared_ptr<project_action_controller> const &action_controller)
+                         std::shared_ptr<project_action_sender> const &action_controller)
     : node(ui::node::make_shared()),
       _color(color),
       _button(ui::button::make_shared({.size = {1.0f, 1.0f}}, standard)),

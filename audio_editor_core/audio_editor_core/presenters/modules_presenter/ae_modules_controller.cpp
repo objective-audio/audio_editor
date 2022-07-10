@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_json_utils.h>
-#include <audio_editor_core/ae_project_action_controller.h>
+#include <audio_editor_core/ae_project_action_sender.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
@@ -19,7 +19,7 @@ std::shared_ptr<modules_controller> modules_controller::make_shared(
         new modules_controller{project_lifetime->action_controller, location_pool});
 }
 
-modules_controller::modules_controller(std::shared_ptr<project_action_controller> const &action_controller,
+modules_controller::modules_controller(std::shared_ptr<project_action_sender> const &action_controller,
                                        std::shared_ptr<module_location_pool> const &location_pool)
     : _action_controller(action_controller), _location_pool(location_pool) {
 }

@@ -5,7 +5,7 @@
 #import "AEMetalView.h"
 #include <audio_editor_core/ae_action_utils.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_action_controller.h>
+#include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_event_utils.h>
 #include <cpp_utils/yas_assertion.h>
@@ -21,7 +21,7 @@ using namespace yas::ae;
 @implementation AEMetalView {
     std::weak_ptr<project_modal_lifecycle> _lifecycle;
     std::optional<std::pair<context_menu_lifetime_id, context_menu>> _shown_context_menu;
-    std::weak_ptr<project_action_controller> _action_controller;
+    std::weak_ptr<project_action_sender> _action_controller;
     observing::canceller_pool _pool;
 }
 
@@ -33,7 +33,7 @@ using namespace yas::ae;
 }
 
 - (void)setupWithLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)lifecycle
-          actionController:(std::shared_ptr<project_action_controller> const &)action_controller {
+          actionController:(std::shared_ptr<project_action_sender> const &)action_controller {
     self->_lifecycle = lifecycle;
     self->_action_controller = action_controller;
 
