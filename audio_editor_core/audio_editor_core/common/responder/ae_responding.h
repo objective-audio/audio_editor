@@ -5,7 +5,7 @@
 #pragma once
 
 namespace yas::ae {
-enum class responding {
+enum class action_receivable_state {
     accepting,
     blocking,
     fallthrough,

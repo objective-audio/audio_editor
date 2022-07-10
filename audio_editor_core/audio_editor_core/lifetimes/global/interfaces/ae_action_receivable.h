@@ -20,6 +20,6 @@ struct action_receivable {
 
     [[nodiscard]] virtual std::optional<ae::action> to_action(ae::key const &, ae::action_id const &) const = 0;
     virtual void handle_action(ae::action const &) const = 0;
-    [[nodiscard]] virtual responding responding_to_action(ae::action const &) const = 0;
+    [[nodiscard]] virtual action_receivable_state responding_to_action(ae::action const &) const = 0;
 };
 }  // namespace yas::ae

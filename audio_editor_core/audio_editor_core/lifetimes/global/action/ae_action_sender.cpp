@@ -35,30 +35,30 @@ void action_sender::handle_action(ae::action const &action) {
 
     for (auto const &receiver : receivers) {
         switch (receiver->responding_to_action(action)) {
-            case ae::responding::accepting:
+            case ae::action_receivable_state::accepting:
                 receiver->handle_action(action);
                 return;
-            case ae::responding::blocking:
+            case ae::action_receivable_state::blocking:
                 return;
-            case ae::responding::fallthrough:
+            case ae::action_receivable_state::fallthrough:
                 break;
         }
     }
 }
 
-responding action_sender::responding_to_action(ae::action const &action) {
+action_receivable_state action_sender::responding_to_action(ae::action const &action) {
     auto const receivers = this->_root_provider->receivers(action.action_id);
 
     for (auto const &receiver : receivers) {
         switch (receiver->responding_to_action(action)) {
-            case ae::responding::accepting:
-                return responding::accepting;
-            case ae::responding::blocking:
-                return responding::blocking;
-            case ae::responding::fallthrough:
+            case ae::action_receivable_state::accepting:
+                return action_receivable_state::accepting;
+            case ae::action_receivable_state::blocking:
+                return action_receivable_state::blocking;
+            case ae::action_receivable_state::fallthrough:
                 break;
         }
     }
 
-    return responding::fallthrough;
+    return action_receivable_state::fallthrough;
 }

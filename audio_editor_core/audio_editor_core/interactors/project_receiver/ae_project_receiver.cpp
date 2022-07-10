@@ -131,7 +131,7 @@ std::optional<ae::action> project_receiver::to_action(ae::key const &key, ae::ac
 void project_receiver::handle_action(ae::action const &action) const {
     auto const responding = this->responding_to_action(action);
     switch (responding) {
-        case responding::accepting: {
+        case action_receivable_state::accepting: {
             switch (action.kind) {
                 case action_kind::toggle_play:
                     this->_playing_toggler->toggle_playing();
@@ -252,20 +252,20 @@ void project_receiver::handle_action(ae::action const &action) const {
             }
         } break;
 
-        case responding::blocking:
-        case responding::fallthrough:
+        case action_receivable_state::blocking:
+        case action_receivable_state::fallthrough:
             break;
     }
 }
 
-responding project_receiver::responding_to_action(ae::action const &action) const {
+action_receivable_state project_receiver::responding_to_action(ae::action const &action) const {
     static auto const to_responding = [](bool const &flag) {
-        return flag ? responding::accepting : responding::blocking;
+        return flag ? action_receivable_state::accepting : action_receivable_state::blocking;
     };
 
     switch (action.kind) {
         case action_kind::toggle_play:
-            return responding::accepting;
+            return action_receivable_state::accepting;
         case action_kind::nudge_previous:
         case action_kind::nudge_next:
         case action_kind::nudge_previous_more:
@@ -273,9 +273,9 @@ responding project_receiver::responding_to_action(ae::action const &action) cons
             return to_responding(this->_nudger->can_nudge());
         case action_kind::rotate_nudging_next_unit:
         case action_kind::rotate_nudging_previous_unit:
-            return responding::accepting;
+            return action_receivable_state::accepting;
         case action_kind::rotate_timing_fraction:
-            return responding::accepting;
+            return action_receivable_state::accepting;
 
         case action_kind::jump_previous:
             return to_responding(this->_jumper->can_jump_to_previous_edge());
@@ -351,6 +351,6 @@ responding project_receiver::responding_to_action(ae::action const &action) cons
         case action_kind::decrement_time:
         case action_kind::change_time_sign_to_plus:
         case action_kind::change_time_sign_to_minus:
-            return responding::fallthrough;
+            return action_receivable_state::fallthrough;
     }
 }

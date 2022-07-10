@@ -93,7 +93,7 @@ std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key, ae
 void time_editor_receiver::handle_action(ae::action const &action) const {
     auto const responding = this->responding_to_action(action);
     switch (responding) {
-        case responding::accepting: {
+        case action_receivable_state::accepting: {
             switch (action.kind) {
                 case action_kind::finish_time_editing:
                     this->_closer->finish();
@@ -166,15 +166,15 @@ void time_editor_receiver::handle_action(ae::action const &action) const {
             }
         } break;
 
-        case responding::blocking:
-        case responding::fallthrough:
+        case action_receivable_state::blocking:
+        case action_receivable_state::fallthrough:
             break;
     }
 }
 
-responding time_editor_receiver::responding_to_action(ae::action const &action) const {
+action_receivable_state time_editor_receiver::responding_to_action(ae::action const &action) const {
     static auto const to_responding = [](bool const &flag) {
-        return flag ? responding::accepting : responding::blocking;
+        return flag ? action_receivable_state::accepting : action_receivable_state::blocking;
     };
 
     switch (action.kind) {
@@ -235,6 +235,6 @@ responding time_editor_receiver::responding_to_action(ae::action const &action) 
         case action_kind::begin_time_editing:
         case action_kind::set_begin_edge:
         case action_kind::set_end_edge:
-            return responding::fallthrough;
+            return action_receivable_state::fallthrough;
     }
 }

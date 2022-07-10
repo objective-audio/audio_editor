@@ -28,6 +28,6 @@ void window_receiver::handle_action(ae::action const &) const {
     // do nothing.
 }
 
-responding window_receiver::responding_to_action(ae::action const &) const {
-    return responding::fallthrough;
+action_receivable_state window_receiver::responding_to_action(ae::action const &) const {
+    return action_receivable_state::fallthrough;
 }

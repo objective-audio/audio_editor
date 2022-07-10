@@ -10,7 +10,7 @@
 
 namespace yas::ae {
 enum class key;
-enum class responding;
+enum class action_receivable_state;
 class action;
 class action_id;
 class action_receiver_providable;
@@ -22,7 +22,7 @@ struct action_sender final {
 
     [[nodiscard]] std::optional<ae::action> to_action(ae::key const &, ae::action_id const &) const;
     void handle_action(ae::action const &);
-    [[nodiscard]] responding responding_to_action(ae::action const &);
+    [[nodiscard]] action_receivable_state responding_to_action(ae::action const &);
 
    private:
     action_receiver_providable *const _root_provider;
