@@ -6,8 +6,6 @@
 
 namespace yas::ae {
 enum class project_state {
-    launching,
-    loading,
     editing,
     closing,
 };

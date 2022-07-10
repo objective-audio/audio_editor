@@ -12,7 +12,7 @@ std::shared_ptr<project_state_holder> project_state_holder::make_shared() {
 }
 
 project_state_holder::project_state_holder()
-    : _state(observing::value::holder<project_state>::make_shared(project_state::launching)) {
+    : _state(observing::value::holder<project_state>::make_shared(project_state::editing)) {
 }
 
 project_state const &project_state_holder::state() const {

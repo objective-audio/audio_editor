@@ -36,16 +36,9 @@ void project_closer::request_close() {
     switch (this->_status->state()) {
         case project_state::closing:
             return;
-        case project_state::loading:
-            this->_file_importer->cancel(this->_window_lifetime_id.project);
-            this->_status->set_state(project_state::closing);
-            break;
         case project_state::editing:
             this->_status->set_state(project_state::closing);
-            break;
-        case project_state::launching:
-            break;
+            this->_file_importer->cancel(this->_window_lifetime_id.project);
+            return;
     }
-
-    this->_window_lifecycle->remove_lifetime(this->_window_lifetime_id);
 }
