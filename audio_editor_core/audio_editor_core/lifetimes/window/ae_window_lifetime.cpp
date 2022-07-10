@@ -33,7 +33,6 @@ window_lifetime::window_lifetime(window_lifetime_id const &lifetime_id, ae::proj
       project_format(project_format),
       project_directory_url(project_dir_url),
       project_url(ae::project_url::make_shared(project_dir_url)),
-      project_state_holder(ae::project_state_holder::make_shared()),
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_lifetime->system_url->playing_directory(), lifetime_id.project,

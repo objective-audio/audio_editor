@@ -34,7 +34,6 @@ struct window_lifetime final {
     url const project_directory_url;
 
     std::shared_ptr<project_url> const project_url;
-    std::shared_ptr<project_state_holder> const project_state_holder;
     std::shared_ptr<ae::zooming_pair> const zooming_pair;
     std::shared_ptr<ae::scrolling> const scrolling;
     std::shared_ptr<ae::player> const player;
