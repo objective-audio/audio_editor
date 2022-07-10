@@ -30,6 +30,6 @@ void project_setup_dialog_receiver::handle_action(ae::action const &) const {
     // do nothing.
 }
 
-action_receivable_state project_setup_dialog_receiver::responding_to_action(ae::action const &) const {
+action_receivable_state project_setup_dialog_receiver::receivable_state(ae::action const &) const {
     return action_receivable_state::fallthrough;
 }

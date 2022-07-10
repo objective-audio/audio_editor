@@ -129,8 +129,7 @@ std::optional<ae::action> project_receiver::to_action(ae::key const &key, ae::ac
 }
 
 void project_receiver::handle_action(ae::action const &action) const {
-    auto const responding = this->responding_to_action(action);
-    switch (responding) {
+    switch (this->receivable_state(action)) {
         case action_receivable_state::accepting: {
             switch (action.kind) {
                 case action_kind::toggle_play:
@@ -258,8 +257,8 @@ void project_receiver::handle_action(ae::action const &action) const {
     }
 }
 
-action_receivable_state project_receiver::responding_to_action(ae::action const &action) const {
-    static auto const to_responding = [](bool const &flag) {
+action_receivable_state project_receiver::receivable_state(ae::action const &action) const {
+    static auto const to_state = [](bool const &flag) {
         return flag ? action_receivable_state::accepting : action_receivable_state::blocking;
     };
 
@@ -270,7 +269,7 @@ action_receivable_state project_receiver::responding_to_action(ae::action const 
         case action_kind::nudge_next:
         case action_kind::nudge_previous_more:
         case action_kind::nudge_next_more:
-            return to_responding(this->_nudger->can_nudge());
+            return to_state(this->_nudger->can_nudge());
         case action_kind::rotate_nudging_next_unit:
         case action_kind::rotate_nudging_previous_unit:
             return action_receivable_state::accepting;
@@ -278,67 +277,67 @@ action_receivable_state project_receiver::responding_to_action(ae::action const 
             return action_receivable_state::accepting;
 
         case action_kind::jump_previous:
-            return to_responding(this->_jumper->can_jump_to_previous_edge());
+            return to_state(this->_jumper->can_jump_to_previous_edge());
         case action_kind::jump_next:
-            return to_responding(this->_jumper->can_jump_to_next_edge());
+            return to_state(this->_jumper->can_jump_to_next_edge());
         case action_kind::jump_to_beginning:
-            return to_responding(this->_jumper->can_jump_to_beginnig());
+            return to_state(this->_jumper->can_jump_to_beginnig());
         case action_kind::jump_to_end:
-            return to_responding(this->_jumper->can_jump_to_end());
+            return to_state(this->_jumper->can_jump_to_end());
 
         case action_kind::drop_head:
-            return to_responding(this->_editor->can_split());
+            return to_state(this->_editor->can_split());
         case action_kind::split:
-            return to_responding(this->_editor->can_split());
+            return to_state(this->_editor->can_split());
         case action_kind::drop_tail:
-            return to_responding(this->_editor->can_split());
+            return to_state(this->_editor->can_split());
 
         case action_kind::erase:
-            return to_responding(this->_editor->can_erase());
+            return to_state(this->_editor->can_erase());
 
         case action_kind::insert_marker:
-            return to_responding(this->_marker_editor->can_insert_marker());
+            return to_state(this->_marker_editor->can_insert_marker());
 
         case action_kind::return_to_zero:
-            return to_responding(this->_jumper->can_return_to_zero());
+            return to_state(this->_jumper->can_return_to_zero());
         case action_kind::go_to_marker:
-            return to_responding(this->_jumper->can_go_to_marker(std::stoi(action.value)));
+            return to_state(this->_jumper->can_go_to_marker(std::stoi(action.value)));
 
         case action_kind::undo:
-            return to_responding(this->_reverter->can_undo());
+            return to_state(this->_reverter->can_undo());
         case action_kind::redo:
-            return to_responding(this->_reverter->can_redo());
+            return to_state(this->_reverter->can_redo());
         case action_kind::purge:
-            return to_responding(this->_reverter->can_purge());
+            return to_state(this->_reverter->can_purge());
 
         case action_kind::select_file_for_import:
-            return to_responding(this->_import_interactor->can_select_file_for_import());
+            return to_state(this->_import_interactor->can_select_file_for_import());
         case action_kind::import_from_file:
-            return to_responding(this->_import_interactor->can_import_from_file());
+            return to_state(this->_import_interactor->can_import_from_file());
         case action_kind::select_file_for_export:
-            return to_responding(this->_export_interactor->can_select_file_for_export());
+            return to_state(this->_export_interactor->can_select_file_for_export());
         case action_kind::export_to_file:
-            return to_responding(this->_export_interactor->can_export_to_file());
+            return to_state(this->_export_interactor->can_export_to_file());
 
         case action_kind::cut:
-            return to_responding(this->_editor->can_cut());
+            return to_state(this->_editor->can_cut());
         case action_kind::copy:
-            return to_responding(this->_editor->can_copy());
+            return to_state(this->_editor->can_copy());
         case action_kind::paste:
-            return to_responding(this->_editor->can_paste());
+            return to_state(this->_editor->can_paste());
 
         case action_kind::begin_module_renaming:
-            return to_responding(this->_module_renaming_launcher->can_begin_module_renaming());
+            return to_state(this->_module_renaming_launcher->can_begin_module_renaming());
 
         case action_kind::begin_time_editing:
-            return to_responding(this->_time_editor_launcher->can_begin_time_editing());
+            return to_state(this->_time_editor_launcher->can_begin_time_editing());
         case action_kind::select_time_unit:
-            return to_responding(this->_time_editor_launcher->can_begin_time_editing());
+            return to_state(this->_time_editor_launcher->can_begin_time_editing());
 
         case action_kind::set_begin_edge:
-            return to_responding(this->_edge_editor->can_set_begin());
+            return to_state(this->_edge_editor->can_set_begin());
         case action_kind::set_end_edge:
-            return to_responding(this->_edge_editor->can_set_end());
+            return to_state(this->_edge_editor->can_set_end());
 
             // 以下、time_editor用
         case action_kind::finish_time_editing:

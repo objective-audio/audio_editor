@@ -91,8 +91,7 @@ std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key, ae
 }
 
 void time_editor_receiver::handle_action(ae::action const &action) const {
-    auto const responding = this->responding_to_action(action);
-    switch (responding) {
+    switch (this->receivable_state(action)) {
         case action_receivable_state::accepting: {
             switch (action.kind) {
                 case action_kind::finish_time_editing:
@@ -172,34 +171,34 @@ void time_editor_receiver::handle_action(ae::action const &action) const {
     }
 }
 
-action_receivable_state time_editor_receiver::responding_to_action(ae::action const &action) const {
-    static auto const to_responding = [](bool const &flag) {
+action_receivable_state time_editor_receiver::receivable_state(ae::action const &action) const {
+    static auto const to_state = [](bool const &flag) {
         return flag ? action_receivable_state::accepting : action_receivable_state::blocking;
     };
 
     switch (action.kind) {
         case action_kind::finish_time_editing:
-            return to_responding(this->_closer->can_finish());
+            return to_state(this->_closer->can_finish());
         case action_kind::cancel_time_editing:
-            return to_responding(this->_closer->can_cancel());
+            return to_state(this->_closer->can_cancel());
         case action_kind::move_to_previous_time_unit:
-            return to_responding(this->_editor->can_move_to_previous_unit());
+            return to_state(this->_editor->can_move_to_previous_unit());
         case action_kind::move_to_next_time_unit:
-            return to_responding(this->_editor->can_move_to_next_unit());
+            return to_state(this->_editor->can_move_to_next_unit());
         case action_kind::input_time:
-            return to_responding(this->_editor->can_input_number());
+            return to_state(this->_editor->can_input_number());
         case action_kind::delete_time:
-            return to_responding(this->_editor->can_delete_number());
+            return to_state(this->_editor->can_delete_number());
         case action_kind::increment_time:
-            return to_responding(this->_editor->can_increment_number());
+            return to_state(this->_editor->can_increment_number());
         case action_kind::decrement_time:
-            return to_responding(this->_editor->can_decrement_number());
+            return to_state(this->_editor->can_decrement_number());
         case action_kind::change_time_sign_to_plus:
-            return to_responding(this->_editor->can_change_sign_to_plus());
+            return to_state(this->_editor->can_change_sign_to_plus());
         case action_kind::change_time_sign_to_minus:
-            return to_responding(this->_editor->can_change_sign_to_minus());
+            return to_state(this->_editor->can_change_sign_to_minus());
         case action_kind::select_time_unit:
-            return to_responding(this->_editor->can_set_unit_idx());
+            return to_state(this->_editor->can_set_unit_idx());
 
             // 以下、project_editor用
         case action_kind::toggle_play:
