@@ -46,7 +46,7 @@ void action_sender::handle_action(ae::action const &action) {
     }
 }
 
-action_receivable_state action_sender::responding_to_action(ae::action const &action) {
+action_receivable_state action_sender::receivable_state(ae::action const &action) {
     auto const receivers = this->_root_provider->receivers(action.action_id);
 
     for (auto const &receiver : receivers) {

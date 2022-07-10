@@ -38,7 +38,7 @@ playing_line_state_t editing_root_presenter::playing_line_state() const {
 
 bool editing_root_presenter::responds_to_action(action const action) {
     if (auto const action_sender = this->_action_sender.lock()) {
-        switch (action_sender->responding_to_action(action)) {
+        switch (action_sender->receivable_state(action)) {
             case action_receivable_state::accepting:
             case action_receivable_state::blocking:
                 return true;
