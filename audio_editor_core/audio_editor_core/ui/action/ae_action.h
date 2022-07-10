@@ -61,7 +61,6 @@ enum class action_kind {
 struct action {
     action_kind kind;
     std::string value = "";
-    std::optional<action_id> action_id;
 
     action(action_kind const kind, std::string const &value, std::optional<ae::action_id> const &);
 
