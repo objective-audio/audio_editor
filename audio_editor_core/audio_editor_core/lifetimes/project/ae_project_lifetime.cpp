@@ -30,11 +30,9 @@
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_project_action_controller.h>
-#include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_project_receiver.h>
-#include <audio_editor_core/ae_project_state_holder.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
@@ -62,9 +60,6 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
     : window_lifetime_id(window_lifetime->lifetime_id),
       project_format(window_lifetime->project_format),
       project_url(project_url::make_shared(window_lifetime->project_directory_url)),
-      state_holder(ae::project_state_holder::make_shared()),
-      closer(project_closer::make_shared(window_lifetime_id, app_lifetime->file_importer.get(),
-                                         app_lifetime->window_lifecycle.get(), this->state_holder.get())),
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),

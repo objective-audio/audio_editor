@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_launcher.h>
-#include <audio_editor_core/ae_project_state_holder.h>
 #include <audio_editor_core/ae_window_lifetime.h>
 
 using namespace yas;

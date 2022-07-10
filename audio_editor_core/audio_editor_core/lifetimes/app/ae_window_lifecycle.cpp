@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_action_id.h>
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_id_generator.h>
-#include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
 #include <audio_editor_core/ae_project_launcher.h>

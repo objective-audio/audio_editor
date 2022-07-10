@@ -5,7 +5,6 @@
 #include "ae_window_presenter.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_launch_lifetime.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_project_url.h>
