@@ -21,7 +21,7 @@ project_action_controller::project_action_controller(window_lifetime_id const &w
 }
 
 void project_action_controller::handle_action(action const &action) {
-    this->_action_sender->send(action);
+    this->_action_sender->send(action, action_id{this->_window_lifetime_id});
 }
 
 void project_action_controller::handle_action(action_kind const &kind, std::string const &value) {
@@ -29,7 +29,9 @@ void project_action_controller::handle_action(action_kind const &kind, std::stri
 }
 
 void project_action_controller::handle_key(ae::key const key) {
-    if (auto const action = this->_action_sender->to_action(key, action_id{this->_window_lifetime_id})) {
-        this->_action_sender->send(action.value());
+    action_id const action_id{this->_window_lifetime_id};
+
+    if (auto const action = this->_action_sender->to_action(key, action_id)) {
+        this->_action_sender->send(action.value(), action_id);
     }
 }
