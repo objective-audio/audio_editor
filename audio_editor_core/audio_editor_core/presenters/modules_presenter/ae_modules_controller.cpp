@@ -35,8 +35,7 @@ void modules_controller::select_module_at(std::size_t const idx) {
     if (idx < locations.size()) {
         auto const &location = locations.at(idx);
         if (location.has_value()) {
-            action_controller->handle_action(action_kind::begin_module_renaming,
-                                             to_json_string(location.value().range));
+            action_controller->send(action_kind::begin_module_renaming, to_json_string(location.value().range));
         }
     }
 }

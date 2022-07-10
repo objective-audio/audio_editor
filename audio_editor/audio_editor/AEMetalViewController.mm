@@ -111,85 +111,85 @@ using namespace yas::ae;
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::jump_previous);
+        action_controller->send(action_kind::jump_previous);
     }
 }
 
 - (IBAction)jumpNext:(NSMenuItem *)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::jump_next);
+        action_controller->send(action_kind::jump_next);
     }
 }
 
 - (IBAction)jumpToBeginning:(NSMenuItem *)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::jump_to_beginning);
+        action_controller->send(action_kind::jump_to_beginning);
     }
 }
 
 - (IBAction)jumpToEnd:(NSMenuItem *)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::jump_to_end);
+        action_controller->send(action_kind::jump_to_end);
     }
 }
 
 - (IBAction)insertMarker:(NSMenuItem *)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::insert_marker);
+        action_controller->send(action_kind::insert_marker);
     }
 }
 
 - (IBAction)returnToZero:(NSMenuItem *)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::return_to_zero);
+        action_controller->send(action_kind::return_to_zero);
     }
 }
 
 - (IBAction)undo:(NSMenuItem *)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::undo);
+        action_controller->send(action_kind::undo);
     }
 }
 
 - (IBAction)redo:(NSMenuItem *)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::redo);
+        action_controller->send(action_kind::redo);
     }
 }
 
 - (IBAction)importFromFile:(id)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::select_file_for_import);
+        action_controller->send(action_kind::select_file_for_import);
     }
 }
 
 - (IBAction)exportToFile:(id)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::select_file_for_export);
+        action_controller->send(action_kind::select_file_for_export);
     }
 }
 
 - (IBAction)cut:(id)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::cut);
+        action_controller->send(action_kind::cut);
     }
 }
 
 - (IBAction)copy:(id)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::copy);
+        action_controller->send(action_kind::copy);
     }
 }
 
 - (IBAction)paste:(id)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::paste);
+        action_controller->send(action_kind::paste);
     }
 }
 
 - (IBAction)purge:(id)sender {
     if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->handle_action(action_kind::purge);
+        action_controller->send(action_kind::purge);
     }
 }
 
@@ -260,7 +260,7 @@ using namespace yas::ae;
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
             if (auto const action_controller = self->_action_controller.lock()) {
-                action_controller->handle_action(action_kind::import_from_file, path);
+                action_controller->send(action_kind::import_from_file, path);
             }
         }
     }];
@@ -288,7 +288,7 @@ using namespace yas::ae;
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
             if (auto const action_controller = self->_action_controller.lock()) {
-                action_controller->handle_action(action_kind::export_to_file, path);
+                action_controller->send(action_kind::export_to_file, path);
             }
         }
     }];

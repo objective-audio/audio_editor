@@ -86,7 +86,7 @@ void ui_editing_root::_setup_observing(std::shared_ptr<ui::standard> const &stan
     keyboard
         ->observe_key([this](ae::key const &key) {
             if (auto const action_controller = this->_action_controller.lock()) {
-                action_controller->handle_key(key);
+                action_controller->send(key);
             }
         })
         .end()

@@ -20,15 +20,15 @@ project_action_controller::project_action_controller(window_lifetime_id const &w
     : _window_lifetime_id(window_lifetime_id), _action_sender(action_sender) {
 }
 
-void project_action_controller::handle_action(action const &action) {
+void project_action_controller::send(action const &action) {
     this->_action_sender->send(action, action_id{this->_window_lifetime_id});
 }
 
-void project_action_controller::handle_action(action_kind const &kind, std::string const &value) {
-    this->handle_action(action{kind, value});
+void project_action_controller::send(action_kind const &kind, std::string const &value) {
+    this->send(action{kind, value});
 }
 
-void project_action_controller::handle_key(ae::key const key) {
+void project_action_controller::send(ae::key const key) {
     action_id const action_id{this->_window_lifetime_id};
 
     this->_action_sender->send(key, action_id);

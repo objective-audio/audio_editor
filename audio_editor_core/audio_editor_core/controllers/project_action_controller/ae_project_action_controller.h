@@ -17,9 +17,9 @@ struct project_action_controller final {
 
     project_action_controller(window_lifetime_id const &, action_sender *);
 
-    void handle_action(action const &);
-    void handle_action(action_kind const &, std::string const &value = "");
-    void handle_key(ae::key const);
+    void send(action const &);
+    void send(action_kind const &, std::string const &value = "");
+    void send(ae::key const);
 
    private:
     window_lifetime_id const _window_lifetime_id;

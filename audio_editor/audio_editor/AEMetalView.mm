@@ -107,7 +107,7 @@ using namespace yas::ae;
     if (idx < context_menu.actions.size()) {
         if (auto const &action = context_menu.actions.at(idx)) {
             if (auto const action_controller = self->_action_controller.lock()) {
-                action_controller->handle_action(action.value());
+                action_controller->send(action.value());
             }
         }
     }

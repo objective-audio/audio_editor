@@ -64,7 +64,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
                 case ui::button::phase::ended:
                     if (context.touch.touch_id == ui::touch_id::mouse_left()) {
                         if (auto const action_controller = this->_action_controller.lock()) {
-                            action_controller->handle_action(action_kind::begin_time_editing, "");
+                            action_controller->send(action_kind::begin_time_editing, "");
                         }
                     }
                     break;
@@ -176,23 +176,23 @@ void ui_time::_resize_buttons() {
 
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
-            auto canceller = button
-                                 ->observe([this, idx](ui::button::context const &context) {
-                                     switch (context.phase) {
-                                         case ui::button::phase::ended: {
-                                             // 左クリック
-                                             if (context.touch.touch_id == ui::touch_id::mouse_left()) {
-                                                 if (auto const action_controller = this->_action_controller.lock()) {
-                                                     action_controller->handle_action(action_kind::select_time_unit,
-                                                                                      std::to_string(idx));
-                                                 }
-                                             }
-                                         } break;
-                                         default:
-                                             break;
-                                     }
-                                 })
-                                 .end();
+            auto canceller =
+                button
+                    ->observe([this, idx](ui::button::context const &context) {
+                        switch (context.phase) {
+                            case ui::button::phase::ended: {
+                                // 左クリック
+                                if (context.touch.touch_id == ui::touch_id::mouse_left()) {
+                                    if (auto const action_controller = this->_action_controller.lock()) {
+                                        action_controller->send(action_kind::select_time_unit, std::to_string(idx));
+                                    }
+                                }
+                            } break;
+                            default:
+                                break;
+                        }
+                    })
+                    .end();
 
             this->_buttons_root_node->add_sub_node(button->rect_plane()->node());
 
