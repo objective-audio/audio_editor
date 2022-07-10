@@ -44,8 +44,6 @@ void project_closer::request_close() {
             this->_status->set_state(project_state::closing);
             break;
         case project_state::launching:
-        case project_state::failure:
-            this->_status->set_state(project_state::closing);
             break;
     }
 

@@ -9,7 +9,6 @@ enum class project_state {
     launching,
     loading,
     editing,
-    failure,
     closing,
 };
 }  // namespace yas::ae
