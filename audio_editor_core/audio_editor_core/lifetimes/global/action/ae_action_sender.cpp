@@ -20,16 +20,6 @@ std::shared_ptr<action_sender> action_sender::make_shared(action_receiver_provid
 action_sender::action_sender(action_receiver_providable *root_provider) : _root_provider(root_provider) {
 }
 
-std::optional<ae::action> action_sender::to_action(ae::key const &key, ae::action_id const &action_id) const {
-    auto const receivers = this->_root_provider->receivers(action_id);
-
-    if (auto const &iterator = receivers.begin(); iterator != receivers.end()) {
-        return (*iterator)->to_action(key, action_id);
-    }
-
-    return std::nullopt;
-}
-
 void action_sender::send(ae::action const &action, ae::action_id const &action_id) {
     auto const receivers = this->_root_provider->receivers(action_id);
 
@@ -42,6 +32,24 @@ void action_sender::send(ae::action const &action, ae::action_id const &action_i
                 return;
             case ae::action_receivable_state::fallthrough:
                 break;
+        }
+    }
+}
+
+void action_sender::send(ae::key const &key, ae::action_id const &action_id) {
+    auto const receivers = this->_root_provider->receivers(action_id);
+
+    for (auto const &receiver : receivers) {
+        if (auto const action = receiver->to_action(key, action_id)) {
+            switch (receiver->receivable_state(action.value())) {
+                case ae::action_receivable_state::accepting:
+                    receiver->handle_action(action.value());
+                    return;
+                case ae::action_receivable_state::blocking:
+                    return;
+                case ae::action_receivable_state::fallthrough:
+                    break;
+            }
         }
     }
 }
