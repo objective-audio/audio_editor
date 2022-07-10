@@ -21,7 +21,7 @@ struct action_sender final {
     action_sender(action_receiver_providable *root_provider);
 
     [[nodiscard]] std::optional<ae::action> to_action(ae::key const &, ae::action_id const &) const;
-    void handle_action(ae::action const &);
+    void send(ae::action const &);
     [[nodiscard]] action_receivable_state receivable_state(ae::action const &);
 
    private:
