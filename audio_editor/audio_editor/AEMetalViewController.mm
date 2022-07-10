@@ -198,8 +198,7 @@ using namespace yas::ae;
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     if (auto const action_kind = [self actionKindForSelector:menuItem.action]) {
         if (auto const ui_root_lifetime = self->_root_lifetime.lock()) {
-            return ui_root_lifetime->root->responds_to_action(
-                {action_kind.value(), "", action_id{self->_window_lifetime_id}});
+            return ui_root_lifetime->root->responds_to_action({action_kind.value(), ""});
         }
     }
     return NO;
