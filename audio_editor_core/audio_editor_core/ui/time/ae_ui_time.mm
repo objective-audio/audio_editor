@@ -27,15 +27,15 @@ std::shared_ptr<ui_time> ui_time::make_shared(window_lifetime_id const &window_l
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
 
     return std::make_shared<ui_time>(standard, texture, app_lifetime->color, presenter,
-                                     project_lifetime->action_controller);
+                                     project_lifetime->action_sender);
 }
 
 ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::texture> const &texture,
                  std::shared_ptr<ae::color> const &color, std::shared_ptr<time_presenter> const &presenter,
-                 std::shared_ptr<project_action_sender> const &action_controller)
+                 std::shared_ptr<project_action_sender> const &action_sender)
     : node(ui::node::make_shared()),
       _presenter(presenter),
-      _action_controller(action_controller),
+      _action_sender(action_sender),
       _standard(standard),
       _color(color),
       _font_atlas(ui::font_atlas::make_shared(
@@ -63,8 +63,8 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
             switch (context.phase) {
                 case ui::button::phase::ended:
                     if (context.touch.touch_id == ui::touch_id::mouse_left()) {
-                        if (auto const action_controller = this->_action_controller.lock()) {
-                            action_controller->send(action_kind::begin_time_editing, "");
+                        if (auto const action_sender = this->_action_sender.lock()) {
+                            action_sender->send(action_kind::begin_time_editing, "");
                         }
                     }
                     break;
@@ -183,8 +183,8 @@ void ui_time::_resize_buttons() {
                             case ui::button::phase::ended: {
                                 // 左クリック
                                 if (context.touch.touch_id == ui::touch_id::mouse_left()) {
-                                    if (auto const action_controller = this->_action_controller.lock()) {
-                                        action_controller->send(action_kind::select_time_unit, std::to_string(idx));
+                                    if (auto const action_sender = this->_action_sender.lock()) {
+                                        action_sender->send(action_kind::select_time_unit, std::to_string(idx));
                                     }
                                 }
                             } break;

@@ -30,7 +30,7 @@ struct ui_time final {
     };
 
     std::shared_ptr<time_presenter> const _presenter;
-    std::weak_ptr<project_action_sender> const _action_controller;
+    std::weak_ptr<project_action_sender> const _action_sender;
     std::weak_ptr<ui::standard> const _standard;
     std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui::font_atlas> const _font_atlas;

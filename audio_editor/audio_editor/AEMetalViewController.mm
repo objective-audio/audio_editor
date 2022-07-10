@@ -29,7 +29,7 @@ using namespace yas::ae;
     window_lifetime_id _window_lifetime_id;
     std::weak_ptr<ui_root_lifetime> _root_lifetime;
     std::weak_ptr<project_modal_lifecycle> _project_modal_lifecycle;
-    std::weak_ptr<project_action_sender> _action_controller;
+    std::weak_ptr<project_action_sender> _action_sender;
     observing::canceller_pool _pool;
     observing::cancellable_ptr _sheet_canceller;
 }
@@ -54,13 +54,13 @@ using namespace yas::ae;
 
     [self setupWithWindowLifetimeID:lifetime_id
                     uiRootLifecycle:ui_root_lifecycle
-                   actionController:project_lifetime->action_controller
+                   actionController:project_lifetime->action_sender
               projectModalLifecycle:project_lifetime->modal_lifecycle];
 }
 
 - (void)setupWithWindowLifetimeID:(window_lifetime_id const &)window_lifetime_id
                   uiRootLifecycle:(std::shared_ptr<ae::ui_root_lifecycle> const &)ui_root_lifecycle
-                 actionController:(std::shared_ptr<project_action_sender> const &)action_controller
+                 actionController:(std::shared_ptr<project_action_sender> const &)action_sender
             projectModalLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)project_modal_lifecycle {
     self->_window_lifetime_id = window_lifetime_id;
 
@@ -71,7 +71,7 @@ using namespace yas::ae;
     ui_root_lifecycle->add_lifetime(standard, self->_window_lifetime_id);
     self->_root_lifetime = ui_root_lifecycle->lifetime_for_window_lifetime_id(self->_window_lifetime_id);
 
-    self->_action_controller = action_controller;
+    self->_action_sender = action_sender;
     self->_project_modal_lifecycle = project_modal_lifecycle;
 
     [self configure_with_metal_system:metal_system
@@ -110,86 +110,86 @@ using namespace yas::ae;
 }
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::jump_previous);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::jump_previous);
     }
 }
 
 - (IBAction)jumpNext:(NSMenuItem *)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::jump_next);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::jump_next);
     }
 }
 
 - (IBAction)jumpToBeginning:(NSMenuItem *)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::jump_to_beginning);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::jump_to_beginning);
     }
 }
 
 - (IBAction)jumpToEnd:(NSMenuItem *)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::jump_to_end);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::jump_to_end);
     }
 }
 
 - (IBAction)insertMarker:(NSMenuItem *)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::insert_marker);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::insert_marker);
     }
 }
 
 - (IBAction)returnToZero:(NSMenuItem *)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::return_to_zero);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::return_to_zero);
     }
 }
 
 - (IBAction)undo:(NSMenuItem *)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::undo);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::undo);
     }
 }
 
 - (IBAction)redo:(NSMenuItem *)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::redo);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::redo);
     }
 }
 
 - (IBAction)importFromFile:(id)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::select_file_for_import);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::select_file_for_import);
     }
 }
 
 - (IBAction)exportToFile:(id)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::select_file_for_export);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::select_file_for_export);
     }
 }
 
 - (IBAction)cut:(id)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::cut);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::cut);
     }
 }
 
 - (IBAction)copy:(id)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::copy);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::copy);
     }
 }
 
 - (IBAction)paste:(id)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::paste);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::paste);
     }
 }
 
 - (IBAction)purge:(id)sender {
-    if (auto const action_controller = self->_action_controller.lock()) {
-        action_controller->send(action_kind::purge);
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(action_kind::purge);
     }
 }
 
@@ -259,8 +259,8 @@ using namespace yas::ae;
 
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
-            if (auto const action_controller = self->_action_controller.lock()) {
-                action_controller->send(action_kind::import_from_file, path);
+            if (auto const action_sender = self->_action_sender.lock()) {
+                action_sender->send(action_kind::import_from_file, path);
             }
         }
     }];
@@ -287,8 +287,8 @@ using namespace yas::ae;
 
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
-            if (auto const action_controller = self->_action_controller.lock()) {
-                action_controller->send(action_kind::export_to_file, path);
+            if (auto const action_sender = self->_action_sender.lock()) {
+                action_sender->send(action_kind::export_to_file, path);
             }
         }
     }];

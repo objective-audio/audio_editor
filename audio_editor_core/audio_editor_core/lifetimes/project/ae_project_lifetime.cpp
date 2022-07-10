@@ -63,7 +63,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),
-      action_controller(ae::project_action_sender::make_shared(window_lifetime_id, app_lifetime->action_sender.get())),
+      action_sender(ae::project_action_sender::make_shared(window_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(window_lifetime->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(window_lifetime->scrolling.get())),
       timing(timing::make_shared(project_format.sample_rate)),

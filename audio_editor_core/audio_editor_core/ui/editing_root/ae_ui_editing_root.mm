@@ -34,7 +34,7 @@ std::shared_ptr<ui_editing_root> ui_editing_root::make_shared(window_lifetime_id
     auto const presenter = editing_root_presenter::make_shared(window_lifetime_id);
 
     return std::make_shared<ui_editing_root>(
-        standard, font_atlas, app_lifetime->color, presenter, project_lifetime->action_controller,
+        standard, font_atlas, app_lifetime->color, presenter, project_lifetime->action_sender,
         project_lifetime->pinch_gesture_controller, keyboard, ui_scroller, ui_modal_bg, ui_time);
 }
 
@@ -42,14 +42,14 @@ ui_editing_root::ui_editing_root(std::shared_ptr<ui::standard> const &standard,
                                  std::shared_ptr<ui::font_atlas> const &font_atlas,
                                  std::shared_ptr<ae::color> const &color,
                                  std::shared_ptr<editing_root_presenter> const &presenter,
-                                 std::shared_ptr<project_action_sender> const &action_controller,
+                                 std::shared_ptr<project_action_sender> const &action_sender,
                                  std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
                                  std::shared_ptr<ae::keyboard> const &keyboard,
                                  std::shared_ptr<ui_scroller> const &scroller,
                                  std::shared_ptr<ui_modal_bg> const &modal_bg, std::shared_ptr<ui_time> const &time)
     : node(ui::node::make_shared()),
       _presenter(presenter),
-      _action_controller(action_controller),
+      _action_sender(action_sender),
       _pinch_gesture_controller(pinch_gesture_controller),
       _color(color),
       _playing_line(ui::rect_plane::make_shared(1)),
@@ -85,8 +85,8 @@ void ui_editing_root::_setup_observing(std::shared_ptr<ui::standard> const &stan
 
     keyboard
         ->observe_key([this](ae::key const &key) {
-            if (auto const action_controller = this->_action_controller.lock()) {
-                action_controller->send(key);
+            if (auto const action_sender = this->_action_sender.lock()) {
+                action_sender->send(key);
             }
         })
         .end()

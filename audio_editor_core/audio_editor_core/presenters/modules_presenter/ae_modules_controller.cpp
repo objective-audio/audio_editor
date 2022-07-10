@@ -15,18 +15,17 @@ using namespace yas::ae;
 std::shared_ptr<modules_controller> modules_controller::make_shared(
     window_lifetime_id const &window_lifetime_id, std::shared_ptr<module_location_pool> const &location_pool) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::shared_ptr<modules_controller>(
-        new modules_controller{project_lifetime->action_controller, location_pool});
+    return std::shared_ptr<modules_controller>(new modules_controller{project_lifetime->action_sender, location_pool});
 }
 
-modules_controller::modules_controller(std::shared_ptr<project_action_sender> const &action_controller,
+modules_controller::modules_controller(std::shared_ptr<project_action_sender> const &action_sender,
                                        std::shared_ptr<module_location_pool> const &location_pool)
-    : _action_controller(action_controller), _location_pool(location_pool) {
+    : _action_sender(action_sender), _location_pool(location_pool) {
 }
 
 void modules_controller::select_module_at(std::size_t const idx) {
-    auto const action_controller = this->_action_controller.lock();
-    if (!action_controller) {
+    auto const action_sender = this->_action_sender.lock();
+    if (!action_sender) {
         assertion_failure_if_not_test();
         return;
     }
@@ -35,7 +34,7 @@ void modules_controller::select_module_at(std::size_t const idx) {
     if (idx < locations.size()) {
         auto const &location = locations.at(idx);
         if (location.has_value()) {
-            action_controller->send(action_kind::begin_module_renaming, to_json_string(location.value().range));
+            action_sender->send(action_kind::begin_module_renaming, to_json_string(location.value().range));
         }
     }
 }

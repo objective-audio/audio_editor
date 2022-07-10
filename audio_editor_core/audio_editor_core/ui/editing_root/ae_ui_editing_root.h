@@ -37,7 +37,7 @@ struct ui_editing_root final {
 
    private:
     std::shared_ptr<editing_root_presenter> const _presenter;
-    std::weak_ptr<project_action_sender> const _action_controller;
+    std::weak_ptr<project_action_sender> const _action_sender;
     std::weak_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
 
     std::shared_ptr<ae::color> const _color;
