@@ -26,7 +26,7 @@ std::optional<ae::action> project_setup_dialog_receiver::to_action(ae::key const
     return std::nullopt;
 }
 
-void project_setup_dialog_receiver::handle_action(ae::action const &) const {
+void project_setup_dialog_receiver::receive(ae::action const &) const {
     // do nothing.
 }
 

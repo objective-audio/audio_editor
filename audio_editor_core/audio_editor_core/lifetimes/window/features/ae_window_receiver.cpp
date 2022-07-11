@@ -24,7 +24,7 @@ std::optional<ae::action> window_receiver::to_action(ae::key const &, ae::action
     return std::nullopt;
 }
 
-void window_receiver::handle_action(ae::action const &) const {
+void window_receiver::receive(ae::action const &) const {
     // do nothing.
 }
 

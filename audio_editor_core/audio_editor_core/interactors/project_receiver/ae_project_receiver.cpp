@@ -128,7 +128,7 @@ std::optional<ae::action> project_receiver::to_action(ae::key const &key, ae::ac
     }
 }
 
-void project_receiver::handle_action(ae::action const &action) const {
+void project_receiver::receive(ae::action const &action) const {
     switch (this->receivable_state(action)) {
         case action_receivable_state::accepting: {
             switch (action.kind) {

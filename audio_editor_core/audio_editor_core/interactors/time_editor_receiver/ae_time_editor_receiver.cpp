@@ -90,7 +90,7 @@ std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key, ae
     }
 }
 
-void time_editor_receiver::handle_action(ae::action const &action) const {
+void time_editor_receiver::receive(ae::action const &action) const {
     switch (this->receivable_state(action)) {
         case action_receivable_state::accepting: {
             switch (action.kind) {

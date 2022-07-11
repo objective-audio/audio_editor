@@ -26,7 +26,7 @@ void action_sender::send(ae::action const &action, ae::action_id const &action_i
     for (auto const &receiver : receivers) {
         switch (receiver->receivable_state(action)) {
             case ae::action_receivable_state::accepting:
-                receiver->handle_action(action);
+                receiver->receive(action);
                 return;
             case ae::action_receivable_state::blocking:
                 return;
@@ -43,7 +43,7 @@ void action_sender::send(ae::key const &key, ae::action_id const &action_id) {
         if (auto const action = receiver->to_action(key, action_id)) {
             switch (receiver->receivable_state(action.value())) {
                 case ae::action_receivable_state::accepting:
-                    receiver->handle_action(action.value());
+                    receiver->receive(action.value());
                     return;
                 case ae::action_receivable_state::blocking:
                     return;
