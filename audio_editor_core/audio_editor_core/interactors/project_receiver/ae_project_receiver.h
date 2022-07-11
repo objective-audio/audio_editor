@@ -45,10 +45,10 @@ struct project_receiver final : action_receivable {
     time_editor_launcher *const _time_editor_launcher;
     marker_editor *const _marker_editor;
     module_renaming_launcher *const _module_renaming_launcher;
-    timing *_timing;
-    import_interactor *_import_interactor;
-    export_interactor *_export_interactor;
-    reverter *_reverter;
+    timing *const _timing;
+    import_interactor *const _import_interactor;
+    export_interactor *const _export_interactor;
+    reverter *const _reverter;
 
     std::optional<action_id> receivable_id() const override;
     std::optional<ae::action> to_action(ae::key const &) const override;
