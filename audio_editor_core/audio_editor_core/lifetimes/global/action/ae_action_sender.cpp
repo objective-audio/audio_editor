@@ -40,7 +40,7 @@ void action_sender::send(ae::key const &key, ae::action_id const &action_id) {
     auto const receivers = this->_root_provider->receivers(action_id);
 
     for (auto const &receiver : receivers) {
-        if (auto const action = receiver->to_action(key, action_id)) {
+        if (auto const action = receiver->to_action(key)) {
             switch (receiver->receivable_state(action.value())) {
                 case ae::action_receivable_state::accepting:
                     receiver->receive(action.value());

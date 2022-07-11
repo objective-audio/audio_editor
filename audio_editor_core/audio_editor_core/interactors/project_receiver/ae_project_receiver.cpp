@@ -59,11 +59,7 @@ std::optional<action_id> project_receiver::receivable_id() const {
     return action_id{this->_window_lifetime_id};
 }
 
-std::optional<ae::action> project_receiver::to_action(ae::key const &key, ae::action_id const &action_id) const {
-    if (!is_match(this->receivable_id(), action_id)) {
-        throw std::invalid_argument("action_id does not match.");
-    }
-
+std::optional<ae::action> project_receiver::to_action(ae::key const &key) const {
     switch (key) {
         case key::space:
             return action{action_kind::toggle_play, ""};

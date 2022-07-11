@@ -22,7 +22,7 @@ std::optional<action_id> project_setup_dialog_receiver::receivable_id() const {
     return action_id{this->_window_lifetime_id};
 }
 
-std::optional<ae::action> project_setup_dialog_receiver::to_action(ae::key const &, ae::action_id const &) const {
+std::optional<ae::action> project_setup_dialog_receiver::to_action(ae::key const &) const {
     return std::nullopt;
 }
 

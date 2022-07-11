@@ -26,11 +26,7 @@ std::optional<action_id> time_editor_receiver::receivable_id() const {
     return action_id{this->_lifetime_id.window};
 }
 
-std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key, ae::action_id const &action_id) const {
-    if (!is_match(this->receivable_id(), action_id)) {
-        throw std::invalid_argument("action_id does not match.");
-    }
-
+std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key) const {
     switch (key) {
         case ae::key::ret:
             return action{action_kind::finish_time_editing, ""};

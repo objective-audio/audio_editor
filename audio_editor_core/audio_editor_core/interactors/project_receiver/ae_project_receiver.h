@@ -51,7 +51,7 @@ struct project_receiver final : action_receivable {
     reverter *_reverter;
 
     std::optional<action_id> receivable_id() const override;
-    std::optional<ae::action> to_action(ae::key const &, ae::action_id const &) const override;
+    std::optional<ae::action> to_action(ae::key const &) const override;
     void receive(ae::action const &) const override;
     action_receivable_state receivable_state(ae::action const &) const override;
 };
