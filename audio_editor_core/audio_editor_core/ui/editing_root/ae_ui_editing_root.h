@@ -10,7 +10,7 @@
 
 namespace yas::ae {
 class editing_root_presenter;
-class project_action_controller;
+class project_action_sender;
 class pinch_gesture_controller;
 class ui_track;
 class ui_scroller;
@@ -29,16 +29,15 @@ struct ui_editing_root final {
 
     ui_editing_root(std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::font_atlas> const &font_atlas,
                     std::shared_ptr<ae::color> const &, std::shared_ptr<editing_root_presenter> const &,
-                    std::shared_ptr<project_action_controller> const &,
-                    std::shared_ptr<pinch_gesture_controller> const &, std::shared_ptr<ae::keyboard> const &,
-                    std::shared_ptr<ui_scroller> const &, std::shared_ptr<ui_modal_bg> const &,
-                    std::shared_ptr<ui_time> const &);
+                    std::shared_ptr<project_action_sender> const &, std::shared_ptr<pinch_gesture_controller> const &,
+                    std::shared_ptr<ae::keyboard> const &, std::shared_ptr<ui_scroller> const &,
+                    std::shared_ptr<ui_modal_bg> const &, std::shared_ptr<ui_time> const &);
 
     bool responds_to_action(action const);
 
    private:
     std::shared_ptr<editing_root_presenter> const _presenter;
-    std::weak_ptr<project_action_controller> const _action_controller;
+    std::weak_ptr<project_action_sender> const _action_sender;
     std::weak_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
 
     std::shared_ptr<ae::color> const _color;

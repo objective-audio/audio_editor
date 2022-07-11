@@ -24,10 +24,10 @@ std::optional<ae::action> window_receiver::to_action(ae::key const &) const {
     return std::nullopt;
 }
 
-void window_receiver::handle_action(ae::action const &) const {
+void window_receiver::receive(ae::action const &) const {
     // do nothing.
 }
 
-responding window_receiver::responding_to_action(ae::action const &) const {
-    return responding::fallthrough;
+action_receivable_state window_receiver::receivable_state(ae::action const &) const {
+    return action_receivable_state::fallthrough;
 }

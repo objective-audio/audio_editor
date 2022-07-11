@@ -5,7 +5,7 @@
 #include "ae_ui_time.h"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_action_controller.h>
+#include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_time_presenter.h>
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
@@ -27,15 +27,15 @@ std::shared_ptr<ui_time> ui_time::make_shared(window_lifetime_id const &window_l
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
 
     return std::make_shared<ui_time>(standard, texture, app_lifetime->color, presenter,
-                                     project_lifetime->action_controller);
+                                     project_lifetime->action_sender);
 }
 
 ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::texture> const &texture,
                  std::shared_ptr<ae::color> const &color, std::shared_ptr<time_presenter> const &presenter,
-                 std::shared_ptr<project_action_controller> const &action_controller)
+                 std::shared_ptr<project_action_sender> const &action_sender)
     : node(ui::node::make_shared()),
       _presenter(presenter),
-      _action_controller(action_controller),
+      _action_sender(action_sender),
       _standard(standard),
       _color(color),
       _font_atlas(ui::font_atlas::make_shared(
@@ -63,8 +63,8 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
             switch (context.phase) {
                 case ui::button::phase::ended:
                     if (context.touch.touch_id == ui::touch_id::mouse_left()) {
-                        if (auto const action_controller = this->_action_controller.lock()) {
-                            action_controller->handle_action(action_kind::begin_time_editing, "");
+                        if (auto const action_sender = this->_action_sender.lock()) {
+                            action_sender->send(action_kind::begin_time_editing, "");
                         }
                     }
                     break;
@@ -176,23 +176,23 @@ void ui_time::_resize_buttons() {
 
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
-            auto canceller = button
-                                 ->observe([this, idx](ui::button::context const &context) {
-                                     switch (context.phase) {
-                                         case ui::button::phase::ended: {
-                                             // 左クリック
-                                             if (context.touch.touch_id == ui::touch_id::mouse_left()) {
-                                                 if (auto const action_controller = this->_action_controller.lock()) {
-                                                     action_controller->handle_action(action_kind::select_time_unit,
-                                                                                      std::to_string(idx));
-                                                 }
-                                             }
-                                         } break;
-                                         default:
-                                             break;
-                                     }
-                                 })
-                                 .end();
+            auto canceller =
+                button
+                    ->observe([this, idx](ui::button::context const &context) {
+                        switch (context.phase) {
+                            case ui::button::phase::ended: {
+                                // 左クリック
+                                if (context.touch.touch_id == ui::touch_id::mouse_left()) {
+                                    if (auto const action_sender = this->_action_sender.lock()) {
+                                        action_sender->send(action_kind::select_time_unit, std::to_string(idx));
+                                    }
+                                }
+                            } break;
+                            default:
+                                break;
+                        }
+                    })
+                    .end();
 
             this->_buttons_root_node->add_sub_node(button->rect_plane()->node());
 

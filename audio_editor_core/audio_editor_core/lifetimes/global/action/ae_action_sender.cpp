@@ -20,45 +20,53 @@ std::shared_ptr<action_sender> action_sender::make_shared(action_receiver_provid
 action_sender::action_sender(action_receiver_providable *root_provider) : _root_provider(root_provider) {
 }
 
-std::optional<ae::action> action_sender::to_action(ae::key const &key, ae::action_id const &action_id) const {
+void action_sender::send(ae::action const &action, ae::action_id const &action_id) {
     auto const receivers = this->_root_provider->receivers(action_id);
 
-    if (auto const &iterator = receivers.begin(); iterator != receivers.end()) {
-        return (*iterator)->to_action(key);
-    }
-
-    return std::nullopt;
-}
-
-void action_sender::handle_action(ae::action const &action) {
-    auto const receivers = this->_root_provider->receivers(action.action_id);
-
     for (auto const &receiver : receivers) {
-        switch (receiver->responding_to_action(action)) {
-            case ae::responding::accepting:
-                receiver->handle_action(action);
+        switch (receiver->receivable_state(action)) {
+            case ae::action_receivable_state::accepting:
+                receiver->receive(action);
                 return;
-            case ae::responding::blocking:
+            case ae::action_receivable_state::blocking:
                 return;
-            case ae::responding::fallthrough:
+            case ae::action_receivable_state::fallthrough:
                 break;
         }
     }
 }
 
-responding action_sender::responding_to_action(ae::action const &action) {
-    auto const receivers = this->_root_provider->receivers(action.action_id);
+void action_sender::send(ae::key const &key, ae::action_id const &action_id) {
+    auto const receivers = this->_root_provider->receivers(action_id);
 
     for (auto const &receiver : receivers) {
-        switch (receiver->responding_to_action(action)) {
-            case ae::responding::accepting:
-                return responding::accepting;
-            case ae::responding::blocking:
-                return responding::blocking;
-            case ae::responding::fallthrough:
+        if (auto const action = receiver->to_action(key)) {
+            switch (receiver->receivable_state(action.value())) {
+                case ae::action_receivable_state::accepting:
+                    receiver->receive(action.value());
+                    return;
+                case ae::action_receivable_state::blocking:
+                    return;
+                case ae::action_receivable_state::fallthrough:
+                    break;
+            }
+        }
+    }
+}
+
+action_receivable_state action_sender::receivable_state(ae::action const &action, ae::action_id const &action_id) {
+    auto const receivers = this->_root_provider->receivers(action_id);
+
+    for (auto const &receiver : receivers) {
+        switch (receiver->receivable_state(action)) {
+            case ae::action_receivable_state::accepting:
+                return action_receivable_state::accepting;
+            case ae::action_receivable_state::blocking:
+                return action_receivable_state::blocking;
+            case ae::action_receivable_state::fallthrough:
                 break;
         }
     }
 
-    return responding::fallthrough;
+    return action_receivable_state::fallthrough;
 }

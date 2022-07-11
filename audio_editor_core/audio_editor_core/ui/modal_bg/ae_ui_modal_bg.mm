@@ -5,7 +5,7 @@
 #include "ae_ui_modal_bg.h"
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_color.h>
-#include <audio_editor_core/ae_project_action_controller.h>
+#include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 
@@ -17,16 +17,16 @@ std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(window_lifetime_id const &
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<ui_modal_bg>(standard, app_lifetime->color, project_lifetime->modal_lifecycle,
-                                         project_lifetime->action_controller);
+                                         project_lifetime->action_sender);
 }
 
 ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
                          std::shared_ptr<project_modal_lifecycle> const &project_modal_lifecycle,
-                         std::shared_ptr<project_action_controller> const &action_controller)
+                         std::shared_ptr<project_action_sender> const &action_sender)
     : node(ui::node::make_shared()),
       _color(color),
       _button(ui::button::make_shared({.size = {1.0f, 1.0f}}, standard)),
-      _action_controller(action_controller) {
+      _action_sender(action_sender) {
     auto const &button_node = this->_button->rect_plane()->node();
     this->node->add_sub_node(button_node);
 
@@ -34,8 +34,8 @@ ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::sha
         ->observe([this](auto const &context) {
             switch (context.phase) {
                 case ui::button::phase::ended:
-                    if (auto const action_controller = this->_action_controller.lock()) {
-                        action_controller->handle_action(ae::action_kind::cancel_time_editing, "");
+                    if (auto const action_sender = this->_action_sender.lock()) {
+                        action_sender->send(ae::action_kind::cancel_time_editing, "");
                     }
                     break;
                 default:

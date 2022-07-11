@@ -29,7 +29,7 @@
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_playing_toggler.h>
-#include <audio_editor_core/ae_project_action_controller.h>
+#include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_project_receiver.h>
@@ -63,8 +63,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),
-      action_controller(
-          ae::project_action_controller::make_shared(window_lifetime_id, app_lifetime->action_sender.get())),
+      action_sender(ae::project_action_sender::make_shared(window_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(window_lifetime->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(window_lifetime->scrolling.get())),
       timing(timing::make_shared(project_format.sample_rate)),
