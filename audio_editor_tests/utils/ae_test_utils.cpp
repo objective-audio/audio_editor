@@ -38,7 +38,7 @@ bool operator==(std::optional<yas::ae::action_id> const &lhs, std::optional<yas:
 }
 
 bool operator==(yas::ae::action const &lhs, yas::ae::action const &rhs) {
-    return lhs.kind == rhs.kind && lhs.action_id == rhs.action_id && lhs.value == rhs.value;
+    return lhs.kind == rhs.kind && lhs.value == rhs.value;
 }
 
 bool operator==(std::optional<yas::ae::action> const &lhs, std::optional<yas::ae::action> const &rhs) {
