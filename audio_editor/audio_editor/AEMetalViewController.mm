@@ -84,23 +84,38 @@ using namespace yas::ae;
         ->observe([unowned_self](std::optional<project_modal_sub_lifetime> const &sub_lifetime) {
             auto *const self = unowned_self.object;
 
-            if (!sub_lifetime.has_value()) {
-                [self hideModal];
-            } else if (auto const &lifetime = get<sheet_lifetime>(sub_lifetime)) {
-                switch (lifetime->content.kind) {
-                    case sheet_kind::module_name:
-                        [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id value:lifetime->content.value];
-                        break;
-                }
-            } else if (auto const &lifetime = get<dialog_lifetime>(sub_lifetime)) {
-                switch (lifetime->content) {
-                    case dialog_content::select_file_for_import:
-                        [self showSelectFileForImportDialogWithLifetimeId:lifetime->lifetime_id];
-                        break;
-                    case dialog_content::select_file_for_export:
-                        [self showSelectFileForExportDialogWithLifetimeId:lifetime->lifetime_id];
-                        break;
-                }
+            using kind = project_modal_sub_lifetime_kind;
+
+            switch (to_kind(sub_lifetime)) {
+                case kind::none:
+                    [self hideModal];
+                    break;
+
+                case kind::sheet: {
+                    auto const &lifetime = get<sheet_lifetime>(sub_lifetime);
+                    switch (lifetime->content.kind) {
+                        case sheet_kind::module_name:
+                            [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id
+                                                              value:lifetime->content.value];
+                            break;
+                    }
+                } break;
+
+                case kind::dialog: {
+                    auto const &lifetime = get<dialog_lifetime>(sub_lifetime);
+                    switch (lifetime->content) {
+                        case dialog_content::select_file_for_import:
+                            [self showSelectFileForImportDialogWithLifetimeId:lifetime->lifetime_id];
+                            break;
+                        case dialog_content::select_file_for_export:
+                            [self showSelectFileForExportDialogWithLifetimeId:lifetime->lifetime_id];
+                            break;
+                    }
+                } break;
+
+                case kind::context_menu:
+                case kind::time_editor:
+                    break;
             }
         })
         .end()

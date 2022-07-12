@@ -41,9 +41,20 @@ using namespace yas::ae;
 
     lifecycle
         ->observe([unowned](std::optional<project_modal_sub_lifetime> const &sub_lifetime) {
-            if (auto const &lifetime = get<context_menu_lifetime>(sub_lifetime)) {
-                auto *const view = unowned.object;
-                [view showContextMenu:{lifetime->lifetime_id, lifetime->context_menu}];
+            using kind = project_modal_sub_lifetime_kind;
+
+            switch (to_kind(sub_lifetime)) {
+                case kind::context_menu: {
+                    auto *const view = unowned.object;
+                    auto const &lifetime = get<context_menu_lifetime>(sub_lifetime);
+                    [view showContextMenu:{lifetime->lifetime_id, lifetime->context_menu}];
+                } break;
+
+                case kind::none:
+                case kind::time_editor:
+                case kind::dialog:
+                case kind::sheet:
+                    break;
             }
         })
         .end()
