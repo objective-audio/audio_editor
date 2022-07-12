@@ -13,16 +13,14 @@ using namespace yas::ae;
 
 static std::vector<std::string> const _zero_string_vector{"0"};
 
-std::shared_ptr<time_editor> time_editor::make_shared(number_components const &components,
-                                                      std::optional<std::size_t> const unit_idx) {
-    return std::make_shared<time_editor>(components, unit_idx);
+std::shared_ptr<time_editor> time_editor::make_shared(number_components const &components) {
+    return std::make_shared<time_editor>(components);
 }
 
-time_editor::time_editor(number_components const &components, std::optional<std::size_t> const unit_idx)
+time_editor::time_editor(number_components const &components)
     : _original_components(components),
       _commited_components(time_editor_utils::to_editing_components(components)),
-      _unit_idx(
-          observing::value::holder<std::size_t>::make_shared(unit_idx ? unit_idx.value() : components.size() - 1)),
+      _unit_idx(observing::value::holder<std::size_t>::make_shared(components.size() - 1)),
       _event_notifier(observing::notifier<time_editor_event>::make_shared()) {
     this->_components_fetcher =
         observing::fetcher<number_components>::make_shared([this] { return this->editing_components(); });

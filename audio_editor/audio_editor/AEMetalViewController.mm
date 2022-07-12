@@ -126,128 +126,128 @@ using namespace yas::ae;
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::jump_previous);
+        action_sender->send(editing_action_name::jump_previous);
     }
 }
 
 - (IBAction)jumpNext:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::jump_next);
+        action_sender->send(editing_action_name::jump_next);
     }
 }
 
 - (IBAction)jumpToBeginning:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::jump_to_beginning);
+        action_sender->send(editing_action_name::jump_to_beginning);
     }
 }
 
 - (IBAction)jumpToEnd:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::jump_to_end);
+        action_sender->send(editing_action_name::jump_to_end);
     }
 }
 
 - (IBAction)insertMarker:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::insert_marker);
+        action_sender->send(editing_action_name::insert_marker);
     }
 }
 
 - (IBAction)returnToZero:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::return_to_zero);
+        action_sender->send(editing_action_name::return_to_zero);
     }
 }
 
 - (IBAction)undo:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::undo);
+        action_sender->send(editing_action_name::undo);
     }
 }
 
 - (IBAction)redo:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::redo);
+        action_sender->send(editing_action_name::redo);
     }
 }
 
 - (IBAction)importFromFile:(id)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::select_file_for_import);
+        action_sender->send(editing_action_name::select_file_for_import);
     }
 }
 
 - (IBAction)exportToFile:(id)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::select_file_for_export);
+        action_sender->send(editing_action_name::select_file_for_export);
     }
 }
 
 - (IBAction)cut:(id)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::cut);
+        action_sender->send(editing_action_name::cut);
     }
 }
 
 - (IBAction)copy:(id)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::copy);
+        action_sender->send(editing_action_name::copy);
     }
 }
 
 - (IBAction)paste:(id)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::paste);
+        action_sender->send(editing_action_name::paste);
     }
 }
 
 - (IBAction)purge:(id)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(action_kind::purge);
+        action_sender->send(editing_action_name::purge);
     }
 }
 
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-    if (auto const action_kind = [self actionKindForSelector:menuItem.action]) {
+    if (auto const action_name = [self actionNameForSelector:menuItem.action]) {
         if (auto const ui_root_lifetime = self->_root_lifetime.lock()) {
-            return ui_root_lifetime->root->responds_to_action({action_kind.value(), ""});
+            return ui_root_lifetime->root->responds_to_action({action_name.value(), ""});
         }
     }
     return NO;
 }
 
-- (std::optional<action_kind>)actionKindForSelector:(SEL)selector {
+- (std::optional<action_name>)actionNameForSelector:(SEL)selector {
     if (selector == @selector(jumpPrevious:)) {
-        return action_kind::jump_previous;
+        return editing_action_name::jump_previous;
     } else if (selector == @selector(jumpNext:)) {
-        return action_kind::jump_next;
+        return editing_action_name::jump_next;
     } else if (selector == @selector(jumpToBeginning:)) {
-        return action_kind::jump_to_beginning;
+        return editing_action_name::jump_to_beginning;
     } else if (selector == @selector(jumpToEnd:)) {
-        return action_kind::jump_to_end;
+        return editing_action_name::jump_to_end;
     } else if (selector == @selector(insertMarker:)) {
-        return action_kind::insert_marker;
+        return editing_action_name::insert_marker;
     } else if (selector == @selector(returnToZero:)) {
-        return action_kind::return_to_zero;
+        return editing_action_name::return_to_zero;
     } else if (selector == @selector(undo:)) {
-        return action_kind::undo;
+        return editing_action_name::undo;
     } else if (selector == @selector(redo:)) {
-        return action_kind::redo;
+        return editing_action_name::redo;
     } else if (selector == @selector(importFromFile:)) {
-        return action_kind::select_file_for_import;
+        return editing_action_name::select_file_for_import;
     } else if (selector == @selector(exportToFile:)) {
-        return action_kind::select_file_for_export;
+        return editing_action_name::select_file_for_export;
     } else if (selector == @selector(cut:)) {
-        return action_kind::cut;
+        return editing_action_name::cut;
     } else if (selector == @selector(copy:)) {
-        return action_kind::copy;
+        return editing_action_name::copy;
     } else if (selector == @selector(paste:)) {
-        return action_kind::paste;
+        return editing_action_name::paste;
     } else if (selector == @selector(purge:)) {
-        return action_kind::purge;
+        return editing_action_name::purge;
     }
 
     return std::nullopt;
@@ -275,7 +275,7 @@ using namespace yas::ae;
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
             if (auto const action_sender = self->_action_sender.lock()) {
-                action_sender->send(action_kind::import_from_file, path);
+                action_sender->send(editing_action_name::import_from_file, path);
             }
         }
     }];
@@ -303,7 +303,7 @@ using namespace yas::ae;
         if (result == NSModalResponseOK) {
             auto const path = to_string((__bridge CFStringRef)panel.URL.path);
             if (auto const action_sender = self->_action_sender.lock()) {
-                action_sender->send(action_kind::export_to_file, path);
+                action_sender->send(editing_action_name::export_to_file, path);
             }
         }
     }];

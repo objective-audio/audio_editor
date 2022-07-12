@@ -8,9 +8,10 @@
 
 #include <optional>
 #include <string>
+#include <variant>
 
 namespace yas::ae {
-enum class action_kind {
+enum class editing_action_name {
     toggle_play,
     nudge_previous,
     nudge_next,
@@ -43,8 +44,10 @@ enum class action_kind {
     copy,
     paste,
     begin_module_renaming,
-
     begin_time_editing,
+};
+
+enum class time_editing_action_name {
     finish_time_editing,
     cancel_time_editing,
     move_to_next_time_unit,
@@ -58,12 +61,23 @@ enum class action_kind {
     select_time_unit,
 };
 
+using action_name = std::variant<editing_action_name, time_editing_action_name>;
+
+enum class action_name_kind {
+    editing,
+    time_editing,
+};
+
 struct action {
-    action_kind kind;
+    action_name name;
     std::string value = "";
 
-    action(action_kind const kind, std::string const &value);
+    action(action_name const name, std::string const &value);
 
     // ae_test_utilsにテスト用としてoperator==が定義されている
 };
 }  // namespace yas::ae
+
+namespace yas {
+ae::action_name_kind to_kind(ae::action_name const &);
+}

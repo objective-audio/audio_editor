@@ -31,14 +31,13 @@ std::optional<project_modal_sub_lifetime> const &project_modal_lifecycle::curren
     return this->_current->value();
 }
 
-void project_modal_lifecycle::add_time_editor(number_components const &components,
-                                              std::optional<std::size_t> const unit_idx) {
+void project_modal_lifecycle::add_time_editor(number_components const &components) {
     if (this->_current->value().has_value()) {
         throw std::runtime_error("current is not null.");
     }
 
     this->_current->set_value(time_editor_lifetime::make_shared(
-        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, components, unit_idx));
+        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, components));
 }
 
 void project_modal_lifecycle::remove_time_editor(time_editor_lifetime_id const &lifetime_id) {

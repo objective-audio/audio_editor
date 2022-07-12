@@ -20,11 +20,9 @@ class time_editor_receiver;
 
 struct time_editor_lifetime final {
     [[nodiscard]] static std::shared_ptr<time_editor_lifetime> make_shared(time_editor_lifetime_id const &,
-                                                                           number_components const &,
-                                                                           std::optional<std::size_t> const unit_idx);
+                                                                           number_components const &);
 
-    time_editor_lifetime(ae::time_editor_lifetime_id const &, number_components const &,
-                         std::optional<std::size_t> const unit_idx);
+    time_editor_lifetime(ae::time_editor_lifetime_id const &, number_components const &);
 
     time_editor_lifetime_id const lifetime_id;
     std::shared_ptr<time_editor> const editor;
