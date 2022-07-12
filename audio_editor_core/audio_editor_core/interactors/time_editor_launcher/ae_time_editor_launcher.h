@@ -19,7 +19,7 @@ struct time_editor_launcher final {
     time_editor_launcher(player const *, timing const *, project_modal_lifecycle *);
 
     bool can_begin_time_editing() const;
-    void begin_time_editing(std::optional<std::size_t> const unit_idx);
+    void begin_time_editing();
 
    private:
     player const *const _player;

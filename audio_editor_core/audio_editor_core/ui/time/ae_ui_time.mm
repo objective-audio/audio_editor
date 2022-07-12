@@ -176,25 +176,25 @@ void ui_time::_resize_buttons() {
 
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
 
-            auto canceller =
-                button
-                    ->observe([this, idx](ui::button::context const &context) {
-                        switch (context.phase) {
-                            case ui::button::phase::ended: {
-                                // 左クリック
-                                if (context.touch.touch_id == ui::touch_id::mouse_left()) {
-                                    if (auto const action_sender = this->_action_sender.lock()) {
-                                        action_sender->send(editing_action_name::select_time_unit, std::to_string(idx));
-                                        action_sender->send(time_editing_action_name::select_time_unit,
-                                                            std::to_string(idx));
-                                    }
-                                }
-                            } break;
-                            default:
-                                break;
-                        }
-                    })
-                    .end();
+            auto canceller = button
+                                 ->observe([this, idx](ui::button::context const &context) {
+                                     switch (context.phase) {
+                                         case ui::button::phase::ended: {
+                                             // 左クリック
+                                             if (context.touch.touch_id == ui::touch_id::mouse_left()) {
+                                                 if (auto const action_sender = this->_action_sender.lock()) {
+                                                     action_sender->send(editing_action_name::begin_time_editing,
+                                                                         std::to_string(idx));
+                                                     action_sender->send(time_editing_action_name::select_time_unit,
+                                                                         std::to_string(idx));
+                                                 }
+                                             }
+                                         } break;
+                                         default:
+                                             break;
+                                     }
+                                 })
+                                 .end();
 
             this->_buttons_root_node->add_sub_node(button->rect_plane()->node());
 

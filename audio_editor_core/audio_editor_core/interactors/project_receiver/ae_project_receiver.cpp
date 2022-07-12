@@ -228,10 +228,7 @@ void project_receiver::receive(ae::action const &action) const {
                             break;
 
                         case editing_action_name::begin_time_editing:
-                            this->_time_editor_launcher->begin_time_editing(std::nullopt);
-                            break;
-                        case editing_action_name::select_time_unit:
-                            this->_time_editor_launcher->begin_time_editing(std::stoi(action.value));
+                            this->_time_editor_launcher->begin_time_editing();
                             break;
                     }
                 } break;
@@ -322,8 +319,6 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_module_renaming_launcher->can_begin_module_renaming());
 
                 case editing_action_name::begin_time_editing:
-                    return to_state(this->_time_editor_launcher->can_begin_time_editing());
-                case editing_action_name::select_time_unit:
                     return to_state(this->_time_editor_launcher->can_begin_time_editing());
 
                 case editing_action_name::set_begin_edge:

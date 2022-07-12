@@ -19,7 +19,7 @@ struct project_modal_lifecycle final : action_receiver_providable {
 
     std::optional<project_modal_sub_lifetime> const &current() const;
 
-    void add_time_editor(number_components const &, std::optional<std::size_t> const unit_idx);
+    void add_time_editor(number_components const &);
     void remove_time_editor(time_editor_lifetime_id const &);
     std::shared_ptr<time_editor_lifetime> const &time_editor_lifetime() const;
 

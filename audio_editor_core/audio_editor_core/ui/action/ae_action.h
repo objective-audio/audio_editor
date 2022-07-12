@@ -45,7 +45,6 @@ enum class editing_action_name {
     paste,
     begin_module_renaming,
     begin_time_editing,
-    select_time_unit,
 };
 
 enum class time_editing_action_name {
