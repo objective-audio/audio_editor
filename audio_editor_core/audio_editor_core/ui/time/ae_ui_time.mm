@@ -64,7 +64,7 @@ ui_time::ui_time(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<
                 case ui::button::phase::ended:
                     if (context.touch.touch_id == ui::touch_id::mouse_left()) {
                         if (auto const action_sender = this->_action_sender.lock()) {
-                            action_sender->send(action_kind::begin_time_editing, "");
+                            action_sender->send(editing_action_name::begin_time_editing, "");
                         }
                     }
                     break;
@@ -184,7 +184,9 @@ void ui_time::_resize_buttons() {
                                 // 左クリック
                                 if (context.touch.touch_id == ui::touch_id::mouse_left()) {
                                     if (auto const action_sender = this->_action_sender.lock()) {
-                                        action_sender->send(action_kind::select_time_unit, std::to_string(idx));
+                                        action_sender->send(editing_action_name::select_time_unit, std::to_string(idx));
+                                        action_sender->send(time_editing_action_name::select_time_unit,
+                                                            std::to_string(idx));
                                     }
                                 }
                             } break;

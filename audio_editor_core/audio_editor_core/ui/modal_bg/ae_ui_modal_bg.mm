@@ -35,7 +35,7 @@ ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::sha
             switch (context.phase) {
                 case ui::button::phase::ended:
                     if (auto const action_sender = this->_action_sender.lock()) {
-                        action_sender->send(ae::action_kind::cancel_time_editing, "");
+                        action_sender->send(time_editing_action_name::cancel_time_editing, "");
                     }
                     break;
                 default:

@@ -29,46 +29,46 @@ std::optional<action_id> time_editor_receiver::receivable_id() const {
 std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key) const {
     switch (key) {
         case ae::key::ret:
-            return action{action_kind::finish_time_editing, ""};
+            return action{time_editing_action_name::finish_time_editing, ""};
         case ae::key::esc:
-            return action{action_kind::cancel_time_editing, ""};
+            return action{time_editing_action_name::cancel_time_editing, ""};
         case ae::key::left:
         case ae::key::shift_tab:
-            return action{action_kind::move_to_previous_time_unit, ""};
+            return action{time_editing_action_name::move_to_previous_time_unit, ""};
         case ae::key::right:
         case ae::key::tab:
-            return action{action_kind::move_to_next_time_unit, ""};
+            return action{time_editing_action_name::move_to_next_time_unit, ""};
         case ae::key::up:
-            return action{action_kind::increment_time, ""};
+            return action{time_editing_action_name::increment_time, ""};
         case ae::key::down:
-            return action{action_kind::decrement_time, ""};
+            return action{time_editing_action_name::decrement_time, ""};
         case ae::key::plus:
-            return action{action_kind::change_time_sign_to_plus, ""};
+            return action{time_editing_action_name::change_time_sign_to_plus, ""};
         case ae::key::hyphen:
-            return action{action_kind::change_time_sign_to_minus, ""};
+            return action{time_editing_action_name::change_time_sign_to_minus, ""};
 
         case ae::key::num_0:
-            return action{action_kind::input_time, "0"};
+            return action{time_editing_action_name::input_time, "0"};
         case ae::key::num_1:
-            return action{action_kind::input_time, "1"};
+            return action{time_editing_action_name::input_time, "1"};
         case ae::key::num_2:
-            return action{action_kind::input_time, "2"};
+            return action{time_editing_action_name::input_time, "2"};
         case ae::key::num_3:
-            return action{action_kind::input_time, "3"};
+            return action{time_editing_action_name::input_time, "3"};
         case ae::key::num_4:
-            return action{action_kind::input_time, "4"};
+            return action{time_editing_action_name::input_time, "4"};
         case ae::key::num_5:
-            return action{action_kind::input_time, "5"};
+            return action{time_editing_action_name::input_time, "5"};
         case ae::key::num_6:
-            return action{action_kind::input_time, "6"};
+            return action{time_editing_action_name::input_time, "6"};
         case ae::key::num_7:
-            return action{action_kind::input_time, "7"};
+            return action{time_editing_action_name::input_time, "7"};
         case ae::key::num_8:
-            return action{action_kind::input_time, "8"};
+            return action{time_editing_action_name::input_time, "8"};
         case ae::key::num_9:
-            return action{action_kind::input_time, "9"};
+            return action{time_editing_action_name::input_time, "9"};
         case ae::key::del:
-            return action{action_kind::delete_time, ""};
+            return action{time_editing_action_name::delete_time, ""};
 
         case key::space:
         case key::a:
@@ -89,74 +89,45 @@ std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key) co
 void time_editor_receiver::receive(ae::action const &action) const {
     switch (this->receivable_state(action)) {
         case action_receivable_state::accepting: {
-            switch (action.kind) {
-                case action_kind::finish_time_editing:
-                    this->_closer->finish();
-                    break;
-                case action_kind::cancel_time_editing:
-                    this->_closer->cancel();
-                    break;
-                case action_kind::move_to_previous_time_unit:
-                    this->_editor->move_to_previous_unit();
-                    break;
-                case action_kind::move_to_next_time_unit:
-                    this->_editor->move_to_next_unit();
-                    break;
-                case action_kind::input_time:
-                    this->_editor->input_number(std::stoi(action.value));
-                    break;
-                case action_kind::delete_time:
-                    this->_editor->delete_number();
-                    break;
-                case action_kind::increment_time:
-                    this->_editor->increment_number();
-                    break;
-                case action_kind::decrement_time:
-                    this->_editor->decrement_number();
-                    break;
-                case action_kind::change_time_sign_to_plus:
-                    this->_editor->change_sign_to_plus();
-                    break;
-                case action_kind::change_time_sign_to_minus:
-                    this->_editor->change_sign_to_minus();
-                    break;
-                case action_kind::select_time_unit:
-                    this->_editor->set_unit_idx(std::stoi(action.value));
-                    break;
-
-                case action_kind::toggle_play:
-                case action_kind::nudge_previous:
-                case action_kind::nudge_next:
-                case action_kind::nudge_previous_more:
-                case action_kind::nudge_next_more:
-                case action_kind::rotate_nudging_next_unit:
-                case action_kind::rotate_nudging_previous_unit:
-                case action_kind::rotate_timing_fraction:
-                case action_kind::jump_previous:
-                case action_kind::jump_next:
-                case action_kind::jump_to_beginning:
-                case action_kind::jump_to_end:
-                case action_kind::drop_head:
-                case action_kind::split:
-                case action_kind::drop_tail:
-                case action_kind::erase:
-                case action_kind::insert_marker:
-                case action_kind::set_begin_edge:
-                case action_kind::set_end_edge:
-                case action_kind::return_to_zero:
-                case action_kind::go_to_marker:
-                case action_kind::undo:
-                case action_kind::redo:
-                case action_kind::select_file_for_import:
-                case action_kind::import_from_file:
-                case action_kind::select_file_for_export:
-                case action_kind::export_to_file:
-                case action_kind::cut:
-                case action_kind::copy:
-                case action_kind::paste:
-                case action_kind::purge:
-                case action_kind::begin_module_renaming:
-                case action_kind::begin_time_editing:
+            switch (to_kind(action.name)) {
+                case action_name_kind::time_editing: {
+                    switch (get<time_editing_action_name>(action.name)) {
+                        case time_editing_action_name::finish_time_editing:
+                            this->_closer->finish();
+                            break;
+                        case time_editing_action_name::cancel_time_editing:
+                            this->_closer->cancel();
+                            break;
+                        case time_editing_action_name::move_to_previous_time_unit:
+                            this->_editor->move_to_previous_unit();
+                            break;
+                        case time_editing_action_name::move_to_next_time_unit:
+                            this->_editor->move_to_next_unit();
+                            break;
+                        case time_editing_action_name::input_time:
+                            this->_editor->input_number(std::stoi(action.value));
+                            break;
+                        case time_editing_action_name::delete_time:
+                            this->_editor->delete_number();
+                            break;
+                        case time_editing_action_name::increment_time:
+                            this->_editor->increment_number();
+                            break;
+                        case time_editing_action_name::decrement_time:
+                            this->_editor->decrement_number();
+                            break;
+                        case time_editing_action_name::change_time_sign_to_plus:
+                            this->_editor->change_sign_to_plus();
+                            break;
+                        case time_editing_action_name::change_time_sign_to_minus:
+                            this->_editor->change_sign_to_minus();
+                            break;
+                        case time_editing_action_name::select_time_unit:
+                            this->_editor->set_unit_idx(std::stoi(action.value));
+                            break;
+                    }
+                } break;
+                case action_name_kind::editing:
                     break;
             }
         } break;
@@ -168,68 +139,39 @@ void time_editor_receiver::receive(ae::action const &action) const {
 }
 
 action_receivable_state time_editor_receiver::receivable_state(ae::action const &action) const {
-    static auto const to_state = [](bool const &flag) {
-        return flag ? action_receivable_state::accepting : action_receivable_state::blocking;
-    };
+    switch (to_kind(action.name)) {
+        case action_name_kind::time_editing: {
+            static auto const to_state = [](bool const &flag) {
+                return flag ? action_receivable_state::accepting : action_receivable_state::blocking;
+            };
 
-    switch (action.kind) {
-        case action_kind::finish_time_editing:
-            return to_state(this->_closer->can_finish());
-        case action_kind::cancel_time_editing:
-            return to_state(this->_closer->can_cancel());
-        case action_kind::move_to_previous_time_unit:
-            return to_state(this->_editor->can_move_to_previous_unit());
-        case action_kind::move_to_next_time_unit:
-            return to_state(this->_editor->can_move_to_next_unit());
-        case action_kind::input_time:
-            return to_state(this->_editor->can_input_number());
-        case action_kind::delete_time:
-            return to_state(this->_editor->can_delete_number());
-        case action_kind::increment_time:
-            return to_state(this->_editor->can_increment_number());
-        case action_kind::decrement_time:
-            return to_state(this->_editor->can_decrement_number());
-        case action_kind::change_time_sign_to_plus:
-            return to_state(this->_editor->can_change_sign_to_plus());
-        case action_kind::change_time_sign_to_minus:
-            return to_state(this->_editor->can_change_sign_to_minus());
-        case action_kind::select_time_unit:
-            return to_state(this->_editor->can_set_unit_idx());
+            switch (get<time_editing_action_name>(action.name)) {
+                case time_editing_action_name::finish_time_editing:
+                    return to_state(this->_closer->can_finish());
+                case time_editing_action_name::cancel_time_editing:
+                    return to_state(this->_closer->can_cancel());
+                case time_editing_action_name::move_to_previous_time_unit:
+                    return to_state(this->_editor->can_move_to_previous_unit());
+                case time_editing_action_name::move_to_next_time_unit:
+                    return to_state(this->_editor->can_move_to_next_unit());
+                case time_editing_action_name::input_time:
+                    return to_state(this->_editor->can_input_number());
+                case time_editing_action_name::delete_time:
+                    return to_state(this->_editor->can_delete_number());
+                case time_editing_action_name::increment_time:
+                    return to_state(this->_editor->can_increment_number());
+                case time_editing_action_name::decrement_time:
+                    return to_state(this->_editor->can_decrement_number());
+                case time_editing_action_name::change_time_sign_to_plus:
+                    return to_state(this->_editor->can_change_sign_to_plus());
+                case time_editing_action_name::change_time_sign_to_minus:
+                    return to_state(this->_editor->can_change_sign_to_minus());
+                case time_editing_action_name::select_time_unit:
+                    return to_state(this->_editor->can_set_unit_idx());
+            }
+        }
 
-            // 以下、project_editor用
-        case action_kind::toggle_play:
-        case action_kind::nudge_previous:
-        case action_kind::nudge_next:
-        case action_kind::nudge_previous_more:
-        case action_kind::nudge_next_more:
-        case action_kind::rotate_nudging_next_unit:
-        case action_kind::rotate_nudging_previous_unit:
-        case action_kind::rotate_timing_fraction:
-        case action_kind::jump_previous:
-        case action_kind::jump_next:
-        case action_kind::jump_to_beginning:
-        case action_kind::jump_to_end:
-        case action_kind::drop_head:
-        case action_kind::split:
-        case action_kind::drop_tail:
-        case action_kind::erase:
-        case action_kind::insert_marker:
-        case action_kind::return_to_zero:
-        case action_kind::go_to_marker:
-        case action_kind::undo:
-        case action_kind::redo:
-        case action_kind::select_file_for_import:
-        case action_kind::import_from_file:
-        case action_kind::select_file_for_export:
-        case action_kind::export_to_file:
-        case action_kind::cut:
-        case action_kind::copy:
-        case action_kind::paste:
-        case action_kind::purge:
-        case action_kind::begin_module_renaming:
-        case action_kind::begin_time_editing:
-        case action_kind::set_begin_edge:
-        case action_kind::set_end_edge:
+        case action_name_kind::editing:
             return action_receivable_state::fallthrough;
     }
 }
