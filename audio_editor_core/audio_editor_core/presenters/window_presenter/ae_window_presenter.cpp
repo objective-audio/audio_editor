@@ -50,11 +50,21 @@ observing::syncable window_presenter::observe(std::function<void(window_presente
     if (auto const lifecycle = this->_project_lifecycle.lock()) {
         return lifecycle->observe([once_called = false, handler = std::move(handler)](
                                       std::optional<project_sub_lifetime> const &current) mutable {
-            if (current.has_value() && !once_called) {
-                if (get<project_lifetime>(current) != nullptr) {
+            if (once_called) {
+                return;
+            }
+
+            using kind = project_sub_lifetime_kind;
+
+            switch (to_kind(current)) {
+                case kind::none:
+                case kind::launch:
+                    break;
+
+                case kind::project:
                     once_called = true;
                     handler(window_presenter_event::setup_view_controller);
-                }
+                    break;
             }
         });
     } else {
