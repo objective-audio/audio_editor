@@ -16,9 +16,19 @@ namespace yas::ae {
 using project_modal_sub_lifetime =
     std::variant<std::shared_ptr<time_editor_lifetime>, std::shared_ptr<sheet_lifetime>,
                  std::shared_ptr<dialog_lifetime>, std::shared_ptr<context_menu_lifetime>>;
+
+enum class project_modal_sub_lifetime_kind {
+    none,
+    time_editor,
+    sheet,
+    dialog,
+    context_menu,
+};
 }  // namespace yas::ae
 
 namespace yas {
 template <typename T>
 std::shared_ptr<T> const &get(std::optional<ae::project_modal_sub_lifetime> const &);
+
+ae::project_modal_sub_lifetime_kind to_kind(std::optional<ae::project_modal_sub_lifetime> const &);
 }  // namespace yas

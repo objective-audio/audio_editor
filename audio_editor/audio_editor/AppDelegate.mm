@@ -56,10 +56,16 @@ using namespace yas::ae;
 
     self->_presenter
         ->observe_dialog([unowned](std::optional<app_modal_sub_lifetime> const &sub_lifetime) {
-            if (!sub_lifetime.has_value()) {
-                // panelは強制的に閉じれないので何もしない
-            } else if (auto const lifetime = get<project_setup_dialog_lifetime>(sub_lifetime)) {
-                [unowned.object openProjectSetupDialog];
+            using kind = app_modal_sub_lifetime_kind;
+
+            switch (to_kind(sub_lifetime)) {
+                case kind::none:
+                    // panelは強制的に閉じれないので何もしない
+                    break;
+
+                case kind::project_setup_dialog:
+                    [unowned.object openProjectSetupDialog];
+                    break;
             }
         })
         .sync()

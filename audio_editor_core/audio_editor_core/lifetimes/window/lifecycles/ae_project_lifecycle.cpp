@@ -52,17 +52,27 @@ std::optional<action_id> project_lifecycle::receivable_id() const {
 }
 
 std::vector<action_receivable *> project_lifecycle::receivers() const {
-    if (auto const &lifetime = get<project_lifetime>(this->current())) {
-        return {lifetime->receiver.get()};
-    } else {
-        return {};
+    using kind = project_sub_lifetime_kind;
+
+    switch (to_kind(this->current())) {
+        case kind::project: {
+            auto const &lifetime = get<project_lifetime>(this->current());
+            return {lifetime->receiver.get()};
+        }
+        case kind::launch:
+        case kind::none:
+            return {};
     }
 }
 
 std::vector<action_receiver_providable *> project_lifecycle::sub_providers() const {
-    if (auto const &lifetime = get<project_lifetime>(this->current())) {
-        return {lifetime->modal_lifecycle.get()};
-    } else {
-        return {};
+    switch (to_kind(this->current())) {
+        case project_sub_lifetime_kind::project: {
+            auto const &lifetime = get<project_lifetime>(this->current());
+            return {lifetime->modal_lifecycle.get()};
+        }
+        case project_sub_lifetime_kind::launch:
+        case project_sub_lifetime_kind::none:
+            return {};
     }
 }
