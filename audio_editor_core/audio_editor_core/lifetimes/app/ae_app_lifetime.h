@@ -18,7 +18,6 @@ class window_opener;
 class app_modal_lifecycle;
 class window_lifecycle;
 class action_sender;
-class action_receiver_providable;
 
 struct app_lifetime final {
     [[nodiscard]] static std::shared_ptr<app_lifetime> make_shared();
