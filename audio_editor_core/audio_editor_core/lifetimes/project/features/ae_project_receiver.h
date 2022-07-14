@@ -16,7 +16,7 @@ class jumper;
 class edge_editor;
 class time_editor_opener;
 class marker_editor;
-class module_renaming_launcher;
+class module_renaming_opener;
 class timing;
 class import_interactor;
 class export_interactor;
@@ -26,13 +26,13 @@ struct project_receiver final : action_receivable {
     [[nodiscard]] static std::shared_ptr<project_receiver> make_shared(window_lifetime_id const &, track_editor *,
                                                                        playing_toggler *, nudge_settings *, nudger *,
                                                                        jumper *, edge_editor *, time_editor_opener *,
-                                                                       marker_editor *, module_renaming_launcher *,
+                                                                       marker_editor *, module_renaming_opener *,
                                                                        timing *, import_interactor *,
                                                                        export_interactor *, reverter *);
 
     project_receiver(window_lifetime_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *,
-                     jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_launcher *,
-                     timing *, import_interactor *, export_interactor *, reverter *);
+                     jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_opener *, timing *,
+                     import_interactor *, export_interactor *, reverter *);
 
    private:
     window_lifetime_id const _window_lifetime_id;
@@ -44,7 +44,7 @@ struct project_receiver final : action_receivable {
     edge_editor *const _edge_editor;
     time_editor_opener *const _time_editor_opener;
     marker_editor *const _marker_editor;
-    module_renaming_launcher *const _module_renaming_launcher;
+    module_renaming_opener *const _module_renaming_opener;
     timing *const _timing;
     import_interactor *const _import_interactor;
     export_interactor *const _export_interactor;

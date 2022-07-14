@@ -39,7 +39,7 @@ class edge_editor;
 class jumper;
 class time_editor_opener;
 class marker_editor;
-class module_renaming_launcher;
+class module_renaming_opener;
 class import_interactor;
 class export_interactor;
 class database_updater;
@@ -86,7 +86,7 @@ struct project_lifetime final {
     std::shared_ptr<jumper> const jumper;
     std::shared_ptr<time_editor_opener> const time_editor_opener;
     std::shared_ptr<marker_editor> const marker_editor;
-    std::shared_ptr<module_renaming_launcher> const module_renaming_launcher;
+    std::shared_ptr<module_renaming_opener> const module_renaming_opener;
     std::shared_ptr<export_interactor> const export_interactor;
     std::shared_ptr<database_updater> const database_updater;
     std::shared_ptr<timeline_updater> const timeline_updater;

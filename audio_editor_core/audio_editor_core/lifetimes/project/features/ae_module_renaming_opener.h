@@ -1,5 +1,5 @@
 //
-//  ae_module_renaming_launcher.h
+//  ae_module_renaming_opener.h
 //
 
 #pragma once
@@ -10,11 +10,11 @@ namespace yas::ae {
 class project_modal_lifecycle;
 class editing_status;
 
-struct module_renaming_launcher final {
-    [[nodiscard]] static std::shared_ptr<module_renaming_launcher> make_shared(project_modal_lifecycle *,
-                                                                               editing_status const *);
+struct module_renaming_opener final {
+    [[nodiscard]] static std::shared_ptr<module_renaming_opener> make_shared(project_modal_lifecycle *,
+                                                                             editing_status const *);
 
-    module_renaming_launcher(project_modal_lifecycle *, editing_status const *);
+    module_renaming_opener(project_modal_lifecycle *, editing_status const *);
 
     [[nodiscard]] bool can_begin_module_renaming() const;
     void begin_module_renaming(std::string const &range);
