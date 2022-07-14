@@ -5,7 +5,10 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_info.h>
-#include <audio_editor_core/ae_project_launcher_dependency.h>
+#include <cpp_utils/yas_url.h>
+
+#include <memory>
+#include <optional>
 
 namespace yas::ae {
 struct file_info_loader final {
