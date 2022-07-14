@@ -63,7 +63,6 @@ struct project_lifetime final {
     window_lifetime_id const window_lifetime_id;
     project_format const project_format;
 
-    std::shared_ptr<ae::project_url> const project_url;
     std::shared_ptr<module_location_pool> const module_location_pool;
     std::shared_ptr<marker_location_pool> const marker_location_pool;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
