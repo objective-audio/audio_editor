@@ -37,7 +37,7 @@ class nudger;
 class edge_holder;
 class edge_editor;
 class jumper;
-class time_editor_launcher;
+class time_editor_opener;
 class marker_editor;
 class module_renaming_launcher;
 class import_interactor;
@@ -84,7 +84,7 @@ struct project_lifetime final {
     std::shared_ptr<edge_holder> const edge_holder;
     std::shared_ptr<edge_editor> const edge_editor;
     std::shared_ptr<jumper> const jumper;
-    std::shared_ptr<time_editor_launcher> const time_editor_launcher;
+    std::shared_ptr<time_editor_opener> const time_editor_opener;
     std::shared_ptr<marker_editor> const marker_editor;
     std::shared_ptr<module_renaming_launcher> const module_renaming_launcher;
     std::shared_ptr<export_interactor> const export_interactor;

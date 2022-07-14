@@ -38,7 +38,7 @@
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_url.h>
-#include <audio_editor_core/ae_time_editor_launcher.h>
+#include <audio_editor_core/ae_time_editor_opener.h>
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
@@ -81,8 +81,8 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
           edge_editor::make_shared(this->edge_holder.get(), window_lifetime->player.get(), this->editing_status.get())),
       jumper(jumper::make_shared(window_lifetime->player.get(), this->file_track.get(), this->marker_pool.get(),
                                  this->edge_holder.get())),
-      time_editor_launcher(time_editor_launcher::make_shared(window_lifetime->player.get(), this->timing.get(),
-                                                             this->modal_lifecycle.get())),
+      time_editor_opener(time_editor_opener::make_shared(window_lifetime->player.get(), this->timing.get(),
+                                                         this->modal_lifecycle.get())),
       marker_editor(marker_editor::make_shared(window_lifetime->player.get(), this->marker_pool.get(),
                                                this->database.get(), this->editing_status.get())),
       module_renaming_launcher(
@@ -108,7 +108,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
                                              this->editing_status.get())),
       receiver(project_receiver::make_shared(
           window_lifetime_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
-          this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(),
+          this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_opener.get(),
           this->marker_editor.get(), this->module_renaming_launcher.get(), this->timing.get(),
           this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())) {
 }

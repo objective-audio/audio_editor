@@ -15,7 +15,7 @@
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_reverter.h>
-#include <audio_editor_core/ae_time_editor_launcher.h>
+#include <audio_editor_core/ae_time_editor_opener.h>
 #include <audio_editor_core/ae_timing.h>
 #include <audio_editor_core/ae_track_editor.h>
 
@@ -25,17 +25,17 @@ using namespace yas::ae;
 std::shared_ptr<project_receiver> project_receiver::make_shared(
     window_lifetime_id const &window_lifetime_id, track_editor *track_editor, playing_toggler *toggler,
     nudge_settings *nudge_settings, nudger *nudger, jumper *jumper, edge_editor *edge_editor,
-    time_editor_launcher *time_editor_launcher, marker_editor *marker_editor,
+    time_editor_opener *time_editor_opener, marker_editor *marker_editor,
     module_renaming_launcher *module_renaming_launcher, timing *timing, import_interactor *import_interactor,
     export_interactor *export_interactor, reverter *reverter) {
-    return std::make_shared<project_receiver>(
-        window_lifetime_id, track_editor, toggler, nudge_settings, nudger, jumper, edge_editor, time_editor_launcher,
-        marker_editor, module_renaming_launcher, timing, import_interactor, export_interactor, reverter);
+    return std::make_shared<project_receiver>(window_lifetime_id, track_editor, toggler, nudge_settings, nudger, jumper,
+                                              edge_editor, time_editor_opener, marker_editor, module_renaming_launcher,
+                                              timing, import_interactor, export_interactor, reverter);
 }
 
 project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id, track_editor *track_editor,
                                    playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger,
-                                   jumper *jumper, edge_editor *edge_editor, time_editor_launcher *time_editor_launcher,
+                                   jumper *jumper, edge_editor *edge_editor, time_editor_opener *time_editor_opener,
                                    marker_editor *marker_editor, module_renaming_launcher *module_renaming_launcher,
                                    timing *timing, import_interactor *import_interactor,
                                    export_interactor *export_interactor, reverter *reverter)
@@ -46,7 +46,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
       _nudger(nudger),
       _jumper(jumper),
       _edge_editor(edge_editor),
-      _time_editor_launcher(time_editor_launcher),
+      _time_editor_opener(time_editor_opener),
       _marker_editor(marker_editor),
       _module_renaming_launcher(module_renaming_launcher),
       _timing(timing),
@@ -228,7 +228,7 @@ void project_receiver::receive(ae::action const &action) const {
                             break;
 
                         case editing_action_name::begin_time_editing:
-                            this->_time_editor_launcher->begin_time_editing();
+                            this->_time_editor_opener->begin_time_editing();
                             break;
                     }
                 } break;
@@ -319,7 +319,7 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_module_renaming_launcher->can_begin_module_renaming());
 
                 case editing_action_name::begin_time_editing:
-                    return to_state(this->_time_editor_launcher->can_begin_time_editing());
+                    return to_state(this->_time_editor_opener->can_begin_time_editing());
 
                 case editing_action_name::set_begin_edge:
                     return to_state(this->_edge_editor->can_set_begin());

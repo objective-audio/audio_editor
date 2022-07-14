@@ -14,7 +14,7 @@ class nudge_settings;
 class nudger;
 class jumper;
 class edge_editor;
-class time_editor_launcher;
+class time_editor_opener;
 class marker_editor;
 class module_renaming_launcher;
 class timing;
@@ -25,13 +25,13 @@ class reverter;
 struct project_receiver final : action_receivable {
     [[nodiscard]] static std::shared_ptr<project_receiver> make_shared(window_lifetime_id const &, track_editor *,
                                                                        playing_toggler *, nudge_settings *, nudger *,
-                                                                       jumper *, edge_editor *, time_editor_launcher *,
+                                                                       jumper *, edge_editor *, time_editor_opener *,
                                                                        marker_editor *, module_renaming_launcher *,
                                                                        timing *, import_interactor *,
                                                                        export_interactor *, reverter *);
 
     project_receiver(window_lifetime_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *,
-                     jumper *, edge_editor *, time_editor_launcher *, marker_editor *, module_renaming_launcher *,
+                     jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_launcher *,
                      timing *, import_interactor *, export_interactor *, reverter *);
 
    private:
@@ -42,7 +42,7 @@ struct project_receiver final : action_receivable {
     nudger *const _nudger;
     jumper *const _jumper;
     edge_editor *const _edge_editor;
-    time_editor_launcher *const _time_editor_launcher;
+    time_editor_opener *const _time_editor_opener;
     marker_editor *const _marker_editor;
     module_renaming_launcher *const _module_renaming_launcher;
     timing *const _timing;
