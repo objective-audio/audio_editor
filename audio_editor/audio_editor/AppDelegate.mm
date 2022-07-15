@@ -4,6 +4,8 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import <audio_editor_core/AEProjectFormatView.h>
+#import <audio_editor_core/AEWindowController.h>
 #include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_app_modal_sub_lifetime.h>
 #include <audio_editor_core/ae_app_presenter.h>
@@ -11,8 +13,6 @@
 #include <audio_editor_core/ae_project_setup_presenter.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
-#import "AEProjectFormatView.h"
-#import "AEWindowController.h"
 
 using namespace yas;
 using namespace yas::ae;

@@ -4,6 +4,8 @@
 
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
+#import <audio_editor_core/AEMetalView.h>
+#import <audio_editor_core/AEModuleNameViewController.h>
 #include <audio_editor_core/ae_json_utils.h>
 #include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
@@ -15,8 +17,6 @@
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
-#import "AEMetalView.h"
-#import "AEModuleNameViewController.h"
 
 using namespace yas;
 using namespace yas::ae;

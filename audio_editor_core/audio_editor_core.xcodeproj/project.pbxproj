@@ -304,6 +304,20 @@
 		B6CF425B2632ED2A00F9F297 /* ae_window_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6D2838C2880F93700F294EC /* ae_file_track_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D2838A2880F93700F294EC /* ae_file_track_utils.cpp */; };
 		B6D2838D2880F93700F294EC /* ae_file_track_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D2838B2880F93700F294EC /* ae_file_track_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6D2839E2881064000F294EC /* ProjectFormat.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6D2839B2881064000F294EC /* ProjectFormat.xib */; };
+		B6D2839F2881064000F294EC /* AEProjectFormatView.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D2839C2881064000F294EC /* AEProjectFormatView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6D283A02881064000F294EC /* AEProjectFormatView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6D2839D2881064000F294EC /* AEProjectFormatView.mm */; };
+		B6D283A9288110BE00F294EC /* AEMetalViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D283A1288110BD00F294EC /* AEMetalViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6D283AA288110BE00F294EC /* AEMetalViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6D283A2288110BD00F294EC /* AEMetalViewController.mm */; };
+		B6D283AB288110BE00F294EC /* AEWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D283A3288110BD00F294EC /* AEWindowController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6D283AC288110BE00F294EC /* AEWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6D283A4288110BD00F294EC /* AEWindowController.mm */; };
+		B6D283AD288110BE00F294EC /* AEMetalView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6D283A5288110BD00F294EC /* AEMetalView.mm */; };
+		B6D283AE288110BE00F294EC /* AEMetalView.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D283A6288110BD00F294EC /* AEMetalView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6D283AF288110BE00F294EC /* AEModuleNameViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D283A7288110BD00F294EC /* AEModuleNameViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6D283B0288110BE00F294EC /* AEModuleNameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6D283A8288110BE00F294EC /* AEModuleNameViewController.mm */; };
+		B6D283B2288110F400F294EC /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6D283B1288110F400F294EC /* UniformTypeIdentifiers.framework */; };
+		B6D283B5288111D400F294EC /* Window.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6D283B3288111D400F294EC /* Window.storyboard */; };
+		B6D283B6288111D400F294EC /* ModuleName.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6D283B4288111D400F294EC /* ModuleName.storyboard */; };
 		B6D385312649623A005ADD0B /* ae_timeline_holder_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D3852F2649623A005ADD0B /* ae_timeline_holder_utils.cpp */; };
 		B6D385322649623A005ADD0B /* ae_timeline_holder_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B6D385302649623A005ADD0B /* ae_timeline_holder_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6D55913281F849500C9427C /* ae_playing_toggler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6D55911281F849500C9427C /* ae_playing_toggler.cpp */; };
@@ -658,6 +672,20 @@
 		B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_window_presenter.h; sourceTree = "<group>"; };
 		B6D2838A2880F93700F294EC /* ae_file_track_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_track_utils.cpp; sourceTree = "<group>"; };
 		B6D2838B2880F93700F294EC /* ae_file_track_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_track_utils.h; sourceTree = "<group>"; };
+		B6D2839B2881064000F294EC /* ProjectFormat.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectFormat.xib; sourceTree = "<group>"; };
+		B6D2839C2881064000F294EC /* AEProjectFormatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEProjectFormatView.h; sourceTree = "<group>"; };
+		B6D2839D2881064000F294EC /* AEProjectFormatView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AEProjectFormatView.mm; sourceTree = "<group>"; };
+		B6D283A1288110BD00F294EC /* AEMetalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEMetalViewController.h; sourceTree = "<group>"; };
+		B6D283A2288110BD00F294EC /* AEMetalViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AEMetalViewController.mm; sourceTree = "<group>"; };
+		B6D283A3288110BD00F294EC /* AEWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEWindowController.h; sourceTree = "<group>"; };
+		B6D283A4288110BD00F294EC /* AEWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AEWindowController.mm; sourceTree = "<group>"; };
+		B6D283A5288110BD00F294EC /* AEMetalView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AEMetalView.mm; sourceTree = "<group>"; };
+		B6D283A6288110BD00F294EC /* AEMetalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEMetalView.h; sourceTree = "<group>"; };
+		B6D283A7288110BD00F294EC /* AEModuleNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEModuleNameViewController.h; sourceTree = "<group>"; };
+		B6D283A8288110BE00F294EC /* AEModuleNameViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AEModuleNameViewController.mm; sourceTree = "<group>"; };
+		B6D283B1288110F400F294EC /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		B6D283B3288111D400F294EC /* Window.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Window.storyboard; sourceTree = "<group>"; };
+		B6D283B4288111D400F294EC /* ModuleName.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ModuleName.storyboard; sourceTree = "<group>"; };
 		B6D3852F2649623A005ADD0B /* ae_timeline_holder_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_timeline_holder_utils.cpp; sourceTree = "<group>"; };
 		B6D385302649623A005ADD0B /* ae_timeline_holder_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_timeline_holder_utils.h; sourceTree = "<group>"; };
 		B6D55911281F849500C9427C /* ae_playing_toggler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_playing_toggler.cpp; sourceTree = "<group>"; };
@@ -717,6 +745,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6D283B2288110F400F294EC /* UniformTypeIdentifiers.framework in Frameworks */,
 				B66F5D6C27AE30A600441616 /* AppKit.framework in Frameworks */,
 				B6A997942629B72E00DAC3FE /* processing.framework in Frameworks */,
 				B6A9978C2629B72E00DAC3FE /* db.framework in Frameworks */,
@@ -748,6 +777,7 @@
 		B605EA6D2657E51B0031B177 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				B6D2839A288105F900F294EC /* objc */,
 				B6F09CE927E89C4F00638C6A /* common */,
 				B68D82102837BBA100C2FC23 /* action_utils */,
 				B68D820D2837BB8400C2FC23 /* display_space */,
@@ -1239,6 +1269,7 @@
 		B6A9977F2629B72E00DAC3FE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B6D283B1288110F400F294EC /* UniformTypeIdentifiers.framework */,
 				B66F5D6B27AE30A500441616 /* AppKit.framework */,
 				B607E7AD276EDEC00048F75C /* Accelerate.framework */,
 				B64DE6842658C099006FC562 /* Metal.framework */,
@@ -1560,6 +1591,26 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
+		B6D2839A288105F900F294EC /* objc */ = {
+			isa = PBXGroup;
+			children = (
+				B6D283B4288111D400F294EC /* ModuleName.storyboard */,
+				B6D283B3288111D400F294EC /* Window.storyboard */,
+				B6D283A6288110BD00F294EC /* AEMetalView.h */,
+				B6D283A5288110BD00F294EC /* AEMetalView.mm */,
+				B6D283A1288110BD00F294EC /* AEMetalViewController.h */,
+				B6D283A2288110BD00F294EC /* AEMetalViewController.mm */,
+				B6D283A7288110BD00F294EC /* AEModuleNameViewController.h */,
+				B6D283A8288110BE00F294EC /* AEModuleNameViewController.mm */,
+				B6D283A3288110BD00F294EC /* AEWindowController.h */,
+				B6D283A4288110BD00F294EC /* AEWindowController.mm */,
+				B6D2839C2881064000F294EC /* AEProjectFormatView.h */,
+				B6D2839D2881064000F294EC /* AEProjectFormatView.mm */,
+				B6D2839B2881064000F294EC /* ProjectFormat.xib */,
+			);
+			path = objc;
+			sourceTree = "<group>";
+		};
 		B6DC2CBB27B649C2000EF5F9 /* edge */ = {
 			isa = PBXGroup;
 			children = (
@@ -1637,6 +1688,7 @@
 			files = (
 				B6604F812646D7DF003439F1 /* ae_file_track.h in Headers */,
 				B6650B9E2854BE86004BB7C9 /* ae_window_lifetime.h in Headers */,
+				B6D2839F2881064000F294EC /* AEProjectFormatView.h in Headers */,
 				B62D8FA02723CB6A00779D42 /* ae_scrolling.h in Headers */,
 				B6047AEA2875AC3000BC91F6 /* ae_window_lifetime_id.h in Headers */,
 				B6A1238D2789848B00F31B31 /* ae_time_presenter_utils.h in Headers */,
@@ -1646,6 +1698,7 @@
 				B6F4D98227B5FD3B00AE7D5D /* ae_edge_holder.h in Headers */,
 				B64504B02719C4E4009E05D6 /* ae_marker_location.h in Headers */,
 				B68C3E8027088FF000888A53 /* ae_root_presenter.h in Headers */,
+				B6D283AB288110BE00F294EC /* AEWindowController.h in Headers */,
 				B68C3E782708255600888A53 /* ae_ui_track_constants.h in Headers */,
 				B666CE0B263424FF00C1693D /* ae_file_importer_types.h in Headers */,
 				B6137F6D27C7B23C0097A3C6 /* ae_project_lifetime.h in Headers */,
@@ -1660,6 +1713,7 @@
 				B6F09CED27E89C8C00638C6A /* ae_ui_mesh_data.h in Headers */,
 				B6B002BF263BC8880013E6D0 /* ae_file_info.h in Headers */,
 				B66F4770278BEAE000CB724C /* ae_timing_utils.h in Headers */,
+				B6D283A9288110BE00F294EC /* AEMetalViewController.h in Headers */,
 				B6DBC3642763474E001AF1D3 /* ae_marker_location_pool.h in Headers */,
 				B6EE90DD27A25A06000470F3 /* ae_ui_types.h in Headers */,
 				B6C3D63D2826684000A8FCFE /* ae_editing_status.h in Headers */,
@@ -1690,6 +1744,7 @@
 				B6CCC498274BD2C300B563C8 /* ae_pasteboard_constants.h in Headers */,
 				B68483F127C50B9400792D17 /* ae_context_menu.h in Headers */,
 				B693BE2C28251D2F00A82877 /* ae_project_id.h in Headers */,
+				B6D283AF288110BE00F294EC /* AEModuleNameViewController.h in Headers */,
 				B6C9A728264047B100585FDF /* ae_player.h in Headers */,
 				B61E323C264ACB8F000DB2B1 /* ae_file_module_utils.h in Headers */,
 				B668BE40262F412B0021AD20 /* ae_app_presenter.h in Headers */,
@@ -1772,6 +1827,7 @@
 				B657D4D426803C7B0048C6AD /* ae_keyboard_types.h in Headers */,
 				B69C68A32670F5BF00C1083F /* ae_ui_button.h in Headers */,
 				B6DEAC6D2840E070001D7D53 /* ae_project_setup_presenter.h in Headers */,
+				B6D283AE288110BE00F294EC /* AEMetalView.h in Headers */,
 				B6DC2CC627B654AA000EF5F9 /* ae_edge_presenter_dependency.h in Headers */,
 				B64504AE2719C4D9009E05D6 /* ae_module_location.h in Headers */,
 				B661269A28549A5E00E66214 /* ae_project_sub_lifetime.h in Headers */,
@@ -1885,7 +1941,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6D283B5288111D400F294EC /* Window.storyboard in Resources */,
+				B6D2839E2881064000F294EC /* ProjectFormat.xib in Resources */,
 				B66F5D6A27AE2F6600441616 /* audio_editor_core.xcassets in Resources */,
+				B6D283B6288111D400F294EC /* ModuleName.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1917,6 +1976,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B69708EA2639A15E0045E975 /* ae_file_importer.cpp in Sources */,
+				B6D283AA288110BE00F294EC /* AEMetalViewController.mm in Sources */,
 				B63D1E8F282AA943005F606E /* ae_app_lifecycle.cpp in Sources */,
 				B61262FC2782FF030019B364 /* ae_nudge_settings.cpp in Sources */,
 				B6901110286333B600EF58CF /* ae_json_utils.cpp in Sources */,
@@ -1950,6 +2010,7 @@
 				B6DC2CC327B64A87000EF5F9 /* ae_edge_presenter.cpp in Sources */,
 				B644411D2824C967001AFE8B /* ae_nudger.cpp in Sources */,
 				B6F09CE727E84F1300638C6A /* ae_ui_marker_element.mm in Sources */,
+				B6D283AD288110BE00F294EC /* AEMetalView.mm in Sources */,
 				B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */,
 				B68D82172837C96D00C2FC23 /* ae_sheet_lifetime.cpp in Sources */,
 				B64E9FC82650EDC800758FE8 /* ae_marker_pool.cpp in Sources */,
@@ -1986,6 +2047,7 @@
 				B64504BB271A94D2009E05D6 /* ae_modules_presenter.cpp in Sources */,
 				B6D98A2127E0BD1A0034AD7C /* ae_ui_event_utils.cpp in Sources */,
 				B64E9FD02650EE2C00758FE8 /* ae_marker.cpp in Sources */,
+				B6D283AC288110BE00F294EC /* AEWindowController.mm in Sources */,
 				B6DEAC6C2840E070001D7D53 /* ae_project_setup_presenter.cpp in Sources */,
 				B64504B4271A7316009E05D6 /* ae_markers_presenter.cpp in Sources */,
 				B6650BAA2855800E004BB7C9 /* ae_window_closer.cpp in Sources */,
@@ -2019,6 +2081,7 @@
 				B666CDE82634125E00C1693D /* ae_system_url.cpp in Sources */,
 				B6604F872646DE4F003439F1 /* ae_file_module.cpp in Sources */,
 				B6B9736027006FF500E1BD12 /* ae_ui_button_utils.cpp in Sources */,
+				B6D283A02881064000F294EC /* AEProjectFormatView.mm in Sources */,
 				B69708F12639B0390045E975 /* ae_file_importer_resource.cpp in Sources */,
 				B6650B9D2854BE86004BB7C9 /* ae_window_lifetime.cpp in Sources */,
 				B68483F327C50D1B00792D17 /* ae_action.cpp in Sources */,
@@ -2033,6 +2096,7 @@
 				B68D82252838A08600C2FC23 /* ae_project_modal_sub_lifetime.cpp in Sources */,
 				B66FBAA8286B44B200E49B7E /* ae_action_receiver_providable.cpp in Sources */,
 				B666F17C2759CCEA0040D306 /* ae_display_space.mm in Sources */,
+				B6D283B0288110BE00F294EC /* AEModuleNameViewController.mm in Sources */,
 				B6604F802646D7DF003439F1 /* ae_file_track.cpp in Sources */,
 				B66471752824EDC300DF84C4 /* ae_edge_editor.cpp in Sources */,
 				B68D822028389B4A00C2FC23 /* ae_dialog_lifetime.cpp in Sources */,

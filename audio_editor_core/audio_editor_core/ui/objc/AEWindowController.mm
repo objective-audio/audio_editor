@@ -3,11 +3,11 @@
 //
 
 #import "AEWindowController.h"
+#import <audio_editor_core/AEMetalViewController.h>
 #include <audio_editor_core/ae_window_presenter.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
-#import "AEMetalViewController.h"
 
 using namespace yas;
 using namespace yas::ae;
