@@ -21,6 +21,18 @@ using namespace yas::ae;
     observing::canceller_pool _pool;
 }
 
++ (instancetype)instantiateWithLifetimeID:(yas::ae::window_lifetime_id const &)lifetime_id {
+    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window"
+                                                         bundle:[NSBundle bundleForClass:[self class]]];
+    AEWindowController *windowController = [storyboard instantiateInitialController];
+
+    NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
+
+    [windowController setupWithLifetimeID:lifetime_id];
+
+    return windowController;
+}
+
 - (void)setupWithLifetimeID:(window_lifetime_id const &)lifetime_id {
     self->_presenter = window_presenter::make_shared(lifetime_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
