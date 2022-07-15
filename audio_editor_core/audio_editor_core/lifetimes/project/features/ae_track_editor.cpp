@@ -212,7 +212,7 @@ void track_editor::copy() {
             auto const &value = file_module.value();
             this->_pasteboard->set_file_module({.name = value.name,
                                                 .file_frame = value.file_frame,
-                                                .length = value.range.length,
+                                                .range = value.range.offset(-current_frame),
                                                 .file_name = value.file_name});
         }
     });
@@ -242,7 +242,7 @@ void track_editor::paste() {
 
             this->_file_track->overwrite_module({.name = module_value.name,
                                                  .file_frame = module_value.file_frame,
-                                                 .range = {current_frame, module_value.length},
+                                                 .range = module_value.range.offset(current_frame),
                                                  .file_name = module_value.file_name});
         });
     }
@@ -260,7 +260,7 @@ void track_editor::paste_and_offset() {
 
             this->_file_track->split_and_insert_module_and_offset({.name = module_value.name,
                                                                    .file_frame = module_value.file_frame,
-                                                                   .range = {current_frame, module_value.length},
+                                                                   .range = module_value.range.offset(current_frame),
                                                                    .file_name = module_value.file_name});
         });
     }
