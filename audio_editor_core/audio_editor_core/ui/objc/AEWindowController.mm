@@ -3,11 +3,11 @@
 //
 
 #import "AEWindowController.h"
+#import <audio_editor_core/AEMetalViewController.h>
 #include <audio_editor_core/ae_window_presenter.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
-#import "AEMetalViewController.h"
 
 using namespace yas;
 using namespace yas::ae;
@@ -19,6 +19,18 @@ using namespace yas::ae;
 @implementation AEWindowController {
     std::shared_ptr<window_presenter> _presenter;
     observing::canceller_pool _pool;
+}
+
++ (instancetype)instantiateWithLifetimeID:(yas::ae::window_lifetime_id const &)lifetime_id {
+    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window"
+                                                         bundle:[NSBundle bundleForClass:[self class]]];
+    AEWindowController *windowController = [storyboard instantiateInitialController];
+
+    NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
+
+    [windowController setupWithLifetimeID:lifetime_id];
+
+    return windowController;
 }
 
 - (void)setupWithLifetimeID:(window_lifetime_id const &)lifetime_id {

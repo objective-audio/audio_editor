@@ -4,6 +4,8 @@
 
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import <audio_editor_core/AEProjectFormatView.h>
+#import <audio_editor_core/AEWindowController.h>
 #include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_app_modal_sub_lifetime.h>
 #include <audio_editor_core/ae_app_presenter.h>
@@ -11,8 +13,6 @@
 #include <audio_editor_core/ae_project_setup_presenter.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
-#import "AEProjectFormatView.h"
-#import "AEWindowController.h"
 
 using namespace yas;
 using namespace yas::ae;
@@ -114,10 +114,7 @@ using namespace yas::ae;
 }
 
 - (void)makeAndShowWindowControllerWithLifetimeID:(window_lifetime_id const &)lifetime_id {
-    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
-    AEWindowController *windowController = [storyboard instantiateInitialController];
-    NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
-    [windowController setupWithLifetimeID:lifetime_id];
+    AEWindowController *windowController = [AEWindowController instantiateWithLifetimeID:lifetime_id];
     [self.windowControllers addObject:windowController];
     [windowController showWindow:nil];
 }
