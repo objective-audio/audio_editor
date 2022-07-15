@@ -4,7 +4,7 @@
 
 #include "ae_file_track.h"
 
-#include <audio_editor_core/ae_file_module_utils.h>
+#include <audio_editor_core/ae_file_track_utils.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
@@ -53,27 +53,27 @@ void file_track::set_module_name_and_notify(time::range const &range, std::strin
 }
 
 std::optional<file_module> file_track::module_at(frame_index_t const frame) const {
-    return file_module_utils::module(this->_modules, frame);
+    return file_track_utils::module(this->_modules, frame);
 }
 
 std::optional<file_module> file_track::previous_module_at(frame_index_t const frame) const {
-    return file_module_utils::previous_module(this->_modules, frame);
+    return file_track_utils::previous_module(this->_modules, frame);
 }
 
 std::optional<file_module> file_track::next_module_at(frame_index_t const frame) const {
-    return file_module_utils::next_module(this->_modules, frame);
+    return file_track_utils::next_module(this->_modules, frame);
 }
 
 std::optional<file_module> file_track::splittable_module_at(frame_index_t const frame) const {
-    return file_module_utils::splittable_module(this->_modules, frame);
+    return file_track_utils::splittable_module(this->_modules, frame);
 }
 
 std::optional<file_module> file_track::first_module() const {
-    return file_module_utils::first_module(this->_modules);
+    return file_track_utils::first_module(this->_modules);
 }
 
 std::optional<file_module> file_track::last_module() const {
-    return file_module_utils::last_module(this->_modules);
+    return file_track_utils::last_module(this->_modules);
 }
 
 std::optional<frame_index_t> file_track::next_jumpable_frame(frame_index_t const frame) const {
@@ -171,7 +171,7 @@ void file_track::drop_tail_and_offset_at(frame_index_t const frame) {
 }
 
 void file_track::overwrite_module(file_module const &module) {
-    auto const overlapped_modules = file_module_utils::overlapped_modules(this->_modules, module.range);
+    auto const overlapped_modules = file_track_utils::overlapped_modules(this->_modules, module.range);
     for (auto const &overlapped_module : overlapped_modules) {
         this->erase_module_and_notify(overlapped_module);
         auto const cropped_ranges = overlapped_module.range.cropped(module.range);
