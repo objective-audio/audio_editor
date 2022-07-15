@@ -27,7 +27,7 @@ using namespace yas::ae;
 }
 
 + (instancetype)instantiate {
-    NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ProjectFormat" bundle:nil];
+    NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ProjectFormat" bundle:[NSBundle bundleForClass:[self class]]];
 
     NSArray *objects = nil;
 

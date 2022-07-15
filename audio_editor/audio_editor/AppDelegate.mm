@@ -114,7 +114,8 @@ using namespace yas::ae;
 }
 
 - (void)makeAndShowWindowControllerWithLifetimeID:(window_lifetime_id const &)lifetime_id {
-    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window" bundle:nil];
+    NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window"
+                                                         bundle:[NSBundle bundleForClass:[AEWindowController class]]];
     AEWindowController *windowController = [storyboard instantiateInitialController];
     NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
     [windowController setupWithLifetimeID:lifetime_id];
