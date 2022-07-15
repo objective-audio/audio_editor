@@ -221,7 +221,7 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_editor->copy();
                             break;
                         case editing_action_name::paste:
-                            this->_editor->paste_and_offset();
+                            this->_editor->paste();
                             break;
                         case editing_action_name::begin_module_renaming:
                             this->_module_renaming_opener->begin_module_renaming(action.value);

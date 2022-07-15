@@ -227,21 +227,25 @@ bool track_editor::can_paste() const {
         return false;
     }
 
-    auto const &file_track = this->_file_track;
-    auto const current_frame = this->_player->current_frame();
+    return true;
+}
 
-    if (file_track->modules().empty()) {
-        // moduleが何もなければペーストできる
-        return true;
-    } else if (file_track->module_at(current_frame).has_value()) {
-        // 今いるframeの場所にmoduleがあればペーストできる
-        return true;
-    } else if (file_track->module_at(current_frame - 1).has_value()) {
-        // 今あるmoduleのピッタリ後ろならペーストできる
-        return true;
+void track_editor::paste() {
+    if (!this->can_paste()) {
+        return;
     }
 
-    return false;
+    if (auto const module = this->_pasteboard->file_module()) {
+        this->_database->suspend_saving([this, &module] {
+            auto const module_value = module.value();
+            auto const current_frame = this->_player->current_frame();
+
+            this->_file_track->overwrite_module({.name = module_value.name,
+                                                 .file_frame = module_value.file_frame,
+                                                 .range = {current_frame, module_value.length},
+                                                 .file_name = module_value.file_name});
+        });
+    }
 }
 
 void track_editor::paste_and_offset() {
