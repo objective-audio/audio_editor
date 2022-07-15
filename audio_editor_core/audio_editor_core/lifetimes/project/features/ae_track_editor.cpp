@@ -258,8 +258,6 @@ void track_editor::paste_and_offset() {
                                                                    .file_frame = module_value.file_frame,
                                                                    .range = {current_frame, module_value.length},
                                                                    .file_name = module_value.file_name});
-
-            this->_marker_pool->move_offset_from(current_frame, module_value.length);
         });
     }
 }
