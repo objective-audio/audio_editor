@@ -11,7 +11,6 @@
 namespace yas::ae {
 class window_opener;
 class app_modal_lifecycle;
-class project_format;
 
 struct app_presenter final {
     [[nodiscard]] static std::shared_ptr<app_presenter> make_shared();

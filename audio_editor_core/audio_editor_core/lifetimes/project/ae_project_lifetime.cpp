@@ -22,7 +22,7 @@
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_editor.h>
 #include <audio_editor_core/ae_marker_pool.h>
-#include <audio_editor_core/ae_module_renaming_launcher.h>
+#include <audio_editor_core/ae_module_renaming_opener.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
 #include <audio_editor_core/ae_pasteboard.h>
@@ -38,7 +38,7 @@
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_url.h>
-#include <audio_editor_core/ae_time_editor_launcher.h>
+#include <audio_editor_core/ae_time_editor_opener.h>
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
@@ -59,10 +59,9 @@ std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::window_lifet
 project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetime *app_lifetime)
     : window_lifetime_id(window_lifetime->lifetime_id),
       project_format(window_lifetime->project_format),
-      project_url(project_url::make_shared(window_lifetime->project_directory_url)),
       module_location_pool(module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
-      waveforms_mesh_importer(waveform_mesh_importer::make_shared(this->project_url.get())),
+      waveforms_mesh_importer(waveform_mesh_importer::make_shared(window_lifetime->project_url.get())),
       action_sender(ae::project_action_sender::make_shared(window_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(window_lifetime->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(window_lifetime->scrolling.get())),
@@ -71,7 +70,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       file_track(file_track::make_shared()),
       marker_pool(marker_pool::make_shared()),
       pasteboard(pasteboard::make_shared()),
-      database(database::make_shared(this->project_url->db_file())),
+      database(database::make_shared(window_lifetime->project_url->db_file())),
       exporter(exporter::make_shared()),
       editing_status(editing_status::make_shared(this->exporter.get())),
       playing_toggler(playing_toggler::make_shared(window_lifetime->player.get())),
@@ -82,12 +81,12 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
           edge_editor::make_shared(this->edge_holder.get(), window_lifetime->player.get(), this->editing_status.get())),
       jumper(jumper::make_shared(window_lifetime->player.get(), this->file_track.get(), this->marker_pool.get(),
                                  this->edge_holder.get())),
-      time_editor_launcher(time_editor_launcher::make_shared(window_lifetime->player.get(), this->timing.get(),
-                                                             this->modal_lifecycle.get())),
+      time_editor_opener(time_editor_opener::make_shared(window_lifetime->player.get(), this->timing.get(),
+                                                         this->modal_lifecycle.get())),
       marker_editor(marker_editor::make_shared(window_lifetime->player.get(), this->marker_pool.get(),
                                                this->database.get(), this->editing_status.get())),
-      module_renaming_launcher(
-          module_renaming_launcher::make_shared(this->modal_lifecycle.get(), this->editing_status.get())),
+      module_renaming_opener(
+          module_renaming_opener::make_shared(this->modal_lifecycle.get(), this->editing_status.get())),
       export_interactor(export_interactor::make_shared(
           project_format, this->modal_lifecycle.get(), this->editing_status.get(), this->edge_holder.get(),
           window_lifetime->player.get(), this->exporter.get(), window_lifetime->timeline_holder.get())),
@@ -99,9 +98,9 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
                                      this->pasteboard.get(), this->edge_holder.get(), this->editing_status.get())),
       file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
       file_module_loader(file_module_loader::make_shared(
-          window_lifetime_id.project, this->project_url.get(), this->project_format, window_lifetime->player.get(),
-          this->file_module_loading_state_holder.get(), this->database.get(), this->file_track.get(),
-          this->edge_holder.get(), window_lifetime->timeline_holder.get())),
+          window_lifetime_id.project, window_lifetime->project_url.get(), this->project_format,
+          window_lifetime->player.get(), this->file_module_loading_state_holder.get(), this->database.get(),
+          this->file_track.get(), this->edge_holder.get(), window_lifetime->timeline_holder.get())),
       import_interactor(import_interactor::make_shared(this->modal_lifecycle.get(), this->editing_status.get(),
                                                        this->file_module_loader.get())),
       track_editor(track_editor::make_shared(window_lifetime->player.get(), this->file_track.get(),
@@ -109,7 +108,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
                                              this->editing_status.get())),
       receiver(project_receiver::make_shared(
           window_lifetime_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
-          this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_launcher.get(),
-          this->marker_editor.get(), this->module_renaming_launcher.get(), this->timing.get(),
+          this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_opener.get(),
+          this->marker_editor.get(), this->module_renaming_opener.get(), this->timing.get(),
           this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())) {
 }

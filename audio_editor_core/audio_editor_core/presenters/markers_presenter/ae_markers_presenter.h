@@ -5,7 +5,6 @@
 #pragma once
 
 #include <audio_editor_core/ae_marker_location_pool.h>
-#include <audio_editor_core/ae_markers_presenter_dependency.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
