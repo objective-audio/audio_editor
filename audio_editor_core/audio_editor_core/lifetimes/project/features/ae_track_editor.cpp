@@ -164,6 +164,19 @@ bool track_editor::can_cut() const {
     return this->can_copy();
 }
 
+void track_editor::cut() {
+    if (!this->can_cut()) {
+        return;
+    }
+
+    this->_database->suspend_saving([this] {
+        this->copy();
+
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->erase_at(current_frame);
+    });
+}
+
 void track_editor::cut_and_offset() {
     if (!this->can_cut()) {
         return;

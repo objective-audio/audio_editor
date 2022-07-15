@@ -215,7 +215,7 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_export_interactor->export_to_file(url::file_url(action.value));
                             break;
                         case editing_action_name::cut:
-                            this->_editor->cut_and_offset();
+                            this->_editor->cut();
                             break;
                         case editing_action_name::copy:
                             this->_editor->copy();
