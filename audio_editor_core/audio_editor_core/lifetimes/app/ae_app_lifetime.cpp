@@ -29,11 +29,12 @@ std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
     auto const window_lifecycle = window_lifecycle::make_shared();
     auto const action_sender = action_sender::make_shared(hierarchy::app_lifecycle().get());
     auto const id_generator = id_generator::make_shared();
+    auto const uuid_generator = uuid_generator::make_shared();
 
     return std::make_shared<app_lifetime>(
         worker, system_url, app_launcher::make_shared(worker, system_url),
         file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing)), file_info_loader,
-        ae::color::make_shared(), uuid_generator::make_shared(), id_generator, window_lifecycle,
+        ae::color::make_shared(), uuid_generator, id_generator, window_lifecycle,
         app_modal_lifecycle::make_shared(id_generator.get()), ui_root_lifecycle::make_shared(),
         window_opener::make_shared(file_info_loader.get(), window_lifecycle.get()), action_sender);
 }
