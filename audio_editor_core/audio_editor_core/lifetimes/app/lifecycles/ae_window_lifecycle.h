@@ -17,9 +17,10 @@ class file_info_loader;
 class project_format;
 
 struct window_lifecycle final : window_lifecycle_for_app_presenter, action_receiver_providable {
-    [[nodiscard]] static std::shared_ptr<window_lifecycle> make_shared();
+    [[nodiscard]] static std::shared_ptr<window_lifecycle> make_shared(id_generatable const *,
+                                                                       uuid_generatable const *);
 
-    window_lifecycle(std::shared_ptr<id_generatable> const &, std::shared_ptr<uuid_generatable> const &);
+    window_lifecycle(id_generatable const *, uuid_generatable const *);
 
     void add_lifetime(url const &project_dir_url, project_format const &);
     void remove_lifetime(window_lifetime_id const &);
@@ -31,8 +32,8 @@ struct window_lifecycle final : window_lifecycle_for_app_presenter, action_recei
     [[nodiscard]] observing::syncable observe_event(std::function<void(window_lifecycle_event const &)> &&) override;
 
    private:
-    std::shared_ptr<id_generatable> const _id_generator;
-    std::shared_ptr<uuid_generatable> const _uuid_generator;
+    id_generatable const *const _id_generator;
+    uuid_generatable const *const _uuid_generator;
 
     using window_lifetimes_t =
         observing::map::holder<window_lifetime_id,
