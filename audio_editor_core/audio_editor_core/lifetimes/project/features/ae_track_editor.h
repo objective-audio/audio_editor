@@ -32,10 +32,12 @@ struct track_editor final {
     void erase_and_offset();
 
     [[nodiscard]] bool can_cut() const;
+    void cut();
     void cut_and_offset();
     [[nodiscard]] bool can_copy() const;
     void copy();
     [[nodiscard]] bool can_paste() const;
+    void paste();
     void paste_and_offset();
 
    private:

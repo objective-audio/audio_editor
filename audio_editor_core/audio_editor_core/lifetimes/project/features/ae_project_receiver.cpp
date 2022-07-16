@@ -215,13 +215,13 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_export_interactor->export_to_file(url::file_url(action.value));
                             break;
                         case editing_action_name::cut:
-                            this->_editor->cut_and_offset();
+                            this->_editor->cut();
                             break;
                         case editing_action_name::copy:
                             this->_editor->copy();
                             break;
                         case editing_action_name::paste:
-                            this->_editor->paste_and_offset();
+                            this->_editor->paste();
                             break;
                         case editing_action_name::begin_module_renaming:
                             this->_module_renaming_opener->begin_module_renaming(action.value);

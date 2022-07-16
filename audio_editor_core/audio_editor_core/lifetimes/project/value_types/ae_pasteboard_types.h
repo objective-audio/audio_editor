@@ -18,7 +18,7 @@ enum class pasteboard_event {
 struct pasting_file_module final {
     std::string name;
     frame_index_t file_frame;
-    proc::length_t length;
+    time::range range;
     std::string file_name;
 
     std::string data() const;

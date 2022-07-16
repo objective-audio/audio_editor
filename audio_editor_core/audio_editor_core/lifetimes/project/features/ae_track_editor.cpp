@@ -164,6 +164,19 @@ bool track_editor::can_cut() const {
     return this->can_copy();
 }
 
+void track_editor::cut() {
+    if (!this->can_cut()) {
+        return;
+    }
+
+    this->_database->suspend_saving([this] {
+        this->copy();
+
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->erase_at(current_frame);
+    });
+}
+
 void track_editor::cut_and_offset() {
     if (!this->can_cut()) {
         return;
@@ -173,11 +186,7 @@ void track_editor::cut_and_offset() {
         this->copy();
 
         auto const current_frame = this->_player->current_frame();
-        auto const erasing_range = this->_file_track->module_at(current_frame)->range;
         this->_file_track->erase_and_offset_at(current_frame);
-        this->_marker_pool->erase_range(erasing_range);
-        auto const offset = -static_cast<frame_index_t>(erasing_range.length);
-        this->_marker_pool->move_offset_from(erasing_range.next_frame(), offset);
     });
 }
 
@@ -203,7 +212,7 @@ void track_editor::copy() {
             auto const &value = file_module.value();
             this->_pasteboard->set_file_module({.name = value.name,
                                                 .file_frame = value.file_frame,
-                                                .length = value.range.length,
+                                                .range = value.range.offset(-current_frame),
                                                 .file_name = value.file_name});
         }
     });
@@ -218,21 +227,25 @@ bool track_editor::can_paste() const {
         return false;
     }
 
-    auto const &file_track = this->_file_track;
-    auto const current_frame = this->_player->current_frame();
+    return true;
+}
 
-    if (file_track->modules().empty()) {
-        // moduleが何もなければペーストできる
-        return true;
-    } else if (file_track->module_at(current_frame).has_value()) {
-        // 今いるframeの場所にmoduleがあればペーストできる
-        return true;
-    } else if (file_track->module_at(current_frame - 1).has_value()) {
-        // 今あるmoduleのピッタリ後ろならペーストできる
-        return true;
+void track_editor::paste() {
+    if (!this->can_paste()) {
+        return;
     }
 
-    return false;
+    if (auto const module = this->_pasteboard->file_module()) {
+        this->_database->suspend_saving([this, &module] {
+            auto const module_value = module.value();
+            auto const current_frame = this->_player->current_frame();
+
+            this->_file_track->overwrite_module({.name = module_value.name,
+                                                 .file_frame = module_value.file_frame,
+                                                 .range = module_value.range.offset(current_frame),
+                                                 .file_name = module_value.file_name});
+        });
+    }
 }
 
 void track_editor::paste_and_offset() {
@@ -247,10 +260,8 @@ void track_editor::paste_and_offset() {
 
             this->_file_track->split_and_insert_module_and_offset({.name = module_value.name,
                                                                    .file_frame = module_value.file_frame,
-                                                                   .range = {current_frame, module_value.length},
+                                                                   .range = module_value.range.offset(current_frame),
                                                                    .file_name = module_value.file_name});
-
-            this->_marker_pool->move_offset_from(current_frame, module_value.length);
         });
     }
 }
