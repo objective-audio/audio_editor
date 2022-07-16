@@ -80,11 +80,10 @@ void file_module_loader::load(url const &src_url) {
              if (auto const file_info = loader->_file_info_loader->load_file_info(dst_url)) {
                  loader->_database->suspend_saving(
                      [&loader, &file_info = file_info.value(), &src_file_name, &dst_file_name] {
-                         loader->_file_track->insert_module_and_notify(
-                             file_module{.name = src_file_name,
-                                         .range = time::range{0, file_info.length},
-                                         .file_frame = 0,
-                                         .file_name = dst_file_name});
+                         loader->_file_track->overwrite_module(file_module{.name = src_file_name,
+                                                                           .range = time::range{0, file_info.length},
+                                                                           .file_frame = 0,
+                                                                           .file_name = dst_file_name});
 
                          loader->_edge_holder->set_edge(
                              {.begin_frame = 0, .end_frame = static_cast<frame_index_t>(file_info.length)});
