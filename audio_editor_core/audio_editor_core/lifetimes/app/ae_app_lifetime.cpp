@@ -43,7 +43,7 @@ app_lifetime::app_lifetime(
     std::shared_ptr<ae::file_info_loader> const &file_info_loader, std::shared_ptr<ae::color> const &color,
     std::shared_ptr<ae::uuid_generator> const &uuid_generator, std::shared_ptr<ae::id_generator> const &id_generator,
     std::shared_ptr<ae::window_lifecycle> const &window_lifecycle,
-    std::shared_ptr<app_modal_lifecycle> const &dialog_lifecycle,
+    std::shared_ptr<app_modal_lifecycle> const &modal_lifecycle,
     std::shared_ptr<ae::ui_root_lifecycle> const &ui_root_lifecycle,
     std::shared_ptr<ae::window_opener> const &window_opener, std::shared_ptr<ae::action_sender> const &action_sender)
     : worker(worker),
@@ -55,7 +55,7 @@ app_lifetime::app_lifetime(
       uuid_generator(uuid_generator),
       id_generator(id_generator),
       window_lifecycle(window_lifecycle),
-      dialog_lifecycle(dialog_lifecycle),
+      modal_lifecycle(modal_lifecycle),
       ui_root_lifecycle(ui_root_lifecycle),
       window_opener(window_opener),
       action_sender(action_sender) {

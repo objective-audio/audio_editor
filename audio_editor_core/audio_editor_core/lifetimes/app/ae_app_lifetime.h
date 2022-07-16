@@ -42,7 +42,7 @@ struct app_lifetime final {
     std::shared_ptr<id_generator> const id_generator;
 
     std::shared_ptr<window_lifecycle> const window_lifecycle;
-    std::shared_ptr<app_modal_lifecycle> const dialog_lifecycle;
+    std::shared_ptr<app_modal_lifecycle> const modal_lifecycle;
     std::shared_ptr<ui_root_lifecycle> const ui_root_lifecycle;
 
     std::shared_ptr<window_opener> const window_opener;

@@ -16,7 +16,7 @@ std::shared_ptr<project_setup> project_setup::make_shared(project_setup_dialog_l
                                                           project_format_setup *format_setup) {
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &window_opener = app_lifetime->window_opener;
-    auto const &lifecycle = app_lifetime->dialog_lifecycle;
+    auto const &lifecycle = app_lifetime->modal_lifecycle;
     return std::make_shared<project_setup>(lifetime_id, format_setup, window_opener.get(), lifecycle.get());
 }
 
