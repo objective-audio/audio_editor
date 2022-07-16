@@ -10,11 +10,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<app_modal_lifecycle> app_modal_lifecycle::make_shared() {
-    return std::make_shared<app_modal_lifecycle>(id_generator::make_shared());
+std::shared_ptr<app_modal_lifecycle> app_modal_lifecycle::make_shared(id_generatable const *id_generator) {
+    return std::make_shared<app_modal_lifecycle>(id_generator);
 }
 
-app_modal_lifecycle::app_modal_lifecycle(std::shared_ptr<id_generatable> const &id_generator)
+app_modal_lifecycle::app_modal_lifecycle(id_generatable const *id_generator)
     : _id_generator(id_generator),
       _current(observing::value::holder<std::optional<app_modal_sub_lifetime>>::make_shared(std::nullopt)) {
 }
