@@ -16,7 +16,7 @@ using namespace yas::ae;
 
 std::shared_ptr<app_presenter> app_presenter::make_shared() {
     return std::make_shared<app_presenter>(hierarchy::app_lifetime()->window_lifecycle,
-                                           hierarchy::app_lifetime()->dialog_lifecycle,
+                                           hierarchy::app_lifetime()->modal_lifecycle,
                                            hierarchy::app_lifetime()->window_opener);
 }
 

@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_action_id.h>
 #include <audio_editor_core/ae_file_info_loader.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_id_generator.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
@@ -19,12 +20,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<window_lifecycle> window_lifecycle::make_shared() {
-    return std::make_shared<window_lifecycle>(id_generator::make_shared(), uuid_generator::make_shared());
+std::shared_ptr<window_lifecycle> window_lifecycle::make_shared(id_generatable const *id_generator,
+                                                                uuid_generatable const *uuid_generator) {
+    return std::make_shared<window_lifecycle>(id_generator, uuid_generator);
 }
 
-window_lifecycle::window_lifecycle(std::shared_ptr<id_generatable> const &id_generator,
-                                   std::shared_ptr<uuid_generatable> const &uuid_generator)
+window_lifecycle::window_lifecycle(id_generatable const *id_generator, uuid_generatable const *uuid_generator)
     : _id_generator(id_generator), _uuid_generator(uuid_generator) {
 }
 

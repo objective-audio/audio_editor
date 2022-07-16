@@ -23,7 +23,7 @@ std::shared_ptr<app_lifetime> const &hierarchy::app_lifetime() {
 }
 
 std::shared_ptr<project_setup_dialog_lifetime> const &hierarchy::project_setup_dialog_lifetime() {
-    return hierarchy::app_lifetime()->dialog_lifecycle->project_setup_dialog_lifetime();
+    return hierarchy::app_lifetime()->modal_lifecycle->project_setup_dialog_lifetime();
 }
 
 std::shared_ptr<window_lifetime> const &hierarchy::window_lifetime_for_id(

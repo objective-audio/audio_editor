@@ -4,6 +4,7 @@
 
 #include "ae_project_modal_lifecycle.h"
 
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_id_generator.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_lifetime.h>
@@ -17,10 +18,11 @@ static std::shared_ptr<sheet_lifetime> const _null_sheet_lifetime = nullptr;
 
 std::shared_ptr<project_modal_lifecycle> project_modal_lifecycle::make_shared(
     window_lifetime_id const &window_lifetime_id) {
-    return std::make_shared<project_modal_lifecycle>(id_generator::make_shared(), window_lifetime_id);
+    auto const &app_lifetime = hierarchy::app_lifetime();
+    return std::make_shared<project_modal_lifecycle>(app_lifetime->id_generator.get(), window_lifetime_id);
 }
 
-project_modal_lifecycle::project_modal_lifecycle(std::shared_ptr<id_generatable> const &id_generator,
+project_modal_lifecycle::project_modal_lifecycle(id_generatable const *id_generator,
                                                  window_lifetime_id const &window_lifetime_id)
     : _id_generator(id_generator),
       _window_lifetime_id(window_lifetime_id),

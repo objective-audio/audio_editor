@@ -1396,6 +1396,10 @@
 		B6D2837A287EFF7F00F294EC /* features */ = {
 			isa = PBXGroup;
 			children = (
+				B61883EA28791041006CF5AD /* ae_id_generator.cpp */,
+				B61883EB28791041006CF5AD /* ae_id_generator.h */,
+				B666CE332634FC8300C1693D /* ae_uuid_generator.cpp */,
+				B666CE342634FC8300C1693D /* ae_uuid_generator.h */,
 				B6169833286707AC00DD87AF /* ae_action_sender.cpp */,
 				B6169834286707AC00DD87AF /* ae_action_sender.h */,
 				B65ABF582833DBB30096B6C7 /* ae_window_opener.cpp */,
@@ -1556,10 +1560,6 @@
 		B6D283852880485200F294EC /* features */ = {
 			isa = PBXGroup;
 			children = (
-				B61883EA28791041006CF5AD /* ae_id_generator.cpp */,
-				B61883EB28791041006CF5AD /* ae_id_generator.h */,
-				B666CE332634FC8300C1693D /* ae_uuid_generator.cpp */,
-				B666CE342634FC8300C1693D /* ae_uuid_generator.h */,
 				B6DBC36C276382FB001AF1D3 /* ae_recycle_pool_private.h */,
 				B655310E277D5F62004C6AC8 /* ae_recycle_pool.cpp */,
 				B6DBC368276382A5001AF1D3 /* ae_recycle_pool.h */,
