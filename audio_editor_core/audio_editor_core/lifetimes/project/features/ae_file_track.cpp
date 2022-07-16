@@ -179,7 +179,7 @@ void file_track::overwrite_module(file_module const &module) {
             frame_index_t const file_frame_offset = cropped_range.frame - overlapped_module.range.frame;
             this->insert_module_and_notify({.name = overlapped_module.name,
                                             .range = cropped_range,
-                                            .file_frame = overlapped_module.range.frame + file_frame_offset,
+                                            .file_frame = overlapped_module.file_frame + file_frame_offset,
                                             .file_name = overlapped_module.file_name});
         }
     }
