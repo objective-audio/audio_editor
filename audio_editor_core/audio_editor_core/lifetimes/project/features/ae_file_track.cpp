@@ -52,6 +52,10 @@ void file_track::set_module_name_and_notify(time::range const &range, std::strin
     }
 }
 
+std::optional<time::range> file_track::total_range() const {
+    return file_track_utils::total_range(this->_modules);
+}
+
 std::optional<file_module> file_track::module_at(frame_index_t const frame) const {
     return file_track_utils::module(this->_modules, frame);
 }

@@ -24,6 +24,7 @@ struct file_track final : jumpable_on_jumper {
     void erase_module_and_notify(file_module const &);
     void set_module_name_and_notify(time::range const &, std::string const &);
 
+    std::optional<time::range> total_range() const;
     std::optional<file_module> module_at(frame_index_t const) const;
     std::optional<file_module> previous_module_at(frame_index_t const) const;
     std::optional<file_module> next_module_at(frame_index_t const) const;

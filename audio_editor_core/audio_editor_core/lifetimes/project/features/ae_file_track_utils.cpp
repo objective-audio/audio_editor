@@ -9,6 +9,20 @@
 using namespace yas;
 using namespace yas::ae;
 
+std::optional<time::range> file_track_utils::total_range(file_track_module_map_t const &modules) {
+    std::optional<time::range> result{std::nullopt};
+
+    for (auto const &pair : modules) {
+        if (result.has_value()) {
+            result = result->merged(pair.first);
+        } else {
+            result = pair.first;
+        }
+    }
+
+    return result;
+}
+
 std::optional<file_module> file_track_utils::module(file_track_module_map_t const &modules, frame_index_t const frame) {
     for (auto const &pair : modules) {
         if (pair.first.is_contain(frame)) {
