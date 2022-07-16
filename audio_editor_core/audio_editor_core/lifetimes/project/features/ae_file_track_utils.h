@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_file_track_types.h>
 
 namespace yas::ae::file_track_utils {
+[[nodiscard]] std::optional<time::range> total_range(file_track_module_map_t const &);
 [[nodiscard]] std::optional<file_module> module(file_track_module_map_t const &, frame_index_t const);
 [[nodiscard]] std::optional<file_module> first_module(file_track_module_map_t const &);
 [[nodiscard]] std::optional<file_module> last_module(file_track_module_map_t const &);
