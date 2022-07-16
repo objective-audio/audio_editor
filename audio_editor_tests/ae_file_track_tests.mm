@@ -407,40 +407,40 @@ using namespace yas::ae;
 - (void)test_overwrite_module_middle_cropped {
     auto const track = file_track::make_shared();
 
-    file_module const module1{.name = "base", .range = {0, 4}, .file_frame = 0};
+    file_module const module1{.name = "base", .range = {10, 4}, .file_frame = 0};
 
     track->revert_modules_and_notify({module1});
 
-    track->overwrite_module({.name = "overwrite", .range = {1, 2}, .file_frame = 100});
+    track->overwrite_module({.name = "overwrite", .range = {11, 2}, .file_frame = 100});
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertTrue(modules.at(time::range{0, 1}).is_equal_location(file_module{.range = {0, 1}, .file_frame = 0}));
-    XCTAssertEqual(modules.at(time::range{0, 1}).name, "base");
-    XCTAssertTrue(modules.at(time::range{1, 2}).is_equal_location(file_module{.range = {1, 2}, .file_frame = 100}));
-    XCTAssertEqual(modules.at(time::range{1, 2}).name, "overwrite");
-    XCTAssertTrue(modules.at(time::range{3, 1}).is_equal_location(file_module{.range = {3, 1}, .file_frame = 3}));
-    XCTAssertEqual(modules.at(time::range{3, 1}).name, "base");
+    XCTAssertTrue(modules.at(time::range{10, 1}).is_equal_location(file_module{.range = {10, 1}, .file_frame = 0}));
+    XCTAssertEqual(modules.at(time::range{10, 1}).name, "base");
+    XCTAssertTrue(modules.at(time::range{11, 2}).is_equal_location(file_module{.range = {11, 2}, .file_frame = 100}));
+    XCTAssertEqual(modules.at(time::range{11, 2}).name, "overwrite");
+    XCTAssertTrue(modules.at(time::range{13, 1}).is_equal_location(file_module{.range = {13, 1}, .file_frame = 3}));
+    XCTAssertEqual(modules.at(time::range{13, 1}).name, "base");
 }
 
 - (void)test_overwrite_module_edge_cropped {
     auto const track = file_track::make_shared();
 
-    file_module const module1{.name = "base_1", .range = {0, 3}, .file_frame = 0};
-    file_module const module2{.name = "base_2", .range = {3, 3}, .file_frame = 3};
+    file_module const module1{.name = "base_1", .range = {100, 3}, .file_frame = 0};
+    file_module const module2{.name = "base_2", .range = {103, 3}, .file_frame = 3};
 
     track->revert_modules_and_notify({module1, module2});
 
-    track->overwrite_module({.name = "overwrite", .range = {2, 2}, .file_frame = 200});
+    track->overwrite_module({.name = "overwrite", .range = {102, 2}, .file_frame = 200});
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertTrue(modules.at(time::range{0, 2}).is_equal_location(file_module{.range = {0, 2}, .file_frame = 0}));
-    XCTAssertEqual(modules.at(time::range{0, 2}).name, "base_1");
-    XCTAssertTrue(modules.at(time::range{2, 2}).is_equal_location(file_module{.range = {2, 2}, .file_frame = 200}));
-    XCTAssertEqual(modules.at(time::range{2, 2}).name, "overwrite");
-    XCTAssertTrue(modules.at(time::range{4, 2}).is_equal_location(file_module{.range = {4, 2}, .file_frame = 4}));
-    XCTAssertEqual(modules.at(time::range{4, 2}).name, "base_2");
+    XCTAssertTrue(modules.at(time::range{100, 2}).is_equal_location(file_module{.range = {100, 2}, .file_frame = 0}));
+    XCTAssertEqual(modules.at(time::range{100, 2}).name, "base_1");
+    XCTAssertTrue(modules.at(time::range{102, 2}).is_equal_location(file_module{.range = {102, 2}, .file_frame = 200}));
+    XCTAssertEqual(modules.at(time::range{102, 2}).name, "overwrite");
+    XCTAssertTrue(modules.at(time::range{104, 2}).is_equal_location(file_module{.range = {104, 2}, .file_frame = 4}));
+    XCTAssertEqual(modules.at(time::range{104, 2}).name, "base_2");
 }
 
 - (void)test_move_one_module {
