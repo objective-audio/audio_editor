@@ -16,6 +16,8 @@ struct pasteboard final {
     [[nodiscard]] std::optional<pasting_file_module> file_module() const;
     void set_file_module(pasting_file_module const &);
 
+    [[nodiscard]] std::optional<pasting_value> const &value() const;
+    void revert_value(std::optional<pasting_value> const &);
     [[nodiscard]] std::string data() const;
     void revert_data(std::string const &);
 
