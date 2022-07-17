@@ -18,7 +18,7 @@ struct project_action_sender final {
     project_action_sender(window_lifetime_id const &, action_sender *);
 
     void send(action const &);
-    void send(action_name const &, std::string const &value = "");
+    void send(action_name const &, std::optional<action_value> &&value = std::nullopt);
     void send(ae::key const);
 
    private:
