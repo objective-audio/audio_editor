@@ -96,7 +96,7 @@ database_updater::database_updater(file_track *file_track, marker_pool *marker_p
         ->observe_event([this](pasteboard_event const &event) {
             switch (event) {
                 case pasteboard_event::file_module:
-                    this->_database->set_pasting_data(this->_pasteboard->data());
+                    this->_database->set_pasting_value(this->_pasteboard->value());
                     break;
                 case pasteboard_event::fetched:
                 case pasteboard_event::reverted:
