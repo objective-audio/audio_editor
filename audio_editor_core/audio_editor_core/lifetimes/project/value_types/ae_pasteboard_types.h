@@ -10,6 +10,10 @@
 #include <variant>
 
 namespace yas::ae {
+enum class pasting_kind {
+    file_module,
+};
+
 enum class pasteboard_event {
     fetched,
     file_module,
