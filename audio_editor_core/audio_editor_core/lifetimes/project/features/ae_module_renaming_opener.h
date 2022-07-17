@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_common_types.h>
+
 #include <memory>
 
 namespace yas::ae {
@@ -17,7 +19,7 @@ struct module_renaming_opener final {
     module_renaming_opener(project_modal_lifecycle *, editing_status const *);
 
     [[nodiscard]] bool can_begin_module_renaming() const;
-    void begin_module_renaming(std::string const &range);
+    void begin_module_renaming(time::range const &range);
 
    private:
     project_modal_lifecycle *const _lifecycle;

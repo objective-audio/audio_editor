@@ -96,7 +96,7 @@ using namespace yas::ae;
                     switch (lifetime->content.kind) {
                         case sheet_kind::module_name:
                             [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id
-                                                              value:lifetime->content.value];
+                                                              range:lifetime->content.range_value()];
                             break;
                     }
                 } break;
@@ -309,14 +309,8 @@ using namespace yas::ae;
     }];
 }
 
-- (void)showModuleNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id value:(std::string const &)value {
-    auto const range = to_time_range(value);
-    if (!range.has_value()) {
-        assertion_failure_if_not_test();
-        return;
-    }
-
-    auto *const vc = [AEModuleNameViewController instantiateWithSheetLifetimeId:lifetime_id moduleRange:range.value()];
+- (void)showModuleNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id range:(time::range const &)range {
+    auto *const vc = [AEModuleNameViewController instantiateWithSheetLifetimeId:lifetime_id moduleRange:range];
 
     [self presentViewControllerAsSheet:vc];
 }
