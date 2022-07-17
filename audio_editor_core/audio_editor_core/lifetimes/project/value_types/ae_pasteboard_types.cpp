@@ -50,6 +50,15 @@ std::optional<pasting_file_module> pasting_file_module::make_value(std::string c
     return std::nullopt;
 }
 
+bool pasting_file_module::operator==(pasting_file_module const &rhs) const {
+    return this->name == rhs.name && this->file_frame == rhs.file_frame && this->range == rhs.range &&
+           this->file_name == rhs.file_name;
+}
+
+bool pasting_file_module::operator!=(pasting_file_module const &rhs) const {
+    return !(*this == rhs);
+}
+
 std::string yas::to_data(std::optional<ae::pasting_value> const &value) {
     if (value.has_value()) {
         auto const &pasting_value = value.value();

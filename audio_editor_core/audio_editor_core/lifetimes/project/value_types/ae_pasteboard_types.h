@@ -29,6 +29,9 @@ struct pasting_file_module final {
     std::string data() const;
 
     static std::optional<pasting_file_module> make_value(std::string const &);
+
+    bool operator==(pasting_file_module const &) const;
+    bool operator!=(pasting_file_module const &) const;
 };
 
 using pasting_value = std::variant<pasting_file_module>;
