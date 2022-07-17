@@ -11,7 +11,7 @@ using namespace yas;
 using namespace yas::ae;
 using namespace yas::ae::pasteboard_constants;
 
-std::string pasting_file_module::data() const {
+std::string pasting_file_module::json_string() const {
     assert(!this->file_name.empty());
     json_map map{{file_module_key::kind, json_value{file_module_kind::value}},
                  {file_module_key::name, json_value{this->name}},
@@ -59,20 +59,20 @@ bool pasting_file_module::operator!=(pasting_file_module const &rhs) const {
     return !(*this == rhs);
 }
 
-std::string yas::to_data(std::optional<ae::pasting_value> const &value) {
+std::string yas::to_json_string(std::optional<ae::pasting_value> const &value) {
     if (value.has_value()) {
         auto const &pasting_value = value.value();
 
         if (std::holds_alternative<ae::pasting_file_module>(pasting_value)) {
-            return std::get<ae::pasting_file_module>(pasting_value).data();
+            return std::get<ae::pasting_file_module>(pasting_value).json_string();
         }
     }
 
     return "";
 }
 
-std::optional<ae::pasting_value> yas::to_pasting_value(std::string const &data) {
-    if (auto file_module = pasting_file_module::make_value(data)) {
+std::optional<ae::pasting_value> yas::to_pasting_value(std::string const &json_string) {
+    if (auto file_module = pasting_file_module::make_value(json_string)) {
         return file_module;
     } else {
         return std::nullopt;

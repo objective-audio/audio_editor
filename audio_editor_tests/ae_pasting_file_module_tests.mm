@@ -19,7 +19,7 @@ using namespace yas::ae;
     pasting_file_module const module{
         .name = "test-name-1", .file_frame = -1, .range = {2, 3}, .file_name = "test-file-name-1"};
 
-    XCTAssertEqual(module.data(),
+    XCTAssertEqual(module.json_string(),
                    "{\"frame\":2,\"kind\":\"file_module\",\"length\":3,\"file_name\":\"test-file-name-1\","
                    "\"name\":\"test-name-1\",\"file_frame\":-1}");
 }

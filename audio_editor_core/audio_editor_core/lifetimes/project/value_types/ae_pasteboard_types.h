@@ -26,7 +26,7 @@ struct pasting_file_module final {
     time::range range;
     std::string file_name;
 
-    std::string data() const;
+    std::string json_string() const;
 
     static std::optional<pasting_file_module> make_value(std::string const &);
 
@@ -38,8 +38,8 @@ using pasting_value = std::variant<pasting_file_module>;
 }  // namespace yas::ae
 
 namespace yas {
-std::string to_data(std::optional<ae::pasting_value> const &);
-std::optional<ae::pasting_value> to_pasting_value(std::string const &);
+std::string to_json_string(std::optional<ae::pasting_value> const &);
+std::optional<ae::pasting_value> to_pasting_value(std::string const &json_string);
 
 std::string to_string(ae::pasting_file_module const &);
 }  // namespace yas
