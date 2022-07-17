@@ -16,20 +16,41 @@ pasteboard::pasteboard()
 }
 
 std::optional<pasting_file_module> pasteboard::file_module() const {
-    return pasting_file_module::make_value(this->_data);
+    if (this->_value.has_value()) {
+        auto const &pasting_value = this->_value.value();
+
+        if (std::holds_alternative<pasting_file_module>(pasting_value)) {
+            return std::get<pasting_file_module>(pasting_value);
+        }
+    }
+
+    return std::nullopt;
 }
 
 void pasteboard::set_file_module(pasting_file_module const &module) {
-    this->_data = module.data();
+    this->_value = module;
     this->_event_fetcher->push(pasteboard_event::file_module);
 }
 
-std::string const &pasteboard::data() const {
-    return this->_data;
+std::string pasteboard::data() const {
+    if (this->_value.has_value()) {
+        auto const &pasting_value = this->_value.value();
+
+        if (std::holds_alternative<pasting_file_module>(pasting_value)) {
+            return std::get<pasting_file_module>(pasting_value).data();
+        }
+    }
+
+    return "";
 }
 
 void pasteboard::revert_data(std::string const &data) {
-    this->_data = data;
+    if (auto file_module = pasting_file_module::make_value(data)) {
+        this->_value = file_module;
+    } else {
+        this->_value = std::nullopt;
+    }
+
     this->_event_fetcher->push(pasteboard_event::reverted);
 }
 
