@@ -62,6 +62,14 @@ std::string yas::to_data(std::optional<ae::pasting_value> const &value) {
     return "";
 }
 
+std::optional<ae::pasting_value> yas::to_pasting_value(std::string const &data) {
+    if (auto file_module = pasting_file_module::make_value(data)) {
+        return file_module;
+    } else {
+        return std::nullopt;
+    }
+}
+
 std::string yas::to_string(ae::pasting_file_module const &module) {
     return "{name:" + module.name + ", file_frame:" + std::to_string(module.file_frame) +
            ", range:" + to_string(module.range) + ", file_name:" + module.file_name + "}";

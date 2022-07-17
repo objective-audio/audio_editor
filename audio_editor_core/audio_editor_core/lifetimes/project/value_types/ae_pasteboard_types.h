@@ -36,6 +36,8 @@ using pasting_value = std::variant<pasting_file_module>;
 
 namespace yas {
 std::string to_data(std::optional<ae::pasting_value> const &);
+std::optional<ae::pasting_value> to_pasting_value(std::string const &);
+
 std::string to_string(ae::pasting_file_module const &);
 }  // namespace yas
 

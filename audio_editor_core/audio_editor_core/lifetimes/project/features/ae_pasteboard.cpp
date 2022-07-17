@@ -41,16 +41,6 @@ void pasteboard::revert_value(std::optional<pasting_value> const &value) {
     this->_event_fetcher->push(pasteboard_event::reverted);
 }
 
-void pasteboard::revert_data(std::string const &data) {
-    if (auto file_module = pasting_file_module::make_value(data)) {
-        this->_value = file_module;
-    } else {
-        this->_value = std::nullopt;
-    }
-
-    this->_event_fetcher->push(pasteboard_event::reverted);
-}
-
 observing::syncable pasteboard::observe_event(std::function<void(pasteboard_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }
