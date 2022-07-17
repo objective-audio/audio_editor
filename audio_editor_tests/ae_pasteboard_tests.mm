@@ -26,14 +26,17 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), pasteboard_event::fetched);
 
-    XCTAssertEqual(pasteboard->data(), "");
+    XCTAssertFalse(pasteboard->value().has_value());
 
-    pasteboard->revert_data("test_data");
+    pasting_file_module const module{
+        .name = "test-name", .file_name = "test-file-name", .range = {1, 2}, .file_frame = 3};
+
+    pasteboard->revert_value(module);
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), pasteboard_event::reverted);
 
-    XCTAssertEqual(pasteboard->data(), "test_data");
+    XCTAssertEqual(pasteboard->value(), pasting_value(module));
 
     canceller->cancel();
 }
