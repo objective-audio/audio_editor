@@ -23,8 +23,8 @@ void project_action_sender::send(action const &action) {
     this->_action_sender->send(action, action_id{this->_window_lifetime_id});
 }
 
-void project_action_sender::send(action_name const &name, std::string const &value) {
-    this->send(action{name, value});
+void project_action_sender::send(action_name const &name, std::optional<action_value> &&value) {
+    this->send(action{name, std::move(value)});
 }
 
 void project_action_sender::send(ae::key const key) {

@@ -62,55 +62,55 @@ std::optional<action_id> project_receiver::receivable_id() const {
 std::optional<ae::action> project_receiver::to_action(ae::key const &key) const {
     switch (key) {
         case key::space:
-            return action{editing_action_name::toggle_play, ""};
+            return action{editing_action_name::toggle_play, std::nullopt};
         case key::del:
-            return action{editing_action_name::erase, ""};
+            return action{editing_action_name::erase, std::nullopt};
         case key::a:
-            return action{editing_action_name::drop_head, ""};
+            return action{editing_action_name::drop_head, std::nullopt};
         case key::s:
-            return action{editing_action_name::split, ""};
+            return action{editing_action_name::split, std::nullopt};
         case key::d:
-            return action{editing_action_name::drop_tail, ""};
+            return action{editing_action_name::drop_tail, std::nullopt};
         case key::n:
-            return action{editing_action_name::rotate_nudging_next_unit, ""};
+            return action{editing_action_name::rotate_nudging_next_unit, std::nullopt};
         case key::shift_n:
-            return action{editing_action_name::rotate_nudging_previous_unit, ""};
+            return action{editing_action_name::rotate_nudging_previous_unit, std::nullopt};
         case key::f:
-            return action{editing_action_name::rotate_timing_fraction, ""};
+            return action{editing_action_name::rotate_timing_fraction, std::nullopt};
         case key::t:
-            return action{editing_action_name::begin_time_editing, ""};
+            return action{editing_action_name::begin_time_editing, std::nullopt};
         case key::left_bracket:
-            return action{editing_action_name::set_begin_edge, ""};
+            return action{editing_action_name::set_begin_edge, std::nullopt};
         case key::right_bracket:
-            return action{editing_action_name::set_end_edge, ""};
+            return action{editing_action_name::set_end_edge, std::nullopt};
         case key::left:
-            return action{editing_action_name::nudge_previous, ""};
+            return action{editing_action_name::nudge_previous, std::nullopt};
         case key::right:
-            return action{editing_action_name::nudge_next, ""};
+            return action{editing_action_name::nudge_next, std::nullopt};
         case key::shift_left:
-            return action{editing_action_name::nudge_previous_more, ""};
+            return action{editing_action_name::nudge_previous_more, std::nullopt};
         case key::shift_right:
-            return action{editing_action_name::nudge_next_more, ""};
+            return action{editing_action_name::nudge_next_more, std::nullopt};
         case key::num_0:
-            return action{editing_action_name::return_to_zero, ""};
+            return action{editing_action_name::return_to_zero, std::nullopt};
         case key::num_1:
-            return action{editing_action_name::go_to_marker, "0"};
+            return action{editing_action_name::go_to_marker, 0};
         case key::num_2:
-            return action{editing_action_name::go_to_marker, "1"};
+            return action{editing_action_name::go_to_marker, 1};
         case key::num_3:
-            return action{editing_action_name::go_to_marker, "2"};
+            return action{editing_action_name::go_to_marker, 2};
         case key::num_4:
-            return action{editing_action_name::go_to_marker, "3"};
+            return action{editing_action_name::go_to_marker, 3};
         case key::num_5:
-            return action{editing_action_name::go_to_marker, "4"};
+            return action{editing_action_name::go_to_marker, 4};
         case key::num_6:
-            return action{editing_action_name::go_to_marker, "5"};
+            return action{editing_action_name::go_to_marker, 5};
         case key::num_7:
-            return action{editing_action_name::go_to_marker, "6"};
+            return action{editing_action_name::go_to_marker, 6};
         case key::num_8:
-            return action{editing_action_name::go_to_marker, "7"};
+            return action{editing_action_name::go_to_marker, 7};
         case key::num_9:
-            return action{editing_action_name::go_to_marker, "8"};
+            return action{editing_action_name::go_to_marker, 8};
 
         case key::esc:
         case key::plus:
