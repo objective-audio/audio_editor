@@ -7,7 +7,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-action::action(action_name const name, std::string const &value) : name(name), value(value) {
+action::action(action_name const name, std::optional<action_value> &&value) : name(name), value(std::move(value)) {
+}
+
+int64_t const &action::integer_value() const {
+    return std::get<int64_t>(this->value.value());
+}
+
+std::string const &action::string_value() const {
+    return std::get<std::string>(this->value.value());
 }
 
 ae::action_name_kind yas::to_kind(ae::action_name const &scope) {

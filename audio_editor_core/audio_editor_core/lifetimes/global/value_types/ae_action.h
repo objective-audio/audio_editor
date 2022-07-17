@@ -68,12 +68,16 @@ enum class action_name_kind {
     time_editing,
 };
 
+using action_value = std::variant<int64_t, std::string>;
+
 struct action {
     action_name name;
-    std::string value = "";
+    std::optional<action_value> value;
 
-    action(action_name const name, std::string const &value);
+    action(action_name const name, std::optional<action_value> &&value);
 
+    int64_t const &integer_value() const;
+    std::string const &string_value() const;
     // ae_test_utilsにテスト用としてoperator==が定義されている
 };
 }  // namespace yas::ae

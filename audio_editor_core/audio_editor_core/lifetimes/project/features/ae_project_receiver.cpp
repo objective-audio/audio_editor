@@ -191,7 +191,7 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_jumper->return_to_zero();
                             break;
                         case editing_action_name::go_to_marker:
-                            this->_jumper->go_to_marker(std::stoi(action.value));
+                            this->_jumper->go_to_marker(action.integer_value());
                             break;
                         case editing_action_name::undo:
                             this->_reverter->undo();
@@ -206,13 +206,13 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_import_interactor->select_file_for_import();
                             break;
                         case editing_action_name::import_from_file:
-                            this->_import_interactor->import_from_file(url::file_url(action.value));
+                            this->_import_interactor->import_from_file(url::file_url(action.string_value()));
                             break;
                         case editing_action_name::select_file_for_export:
                             this->_export_interactor->select_file_for_export();
                             break;
                         case editing_action_name::export_to_file:
-                            this->_export_interactor->export_to_file(url::file_url(action.value));
+                            this->_export_interactor->export_to_file(url::file_url(action.string_value()));
                             break;
                         case editing_action_name::cut:
                             this->_editor->cut();
@@ -224,7 +224,7 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_editor->paste();
                             break;
                         case editing_action_name::begin_module_renaming:
-                            this->_module_renaming_opener->begin_module_renaming(action.value);
+                            this->_module_renaming_opener->begin_module_renaming(action.string_value());
                             break;
 
                         case editing_action_name::begin_time_editing:
@@ -290,7 +290,7 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                 case editing_action_name::return_to_zero:
                     return to_state(this->_jumper->can_return_to_zero());
                 case editing_action_name::go_to_marker:
-                    return to_state(this->_jumper->can_go_to_marker(std::stoi(action.value)));
+                    return to_state(this->_jumper->can_go_to_marker(action.integer_value()));
 
                 case editing_action_name::undo:
                     return to_state(this->_reverter->can_undo());

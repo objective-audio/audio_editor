@@ -105,7 +105,7 @@ void time_editor_receiver::receive(ae::action const &action) const {
                             this->_editor->move_to_next_unit();
                             break;
                         case time_editing_action_name::input_time:
-                            this->_editor->input_number(std::stoi(action.value));
+                            this->_editor->input_number(static_cast<uint32_t>(action.integer_value()));
                             break;
                         case time_editing_action_name::delete_time:
                             this->_editor->delete_number();
@@ -123,7 +123,7 @@ void time_editor_receiver::receive(ae::action const &action) const {
                             this->_editor->change_sign_to_minus();
                             break;
                         case time_editing_action_name::select_time_unit:
-                            this->_editor->set_unit_idx(std::stoi(action.value));
+                            this->_editor->set_unit_idx(action.integer_value());
                             break;
                     }
                 } break;
