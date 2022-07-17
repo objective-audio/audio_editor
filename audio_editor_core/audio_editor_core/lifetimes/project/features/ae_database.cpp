@@ -76,19 +76,15 @@ void database::update_module_detail(file_module const &file_module) {
     }
 }
 
-void database::set_pasting_data(std::string const &data) {
+void database::set_pasting_value(std::optional<ae::pasting_value> const &value) {
     if (auto const &subject = this->_pasting_subject) {
         auto subject_value = subject.value();
         subject_value.remove();
     }
 
-    this->_pasting_subject.emplace(db_pasting_subject::create(this->_manager, data));
+    this->_pasting_subject.emplace(db_pasting_subject::create(this->_manager, to_json_string(value)));
 
     this->_save();
-}
-
-void database::set_pasting_value(std::optional<ae::pasting_value> const &value) {
-    this->set_pasting_data(to_data(value));
 }
 
 void database::add_marker(marker const &marker) {
