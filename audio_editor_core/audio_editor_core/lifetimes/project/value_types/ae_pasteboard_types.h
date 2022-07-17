@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_common_types.h>
 
 #include <string>
+#include <variant>
 
 namespace yas::ae {
 enum class pasteboard_event {
@@ -25,6 +26,8 @@ struct pasting_file_module final {
 
     static std::optional<pasting_file_module> make_value(std::string const &);
 };
+
+using pasting_value = std::variant<pasting_file_module>;
 }  // namespace yas::ae
 
 namespace yas {
