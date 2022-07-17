@@ -56,7 +56,7 @@ reverter::reverter(database *database, file_track *file_track, marker_pool *mark
                 this->_edge_holder->revert_edge(ae::edge::zero());
             }
 
-            this->_pasteboard->revert_value(to_pasting_value(this->_database->pasting_data()));
+            this->_pasteboard->revert_value(this->_database->pasting_value());
         })
         .end()
         ->add_to(this->_pool);

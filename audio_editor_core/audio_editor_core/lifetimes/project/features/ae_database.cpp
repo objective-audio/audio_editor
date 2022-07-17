@@ -41,14 +41,6 @@ std::optional<db_edge> const &database::edge() const {
     return this->_edge;
 }
 
-std::string const database::pasting_data() const {
-    if (auto const &subject = this->_pasting_subject) {
-        return subject.value().data();
-    } else {
-        return "";
-    }
-}
-
 std::optional<pasting_value> database::pasting_value() const {
     if (auto const &subject = this->_pasting_subject) {
         return to_pasting_value(subject.value().data());

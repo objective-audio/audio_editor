@@ -25,7 +25,6 @@ struct database final : std::enable_shared_from_this<database> {
     [[nodiscard]] db_modules_map const &modules() const;
     [[nodiscard]] db_markers_map const &markers() const;
     [[nodiscard]] std::optional<db_edge> const &edge() const;
-    [[nodiscard]] std::string const pasting_data() const;
     [[nodiscard]] std::optional<pasting_value> pasting_value() const;
     [[nodiscard]] bool is_processing() const;
 
