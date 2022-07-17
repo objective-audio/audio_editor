@@ -18,6 +18,10 @@ std::string const &action::string_value() const {
     return std::get<std::string>(this->value.value());
 }
 
+time::range const &action::range_value() const {
+    return std::get<time::range>(this->value.value());
+}
+
 ae::action_name_kind yas::to_kind(ae::action_name const &scope) {
     using kind = ae::action_name_kind;
 

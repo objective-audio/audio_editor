@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action_id.h>
+#include <audio_editor_core/ae_common_types.h>
 
 #include <optional>
 #include <string>
@@ -68,7 +69,7 @@ enum class action_name_kind {
     time_editing,
 };
 
-using action_value = std::variant<int64_t, std::string>;
+using action_value = std::variant<int64_t, std::string, time::range>;
 
 struct action {
     action_name name;
@@ -78,6 +79,7 @@ struct action {
 
     int64_t const &integer_value() const;
     std::string const &string_value() const;
+    time::range const &range_value() const;
     // ae_test_utilsにテスト用としてoperator==が定義されている
 };
 }  // namespace yas::ae

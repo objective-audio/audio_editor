@@ -28,7 +28,7 @@ bool module_renaming_opener::can_begin_module_renaming() const {
     return true;
 }
 
-void module_renaming_opener::begin_module_renaming(std::string const &range) {
+void module_renaming_opener::begin_module_renaming(time::range const &range) {
     if (!this->can_begin_module_renaming()) {
         return;
     }

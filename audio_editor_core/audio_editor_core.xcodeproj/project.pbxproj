@@ -370,6 +370,7 @@
 		B6F4D98427B6027200AE7D5D /* ae_edge_holder_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F4D98327B6026F00AE7D5D /* ae_edge_holder_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6F5264A27925EAD00688339 /* ae_number_components.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6F5264827925EAD00688339 /* ae_number_components.cpp */; };
 		B6F5264B27925EAD00688339 /* ae_number_components.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F5264927925EAD00688339 /* ae_number_components.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6F639AB28842623002E55D4 /* ae_sheet_content.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6F639AA28842623002E55D4 /* ae_sheet_content.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -738,6 +739,7 @@
 		B6F4D98327B6026F00AE7D5D /* ae_edge_holder_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_edge_holder_types.h; sourceTree = "<group>"; };
 		B6F5264827925EAD00688339 /* ae_number_components.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_number_components.cpp; sourceTree = "<group>"; };
 		B6F5264927925EAD00688339 /* ae_number_components.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_number_components.h; sourceTree = "<group>"; };
+		B6F639AA28842623002E55D4 /* ae_sheet_content.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_sheet_content.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1537,6 +1539,7 @@
 			isa = PBXGroup;
 			children = (
 				B68D821A2837CB2B00C2FC23 /* ae_sheet_content.h */,
+				B6F639AA28842623002E55D4 /* ae_sheet_content.cpp */,
 			);
 			path = value_types;
 			sourceTree = "<group>";
@@ -2017,6 +2020,7 @@
 				B6A12388278947A200F31B31 /* ae_time_presenter.cpp in Sources */,
 				B62EF82E27C9F85600A27948 /* ae_hierarchy.cpp in Sources */,
 				B69C68A22670F5BF00C1083F /* ae_ui_button.mm in Sources */,
+				B6F639AB28842623002E55D4 /* ae_sheet_content.cpp in Sources */,
 				B68483E927C4944100792D17 /* ae_action_utils.cpp in Sources */,
 				B6B2D78928687B6E008DF3F6 /* ae_project_setup_dialog_receiver.cpp in Sources */,
 				B61883F1287962A1006CF5AD /* ae_project_launch_lifetime.cpp in Sources */,
