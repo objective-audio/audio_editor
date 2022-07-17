@@ -26,13 +26,14 @@ struct database final : std::enable_shared_from_this<database> {
     [[nodiscard]] db_markers_map const &markers() const;
     [[nodiscard]] std::optional<db_edge> const &edge() const;
     [[nodiscard]] std::string const pasting_data() const;
+    [[nodiscard]] std::optional<pasting_value> pasting_value() const;
     [[nodiscard]] bool is_processing() const;
 
     void add_module(file_module const &);
     void remove_module(time::range const &);
     void update_module_detail(file_module const &);
     void set_pasting_data(std::string const &);
-    void set_pasting_value(std::optional<pasting_value> const &);
+    void set_pasting_value(std::optional<ae::pasting_value> const &);
     void add_marker(marker const &);
     void remove_marker(frame_index_t const &);
     void set_edge(ae::edge const &);

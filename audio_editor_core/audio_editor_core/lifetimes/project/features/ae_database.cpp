@@ -49,6 +49,14 @@ std::string const database::pasting_data() const {
     }
 }
 
+std::optional<pasting_value> database::pasting_value() const {
+    if (auto const &subject = this->_pasting_subject) {
+        return to_pasting_value(subject.value().data());
+    } else {
+        return std::nullopt;
+    }
+}
+
 bool database::is_processing() const {
     return this->_processing_count > 0;
 }
@@ -87,7 +95,7 @@ void database::set_pasting_data(std::string const &data) {
     this->_save();
 }
 
-void database::set_pasting_value(std::optional<pasting_value> const &value) {
+void database::set_pasting_value(std::optional<ae::pasting_value> const &value) {
     this->set_pasting_data(to_data(value));
 }
 
