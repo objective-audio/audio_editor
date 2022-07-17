@@ -50,6 +50,18 @@ std::optional<pasting_file_module> pasting_file_module::make_value(std::string c
     return std::nullopt;
 }
 
+std::string yas::to_data(std::optional<ae::pasting_value> const &value) {
+    if (value.has_value()) {
+        auto const &pasting_value = value.value();
+
+        if (std::holds_alternative<ae::pasting_file_module>(pasting_value)) {
+            return std::get<ae::pasting_file_module>(pasting_value).data();
+        }
+    }
+
+    return "";
+}
+
 std::string yas::to_string(ae::pasting_file_module const &module) {
     return "{name:" + module.name + ", file_frame:" + std::to_string(module.file_frame) +
            ", range:" + to_string(module.range) + ", file_name:" + module.file_name + "}";

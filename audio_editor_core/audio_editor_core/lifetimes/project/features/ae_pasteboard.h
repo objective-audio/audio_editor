@@ -18,7 +18,6 @@ struct pasteboard final {
 
     [[nodiscard]] std::optional<pasting_value> const &value() const;
     void revert_value(std::optional<pasting_value> const &);
-    [[nodiscard]] std::string data() const;
     void revert_data(std::string const &);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(pasteboard_event const &)> &&);

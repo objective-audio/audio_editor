@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_marker.h>
+#include <audio_editor_core/ae_pasteboard_types.h>
 #include <cpp_utils/yas_delaying_caller.h>
 #include <cpp_utils/yas_url.h>
 
@@ -31,6 +32,7 @@ struct database final : std::enable_shared_from_this<database> {
     void remove_module(time::range const &);
     void update_module_detail(file_module const &);
     void set_pasting_data(std::string const &);
+    void set_pasting_value(std::optional<pasting_value> const &);
     void add_marker(marker const &);
     void remove_marker(frame_index_t const &);
     void set_edge(ae::edge const &);

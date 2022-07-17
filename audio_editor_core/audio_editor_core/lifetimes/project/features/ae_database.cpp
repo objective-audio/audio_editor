@@ -87,6 +87,10 @@ void database::set_pasting_data(std::string const &data) {
     this->_save();
 }
 
+void database::set_pasting_value(std::optional<pasting_value> const &value) {
+    this->set_pasting_data(to_data(value));
+}
+
 void database::add_marker(marker const &marker) {
     this->_markers.emplace(marker.frame, db_marker::create(this->_manager, marker));
     this->_save();
