@@ -11,12 +11,13 @@
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_root.h>
-#include <audio_editor_core/ae_ui_root_lifecycle.h>
-#include <audio_editor_core/ae_ui_root_lifetime.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
+#include <audio_editor_core/ae_ui_base_lifetime.hpp>
+#include <audio_editor_core/ae_ui_resource_lifecycle.hpp>
+#include <audio_editor_core/ae_ui_resource_lifetime.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -27,7 +28,8 @@ using namespace yas::ae;
 
 @implementation AEMetalViewController {
     window_lifetime_id _window_lifetime_id;
-    std::weak_ptr<ui_root_lifetime> _root_lifetime;
+    std::weak_ptr<ui_resource_lifetime> _resource_lifetime;
+    std::weak_ptr<ui_root> _root;
     std::weak_ptr<project_modal_lifecycle> _project_modal_lifecycle;
     std::weak_ptr<project_action_sender> _action_sender;
     observing::canceller_pool _pool;
@@ -45,21 +47,21 @@ using namespace yas::ae;
 - (void)viewDidDisappear {
     [super viewDidDisappear];
 
-    hierarchy::app_lifetime()->ui_root_lifecycle->remove_lifetime_for_window_lifetime_id(self->_window_lifetime_id);
+    hierarchy::app_lifetime()->ui_resource_lifecycle->remove_lifetime_for_window_lifetime_id(self->_window_lifetime_id);
 }
 
 - (void)setupWithWindowLifetimeID:(window_lifetime_id const &)lifetime_id {
-    auto const &ui_root_lifecycle = hierarchy::app_lifetime()->ui_root_lifecycle;
+    auto const &ui_resource_lifecycle = hierarchy::app_lifetime()->ui_resource_lifecycle;
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
 
     [self setupWithWindowLifetimeID:lifetime_id
-                    uiRootLifecycle:ui_root_lifecycle
+                uiResourceLifecycle:ui_resource_lifecycle
                    actionController:project_lifetime->action_sender
               projectModalLifecycle:project_lifetime->modal_lifecycle];
 }
 
 - (void)setupWithWindowLifetimeID:(window_lifetime_id const &)window_lifetime_id
-                  uiRootLifecycle:(std::shared_ptr<ae::ui_root_lifecycle> const &)ui_root_lifecycle
+              uiResourceLifecycle:(std::shared_ptr<ae::ui_resource_lifecycle> const &)ui_resource_lifecycle
                  actionController:(std::shared_ptr<project_action_sender> const &)action_sender
             projectModalLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)project_modal_lifecycle {
     self->_window_lifetime_id = window_lifetime_id;
@@ -68,8 +70,9 @@ using namespace yas::ae;
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
-    ui_root_lifecycle->add_lifetime(standard, self->_window_lifetime_id);
-    self->_root_lifetime = ui_root_lifecycle->lifetime_for_window_lifetime_id(self->_window_lifetime_id);
+    ui_resource_lifecycle->add_lifetime(standard, self->_window_lifetime_id);
+    self->_resource_lifetime = ui_resource_lifecycle->lifetime_for_window_lifetime_id(self->_window_lifetime_id);
+    self->_root = ui_hierarchy::base_lifetime_for_window_lifetime_id(self->_window_lifetime_id)->root;
 
     self->_action_sender = action_sender;
     self->_project_modal_lifecycle = project_modal_lifecycle;
@@ -212,8 +215,8 @@ using namespace yas::ae;
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     if (auto const action_name = [self actionNameForSelector:menuItem.action]) {
-        if (auto const ui_root_lifetime = self->_root_lifetime.lock()) {
-            return ui_root_lifetime->root->responds_to_action({action_name.value(), ""});
+        if (auto const root = self->_root.lock()) {
+            return root->responds_to_action({action_name.value(), ""});
         }
     }
     return NO;

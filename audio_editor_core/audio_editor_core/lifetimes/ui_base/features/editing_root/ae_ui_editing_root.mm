@@ -13,7 +13,6 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_modal_bg.h>
-#include <audio_editor_core/ae_ui_root_lifetime.h>
 #include <audio_editor_core/ae_ui_scroller.h>
 #include <audio_editor_core/ae_ui_time.h>
 #include <audio_editor_core/ae_ui_track.h>

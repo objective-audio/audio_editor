@@ -13,6 +13,7 @@ class system_url;
 class file_importer;
 class file_info_loader;
 class color;
+class ui_resource_lifecycle;
 class ui_root_lifecycle;
 class window_opener;
 class app_modal_lifecycle;
@@ -29,7 +30,7 @@ struct app_lifetime final {
                  std::shared_ptr<file_info_loader> const &, std::shared_ptr<color> const &,
                  std::shared_ptr<uuid_generator> const &, std::shared_ptr<id_generator> const &,
                  std::shared_ptr<window_lifecycle> const &, std::shared_ptr<app_modal_lifecycle> const &,
-                 std::shared_ptr<ui_root_lifecycle> const &, std::shared_ptr<window_opener> const &,
+                 std::shared_ptr<ui_resource_lifecycle> const &, std::shared_ptr<window_opener> const &,
                  std::shared_ptr<action_sender> const &);
 
     std::shared_ptr<worker> const worker;
@@ -43,7 +44,7 @@ struct app_lifetime final {
 
     std::shared_ptr<window_lifecycle> const window_lifecycle;
     std::shared_ptr<app_modal_lifecycle> const modal_lifecycle;
-    std::shared_ptr<ui_root_lifecycle> const ui_root_lifecycle;
+    std::shared_ptr<ui_resource_lifecycle> const ui_resource_lifecycle;
 
     std::shared_ptr<window_opener> const window_opener;
 

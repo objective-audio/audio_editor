@@ -12,7 +12,6 @@
 #include <audio_editor_core/ae_modules_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
-#include <audio_editor_core/ae_ui_root_lifetime.h>
 
 using namespace yas;
 using namespace yas::ae;

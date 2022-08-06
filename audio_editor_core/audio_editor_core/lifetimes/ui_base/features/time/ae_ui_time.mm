@@ -10,7 +10,6 @@
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
-#include <audio_editor_core/ae_ui_root_lifetime.h>
 #include <audio_editor_core/ae_ui_time_constants.h>
 #include <audio_editor_core/ae_ui_types.h>
 #include <cpp_utils/yas_fast_each.h>
