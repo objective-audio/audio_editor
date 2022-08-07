@@ -27,7 +27,7 @@ using namespace yas::ae;
     XCTAssertTrue(lifetime->color != nullptr);
 
     XCTAssertTrue(lifetime->window_lifecycle != nullptr);
-    XCTAssertTrue(lifetime->ui_root_lifecycle != nullptr);
+    XCTAssertTrue(lifetime->ui_resource_lifecycle != nullptr);
 }
 
 @end
