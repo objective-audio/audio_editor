@@ -15,21 +15,16 @@ class ui_edge;
 class display_space;
 
 struct ui_track final {
-    [[nodiscard]] static std::shared_ptr<ui_track> make_shared(window_lifetime_id const &,
-                                                               std::shared_ptr<ui::standard> const &,
-                                                               std::shared_ptr<display_space> const &,
-                                                               std::shared_ptr<ui_modules> const &);
+    [[nodiscard]] static std::shared_ptr<ui_track> make_shared(window_lifetime_id const &, ui_modules *);
 
-    ui_track(std::shared_ptr<ui::standard> const &, std::shared_ptr<display_space> const &,
-             std::shared_ptr<track_presenter> const &, std::shared_ptr<ui_modules> const &);
-
-    std::shared_ptr<ui::node> const node;
+    ui_track(std::shared_ptr<ui::standard> const &, display_space *, std::shared_ptr<track_presenter> const &,
+             ui_modules *);
 
    private:
     std::shared_ptr<track_presenter> const _presenter;
 
-    std::shared_ptr<display_space> const _display_space;
-    std::shared_ptr<ui_modules> const _modules;
+    display_space *const _display_space;
+    ui_modules *const _modules;
 
     observing::canceller_pool _pool;
 

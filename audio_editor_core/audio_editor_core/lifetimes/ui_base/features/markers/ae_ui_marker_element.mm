@@ -10,30 +10,30 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(args const &args,
-                                                                  std::shared_ptr<ui::standard> const &standard,
-                                                                  std::shared_ptr<ui::font_atlas> const &font_atlas) {
+std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetime_id const &lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
 
-    return std::shared_ptr<ui_marker_element>(
-        new ui_marker_element{standard, font_atlas, app_lifetime->color, std::move(args)});
+    return std::shared_ptr<ui_marker_element>(new ui_marker_element{resource_lifetime->standard, app_lifetime->color,
+                                                                    resource_lifetime->vertical_line_data,
+                                                                    resource_lifetime->triangle_data});
 }
 
 ui_marker_element::ui_marker_element(std::shared_ptr<ui::standard> const &standard,
-                                     std::shared_ptr<ui::font_atlas> const &font_atlas,
-                                     std::shared_ptr<ae::color> const &color, args const &args)
+                                     std::shared_ptr<ae::color> const &color,
+                                     std::shared_ptr<ui_mesh_data> const &vertical_line_data,
+                                     std::shared_ptr<ui_mesh_data> const &triangle_data)
     : node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
       _triangle_node(ui::node::make_shared()),
       _color(color) {
     auto const line_mesh =
-        ui::mesh::make_shared({.primitive_type = args.vertical_line_data->primitive_type},
-                              args.vertical_line_data->vertex_data, args.vertical_line_data->index_data, nullptr);
+        ui::mesh::make_shared({.primitive_type = vertical_line_data->primitive_type}, vertical_line_data->vertex_data,
+                              vertical_line_data->index_data, nullptr);
     this->_line_node->set_mesh(line_mesh);
 
-    auto const triangle_mesh =
-        ui::mesh::make_shared({.primitive_type = args.triangle_data->primitive_type}, args.triangle_data->vertex_data,
-                              args.triangle_data->index_data, nullptr);
+    auto const triangle_mesh = ui::mesh::make_shared({.primitive_type = triangle_data->primitive_type},
+                                                     triangle_data->vertex_data, triangle_data->index_data, nullptr);
     this->_triangle_node->set_mesh(triangle_mesh);
 
     this->node->add_sub_node(this->_line_node);

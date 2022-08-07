@@ -12,19 +12,17 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_track> ui_track::make_shared(window_lifetime_id const &window_lifetime_id,
-                                                std::shared_ptr<ui::standard> const &standard,
-                                                std::shared_ptr<display_space> const &display_space,
-                                                std::shared_ptr<ui_modules> const &modules) {
+std::shared_ptr<ui_track> ui_track::make_shared(window_lifetime_id const &window_lifetime_id, ui_modules *modules) {
     auto const presenter = track_presenter::make_shared(window_lifetime_id);
-    return std::make_shared<ui_track>(standard, display_space, presenter, modules);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+
+    return std::make_shared<ui_track>(resource_lifetime->standard, resource_lifetime->display_space.get(), presenter,
+                                      modules);
 }
 
-ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<display_space> const &display_space,
-                   std::shared_ptr<track_presenter> const &presenter, std::shared_ptr<ui_modules> const &modules)
-    : node(ui::node::make_shared()), _display_space(display_space), _presenter(presenter), _modules(modules) {
-    this->node->add_sub_node(this->_modules->node);
-
+ui_track::ui_track(std::shared_ptr<ui::standard> const &standard, display_space *display_space,
+                   std::shared_ptr<track_presenter> const &presenter, ui_modules *modules)
+    : _display_space(display_space), _presenter(presenter), _modules(modules) {
     presenter->observe_zooming_scale([this](auto const &) { this->_update_scale(); }).sync()->add_to(this->_pool);
 
     standard->view_look()

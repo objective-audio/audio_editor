@@ -13,18 +13,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(
-    window_lifetime_id const &window_lifetime_id, std::shared_ptr<ui::standard> const &standard,
-    std::shared_ptr<module_location_pool> const &location_pool,
-    std::shared_ptr<waveform_mesh_importer> const &importer) {
+std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(window_lifetime_id const &window_lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const presenter = module_waveforms_presenter::make_shared(location_pool, importer);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+    auto const presenter = module_waveforms_presenter::make_shared(window_lifetime_id);
 
-    return std::make_shared<ui_module_waveforms>(standard, app_lifetime->color, presenter);
+    return std::make_shared<ui_module_waveforms>(resource_lifetime->standard, app_lifetime->color.get(), presenter);
 }
 
-ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &standard,
-                                         std::shared_ptr<ae::color> const &color,
+ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &standard, ae::color *color,
                                          std::shared_ptr<module_waveforms_presenter> const &presenter)
     : node(ui::node::make_shared()), _presenter(presenter), _color(color) {
     this->_presenter

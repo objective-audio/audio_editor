@@ -6,14 +6,14 @@
 
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
+#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <cpp_utils/yas_url.h>
 
 namespace yas::ae {
 class waveform_mesh_importer;
 
 struct module_waveforms_presenter final {
-    [[nodiscard]] static std::shared_ptr<module_waveforms_presenter> make_shared(
-        std::shared_ptr<module_location_pool> const &, std::shared_ptr<waveform_mesh_importer> const &);
+    [[nodiscard]] static std::shared_ptr<module_waveforms_presenter> make_shared(window_lifetime_id const &);
 
     module_waveforms_presenter(std::shared_ptr<module_location_pool> const &,
                                std::shared_ptr<waveform_mesh_importer> const &);

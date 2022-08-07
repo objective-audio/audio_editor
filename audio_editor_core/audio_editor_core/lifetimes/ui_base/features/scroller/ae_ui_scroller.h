@@ -15,25 +15,15 @@ class ui_edge;
 class ui_markers;
 
 struct ui_scroller final {
-    [[nodiscard]] static std::shared_ptr<ui_scroller> make_shared(window_lifetime_id const &,
-                                                                  std::shared_ptr<ui::standard> const &,
-                                                                  std::shared_ptr<ui_track> const &,
-                                                                  std::shared_ptr<ui_edge> const &,
-                                                                  std::shared_ptr<ui_markers> const &);
+    [[nodiscard]] static std::shared_ptr<ui_scroller> make_shared(window_lifetime_id const &, ui::node *);
 
-    ui_scroller(std::shared_ptr<ui::standard> const &, std::shared_ptr<scroller_presenter> const &,
-                std::shared_ptr<scroll_gesture_controller> const &, std::shared_ptr<ui_track> const &,
-                std::shared_ptr<ui_edge> const &, std::shared_ptr<ui_markers> const &);
-
-    std::shared_ptr<ui::node> const node;
+    ui_scroller(std::shared_ptr<ui::standard> const &, ui::node *, std::shared_ptr<scroller_presenter> const &,
+                std::shared_ptr<scroll_gesture_controller> const &);
 
    private:
     std::shared_ptr<scroller_presenter> const _presenter;
     std::shared_ptr<scroll_gesture_controller> const _scroll_gesture_controller;
-    std::shared_ptr<ui::node> const _scrolling_node;
-    std::shared_ptr<ui_track> const _track;
-    std::shared_ptr<ui_edge> const _edge;
-    std::shared_ptr<ui_markers> const _markers;
+    ui::node *const _node;
 
     observing::canceller_pool _pool;
 };

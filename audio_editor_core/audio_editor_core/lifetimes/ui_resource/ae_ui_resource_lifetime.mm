@@ -25,6 +25,28 @@ std::shared_ptr<ui_mesh_data> make_vertical_line_data() {
     });
     return mesh_data;
 }
+
+std::shared_ptr<ui_mesh_data> make_triangle_data() {
+    auto triangle_data =
+        ui_mesh_data::make_shared(ui::primitive_type::triangle, ui::static_mesh_vertex_data::make_shared(3),
+                                  ui::static_mesh_index_data::make_shared(3));
+
+    triangle_data->vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
+        float const half_width = -5.0f;
+        float const height = 10.0f;
+        vertices[0].position = {0.0f, -height};
+        vertices[1].position = {-half_width, 0.0f};
+        vertices[2].position = {half_width, 0.0f};
+    });
+
+    triangle_data->index_data->write_once([](std::vector<ui::index2d_t> &indices) {
+        indices[0] = 0;
+        indices[1] = 1;
+        indices[2] = 2;
+    });
+
+    return triangle_data;
+}
 }
 
 ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &standard,
@@ -32,12 +54,15 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
     : standard(standard),
       window_lifetime_id(lifetime_id),
       texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
-      font_atlas_14(ui::font_atlas::make_shared(
+      normal_font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",
            .font_size = 14.0f,
            .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"},
           this->texture)),
+      time_font_atlas(ui::font_atlas::make_shared(
+          {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
       vertical_line_data(ui_resource_lifetime_utils::make_vertical_line_data()),
+      triangle_data(ui_resource_lifetime_utils::make_triangle_data()),
       display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
       keyboard(ae::keyboard::make_shared(standard->event_manager())),
       base_lifecycle(std::make_shared<ae::ui_base_lifecycle>(lifetime_id)) {

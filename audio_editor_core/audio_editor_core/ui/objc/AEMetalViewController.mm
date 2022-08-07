@@ -6,11 +6,11 @@
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
 #import <audio_editor_core/AEMetalView.h>
 #import <audio_editor_core/AEModuleNameViewController.h>
+#include <audio_editor_core/ae_event_handling_presenter.h>
 #include <audio_editor_core/ae_json_utils.h>
 #include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
-#include <audio_editor_core/ae_ui_root.h>
 #include <audio_editor_core/audio_editor_core_umbrella.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
@@ -29,7 +29,7 @@ using namespace yas::ae;
 @implementation AEMetalViewController {
     window_lifetime_id _window_lifetime_id;
     std::weak_ptr<ui_resource_lifetime> _resource_lifetime;
-    std::weak_ptr<ui_root> _root;
+    std::shared_ptr<event_handling_presenter> _event_handling_presenter;
     std::weak_ptr<project_modal_lifecycle> _project_modal_lifecycle;
     std::weak_ptr<project_action_sender> _action_sender;
     observing::canceller_pool _pool;
@@ -72,7 +72,7 @@ using namespace yas::ae;
 
     ui_resource_lifecycle->add_lifetime(standard, self->_window_lifetime_id);
     self->_resource_lifetime = ui_resource_lifecycle->lifetime_for_window_lifetime_id(self->_window_lifetime_id);
-    self->_root = ui_hierarchy::base_lifetime_for_window_lifetime_id(self->_window_lifetime_id)->root;
+    self->_event_handling_presenter = event_handling_presenter::make_shared(self->_window_lifetime_id);
 
     self->_action_sender = action_sender;
     self->_project_modal_lifecycle = project_modal_lifecycle;
@@ -215,9 +215,7 @@ using namespace yas::ae;
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
     if (auto const action_name = [self actionNameForSelector:menuItem.action]) {
-        if (auto const root = self->_root.lock()) {
-            return root->responds_to_action({action_name.value(), ""});
-        }
+        return self->_event_handling_presenter->responds_to_action({action_name.value(), ""});
     }
     return NO;
 }

@@ -15,40 +15,25 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_scroller> ui_scroller::make_shared(window_lifetime_id const &window_lifetime_id,
-                                                      std::shared_ptr<ui::standard> const &standard,
-                                                      std::shared_ptr<ui_track> const &track,
-                                                      std::shared_ptr<ui_edge> const &edge,
-                                                      std::shared_ptr<ui_markers> const &markers) {
+std::shared_ptr<ui_scroller> ui_scroller::make_shared(window_lifetime_id const &window_lifetime_id, ui::node *node) {
     auto const presenter = scroller_presenter::make_shared(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<ui_scroller>(standard, presenter, project_lifetime->scroll_gesture_controller, track, edge,
-                                         markers);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+
+    return std::make_shared<ui_scroller>(resource_lifetime->standard, node, presenter,
+                                         project_lifetime->scroll_gesture_controller);
 }
 
-ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard,
+ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard, ui::node *node,
                          std::shared_ptr<scroller_presenter> const &presenter,
-                         std::shared_ptr<scroll_gesture_controller> const &scroll_gesture_controller,
-                         std::shared_ptr<ui_track> const &track, std::shared_ptr<ui_edge> const &edge,
-                         std::shared_ptr<ui_markers> const &markers)
-    : node(ui::node::make_shared()),
-      _presenter(presenter),
-      _scroll_gesture_controller(scroll_gesture_controller),
-      _scrolling_node(ui::node::make_shared()),
-      _track(track),
-      _edge(edge),
-      _markers(markers) {
-    this->node->add_sub_node(this->_scrolling_node);
-    this->_scrolling_node->add_sub_node(this->_track->node);
-    this->_scrolling_node->add_sub_node(this->_edge->node);
-    this->_scrolling_node->add_sub_node(this->_markers->node);
-
+                         std::shared_ptr<scroll_gesture_controller> const &scroll_gesture_controller)
+    : _presenter(presenter), _scroll_gesture_controller(scroll_gesture_controller), _node(node) {
     standard->renderer()
         ->observe_will_render([this](auto const &) {
             auto const time = this->_presenter->current_position();
             auto const scale = this->_presenter->horizontal_zooming_scale();
             float const x = -time * ui_track_constants::standard_width_per_sec * scale;
-            this->_scrolling_node->set_position(ui::point{x, 0.0f});
+            this->_node->set_position(ui::point{x, 0.0f});
         })
         .end()
         ->add_to(this->_pool);

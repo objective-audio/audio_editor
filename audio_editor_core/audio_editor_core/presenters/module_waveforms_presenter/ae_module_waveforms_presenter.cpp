@@ -12,9 +12,10 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<module_waveforms_presenter> module_waveforms_presenter::make_shared(
-    std::shared_ptr<module_location_pool> const &location_pool,
-    std::shared_ptr<waveform_mesh_importer> const &importer) {
-    return std::make_shared<module_waveforms_presenter>(location_pool, importer);
+    window_lifetime_id const &lifetime_id) {
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
+    return std::make_shared<module_waveforms_presenter>(project_lifetime->module_location_pool,
+                                                        project_lifetime->waveforms_mesh_importer);
 }
 
 module_waveforms_presenter::module_waveforms_presenter(std::shared_ptr<module_location_pool> const &location_pool,
