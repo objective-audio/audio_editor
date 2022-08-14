@@ -12,7 +12,7 @@ using namespace yas::ae;
 using namespace yas::ae::db_constants;
 
 db::model database_utils::make_model() {
-    yas::version version{"0.0.1"};
+    yas::version version{"0.0.2"};
 
     db::entity_args module_entity{.name = module_name::entity,
                                   .attributes = {{.name = module_name::attribute::name,
@@ -41,7 +41,10 @@ db::model database_utils::make_model() {
                                   .attributes = {{.name = marker_name::attribute::frame,
                                                   .type = db::attribute_type::integer,
                                                   .default_value = db::value{0},
-                                                  .not_null = true}},
+                                                  .not_null = true},
+                                                 {.name = marker_name::attribute::name,
+                                                  .type = db::attribute_type::text,
+                                                  .default_value = db::value{""}}},
                                   .relations = {}};
 
     db::entity_args edge_entity{.name = edge_name::entity,

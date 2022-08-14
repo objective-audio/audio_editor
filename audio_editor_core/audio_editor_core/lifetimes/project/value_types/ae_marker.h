@@ -11,5 +11,6 @@ namespace yas::ae {
 struct marker final {
     identifier identifier;
     frame_index_t frame;
+    std::string name;
 };
 }  // namespace yas::ae
