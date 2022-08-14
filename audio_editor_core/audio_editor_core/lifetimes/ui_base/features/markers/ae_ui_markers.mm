@@ -3,7 +3,6 @@
 //
 
 #include "ae_ui_markers.h"
-#include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_markers_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
@@ -19,47 +18,22 @@ static std::size_t const reserving_interval = 10;
 }
 
 std::shared_ptr<ui_markers> ui_markers::make_shared(window_lifetime_id const &window_lifetime_id,
-                                                    std::shared_ptr<ae::display_space> const &display_space,
-                                                    std::shared_ptr<marker_location_pool> const &location_pool,
-                                                    std::shared_ptr<ui::standard> const &standard,
-                                                    std::shared_ptr<ui::font_atlas> const &font_atlas,
-                                                    std::shared_ptr<ui_mesh_data> const &vertical_line_data) {
-    auto const &app_lifetime = hierarchy::app_lifetime();
+                                                    std::shared_ptr<ui::node> const &node) {
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
-    auto const presenter = markers_presenter::make_shared(window_lifetime_id, display_space, location_pool);
-    auto const &color = app_lifetime->color;
-    return std::make_shared<ui_markers>(presenter, standard, font_atlas, color, vertical_line_data);
+    auto const presenter = markers_presenter::make_shared(window_lifetime_id, resource_lifetime->display_space,
+                                                          project_lifetime->marker_location_pool);
+    return std::make_shared<ui_markers>(window_lifetime_id, presenter, resource_lifetime->standard, node.get());
 }
 
-ui_markers::ui_markers(std::shared_ptr<markers_presenter> const &presenter,
-                       std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::font_atlas> const &font_atlas,
-                       std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_mesh_data> const &vertical_line_data)
-    : node(ui::node::make_shared()),
-      _standard(standard),
-      _font_atlas(font_atlas),
+ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
+                       std::shared_ptr<markers_presenter> const &presenter,
+                       std::shared_ptr<ui::standard> const &standard, ui::node *node)
+    : _window_lifetime_id(window_lifetime_id),
+      _node(node),
       _presenter(presenter),
-      _color(color),
-      _top_guide(standard->view_look()->view_layout_guide()->top()),
-      _vertical_line_data(vertical_line_data),
-      _triangle_data(ui_mesh_data::make_shared(ui::primitive_type::triangle,
-                                               ui::static_mesh_vertex_data::make_shared(3),
-                                               ui::static_mesh_index_data::make_shared(3))) {
-    this->node->set_batch(ui::batch::make_shared());
-
-    this->_triangle_data->vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
-        float const half_width = -5.0f;
-        float const height = 10.0f;
-        vertices[0].position = {0.0f, -height};
-        vertices[1].position = {-half_width, 0.0f};
-        vertices[2].position = {half_width, 0.0f};
-    });
-
-    this->_triangle_data->index_data->write_once([](std::vector<ui::index2d_t> &indices) {
-        indices[0] = 0;
-        indices[1] = 1;
-        indices[2] = 2;
-    });
-
+      _top_guide(standard->view_look()->view_layout_guide()->top()) {
     this->_presenter
         ->observe_locations([this](marker_location_pool_event const &event) {
             switch (event.type) {
@@ -124,17 +98,14 @@ void ui_markers::_set_count(std::size_t const location_count) {
     auto const prev_element_count = this->_elements.size();
 
     if (prev_element_count < location_count) {
-        ui_marker_element::args const args{.vertical_line_data = this->_vertical_line_data,
-                                           .triangle_data = this->_triangle_data};
-
         this->_elements.reserve(
             common_utils::reserving_count(location_count, ui_markers_constants::reserving_interval));
 
         auto each = make_fast_each(location_count - prev_element_count);
         while (yas_each_next(each)) {
-            auto element = ui_marker_element::make_shared(args, this->_standard, this->_font_atlas);
+            auto element = ui_marker_element::make_shared(this->_window_lifetime_id);
             element->node->set_is_enabled(false);
-            this->node->add_sub_node(element->node);
+            this->_node->add_sub_node(element->node);
             this->_elements.emplace_back(std::move(element));
         }
     } else if (location_count < prev_element_count) {

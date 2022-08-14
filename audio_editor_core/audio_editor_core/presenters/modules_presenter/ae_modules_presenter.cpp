@@ -15,13 +15,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<modules_presenter> modules_presenter::make_shared(
-    window_lifetime_id const &window_lifetime_id, std::shared_ptr<display_space> const &display_space,
-    std::shared_ptr<module_location_pool> const &location_pool) {
+std::shared_ptr<modules_presenter> modules_presenter::make_shared(window_lifetime_id const &window_lifetime_id,
+                                                                  std::shared_ptr<display_space> const &display_space) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<modules_presenter>(project_lifetime->project_format, window_lifetime->player,
-                                               project_lifetime->file_track, display_space, location_pool);
+                                               project_lifetime->file_track, display_space,
+                                               project_lifetime->module_location_pool);
 }
 
 modules_presenter::modules_presenter(project_format const &project_format, std::shared_ptr<player> const &player,

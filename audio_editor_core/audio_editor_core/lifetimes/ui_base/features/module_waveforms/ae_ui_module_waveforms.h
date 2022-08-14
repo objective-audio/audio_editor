@@ -16,11 +16,9 @@ class waveform_mesh_importer;
 class color;
 
 struct ui_module_waveforms final {
-    [[nodiscard]] static std::shared_ptr<ui_module_waveforms> make_shared(
-        window_lifetime_id const &, std::shared_ptr<ui::standard> const &,
-        std::shared_ptr<module_location_pool> const &, std::shared_ptr<waveform_mesh_importer> const &importer);
+    [[nodiscard]] static std::shared_ptr<ui_module_waveforms> make_shared(window_lifetime_id const &);
 
-    ui_module_waveforms(std::shared_ptr<ui::standard> const &, std::shared_ptr<ae::color> const &,
+    ui_module_waveforms(std::shared_ptr<ui::standard> const &, ae::color *,
                         std::shared_ptr<module_waveforms_presenter> const &);
 
     std::shared_ptr<ui::node> const node;
@@ -34,7 +32,7 @@ struct ui_module_waveforms final {
 
    private:
     std::shared_ptr<module_waveforms_presenter> const _presenter;
-    std::shared_ptr<ae::color> const _color;
+    ae::color *const _color;
     std::optional<float> _scale = std::nullopt;
 
     observing::canceller_pool _pool;

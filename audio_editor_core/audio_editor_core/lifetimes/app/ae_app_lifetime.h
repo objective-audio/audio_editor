@@ -14,7 +14,6 @@ class file_importer;
 class file_info_loader;
 class color;
 class ui_resource_lifecycle;
-class ui_root_lifecycle;
 class window_opener;
 class app_modal_lifecycle;
 class window_lifecycle;

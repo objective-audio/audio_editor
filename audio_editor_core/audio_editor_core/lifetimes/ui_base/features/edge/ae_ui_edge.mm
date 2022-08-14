@@ -13,24 +13,25 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_edge> ui_edge::make_shared(window_lifetime_id const &window_lifetime_id,
-                                              std::shared_ptr<ui_mesh_data> const &vertical_line_data,
-                                              std::shared_ptr<ae::display_space> const &display_space,
-                                              std::shared_ptr<ui::standard> const &standard,
-                                              std::shared_ptr<ui::font_atlas> const &font_atlas) {
-    ui_edge_element::args const args{.vertical_line_data = vertical_line_data};
+                                              std::shared_ptr<ui::node> const &node) {
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
-    auto const begin_edge = ui_edge_element::make_shared("BEGIN", args, standard, font_atlas);
-    auto const end_edge = ui_edge_element::make_shared("END", args, standard, font_atlas);
+    ui_edge_element::args const args{.vertical_line_data = resource_lifetime->vertical_line_data};
 
-    auto const presenter = edge_presenter::make_shared(window_lifetime_id, display_space);
-    return std::make_shared<ui_edge>(presenter, begin_edge, end_edge);
+    auto const begin_edge =
+        ui_edge_element::make_shared("BEGIN", args, resource_lifetime->standard, resource_lifetime->normal_font_atlas);
+    auto const end_edge =
+        ui_edge_element::make_shared("END", args, resource_lifetime->standard, resource_lifetime->normal_font_atlas);
+
+    auto const presenter = edge_presenter::make_shared(window_lifetime_id, resource_lifetime->display_space);
+    return std::make_shared<ui_edge>(presenter, begin_edge, end_edge, node);
 }
 
 ui_edge::ui_edge(std::shared_ptr<edge_presenter> const &presenter, std::shared_ptr<ui_edge_element> const &begin_edge,
-                 std::shared_ptr<ui_edge_element> const &end_edge)
-    : node(ui::node::make_shared()), _presenter(presenter), _begin_edge(begin_edge), _end_edge(end_edge) {
-    this->node->add_sub_node(this->_begin_edge->node);
-    this->node->add_sub_node(this->_end_edge->node);
+                 std::shared_ptr<ui_edge_element> const &end_edge, std::shared_ptr<ui::node> const &node)
+    : _presenter(presenter), _begin_edge(begin_edge), _end_edge(end_edge) {
+    node->add_sub_node(this->_begin_edge->node);
+    node->add_sub_node(this->_end_edge->node);
 
     this->_presenter
         ->observe_locations([this](edge_locations const &locations) {

@@ -13,22 +13,20 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_modal_bg> ui_modal_bg::make_shared(window_lifetime_id const &window_lifetime_id,
-                                                      std::shared_ptr<ui::standard> const &standard) {
+                                                      std::shared_ptr<ui::node> const &node) {
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<ui_modal_bg>(standard, app_lifetime->color, project_lifetime->modal_lifecycle,
-                                         project_lifetime->action_sender);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+    return std::make_shared<ui_modal_bg>(resource_lifetime->standard, node, app_lifetime->color.get(),
+                                         project_lifetime->modal_lifecycle, project_lifetime->action_sender);
 }
 
-ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ae::color> const &color,
-                         std::shared_ptr<project_modal_lifecycle> const &project_modal_lifecycle,
+ui_modal_bg::ui_modal_bg(std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::node> const &node,
+                         ae::color *color, std::shared_ptr<project_modal_lifecycle> const &project_modal_lifecycle,
                          std::shared_ptr<project_action_sender> const &action_sender)
-    : node(ui::node::make_shared()),
-      _color(color),
-      _button(ui::button::make_shared({.size = {1.0f, 1.0f}}, standard)),
-      _action_sender(action_sender) {
+    : _color(color), _button(ui::button::make_shared({.size = {1.0f, 1.0f}}, standard)), _action_sender(action_sender) {
     auto const &button_node = this->_button->rect_plane()->node();
-    this->node->add_sub_node(button_node);
+    node->add_sub_node(button_node);
 
     this->_button
         ->observe([this](auto const &context) {
