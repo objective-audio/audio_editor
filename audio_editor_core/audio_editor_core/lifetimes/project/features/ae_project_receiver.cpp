@@ -19,26 +19,18 @@
 #include <audio_editor_core/ae_timing.h>
 #include <audio_editor_core/ae_track_editor.h>
 
+#include <audio_editor_core/ae_marker_renaming_opener.hpp>
+
 using namespace yas;
 using namespace yas::ae;
-
-std::shared_ptr<project_receiver> project_receiver::make_shared(
-    window_lifetime_id const &window_lifetime_id, track_editor *track_editor, playing_toggler *toggler,
-    nudge_settings *nudge_settings, nudger *nudger, jumper *jumper, edge_editor *edge_editor,
-    time_editor_opener *time_editor_opener, marker_editor *marker_editor,
-    module_renaming_opener *module_renaming_opener, timing *timing, import_interactor *import_interactor,
-    export_interactor *export_interactor, reverter *reverter) {
-    return std::make_shared<project_receiver>(window_lifetime_id, track_editor, toggler, nudge_settings, nudger, jumper,
-                                              edge_editor, time_editor_opener, marker_editor, module_renaming_opener,
-                                              timing, import_interactor, export_interactor, reverter);
-}
 
 project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id, track_editor *track_editor,
                                    playing_toggler *toggler, nudge_settings *nudge_settings, nudger *nudger,
                                    jumper *jumper, edge_editor *edge_editor, time_editor_opener *time_editor_opener,
                                    marker_editor *marker_editor, module_renaming_opener *module_renaming_opener,
-                                   timing *timing, import_interactor *import_interactor,
-                                   export_interactor *export_interactor, reverter *reverter)
+                                   marker_renaming_opener *marker_renaming_opener, timing *timing,
+                                   import_interactor *import_interactor, export_interactor *export_interactor,
+                                   reverter *reverter)
     : _window_lifetime_id(window_lifetime_id),
       _editor(track_editor),
       _playing_toggler(toggler),
@@ -49,6 +41,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
       _time_editor_opener(time_editor_opener),
       _marker_editor(marker_editor),
       _module_renaming_opener(module_renaming_opener),
+      _marker_renaming_opener(marker_renaming_opener),
       _timing(timing),
       _import_interactor(import_interactor),
       _export_interactor(export_interactor),
@@ -226,6 +219,9 @@ void project_receiver::receive(ae::action const &action) const {
                         case editing_action_name::begin_module_renaming:
                             this->_module_renaming_opener->begin_module_renaming(action.range_value());
                             break;
+                        case editing_action_name::begin_marker_renaming:
+                            this->_marker_renaming_opener->begin_renaming(action.integer_value());
+                            break;
 
                         case editing_action_name::begin_time_editing:
                             this->_time_editor_opener->begin_time_editing();
@@ -317,6 +313,8 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
 
                 case editing_action_name::begin_module_renaming:
                     return to_state(this->_module_renaming_opener->can_begin_module_renaming());
+                case editing_action_name::begin_marker_renaming:
+                    return to_state(this->_marker_renaming_opener->can_begin_renaming());
 
                 case editing_action_name::begin_time_editing:
                     return to_state(this->_time_editor_opener->can_begin_time_editing());

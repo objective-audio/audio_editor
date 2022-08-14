@@ -4,6 +4,7 @@
 
 #import "AEMetalViewController.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
+#import <audio_editor_core/AEMarkerNameViewController.h>
 #import <audio_editor_core/AEMetalView.h>
 #import <audio_editor_core/AEModuleNameViewController.h>
 #include <audio_editor_core/ae_event_handling_presenter.h>
@@ -100,6 +101,10 @@ using namespace yas::ae;
                         case sheet_kind::module_name:
                             [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id
                                                               range:lifetime->content.range_value()];
+                            break;
+                        case sheet_kind::marker_name:
+                            [self showMarkerNameSheetWithLifetimeId:lifetime->lifetime_id
+                                                              frame:lifetime->content.integer_value()];
                             break;
                     }
                 } break;
@@ -312,6 +317,12 @@ using namespace yas::ae;
 
 - (void)showModuleNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id range:(time::range const &)range {
     auto *const vc = [AEModuleNameViewController instantiateWithSheetLifetimeId:lifetime_id moduleRange:range];
+
+    [self presentViewControllerAsSheet:vc];
+}
+
+- (void)showMarkerNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id frame:(int64_t const &)marker_frame {
+    auto *const vc = [AEMarkerNameViewController instantiateWithSheetLifetimeId:lifetime_id markerFrame:marker_frame];
 
     [self presentViewControllerAsSheet:vc];
 }

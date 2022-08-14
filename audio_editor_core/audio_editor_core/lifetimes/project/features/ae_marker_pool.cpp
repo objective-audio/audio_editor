@@ -78,6 +78,22 @@ std::optional<marker> marker_pool::marker_at(std::size_t const idx) const {
     return iterator->second;
 }
 
+std::optional<marker> marker_pool::marker_for_frame(frame_index_t const frame) const {
+    if (this->_markers->elements().contains(frame)) {
+        return this->_markers->elements().at(frame);
+    }
+    return std::nullopt;
+}
+
+std::optional<marker> marker_pool::marker_for_id(identifier const &identifier) const {
+    for (auto const &pair : this->markers()) {
+        if (pair.second.identifier == identifier) {
+            return pair.second;
+        }
+    }
+    return std::nullopt;
+}
+
 std::optional<frame_index_t> marker_pool::next_jumpable_frame(frame_index_t const frame) const {
     auto const &markers = this->markers();
     auto upper_it = markers.upper_bound(frame);

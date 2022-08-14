@@ -62,13 +62,12 @@ void ui_markers::set_locations(std::vector<std::optional<marker_location>> const
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
         auto const &location = locations.at(idx);
-        auto const &node = this->_elements.at(idx)->node;
+        auto const &element = this->_elements.at(idx);
         if (location.has_value()) {
             auto const &location_value = location.value();
-            node->set_is_enabled(true);
-            node->set_position({location_value.x, node->position().y});
+            element->set_location(location_value);
         } else {
-            node->set_is_enabled(false);
+            element->reset_location();
         }
     }
 }
@@ -81,16 +80,15 @@ void ui_markers::update_locations(std::size_t const count,
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
         if (idx < count) {
-            this->_elements.at(idx)->node->set_is_enabled(false);
+            this->_elements.at(idx)->reset_location();
         }
     }
 
     for (auto const &pair : inserted) {
         auto const &idx = pair.first;
         auto const &location = pair.second;
-        auto const &node = this->_elements.at(idx)->node;
-        node->set_is_enabled(true);
-        node->set_position({location.x, node->position().y});
+        auto const &element = this->_elements.at(idx);
+        element->set_location(location);
     }
 }
 
@@ -103,16 +101,14 @@ void ui_markers::_set_count(std::size_t const location_count) {
 
         auto each = make_fast_each(location_count - prev_element_count);
         while (yas_each_next(each)) {
-            auto element = ui_marker_element::make_shared(this->_window_lifetime_id);
-            element->node->set_is_enabled(false);
-            this->_node->add_sub_node(element->node);
+            auto element = ui_marker_element::make_shared(this->_window_lifetime_id, this->_node);
             this->_elements.emplace_back(std::move(element));
         }
     } else if (location_count < prev_element_count) {
         auto each = make_fast_each(prev_element_count - location_count);
         while (yas_each_next(each)) {
             auto const idx = prev_element_count - 1 - yas_each_index(each);
-            this->_elements.at(idx)->node->remove_from_super_node();
+            this->_elements.at(idx)->finalize();
         }
         this->_elements.resize(location_count);
     }

@@ -86,12 +86,16 @@ ui::color color::edge_text() const {
     return to_color(@"edge_text");
 }
 
-ui::color color::marker_triangle() const {
-    return to_color(@"marker_triangle");
+ui::color color::marker_square() const {
+    return to_color(@"marker_square");
 }
 
 ui::color color::marker_line() const {
     return to_color(@"marker_line");
+}
+
+ui::color color::marker_text() const {
+    return to_color(@"marker_text");
 }
 
 ui::color color::modal_bg() const {
