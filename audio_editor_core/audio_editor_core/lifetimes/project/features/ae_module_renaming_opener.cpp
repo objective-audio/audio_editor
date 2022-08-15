@@ -5,7 +5,6 @@
 #include "ae_module_renaming_opener.h"
 
 #include <audio_editor_core/ae_editing_status.h>
-#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 
 using namespace yas;
