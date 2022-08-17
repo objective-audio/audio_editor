@@ -13,13 +13,15 @@ using namespace yas::ae;
 
 namespace yas::ae::ui_resource_lifetime_utils {
 std::shared_ptr<ui_mesh_data> make_vertical_line_data() {
-    auto mesh_data = ui_mesh_data::make_shared(ui::primitive_type::line, ui::static_mesh_vertex_data::make_shared(2),
-                                               ui::static_mesh_index_data::make_shared(2));
-    mesh_data->vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
+    auto const vertex_data = ui::static_mesh_vertex_data::make_shared(2);
+    auto const index_data = ui::static_mesh_index_data::make_shared(2);
+
+    auto mesh_data = ui_mesh_data::make_shared(ui::primitive_type::line, vertex_data, index_data);
+    vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
         vertices.at(0).position = {0.0f, -0.5f};
         vertices.at(1).position = {0.0f, 0.5f};
     });
-    mesh_data->index_data->write_once([](std::vector<ui::index2d_t> &indices) {
+    index_data->write_once([](std::vector<ui::index2d_t> &indices) {
         indices.at(0) = 0;
         indices.at(1) = 1;
     });
@@ -27,11 +29,12 @@ std::shared_ptr<ui_mesh_data> make_vertical_line_data() {
 }
 
 std::shared_ptr<ui_mesh_data> make_triangle_data() {
-    auto triangle_data =
-        ui_mesh_data::make_shared(ui::primitive_type::triangle, ui::static_mesh_vertex_data::make_shared(3),
-                                  ui::static_mesh_index_data::make_shared(3));
+    auto const vertex_data = ui::static_mesh_vertex_data::make_shared(3);
+    auto const index_data = ui::static_mesh_index_data::make_shared(3);
 
-    triangle_data->vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
+    auto mesh_data = ui_mesh_data::make_shared(ui::primitive_type::triangle, vertex_data, index_data);
+
+    vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
         float const half_width = -5.0f;
         float const height = 10.0f;
         vertices[0].position = {0.0f, -height};
@@ -39,13 +42,21 @@ std::shared_ptr<ui_mesh_data> make_triangle_data() {
         vertices[2].position = {half_width, 0.0f};
     });
 
-    triangle_data->index_data->write_once([](std::vector<ui::index2d_t> &indices) {
+    index_data->write_once([](std::vector<ui::index2d_t> &indices) {
         indices[0] = 0;
         indices[1] = 1;
         indices[2] = 2;
     });
 
-    return triangle_data;
+    return mesh_data;
+}
+
+std::shared_ptr<ui_mesh_data> make_square_data() {
+    auto const plane_data = ui::rect_plane_data::make_shared(1);
+    plane_data->set_rect_position(ui::region{.origin = {0.0f, 0.0f}, .size = {1.0f, 1.0f}}, 0);
+
+    return ui_mesh_data::make_shared(ui::primitive_type::triangle, plane_data->dynamic_vertex_data(),
+                                     plane_data->dynamic_index_data());
 }
 }
 
@@ -63,6 +74,7 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
       vertical_line_data(ui_resource_lifetime_utils::make_vertical_line_data()),
       triangle_data(ui_resource_lifetime_utils::make_triangle_data()),
+      square_data(ui_resource_lifetime_utils::make_square_data()),
       display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
       keyboard(ae::keyboard::make_shared(standard->event_manager())),
       base_lifecycle(std::make_shared<ae::ui_base_lifecycle>(lifetime_id)) {

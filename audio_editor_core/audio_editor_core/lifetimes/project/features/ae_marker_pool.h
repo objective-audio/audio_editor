@@ -25,6 +25,8 @@ struct marker_pool final : jumpable_on_jumper {
 
     [[nodiscard]] marker_map_t const &markers() const;
     [[nodiscard]] std::optional<marker> marker_at(std::size_t const) const;
+    [[nodiscard]] std::optional<marker> marker_for_frame(frame_index_t const) const;
+    [[nodiscard]] std::optional<marker> marker_for_id(identifier const &) const;
 
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
     [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;

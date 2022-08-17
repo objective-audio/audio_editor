@@ -24,7 +24,8 @@ namespace marker_name {
 
     namespace attribute {
         static std::string const frame = "frame";
-    }
+        static std::string const name = "name";
+    }  // namespace attribute
 }  // namespace marker_name
 
 namespace edge_name {

@@ -31,8 +31,9 @@ using namespace yas::ae;
     XCTAssertNoThrow(color->edge_line());
     XCTAssertNoThrow(color->edge_text());
 
-    XCTAssertNoThrow(color->marker_triangle());
+    XCTAssertNoThrow(color->marker_square());
     XCTAssertNoThrow(color->marker_line());
+    XCTAssertNoThrow(color->marker_text());
 
     XCTAssertNoThrow(color->modal_bg());
 
