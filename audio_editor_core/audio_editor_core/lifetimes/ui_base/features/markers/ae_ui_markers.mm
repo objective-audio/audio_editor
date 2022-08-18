@@ -39,10 +39,10 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
             switch (event.type) {
                 case marker_location_pool_event_type::fetched:
                 case marker_location_pool_event_type::replaced:
-                    this->replace_locations(event.elements);
+                    this->_replace_locations(event.elements);
                     break;
                 case marker_location_pool_event_type::updated:
-                    this->update_locations(event.elements.size(), event.erased, event.inserted);
+                    this->_update_locations(event.elements.size(), event.erased, event.inserted);
                     break;
             }
         })
@@ -55,7 +55,7 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
         ->add_to(this->_pool);
 }
 
-void ui_markers::replace_locations(std::vector<std::optional<marker_location>> const &locations) {
+void ui_markers::_replace_locations(std::vector<std::optional<marker_location>> const &locations) {
     this->_set_count(locations.size());
 
     auto each = make_fast_each(locations.size());
@@ -72,9 +72,9 @@ void ui_markers::replace_locations(std::vector<std::optional<marker_location>> c
     }
 }
 
-void ui_markers::update_locations(std::size_t const count,
-                                  std::vector<std::pair<std::size_t, marker_location>> const &erased,
-                                  std::vector<std::pair<std::size_t, marker_location>> const &inserted) {
+void ui_markers::_update_locations(std::size_t const count,
+                                   std::vector<std::pair<std::size_t, marker_location>> const &erased,
+                                   std::vector<std::pair<std::size_t, marker_location>> const &inserted) {
     this->_set_count(count);
 
     for (auto const &pair : erased) {

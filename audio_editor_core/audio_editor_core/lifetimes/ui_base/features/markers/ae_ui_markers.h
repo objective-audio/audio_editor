@@ -21,10 +21,6 @@ struct ui_markers final {
     ui_markers(window_lifetime_id const &, std::shared_ptr<markers_presenter> const &,
                std::shared_ptr<ui::standard> const &, ui::node *);
 
-    void replace_locations(std::vector<std::optional<marker_location>> const &);
-    void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, marker_location>> const &erased,
-                          std::vector<std::pair<std::size_t, marker_location>> const &inserted);
-
    private:
     window_lifetime_id const _window_lifetime_id;
     ui::node *const _node;
@@ -36,5 +32,8 @@ struct ui_markers final {
     observing::canceller_pool _pool;
 
     void _set_count(std::size_t const);
+    void _replace_locations(std::vector<std::optional<marker_location>> const &);
+    void _update_locations(std::size_t const count, std::vector<std::pair<std::size_t, marker_location>> const &erased,
+                           std::vector<std::pair<std::size_t, marker_location>> const &inserted);
 };
 }  // namespace yas::ae
