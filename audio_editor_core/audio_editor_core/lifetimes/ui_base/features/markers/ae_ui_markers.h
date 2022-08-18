@@ -21,7 +21,7 @@ struct ui_markers final {
     ui_markers(window_lifetime_id const &, std::shared_ptr<markers_presenter> const &,
                std::shared_ptr<ui::standard> const &, ui::node *);
 
-    void set_locations(std::vector<std::optional<marker_location>> const &);
+    void replace_locations(std::vector<std::optional<marker_location>> const &);
     void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, marker_location>> const &erased,
                           std::vector<std::pair<std::size_t, marker_location>> const &inserted);
 
