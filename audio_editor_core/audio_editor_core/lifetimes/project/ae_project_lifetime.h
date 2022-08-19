@@ -66,7 +66,6 @@ struct project_lifetime final {
 
     std::shared_ptr<module_location_pool> const module_location_pool;
     std::shared_ptr<marker_location_pool> const marker_location_pool;
-    std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<ae::project_action_sender> const action_sender;
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
     std::shared_ptr<scroll_gesture_controller> const scroll_gesture_controller;
@@ -74,6 +73,7 @@ struct project_lifetime final {
     std::shared_ptr<timing> const timing;
     std::shared_ptr<nudge_settings> const nudge_settings;
     std::shared_ptr<file_track> const file_track;
+    std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<marker_pool> const marker_pool;
     std::shared_ptr<pasteboard> const pasteboard;
     std::shared_ptr<database> const database;

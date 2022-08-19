@@ -6,6 +6,8 @@
 #include <Accelerate/Accelerate.h>
 #include <audio/yas_audio_file.h>
 #include <audio/yas_audio_pcm_buffer.h>
+#include <audio_editor_core/ae_file_track.h>
+#include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_ui_track_constants.h>
 #include <cpp_utils/yas_thread.h>
@@ -14,12 +16,16 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<waveform_mesh_importer> waveform_mesh_importer::make_shared(project_url const *project_url) {
-    return std::make_shared<waveform_mesh_importer>(project_url);
+std::shared_ptr<waveform_mesh_importer> waveform_mesh_importer::make_shared(window_lifetime_id const &lifetime_id,
+                                                                            file_track *file_track) {
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
+
+    return std::make_shared<waveform_mesh_importer>(window_lifetime->project_url.get(), file_track);
 }
 
-waveform_mesh_importer::waveform_mesh_importer(project_url const *project_url)
+waveform_mesh_importer::waveform_mesh_importer(project_url const *project_url, file_track *file_track)
     : _project_url(project_url),
+      _file_track(file_track),
       _notifier(observing::notifier<event>::make_shared()),
       _task_queue(task_queue<identifier>::make_shared()) {
 }
@@ -27,10 +33,16 @@ waveform_mesh_importer::waveform_mesh_importer(project_url const *project_url)
 void waveform_mesh_importer::import(std::size_t const idx, module_location const &location) {
     this->_task_queue->cancel([&location](auto const &identifier) { return location.identifier == identifier; });
 
-    auto url = this->_project_url->editing_files_directory().appending(location.file_name);
+    auto const &modules = this->_file_track->modules();
+    if (!modules.contains(location.range)) {
+        return;
+    }
+
+    auto url = this->_project_url->editing_files_directory().appending(modules.at(location.range).file_name);
+    auto const file_frame = modules.at(location.range).file_frame;
 
     auto const task = yas::task<identifier>::make_shared(
-        [idx, location, url = std::move(url),
+        [idx, location, url = std::move(url), file_frame,
          weak_importer = this->weak_from_this()](yas::task<identifier> const &task) {
             if (weak_importer.expired()) {
                 return;
@@ -109,8 +121,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
                     auto const &mesh_element_head_x_value = mesh_element_offset_x.value();
 
-                    file->set_file_frame_position(
-                        static_cast<uint32_t>(location.file_frame + mesh_element_value.range.frame));
+                    file->set_file_frame_position(static_cast<uint32_t>(file_frame + mesh_element_value.range.frame));
 
                     float max = 0.0f;
                     float min = 0.0f;

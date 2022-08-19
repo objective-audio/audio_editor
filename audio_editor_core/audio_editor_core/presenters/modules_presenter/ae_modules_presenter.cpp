@@ -15,6 +15,8 @@
 using namespace yas;
 using namespace yas::ae;
 
+static std::string const empty_string = "";
+
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(window_lifetime_id const &window_lifetime_id,
                                                                   std::shared_ptr<display_space> const &display_space) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
@@ -94,6 +96,16 @@ observing::syncable modules_presenter::observe_locations(
     } else {
         return observing::syncable{};
     }
+}
+
+std::string const &modules_presenter::name_for_range(time::range const &range) {
+    if (auto const file_track = this->_file_track.lock()) {
+        if (file_track->modules().contains(range)) {
+            return file_track->modules().at(range).name;
+        }
+    }
+
+    return empty_string;
 }
 
 void modules_presenter::update_if_needed() {
