@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
+#include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -29,12 +30,9 @@ database_updater::database_updater(file_track *file_track, marker_pool *marker_p
     this->_file_track
         ->observe_event([this](file_track_event const &event) {
             switch (event.type) {
-                case file_track_event_type::any: {
-                    for (auto const &pair : event.modules) {
-                        auto const &file_module = pair.second;
-                        this->_database->add_module(file_module);
-                    }
-                } break;
+                case file_track_event_type::any:
+                    assertion_failure_if_not_test();
+                    break;
                 case file_track_event_type::reverted:
                     break;
                 case file_track_event_type::inserted: {
@@ -58,11 +56,7 @@ database_updater::database_updater(file_track *file_track, marker_pool *marker_p
         ->observe_event([this](marker_pool_event const &event) {
             switch (event.type) {
                 case marker_pool_event_type::any:
-                    if (event.markers.size() > 0) {
-                        for (auto const &pair : event.markers) {
-                            this->_database->add_marker(pair.second);
-                        }
-                    }
+                    assertion_failure_if_not_test();
                     break;
                 case marker_pool_event_type::reverted:
                     break;
