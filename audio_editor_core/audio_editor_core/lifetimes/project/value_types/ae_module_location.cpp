@@ -19,17 +19,13 @@ bool module_location::mesh_element::operator!=(mesh_element const &rhs) const {
     return !(*this == rhs);
 }
 
-module_location module_location::make_value(yas::identifier const &identifier, std::string const &name,
-                                            time::range const &range, frame_index_t const file_frame,
-                                            std::string const &file_name, uint32_t const sample_rate,
+module_location module_location::make_value(yas::identifier const &identifier, time::range const &range,
+                                            uint32_t const sample_rate,
                                             std::vector<std::optional<mesh_element>> const &mesh_elements,
                                             float const scale) {
     return module_location{.identifier = identifier,
-                           .name = name,
                            .sample_rate = sample_rate,
                            .range = range,
-                           .file_frame = file_frame,
-                           .file_name = file_name,
                            .mesh_elements = mesh_elements,
                            .scale = scale};
 }
@@ -70,8 +66,7 @@ module_location module_location::make_value(file_module const &file_module, uint
         current_frame = next_frame;
     }
 
-    return make_value(file_module.identifier, file_module.name, file_module.range, file_module.file_frame,
-                      file_module.file_name, sample_rate, mesh_elements, scale);
+    return make_value(file_module.identifier, file_module.range, sample_rate, mesh_elements, scale);
 }
 
 float module_location::x() const {
@@ -101,8 +96,7 @@ std::optional<float> module_location::element_offset_x(std::size_t const idx) co
 }
 
 bool module_location::operator==(module_location const &rhs) const {
-    return this->identifier == rhs.identifier && this->name == rhs.name && this->sample_rate == rhs.sample_rate &&
-           this->range == rhs.range && this->file_frame == rhs.file_frame && this->file_name == rhs.file_name &&
+    return this->identifier == rhs.identifier && this->sample_rate == rhs.sample_rate && this->range == rhs.range &&
            this->scale == rhs.scale && equal(this->mesh_elements, rhs.mesh_elements);
 }
 

@@ -344,9 +344,9 @@ static time::range const dummy_range{0, 1};
     identifier id_1;
     identifier id_2;
 
-    pool->replace_all({{.identifier = id_0, .name = "name_0", .range = dummy_range},
-                       {.identifier = id_1, .name = "name_1", .range = dummy_range},
-                       {.identifier = id_2, .name = "name_2", .range = dummy_range}});
+    pool->replace_all({{.identifier = id_0, .range = dummy_range, .sample_rate = 0},
+                       {.identifier = id_1, .range = dummy_range, .sample_rate = 1},
+                       {.identifier = id_2, .range = dummy_range, .sample_rate = 2}});
 
     auto canceller =
         pool->observe_event([&called](module_location_pool_event const &event) { called.emplace_back(event); }).sync();
@@ -354,13 +354,13 @@ static time::range const dummy_range{0, 1};
     XCTAssertEqual(called.size(), 1);
 
     {
-        pool->replace({.identifier = id_1, .name = "name_overwritten_1", .range = dummy_range});
+        pool->replace({.identifier = id_1, .sample_rate = 11, .range = dummy_range});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
-        XCTAssertEqual(locations.at(0).value().name, "name_0");
-        XCTAssertEqual(locations.at(1).value().name, "name_overwritten_1");
-        XCTAssertEqual(locations.at(2).value().name, "name_2");
+        XCTAssertEqual(locations.at(0).value().sample_rate, 0);
+        XCTAssertEqual(locations.at(1).value().sample_rate, 11);
+        XCTAssertEqual(locations.at(2).value().sample_rate, 2);
 
         XCTAssertEqual(called.size(), 2);
         XCTAssertEqual(called.at(1).type, module_location_pool_event_type::updated);
@@ -374,13 +374,13 @@ static time::range const dummy_range{0, 1};
     {
         identifier id_other;
 
-        pool->replace({.identifier = id_other, .name = "name_other", .range = dummy_range});
+        pool->replace({.identifier = id_other, .sample_rate = 100, .range = dummy_range});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
-        XCTAssertEqual(locations.at(0).value().name, "name_0");
-        XCTAssertEqual(locations.at(1).value().name, "name_overwritten_1");
-        XCTAssertEqual(locations.at(2).value().name, "name_2");
+        XCTAssertEqual(locations.at(0).value().sample_rate, 0);
+        XCTAssertEqual(locations.at(1).value().sample_rate, 11);
+        XCTAssertEqual(locations.at(2).value().sample_rate, 2);
 
         XCTAssertEqual(called.size(), 2);
     }
