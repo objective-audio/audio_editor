@@ -39,9 +39,8 @@ static time::range const dummy_range{0, 1};
     identifier id_2;
 
     {
-        pool->replace_all({{.identifier = id_0, .range = dummy_range},
-                           {.identifier = id_1, .range = dummy_range},
-                           {.identifier = id_2, .range = dummy_range}});
+        pool->replace_all(
+            {{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -57,7 +56,7 @@ static time::range const dummy_range{0, 1};
     identifier id_4;
 
     {
-        pool->replace_all({{.identifier = id_3, .range = dummy_range}, {.identifier = id_4, .range = dummy_range}});
+        pool->replace_all({{id_3, dummy_range, 0, {}, 0}, {id_4, dummy_range, 0, {}, 0}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
@@ -89,7 +88,7 @@ static time::range const dummy_range{0, 1};
     identifier id_5;
 
     {
-        pool->update_all({{.identifier = id_0, .range = dummy_range}, {.identifier = id_2, .range = dummy_range}});
+        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
@@ -108,9 +107,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->update_all({{.identifier = id_0, .range = dummy_range},
-                          {.identifier = id_1, .range = dummy_range},
-                          {.identifier = id_2, .range = dummy_range}});
+        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -128,7 +125,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->update_all({{.identifier = id_1, .range = dummy_range}, {.identifier = id_2, .range = dummy_range}});
+        pool->update_all({{id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -146,10 +143,10 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->update_all({{.identifier = id_1, .range = dummy_range},
-                          {.identifier = id_2, .range = dummy_range},
-                          {.identifier = id_3, .range = dummy_range},
-                          {.identifier = id_4, .range = dummy_range}});
+        pool->update_all({{id_1, dummy_range, 0, {}, 0},
+                          {id_2, dummy_range, 0, {}, 0},
+                          {id_3, dummy_range, 0, {}, 0},
+                          {id_4, dummy_range, 0, {}, 0}});
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
         XCTAssertEqual(locations.at(0).value().identifier, id_3);
@@ -171,9 +168,7 @@ static time::range const dummy_range{0, 1};
     {
         time::range const other_range{0, 2};
 
-        pool->update_all({{.identifier = id_1, .range = dummy_range},
-                          {.identifier = id_4, .range = other_range},
-                          {.identifier = id_5, .range = dummy_range}});
+        pool->update_all({{id_1, dummy_range, 0, {}, 0}, {id_4, other_range, 0, {}, 0}, {id_5, dummy_range, 0, {}, 0}});
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
         XCTAssertEqual(locations.at(0).value().identifier, id_5);
@@ -209,9 +204,7 @@ static time::range const dummy_range{0, 1};
     identifier id_2;
     identifier id_3;
 
-    pool->replace_all({{.identifier = id_0, .range = dummy_range},
-                       {.identifier = id_1, .range = dummy_range},
-                       {.identifier = id_2, .range = dummy_range}});
+    pool->replace_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
 
     auto canceller =
         pool->observe_event([&called](module_location_pool_event const &event) { called.emplace_back(event); }).sync();
@@ -263,7 +256,7 @@ static time::range const dummy_range{0, 1};
     XCTAssertEqual(pool->elements().size(), 0);
 
     {
-        pool->insert({.identifier = id_0, .range = dummy_range});
+        pool->insert({id_0, dummy_range, 0, {}, 0});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 1);
@@ -279,7 +272,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->insert({.identifier = id_0, .range = dummy_range});
+        pool->insert({id_0, dummy_range, 0, {}, 0});
 
         XCTAssertEqual(pool->elements().size(), 1);
 
@@ -287,7 +280,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->insert({.identifier = id_1, .range = dummy_range});
+        pool->insert({id_1, dummy_range, 0, {}, 0});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
@@ -318,7 +311,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->insert({.identifier = id_2, .range = dummy_range});
+        pool->insert({id_2, dummy_range, 0, {}, 0});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
@@ -344,9 +337,7 @@ static time::range const dummy_range{0, 1};
     identifier id_1;
     identifier id_2;
 
-    pool->replace_all({{.identifier = id_0, .range = dummy_range, .sample_rate = 0},
-                       {.identifier = id_1, .range = dummy_range, .sample_rate = 1},
-                       {.identifier = id_2, .range = dummy_range, .sample_rate = 2}});
+    pool->replace_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 1, {}, 0}, {id_2, dummy_range, 2, {}, 0}});
 
     auto canceller =
         pool->observe_event([&called](module_location_pool_event const &event) { called.emplace_back(event); }).sync();
@@ -354,7 +345,7 @@ static time::range const dummy_range{0, 1};
     XCTAssertEqual(called.size(), 1);
 
     {
-        pool->replace({.identifier = id_1, .sample_rate = 11, .range = dummy_range});
+        pool->replace({id_1, dummy_range, 11, {}, 0});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -374,7 +365,7 @@ static time::range const dummy_range{0, 1};
     {
         identifier id_other;
 
-        pool->replace({.identifier = id_other, .sample_rate = 100, .range = dummy_range});
+        pool->replace({id_other, dummy_range, 100, {}, 0});
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);

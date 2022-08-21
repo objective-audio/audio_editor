@@ -58,16 +58,15 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
                     auto const &module = event.module.value();
                     auto const space_range = this->_space_range();
                     if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
-                        location_pool->insert(module_location::make_value(module, sample_rate, space_range.value(),
-                                                                          display_space->scale().width));
+                        location_pool->insert({module, sample_rate, space_range.value(), display_space->scale().width});
                     }
                 } break;
                 case file_track_event_type::detail_updated: {
                     auto const &module = event.module.value();
                     auto const space_range = this->_space_range();
                     if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
-                        location_pool->replace(module_location::make_value(module, sample_rate, space_range.value(),
-                                                                           display_space->scale().width));
+                        location_pool->replace(
+                            {module, sample_rate, space_range.value(), display_space->scale().width});
                     }
                 } break;
             }
@@ -145,8 +144,7 @@ void modules_presenter::_update_all_locations(bool const force) {
             file_track->modules(),
             [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale](auto const &module) {
                 if (module.first.is_overlap(space_range_value)) {
-                    return std::make_optional(
-                        module_location::make_value(module.second, sample_rate, space_range_value, scale));
+                    return std::make_optional<module_location>(module.second, sample_rate, space_range_value, scale);
                 } else {
                     return std::optional<module_location>(std::nullopt);
                 }
