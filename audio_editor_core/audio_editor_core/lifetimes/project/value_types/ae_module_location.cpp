@@ -11,27 +11,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-bool module_location::mesh_element::operator==(mesh_element const &rhs) const {
-    return this->rect_count == rhs.rect_count && this->range == rhs.range;
-}
+namespace yas::ae::module_location_utils {
+using mesh_element = module_location::mesh_element;
 
-bool module_location::mesh_element::operator!=(mesh_element const &rhs) const {
-    return !(*this == rhs);
-}
-
-module_location module_location::make_value(yas::identifier const &identifier, time::range const &range,
-                                            uint32_t const sample_rate,
-                                            std::vector<std::optional<mesh_element>> const &mesh_elements,
-                                            float const scale) {
-    return module_location{.identifier = identifier,
-                           .sample_rate = sample_rate,
-                           .range = range,
-                           .mesh_elements = mesh_elements,
-                           .scale = scale};
-}
-
-module_location module_location::make_value(file_module const &file_module, uint32_t const sample_rate,
-                                            time::range const &space_range, float const scale) {
+static std::vector<std::optional<mesh_element>> make_mesh_elements(file_module const &file_module,
+                                                                   uint32_t const sample_rate,
+                                                                   time::range const &space_range, float const scale) {
     std::vector<std::optional<mesh_element>> mesh_elements;
 
     uint32_t const mesh_width_interval = module_location::mesh_element::max_length;
@@ -66,7 +51,28 @@ module_location module_location::make_value(file_module const &file_module, uint
         current_frame = next_frame;
     }
 
-    return make_value(file_module.identifier, file_module.range, sample_rate, mesh_elements, scale);
+    return mesh_elements;
+}
+}  // namespace yas::ae::module_location_utils
+
+bool module_location::mesh_element::operator==(mesh_element const &rhs) const {
+    return this->rect_count == rhs.rect_count && this->range == rhs.range;
+}
+
+bool module_location::mesh_element::operator!=(mesh_element const &rhs) const {
+    return !(*this == rhs);
+}
+
+module_location::module_location(file_module const &file_module, uint32_t const sample_rate,
+                                 time::range const &space_range, float const scale)
+    : module_location(file_module.identifier, file_module.range, sample_rate,
+                      module_location_utils::make_mesh_elements(file_module, sample_rate, space_range, scale), scale) {
+}
+
+module_location::module_location(yas::identifier const &identifier, time::range const &range,
+                                 uint32_t const sample_rate,
+                                 std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale)
+    : identifier(identifier), sample_rate(sample_rate), range(range), mesh_elements(mesh_elements), scale(scale) {
 }
 
 float module_location::x() const {
