@@ -47,16 +47,30 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                     this->_update_all_locations(update_type::update);
                     break;
                 case marker_pool_event_type::erased:
-                    this->_location_pool->erase(event.marker.value().identifier);
+                    this->_location_pool->erase(event.erased.value().identifier);
                     break;
-                case marker_pool_event_type::inserted:
-                    auto const &marker = event.marker.value();
+                case marker_pool_event_type::inserted: {
+                    auto const &marker = event.inserted.value();
                     if (auto const space_range = this->_space_range();
                         space_range.has_value() && space_range.value().is_contain(marker.frame)) {
                         this->_location_pool->insert(marker_location::make_value(
                             marker.identifier, marker.frame, sample_rate, display_space->scale().width));
                     }
-                    break;
+                } break;
+                case marker_pool_event_type::replaced: {
+                    auto const &inserted = event.inserted.value();
+                    auto const &erased = event.erased.value();
+
+                    if (inserted.frame != erased.frame) {
+                        if (auto const space_range = this->_space_range();
+                            space_range.has_value() && space_range.value().is_contain(inserted.frame)) {
+                            this->_location_pool->insert_or_replace(marker_location::make_value(
+                                inserted.identifier, inserted.frame, sample_rate, display_space->scale().width));
+                        } else {
+                            this->_location_pool->erase(erased.identifier);
+                        }
+                    }
+                } break;
             }
         })
         .sync()

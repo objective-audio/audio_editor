@@ -145,7 +145,8 @@ using namespace yas::ae;
     identifier const id_1;
     identifier const id_m1;
 
-    pool->revert_markers({{.identifier = id_0, .frame = 0}, {.identifier = id_1, .frame = 1}});
+    pool->revert_markers(
+        {{.identifier = id_0, .frame = 0, .name = "0"}, {.identifier = id_1, .frame = 1, .name = "1"}});
 
     std::vector<marker_pool_event> called;
 
@@ -153,19 +154,29 @@ using namespace yas::ae;
 
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0).type, marker_pool_event_type::any);
-    XCTAssertEqual(called.at(0).marker, std::nullopt);
+    XCTAssertEqual(called.at(0).inserted, std::nullopt);
+    XCTAssertEqual(called.at(0).erased, std::nullopt);
 
-    pool->insert_marker({.identifier = id_m1, .frame = -1});
+    pool->insert_marker({.identifier = id_m1, .frame = -1, .name = "-1"});
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, marker_pool_event_type::inserted);
-    XCTAssertEqual(called.at(1).marker.value().identifier, id_m1);
+    XCTAssertEqual(called.at(1).inserted.value().identifier, id_m1);
+
+    pool->replace_marker({.identifier = id_1, .frame = 1, .name = "1b"});
+
+    XCTAssertEqual(called.size(), 3);
+    XCTAssertEqual(called.at(2).type, marker_pool_event_type::replaced);
+    XCTAssertEqual(called.at(2).inserted.value().identifier, id_1);
+    XCTAssertEqual(called.at(2).inserted.value().name, "1b");
+    XCTAssertEqual(called.at(2).erased.value().identifier, id_1);
+    XCTAssertEqual(called.at(2).erased.value().name, "1");
 
     pool->erase_at(0);
 
-    XCTAssertEqual(called.size(), 3);
-    XCTAssertEqual(called.at(2).type, marker_pool_event_type::erased);
-    XCTAssertEqual(called.at(2).marker.value().identifier, id_0);
+    XCTAssertEqual(called.size(), 4);
+    XCTAssertEqual(called.at(3).type, marker_pool_event_type::erased);
+    XCTAssertEqual(called.at(3).erased.value().identifier, id_0);
 
     canceller->cancel();
 }

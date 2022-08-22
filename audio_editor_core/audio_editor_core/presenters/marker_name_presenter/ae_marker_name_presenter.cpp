@@ -39,7 +39,7 @@ void marker_name_presenter::done(std::string const &name) {
         if (auto opt_marker = marker_pool->marker_for_frame(this->_marker_frame)) {
             auto &marker = opt_marker.value();
             marker.name = name;
-            marker_pool->insert_marker(marker);
+            marker_pool->replace_marker(marker);
         }
     }
 

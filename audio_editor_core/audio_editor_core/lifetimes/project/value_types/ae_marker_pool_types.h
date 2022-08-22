@@ -18,11 +18,13 @@ enum class marker_pool_event_type {
     reverted,
     inserted,
     erased,
+    replaced,
 };
 
 struct marker_pool_event final {
     marker_pool_event_type type;
-    std::optional<ae::marker> marker{std::nullopt};
+    std::optional<ae::marker> inserted{std::nullopt};
+    std::optional<ae::marker> erased{std::nullopt};
     marker_map_t const &markers;
 };
 }  // namespace yas::ae

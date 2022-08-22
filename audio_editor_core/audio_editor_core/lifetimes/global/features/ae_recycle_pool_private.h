@@ -172,6 +172,18 @@ void recycle_pool<Element>::replace(Element const &element) {
 }
 
 template <typename Element>
+void recycle_pool<Element>::insert_or_replace(Element const &element) {
+    // 処理の重さを考慮していない。replaceする場合は2回vectorを走査してしまう
+    if (contains_if(this->_elements, [&element](std::optional<Element> const &target) {
+            return target.has_value() && target.value().identifier == element.identifier;
+        })) {
+        this->replace(element);
+    } else {
+        this->insert(element);
+    }
+}
+
+template <typename Element>
 std::vector<std::optional<Element>> const &recycle_pool<Element>::elements() const {
     return this->_elements;
 }
