@@ -80,8 +80,8 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       modal_lifecycle(project_modal_lifecycle::make_shared(window_lifetime_id)),
       nudger(nudger::make_shared(window_lifetime->player.get(), this->nudge_settings.get())),
       edge_holder(edge_holder::make_shared()),
-      edge_editor(
-          edge_editor::make_shared(this->edge_holder.get(), window_lifetime->player.get(), this->editing_status.get())),
+      edge_editor(std::make_shared<ae::edge_editor>(this->edge_holder.get(), window_lifetime->player.get(),
+                                                    this->editing_status.get(), this->database.get())),
       jumper(jumper::make_shared(window_lifetime->player.get(), this->file_track.get(), this->marker_pool.get(),
                                  this->edge_holder.get())),
       time_editor_opener(time_editor_opener::make_shared(window_lifetime->player.get(), this->timing.get(),

@@ -4,6 +4,7 @@
 
 #include "ae_edge_editor.h"
 
+#include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
 #include <audio_editor_core/ae_hierarchy.h>
@@ -13,13 +14,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<edge_editor> edge_editor::make_shared(edge_holder *holder, player const *player,
-                                                      editing_status const *editing_status) {
-    return std::make_shared<edge_editor>(holder, player, editing_status);
-}
-
-edge_editor::edge_editor(edge_holder *holder, player const *player, editing_status const *editing_status)
-    : _holder(holder), _player(player), _editing_status(editing_status) {
+edge_editor::edge_editor(edge_holder *holder, player const *player, editing_status const *editing_status,
+                         database *database)
+    : _holder(holder), _player(player), _editing_status(editing_status), _database(database) {
 }
 
 bool edge_editor::can_set_begin() const {
@@ -49,8 +46,10 @@ void edge_editor::set_begin() {
         return;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    this->_holder->set_begin_frame(current_frame);
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_holder->set_begin_frame(current_frame);
+    });
 }
 
 void edge_editor::set_end() {
@@ -58,6 +57,8 @@ void edge_editor::set_end() {
         return;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    this->_holder->set_end_frame(current_frame);
+    this->_database->suspend_saving([this] {
+        auto const current_frame = this->_player->current_frame();
+        this->_holder->set_end_frame(current_frame);
+    });
 }
