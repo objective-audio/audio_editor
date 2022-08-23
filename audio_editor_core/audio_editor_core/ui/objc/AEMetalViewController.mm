@@ -16,6 +16,7 @@
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
+#include <audio_editor_core/ae_module_name_editor.hpp>
 #include <audio_editor_core/ae_ui_base_lifetime.hpp>
 #include <audio_editor_core/ae_ui_resource_lifecycle.hpp>
 #include <audio_editor_core/ae_ui_resource_lifetime.hpp>
@@ -99,8 +100,7 @@ using namespace yas::ae;
                     auto const &lifetime = get<sheet_lifetime>(sub_lifetime);
                     switch (lifetime->content.kind) {
                         case sheet_kind::module_name:
-                            [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id
-                                                              range:lifetime->content.range_value()];
+                            [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id];
                             break;
                         case sheet_kind::marker_name:
                             [self showMarkerNameSheetWithLifetimeId:lifetime->lifetime_id
@@ -315,8 +315,8 @@ using namespace yas::ae;
     }];
 }
 
-- (void)showModuleNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id range:(time::range const &)range {
-    auto *const vc = [AEModuleNameViewController instantiateWithSheetLifetimeId:lifetime_id moduleRange:range];
+- (void)showModuleNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id {
+    auto *const vc = [AEModuleNameViewController instantiateWithSheetLifetimeId:lifetime_id];
 
     [self presentViewControllerAsSheet:vc];
 }

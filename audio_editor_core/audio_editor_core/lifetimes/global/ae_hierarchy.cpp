@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_app_modal_lifecycle.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
+#include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <cpp_utils/yas_assertion.h>
 
@@ -34,4 +35,9 @@ std::shared_ptr<window_lifetime> const &hierarchy::window_lifetime_for_id(
 std::shared_ptr<project_lifetime> const &hierarchy::project_lifetime_for_id(
     window_lifetime_id const &window_lifetime_id) {
     return get<project_lifetime>(hierarchy::window_lifetime_for_id(window_lifetime_id)->project_lifecycle->current());
+}
+
+std::shared_ptr<sheet_lifetime> const &hierarchy::sheet_lifetime_for_id(sheet_lifetime_id const &lifetime_id) {
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
+    return project_lifetime->modal_lifecycle->sheet_lifetime();
 }

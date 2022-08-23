@@ -32,5 +32,5 @@ void module_renaming_opener::begin_module_renaming(time::range const &range) {
         return;
     }
 
-    this->_lifecycle->add_sheet({.kind = sheet_kind::module_name, .value = range});
+    this->_lifecycle->add_module_name_sheet(range);
 }
