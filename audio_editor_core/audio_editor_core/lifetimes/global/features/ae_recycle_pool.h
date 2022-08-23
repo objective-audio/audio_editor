@@ -37,6 +37,8 @@ struct recycle_pool final {
     void insert(Element const &);
     /// identifierの一致する単独の要素を置き換える
     void replace(Element const &);
+    /// identifierの一致する要素があれば置き換え、なければ追加する
+    void insert_or_replace(Element const &);
 
     std::vector<std::optional<Element>> const &elements() const;
 

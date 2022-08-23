@@ -61,10 +61,16 @@ database_updater::database_updater(file_track *file_track, marker_pool *marker_p
                 case marker_pool_event_type::reverted:
                     break;
                 case marker_pool_event_type::inserted:
-                    this->_database->add_marker(event.marker.value());
+                    this->_database->add_marker(event.inserted.value());
                     break;
                 case marker_pool_event_type::erased:
-                    this->_database->remove_marker(event.marker.value().frame);
+                    this->_database->remove_marker(event.erased.value().frame);
+                    break;
+                case marker_pool_event_type::replaced:
+                    this->_database->suspend_saving([this, &event] {
+                        this->_database->remove_marker(event.erased.value().frame);
+                        this->_database->add_marker(event.inserted.value());
+                    });
                     break;
             }
         })

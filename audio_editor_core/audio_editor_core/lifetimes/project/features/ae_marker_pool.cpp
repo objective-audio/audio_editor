@@ -4,6 +4,7 @@
 
 #include "ae_marker_pool.h"
 
+#include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <cpp_utils/yas_stl_utils.h>
 #include <cpp_utils/yas_url.h>
@@ -23,11 +24,27 @@ void marker_pool::revert_markers(std::vector<marker> &&markers) {
 }
 
 void marker_pool::insert_marker(marker const &marker) {
-    this->_markers->insert_or_replace(marker.frame, marker);
+    if (!this->_markers->contains(marker.frame)) {
+        this->_markers->insert_or_replace(marker.frame, marker);
+    } else {
+        assertion_failure_if_not_test();
+    }
+}
+
+void marker_pool::replace_marker(marker const &marker) {
+    if (this->_markers->contains(marker.frame)) {
+        this->_markers->insert_or_replace(marker.frame, marker);
+    } else {
+        assertion_failure_if_not_test();
+    }
 }
 
 void marker_pool::erase_at(frame_index_t const frame) {
-    this->_markers->erase(frame);
+    if (this->_markers->contains(frame)) {
+        this->_markers->erase(frame);
+    } else {
+        assertion_failure_if_not_test();
+    }
 }
 
 void marker_pool::erase_marker(marker const &marker) {
@@ -48,6 +65,8 @@ void marker_pool::move_at(frame_index_t const frame, frame_index_t const new_fra
     if (this->_markers->contains(frame)) {
         this->erase_at(frame);
         this->insert_marker({.frame = new_frame});
+    } else {
+        assertion_failure_if_not_test();
     }
 }
 
@@ -116,7 +135,10 @@ std::optional<frame_index_t> marker_pool::previous_jumpable_frame(frame_index_t 
 observing::syncable marker_pool::observe_event(std::function<void(marker_pool_event const &)> &&handler) {
     if (!this->_fetcher) {
         this->_fetcher = observing::fetcher<marker_pool_event>::make_shared([this] {
-            return marker_pool_event{.type = marker_pool_event_type::any, .markers = this->_markers->elements()};
+            return marker_pool_event{.type = marker_pool_event_type::any,
+                                     .inserted = std::nullopt,
+                                     .erased = std::nullopt,
+                                     .markers = this->_markers->elements()};
         });
 
         this->_markers
@@ -124,25 +146,26 @@ observing::syncable marker_pool::observe_event(std::function<void(marker_pool_ev
                 switch (event.type) {
                     case observing::map::event_type::any:
                         this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::reverted,
-                                                               .marker = std::nullopt,
+                                                               .inserted = std::nullopt,
+                                                               .erased = std::nullopt,
                                                                .markers = event.elements});
                         break;
                     case observing::map::event_type::inserted:
                         this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::inserted,
-                                                               .marker = *event.inserted,
+                                                               .inserted = *event.inserted,
+                                                               .erased = std::nullopt,
                                                                .markers = event.elements});
                         break;
                     case observing::map::event_type::erased:
                         this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::erased,
-                                                               .marker = *event.erased,
+                                                               .inserted = std::nullopt,
+                                                               .erased = *event.erased,
                                                                .markers = event.elements});
                         break;
                     case observing::map::event_type::replaced:
-                        this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::erased,
-                                                               .marker = *event.erased,
-                                                               .markers = event.elements});
-                        this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::inserted,
-                                                               .marker = *event.inserted,
+                        this->_fetcher->push(marker_pool_event{.type = marker_pool_event_type::replaced,
+                                                               .inserted = *event.inserted,
+                                                               .erased = *event.erased,
                                                                .markers = event.elements});
                         break;
                 }
