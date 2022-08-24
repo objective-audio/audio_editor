@@ -61,15 +61,6 @@ std::shared_ptr<time_editor_lifetime> const &project_modal_lifecycle::time_edito
     return get<ae::time_editor_lifetime>(this->_current->value());
 }
 
-void project_modal_lifecycle::add_sheet(sheet_content const &content) {
-    if (this->_current->value().has_value()) {
-        throw std::runtime_error("current is not null.");
-    }
-
-    this->_current->set_value(sheet_lifetime::make_shared(
-        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, content));
-}
-
 void project_modal_lifecycle::add_module_name_sheet(time::range const &range) {
     if (this->_current->value().has_value()) {
         throw std::runtime_error("current is not null.");
