@@ -29,12 +29,11 @@ struct marker_name_vc_cpp {
     marker_name_vc_cpp _cpp;
 }
 
-+ (instancetype)instantiateWithSheetLifetimeId:(yas::ae::sheet_lifetime_id const &)sheet_lifetime_id
-                                   markerFrame:(int64_t const)marker_frame {
++ (instancetype)instantiateWithSheetLifetimeId:(yas::ae::sheet_lifetime_id const &)sheet_lifetime_id {
     auto *const storyboard = [NSStoryboard storyboardWithName:@"MarkerName"
                                                        bundle:[NSBundle bundleForClass:[self class]]];
     AEMarkerNameViewController *vc = [storyboard instantiateInitialController];
-    vc->_cpp.presenter = marker_name_presenter::make_shared(sheet_lifetime_id, marker_frame);
+    vc->_cpp.presenter = marker_name_presenter::make_shared(sheet_lifetime_id);
     vc.preferredContentSize = NSMakeSize(400.0, 150.0);
     return vc;
 }

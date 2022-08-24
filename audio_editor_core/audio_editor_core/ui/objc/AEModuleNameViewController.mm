@@ -26,12 +26,11 @@ struct module_name_vc_cpp {
     module_name_vc_cpp _cpp;
 }
 
-+ (instancetype)instantiateWithSheetLifetimeId:(sheet_lifetime_id const &)sheet_lifetime_id
-                                   moduleRange:(time::range const)module_range {
++ (instancetype)instantiateWithSheetLifetimeId:(sheet_lifetime_id const &)sheet_lifetime_id {
     auto *const storyboard = [NSStoryboard storyboardWithName:@"ModuleName"
                                                        bundle:[NSBundle bundleForClass:[self class]]];
     AEModuleNameViewController *vc = [storyboard instantiateInitialController];
-    vc->_cpp.presenter = module_name_presenter::make_shared(sheet_lifetime_id, module_range);
+    vc->_cpp.presenter = module_name_presenter::make_shared(sheet_lifetime_id);
     vc.preferredContentSize = NSMakeSize(400.0, 150.0);
     return vc;
 }

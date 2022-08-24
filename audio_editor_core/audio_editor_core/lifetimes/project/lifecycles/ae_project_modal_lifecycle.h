@@ -23,7 +23,8 @@ struct project_modal_lifecycle final : action_receiver_providable {
     void remove_time_editor(time_editor_lifetime_id const &);
     std::shared_ptr<time_editor_lifetime> const &time_editor_lifetime() const;
 
-    void add_sheet(sheet_content const &);
+    void add_module_name_sheet(time::range const &);
+    void add_marker_name_sheet(int64_t const);
     void remove_sheet(sheet_lifetime_id const &);
     std::shared_ptr<sheet_lifetime> const &sheet_lifetime() const;
 

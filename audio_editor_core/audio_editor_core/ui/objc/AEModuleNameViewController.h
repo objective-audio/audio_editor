@@ -18,8 +18,7 @@ enum class module_name_vc_event {
 
 @interface AEModuleNameViewController : NSViewController
 
-+ (instancetype)instantiateWithSheetLifetimeId:(yas::ae::sheet_lifetime_id const &)sheet_lifetime_id
-                                   moduleRange:(yas::ae::time::range const)module_range;
++ (instancetype)instantiateWithSheetLifetimeId:(yas::ae::sheet_lifetime_id const &)sheet_lifetime_id;
 
 @end
 

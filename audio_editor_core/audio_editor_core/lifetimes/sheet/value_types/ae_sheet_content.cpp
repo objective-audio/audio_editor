@@ -7,10 +7,10 @@
 using namespace yas;
 using namespace yas::ae;
 
-time::range const &sheet_content::range_value() const {
-    return std::get<time::range>(this->value);
+std::shared_ptr<module_name_editor> const &sheet_content::module_name_editor() const {
+    return std::get<std::shared_ptr<ae::module_name_editor>>(this->value);
 }
 
-int64_t const &sheet_content::integer_value() const {
-    return std::get<int64_t>(this->value);
+std::shared_ptr<marker_name_editor> const &sheet_content::marker_name_editor() const {
+    return std::get<std::shared_ptr<ae::marker_name_editor>>(this->value);
 }
