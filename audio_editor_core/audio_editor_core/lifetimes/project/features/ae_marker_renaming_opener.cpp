@@ -32,5 +32,5 @@ void marker_renaming_opener::begin_renaming(frame_index_t const &frame) {
         return;
     }
 
-    this->_lifecycle->add_sheet({.kind = sheet_kind::marker_name, .value = frame});
+    this->_lifecycle->add_marker_name_sheet(frame);
 }

@@ -103,8 +103,7 @@ using namespace yas::ae;
                             [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id];
                             break;
                         case sheet_kind::marker_name:
-                            [self showMarkerNameSheetWithLifetimeId:lifetime->lifetime_id
-                                                              frame:lifetime->content.integer_value()];
+                            [self showMarkerNameSheetWithLifetimeId:lifetime->lifetime_id];
                             break;
                     }
                 } break;
@@ -321,8 +320,8 @@ using namespace yas::ae;
     [self presentViewControllerAsSheet:vc];
 }
 
-- (void)showMarkerNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id frame:(int64_t const &)marker_frame {
-    auto *const vc = [AEMarkerNameViewController instantiateWithSheetLifetimeId:lifetime_id markerFrame:marker_frame];
+- (void)showMarkerNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id {
+    auto *const vc = [AEMarkerNameViewController instantiateWithSheetLifetimeId:lifetime_id];
 
     [self presentViewControllerAsSheet:vc];
 }

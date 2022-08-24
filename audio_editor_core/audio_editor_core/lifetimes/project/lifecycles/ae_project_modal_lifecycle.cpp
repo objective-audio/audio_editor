@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_time_editor_lifetime.h>
 #include <audio_editor_core/ae_time_editor_receiver.h>
 
+#include <audio_editor_core/ae_marker_name_editor.hpp>
 #include <audio_editor_core/ae_module_name_editor.hpp>
 
 using namespace yas;
@@ -80,6 +81,19 @@ void project_modal_lifecycle::add_module_name_sheet(time::range const &range) {
     this->_current->set_value(sheet_lifetime::make_shared(
         sheet_lifetime_id,
         {.kind = sheet_kind::module_name, .value = module_name_editor::make_shared(sheet_lifetime_id, range)}));
+}
+
+void project_modal_lifecycle::add_marker_name_sheet(int64_t const frame) {
+    if (this->_current->value().has_value()) {
+        throw std::runtime_error("current is not null.");
+    }
+
+    sheet_lifetime_id const sheet_lifetime_id{.instance = this->_id_generator->generate(),
+                                              .window = this->_window_lifetime_id};
+
+    this->_current->set_value(sheet_lifetime::make_shared(
+        sheet_lifetime_id,
+        {.kind = sheet_kind::marker_name, .value = marker_name_editor::make_shared(sheet_lifetime_id, frame)}));
 }
 
 void project_modal_lifecycle::remove_sheet(sheet_lifetime_id const &lifetime_id) {

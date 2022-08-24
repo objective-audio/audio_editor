@@ -16,8 +16,7 @@ enum class marker_name_vc_event {
 
 @interface AEMarkerNameViewController : NSViewController
 
-+ (instancetype)instantiateWithSheetLifetimeId:(yas::ae::sheet_lifetime_id const &)sheet_lifetime_id
-                                   markerFrame:(int64_t const)marker_frame;
++ (instancetype)instantiateWithSheetLifetimeId:(yas::ae::sheet_lifetime_id const &)sheet_lifetime_id;
 
 @end
 

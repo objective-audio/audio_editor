@@ -178,6 +178,8 @@
 		B68E852627BF4DB200074894 /* ae_ui_edge_element.h in Headers */ = {isa = PBXBuildFile; fileRef = B68E852427BF4DB200074894 /* ae_ui_edge_element.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6901110286333B600EF58CF /* ae_json_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B690110E286333B600EF58CF /* ae_json_utils.cpp */; };
 		B6901111286333B600EF58CF /* ae_json_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B690110F286333B600EF58CF /* ae_json_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B692946D28B64AA500764235 /* ae_marker_name_editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B692946B28B64AA500764235 /* ae_marker_name_editor.cpp */; };
+		B692946E28B64AA500764235 /* ae_marker_name_editor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B692946C28B64AA500764235 /* ae_marker_name_editor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B693BE2B28251D2F00A82877 /* ae_project_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B693BE2928251D2F00A82877 /* ae_project_id.cpp */; };
 		B693BE2C28251D2F00A82877 /* ae_project_id.h in Headers */ = {isa = PBXBuildFile; fileRef = B693BE2A28251D2F00A82877 /* ae_project_id.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B695726B2737E19E00E97EAE /* ae_modules_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B695726A2737E19E00E97EAE /* ae_modules_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -575,6 +577,8 @@
 		B68E852427BF4DB200074894 /* ae_ui_edge_element.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_edge_element.h; sourceTree = "<group>"; };
 		B690110E286333B600EF58CF /* ae_json_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_json_utils.cpp; sourceTree = "<group>"; };
 		B690110F286333B600EF58CF /* ae_json_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_json_utils.h; sourceTree = "<group>"; };
+		B692946B28B64AA500764235 /* ae_marker_name_editor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_marker_name_editor.cpp; sourceTree = "<group>"; };
+		B692946C28B64AA500764235 /* ae_marker_name_editor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_marker_name_editor.hpp; sourceTree = "<group>"; };
 		B693BE2928251D2F00A82877 /* ae_project_id.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_id.cpp; sourceTree = "<group>"; };
 		B693BE2A28251D2F00A82877 /* ae_project_id.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_id.h; sourceTree = "<group>"; };
 		B695726A2737E19E00E97EAE /* ae_modules_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_modules_presenter_dependency.h; sourceTree = "<group>"; };
@@ -1744,6 +1748,8 @@
 			children = (
 				B6D3C70C28B5136300099257 /* ae_module_name_editor.cpp */,
 				B6D3C70D28B5136300099257 /* ae_module_name_editor.hpp */,
+				B692946B28B64AA500764235 /* ae_marker_name_editor.cpp */,
+				B692946C28B64AA500764235 /* ae_marker_name_editor.hpp */,
 			);
 			path = features;
 			sourceTree = "<group>";
@@ -1931,6 +1937,7 @@
 				B6AAB8D3282D4F7B007A87B5 /* ae_file_module_loading_state.h in Headers */,
 				B668BE2B262F330E0021AD20 /* ae_window_lifecycle_types.h in Headers */,
 				B668BE26262F32B60021AD20 /* ae_window_lifecycle.h in Headers */,
+				B692946E28B64AA500764235 /* ae_marker_name_editor.hpp in Headers */,
 				B6966F38272E4D8400A90733 /* ae_database.h in Headers */,
 				B6A12381278932B900F31B31 /* ae_ui_time_buttons.h in Headers */,
 				B6A997462629B34E00DAC3FE /* audio_editor_core.h in Headers */,
@@ -2323,6 +2330,7 @@
 				B6047AE92875AC3000BC91F6 /* ae_window_lifetime_id.cpp in Sources */,
 				B6966F46272EDB2F00A90733 /* ae_db_module.cpp in Sources */,
 				B66F5D6727AE2EA900441616 /* ae_color.mm in Sources */,
+				B692946D28B64AA500764235 /* ae_marker_name_editor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
