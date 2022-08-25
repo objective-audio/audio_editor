@@ -16,9 +16,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-static std::shared_ptr<time_editor_lifetime> const _null_time_editor_lifetime = nullptr;
-static std::shared_ptr<sheet_lifetime> const _null_sheet_lifetime = nullptr;
-
 std::shared_ptr<project_modal_lifecycle> project_modal_lifecycle::make_shared(
     window_lifetime_id const &window_lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
@@ -69,9 +66,23 @@ void project_modal_lifecycle::add_module_name_sheet(time::range const &range) {
     sheet_lifetime_id const sheet_lifetime_id{.instance = this->_id_generator->generate(),
                                               .window = this->_window_lifetime_id};
 
-    this->_current->set_value(sheet_lifetime::make_shared(
-        sheet_lifetime_id,
-        {.kind = sheet_kind::module_name, .value = module_name_editor::make_shared(sheet_lifetime_id, range)}));
+    this->_current->set_value(std::make_shared<ae::module_name_sheet_lifetime>(sheet_lifetime_id, range));
+}
+
+void project_modal_lifecycle::remove_module_name_sheet(sheet_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->module_name_sheet_lifetime();
+
+    if (lifetime == nullptr) {
+        throw std::runtime_error("module_name_sheet is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("sheet does not match id.");
+    }
+
+    this->_current->set_value(std::nullopt);
+}
+
+std::shared_ptr<module_name_sheet_lifetime> const &project_modal_lifecycle::module_name_sheet_lifetime() const {
+    return get<ae::module_name_sheet_lifetime>(this->_current->value());
 }
 
 void project_modal_lifecycle::add_marker_name_sheet(int64_t const frame) {
@@ -82,16 +93,14 @@ void project_modal_lifecycle::add_marker_name_sheet(int64_t const frame) {
     sheet_lifetime_id const sheet_lifetime_id{.instance = this->_id_generator->generate(),
                                               .window = this->_window_lifetime_id};
 
-    this->_current->set_value(sheet_lifetime::make_shared(
-        sheet_lifetime_id,
-        {.kind = sheet_kind::marker_name, .value = marker_name_editor::make_shared(sheet_lifetime_id, frame)}));
+    this->_current->set_value(std::make_shared<ae::marker_name_sheet_lifetime>(sheet_lifetime_id, frame));
 }
 
-void project_modal_lifecycle::remove_sheet(sheet_lifetime_id const &lifetime_id) {
-    auto const &lifetime = this->sheet_lifetime();
+void project_modal_lifecycle::remove_marker_name_sheet(sheet_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->marker_name_sheet_lifetime();
 
     if (lifetime == nullptr) {
-        throw std::runtime_error("sheet is null.");
+        throw std::runtime_error("module_name_sheet is null.");
     } else if (lifetime->lifetime_id != lifetime_id) {
         throw std::runtime_error("sheet does not match id.");
     }
@@ -99,8 +108,8 @@ void project_modal_lifecycle::remove_sheet(sheet_lifetime_id const &lifetime_id)
     this->_current->set_value(std::nullopt);
 }
 
-std::shared_ptr<sheet_lifetime> const &project_modal_lifecycle::sheet_lifetime() const {
-    return get<ae::sheet_lifetime>(this->_current->value());
+std::shared_ptr<marker_name_sheet_lifetime> const &project_modal_lifecycle::marker_name_sheet_lifetime() const {
+    return get<ae::marker_name_sheet_lifetime>(this->_current->value());
 }
 
 void project_modal_lifecycle::add_dialog(dialog_content const content) {

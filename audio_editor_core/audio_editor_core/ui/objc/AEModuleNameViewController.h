@@ -4,7 +4,7 @@
 
 #import <Cocoa/Cocoa.h>
 #include <audio_editor_core/ae_common_types.h>
-#include <audio_editor_core/ae_window_sub_lifetime_id.h>
+#include <audio_editor_core/ae_project_sub_lifetime_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 NS_ASSUME_NONNULL_BEGIN

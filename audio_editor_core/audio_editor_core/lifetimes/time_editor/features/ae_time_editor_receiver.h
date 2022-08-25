@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action_receivable.h>
-#include <audio_editor_core/ae_window_sub_lifetime_id.h>
+#include <audio_editor_core/ae_project_sub_lifetime_id.h>
 
 namespace yas::ae {
 class time_editor;

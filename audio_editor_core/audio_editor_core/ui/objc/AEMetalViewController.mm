@@ -96,16 +96,14 @@ using namespace yas::ae;
                     [self hideModal];
                     break;
 
-                case kind::sheet: {
-                    auto const &lifetime = get<sheet_lifetime>(sub_lifetime);
-                    switch (lifetime->content.kind) {
-                        case sheet_kind::module_name:
-                            [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id];
-                            break;
-                        case sheet_kind::marker_name:
-                            [self showMarkerNameSheetWithLifetimeId:lifetime->lifetime_id];
-                            break;
-                    }
+                case kind::module_name_sheet: {
+                    auto const &lifetime = get<module_name_sheet_lifetime>(sub_lifetime);
+                    [self showModuleNameSheetWithLifetimeId:lifetime->lifetime_id];
+                } break;
+
+                case kind::marker_name_sheet: {
+                    auto const &lifetime = get<marker_name_sheet_lifetime>(sub_lifetime);
+                    [self showMarkerNameSheetWithLifetimeId:lifetime->lifetime_id];
                 } break;
 
                 case kind::dialog: {
