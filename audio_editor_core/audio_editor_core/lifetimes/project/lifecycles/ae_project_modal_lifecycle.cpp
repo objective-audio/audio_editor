@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_id_generator.h>
 #include <audio_editor_core/ae_time_editor.h>
-#include <audio_editor_core/ae_time_editor_lifetime.h>
 #include <audio_editor_core/ae_time_editor_receiver.h>
 
 #include <audio_editor_core/ae_marker_name_editor.hpp>
@@ -112,29 +111,54 @@ std::shared_ptr<marker_name_sheet_lifetime> const &project_modal_lifecycle::mark
     return get<ae::marker_name_sheet_lifetime>(this->_current->value());
 }
 
-void project_modal_lifecycle::add_dialog(dialog_content const content) {
+void project_modal_lifecycle::add_file_import_dialog() {
     if (this->_current->value().has_value()) {
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(dialog_lifetime::make_shared(
-        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, content));
+    this->_current->set_value(std::make_shared<ae::file_import_dialog_lifetime>(
+        dialog_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}));
 }
 
-void project_modal_lifecycle::remove_dialog(dialog_lifetime_id const &lifetime_id) {
-    auto const &lifetime = this->dialog_lifetime();
+void project_modal_lifecycle::remove_file_import_dialog(dialog_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->file_import_dialog_lifetime();
 
     if (lifetime == nullptr) {
-        throw std::runtime_error("dialog is null.");
+        throw std::runtime_error("file_import_dialog is null.");
     } else if (lifetime->lifetime_id != lifetime_id) {
-        throw std::runtime_error("dialog does not match id.");
+        throw std::runtime_error("file_import_dialog does not match id.");
     }
 
     this->_current->set_value(std::nullopt);
 }
 
-std::shared_ptr<dialog_lifetime> const &project_modal_lifecycle::dialog_lifetime() const {
-    return get<ae::dialog_lifetime>(this->_current->value());
+std::shared_ptr<file_import_dialog_lifetime> const &project_modal_lifecycle::file_import_dialog_lifetime() const {
+    return get<ae::file_import_dialog_lifetime>(this->_current->value());
+}
+
+void project_modal_lifecycle::add_file_export_dialog() {
+    if (this->_current->value().has_value()) {
+        throw std::runtime_error("current is not null.");
+    }
+
+    this->_current->set_value(std::make_shared<ae::file_export_dialog_lifetime>(
+        dialog_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}));
+}
+
+void project_modal_lifecycle::remove_file_export_dialog(dialog_lifetime_id const &lifetime_id) {
+    auto const &lifetime = this->file_export_dialog_lifetime();
+
+    if (lifetime == nullptr) {
+        throw std::runtime_error("file_export_dialog is null.");
+    } else if (lifetime->lifetime_id != lifetime_id) {
+        throw std::runtime_error("file_export_dialog does not match id.");
+    }
+
+    this->_current->set_value(std::nullopt);
+}
+
+std::shared_ptr<file_export_dialog_lifetime> const &project_modal_lifecycle::file_export_dialog_lifetime() const {
+    return get<ae::file_export_dialog_lifetime>(this->_current->value());
 }
 
 void project_modal_lifecycle::add_context_menu(context_menu const &context_menu) {

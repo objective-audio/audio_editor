@@ -52,6 +52,8 @@ using namespace yas::ae;
 
                 case kind::none:
                 case kind::time_editor:
+                case kind::file_import_dialog:
+                case kind::file_export_dialog:
                 case kind::dialog:
                 case kind::module_name_sheet:
                 case kind::marker_name_sheet:

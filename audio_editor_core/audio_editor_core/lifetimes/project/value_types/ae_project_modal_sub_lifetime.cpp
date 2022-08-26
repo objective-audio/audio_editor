@@ -22,6 +22,10 @@ template std::shared_ptr<module_name_sheet_lifetime> const &yas::get(
     std::optional<ae::project_modal_sub_lifetime> const &);
 template std::shared_ptr<marker_name_sheet_lifetime> const &yas::get(
     std::optional<ae::project_modal_sub_lifetime> const &);
+template std::shared_ptr<file_import_dialog_lifetime> const &yas::get(
+    std::optional<ae::project_modal_sub_lifetime> const &);
+template std::shared_ptr<file_export_dialog_lifetime> const &yas::get(
+    std::optional<ae::project_modal_sub_lifetime> const &);
 template std::shared_ptr<dialog_lifetime> const &yas::get(std::optional<ae::project_modal_sub_lifetime> const &);
 template std::shared_ptr<context_menu_lifetime> const &yas::get(std::optional<ae::project_modal_sub_lifetime> const &);
 
@@ -36,6 +40,10 @@ ae::project_modal_sub_lifetime_kind yas::to_kind(std::optional<ae::project_modal
         return kind::module_name_sheet;
     } else if (std::holds_alternative<std::shared_ptr<marker_name_sheet_lifetime>>(sub_lifetime.value())) {
         return kind::marker_name_sheet;
+    } else if (std::holds_alternative<std::shared_ptr<file_import_dialog_lifetime>>(sub_lifetime.value())) {
+        return kind::file_import_dialog;
+    } else if (std::holds_alternative<std::shared_ptr<file_export_dialog_lifetime>>(sub_lifetime.value())) {
+        return kind::file_export_dialog;
     } else if (std::holds_alternative<std::shared_ptr<dialog_lifetime>>(sub_lifetime.value())) {
         return kind::dialog;
     } else if (std::holds_alternative<std::shared_ptr<context_menu_lifetime>>(sub_lifetime.value())) {

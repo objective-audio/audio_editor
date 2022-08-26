@@ -106,6 +106,16 @@ using namespace yas::ae;
                     [self showMarkerNameSheetWithLifetimeId:lifetime->lifetime_id];
                 } break;
 
+                case kind::file_import_dialog: {
+                    auto const &lifetime = get<file_import_dialog_lifetime>(sub_lifetime);
+                    [self showSelectFileForImportDialogWithLifetimeId:lifetime->lifetime_id];
+                } break;
+
+                case kind::file_export_dialog: {
+                    auto const &lifetime = get<file_export_dialog_lifetime>(sub_lifetime);
+                    [self showSelectFileForExportDialogWithLifetimeId:lifetime->lifetime_id];
+                } break;
+
                 case kind::dialog: {
                     auto const &lifetime = get<dialog_lifetime>(sub_lifetime);
                     switch (lifetime->content) {
@@ -270,7 +280,7 @@ using namespace yas::ae;
         auto *const panel = unowned_panel.object;
 
         if (auto const lifecycle = self->_project_modal_lifecycle.lock()) {
-            lifecycle->remove_dialog(lifetime_id);
+            lifecycle->remove_file_import_dialog(lifetime_id);
         } else {
             assertion_failure_if_not_test();
         }
@@ -298,7 +308,7 @@ using namespace yas::ae;
         auto *const panel = unowned_panel.object;
 
         if (auto const lifecycle = self->_project_modal_lifecycle.lock()) {
-            lifecycle->remove_dialog(lifetime_id);
+            lifecycle->remove_file_export_dialog(lifetime_id);
         } else {
             assertion_failure_if_not_test();
         }

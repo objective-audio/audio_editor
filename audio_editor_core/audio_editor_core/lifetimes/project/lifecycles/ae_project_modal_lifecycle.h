@@ -31,9 +31,13 @@ struct project_modal_lifecycle final : action_receiver_providable {
     void remove_marker_name_sheet(sheet_lifetime_id const &);
     std::shared_ptr<marker_name_sheet_lifetime> const &marker_name_sheet_lifetime() const;
 
-    void add_dialog(dialog_content const);
-    void remove_dialog(dialog_lifetime_id const &);
-    std::shared_ptr<dialog_lifetime> const &dialog_lifetime() const;
+    void add_file_import_dialog();
+    void remove_file_import_dialog(dialog_lifetime_id const &);
+    std::shared_ptr<file_import_dialog_lifetime> const &file_import_dialog_lifetime() const;
+
+    void add_file_export_dialog();
+    void remove_file_export_dialog(dialog_lifetime_id const &);
+    std::shared_ptr<file_export_dialog_lifetime> const &file_export_dialog_lifetime() const;
 
     void add_context_menu(context_menu const &);
     void remove_context_menu(context_menu_lifetime_id const &);

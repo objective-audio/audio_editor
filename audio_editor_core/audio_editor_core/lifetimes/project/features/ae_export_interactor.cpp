@@ -43,7 +43,7 @@ void export_interactor::select_file_for_export() {
         return;
     }
 
-    this->_lifecycle->add_dialog(dialog_content::select_file_for_export);
+    this->_lifecycle->add_file_export_dialog();
 }
 
 bool export_interactor::can_export_to_file() const {

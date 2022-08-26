@@ -31,7 +31,7 @@ void import_interactor::select_file_for_import() {
         return;
     }
 
-    this->_lifecycle->add_dialog(dialog_content::select_file_for_import);
+    this->_lifecycle->add_file_import_dialog();
 }
 
 bool import_interactor::can_import_from_file() const {
