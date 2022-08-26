@@ -8,6 +8,8 @@
 #include <audio_editor_core/ae_dialog_lifetime.h>
 #include <audio_editor_core/ae_time_editor_lifetime.h>
 
+#include <audio_editor_core/ae_file_export_dialog_lifetime.hpp>
+#include <audio_editor_core/ae_file_import_dialog_lifetime.hpp>
 #include <audio_editor_core/ae_marker_name_sheet_lifetime.hpp>
 #include <audio_editor_core/ae_module_name_sheet_lifetime.hpp>
 #include <optional>
@@ -16,7 +18,8 @@
 namespace yas::ae {
 using project_modal_sub_lifetime =
     std::variant<std::shared_ptr<time_editor_lifetime>, std::shared_ptr<module_name_sheet_lifetime>,
-                 std::shared_ptr<marker_name_sheet_lifetime>, std::shared_ptr<dialog_lifetime>,
+                 std::shared_ptr<marker_name_sheet_lifetime>, std::shared_ptr<file_import_dialog_lifetime>,
+                 std::shared_ptr<file_export_dialog_lifetime>, std::shared_ptr<dialog_lifetime>,
                  std::shared_ptr<context_menu_lifetime>>;
 
 enum class project_modal_sub_lifetime_kind {
@@ -24,6 +27,8 @@ enum class project_modal_sub_lifetime_kind {
     time_editor,
     module_name_sheet,
     marker_name_sheet,
+    file_import_dialog,
+    file_export_dialog,
     dialog,
     context_menu,
 };
