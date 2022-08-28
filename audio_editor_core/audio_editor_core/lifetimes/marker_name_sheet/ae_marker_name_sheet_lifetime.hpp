@@ -13,9 +13,9 @@ namespace yas::ae {
 class marker_name_editor;
 
 struct marker_name_sheet_lifetime final {
-    marker_name_sheet_lifetime(sheet_lifetime_id const &, int64_t const marker_frame);
+    marker_name_sheet_lifetime(project_sub_lifetime_id const &, int64_t const marker_frame);
 
-    sheet_lifetime_id const lifetime_id;
+    project_sub_lifetime_id const lifetime_id;
     std::shared_ptr<marker_name_editor> const editor;
 };
 }  // namespace yas::ae

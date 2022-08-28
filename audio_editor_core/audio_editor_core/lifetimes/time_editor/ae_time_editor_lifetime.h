@@ -19,12 +19,12 @@ class time_editor_closer;
 class time_editor_receiver;
 
 struct time_editor_lifetime final {
-    [[nodiscard]] static std::shared_ptr<time_editor_lifetime> make_shared(time_editor_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<time_editor_lifetime> make_shared(project_sub_lifetime_id const &,
                                                                            number_components const &);
 
-    time_editor_lifetime(ae::time_editor_lifetime_id const &, number_components const &);
+    time_editor_lifetime(project_sub_lifetime_id const &, number_components const &);
 
-    time_editor_lifetime_id const lifetime_id;
+    project_sub_lifetime_id const lifetime_id;
     std::shared_ptr<time_editor> const editor;
     std::shared_ptr<time_editor_closer> const closer;
     std::shared_ptr<time_editor_receiver> const receiver;

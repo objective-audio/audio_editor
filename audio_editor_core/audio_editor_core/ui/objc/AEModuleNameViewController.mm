@@ -26,7 +26,7 @@ struct module_name_vc_cpp {
     module_name_vc_cpp _cpp;
 }
 
-+ (instancetype)instantiateWithSheetLifetimeId:(sheet_lifetime_id const &)sheet_lifetime_id {
++ (instancetype)instantiateWithSheetLifetimeId:(project_sub_lifetime_id const &)sheet_lifetime_id {
     auto *const storyboard = [NSStoryboard storyboardWithName:@"ModuleName"
                                                        bundle:[NSBundle bundleForClass:[self class]]];
     AEModuleNameViewController *vc = [storyboard instantiateInitialController];

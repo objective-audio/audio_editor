@@ -12,7 +12,7 @@ using namespace yas::ae;
 
 static std::string const empty_string = "";
 
-std::shared_ptr<marker_name_editor> marker_name_editor::make_shared(sheet_lifetime_id const &lifetime_id,
+std::shared_ptr<marker_name_editor> marker_name_editor::make_shared(project_sub_lifetime_id const &lifetime_id,
                                                                     int64_t const marker_frame) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
     return std::make_shared<marker_name_editor>(marker_frame, project_lifetime->marker_pool.get());

@@ -41,7 +41,7 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
         {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, components));
 }
 
-void project_modal_lifecycle::remove_time_editor(time_editor_lifetime_id const &lifetime_id) {
+void project_modal_lifecycle::remove_time_editor(project_sub_lifetime_id const &lifetime_id) {
     auto const &lifetime = this->time_editor_lifetime();
 
     if (lifetime == nullptr) {
@@ -62,13 +62,12 @@ void project_modal_lifecycle::add_module_name_sheet(time::range const &range) {
         throw std::runtime_error("current is not null.");
     }
 
-    sheet_lifetime_id const sheet_lifetime_id{.instance = this->_id_generator->generate(),
-                                              .window = this->_window_lifetime_id};
-
-    this->_current->set_value(std::make_shared<ae::module_name_sheet_lifetime>(sheet_lifetime_id, range));
+    this->_current->set_value(std::make_shared<ae::module_name_sheet_lifetime>(
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id},
+        range));
 }
 
-void project_modal_lifecycle::remove_module_name_sheet(sheet_lifetime_id const &lifetime_id) {
+void project_modal_lifecycle::remove_module_name_sheet(project_sub_lifetime_id const &lifetime_id) {
     auto const &lifetime = this->module_name_sheet_lifetime();
 
     if (lifetime == nullptr) {
@@ -89,13 +88,12 @@ void project_modal_lifecycle::add_marker_name_sheet(int64_t const frame) {
         throw std::runtime_error("current is not null.");
     }
 
-    sheet_lifetime_id const sheet_lifetime_id{.instance = this->_id_generator->generate(),
-                                              .window = this->_window_lifetime_id};
-
-    this->_current->set_value(std::make_shared<ae::marker_name_sheet_lifetime>(sheet_lifetime_id, frame));
+    this->_current->set_value(std::make_shared<ae::marker_name_sheet_lifetime>(
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id},
+        frame));
 }
 
-void project_modal_lifecycle::remove_marker_name_sheet(sheet_lifetime_id const &lifetime_id) {
+void project_modal_lifecycle::remove_marker_name_sheet(project_sub_lifetime_id const &lifetime_id) {
     auto const &lifetime = this->marker_name_sheet_lifetime();
 
     if (lifetime == nullptr) {
@@ -117,10 +115,10 @@ void project_modal_lifecycle::add_file_import_dialog() {
     }
 
     this->_current->set_value(std::make_shared<ae::file_import_dialog_lifetime>(
-        dialog_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}));
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}));
 }
 
-void project_modal_lifecycle::remove_file_import_dialog(dialog_lifetime_id const &lifetime_id) {
+void project_modal_lifecycle::remove_file_import_dialog(project_sub_lifetime_id const &lifetime_id) {
     auto const &lifetime = this->file_import_dialog_lifetime();
 
     if (lifetime == nullptr) {
@@ -142,10 +140,10 @@ void project_modal_lifecycle::add_file_export_dialog() {
     }
 
     this->_current->set_value(std::make_shared<ae::file_export_dialog_lifetime>(
-        dialog_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}));
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}));
 }
 
-void project_modal_lifecycle::remove_file_export_dialog(dialog_lifetime_id const &lifetime_id) {
+void project_modal_lifecycle::remove_file_export_dialog(project_sub_lifetime_id const &lifetime_id) {
     auto const &lifetime = this->file_export_dialog_lifetime();
 
     if (lifetime == nullptr) {
@@ -170,7 +168,7 @@ void project_modal_lifecycle::add_context_menu(context_menu const &context_menu)
         {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, context_menu));
 }
 
-void project_modal_lifecycle::remove_context_menu(context_menu_lifetime_id const &lifetime_id) {
+void project_modal_lifecycle::remove_context_menu(project_sub_lifetime_id const &lifetime_id) {
     auto const &lifetime = this->context_menu_lifetime();
 
     if (lifetime == nullptr) {
