@@ -8,8 +8,8 @@
 
 namespace yas::ae {
 struct file_export_dialog_lifetime final {
-    file_export_dialog_lifetime(dialog_lifetime_id const &);
+    file_export_dialog_lifetime(project_sub_lifetime_id const &);
 
-    dialog_lifetime_id const lifetime_id;
+    project_sub_lifetime_id const lifetime_id;
 };
 }  // namespace yas::ae

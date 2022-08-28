@@ -22,8 +22,8 @@ struct hierarchy final {
     [[nodiscard]] static std::shared_ptr<window_lifetime> const &window_lifetime_for_id(window_lifetime_id const &);
     [[nodiscard]] static std::shared_ptr<project_lifetime> const &project_lifetime_for_id(window_lifetime_id const &);
     [[nodiscard]] static std::shared_ptr<module_name_sheet_lifetime> const &module_name_sheet_lifetime_for_id(
-        sheet_lifetime_id const &);
+        project_sub_lifetime_id const &);
     [[nodiscard]] static std::shared_ptr<marker_name_sheet_lifetime> const &marker_name_sheet_lifetime_for_id(
-        sheet_lifetime_id const &);
+        project_sub_lifetime_id const &);
 };
 }  // namespace yas::ae

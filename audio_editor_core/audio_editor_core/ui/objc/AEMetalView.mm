@@ -20,7 +20,7 @@ using namespace yas::ae;
 
 @implementation AEMetalView {
     std::weak_ptr<project_modal_lifecycle> _lifecycle;
-    std::optional<std::pair<context_menu_lifetime_id, context_menu>> _shown_context_menu;
+    std::optional<std::pair<project_sub_lifetime_id, context_menu>> _shown_context_menu;
     std::weak_ptr<project_action_sender> _action_sender;
     observing::canceller_pool _pool;
 }
@@ -64,7 +64,7 @@ using namespace yas::ae;
         ->add_to(self->_pool);
 }
 
-- (void)showContextMenu:(std::pair<context_menu_lifetime_id, context_menu> const &)context_menu {
+- (void)showContextMenu:(std::pair<project_sub_lifetime_id, context_menu> const &)context_menu {
     self->_shown_context_menu = context_menu;
 
     auto const position = ui_event_utils::to_position_from_event_string(context_menu.second.position);

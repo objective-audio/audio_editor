@@ -13,9 +13,9 @@ namespace yas::ae {
 class module_name_editor;
 
 struct module_name_sheet_lifetime final {
-    module_name_sheet_lifetime(sheet_lifetime_id const &, time::range const &);
+    module_name_sheet_lifetime(project_sub_lifetime_id const &, time::range const &);
 
-    sheet_lifetime_id const lifetime_id;
+    project_sub_lifetime_id const lifetime_id;
     std::shared_ptr<module_name_editor> const editor;
 };
 }  // namespace yas::ae

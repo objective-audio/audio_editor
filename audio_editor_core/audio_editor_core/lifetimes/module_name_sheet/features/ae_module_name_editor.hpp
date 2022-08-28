@@ -12,7 +12,7 @@ class file_track;
 class database;
 
 struct module_name_editor final {
-    [[nodiscard]] static std::shared_ptr<module_name_editor> make_shared(sheet_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<module_name_editor> make_shared(project_sub_lifetime_id const &,
                                                                          time::range const &);
     module_name_editor(time::range const &, file_track *, database *);
 

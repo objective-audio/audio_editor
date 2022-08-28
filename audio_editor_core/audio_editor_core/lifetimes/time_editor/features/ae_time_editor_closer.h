@@ -18,11 +18,11 @@ class timing;
 class player;
 
 struct time_editor_closer final {
-    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(time_editor_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<time_editor_closer> make_shared(project_sub_lifetime_id const &,
                                                                          identifier const lifetime_instance_id,
                                                                          time_editor *);
 
-    time_editor_closer(time_editor_lifetime_id const &, time_editor *, project_modal_lifecycle *, timing *, player *);
+    time_editor_closer(project_sub_lifetime_id const &, time_editor *, project_modal_lifecycle *, timing *, player *);
 
     void finish();
     void cancel();
@@ -31,7 +31,7 @@ struct time_editor_closer final {
     bool can_cancel();
 
    private:
-    time_editor_lifetime_id const _lifetime_id;
+    project_sub_lifetime_id const _lifetime_id;
 
     struct dependencies {
         time_editor *const editor;

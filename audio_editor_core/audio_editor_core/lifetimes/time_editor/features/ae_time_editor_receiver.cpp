@@ -11,13 +11,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_receiver> time_editor_receiver::make_shared(time_editor_lifetime_id const &lifetime_id,
+std::shared_ptr<time_editor_receiver> time_editor_receiver::make_shared(project_sub_lifetime_id const &lifetime_id,
                                                                         time_editor *editor,
                                                                         time_editor_closer *closer) {
     return std::make_shared<time_editor_receiver>(lifetime_id, editor, closer);
 }
 
-time_editor_receiver::time_editor_receiver(time_editor_lifetime_id const &lifetime_id, time_editor *editor,
+time_editor_receiver::time_editor_receiver(project_sub_lifetime_id const &lifetime_id, time_editor *editor,
                                            time_editor_closer *closer)
     : _lifetime_id(lifetime_id), _editor(editor), _closer(closer) {
 }

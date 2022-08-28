@@ -20,27 +20,27 @@ struct project_modal_lifecycle final : action_receiver_providable {
     std::optional<project_modal_sub_lifetime> const &current() const;
 
     void add_time_editor(number_components const &);
-    void remove_time_editor(time_editor_lifetime_id const &);
+    void remove_time_editor(project_sub_lifetime_id const &);
     std::shared_ptr<time_editor_lifetime> const &time_editor_lifetime() const;
 
     void add_module_name_sheet(time::range const &);
-    void remove_module_name_sheet(sheet_lifetime_id const &);
+    void remove_module_name_sheet(project_sub_lifetime_id const &);
     std::shared_ptr<module_name_sheet_lifetime> const &module_name_sheet_lifetime() const;
 
     void add_marker_name_sheet(int64_t const);
-    void remove_marker_name_sheet(sheet_lifetime_id const &);
+    void remove_marker_name_sheet(project_sub_lifetime_id const &);
     std::shared_ptr<marker_name_sheet_lifetime> const &marker_name_sheet_lifetime() const;
 
     void add_file_import_dialog();
-    void remove_file_import_dialog(dialog_lifetime_id const &);
+    void remove_file_import_dialog(project_sub_lifetime_id const &);
     std::shared_ptr<file_import_dialog_lifetime> const &file_import_dialog_lifetime() const;
 
     void add_file_export_dialog();
-    void remove_file_export_dialog(dialog_lifetime_id const &);
+    void remove_file_export_dialog(project_sub_lifetime_id const &);
     std::shared_ptr<file_export_dialog_lifetime> const &file_export_dialog_lifetime() const;
 
     void add_context_menu(context_menu const &);
-    void remove_context_menu(context_menu_lifetime_id const &);
+    void remove_context_menu(project_sub_lifetime_id const &);
     std::shared_ptr<context_menu_lifetime> const &context_menu_lifetime() const;
 
     [[nodiscard]] observing::syncable observe(

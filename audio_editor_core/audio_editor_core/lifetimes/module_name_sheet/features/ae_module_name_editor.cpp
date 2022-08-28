@@ -13,7 +13,7 @@ using namespace yas::ae;
 
 static std::string const empty_string = "";
 
-std::shared_ptr<module_name_editor> module_name_editor::make_shared(sheet_lifetime_id const &lifetime_id,
+std::shared_ptr<module_name_editor> module_name_editor::make_shared(project_sub_lifetime_id const &lifetime_id,
                                                                     time::range const &range) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
     return std::make_shared<module_name_editor>(range, project_lifetime->file_track.get(),

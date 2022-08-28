@@ -268,7 +268,7 @@ using namespace yas::ae;
 
 #pragma mark -
 
-- (void)showSelectFileForImportDialogWithLifetimeId:(dialog_lifetime_id const &)lifetime_id {
+- (void)showSelectFileForImportDialogWithLifetimeId:(project_sub_lifetime_id const &)lifetime_id {
     auto *const panel = [NSOpenPanel openPanel];
     panel.allowedContentTypes = @[UTTypeAudio];
 
@@ -294,7 +294,7 @@ using namespace yas::ae;
     }];
 }
 
-- (void)showSelectFileForExportDialogWithLifetimeId:(dialog_lifetime_id const &)lifetime_id {
+- (void)showSelectFileForExportDialogWithLifetimeId:(project_sub_lifetime_id const &)lifetime_id {
     auto *const panel = [NSSavePanel savePanel];
     panel.canCreateDirectories = YES;
     panel.allowedContentTypes = @[UTTypeAudio];
@@ -322,13 +322,13 @@ using namespace yas::ae;
     }];
 }
 
-- (void)showModuleNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id {
+- (void)showModuleNameSheetWithLifetimeId:(project_sub_lifetime_id const &)lifetime_id {
     auto *const vc = [AEModuleNameViewController instantiateWithSheetLifetimeId:lifetime_id];
 
     [self presentViewControllerAsSheet:vc];
 }
 
-- (void)showMarkerNameSheetWithLifetimeId:(sheet_lifetime_id const &)lifetime_id {
+- (void)showMarkerNameSheetWithLifetimeId:(project_sub_lifetime_id const &)lifetime_id {
     auto *const vc = [AEMarkerNameViewController instantiateWithSheetLifetimeId:lifetime_id];
 
     [self presentViewControllerAsSheet:vc];

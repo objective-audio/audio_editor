@@ -10,7 +10,7 @@ namespace yas::ae {
 class marker_pool;
 
 struct marker_name_editor final {
-    [[nodiscard]] static std::shared_ptr<marker_name_editor> make_shared(sheet_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<marker_name_editor> make_shared(project_sub_lifetime_id const &,
                                                                          int64_t const marker_frame);
     marker_name_editor(int64_t const marker_frame, marker_pool *);
 

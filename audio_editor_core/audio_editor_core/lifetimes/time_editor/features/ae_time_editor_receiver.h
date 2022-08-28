@@ -13,13 +13,13 @@ class time_editor_closer;
 class time_editor_responder;
 
 struct time_editor_receiver : action_receivable {
-    [[nodiscard]] static std::shared_ptr<time_editor_receiver> make_shared(time_editor_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<time_editor_receiver> make_shared(project_sub_lifetime_id const &,
                                                                            time_editor *, time_editor_closer *);
 
-    time_editor_receiver(time_editor_lifetime_id const &, time_editor *, time_editor_closer *);
+    time_editor_receiver(project_sub_lifetime_id const &, time_editor *, time_editor_closer *);
 
    private:
-    time_editor_lifetime_id const _lifetime_id;
+    project_sub_lifetime_id const _lifetime_id;
     time_editor *const _editor;
     time_editor_closer *const _closer;
 

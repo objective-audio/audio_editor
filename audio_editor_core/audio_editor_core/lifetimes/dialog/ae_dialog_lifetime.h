@@ -11,11 +11,12 @@
 
 namespace yas::ae {
 struct dialog_lifetime final {
-    [[nodiscard]] static std::shared_ptr<dialog_lifetime> make_shared(dialog_lifetime_id const &, dialog_content const);
+    [[nodiscard]] static std::shared_ptr<dialog_lifetime> make_shared(project_sub_lifetime_id const &,
+                                                                      dialog_content const);
 
-    dialog_lifetime(dialog_lifetime_id const &, dialog_content const);
+    dialog_lifetime(project_sub_lifetime_id const &, dialog_content const);
 
-    dialog_lifetime_id const lifetime_id;
+    project_sub_lifetime_id const lifetime_id;
     dialog_content const content;
 };
 }  // namespace yas::ae
