@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_scrolling.h>
-#include <audio_editor_core/ae_system_url.h>
+#include <audio_editor_core/ae_system_path.h>
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_window_closer.h>
 #include <audio_editor_core/ae_window_receiver.h>
@@ -20,21 +20,21 @@ using namespace yas::ae;
 
 std::shared_ptr<window_lifetime> window_lifetime::make_shared(window_lifetime_id const &lifetime_id,
                                                               ae::project_format const &project_format,
-                                                              url const &project_dir_url) {
+                                                              std::filesystem::path const &project_dir_path) {
     auto const &app_lifetime = hierarchy::app_lifetime();
 
-    return std::make_shared<window_lifetime>(lifetime_id, project_format, project_dir_url, app_lifetime.get());
+    return std::make_shared<window_lifetime>(lifetime_id, project_format, project_dir_path, app_lifetime.get());
 }
 
 window_lifetime::window_lifetime(window_lifetime_id const &lifetime_id, ae::project_format const &project_format,
-                                 url const &project_dir_url, app_lifetime *app_lifetime)
+                                 std::filesystem::path const &project_dir_path, app_lifetime *app_lifetime)
     : lifetime_id(lifetime_id),
       project_format(project_format),
-      project_directory_url(project_dir_url),
-      project_url(ae::project_url::make_shared(project_dir_url)),
+      project_directory_path(project_dir_path),
+      project_url(ae::project_url::make_shared(project_dir_path)),
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
-      player(player::make_shared(app_lifetime->system_url->playing_directory(), lifetime_id.project,
+      player(player::make_shared(app_lifetime->system_path->playing_directory(), lifetime_id.project,
                                  this->scrolling.get())),
       timeline_holder(timeline_holder::make_shared(this->project_format, this->project_url.get())),
       project_lifecycle(ae::project_lifecycle::make_shared(lifetime_id)),

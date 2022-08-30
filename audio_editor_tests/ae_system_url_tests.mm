@@ -1,34 +1,34 @@
 //
-//  ae_system_url_tests.mm
+//  ae_system_path_tests.mm
 //
 
 #import <XCTest/XCTest.h>
-#import <audio_editor_core/ae_system_url.h>
+#import <audio_editor_core/ae_system_path.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-@interface ae_system_url_tests : XCTestCase
+@interface ae_system_path_tests : XCTestCase
 
 @end
 
-@implementation ae_system_url_tests
+@implementation ae_system_path_tests
 
 - (void)test_document_directory {
-    auto const system_url = system_url::make_shared();
+    auto const system_path = system_path::make_shared();
 
-    XCTAssertEqual(system_url->document_directory().last_path_component(), "Documents");
+    XCTAssertEqual(system_path->document_directory().filename(), "Documents");
 }
 
 - (void)test_app_directory {
-    auto const system_url = system_url::make_shared();
-    auto const app_url = system_url->app_directory();
+    auto const system_path = system_path::make_shared();
+    auto app_path = system_path->app_directory();
 
-    XCTAssertEqual(app_url.last_path_component(), "audio_editor_app");
+    XCTAssertEqual(app_path.filename(), "audio_editor_app");
 
-    auto document_url = app_url.deleting_last_path_component();
+    auto document_path = app_path.parent_path();
 
-    XCTAssertEqual(document_url.last_path_component(), "Documents");
+    XCTAssertEqual(document_path.filename(), "Documents");
 }
 
 @end

@@ -9,7 +9,7 @@
 namespace yas::ae {
 class app_launcher;
 class window_lifecycle;
-class system_url;
+class system_path;
 class file_importer;
 class file_info_loader;
 class color;
@@ -24,7 +24,7 @@ class id_generator;
 struct app_lifetime final {
     [[nodiscard]] static std::shared_ptr<app_lifetime> make_shared();
 
-    app_lifetime(std::shared_ptr<worker> const &, std::shared_ptr<system_url> const &,
+    app_lifetime(std::shared_ptr<worker> const &, std::shared_ptr<system_path> const &,
                  std::shared_ptr<app_launcher> const &, std::shared_ptr<file_importer> const &,
                  std::shared_ptr<file_info_loader> const &, std::shared_ptr<color> const &,
                  std::shared_ptr<uuid_generator> const &, std::shared_ptr<id_generator> const &,
@@ -33,7 +33,7 @@ struct app_lifetime final {
                  std::shared_ptr<action_sender> const &);
 
     std::shared_ptr<worker> const worker;
-    std::shared_ptr<system_url> const system_url;
+    std::shared_ptr<system_path> const system_path;
     std::shared_ptr<app_launcher> const launcher;
     std::shared_ptr<file_importer> const file_importer;
     std::shared_ptr<file_info_loader> const file_info_loader;

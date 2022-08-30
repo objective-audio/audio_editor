@@ -38,10 +38,10 @@ bool import_interactor::can_import_from_file() const {
     return this->_editing_status->can_editing();
 }
 
-void import_interactor::import_from_file(url const &file_url) {
+void import_interactor::import_from_file(std::filesystem::path const &file_path) {
     if (!this->can_import_from_file()) {
         return;
     }
 
-    this->_file_module_loader->load(file_url);
+    this->_file_module_loader->load(file_path);
 }

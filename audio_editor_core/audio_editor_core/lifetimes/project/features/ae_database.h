@@ -11,7 +11,8 @@
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
 #include <cpp_utils/yas_delaying_caller.h>
-#include <cpp_utils/yas_url.h>
+
+#include <filesystem>
 
 namespace yas::db {
 class manager;
@@ -19,7 +20,7 @@ class manager;
 
 namespace yas::ae {
 struct database final : std::enable_shared_from_this<database> {
-    [[nodiscard]] static std::shared_ptr<database> make_shared(url const &db_file_url);
+    [[nodiscard]] static std::shared_ptr<database> make_shared(std::filesystem::path const &db_file_path);
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);
 
     [[nodiscard]] db_modules_map const &modules() const;

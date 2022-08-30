@@ -6,8 +6,8 @@
 
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
-#include <cpp_utils/yas_url.h>
 
+#include <filesystem>
 #include <memory>
 
 namespace yas::ae {
@@ -33,7 +33,7 @@ struct file_module_loader final : std::enable_shared_from_this<file_module_loade
                        file_module_loading_state_holder *, database *, file_track *, edge_holder *,
                        timeline_holder const *);
 
-    void load(url const &src_url);
+    void load(std::filesystem::path const &src_path);
 
    private:
     std::shared_ptr<uuid_generatable> const _uuid_generator;

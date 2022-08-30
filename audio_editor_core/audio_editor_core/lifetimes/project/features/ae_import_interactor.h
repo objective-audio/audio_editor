@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include <cpp_utils/yas_url.h>
-
+#include <filesystem>
 #include <memory>
 
 namespace yas::ae {
@@ -22,7 +21,7 @@ struct import_interactor final {
     [[nodiscard]] bool can_select_file_for_import() const;
     void select_file_for_import();
     [[nodiscard]] bool can_import_from_file() const;
-    void import_from_file(url const &file_url);
+    void import_from_file(std::filesystem::path const &);
 
    private:
     project_modal_lifecycle *const _lifecycle;

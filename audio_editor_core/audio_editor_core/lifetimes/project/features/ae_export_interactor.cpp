@@ -54,7 +54,7 @@ bool export_interactor::can_export_to_file() const {
     return this->_edge_holder->edge().range().has_value();
 }
 
-void export_interactor::export_to_file(url const &export_url) {
+void export_interactor::export_to_file(std::filesystem::path const &export_path) {
     if (!this->can_export_to_file()) {
         return;
     }
@@ -70,5 +70,5 @@ void export_interactor::export_to_file(url const &export_url) {
                                   .pcm_format = audio::pcm_format::float32,
                                   .channel_count = this->_project_format.channel_count};
 
-    this->_exporter->begin(export_url, this->_timeline_holder->timeline(), format, range.value());
+    this->_exporter->begin(export_path, this->_timeline_holder->timeline(), format, range.value());
 }

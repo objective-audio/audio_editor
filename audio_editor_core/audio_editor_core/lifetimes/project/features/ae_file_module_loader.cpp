@@ -52,7 +52,7 @@ file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &
       _timeline_holder(timeline_holder) {
 }
 
-void file_module_loader::load(url const &src_url) {
+void file_module_loader::load(std::filesystem::path const &src_path) {
     if (this->_state_holder->state() != file_module_loading_state::waiting) {
         assertion_failure_if_not_test();
         return;
@@ -61,23 +61,23 @@ void file_module_loader::load(url const &src_url) {
     this->_state_holder->set_state(file_module_loading_state::loading);
 
     auto const uuid = this->_uuid_generator->generate();
-    std::string const src_file_name = src_url.last_path_component();
+    std::string const src_file_name = src_path.filename();
     std::string const dst_file_name = uuid + ".caf";
-    auto const dst_url = this->_project_url->editing_files_directory().appending(dst_file_name);
+    auto const dst_path = this->_project_url->editing_files_directory().append(dst_file_name);
 
     this->_file_importer->import(
         {.project_id = this->_project_id,
-         .src_url = src_url,
-         .dst_url = dst_url,
+         .src_path = src_path,
+         .dst_path = dst_path,
          .project_format = this->_project_format,
-         .completion = [weak = this->weak_from_this(), dst_url, src_file_name, dst_file_name](bool const result) {
+         .completion = [weak = this->weak_from_this(), dst_path, src_file_name, dst_file_name](bool const result) {
              auto const loader = weak.lock();
              if (!loader) {
                  assertion_failure_if_not_test();
                  return;
              }
 
-             if (auto const file_info = loader->_file_info_loader->load_file_info(dst_url)) {
+             if (auto const file_info = loader->_file_info_loader->load_file_info(dst_path)) {
                  loader->_database->suspend_saving(
                      [&loader, &file_info = file_info.value(), &src_file_name, &dst_file_name] {
                          loader->_file_track->overwrite_module(file_module{.name = src_file_name,

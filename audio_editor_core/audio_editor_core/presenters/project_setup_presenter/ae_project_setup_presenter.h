@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include <cpp_utils/yas_url.h>
-
+#include <filesystem>
 #include <memory>
 
 namespace yas::ae {
@@ -16,7 +15,7 @@ struct project_setup_presenter final {
 
     project_setup_presenter(std::shared_ptr<project_setup> const &);
 
-    void select_directory(url const &file_url);
+    void select_directory(std::filesystem::path const &file_path);
     void did_close_dialog();
 
    private:

@@ -6,15 +6,15 @@
 
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_id.h>
-#include <cpp_utils/yas_url.h>
 
+#include <filesystem>
 #include <functional>
 
 namespace yas::ae {
 struct file_importing_context final {
     project_id project_id;
-    url src_url;
-    url dst_url;
+    std::filesystem::path src_path;
+    std::filesystem::path dst_path;
     project_format project_format;
     std::function<void(bool const)> completion;
 };

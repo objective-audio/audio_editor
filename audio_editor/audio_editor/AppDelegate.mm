@@ -105,8 +105,8 @@ using namespace yas::ae;
 
     [panel beginWithCompletionHandler:[unowned_self, unowned_panel, presenter](NSModalResponse result) {
         if (result == NSModalResponseOK) {
-            url const file_url{to_string((__bridge CFStringRef)unowned_panel.object.URL.absoluteString)};
-            presenter->select_directory(file_url);
+            auto const file_path = to_string((__bridge CFStringRef)unowned_panel.object.URL.path);
+            presenter->select_directory(file_path);
         }
 
         presenter->did_close_dialog();

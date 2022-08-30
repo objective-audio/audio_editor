@@ -38,11 +38,11 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
         return;
     }
 
-    auto url = this->_project_url->editing_files_directory().appending(modules.at(location.range).file_name);
+    auto path = this->_project_url->editing_files_directory().append(modules.at(location.range).file_name);
     auto const file_frame = modules.at(location.range).file_frame;
 
     auto const task = yas::task<identifier>::make_shared(
-        [idx, location, url = std::move(url), file_frame,
+        [idx, location, path = std::move(path), file_frame,
          weak_importer = this->weak_from_this()](yas::task<identifier> const &task) {
             if (weak_importer.expired()) {
                 return;
@@ -50,7 +50,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
             std::vector<waveform_mesh_importer_event::data> datas;
 
-            auto const file_result = audio::file::make_opened({.file_url = url});
+            auto const file_result = audio::file::make_opened({.file_path = path});
             if (file_result) {
                 auto const &scale = location.scale;
                 double const rect_width = 1.0 / scale;

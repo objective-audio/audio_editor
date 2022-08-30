@@ -5,8 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_info.h>
-#include <cpp_utils/yas_url.h>
 
+#include <filesystem>
 #include <memory>
 #include <optional>
 
@@ -16,7 +16,7 @@ struct file_info_loader final {
 
     file_info_loader();
 
-    [[nodiscard]] std::optional<file_info> load_file_info(url const &) const;
+    [[nodiscard]] std::optional<file_info> load_file_info(std::filesystem::path const &) const;
 
    private:
     file_info_loader(file_info_loader const &) = delete;

@@ -16,8 +16,8 @@ std::shared_ptr<file_info_loader> file_info_loader::make_shared() {
 file_info_loader::file_info_loader() {
 }
 
-std::optional<file_info> file_info_loader::load_file_info(url const &url) const {
-    auto const file_result = audio::file::make_opened({.file_url = url});
+std::optional<file_info> file_info_loader::load_file_info(std::filesystem::path const &path) const {
+    auto const file_result = audio::file::make_opened({.file_path = path});
     if (file_result.is_error()) {
         return std::nullopt;
     }

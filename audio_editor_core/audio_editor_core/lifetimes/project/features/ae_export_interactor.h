@@ -6,8 +6,8 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <cpp_utils/yas_url.h>
 
+#include <filesystem>
 #include <memory>
 
 namespace yas::ae {
@@ -30,7 +30,7 @@ struct export_interactor final {
     [[nodiscard]] bool can_select_file_for_export() const;
     void select_file_for_export();
     [[nodiscard]] bool can_export_to_file() const;
-    void export_to_file(url const &);
+    void export_to_file(std::filesystem::path const &);
 
    private:
     project_format const _project_format;

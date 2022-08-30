@@ -6,8 +6,8 @@
 
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
-#include <cpp_utils/yas_url.h>
 
+#include <filesystem>
 #include <memory>
 
 namespace yas::ae {
@@ -25,13 +25,14 @@ class timeline_holder;
 struct window_lifetime final {
     [[nodiscard]] static std::shared_ptr<window_lifetime> make_shared(window_lifetime_id const &,
                                                                       project_format const &,
-                                                                      url const &project_dir_url);
+                                                                      std::filesystem::path const &project_dir_path);
 
-    window_lifetime(window_lifetime_id const &, project_format const &, url const &project_dir_url, app_lifetime *);
+    window_lifetime(window_lifetime_id const &, project_format const &, std::filesystem::path const &project_dir_path,
+                    app_lifetime *);
 
     window_lifetime_id const lifetime_id;
     project_format const project_format;
-    url const project_directory_url;
+    std::filesystem::path const project_directory_path;
 
     std::shared_ptr<project_url> const project_url;
     std::shared_ptr<ae::zooming_pair> const zooming_pair;

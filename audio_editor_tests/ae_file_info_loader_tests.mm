@@ -28,9 +28,10 @@ using namespace yas::ae;
 }
 
 - (void)test_load_file_info {
-    auto const url = test_utils::test_url().appending("src.wav");
-    auto const file_result = audio::file::make_created(
-        {.file_url = url, .pcm_format = audio::pcm_format::int16, .settings = audio::wave_file_settings(48000, 1, 16)});
+    auto const path = test_utils::test_path().append("src.wav");
+    auto const file_result = audio::file::make_created({.file_path = path,
+                                                        .pcm_format = audio::pcm_format::int16,
+                                                        .settings = audio::wave_file_settings(48000, 1, 16)});
     XCTAssertTrue(file_result.is_success());
     auto const &file = file_result.value();
 
@@ -46,7 +47,7 @@ using namespace yas::ae;
     file->close();
 
     auto const loader = file_info_loader::make_shared();
-    auto const file_info = loader->load_file_info(url);
+    auto const file_info = loader->load_file_info(path);
 
     XCTAssertEqual(file_info.value().sample_rate, 48000);
     XCTAssertEqual(file_info.value().length, 4);

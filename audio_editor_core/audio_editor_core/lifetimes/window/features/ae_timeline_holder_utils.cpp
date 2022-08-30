@@ -11,8 +11,8 @@ using namespace yas::ae;
 
 proc::module_ptr timeline_holder_utils::make_module(file_module const &file_module, project_url const *project_url,
                                                     uint32_t const ch_count) {
-    auto const url = project_url->editing_files_directory().appending(file_module.file_name);
-    auto const module = proc::file::make_signal_module<float>(url, file_module.range.frame, file_module.file_frame);
+    auto const path = project_url->editing_files_directory().append(file_module.file_name);
+    auto const module = proc::file::make_signal_module<float>(path, file_module.range.frame, file_module.file_frame);
 
     auto each = make_fast_each(ch_count);
     while (yas_each_next(each)) {

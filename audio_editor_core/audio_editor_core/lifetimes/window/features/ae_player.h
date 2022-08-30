@@ -9,13 +9,14 @@
 #include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_playing_toggler_dependency.h>
 #include <audio_editor_core/ae_project_id.h>
-#include <cpp_utils/yas_url.h>
 #include <processing/yas_processing_ptr.h>
+
+#include <filesystem>
 
 namespace yas::ae {
 struct player final : player_for_playing_toggler {
-    [[nodiscard]] static std::shared_ptr<player> make_shared(url const &root_url, project_id const &project_id,
-                                                             scrolling_for_player *);
+    [[nodiscard]] static std::shared_ptr<player> make_shared(std::filesystem::path const &root_path,
+                                                             project_id const &project_id, scrolling_for_player *);
 
     player(std::shared_ptr<playing::coordinator> const &, project_id const &, scrolling_for_player *);
 

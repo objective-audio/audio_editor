@@ -19,20 +19,22 @@ using namespace yas::ae;
 
     XCTAssertFalse(resource->pull_context_on_task().has_value());
 
-    resource->push_context_on_main({.src_url = url("test/src0.wav"), .dst_url = url("test/dst0.caf")});
-    resource->push_context_on_main({.src_url = url("test/src1.wav"), .dst_url = url("test/dst1.caf")});
+    resource->push_context_on_main(
+        {.src_path = std::filesystem::path("test/src0.wav"), .dst_path = std::filesystem::path("test/dst0.caf")});
+    resource->push_context_on_main(
+        {.src_path = std::filesystem::path("test/src1.wav"), .dst_path = std::filesystem::path("test/dst1.caf")});
 
     auto const context0 = resource->pull_context_on_task();
 
     XCTAssertTrue(context0.has_value());
-    XCTAssertEqual(context0.value().src_url, url("test/src0.wav"));
-    XCTAssertEqual(context0.value().dst_url, url("test/dst0.caf"));
+    XCTAssertEqual(context0.value().src_path, std::filesystem::path("test/src0.wav"));
+    XCTAssertEqual(context0.value().dst_path, std::filesystem::path("test/dst0.caf"));
 
     auto const context1 = resource->pull_context_on_task();
 
     XCTAssertTrue(context1.has_value());
-    XCTAssertEqual(context1.value().src_url, url("test/src1.wav"));
-    XCTAssertEqual(context1.value().dst_url, url("test/dst1.caf"));
+    XCTAssertEqual(context1.value().src_path, std::filesystem::path("test/src1.wav"));
+    XCTAssertEqual(context1.value().dst_path, std::filesystem::path("test/dst1.caf"));
 
     XCTAssertFalse(resource->pull_context_on_task().has_value());
 }
@@ -40,18 +42,20 @@ using namespace yas::ae;
 - (void)test_cancel_context {
     auto const resource = file_importer_resource::make_shared();
 
-    resource->push_context_on_main(
-        {.project_id = "0", .src_url = url("test/src0.wav"), .dst_url = url("test/dst0.caf")});
-    resource->push_context_on_main(
-        {.project_id = "1", .src_url = url("test/src1.wav"), .dst_url = url("test/dst1.caf")});
+    resource->push_context_on_main({.project_id = "0",
+                                    .src_path = std::filesystem::path("test/src0.wav"),
+                                    .dst_path = std::filesystem::path("test/dst0.caf")});
+    resource->push_context_on_main({.project_id = "1",
+                                    .src_path = std::filesystem::path("test/src1.wav"),
+                                    .dst_path = std::filesystem::path("test/dst1.caf")});
 
     resource->cancel_on_main({"0"});
 
     auto const context1 = resource->pull_context_on_task();
 
     XCTAssertTrue(context1.has_value());
-    XCTAssertEqual(context1.value().src_url, url("test/src1.wav"));
-    XCTAssertEqual(context1.value().dst_url, url("test/dst1.caf"));
+    XCTAssertEqual(context1.value().src_path, std::filesystem::path("test/src1.wav"));
+    XCTAssertEqual(context1.value().dst_path, std::filesystem::path("test/dst1.caf"));
 }
 
 - (void)test_pull_cancel_ids {

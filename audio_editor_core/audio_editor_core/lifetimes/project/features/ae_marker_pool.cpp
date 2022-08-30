@@ -7,7 +7,6 @@
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <cpp_utils/yas_stl_utils.h>
-#include <cpp_utils/yas_url.h>
 
 using namespace yas;
 using namespace yas::ae;

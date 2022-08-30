@@ -42,7 +42,7 @@ file_importer::file_importer(workable_ptr const &worker, uint32_t const priority
             thread::perform_async_on_main([result, completion = std::move(context.completion)] { completion(result); });
         };
 
-        auto const src_file_result = audio::file::make_opened({.file_url = context.src_url});
+        auto const src_file_result = audio::file::make_opened({.file_path = context.src_path});
 
         if (src_file_result.is_error()) {
             wrapped_completion(false);
@@ -63,14 +63,16 @@ file_importer::file_importer(workable_ptr const &worker, uint32_t const priority
         auto const dst_settings =
             audio::wave_file_settings(context.project_format.sample_rate, context.project_format.channel_count, 32);
 
-        auto const dst_directory = context.dst_url.deleting_last_path_component();
-        if (auto result = file_manager::create_directory_if_not_exists(dst_directory.path()); result.is_error()) {
+        auto dst_path = context.dst_path;
+        auto const dst_directory = dst_path.parent_path();
+        if (auto result = file_manager::create_directory_if_not_exists(dst_directory); result.is_error()) {
             wrapped_completion(false);
             return worker_task_result::processed;
         }
 
-        auto const dst_file_result = audio::file::make_created(
-            {.file_url = context.dst_url, .file_type = audio::file_type::core_audio_format, .settings = dst_settings});
+        auto const dst_file_result = audio::file::make_created({.file_path = context.dst_path,
+                                                                .file_type = audio::file_type::core_audio_format,
+                                                                .settings = dst_settings});
 
         if (dst_file_result.is_error()) {
             wrapped_completion(false);

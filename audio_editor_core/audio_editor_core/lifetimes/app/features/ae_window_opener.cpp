@@ -22,8 +22,8 @@ window_opener::window_opener(file_info_loader const *file_info_loader, window_li
     : _file_info_loader(file_info_loader), _window_lifecycle(lifecycle) {
 }
 
-void window_opener::open(project_format const &format, url const &project_url) {
-    auto const exists = file_manager::content_exists(project_url.path());
+void window_opener::open(project_format const &format, std::filesystem::path const &project_path) {
+    auto const exists = file_manager::content_exists(project_path);
     if (exists.is_success()) {
         switch (exists.value()) {
             case file_manager::content_kind::directory:
@@ -37,5 +37,5 @@ void window_opener::open(project_format const &format, url const &project_url) {
         return;
     }
 
-    this->_window_lifecycle->add_lifetime(project_url, format);
+    this->_window_lifecycle->add_lifetime(project_path, format);
 }

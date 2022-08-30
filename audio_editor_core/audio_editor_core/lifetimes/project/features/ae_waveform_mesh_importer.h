@@ -8,7 +8,6 @@
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <cpp_utils/yas_task_queue.h>
-#include <cpp_utils/yas_url.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {

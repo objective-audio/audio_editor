@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include <cpp_utils/yas_url.h>
-
+#include <filesystem>
 #include <memory>
 
 namespace yas::ae {
@@ -18,7 +17,7 @@ struct window_opener final {
 
     window_opener(file_info_loader const *, window_lifecycle *);
 
-    void open(project_format const &, url const &project_url);
+    void open(project_format const &, std::filesystem::path const &project_path);
 
    private:
     file_info_loader const *const _file_info_loader;
