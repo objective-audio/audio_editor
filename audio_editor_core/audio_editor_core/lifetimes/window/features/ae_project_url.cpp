@@ -7,29 +7,33 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_url> project_url::make_shared(url const &root) {
+std::shared_ptr<project_url> project_url::make_shared(std::filesystem::path const &root) {
     return std::shared_ptr<project_url>(new project_url{root});
 }
 
-project_url::project_url(url const &root) : _root(root) {
+project_url::project_url(std::filesystem::path const &root) : _root(root) {
 }
 
-url const &project_url::root_directory() const {
+std::filesystem::path const &project_url::root_directory() const {
     return this->_root;
 }
 
-url project_url::editing_files_directory() const {
-    return this->_root.appending("editing_files");
+std::filesystem::path project_url::editing_files_directory() const {
+    auto root = this->_root;
+    return root.append("editing_files");
 }
 
-url project_url::editing_file() const {
-    return this->_root.appending("editing.caf");
+std::filesystem::path project_url::editing_file() const {
+    auto root = this->_root;
+    return root.append("editing.caf");
 }
 
-url project_url::playing_directory() const {
-    return this->_root.appending("playing");
+std::filesystem::path project_url::playing_directory() const {
+    auto root = this->_root;
+    return root.append("playing");
 }
 
-url project_url::db_file() const {
-    return this->_root.appending("db.sqlite");
+std::filesystem::path project_url::db_file() const {
+    auto root = this->_root;
+    return root.append("db.sqlite");
 }

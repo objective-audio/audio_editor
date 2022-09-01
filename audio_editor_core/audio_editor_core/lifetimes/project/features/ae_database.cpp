@@ -9,14 +9,13 @@
 #include <audio_editor_core/ae_db_utils.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_thread.h>
-#include <cpp_utils/yas_url.h>
 #include <db/yas_db_umbrella.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<database> database::make_shared(url const &db_file_url) {
-    return make_shared(db::manager::make_shared(db_file_url.path(), database_utils::make_model()));
+std::shared_ptr<database> database::make_shared(std::filesystem::path const &db_file_path) {
+    return make_shared(db::manager::make_shared(db_file_path, database_utils::make_model()));
 }
 
 std::shared_ptr<database> database::make_shared(std::shared_ptr<db::manager> const &manager) {

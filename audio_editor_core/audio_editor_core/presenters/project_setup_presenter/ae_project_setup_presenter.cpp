@@ -19,9 +19,9 @@ std::shared_ptr<project_setup_presenter> project_setup_presenter::make_shared() 
 project_setup_presenter::project_setup_presenter(std::shared_ptr<project_setup> const &setup) : _setup(setup) {
 }
 
-void project_setup_presenter::select_directory(url const &file_url) {
+void project_setup_presenter::select_directory(std::filesystem::path const &file_path) {
     if (auto const setup = this->_setup.lock()) {
-        setup->select_directory(file_url);
+        setup->select_directory(file_path);
     }
 }
 

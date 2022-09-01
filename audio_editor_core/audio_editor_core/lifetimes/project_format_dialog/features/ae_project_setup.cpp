@@ -25,9 +25,9 @@ project_setup::project_setup(project_setup_dialog_lifetime_id const &lifetime_id
     : _lifetime_id(lifetime_id), _format_setup(format_setup), _window_opener(opener), _lifecycle(lifecycle) {
 }
 
-void project_setup::select_directory(url const &file_url) {
+void project_setup::select_directory(std::filesystem::path const &file_path) {
     if (this->_window_opener) {
-        this->_window_opener->open(this->_format_setup->format(), file_url);
+        this->_window_opener->open(this->_format_setup->format(), file_path);
     }
 
     this->finalize();

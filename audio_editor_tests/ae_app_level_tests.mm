@@ -20,7 +20,7 @@ using namespace yas::ae;
     XCTAssertTrue(lifetime != nullptr);
 
     XCTAssertTrue(lifetime->worker != nullptr);
-    XCTAssertTrue(lifetime->system_url != nullptr);
+    XCTAssertTrue(lifetime->system_path != nullptr);
     XCTAssertTrue(lifetime->launcher != nullptr);
     XCTAssertTrue(lifetime->file_importer != nullptr);
     XCTAssertTrue(lifetime->file_info_loader != nullptr);

@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <cpp_utils/yas_url.h>
 #include <processing/yas_processing_ptr.h>
 
 namespace yas::ae {

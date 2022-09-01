@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <cpp_utils/yas_identifier.h>
-#include <cpp_utils/yas_url.h>
 
 #include <memory>
 #include <string>
@@ -19,7 +18,7 @@ class app_lifetime;
 class project_url;
 class zooming_pair;
 class scrolling;
-class system_url;
+class system_path;
 class player;
 class project_launcher;
 class timing;

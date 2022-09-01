@@ -6,12 +6,12 @@
 
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_action_id.h>
-#include <cpp_utils/yas_url.h>
 
+#include <filesystem>
 #include <optional>
 
 namespace yas::ae::test_utils {
-url test_url();
+std::filesystem::path test_path();
 void create_test_directory();
 void remove_contents_in_test_directory();
 }  // namespace yas::ae::test_utils

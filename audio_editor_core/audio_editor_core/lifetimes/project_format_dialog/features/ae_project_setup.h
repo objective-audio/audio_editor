@@ -5,8 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_app_sub_lifetime_id.h>
-#include <cpp_utils/yas_url.h>
 
+#include <filesystem>
 #include <memory>
 
 namespace yas::ae {
@@ -21,7 +21,7 @@ struct project_setup final {
     project_setup(project_setup_dialog_lifetime_id const &, project_format_setup *, window_opener *,
                   app_modal_lifecycle *);
 
-    void select_directory(url const &);
+    void select_directory(std::filesystem::path const &);
     void finalize();
 
    private:

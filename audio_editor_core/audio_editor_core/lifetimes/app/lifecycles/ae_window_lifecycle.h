@@ -8,6 +8,8 @@
 #include <audio_editor_core/ae_app_presenter_dependency.h>
 #include <audio_editor_core/ae_window_lifecycle_types.h>
 
+#include <filesystem>
+
 namespace yas::ae {
 class uuid_generatable;
 class id_generatable;
@@ -22,7 +24,7 @@ struct window_lifecycle final : window_lifecycle_for_app_presenter, action_recei
 
     window_lifecycle(id_generatable const *, uuid_generatable const *);
 
-    void add_lifetime(url const &project_dir_url, project_format const &);
+    void add_lifetime(std::filesystem::path const &project_dir_path, project_format const &);
     void remove_lifetime(window_lifetime_id const &);
 
     [[nodiscard]] std::shared_ptr<window_lifetime> const &lifetime_for_id(window_lifetime_id const &) const;

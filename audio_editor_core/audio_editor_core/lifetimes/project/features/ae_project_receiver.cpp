@@ -199,13 +199,13 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_import_interactor->select_file_for_import();
                             break;
                         case editing_action_name::import_from_file:
-                            this->_import_interactor->import_from_file(url::file_url(action.string_value()));
+                            this->_import_interactor->import_from_file(action.string_value());
                             break;
                         case editing_action_name::select_file_for_export:
                             this->_export_interactor->select_file_for_export();
                             break;
                         case editing_action_name::export_to_file:
-                            this->_export_interactor->export_to_file(url::file_url(action.string_value()));
+                            this->_export_interactor->export_to_file(action.string_value());
                             break;
                         case editing_action_name::cut:
                             this->_editor->cut();

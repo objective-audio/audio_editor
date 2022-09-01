@@ -40,11 +40,10 @@ audio::pcm_format const pcm_format = audio::pcm_format::int16;
     project_format const project_format{.sample_rate = test_utils::file_importer::sample_rate,
                                         .channel_count = test_utils::file_importer::ch_count};
 
-    auto const test_url = test_utils::test_url();
-    auto const src_url = test_url.appending("src.wav");
-    auto const dst_url = test_url.appending("dst.caf");
+    auto const src_path = test_utils::test_path().append("src.wav");
+    auto const dst_path = test_utils::test_path().append("dst.caf");
 
-    [self setup_src_file:src_url];
+    [self setup_src_file:src_path];
 
     auto const worker = worker_stub::make_shared();
     auto const importer = file_importer::make_shared(worker, 0);
@@ -55,8 +54,8 @@ audio::pcm_format const pcm_format = audio::pcm_format::int16;
 
     auto expectation = [self expectationWithDescription:@""];
 
-    importer->import({.src_url = src_url,
-                      .dst_url = dst_url,
+    importer->import({.src_path = src_path,
+                      .dst_path = dst_path,
                       .project_format = project_format,
                       .completion = [&results, &expectation](bool const result) {
                           results.emplace_back(result);
@@ -71,7 +70,7 @@ audio::pcm_format const pcm_format = audio::pcm_format::int16;
     XCTAssertTrue(results.at(0));
 
     auto const dst_file_result =
-        audio::file::make_opened({.file_url = dst_url, .pcm_format = audio::pcm_format::int16});
+        audio::file::make_opened({.file_path = dst_path, .pcm_format = audio::pcm_format::int16});
     if (dst_file_result.is_error()) {
         XCTFail();
         return;
@@ -110,14 +109,14 @@ audio::pcm_format const pcm_format = audio::pcm_format::int16;
     XCTAssertEqual(dst_data_1[3], 23);
 }
 
-- (bool)setup_src_file:(url const &)src_url {
+- (bool)setup_src_file:(std::filesystem::path const &)src_path {
     double const sample_rate = test_utils::file_importer::sample_rate;
     uint32_t const ch_count = test_utils::file_importer::ch_count;
     audio::pcm_format const pcm_format = test_utils::file_importer::pcm_format;
 
     auto const wave_settings = audio::wave_file_settings(sample_rate, ch_count, 16);
     auto const src_file_result =
-        audio::file::make_created({.file_url = src_url, .pcm_format = pcm_format, .settings = wave_settings});
+        audio::file::make_created({.file_path = src_path, .pcm_format = pcm_format, .settings = wave_settings});
     if (src_file_result.is_error()) {
         XCTFail();
         return false;

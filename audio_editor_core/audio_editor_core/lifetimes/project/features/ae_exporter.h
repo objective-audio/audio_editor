@@ -7,14 +7,16 @@
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_exporter_types.h>
 
+#include <filesystem>
+
 namespace yas::ae {
 struct exporter final : std::enable_shared_from_this<exporter> {
     [[nodiscard]] static std::shared_ptr<exporter> make_shared();
 
     exporter();
 
-    void begin(url const &export_url, std::shared_ptr<proc::timeline> const &, exporting_format const &,
-               time::range const &);
+    void begin(std::filesystem::path const &export_path, std::shared_ptr<proc::timeline> const &,
+               exporting_format const &, time::range const &);
 
     [[nodiscard]] bool is_exporting() const;
     [[nodiscard]] observing::syncable observe_is_exporting(std::function<void(bool const &)> &&);

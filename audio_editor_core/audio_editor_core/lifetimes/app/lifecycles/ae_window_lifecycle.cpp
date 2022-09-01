@@ -29,10 +29,10 @@ window_lifecycle::window_lifecycle(id_generatable const *id_generator, uuid_gene
     : _id_generator(id_generator), _uuid_generator(uuid_generator) {
 }
 
-void window_lifecycle::add_lifetime(url const &project_dir_url, project_format const &format) {
+void window_lifecycle::add_lifetime(std::filesystem::path const &project_dir_path, project_format const &format) {
     window_lifetime_id const lifetime_id{.instance = this->_id_generator->generate(),
                                          .project = {.raw_value = this->_uuid_generator->generate()}};
-    auto const lifetime = window_lifetime::make_shared(lifetime_id, format, project_dir_url);
+    auto const lifetime = window_lifetime::make_shared(lifetime_id, format, project_dir_path);
 
     this->_window_lifetimes->insert_or_replace(lifetime_id, std::make_pair(lifetime, nullptr));
 

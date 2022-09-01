@@ -29,7 +29,7 @@ window_presenter::window_presenter(ae::window_lifetime_id const &lifetime_id,
 
 std::string window_presenter::title() const {
     if (auto const project_url = this->_project_url.lock()) {
-        return project_url->root_directory().last_path_component();
+        return project_url->root_directory().filename();
     } else {
         return "";
     }

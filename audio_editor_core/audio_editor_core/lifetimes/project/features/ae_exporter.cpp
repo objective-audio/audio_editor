@@ -22,7 +22,7 @@ exporter::exporter()
       _queue(task_queue<std::nullptr_t>::make_shared()) {
 }
 
-void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> const &timeline,
+void exporter::begin(std::filesystem::path const &export_path, std::shared_ptr<proc::timeline> const &timeline,
                      exporting_format const &format, time::range const &range) {
     if (!format.is_available()) {
         throw std::invalid_argument("invalid format.");
@@ -36,13 +36,11 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
     this->_is_exporting->set_value(true);
 
     this->_queue->push_back(
-        task<std::nullptr_t>::make_shared([timeline = std::move(timeline), format, export_url, range,
+        task<std::nullptr_t>::make_shared([timeline = std::move(timeline), format, path = export_path, range,
                                            weak_exporter = this->weak_from_this()](auto const &) {
             assert(!thread::is_main());
 
             exporting_result result{nullptr};
-
-            auto const path = export_url.path();
 
             if (file_manager::content_exists(path)) {
                 if (!file_manager::remove_content(path)) {
@@ -54,7 +52,7 @@ void exporter::begin(url const &export_url, std::shared_ptr<proc::timeline> cons
 
             if (result) {
                 auto const settings = audio::wave_file_settings(format.sample_rate, format.channel_count, 32);
-                if (auto create_result = audio::file::make_created({.file_url = export_url, .settings = settings})) {
+                if (auto create_result = audio::file::make_created({.file_path = path, .settings = settings})) {
                     file = create_result.value();
                 } else {
                     result = exporting_result{exporting_error::create_file_failed};
