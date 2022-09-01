@@ -11,7 +11,7 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-class project_url;
+class project_path;
 class file_track;
 
 struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh_importer> {
@@ -19,7 +19,7 @@ struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh
 
     [[nodiscard]] static std::shared_ptr<waveform_mesh_importer> make_shared(window_lifetime_id const &, file_track *);
 
-    waveform_mesh_importer(project_url const *, file_track *);
+    waveform_mesh_importer(project_path const *, file_track *);
 
     void import(std::size_t const, module_location const &);
     void cancel(identifier const &);
@@ -28,7 +28,7 @@ struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh
     observing::endable observe(std::function<void(event const &)> &&);
 
    private:
-    project_url const *const _project_url;
+    project_path const *const _project_path;
     file_track const *const _file_track;
 
     observing::notifier_ptr<event> const _notifier;

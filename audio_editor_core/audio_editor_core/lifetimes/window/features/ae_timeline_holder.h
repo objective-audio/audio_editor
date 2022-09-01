@@ -9,12 +9,12 @@
 #include <processing/yas_processing_ptr.h>
 
 namespace yas::ae {
-class project_url;
+class project_path;
 
 struct timeline_holder final {
-    [[nodiscard]] static std::shared_ptr<timeline_holder> make_shared(project_format const &, project_url const *);
+    [[nodiscard]] static std::shared_ptr<timeline_holder> make_shared(project_format const &, project_path const *);
 
-    timeline_holder(project_format const &, project_url const *);
+    timeline_holder(project_format const &, project_path const *);
 
     proc::timeline_ptr const &timeline() const;
 
@@ -24,7 +24,7 @@ struct timeline_holder final {
 
    private:
     project_format const _project_format;
-    project_url const *const _project_url;
+    project_path const *const _project_path;
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;

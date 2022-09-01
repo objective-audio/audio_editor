@@ -8,9 +8,9 @@
 #include <processing/yas_processing_umbrella.h>
 
 namespace yas::ae {
-class project_url;
+class project_path;
 }
 
 namespace yas::ae::timeline_holder_utils {
-proc::module_ptr make_module(file_module const &file_module, project_url const *project_url, uint32_t const ch_count);
+proc::module_ptr make_module(file_module const &file_module, project_path const *, uint32_t const ch_count);
 }

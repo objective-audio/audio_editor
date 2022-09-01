@@ -14,7 +14,7 @@ namespace yas::ae {
 class app_lifetime;
 class project_lifecycle;
 class window_closer;
-class project_url;
+class project_path;
 class window_receiver;
 class project_state_holder;
 class zooming_pair;
@@ -34,7 +34,7 @@ struct window_lifetime final {
     project_format const project_format;
     std::filesystem::path const project_directory_path;
 
-    std::shared_ptr<project_url> const project_url;
+    std::shared_ptr<project_path> const project_path;
     std::shared_ptr<ae::zooming_pair> const zooming_pair;
     std::shared_ptr<ae::scrolling> const scrolling;
     std::shared_ptr<ae::player> const player;

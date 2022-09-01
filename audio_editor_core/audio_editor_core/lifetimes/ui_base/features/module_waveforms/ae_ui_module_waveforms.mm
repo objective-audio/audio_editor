@@ -5,7 +5,7 @@
 #include "ae_ui_module_waveforms.h"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_module_waveforms_presenter.h>
-#include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
 #include <cpp_utils/yas_fast_each.h>
