@@ -4,14 +4,14 @@
 
 #include "ae_timeline_holder_utils.h"
 
-#include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_project_path.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-proc::module_ptr timeline_holder_utils::make_module(file_module const &file_module, project_url const *project_url,
+proc::module_ptr timeline_holder_utils::make_module(file_module const &file_module, project_path const *project_path,
                                                     uint32_t const ch_count) {
-    auto const path = project_url->editing_files_directory().append(file_module.file_name);
+    auto const path = project_path->editing_files_directory().append(file_module.file_name);
     auto const module = proc::file::make_signal_module<float>(path, file_module.range.frame, file_module.file_frame);
 
     auto each = make_fast_each(ch_count);

@@ -15,7 +15,7 @@
 
 namespace yas::ae {
 class app_lifetime;
-class project_url;
+class project_path;
 class zooming_pair;
 class scrolling;
 class system_path;

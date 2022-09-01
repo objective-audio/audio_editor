@@ -13,7 +13,7 @@
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_uuid_generator.h>
 #include <cpp_utils/yas_assertion.h>
@@ -22,17 +22,17 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<file_module_loader> file_module_loader::make_shared(
-    project_id const &project_id, project_url const *project_url, project_format const &project_format, player *player,
-    file_module_loading_state_holder *state_holder, database *database, file_track *file_track,
+    project_id const &project_id, project_path const *project_path, project_format const &project_format,
+    player *player, file_module_loading_state_holder *state_holder, database *database, file_track *file_track,
     edge_holder *edge_holder, timeline_holder const *timeline_holder) {
     auto const &app_lifetime = hierarchy::app_lifetime();
     return std::make_shared<file_module_loader>(
-        uuid_generator::make_shared(), project_id, project_url, project_format, app_lifetime->file_importer.get(),
+        uuid_generator::make_shared(), project_id, project_path, project_format, app_lifetime->file_importer.get(),
         app_lifetime->file_info_loader.get(), player, state_holder, database, file_track, edge_holder, timeline_holder);
 }
 
 file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &uuid_generator,
-                                       project_id const &project_id, project_url const *project_url,
+                                       project_id const &project_id, project_path const *project_path,
                                        project_format const &project_format, file_importer *file_importer,
                                        file_info_loader const *file_info_loader, player *player,
                                        file_module_loading_state_holder *state_holder, database *database,
@@ -40,7 +40,7 @@ file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &
                                        timeline_holder const *timeline_holder)
     : _uuid_generator(uuid_generator),
       _project_id(project_id),
-      _project_url(project_url),
+      _project_path(project_path),
       _project_format(project_format),
       _file_importer(file_importer),
       _file_info_loader(file_info_loader),
@@ -63,7 +63,7 @@ void file_module_loader::load(std::filesystem::path const &src_path) {
     auto const uuid = this->_uuid_generator->generate();
     std::string const src_file_name = src_path.filename();
     std::string const dst_file_name = uuid + ".caf";
-    auto const dst_path = this->_project_url->editing_files_directory().append(dst_file_name);
+    auto const dst_path = this->_project_path->editing_files_directory().append(dst_file_name);
 
     this->_file_importer->import(
         {.project_id = this->_project_id,

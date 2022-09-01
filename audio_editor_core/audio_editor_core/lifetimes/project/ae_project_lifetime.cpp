@@ -32,8 +32,8 @@
 #include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
+#include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_project_receiver.h>
-#include <audio_editor_core/ae_project_url.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_scrolling.h>
@@ -73,7 +73,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->file_track.get())),
       marker_pool(marker_pool::make_shared()),
       pasteboard(pasteboard::make_shared()),
-      database(database::make_shared(window_lifetime->project_url->db_file())),
+      database(database::make_shared(window_lifetime->project_path->db_file())),
       exporter(exporter::make_shared()),
       editing_status(editing_status::make_shared(this->exporter.get())),
       playing_toggler(playing_toggler::make_shared(window_lifetime->player.get())),
@@ -103,7 +103,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
                                      this->pasteboard.get(), this->edge_holder.get(), this->editing_status.get())),
       file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
       file_module_loader(file_module_loader::make_shared(
-          window_lifetime_id.project, window_lifetime->project_url.get(), this->project_format,
+          window_lifetime_id.project, window_lifetime->project_path.get(), this->project_format,
           window_lifetime->player.get(), this->file_module_loading_state_holder.get(), this->database.get(),
           this->file_track.get(), this->edge_holder.get(), window_lifetime->timeline_holder.get())),
       import_interactor(import_interactor::make_shared(this->modal_lifecycle.get(), this->editing_status.get(),

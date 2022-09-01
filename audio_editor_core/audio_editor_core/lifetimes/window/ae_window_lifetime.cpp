@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
-#include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_path.h>
 #include <audio_editor_core/ae_timeline_holder.h>
@@ -31,12 +31,12 @@ window_lifetime::window_lifetime(window_lifetime_id const &lifetime_id, ae::proj
     : lifetime_id(lifetime_id),
       project_format(project_format),
       project_directory_path(project_dir_path),
-      project_url(ae::project_url::make_shared(project_dir_path)),
+      project_path(ae::project_path::make_shared(project_dir_path)),
       zooming_pair(zooming_pair::make_shared()),
       scrolling(scrolling::make_shared()),
       player(player::make_shared(app_lifetime->system_path->playing_directory(), lifetime_id.project,
                                  this->scrolling.get())),
-      timeline_holder(timeline_holder::make_shared(this->project_format, this->project_url.get())),
+      timeline_holder(timeline_holder::make_shared(this->project_format, this->project_path.get())),
       project_lifecycle(ae::project_lifecycle::make_shared(lifetime_id)),
       closer(ae::window_closer::make_shared(lifetime_id, app_lifetime->window_lifecycle.get())),
       receiver(ae::window_receiver::make_shared(lifetime_id)) {

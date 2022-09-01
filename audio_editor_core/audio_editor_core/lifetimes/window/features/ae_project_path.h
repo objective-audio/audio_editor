@@ -1,5 +1,5 @@
 //
-//  ae_project_url.h
+//  ae_project_path.h
 //
 
 #pragma once
@@ -7,10 +7,10 @@
 #include <filesystem>
 
 namespace yas::ae {
-struct project_url final {
-    static std::shared_ptr<project_url> make_shared(std::filesystem::path const &root);
+struct project_path final {
+    static std::shared_ptr<project_path> make_shared(std::filesystem::path const &root);
 
-    project_url(std::filesystem::path const &root);
+    project_path(std::filesystem::path const &root);
 
     std::filesystem::path const &root_directory() const;
     std::filesystem::path editing_files_directory() const;
@@ -21,9 +21,9 @@ struct project_url final {
    private:
     std::filesystem::path const _root;
 
-    project_url(project_url const &) = delete;
-    project_url(project_url &&) = delete;
-    project_url &operator=(project_url const &) = delete;
-    project_url &operator=(project_url &&) = delete;
+    project_path(project_path const &) = delete;
+    project_path(project_path &&) = delete;
+    project_path &operator=(project_path const &) = delete;
+    project_path &operator=(project_path &&) = delete;
 };
 }  // namespace yas::ae

@@ -5,7 +5,7 @@
 #include "ae_timeline_holder.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_url.h>
+#include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_timeline_holder_utils.h>
 #include <processing/yas_processing_umbrella.h>
 
@@ -13,13 +13,13 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<timeline_holder> timeline_holder::make_shared(project_format const &project_format,
-                                                              project_url const *project_url) {
-    return std::make_shared<timeline_holder>(project_format, project_url);
+                                                              project_path const *project_path) {
+    return std::make_shared<timeline_holder>(project_format, project_path);
 }
 
-timeline_holder::timeline_holder(project_format const &project_format, project_url const *project_url)
+timeline_holder::timeline_holder(project_format const &project_format, project_path const *project_path)
     : _project_format(project_format),
-      _project_url(project_url),
+      _project_path(project_path),
       _timeline(proc::timeline::make_shared()),
       _track(proc::track::make_shared()) {
     this->_timeline->insert_track(0, this->_track);
@@ -37,7 +37,7 @@ void timeline_holder::replace(file_track_module_map_t const &modules) {
 
     for (auto const &pair : modules) {
         auto const &file_module = pair.second;
-        this->_track->push_back_module(timeline_holder_utils::make_module(file_module, this->_project_url, ch_count),
+        this->_track->push_back_module(timeline_holder_utils::make_module(file_module, this->_project_path, ch_count),
                                        file_module.range);
     }
 
@@ -48,7 +48,7 @@ void timeline_holder::insert(file_module const &file_module) {
     if (auto const &track = this->_track) {
         auto const ch_count = this->_project_format.channel_count;
 
-        track->push_back_module(timeline_holder_utils::make_module(file_module, this->_project_url, ch_count),
+        track->push_back_module(timeline_holder_utils::make_module(file_module, this->_project_path, ch_count),
                                 file_module.range);
     } else {
         assert(0);
