@@ -4,7 +4,7 @@
 
 #include "ae_db_module.h"
 
-#include <audio_editor_core/ae_db_constants.h>
+#include <audio_editor_core/ae_db_module_constants.h>
 #include <audio_editor_core/ae_file_module.h>
 
 using namespace yas;
