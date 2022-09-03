@@ -12,7 +12,7 @@ using namespace yas::ae;
 using namespace yas::ae::db_constants;
 
 db::model database_utils::make_model() {
-    yas::version version{"0.0.2"};
+    yas::version version{"0.0.3"};
 
     db::entity_args module_entity{.name = module_name::entity,
                                   .attributes = {{.name = module_name::attribute::name,
@@ -36,6 +36,13 @@ db::model database_utils::make_model() {
                                                   .default_value = db::value{0},
                                                   .not_null = true}},
                                   .relations = {}};
+
+    db::entity_args file_reference_entity{.name = file_reference_name::entity,
+                                          .attributes = {{.name = file_reference_name::attribute::file_name,
+                                                          .type = db::attribute_type::text,
+                                                          .default_value = db::value{""},
+                                                          .not_null = true}},
+                                          .relations = {}};
 
     db::entity_args marker_entity{.name = marker_name::entity,
                                   .attributes = {{.name = marker_name::attribute::frame,
