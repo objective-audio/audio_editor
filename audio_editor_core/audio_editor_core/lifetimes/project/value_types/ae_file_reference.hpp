@@ -8,6 +8,6 @@
 
 namespace yas::ae {
 struct file_reference final {
-    std::string const file_name;
+    std::string file_name;
 };
 }  // namespace yas::ae

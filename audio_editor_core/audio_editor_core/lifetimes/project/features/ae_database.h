@@ -24,6 +24,7 @@ struct database final : std::enable_shared_from_this<database> {
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);
 
     [[nodiscard]] db_modules_map const &modules() const;
+    [[nodiscard]] db_file_refs_map const &file_refs() const;
     [[nodiscard]] db_markers_map const &markers() const;
     [[nodiscard]] std::optional<db_edge> const &edge() const;
     [[nodiscard]] std::optional<pasting_value> pasting_value() const;
@@ -56,6 +57,7 @@ struct database final : std::enable_shared_from_this<database> {
     std::size_t _processing_count = 0;
     std::shared_ptr<db::manager> const _manager;
     db_modules_map _modules;
+    db_file_refs_map _file_refs;
     db_markers_map _markers;
     std::optional<db_edge> _edge;
     std::optional<db_pasting_subject> _pasting_subject = std::nullopt;
