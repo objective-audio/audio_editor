@@ -11,7 +11,7 @@
 #include <cpp_utils/yas_thread.h>
 #include <db/yas_db_umbrella.h>
 
-#include <audio_editor_core/ae_file_reference.hpp>
+#include <audio_editor_core/ae_file_ref.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -138,6 +138,18 @@ void database::set_edge(ae::edge const &edge) {
     }
 
     this->_save();
+}
+
+std::optional<db_file_ref> database::add_file_ref(file_ref::params const &params) {
+    if (!this->_file_refs.contains(params.file_name)) {
+        auto file_ref = db_file_ref::create(this->_manager, params);
+        this->_file_refs.emplace(params.file_name, file_ref);
+        this->_save();
+        return file_ref;
+    } else {
+        // 同じファイルを追加した場合は新規で作らずにスルーする
+        return std::nullopt;
+    }
 }
 
 void database::suspend_saving(std::function<void(void)> &&handler) {
@@ -312,7 +324,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
         db::no_cancellation,
         [] {
             return db::to_fetch_option(
-                db::select_option{.table = db_constants::file_reference_name::entity,
+                db::select_option{.table = db_constants::file_ref_name::entity,
                                   .field_orders = {{db::object_id_field, db::order::ascending}}});
         },
         [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
@@ -324,10 +336,10 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
 
                 db_file_refs_map file_refs;
 
-                if (result_objects.contains(db_constants::file_reference_name::entity)) {
-                    auto const &objects = result_objects.at(db_constants::module_name::entity);
+                if (result_objects.contains(db_constants::file_ref_name::entity)) {
+                    auto const &objects = result_objects.at(db_constants::file_ref_name::entity);
                     for (auto const &object : objects) {
-                        db_file_reference const db_ref{object};
+                        db_file_ref const db_ref{object};
                         if (auto const ref = db_ref.file_ref()) {
                             file_refs.emplace(ref.value().file_name, std::move(db_ref));
                         }

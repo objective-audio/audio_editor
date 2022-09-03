@@ -37,8 +37,8 @@ db::model database_utils::make_model() {
                                                   .not_null = true}},
                                   .relations = {}};
 
-    db::entity_args file_reference_entity{.name = file_reference_name::entity,
-                                          .attributes = {{.name = file_reference_name::attribute::file_name,
+    db::entity_args file_reference_entity{.name = file_ref_name::entity,
+                                          .attributes = {{.name = file_ref_name::attribute::file_name,
                                                           .type = db::attribute_type::text,
                                                           .default_value = db::value{""},
                                                           .not_null = true}},

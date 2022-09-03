@@ -11,20 +11,24 @@
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
 
+#include <audio_editor_core/ae_file_ref_pool.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<reverter> reverter::make_shared(database *database, file_track *file_track, marker_pool *marker_pool,
-                                                pasteboard *pasteboard, edge_holder *edge_holder,
-                                                editing_status const *editing_status) {
-    return std::make_shared<reverter>(database, file_track, marker_pool, pasteboard, edge_holder, editing_status);
+                                                file_ref_pool *file_ref_pool, pasteboard *pasteboard,
+                                                edge_holder *edge_holder, editing_status const *editing_status) {
+    return std::make_shared<reverter>(database, file_track, marker_pool, file_ref_pool, pasteboard, edge_holder,
+                                      editing_status);
 }
 
-reverter::reverter(database *database, file_track *file_track, marker_pool *marker_pool, pasteboard *pasteboard,
-                   edge_holder *edge_holder, editing_status const *editing_status)
+reverter::reverter(database *database, file_track *file_track, marker_pool *marker_pool, file_ref_pool *file_ref_pool,
+                   pasteboard *pasteboard, edge_holder *edge_holder, editing_status const *editing_status)
     : _database(database),
       _file_track(file_track),
       _marker_pool(marker_pool),
+      _file_ref_pool(file_ref_pool),
       _pasteboard(pasteboard),
       _edge_holder(edge_holder),
       _editing_status(editing_status) {
@@ -49,6 +53,16 @@ reverter::reverter(database *database, file_track *file_track, marker_pool *mark
             }
 
             this->_marker_pool->revert_markers(std::move(markers));
+
+            std::vector<file_ref> file_refs;
+
+            for (auto const &pair : this->_database->file_refs()) {
+                if (auto const file_ref = pair.second.file_ref()) {
+                    file_refs.emplace_back(std::move(file_ref.value()));
+                }
+            }
+
+            this->_file_ref_pool->revert(std::move(file_refs));
 
             if (auto const &db_edge = this->_database->edge()) {
                 this->_edge_holder->revert_edge(db_edge.value().edge());

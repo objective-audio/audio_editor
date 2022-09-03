@@ -8,12 +8,14 @@
 #include <audio_editor_core/ae_db_pasting_subject.h>
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
+#include <audio_editor_core/ae_file_ref_pool_dependencies.h>
 #include <audio_editor_core/ae_file_track_dependencies.h>
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_marker_pool_dependencies.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
 #include <cpp_utils/yas_delaying_caller.h>
 
+#include <audio_editor_core/ae_file_ref.hpp>
 #include <filesystem>
 
 namespace yas::db {
@@ -21,7 +23,10 @@ class manager;
 }  // namespace yas::db
 
 namespace yas::ae {
-struct database final : std::enable_shared_from_this<database>, database_for_marker_pool, database_for_file_track {
+struct database final : std::enable_shared_from_this<database>,
+                        database_for_marker_pool,
+                        database_for_file_track,
+                        database_for_file_ref_pool {
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::filesystem::path const &db_file_path);
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);
 
@@ -41,6 +46,7 @@ struct database final : std::enable_shared_from_this<database>, database_for_mar
     void remove_marker(frame_index_t const &) override;
     void update_marker(frame_index_t const &prev_frame, marker const &) override;
     void set_edge(ae::edge const &);
+    [[nodiscard]] std::optional<db_file_ref> add_file_ref(file_ref::params const &) override;
 
     void suspend_saving(std::function<void(void)> &&);
 
