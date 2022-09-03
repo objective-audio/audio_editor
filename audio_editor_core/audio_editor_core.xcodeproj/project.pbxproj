@@ -873,7 +873,6 @@
 			children = (
 				B6137F6A27C7B23C0097A3C6 /* ae_project_lifetime.cpp */,
 				B6137F6B27C7B23C0097A3C6 /* ae_project_lifetime.h */,
-				B6D2838828804F5C00F294EC /* utils */,
 				B61883E7287865DE006CF5AD /* value_types */,
 				B6D2837D287F041B00F294EC /* features */,
 				B61883E6287865D9006CF5AD /* lifecycles */,
@@ -1718,13 +1717,6 @@
 			children = (
 				B6370CD1279BA06C00449D03 /* ae_time_editor_utils.cpp */,
 				B6370CD2279BA06C00449D03 /* ae_time_editor_utils.h */,
-			);
-			path = utils;
-			sourceTree = "<group>";
-		};
-		B6D2838828804F5C00F294EC /* utils */ = {
-			isa = PBXGroup;
-			children = (
 			);
 			path = utils;
 			sourceTree = "<group>";
