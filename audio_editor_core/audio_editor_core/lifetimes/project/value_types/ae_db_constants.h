@@ -19,6 +19,14 @@ namespace module_name {
     }  // namespace attribute
 }  // namespace module_name
 
+namespace file_reference_name {
+    static std::string const entity = "file_reference";
+
+    namespace attribute {
+        static std::string const file_name = "file_name";
+    }
+}  // namespace file_reference_name
+
 namespace marker_name {
     static std::string const entity = "marker";
 
