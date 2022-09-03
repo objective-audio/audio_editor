@@ -72,8 +72,9 @@ db::model database_utils::make_model() {
                                                            .not_null = true}},
                                            .relations = {}};
 
-    return db::model{db::model_args{.version = std::move(version),
-                                    .entities = {std::move(module_entity), std::move(marker_entity),
-                                                 std::move(edge_entity), std::move(pasting_subject_entity)},
-                                    .indices = {}}};
+    return db::model{db::model_args{
+        .version = std::move(version),
+        .entities = {std::move(module_entity), std::move(file_reference_entity), std::move(marker_entity),
+                     std::move(edge_entity), std::move(pasting_subject_entity)},
+        .indices = {}}};
 }
