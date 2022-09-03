@@ -4,7 +4,7 @@
 
 #include "ae_db_marker.h"
 
-#include <audio_editor_core/ae_db_constants.h>
+#include <audio_editor_core/ae_db_marker_constants.h>
 #include <audio_editor_core/ae_marker.h>
 
 using namespace yas;

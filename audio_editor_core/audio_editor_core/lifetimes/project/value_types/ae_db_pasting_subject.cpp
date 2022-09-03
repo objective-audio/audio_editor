@@ -4,7 +4,7 @@
 
 #include "ae_db_pasting_subject.h"
 
-#include <audio_editor_core/ae_db_constants.h>
+#include <audio_editor_core/ae_db_pasting_subject_constants.h>
 
 using namespace yas;
 using namespace yas::ae;
