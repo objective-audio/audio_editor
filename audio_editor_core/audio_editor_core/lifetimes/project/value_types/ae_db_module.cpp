@@ -38,10 +38,7 @@ std::optional<file_module> db_module::file_module() const {
             auto const file_frame = file_frame_value.get<db::integer>();
             auto const range_frame = range_frame_value.get<db::integer>();
             auto const file_name = file_name_value.get<db::text>();
-            return ae::file_module{.name = std::move(name),
-                                   .range = time::range{range_frame, range_length},
-                                   .file_frame = file_frame,
-                                   .file_name = file_name};
+            return ae::file_module{{}, std::move(name), time::range{range_frame, range_length}, file_frame, file_name};
         }
     }
 
