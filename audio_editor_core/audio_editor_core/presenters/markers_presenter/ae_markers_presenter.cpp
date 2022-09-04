@@ -53,8 +53,8 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                     auto const &marker = event.inserted.value();
                     if (auto const space_range = this->_space_range();
                         space_range.has_value() && space_range.value().is_contain(marker.frame)) {
-                        this->_location_pool->insert(marker_location::make_value(
-                            marker.identifier, marker.frame, sample_rate, display_space->scale().width));
+                        this->_location_pool->insert(
+                            {marker.identifier, marker.frame, sample_rate, display_space->scale().width});
                     }
                 } break;
                 case marker_pool_event_type::replaced: {
@@ -64,8 +64,8 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                     if (inserted.frame != erased.frame) {
                         if (auto const space_range = this->_space_range();
                             space_range.has_value() && space_range.value().is_contain(inserted.frame)) {
-                            this->_location_pool->insert_or_replace(marker_location::make_value(
-                                inserted.identifier, inserted.frame, sample_rate, display_space->scale().width));
+                            this->_location_pool->insert_or_replace(
+                                {inserted.identifier, inserted.frame, sample_rate, display_space->scale().width});
                         } else {
                             this->_location_pool->erase(erased.identifier);
                         }
@@ -139,8 +139,8 @@ void markers_presenter::_update_all_locations(update_type const type) {
             marker_pool->markers(),
             [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale](auto const &pair) {
                 if (space_range_value.is_contain(pair.second.frame)) {
-                    return std::make_optional(marker_location::make_value(pair.second.identifier, pair.second.frame,
-                                                                          sample_rate, scale.width));
+                    return std::make_optional<marker_location>(pair.second.identifier, pair.second.frame, sample_rate,
+                                                               scale.width);
                 } else {
                     return std::optional<marker_location>(std::nullopt);
                 }
