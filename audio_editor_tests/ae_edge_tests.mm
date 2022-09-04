@@ -16,10 +16,10 @@ using namespace yas::ae;
 @implementation ae_edge_tests
 
 - (void)test_equal {
-    edge const value1a{.begin_frame = 0, .end_frame = 1};
-    edge const value1b{.begin_frame = 0, .end_frame = 1};
-    edge const value2{.begin_frame = 2, .end_frame = 1};
-    edge const value3{.begin_frame = 0, .end_frame = 3};
+    edge const value1a{0, 1};
+    edge const value1b{0, 1};
+    edge const value2{2, 1};
+    edge const value3{0, 3};
 
     XCTAssertTrue(value1a == value1a);
     XCTAssertTrue(value1a == value1b);
@@ -33,11 +33,11 @@ using namespace yas::ae;
 }
 
 - (void)test_range {
-    XCTAssertEqual((edge{.begin_frame = 0, .end_frame = 1}.range()), (time::range{0, 1}));
-    XCTAssertEqual((edge{.begin_frame = 1, .end_frame = 3}.range()), (time::range{1, 2}));
+    XCTAssertEqual((edge{0, 1}.range()), (time::range{0, 1}));
+    XCTAssertEqual((edge{1, 3}.range()), (time::range{1, 2}));
 
-    XCTAssertFalse((edge{.begin_frame = 2, .end_frame = 2}.range().has_value()));
-    XCTAssertFalse((edge{.begin_frame = 2, .end_frame = 1}.range().has_value()));
+    XCTAssertFalse((edge{2, 2}.range().has_value()));
+    XCTAssertFalse((edge{2, 1}.range().has_value()));
 }
 
 - (void)test_zero {
@@ -48,13 +48,13 @@ using namespace yas::ae;
 }
 
 - (void)test_to_string {
-    edge const value{.begin_frame = 100, .end_frame = 200};
+    edge const value{100, 200};
 
     XCTAssertEqual(to_string(value), "{100, 200}");
 }
 
 - (void)test_ostream {
-    edge const value{.begin_frame = 100, .end_frame = 200};
+    edge const value{100, 200};
 
     std::ostringstream stream;
     stream << value;

@@ -88,8 +88,7 @@ void file_module_loader::load(std::filesystem::path const &src_path) {
                          if (auto const &total_range = loader->_file_track->total_range()) {
                              auto const &total_range_value = total_range.value();
                              loader->_edge_holder->set_edge(
-                                 {.begin_frame = total_range_value.frame,
-                                  .end_frame = static_cast<frame_index_t>(total_range_value.next_frame())});
+                                 {total_range_value.frame, static_cast<frame_index_t>(total_range_value.next_frame())});
                          }
                      });
              }

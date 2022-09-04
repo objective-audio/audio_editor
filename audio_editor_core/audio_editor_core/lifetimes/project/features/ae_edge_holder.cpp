@@ -25,12 +25,12 @@ void edge_holder::set_edge(ae::edge const &edge) {
 }
 
 void edge_holder::set_begin_frame(frame_index_t const begin_frame) {
-    this->_set_edge_and_notify({.begin_frame = begin_frame, .end_frame = std::max(begin_frame, this->_edge.end_frame)},
+    this->_set_edge_and_notify({begin_frame, std::max(begin_frame, this->_edge.end_frame)},
                                edge_holder_event_type::updated);
 }
 
 void edge_holder::set_end_frame(frame_index_t const end_frame) {
-    this->_set_edge_and_notify({.begin_frame = std::min(end_frame, this->_edge.begin_frame), .end_frame = end_frame},
+    this->_set_edge_and_notify({std::min(end_frame, this->_edge.begin_frame), end_frame},
                                edge_holder_event_type::updated);
 }
 

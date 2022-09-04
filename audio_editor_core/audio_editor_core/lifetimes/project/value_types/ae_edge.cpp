@@ -7,6 +7,12 @@
 using namespace yas;
 using namespace yas::ae;
 
+static edge const _zero_value{0, 0};
+
+edge::edge(frame_index_t const begin_frame, frame_index_t const end_frame)
+    : begin_frame(begin_frame), end_frame(end_frame) {
+}
+
 bool edge::operator==(edge const &rhs) const {
     return this->begin_frame == rhs.begin_frame && this->end_frame == rhs.end_frame;
 }
@@ -24,8 +30,7 @@ std::optional<time::range> edge::range() const {
 }
 
 edge const &edge::zero() {
-    static edge const zero_value{.begin_frame = 0, .end_frame = 0};
-    return zero_value;
+    return _zero_value;
 }
 
 std::string yas::to_string(ae::edge const &value) {
