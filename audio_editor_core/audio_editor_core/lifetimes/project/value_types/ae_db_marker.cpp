@@ -26,7 +26,7 @@ std::optional<marker> db_marker::marker() const {
     auto const &name_value = this->_object->attribute_value(marker_name::attribute::name);
 
     if (frame_value && name_value) {
-        return ae::marker{.frame = frame_value.get<db::integer>(), .name = name_value.get<db::text>()};
+        return ae::marker{{}, frame_value.get<db::integer>(), name_value.get<db::text>()};
     }
     return std::nullopt;
 }
