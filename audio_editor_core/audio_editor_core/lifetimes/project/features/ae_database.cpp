@@ -11,6 +11,8 @@
 #include <cpp_utils/yas_thread.h>
 #include <db/yas_db_umbrella.h>
 
+#include <audio_editor_core/ae_file_reference.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -30,6 +32,10 @@ database::database(std::shared_ptr<db::manager> const &manager)
 
 db_modules_map const &database::modules() const {
     return this->_modules;
+}
+
+db_file_refs_map const &database::file_refs() const {
+    return this->_file_refs;
 }
 
 db_markers_map const &database::markers() const {
@@ -272,6 +278,38 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                 }
 
                 database->_modules = std::move(modules);
+            } else {
+                assertion_failure_if_not_test();
+            }
+        });
+
+    this->_manager->fetch_objects(
+        db::no_cancellation,
+        [] {
+            return db::to_fetch_option(
+                db::select_option{.table = db_constants::file_reference_name::entity,
+                                  .field_orders = {{db::object_id_field, db::order::ascending}}});
+        },
+        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
+            assert(thread::is_main());
+
+            auto const database = weak_db.lock();
+            if (database && result) {
+                auto const &result_objects = result.value();
+
+                db_file_refs_map file_refs;
+
+                if (result_objects.contains(db_constants::file_reference_name::entity)) {
+                    auto const &objects = result_objects.at(db_constants::module_name::entity);
+                    for (auto const &object : objects) {
+                        db_file_reference const db_ref{object};
+                        if (auto const ref = db_ref.file_ref()) {
+                            file_refs.emplace(ref.value().file_name, std::move(db_ref));
+                        }
+                    }
+                }
+
+                database->_file_refs = std::move(file_refs);
             } else {
                 assertion_failure_if_not_test();
             }

@@ -21,7 +21,7 @@ db_file_reference db_file_reference::create(db::manager_ptr const &manager, ae::
     return db_file_reference{std::move(object)};
 }
 
-std::optional<file_reference> db_file_reference::file_reference() const {
+std::optional<file_reference> db_file_reference::file_ref() const {
     auto const &file_name_value = this->_object->attribute_value(file_reference_name::attribute::file_name);
 
     if (file_name_value) {
