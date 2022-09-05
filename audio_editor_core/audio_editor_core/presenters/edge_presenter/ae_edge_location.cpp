@@ -7,9 +7,17 @@
 using namespace yas;
 using namespace yas::ae;
 
-edge_location edge_location::make_value(frame_index_t const &frame, uint32_t const sample_rate, ui::size const &scale) {
-    double const x = static_cast<double>(frame) / static_cast<double>(sample_rate) * static_cast<double>(scale.width);
-    return edge_location{.x = static_cast<float>(x)};
+namespace yas::ae::edge_location_utils {
+float to_x(frame_index_t const &frame, uint32_t const sample_rate, ui::size const &scale) {
+    return static_cast<double>(frame) / static_cast<double>(sample_rate) * static_cast<double>(scale.width);
+}
+}  // namespace yas::ae::edge_location_utils
+
+edge_location::edge_location(frame_index_t const &frame, uint32_t const sample_rate, ui::size const &scale)
+    : edge_location(edge_location_utils::to_x(frame, sample_rate, scale)) {
+}
+
+edge_location::edge_location(float const x) : x(x) {
 }
 
 bool edge_location::operator==(edge_location const &rhs) const {
