@@ -210,10 +210,8 @@ void track_editor::copy() {
         auto const current_frame = this->_player->current_frame();
         if (auto const file_module = file_track->module_at(current_frame)) {
             auto const &value = file_module.value();
-            this->_pasteboard->set_file_module({.name = value.name,
-                                                .file_frame = value.file_frame,
-                                                .range = value.range.offset(-current_frame),
-                                                .file_name = value.file_name});
+            this->_pasteboard->set_file_module(
+                {value.name, value.file_frame, value.range.offset(-current_frame), value.file_name});
         }
     });
 }
@@ -240,10 +238,11 @@ void track_editor::paste() {
             auto const module_value = module.value();
             auto const current_frame = this->_player->current_frame();
 
-            this->_file_track->overwrite_module({.name = module_value.name,
-                                                 .file_frame = module_value.file_frame,
-                                                 .range = module_value.range.offset(current_frame),
-                                                 .file_name = module_value.file_name});
+            this->_file_track->overwrite_module({{},
+                                                 module_value.name,
+                                                 module_value.range.offset(current_frame),
+                                                 module_value.file_frame,
+                                                 module_value.file_name});
         });
     }
 }
@@ -258,10 +257,11 @@ void track_editor::paste_and_offset() {
             auto const module_value = module.value();
             auto const current_frame = this->_player->current_frame();
 
-            this->_file_track->split_and_insert_module_and_offset({.name = module_value.name,
-                                                                   .file_frame = module_value.file_frame,
-                                                                   .range = module_value.range.offset(current_frame),
-                                                                   .file_name = module_value.file_name});
+            this->_file_track->split_and_insert_module_and_offset({{},
+                                                                   module_value.name,
+                                                                   module_value.range.offset(current_frame),
+                                                                   module_value.file_frame,
+                                                                   module_value.file_name});
         });
     }
 }

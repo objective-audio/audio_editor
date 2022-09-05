@@ -36,20 +36,20 @@ using namespace yas::ae;
 
     XCTAssertEqual(called.size(), 1);
 
-    holder->set_edge({.begin_frame = 1, .end_frame = 2});
+    holder->set_edge({1, 2});
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, edge_holder_event_type::updated);
-    XCTAssertEqual(called.at(1).edge, (ae::edge{.begin_frame = 1, .end_frame = 2}));
+    XCTAssertEqual(called.at(1).edge, (ae::edge{1, 2}));
 
-    XCTAssertThrows(holder->set_edge({.begin_frame = 1, .end_frame = 0}));
+    XCTAssertThrows(holder->set_edge({1, 0}));
 
     canceller->cancel();
 }
 
 - (void)test_set_begin_frame {
     auto const holder = edge_holder::make_shared();
-    holder->set_edge({.begin_frame = 0, .end_frame = 2});
+    holder->set_edge({0, 2});
 
     std::vector<edge_holder_event> called;
 
@@ -64,24 +64,24 @@ using namespace yas::ae;
 
     holder->set_begin_frame(1);
 
-    XCTAssertEqual(holder->edge(), (ae::edge{.begin_frame = 1, .end_frame = 2}));
+    XCTAssertEqual(holder->edge(), (ae::edge{1, 2}));
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, edge_holder_event_type::updated);
-    XCTAssertEqual(called.at(1).edge, (ae::edge{.begin_frame = 1, .end_frame = 2}));
+    XCTAssertEqual(called.at(1).edge, (ae::edge{1, 2}));
 
     holder->set_begin_frame(3);
 
-    XCTAssertEqual(holder->edge(), (ae::edge{.begin_frame = 3, .end_frame = 3}));
+    XCTAssertEqual(holder->edge(), (ae::edge{3, 3}));
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2).type, edge_holder_event_type::updated);
-    XCTAssertEqual(called.at(2).edge, (ae::edge{.begin_frame = 3, .end_frame = 3}));
+    XCTAssertEqual(called.at(2).edge, (ae::edge{3, 3}));
 
     canceller->cancel();
 }
 
 - (void)test_set_end_frame {
     auto const holder = edge_holder::make_shared();
-    holder->set_edge({.begin_frame = 1, .end_frame = 2});
+    holder->set_edge({1, 2});
 
     std::vector<edge_holder_event> called;
 
@@ -96,24 +96,24 @@ using namespace yas::ae;
 
     holder->set_end_frame(3);
 
-    XCTAssertEqual(holder->edge(), (ae::edge{.begin_frame = 1, .end_frame = 3}));
+    XCTAssertEqual(holder->edge(), (ae::edge{1, 3}));
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, edge_holder_event_type::updated);
-    XCTAssertEqual(called.at(1).edge, (ae::edge{.begin_frame = 1, .end_frame = 3}));
+    XCTAssertEqual(called.at(1).edge, (ae::edge{1, 3}));
 
     holder->set_end_frame(0);
 
-    XCTAssertEqual(holder->edge(), (ae::edge{.begin_frame = 0, .end_frame = 0}));
+    XCTAssertEqual(holder->edge(), (ae::edge{0, 0}));
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2).type, edge_holder_event_type::updated);
-    XCTAssertEqual(called.at(2).edge, (ae::edge{.begin_frame = 0, .end_frame = 0}));
+    XCTAssertEqual(called.at(2).edge, (ae::edge{0, 0}));
 
     canceller->cancel();
 }
 
 - (void)test_revert_edge {
     auto const holder = edge_holder::make_shared();
-    holder->set_edge({.begin_frame = 0, .end_frame = 2});
+    holder->set_edge({0, 2});
 
     std::vector<edge_holder_event> called;
 
@@ -122,16 +122,16 @@ using namespace yas::ae;
 
     XCTAssertEqual(called.size(), 1);
 
-    holder->revert_edge({.begin_frame = 0, .end_frame = 2});
+    holder->revert_edge({0, 2});
 
     XCTAssertEqual(called.size(), 1);
 
-    holder->revert_edge({.begin_frame = 1, .end_frame = 3});
+    holder->revert_edge({1, 3});
 
-    XCTAssertEqual(holder->edge(), (ae::edge{.begin_frame = 1, .end_frame = 3}));
+    XCTAssertEqual(holder->edge(), (ae::edge{1, 3}));
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, edge_holder_event_type::reverted);
-    XCTAssertEqual(called.at(1).edge, (ae::edge{.begin_frame = 1, .end_frame = 3}));
+    XCTAssertEqual(called.at(1).edge, (ae::edge{1, 3}));
 }
 
 @end

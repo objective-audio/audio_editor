@@ -24,27 +24,27 @@ using namespace yas::ae;
     float const scale_1 = 1.0f;
     float const scale_2 = 2.0f;
 
-    XCTAssertTrue(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) ==
-                  marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1));
-    XCTAssertFalse(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) ==
-                   marker_location::make_value(id_2, frame_1, sample_rate_1, scale_1));
-    XCTAssertFalse(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) ==
-                   marker_location::make_value(id_1, frame_2, sample_rate_1, scale_1));
-    XCTAssertFalse(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) ==
-                   marker_location::make_value(id_1, frame_1, sample_rate_2, scale_1));
-    XCTAssertFalse(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) ==
-                   marker_location::make_value(id_1, frame_1, sample_rate_1, scale_2));
+    XCTAssertTrue(marker_location(id_1, frame_1, sample_rate_1, scale_1) ==
+                  marker_location(id_1, frame_1, sample_rate_1, scale_1));
+    XCTAssertFalse(marker_location(id_1, frame_1, sample_rate_1, scale_1) ==
+                   marker_location(id_2, frame_1, sample_rate_1, scale_1));
+    XCTAssertFalse(marker_location(id_1, frame_1, sample_rate_1, scale_1) ==
+                   marker_location(id_1, frame_2, sample_rate_1, scale_1));
+    XCTAssertFalse(marker_location(id_1, frame_1, sample_rate_1, scale_1) ==
+                   marker_location(id_1, frame_1, sample_rate_2, scale_1));
+    XCTAssertFalse(marker_location(id_1, frame_1, sample_rate_1, scale_1) ==
+                   marker_location(id_1, frame_1, sample_rate_1, scale_2));
 
-    XCTAssertFalse(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) !=
-                   marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1));
-    XCTAssertTrue(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) !=
-                  marker_location::make_value(id_2, frame_1, sample_rate_1, scale_1));
-    XCTAssertTrue(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) !=
-                  marker_location::make_value(id_1, frame_2, sample_rate_1, scale_1));
-    XCTAssertTrue(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) !=
-                  marker_location::make_value(id_1, frame_1, sample_rate_2, scale_1));
-    XCTAssertTrue(marker_location::make_value(id_1, frame_1, sample_rate_1, scale_1) !=
-                  marker_location::make_value(id_1, frame_1, sample_rate_1, scale_2));
+    XCTAssertFalse(marker_location(id_1, frame_1, sample_rate_1, scale_1) !=
+                   marker_location(id_1, frame_1, sample_rate_1, scale_1));
+    XCTAssertTrue(marker_location(id_1, frame_1, sample_rate_1, scale_1) !=
+                  marker_location(id_2, frame_1, sample_rate_1, scale_1));
+    XCTAssertTrue(marker_location(id_1, frame_1, sample_rate_1, scale_1) !=
+                  marker_location(id_1, frame_2, sample_rate_1, scale_1));
+    XCTAssertTrue(marker_location(id_1, frame_1, sample_rate_1, scale_1) !=
+                  marker_location(id_1, frame_1, sample_rate_2, scale_1));
+    XCTAssertTrue(marker_location(id_1, frame_1, sample_rate_1, scale_1) !=
+                  marker_location(id_1, frame_1, sample_rate_1, scale_2));
 }
 
 @end

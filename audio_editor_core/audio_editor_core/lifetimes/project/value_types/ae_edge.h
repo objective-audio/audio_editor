@@ -13,6 +13,8 @@ struct edge final {
     frame_index_t begin_frame;
     frame_index_t end_frame;
 
+    edge(frame_index_t const begin_frame, frame_index_t const end_frame);
+
     bool operator==(edge const &) const;
     bool operator!=(edge const &) const;
 

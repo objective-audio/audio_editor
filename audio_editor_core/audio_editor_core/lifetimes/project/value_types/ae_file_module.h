@@ -17,6 +17,9 @@ struct file_module final {
     frame_index_t file_frame;
     std::string file_name;
 
+    file_module(yas::identifier const &, std::string const &name, time::range const &range,
+                frame_index_t const file_frame, std::string const &file_name);
+
     bool is_equal_location(file_module const &rhs) const;
 
     std::optional<file_module> head_dropped(frame_index_t const) const;

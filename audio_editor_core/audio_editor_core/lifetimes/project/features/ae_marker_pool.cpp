@@ -63,7 +63,7 @@ void marker_pool::erase_range(time::range const range) {
 void marker_pool::move_at(frame_index_t const frame, frame_index_t const new_frame) {
     if (this->_markers->contains(frame)) {
         this->erase_at(frame);
-        this->insert_marker({.frame = new_frame});
+        this->insert_marker({{}, new_frame, ""});
     } else {
         assertion_failure_if_not_test();
     }

@@ -24,7 +24,7 @@ ae::edge db_edge::edge() const {
     auto const &begin = this->_object->attribute_value(edge_name::attribute::begin);
     auto const &end = this->_object->attribute_value(edge_name::attribute::end);
 
-    return ae::edge{.begin_frame = begin.get<db::integer>(), .end_frame = end.get<db::integer>()};
+    return ae::edge{begin.get<db::integer>(), end.get<db::integer>()};
 }
 
 void db_edge::set(ae::edge const &value) {

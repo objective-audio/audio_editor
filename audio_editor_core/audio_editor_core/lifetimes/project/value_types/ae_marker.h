@@ -12,5 +12,7 @@ struct marker final {
     identifier identifier;
     frame_index_t frame;
     std::string name;
+
+    marker(yas::identifier const &, frame_index_t const frame, std::string const &name);
 };
 }  // namespace yas::ae
