@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
+#include <cpp_utils/yas_json.h>
 
 #include <string>
 #include <variant>
@@ -26,9 +27,12 @@ struct pasting_file_module final {
     time::range range;
     std::string file_name;
 
-    std::string json_string() const;
+    [[nodiscard]] static std::optional<pasting_file_module> make(json_value const &);
 
-    static std::optional<pasting_file_module> make_value(std::string const &);
+    pasting_file_module(std::string const &name, frame_index_t const file_frame, time::range const &range,
+                        std::string const &file_name);
+
+    [[nodiscard]] json_value json() const;
 
     bool operator==(pasting_file_module const &) const;
     bool operator!=(pasting_file_module const &) const;

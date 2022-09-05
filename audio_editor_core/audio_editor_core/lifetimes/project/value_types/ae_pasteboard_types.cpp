@@ -5,26 +5,12 @@
 #include "ae_pasteboard_types.h"
 
 #include <audio_editor_core/ae_pasteboard_constants.h>
-#include <cpp_utils/yas_json.h>
 
 using namespace yas;
 using namespace yas::ae;
 using namespace yas::ae::pasteboard_constants;
 
-std::string pasting_file_module::json_string() const {
-    assert(!this->file_name.empty());
-    json_map map{{file_module_key::kind, json_value{file_module_kind::value}},
-                 {file_module_key::name, json_value{this->name}},
-                 {file_module_key::file_frame, json_value{this->file_frame}},
-                 {file_module_key::frame, json_value{this->range.frame}},
-                 {file_module_key::length, json_value{int64_t(this->range.length)}},
-                 {file_module_key::file_name, json_value{this->file_name}}};
-    return to_json_string(json_value{std::move(map)});
-}
-
-std::optional<pasting_file_module> pasting_file_module::make_value(std::string const &data) {
-    auto const json_value = to_json_value(data);
-
+std::optional<pasting_file_module> pasting_file_module::make(json_value const &json_value) {
     if (!json_value.map.has_value()) {
         return std::nullopt;
     }
@@ -43,11 +29,26 @@ std::optional<pasting_file_module> pasting_file_module::make_value(std::string c
         auto const frame = map_value.at(file_module_key::frame).integer.value();
         auto const length = map_value.at(file_module_key::length).integer.value();
         auto const file_name = map_value.at(file_module_key::file_name).string.value();
-        return pasting_file_module{
-            .name = name, .file_frame = file_frame, .range = {frame, length_t(length)}, .file_name = file_name};
+        return pasting_file_module{name, file_frame, {frame, length_t(length)}, file_name};
     }
 
     return std::nullopt;
+}
+
+pasting_file_module::pasting_file_module(std::string const &name, frame_index_t const file_frame,
+                                         time::range const &range, std::string const &file_name)
+    : name(name), file_frame(file_frame), range(range), file_name(file_name) {
+}
+
+json_value pasting_file_module::json() const {
+    assert(!this->file_name.empty());
+    json_map map{{file_module_key::kind, json_value{file_module_kind::value}},
+                 {file_module_key::name, json_value{this->name}},
+                 {file_module_key::file_frame, json_value{this->file_frame}},
+                 {file_module_key::frame, json_value{this->range.frame}},
+                 {file_module_key::length, json_value{int64_t(this->range.length)}},
+                 {file_module_key::file_name, json_value{this->file_name}}};
+    return json_value{std::move(map)};
 }
 
 bool pasting_file_module::operator==(pasting_file_module const &rhs) const {
@@ -64,7 +65,7 @@ std::string yas::to_json_string(std::optional<ae::pasting_value> const &value) {
         auto const &pasting_value = value.value();
 
         if (std::holds_alternative<ae::pasting_file_module>(pasting_value)) {
-            return std::get<ae::pasting_file_module>(pasting_value).json_string();
+            return to_json_string(std::get<ae::pasting_file_module>(pasting_value).json());
         }
     }
 
@@ -72,7 +73,7 @@ std::string yas::to_json_string(std::optional<ae::pasting_value> const &value) {
 }
 
 std::optional<ae::pasting_value> yas::to_pasting_value(std::string const &json_string) {
-    if (auto file_module = pasting_file_module::make_value(json_string)) {
+    if (auto file_module = pasting_file_module::make(to_json_value(json_string))) {
         return file_module;
     } else {
         return std::nullopt;

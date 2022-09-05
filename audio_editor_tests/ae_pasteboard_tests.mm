@@ -28,8 +28,7 @@ using namespace yas::ae;
 
     XCTAssertFalse(pasteboard->value().has_value());
 
-    pasting_file_module const module{
-        .name = "test-name", .file_name = "test-file-name", .range = {1, 2}, .file_frame = 3};
+    pasting_file_module const module{"test-name", 3, {1, 2}, "test-file-name"};
 
     pasteboard->revert_value(module);
 
@@ -54,8 +53,7 @@ using namespace yas::ae;
 
     XCTAssertFalse(pasteboard->file_module().has_value());
 
-    pasteboard->set_file_module(
-        {.name = "test-name-1", .file_frame = 1, .range = {2, 3}, .file_name = "test-file-name-1"});
+    pasteboard->set_file_module({"test-name-1", 1, {2, 3}, "test-file-name-1"});
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), pasteboard_event::file_module);
