@@ -11,8 +11,8 @@ namespace yas::ae {
 struct edge_location final {
     float x;
 
-    [[nodiscard]] static edge_location make_value(frame_index_t const &frame, uint32_t const sample_rate,
-                                                  ui::size const &scale);
+    edge_location(frame_index_t const &frame, uint32_t const sample_rate, ui::size const &scale);
+    edge_location(float const x);
 
     bool operator==(edge_location const &) const;
     bool operator!=(edge_location const &) const;

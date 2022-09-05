@@ -22,7 +22,7 @@ std::shared_ptr<edge_presenter> edge_presenter::make_shared(window_lifetime_id c
 edge_presenter::edge_presenter(project_format const &project_format, std::shared_ptr<edge_holder> const &edge_holder,
                                std::shared_ptr<display_space> const &display_space)
     : _project_format(project_format),
-      _locations(observing::value::holder<edge_locations>::make_shared({.begin = {.x = 0}, .end = {.x = 0}})),
+      _locations(observing::value::holder<edge_locations>::make_shared({.begin = {0}, .end = {0}})),
       _edge_holder(edge_holder),
       _display_space(display_space) {
     edge_holder->observe_event([this](edge_holder_event const &) { this->_update_locations(); })
@@ -51,9 +51,9 @@ void edge_presenter::_update_locations() {
         auto const sample_rate = this->_project_format.sample_rate;
         auto const &scale = display_space->scale();
 
-        this->_locations->set_value({.begin = edge_location::make_value(edge.begin_frame, sample_rate, scale),
-                                     .end = edge_location::make_value(edge.end_frame, sample_rate, scale)});
+        this->_locations->set_value({.begin = edge_location(edge.begin_frame, sample_rate, scale),
+                                     .end = edge_location(edge.end_frame, sample_rate, scale)});
     } else {
-        this->_locations->set_value({.begin = {.x = 0}, .end = {.x = 0}});
+        this->_locations->set_value({.begin = {0}, .end = {0}});
     }
 }
