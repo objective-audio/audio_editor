@@ -34,8 +34,9 @@ struct database final : std::enable_shared_from_this<database> {
     void remove_module(time::range const &);
     void update_module_detail(file_module const &);
     void set_pasting_value(std::optional<ae::pasting_value> const &);
-    void add_marker(marker const &);
+    db_marker add_marker(frame_index_t const frame, std::string const &name);
     void remove_marker(frame_index_t const &);
+    void update_marker(frame_index_t const &prev_frame, marker const &);
     void set_edge(ae::edge const &);
 
     void suspend_saving(std::function<void(void)> &&);

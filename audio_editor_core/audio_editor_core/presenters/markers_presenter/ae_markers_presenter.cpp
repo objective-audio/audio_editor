@@ -47,7 +47,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                     this->_update_all_locations(update_type::update);
                     break;
                 case marker_pool_event_type::erased:
-                    this->_location_pool->erase(event.erased.value().identifier);
+                    this->_location_pool->erase_for_id(event.erased.value().identifier);
                     break;
                 case marker_pool_event_type::inserted: {
                     auto const &marker = event.inserted.value();
@@ -67,7 +67,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                             this->_location_pool->insert_or_replace(
                                 {inserted.identifier, inserted.frame, sample_rate, display_space->scale().width});
                         } else {
-                            this->_location_pool->erase(erased.identifier);
+                            this->_location_pool->erase_for_id(erased.identifier);
                         }
                     }
                 } break;

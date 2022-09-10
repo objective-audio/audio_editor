@@ -32,7 +32,7 @@ struct ui_marker_element final {
     void finalize();
 
    private:
-    std::optional<identifier> _identifier;
+    std::optional<object_id> _identifier;
 
     std::weak_ptr<marker_pool> const _marker_pool;
     std::shared_ptr<markers_controller> const _controller;

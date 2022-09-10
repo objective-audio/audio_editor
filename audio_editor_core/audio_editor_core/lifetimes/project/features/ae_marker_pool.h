@@ -17,8 +17,8 @@ struct marker_pool final : jumpable_on_jumper {
     marker_pool(database *);
 
     void revert_markers(std::vector<marker> &&);
-    void insert_marker(marker const &);
-    void replace_marker(marker const &);
+    void insert_marker(frame_index_t const, std::string const &name = "");
+    void update_marker(frame_index_t const, marker const &);
     void erase_at(frame_index_t const);
     void erase_marker(marker const &);
     void erase_range(time::range const);
@@ -29,7 +29,7 @@ struct marker_pool final : jumpable_on_jumper {
     [[nodiscard]] marker_map_t const &markers() const;
     [[nodiscard]] std::optional<marker> marker_at(std::size_t const) const;
     [[nodiscard]] std::optional<marker> marker_for_frame(frame_index_t const) const;
-    [[nodiscard]] std::optional<marker> marker_for_id(identifier const &) const;
+    [[nodiscard]] std::optional<marker> marker_for_id(object_id const &) const;
 
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
     [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;

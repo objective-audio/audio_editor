@@ -29,8 +29,8 @@ std::string marker_name_editor::name() const {
 
 void marker_name_editor::set_name(std::string const &name) {
     if (auto opt_marker = this->_marker_pool->marker_for_frame(this->_marker_frame)) {
-        auto &marker = opt_marker.value();
+        auto marker = opt_marker.value();
         marker.name = name;
-        this->_marker_pool->replace_marker(marker);
+        this->_marker_pool->update_marker(marker.frame, marker);
     }
 }
