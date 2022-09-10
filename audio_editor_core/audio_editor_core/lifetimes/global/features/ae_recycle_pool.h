@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_common_types.h>
 #include <cpp_utils/yas_identifier.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -33,6 +34,7 @@ struct recycle_pool final {
     void update_all(std::vector<Element> const &);
     /// 単独の要素を削除する
     void erase(identifier const &);
+    void erase_for_id(object_id const &);
     /// 単独の要素を追加する
     void insert(Element const &);
     /// identifierの一致する単独の要素を置き換える
