@@ -13,8 +13,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-static std::string const empty_string = "";
-
 std::shared_ptr<marker_name_presenter> marker_name_presenter::make_shared(project_sub_lifetime_id const &lifetime_id) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
     auto const &sheet_lifetime = hierarchy::marker_name_sheet_lifetime_for_id(lifetime_id);
@@ -29,11 +27,11 @@ marker_name_presenter::marker_name_presenter(project_sub_lifetime_id const &life
     : _lifetime_id(lifetime_id), _editor(editor), _lifecycle(lifecycle) {
 }
 
-std::string const &marker_name_presenter::name() const {
+std::string marker_name_presenter::name() const {
     if (auto const editor = this->_editor.lock()) {
         return editor->name();
     }
-    return empty_string;
+    return "";
 }
 
 void marker_name_presenter::done(std::string const &name) {

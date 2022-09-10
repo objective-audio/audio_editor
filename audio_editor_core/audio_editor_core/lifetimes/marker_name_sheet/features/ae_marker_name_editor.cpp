@@ -10,8 +10,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-static std::string const empty_string = "";
-
 std::shared_ptr<marker_name_editor> marker_name_editor::make_shared(project_sub_lifetime_id const &lifetime_id,
                                                                     int64_t const marker_frame) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
@@ -22,11 +20,11 @@ marker_name_editor::marker_name_editor(int64_t const marker_frame, marker_pool *
     : _marker_frame(marker_frame), _marker_pool(marker_pool) {
 }
 
-std::string const &marker_name_editor::name() const {
+std::string marker_name_editor::name() const {
     if (auto const marker = this->_marker_pool->marker_for_frame(this->_marker_frame)) {
         return marker->name;
     }
-    return empty_string;
+    return "";
 }
 
 void marker_name_editor::set_name(std::string const &name) {
