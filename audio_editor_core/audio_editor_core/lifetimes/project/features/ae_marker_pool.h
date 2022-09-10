@@ -9,10 +9,12 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-struct marker_pool final : jumpable_on_jumper {
-    [[nodiscard]] static std::shared_ptr<marker_pool> make_shared();
+class database;
 
-    marker_pool();
+struct marker_pool final : jumpable_on_jumper {
+    [[nodiscard]] static std::shared_ptr<marker_pool> make_shared(database *);
+
+    marker_pool(database *);
 
     void revert_markers(std::vector<marker> &&);
     void insert_marker(marker const &);
@@ -35,6 +37,7 @@ struct marker_pool final : jumpable_on_jumper {
     [[nodiscard]] observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&);
 
    private:
+    database *_database;
     observing::map::holder_ptr<frame_index_t, marker> const _markers;
     observing::fetcher_ptr<marker_pool_event> _fetcher;
     observing::canceller_pool _pool;

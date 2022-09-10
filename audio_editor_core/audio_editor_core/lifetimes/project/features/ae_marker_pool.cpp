@@ -4,6 +4,7 @@
 
 #include "ae_marker_pool.h"
 
+#include <audio_editor_core/ae_database.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <cpp_utils/yas_stl_utils.h>
@@ -11,11 +12,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<marker_pool> marker_pool::make_shared() {
-    return std::make_shared<marker_pool>();
+std::shared_ptr<marker_pool> marker_pool::make_shared(database *database) {
+    return std::make_shared<marker_pool>(database);
 }
 
-marker_pool::marker_pool() : _markers(observing::map::holder<frame_index_t, marker>::make_shared()) {
+marker_pool::marker_pool(database *database)
+    : _database(database), _markers(observing::map::holder<frame_index_t, marker>::make_shared()) {
 }
 
 void marker_pool::revert_markers(std::vector<marker> &&markers) {
