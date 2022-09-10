@@ -14,7 +14,7 @@ struct marker_name_editor final {
                                                                          int64_t const marker_frame);
     marker_name_editor(int64_t const marker_frame, marker_pool *);
 
-    std::string const &name() const;
+    std::string name() const;
     void set_name(std::string const &);
 
    private:

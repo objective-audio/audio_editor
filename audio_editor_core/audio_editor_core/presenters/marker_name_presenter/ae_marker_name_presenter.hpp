@@ -15,7 +15,7 @@ struct marker_name_presenter final {
     marker_name_presenter(project_sub_lifetime_id const &, std::shared_ptr<marker_name_editor> const &,
                           std::shared_ptr<project_modal_lifecycle> const &);
 
-    [[nodiscard]] std::string const &name() const;
+    [[nodiscard]] std::string name() const;
 
     void done(std::string const &);
     void cancel();
