@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_jumper_dependency.h>
+#include <audio_editor_core/ae_marker_pool_dependencies.h>
 #include <audio_editor_core/ae_marker_pool_types.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -12,9 +13,9 @@ namespace yas::ae {
 class database;
 
 struct marker_pool final : jumpable_on_jumper {
-    [[nodiscard]] static std::shared_ptr<marker_pool> make_shared(database *);
+    [[nodiscard]] static std::shared_ptr<marker_pool> make_shared(database_for_marker_pool *);
 
-    marker_pool(database *);
+    marker_pool(database_for_marker_pool *);
 
     void revert_markers(std::vector<marker> &&);
     void insert_marker(frame_index_t const, std::string const &name = "");
@@ -37,7 +38,7 @@ struct marker_pool final : jumpable_on_jumper {
     [[nodiscard]] observing::syncable observe_event(std::function<void(marker_pool_event const &)> &&);
 
    private:
-    database *_database;
+    database_for_marker_pool *_database;
     observing::map::holder_ptr<frame_index_t, marker> const _markers;
     observing::fetcher_ptr<marker_pool_event> _fetcher;
     observing::canceller_pool _pool;

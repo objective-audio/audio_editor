@@ -12,11 +12,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<marker_pool> marker_pool::make_shared(database *database) {
+std::shared_ptr<marker_pool> marker_pool::make_shared(database_for_marker_pool *database) {
     return std::make_shared<marker_pool>(database);
 }
 
-marker_pool::marker_pool(database *database)
+marker_pool::marker_pool(database_for_marker_pool *database)
     : _database(database), _markers(observing::map::holder<frame_index_t, marker>::make_shared()) {
 }
 
