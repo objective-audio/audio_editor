@@ -15,8 +15,8 @@ using namespace yas::ae;
 @implementation ae_marker_location_tests
 
 - (void)test_equal {
-    identifier const id_1;
-    identifier const id_2;
+    auto const id_1 = db::make_temporary_id();
+    auto const id_2 = db::make_temporary_id();
     frame_index_t const frame_1 = 1;
     frame_index_t const frame_2 = 2;
     uint32_t const sample_rate_1 = 1;
