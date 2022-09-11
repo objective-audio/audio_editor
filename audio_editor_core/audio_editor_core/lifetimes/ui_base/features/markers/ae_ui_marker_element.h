@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_marker_location.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
-#include <cpp_utils/yas_identifier.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
