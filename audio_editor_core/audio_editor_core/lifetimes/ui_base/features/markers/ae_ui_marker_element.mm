@@ -108,8 +108,11 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
                     }
                     break;
 
-                case marker_pool_event_type::any:
                 case marker_pool_event_type::reverted:
+                    this->_update_name();
+                    break;
+
+                case marker_pool_event_type::any:
                 case marker_pool_event_type::inserted:
                 case marker_pool_event_type::erased:
                     break;
