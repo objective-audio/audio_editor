@@ -4,6 +4,7 @@
 
 #include "ae_marker_pool.h"
 
+#include <audio_editor_core/ae_database.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <cpp_utils/yas_stl_utils.h>
@@ -11,28 +12,37 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<marker_pool> marker_pool::make_shared() {
-    return std::make_shared<marker_pool>();
+std::shared_ptr<marker_pool> marker_pool::make_shared(database_for_marker_pool *database) {
+    return std::make_shared<marker_pool>(database);
 }
 
-marker_pool::marker_pool() : _markers(observing::map::holder<frame_index_t, marker>::make_shared()) {
+marker_pool::marker_pool(database_for_marker_pool *database)
+    : _database(database), _markers(observing::map::holder<frame_index_t, marker>::make_shared()) {
 }
 
 void marker_pool::revert_markers(std::vector<marker> &&markers) {
     this->_markers->replace(to_map<frame_index_t>(std::move(markers), [](auto const &marker) { return marker.frame; }));
 }
 
-void marker_pool::insert_marker(marker const &marker) {
-    if (!this->_markers->contains(marker.frame)) {
-        this->_markers->insert_or_replace(marker.frame, marker);
+void marker_pool::insert_marker(frame_index_t const frame, std::string const &name) {
+    if (!this->_markers->contains(frame)) {
+        if (auto marker = this->_database->add_marker(frame, name).marker(); marker.has_value()) {
+            this->_markers->insert_or_replace(frame, marker.value());
+        } else {
+            assertion_failure_if_not_test();
+        }
     } else {
         assertion_failure_if_not_test();
     }
 }
 
-void marker_pool::replace_marker(marker const &marker) {
-    if (this->_markers->contains(marker.frame)) {
-        this->_markers->insert_or_replace(marker.frame, marker);
+void marker_pool::update_marker(frame_index_t const frame, marker const &new_marker) {
+    if (this->_markers->contains(frame)) {
+        this->_database->update_marker(frame, new_marker);
+        if (frame != new_marker.frame) {
+            this->_markers->erase(frame);
+        }
+        this->_markers->insert_or_replace(new_marker.frame, new_marker);
     } else {
         assertion_failure_if_not_test();
     }
@@ -41,6 +51,7 @@ void marker_pool::replace_marker(marker const &marker) {
 void marker_pool::erase_at(frame_index_t const frame) {
     if (this->_markers->contains(frame)) {
         this->_markers->erase(frame);
+        this->_database->remove_marker(frame);
     } else {
         assertion_failure_if_not_test();
     }
@@ -62,8 +73,9 @@ void marker_pool::erase_range(time::range const range) {
 
 void marker_pool::move_at(frame_index_t const frame, frame_index_t const new_frame) {
     if (this->_markers->contains(frame)) {
-        this->erase_at(frame);
-        this->insert_marker({{}, new_frame, ""});
+        auto marker = this->_markers->at(frame);
+        marker.frame = new_frame;
+        this->update_marker(frame, marker);
     } else {
         assertion_failure_if_not_test();
     }
@@ -103,7 +115,7 @@ std::optional<marker> marker_pool::marker_for_frame(frame_index_t const frame) c
     return std::nullopt;
 }
 
-std::optional<marker> marker_pool::marker_for_id(identifier const &identifier) const {
+std::optional<marker> marker_pool::marker_for_id(object_id const &identifier) const {
     for (auto const &pair : this->markers()) {
         if (pair.second.identifier == identifier) {
             return pair.second;

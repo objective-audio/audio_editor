@@ -8,7 +8,6 @@
 #include <audio_editor_core/ae_module_location_pool.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
-#include <cpp_utils/yas_identifier.h>
 
 #include <memory>
 #include <string>
@@ -69,13 +68,13 @@ struct project_lifetime final {
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
     std::shared_ptr<scroll_gesture_controller> const scroll_gesture_controller;
 
+    std::shared_ptr<database> const database;
     std::shared_ptr<timing> const timing;
     std::shared_ptr<nudge_settings> const nudge_settings;
     std::shared_ptr<file_track> const file_track;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<marker_pool> const marker_pool;
     std::shared_ptr<pasteboard> const pasteboard;
-    std::shared_ptr<database> const database;
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<editing_status> const editing_status;
     std::shared_ptr<playing_toggler> const playing_toggler;

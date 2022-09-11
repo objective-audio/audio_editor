@@ -92,15 +92,27 @@ void database::set_pasting_value(std::optional<ae::pasting_value> const &value) 
     this->_save();
 }
 
-void database::add_marker(marker const &marker) {
-    this->_markers.emplace(marker.frame, db_marker::create(this->_manager, marker));
+db_marker database::add_marker(frame_index_t const frame, std::string const &name) {
+    auto marker = db_marker::create(this->_manager, frame, name);
+    this->_markers.emplace(frame, marker);
     this->_save();
+    return marker;
 }
 
 void database::remove_marker(frame_index_t const &frame) {
     if (this->_markers.contains(frame)) {
         this->_markers.at(frame).remove();
         this->_markers.erase(frame);
+        this->_save();
+    }
+}
+
+void database::update_marker(frame_index_t const &prev_frame, marker const &marker) {
+    if (this->_markers.contains(prev_frame)) {
+        auto &db_marker = this->_markers.at(prev_frame);
+        db_marker.set_marker(marker);
+        this->_markers.erase(prev_frame);
+        this->_markers.emplace(marker.frame, db_marker);
         this->_save();
     }
 }

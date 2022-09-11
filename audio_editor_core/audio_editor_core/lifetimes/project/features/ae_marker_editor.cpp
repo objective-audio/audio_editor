@@ -39,6 +39,6 @@ void marker_editor::insert_marker() {
 
     this->_database->suspend_saving([this] {
         auto const current_frame = this->_player->current_frame();
-        this->_marker_pool->insert_marker({{}, current_frame, ""});
+        this->_marker_pool->insert_marker(current_frame);
     });
 }

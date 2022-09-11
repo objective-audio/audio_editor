@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_marker_location.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
-#include <cpp_utils/yas_identifier.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -32,7 +31,7 @@ struct ui_marker_element final {
     void finalize();
 
    private:
-    std::optional<identifier> _identifier;
+    std::optional<object_id> _identifier;
 
     std::weak_ptr<marker_pool> const _marker_pool;
     std::shared_ptr<markers_controller> const _controller;
