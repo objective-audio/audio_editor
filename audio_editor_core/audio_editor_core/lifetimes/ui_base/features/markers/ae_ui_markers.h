@@ -34,6 +34,7 @@ struct ui_markers final {
     void _set_count(std::size_t const);
     void _replace_locations(std::vector<std::optional<marker_location>> const &);
     void _update_locations(std::size_t const count, std::vector<std::pair<std::size_t, marker_location>> const &erased,
-                           std::vector<std::pair<std::size_t, marker_location>> const &inserted);
+                           std::vector<std::pair<std::size_t, marker_location>> const &inserted,
+                           std::vector<std::pair<std::size_t, marker_location>> const &replaced);
 };
 }  // namespace yas::ae

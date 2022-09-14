@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_marker_constants.h>
 #include <audio_editor_core/ae_ui_mesh_data.h>
+#include <cpp_utils/yas_assertion.h>
 #include <audio_editor_core/ae_markers_controller.hpp>
 
 using namespace yas;
@@ -108,11 +109,8 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
                     }
                     break;
 
-                case marker_pool_event_type::reverted:
-                    this->_update_name();
-                    break;
-
                 case marker_pool_event_type::any:
+                case marker_pool_event_type::reverted:
                 case marker_pool_event_type::inserted:
                 case marker_pool_event_type::erased:
                     break;
@@ -149,6 +147,15 @@ void ui_marker_element::set_location(marker_location const &location) {
     this->node->set_is_enabled(true);
     this->node->set_position({location.x, this->node->position().y});
     this->_update_name();
+}
+
+void ui_marker_element::update_location(marker_location const &location) {
+    if (this->_identifier == location.identifier) {
+        this->node->set_position({location.x, this->node->position().y});
+        this->_update_name();
+    } else {
+        assertion_failure_if_not_test();
+    }
 }
 
 void ui_marker_element::reset_location() {

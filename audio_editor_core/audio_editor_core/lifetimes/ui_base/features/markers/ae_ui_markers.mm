@@ -42,7 +42,7 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
                     this->_replace_locations(event.elements);
                     break;
                 case marker_location_pool_event_type::updated:
-                    this->_update_locations(event.elements.size(), event.erased, event.inserted);
+                    this->_update_locations(event.elements.size(), event.erased, event.inserted, event.replaced);
                     break;
             }
         })
@@ -74,7 +74,8 @@ void ui_markers::_replace_locations(std::vector<std::optional<marker_location>> 
 
 void ui_markers::_update_locations(std::size_t const count,
                                    std::vector<std::pair<std::size_t, marker_location>> const &erased,
-                                   std::vector<std::pair<std::size_t, marker_location>> const &inserted) {
+                                   std::vector<std::pair<std::size_t, marker_location>> const &inserted,
+                                   std::vector<std::pair<std::size_t, marker_location>> const &replaced) {
     this->_set_count(count);
 
     for (auto const &pair : erased) {
@@ -89,6 +90,13 @@ void ui_markers::_update_locations(std::size_t const count,
         auto const &location = pair.second;
         auto const &element = this->_elements.at(idx);
         element->set_location(location);
+    }
+
+    for (auto const &pair : replaced) {
+        auto const &idx = pair.first;
+        auto const &location = pair.second;
+        auto const &element = this->_elements.at(idx);
+        element->update_location(location);
     }
 }
 

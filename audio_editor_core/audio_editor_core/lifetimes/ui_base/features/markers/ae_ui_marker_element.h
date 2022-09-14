@@ -26,6 +26,7 @@ struct ui_marker_element final {
     std::shared_ptr<ui::node> const node;
 
     void set_location(marker_location const &);
+    void update_location(marker_location const &);
     void reset_location();
 
     void finalize();
