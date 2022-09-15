@@ -87,27 +87,36 @@ static time::range const dummy_range{0, 1};
     identifier id_4;
     identifier id_5;
 
+    called.clear();
+
     {
-        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
+        // 元が空なので全てinserted
+
+        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}}, false);
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
         XCTAssertEqual(locations.at(0).value().identifier, id_0);
         XCTAssertEqual(locations.at(1).value().identifier, id_2);
 
-        XCTAssertEqual(called.size(), 2);
-        XCTAssertEqual(called.at(1).type, module_location_pool_event_type::updated);
-        XCTAssertEqual(called.at(1).inserted.size(), 2);
-        XCTAssertEqual(called.at(1).inserted.at(0).first, 0);
-        XCTAssertEqual(called.at(1).inserted.at(0).second.identifier, id_0);
-        XCTAssertEqual(called.at(1).inserted.at(1).first, 1);
-        XCTAssertEqual(called.at(1).inserted.at(1).second.identifier, id_2);
-        XCTAssertEqual(called.at(1).erased.size(), 0);
-        XCTAssertEqual(called.at(1).replaced.size(), 0);
+        XCTAssertEqual(called.size(), 1);
+        XCTAssertEqual(called.at(0).type, module_location_pool_event_type::updated);
+        XCTAssertEqual(called.at(0).inserted.size(), 2);
+        XCTAssertEqual(called.at(0).inserted.at(0).first, 0);
+        XCTAssertEqual(called.at(0).inserted.at(0).second.identifier, id_0);
+        XCTAssertEqual(called.at(0).inserted.at(1).first, 1);
+        XCTAssertEqual(called.at(0).inserted.at(1).second.identifier, id_2);
+        XCTAssertEqual(called.at(0).erased.size(), 0);
+        XCTAssertEqual(called.at(0).replaced.size(), 0);
     }
 
+    called.clear();
+
     {
-        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
+        // 追加された要素だけがinserted
+
+        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}},
+                         false);
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -115,17 +124,21 @@ static time::range const dummy_range{0, 1};
         XCTAssertEqual(locations.at(1).value().identifier, id_2);
         XCTAssertEqual(locations.at(2).value().identifier, id_1);
 
-        XCTAssertEqual(called.size(), 3);
-        XCTAssertEqual(called.at(2).type, module_location_pool_event_type::updated);
-        XCTAssertEqual(called.at(2).inserted.size(), 1);
-        XCTAssertEqual(called.at(2).inserted.at(0).first, 2);
-        XCTAssertEqual(called.at(2).inserted.at(0).second.identifier, id_1);
-        XCTAssertEqual(called.at(2).erased.size(), 0);
-        XCTAssertEqual(called.at(2).replaced.size(), 0);
+        XCTAssertEqual(called.size(), 1);
+        XCTAssertEqual(called.at(0).type, module_location_pool_event_type::updated);
+        XCTAssertEqual(called.at(0).inserted.size(), 1);
+        XCTAssertEqual(called.at(0).inserted.at(0).first, 2);
+        XCTAssertEqual(called.at(0).inserted.at(0).second.identifier, id_1);
+        XCTAssertEqual(called.at(0).erased.size(), 0);
+        XCTAssertEqual(called.at(0).replaced.size(), 0);
     }
 
+    called.clear();
+
     {
-        pool->update_all({{id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
+        // 削除された要素がerased。減った要素のインデックスはnullで残る
+
+        pool->update_all({{id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}}, false);
 
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -133,20 +146,25 @@ static time::range const dummy_range{0, 1};
         XCTAssertEqual(locations.at(1).value().identifier, id_2);
         XCTAssertEqual(locations.at(2).value().identifier, id_1);
 
-        XCTAssertEqual(called.size(), 4);
-        XCTAssertEqual(called.at(3).type, module_location_pool_event_type::updated);
-        XCTAssertEqual(called.at(3).inserted.size(), 0);
-        XCTAssertEqual(called.at(3).erased.size(), 1);
-        XCTAssertEqual(called.at(3).erased.at(0).first, 0);
-        XCTAssertEqual(called.at(3).erased.at(0).second.identifier, id_0);
-        XCTAssertEqual(called.at(3).replaced.size(), 0);
+        XCTAssertEqual(called.size(), 1);
+        XCTAssertEqual(called.at(0).type, module_location_pool_event_type::updated);
+        XCTAssertEqual(called.at(0).inserted.size(), 0);
+        XCTAssertEqual(called.at(0).erased.size(), 1);
+        XCTAssertEqual(called.at(0).erased.at(0).first, 0);
+        XCTAssertEqual(called.at(0).erased.at(0).second.identifier, id_0);
+        XCTAssertEqual(called.at(0).replaced.size(), 0);
     }
 
+    called.clear();
+
     {
+        // 追加したらnullの要素から埋められる
+
         pool->update_all({{id_1, dummy_range, 0, {}, 0},
                           {id_2, dummy_range, 0, {}, 0},
                           {id_3, dummy_range, 0, {}, 0},
-                          {id_4, dummy_range, 0, {}, 0}});
+                          {id_4, dummy_range, 0, {}, 0}},
+                         false);
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
         XCTAssertEqual(locations.at(0).value().identifier, id_3);
@@ -154,21 +172,26 @@ static time::range const dummy_range{0, 1};
         XCTAssertEqual(locations.at(2).value().identifier, id_1);
         XCTAssertEqual(locations.at(3).value().identifier, id_4);
 
-        XCTAssertEqual(called.size(), 5);
-        XCTAssertEqual(called.at(4).type, module_location_pool_event_type::updated);
-        XCTAssertEqual(called.at(4).inserted.size(), 2);
-        XCTAssertEqual(called.at(4).inserted.at(0).first, 0);
-        XCTAssertEqual(called.at(4).inserted.at(0).second.identifier, id_3);
-        XCTAssertEqual(called.at(4).inserted.at(1).first, 3);
-        XCTAssertEqual(called.at(4).inserted.at(1).second.identifier, id_4);
-        XCTAssertEqual(called.at(4).erased.size(), 0);
-        XCTAssertEqual(called.at(4).replaced.size(), 0);
+        XCTAssertEqual(called.size(), 1);
+        XCTAssertEqual(called.at(0).type, module_location_pool_event_type::updated);
+        XCTAssertEqual(called.at(0).inserted.size(), 2);
+        XCTAssertEqual(called.at(0).inserted.at(0).first, 0);
+        XCTAssertEqual(called.at(0).inserted.at(0).second.identifier, id_3);
+        XCTAssertEqual(called.at(0).inserted.at(1).first, 3);
+        XCTAssertEqual(called.at(0).inserted.at(1).second.identifier, id_4);
+        XCTAssertEqual(called.at(0).erased.size(), 0);
+        XCTAssertEqual(called.at(0).replaced.size(), 0);
     }
 
+    called.clear();
+
     {
+        // inserted、erased、replaced全てのパターンが含まれる。要素が変わっていたらreplaced
+
         time::range const other_range{0, 2};
 
-        pool->update_all({{id_1, dummy_range, 0, {}, 0}, {id_4, other_range, 0, {}, 0}, {id_5, dummy_range, 0, {}, 0}});
+        pool->update_all({{id_1, dummy_range, 0, {}, 0}, {id_4, other_range, 0, {}, 0}, {id_5, dummy_range, 0, {}, 0}},
+                         false);
         auto const locations = pool->elements();
         XCTAssertEqual(locations.size(), 4);
         XCTAssertEqual(locations.at(0).value().identifier, id_5);
@@ -176,20 +199,51 @@ static time::range const dummy_range{0, 1};
         XCTAssertEqual(locations.at(2).value().identifier, id_1);
         XCTAssertEqual(locations.at(3).value().identifier, id_4);
 
-        XCTAssertEqual(called.size(), 6);
-        XCTAssertEqual(called.at(5).type, module_location_pool_event_type::updated);
-        XCTAssertEqual(called.at(5).inserted.size(), 1);
-        XCTAssertEqual(called.at(5).inserted.at(0).first, 0);
-        XCTAssertEqual(called.at(5).inserted.at(0).second.identifier, id_5);
-        XCTAssertEqual(called.at(5).erased.size(), 2);
-        XCTAssertEqual(called.at(5).erased.at(0).first, 0);
-        XCTAssertEqual(called.at(5).erased.at(0).second.identifier, id_3);
-        XCTAssertEqual(called.at(5).erased.at(1).first, 1);
-        XCTAssertEqual(called.at(5).erased.at(1).second.identifier, id_2);
-        XCTAssertEqual(called.at(5).replaced.size(), 1);
-        XCTAssertEqual(called.at(5).replaced.at(0).first, 3);
-        XCTAssertEqual(called.at(5).replaced.at(0).second.identifier, id_4);
-        XCTAssertEqual(called.at(5).replaced.at(0).second.range, other_range);
+        XCTAssertEqual(called.size(), 1);
+        XCTAssertEqual(called.at(0).type, module_location_pool_event_type::updated);
+        XCTAssertEqual(called.at(0).inserted.size(), 1);
+        XCTAssertEqual(called.at(0).inserted.at(0).first, 0);
+        XCTAssertEqual(called.at(0).inserted.at(0).second.identifier, id_5);
+        XCTAssertEqual(called.at(0).erased.size(), 2);
+        XCTAssertEqual(called.at(0).erased.at(0).first, 0);
+        XCTAssertEqual(called.at(0).erased.at(0).second.identifier, id_3);
+        XCTAssertEqual(called.at(0).erased.at(1).first, 1);
+        XCTAssertEqual(called.at(0).erased.at(1).second.identifier, id_2);
+        XCTAssertEqual(called.at(0).replaced.size(), 1);
+        XCTAssertEqual(called.at(0).replaced.at(0).first, 3);
+        XCTAssertEqual(called.at(0).replaced.at(0).second.identifier, id_4);
+        XCTAssertEqual(called.at(0).replaced.at(0).second.range, other_range);
+    }
+
+    called.clear();
+
+    {
+        // force_replacedをtrueにすると、変わっていない要素もreplacedに含まれる
+
+        time::range const other_range{1, 3};
+
+        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_5, other_range, 0, {}, 0}},
+                         true);
+        auto const locations = pool->elements();
+        XCTAssertEqual(locations.size(), 4);
+        XCTAssertEqual(locations.at(0).value().identifier, id_5);
+        XCTAssertEqual(locations.at(1).value().identifier, id_0);
+        XCTAssertEqual(locations.at(2).value().identifier, id_1);
+        XCTAssertFalse(locations.at(3).has_value());
+
+        XCTAssertEqual(called.size(), 1);
+        XCTAssertEqual(called.at(0).type, module_location_pool_event_type::updated);
+        XCTAssertEqual(called.at(0).inserted.size(), 1);
+        XCTAssertEqual(called.at(0).inserted.at(0).first, 1);
+        XCTAssertEqual(called.at(0).inserted.at(0).second.identifier, id_0);
+        XCTAssertEqual(called.at(0).erased.size(), 1);
+        XCTAssertEqual(called.at(0).erased.at(0).first, 3);
+        XCTAssertEqual(called.at(0).erased.at(0).second.identifier, id_4);
+        XCTAssertEqual(called.at(0).replaced.size(), 2);
+        XCTAssertEqual(called.at(0).replaced.at(0).first, 2);
+        XCTAssertEqual(called.at(0).replaced.at(0).second.identifier, id_1);
+        XCTAssertEqual(called.at(0).replaced.at(1).first, 0);
+        XCTAssertEqual(called.at(0).replaced.at(1).second.identifier, id_5);
     }
 
     canceller->cancel();
