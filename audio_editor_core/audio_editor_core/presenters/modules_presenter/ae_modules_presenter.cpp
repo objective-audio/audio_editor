@@ -150,7 +150,7 @@ void modules_presenter::_update_all_locations(bool const force) {
                 }
             });
 
-        location_pool->update_all(locations);
+        location_pool->update_all(locations, false);
 
         this->_last_frame = current_frame;
         this->_last_space_range = space_range;

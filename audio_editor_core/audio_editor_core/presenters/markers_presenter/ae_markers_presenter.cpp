@@ -151,8 +151,10 @@ void markers_presenter::_update_all_locations(update_type const type) {
                 this->_location_pool->replace_all(locations);
                 break;
             case update_type::update:
+                this->_location_pool->update_all(locations, true);
+                break;
             case update_type::update_if_changed:
-                this->_location_pool->update_all(locations);
+                this->_location_pool->update_all(locations, false);
                 break;
         }
 
