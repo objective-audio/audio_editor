@@ -27,8 +27,8 @@ struct time_editor_closer final {
     void finish();
     void cancel();
 
-    bool can_finish();
-    bool can_cancel();
+    [[nodiscard]] bool can_finish();
+    [[nodiscard]] bool can_cancel();
 
    private:
     project_sub_lifetime_id const _lifetime_id;

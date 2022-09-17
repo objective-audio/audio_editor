@@ -14,8 +14,8 @@ struct zooming_pair final {
     std::shared_ptr<zooming> const horizontal;
     std::shared_ptr<zooming> const vertical;
 
-    zooming_scale scale() const;
-    observing::syncable observe_scale(std::function<void(zooming_scale const &)> &&);
+    [[nodiscard]] zooming_scale scale() const;
+    [[nodiscard]] observing::syncable observe_scale(std::function<void(zooming_scale const &)> &&);
 
    private:
     observing::fetcher_ptr<zooming_scale> _scale_fetcher;

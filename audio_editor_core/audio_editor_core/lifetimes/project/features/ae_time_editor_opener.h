@@ -18,7 +18,7 @@ struct time_editor_opener final {
 
     time_editor_opener(player const *, timing const *, project_modal_lifecycle *);
 
-    bool can_begin_time_editing() const;
+    [[nodiscard]] bool can_begin_time_editing() const;
     void begin_time_editing();
 
    private:

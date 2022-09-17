@@ -13,7 +13,7 @@ struct file_module_loading_state_holder final {
 
     file_module_loading_state_holder();
 
-    file_module_loading_state const &state() const;
+    [[nodiscard]] file_module_loading_state const &state() const;
     void set_state(file_module_loading_state const);
 
    private:

@@ -16,7 +16,7 @@ struct module_name_editor final {
                                                                          time::range const &);
     module_name_editor(time::range const &, file_track *, database *);
 
-    std::string const &name() const;
+    [[nodiscard]] std::string const &name() const;
     void set_name(std::string const &);
 
    private:

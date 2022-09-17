@@ -9,5 +9,5 @@ class model;
 }
 
 namespace yas::ae::database_utils {
-db::model make_model();
+[[nodiscard]] db::model make_model();
 }
