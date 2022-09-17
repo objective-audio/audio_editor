@@ -52,7 +52,7 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
                     this->_update_all_locations(true, true);
                     break;
                 case file_track_event_type::erased:
-                    location_pool->erase(event.module.value().identifier);
+                    location_pool->erase_for_id(event.module.value().identifier);
                     break;
                 case file_track_event_type::inserted: {
                     auto const &module = event.module.value();

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_common_types.h>
+#include <audio_editor_core/ae_file_module.h>
 #include <db/yas_db_umbrella.h>
 
 namespace yas::ae {
@@ -12,10 +14,11 @@ class file_module;
 struct db_module final {
     explicit db_module(db::object_ptr const &);
 
-    [[nodiscard]] static db_module create(db::manager_ptr const &, file_module const &);
+    [[nodiscard]] static db_module create(db::manager_ptr const &, file_module::params const &);
 
     [[nodiscard]] std::optional<file_module> file_module() const;
 
+    void set_range(time::range const &);
     void set_name(std::string const &);
     void remove();
 

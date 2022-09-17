@@ -238,11 +238,8 @@ void track_editor::paste() {
             auto const module_value = module.value();
             auto const current_frame = this->_player->current_frame();
 
-            this->_file_track->overwrite_module({{},
-                                                 module_value.name,
-                                                 module_value.range.offset(current_frame),
-                                                 module_value.file_frame,
-                                                 module_value.file_name});
+            this->_file_track->overwrite_module({module_value.name, module_value.range.offset(current_frame),
+                                                 module_value.file_frame, module_value.file_name});
         });
     }
 }
@@ -257,11 +254,9 @@ void track_editor::paste_and_offset() {
             auto const module_value = module.value();
             auto const current_frame = this->_player->current_frame();
 
-            this->_file_track->split_and_insert_module_and_offset({{},
-                                                                   module_value.name,
+            this->_file_track->split_and_insert_module_and_offset({module_value.name,
                                                                    module_value.range.offset(current_frame),
-                                                                   module_value.file_frame,
-                                                                   module_value.file_name});
+                                                                   module_value.file_frame, module_value.file_name});
         });
     }
 }
