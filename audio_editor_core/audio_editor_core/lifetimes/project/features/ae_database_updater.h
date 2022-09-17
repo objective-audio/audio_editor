@@ -8,7 +8,6 @@
 
 namespace yas::ae {
 class file_track;
-class marker_pool;
 class edge_holder;
 class pasteboard;
 class database;
