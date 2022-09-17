@@ -25,7 +25,7 @@ struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh
     void cancel(object_id const &);
     void cancel_all();
 
-    observing::endable observe(std::function<void(event const &)> &&);
+    [[nodiscard]] observing::endable observe(std::function<void(event const &)> &&);
 
    private:
     project_path const *const _project_path;

@@ -12,11 +12,11 @@ struct project_path final {
 
     project_path(std::filesystem::path const &root);
 
-    std::filesystem::path const &root_directory() const;
-    std::filesystem::path editing_files_directory() const;
-    std::filesystem::path editing_file() const;
-    std::filesystem::path playing_directory() const;
-    std::filesystem::path db_file() const;
+    [[nodiscard]] std::filesystem::path const &root_directory() const;
+    [[nodiscard]] std::filesystem::path editing_files_directory() const;
+    [[nodiscard]] std::filesystem::path editing_file() const;
+    [[nodiscard]] std::filesystem::path playing_directory() const;
+    [[nodiscard]] std::filesystem::path db_file() const;
 
    private:
     std::filesystem::path const _root;

@@ -20,7 +20,7 @@ struct scrolling final : scrolling_for_player, scrolling_for_gesture_controller 
     [[nodiscard]] bool is_began() const override;
 
     void set_is_enabled(bool const) override;
-    bool is_enabled() const;
+    [[nodiscard]] bool is_enabled() const;
 
     [[nodiscard]] observing::endable observe(std::function<void(scrolling_event const &)> &&) override;
 

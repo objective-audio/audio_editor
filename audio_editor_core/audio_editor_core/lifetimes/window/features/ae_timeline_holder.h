@@ -16,7 +16,7 @@ struct timeline_holder final {
 
     timeline_holder(project_format const &, project_path const *);
 
-    proc::timeline_ptr const &timeline() const;
+    [[nodiscard]] proc::timeline_ptr const &timeline() const;
 
     void replace(file_track_module_map_t const &);
     void insert(file_module const &);
