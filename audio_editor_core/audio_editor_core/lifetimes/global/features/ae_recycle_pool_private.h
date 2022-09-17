@@ -101,24 +101,6 @@ void recycle_pool<Element>::update_all(std::vector<Element> const &elements, boo
 }
 
 template <typename Element>
-void recycle_pool<Element>::erase(identifier const &erase_id) {
-    auto each = make_fast_each(this->_elements.size());
-    while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &element = this->_elements.at(idx);
-        if (element.has_value() && element.value().identifier == erase_id) {
-            std::vector<std::pair<std::size_t, Element>> erased{{idx, element.value()}};
-
-            this->_elements.at(idx) = std::nullopt;
-
-            this->_fetcher->push(
-                {.type = recycle_pool_event_type::updated, .elements = this->_elements, .erased = std::move(erased)});
-            break;
-        }
-    }
-}
-
-template <typename Element>
 void recycle_pool<Element>::erase_for_id(object_id const &erase_id) {
     auto each = make_fast_each(this->_elements.size());
     while (yas_each_next(each)) {
