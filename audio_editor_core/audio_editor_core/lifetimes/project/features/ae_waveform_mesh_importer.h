@@ -22,7 +22,7 @@ struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh
     waveform_mesh_importer(project_path const *, file_track *);
 
     void import(std::size_t const, module_location const &);
-    void cancel(identifier const &);
+    void cancel(object_id const &);
     void cancel_all();
 
     observing::endable observe(std::function<void(event const &)> &&);
@@ -32,6 +32,6 @@ struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh
     file_track const *const _file_track;
 
     observing::notifier_ptr<event> const _notifier;
-    std::shared_ptr<task_queue<identifier>> const _task_queue;
+    std::shared_ptr<task_queue<object_id>> const _task_queue;
 };
 }  // namespace yas::ae

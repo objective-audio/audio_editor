@@ -49,10 +49,10 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
             switch (event.type) {
                 case file_track_event_type::any:
                 case file_track_event_type::reverted:
-                    this->_update_all_locations(true);
+                    this->_update_all_locations(true, true);
                     break;
                 case file_track_event_type::erased:
-                    location_pool->erase(event.module.value().identifier);
+                    location_pool->erase_for_id(event.module.value().identifier);
                     break;
                 case file_track_event_type::inserted: {
                     auto const &module = event.module.value();
@@ -74,7 +74,7 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
         .sync()
         ->add_to(this->_canceller_pool);
 
-    display_space->observe([this](display_space_event const &event) { this->_update_all_locations(true); })
+    display_space->observe([this](display_space_event const &event) { this->_update_all_locations(true, false); })
         .sync()
         ->add_to(this->_canceller_pool);
 }
@@ -108,7 +108,7 @@ std::string const &modules_presenter::name_for_range(time::range const &range) {
 }
 
 void modules_presenter::update_if_needed() {
-    this->_update_all_locations(false);
+    this->_update_all_locations(false, false);
 }
 
 std::optional<time::range> modules_presenter::_space_range() const {
@@ -123,7 +123,7 @@ std::optional<time::range> modules_presenter::_space_range() const {
     }
 }
 
-void modules_presenter::_update_all_locations(bool const force) {
+void modules_presenter::_update_all_locations(bool const force_updating, bool const force_replacing) {
     auto const space_range = this->_space_range();
     auto const player = this->_player.lock();
     auto const file_track = this->_file_track.lock();
@@ -133,7 +133,7 @@ void modules_presenter::_update_all_locations(bool const force) {
     if (player && file_track && space_range.has_value() && display_space && location_pool) {
         auto const current_frame = player->current_frame();
 
-        if (space_range == this->_last_space_range && current_frame == this->_last_frame && !force) {
+        if (space_range == this->_last_space_range && current_frame == this->_last_frame && !force_updating) {
             return;
         }
 
@@ -150,7 +150,7 @@ void modules_presenter::_update_all_locations(bool const force) {
                 }
             });
 
-        location_pool->update_all(locations, false);
+        location_pool->update_all(locations, force_replacing);
 
         this->_last_frame = current_frame;
         this->_last_space_range = space_range;

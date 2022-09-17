@@ -69,8 +69,7 @@ module_location::module_location(file_module const &file_module, uint32_t const 
                       module_location_utils::make_mesh_elements(file_module, sample_rate, space_range, scale), scale) {
 }
 
-module_location::module_location(yas::identifier const &identifier, time::range const &range,
-                                 uint32_t const sample_rate,
+module_location::module_location(object_id const &identifier, time::range const &range, uint32_t const sample_rate,
                                  std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale)
     : identifier(identifier), sample_rate(sample_rate), range(range), mesh_elements(mesh_elements), scale(scale) {
 }

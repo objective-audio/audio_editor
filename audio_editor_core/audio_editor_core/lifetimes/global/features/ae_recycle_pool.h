@@ -5,7 +5,6 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
-#include <cpp_utils/yas_identifier.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
@@ -33,7 +32,6 @@ struct recycle_pool final {
     /// 元のelementsを活かしながら全ての要素を更新する
     void update_all(std::vector<Element> const &, bool const force_replacing);
     /// 単独の要素を削除する
-    void erase(identifier const &);
     void erase_for_id(object_id const &);
     /// 単独の要素を追加する
     void insert(Element const &);

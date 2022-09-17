@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_db_pasting_subject.h>
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
+#include <audio_editor_core/ae_file_track_dependencies.h>
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_marker_pool_dependencies.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
@@ -20,7 +21,7 @@ class manager;
 }  // namespace yas::db
 
 namespace yas::ae {
-struct database final : std::enable_shared_from_this<database>, database_for_marker_pool {
+struct database final : std::enable_shared_from_this<database>, database_for_marker_pool, database_for_file_track {
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::filesystem::path const &db_file_path);
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);
 
@@ -31,11 +32,12 @@ struct database final : std::enable_shared_from_this<database>, database_for_mar
     [[nodiscard]] std::optional<pasting_value> pasting_value() const;
     [[nodiscard]] bool is_processing() const;
 
-    void add_module(file_module const &);
-    void remove_module(time::range const &);
+    [[nodiscard]] db_module add_module(file_module::params const &) override;
+    void remove_module(time::range const &) override;
+    void update_module(time::range const &, file_module const &) override;
     void update_module_detail(file_module const &);
     void set_pasting_value(std::optional<ae::pasting_value> const &);
-    db_marker add_marker(frame_index_t const frame, std::string const &name) override;
+    [[nodiscard]] db_marker add_marker(frame_index_t const frame, std::string const &name) override;
     void remove_marker(frame_index_t const &) override;
     void update_marker(frame_index_t const &prev_frame, marker const &) override;
     void set_edge(ae::edge const &);

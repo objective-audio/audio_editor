@@ -22,11 +22,11 @@ struct module_location final {
     };
 
     module_location(file_module const &, uint32_t const sample_rate, time::range const &space_range, float const scale);
-    module_location(yas::identifier const &, time::range const &, uint32_t const sample_rate,
+    module_location(object_id const &, time::range const &, uint32_t const sample_rate,
                     std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale);
 
-    identifier identifier;  // file_moduleと同じID
-    time::range range;      // track内の位置
+    object_id identifier;  // file_moduleと同じID
+    time::range range;     // track内の位置
     uint32_t sample_rate;
     std::vector<std::optional<mesh_element>> mesh_elements;
     float scale;

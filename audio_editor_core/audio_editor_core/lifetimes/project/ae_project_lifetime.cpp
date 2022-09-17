@@ -69,7 +69,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       database(database::make_shared(window_lifetime->project_path->db_file())),
       timing(timing::make_shared(project_format.sample_rate)),
       nudge_settings(nudge_settings::make_shared(this->timing.get())),
-      file_track(file_track::make_shared()),
+      file_track(file_track::make_shared(this->database.get())),
       waveforms_mesh_importer(
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->file_track.get())),
       marker_pool(marker_pool::make_shared(this->database.get())),
@@ -95,8 +95,8 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       export_interactor(export_interactor::make_shared(
           project_format, this->modal_lifecycle.get(), this->editing_status.get(), this->edge_holder.get(),
           window_lifetime->player.get(), this->exporter.get(), window_lifetime->timeline_holder.get())),
-      database_updater(database_updater::make_shared(this->file_track.get(), this->edge_holder.get(),
-                                                     this->pasteboard.get(), this->database.get())),
+      database_updater(
+          database_updater::make_shared(this->edge_holder.get(), this->pasteboard.get(), this->database.get())),
       timeline_updater(timeline_updater::make_shared(this->file_track.get(), window_lifetime->timeline_holder.get())),
       reverter(reverter::make_shared(this->database.get(), this->file_track.get(), this->marker_pool.get(),
                                      this->pasteboard.get(), this->edge_holder.get(), this->editing_status.get())),

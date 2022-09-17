@@ -34,9 +34,9 @@ static time::range const dummy_range{0, 1};
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0).type, module_location_pool_event_type::fetched);
 
-    identifier id_0;
-    identifier id_1;
-    identifier id_2;
+    auto const id_0 = db::make_temporary_id();
+    auto const id_1 = db::make_temporary_id();
+    auto const id_2 = db::make_temporary_id();
 
     {
         pool->replace_all(
@@ -52,8 +52,8 @@ static time::range const dummy_range{0, 1};
         XCTAssertEqual(called.at(1).type, module_location_pool_event_type::replaced);
     }
 
-    identifier id_3;
-    identifier id_4;
+    auto const id_3 = db::make_temporary_id();
+    auto const id_4 = db::make_temporary_id();
 
     {
         pool->replace_all({{id_3, dummy_range, 0, {}, 0}, {id_4, dummy_range, 0, {}, 0}});
@@ -80,12 +80,12 @@ static time::range const dummy_range{0, 1};
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0).type, module_location_pool_event_type::fetched);
 
-    identifier id_0;
-    identifier id_1;
-    identifier id_2;
-    identifier id_3;
-    identifier id_4;
-    identifier id_5;
+    auto const id_0 = db::make_temporary_id();
+    auto const id_1 = db::make_temporary_id();
+    auto const id_2 = db::make_temporary_id();
+    auto const id_3 = db::make_temporary_id();
+    auto const id_4 = db::make_temporary_id();
+    auto const id_5 = db::make_temporary_id();
 
     called.clear();
 
@@ -253,10 +253,10 @@ static time::range const dummy_range{0, 1};
     auto const pool = module_location_pool::make_shared();
     std::vector<module_location_pool_event> called;
 
-    identifier id_0;
-    identifier id_1;
-    identifier id_2;
-    identifier id_3;
+    auto const id_0 = db::make_temporary_id();
+    auto const id_1 = db::make_temporary_id();
+    auto const id_2 = db::make_temporary_id();
+    auto const id_3 = db::make_temporary_id();
 
     pool->replace_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
 
@@ -267,7 +267,7 @@ static time::range const dummy_range{0, 1};
     XCTAssertEqual(called.at(0).type, module_location_pool_event_type::fetched);
 
     {
-        pool->erase(id_1);
+        pool->erase_for_id(id_1);
 
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 3);
@@ -284,7 +284,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->erase(id_3);
+        pool->erase_for_id(id_3);
 
         XCTAssertEqual(called.size(), 2);
     }
@@ -296,10 +296,10 @@ static time::range const dummy_range{0, 1};
     auto const pool = module_location_pool::make_shared();
     std::vector<module_location_pool_event> called;
 
-    identifier id_0;
-    identifier id_1;
-    identifier id_2;
-    identifier id_3;
+    auto const id_0 = db::make_temporary_id();
+    auto const id_1 = db::make_temporary_id();
+    auto const id_2 = db::make_temporary_id();
+    auto const id_3 = db::make_temporary_id();
 
     auto canceller =
         pool->observe_event([&called](module_location_pool_event const &event) { called.emplace_back(event); }).sync();
@@ -351,7 +351,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->erase(id_0);
+        pool->erase_for_id(id_0);
         auto const &locations = pool->elements();
         XCTAssertEqual(locations.size(), 2);
         XCTAssertFalse(locations.at(0).has_value());
@@ -387,9 +387,9 @@ static time::range const dummy_range{0, 1};
 
     std::vector<module_location_pool_event> called;
 
-    identifier id_0;
-    identifier id_1;
-    identifier id_2;
+    auto const id_0 = db::make_temporary_id();
+    auto const id_1 = db::make_temporary_id();
+    auto const id_2 = db::make_temporary_id();
 
     pool->replace_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 1, {}, 0}, {id_2, dummy_range, 2, {}, 0}});
 
@@ -417,7 +417,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        identifier id_other;
+        auto const id_other = db::make_temporary_id();
 
         pool->replace({id_other, dummy_range, 100, {}, 0});
 

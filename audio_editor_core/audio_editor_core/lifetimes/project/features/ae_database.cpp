@@ -58,15 +58,28 @@ bool database::is_processing() const {
     return this->_processing_count > 0;
 }
 
-void database::add_module(file_module const &file_module) {
-    this->_modules.emplace(file_module.range, db_module::create(this->_manager, file_module));
+db_module database::add_module(file_module::params const &args) {
+    auto module = db_module::create(this->_manager, args);
+    this->_modules.emplace(args.range, module);
     this->_save();
+    return module;
 }
 
 void database::remove_module(time::range const &range) {
     if (this->_modules.contains(range)) {
         this->_modules.at(range).remove();
         this->_modules.erase(range);
+        this->_save();
+    }
+}
+
+void database::update_module(time::range const &range, file_module const &file_module) {
+    if (this->_modules.contains(range)) {
+        auto &db_module = this->_modules.at(range);
+        db_module.set_name(file_module.name);
+        db_module.set_range(file_module.range);
+        this->_modules.erase(range);
+        this->_modules.emplace(file_module.range, db_module);
         this->_save();
     }
 }

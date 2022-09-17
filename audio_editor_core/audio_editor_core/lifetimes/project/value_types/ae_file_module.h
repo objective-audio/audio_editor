@@ -11,20 +11,30 @@
 
 namespace yas::ae {
 struct file_module final {
-    identifier identifier;
+    struct params {
+        std::string name;
+        time::range range;
+        frame_index_t file_frame;
+        std::string file_name;
+
+        params(std::string const &name, time::range const &, frame_index_t const file_frame,
+               std::string const &file_name);
+    };
+
+    object_id identifier;
     std::string name;
     time::range range;
     frame_index_t file_frame;
     std::string file_name;
 
-    file_module(yas::identifier const &, std::string const &name, time::range const &range,
-                frame_index_t const file_frame, std::string const &file_name);
+    file_module(object_id const &, params &&);
+    file_module(object_id const &, std::string const &name, time::range const &range, frame_index_t const file_frame,
+                std::string const &file_name);
 
-    bool is_equal_location(file_module const &rhs) const;
-
-    std::optional<file_module> head_dropped(frame_index_t const) const;
-    std::optional<file_module> tail_dropped(frame_index_t const) const;
-    file_module offset(frame_index_t const) const;
+    [[nodiscard]] file_module::params parameters() const;
+    [[nodiscard]] std::optional<file_module::params> head_dropped(frame_index_t const) const;
+    [[nodiscard]] std::optional<file_module::params> tail_dropped(frame_index_t const) const;
+    [[nodiscard]] file_module::params offset(frame_index_t const) const;
 };
 }  // namespace yas::ae
 

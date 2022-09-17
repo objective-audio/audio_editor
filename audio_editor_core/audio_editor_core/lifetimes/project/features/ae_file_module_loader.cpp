@@ -81,7 +81,7 @@ void file_module_loader::load(std::filesystem::path const &src_path) {
                  loader->_database->suspend_saving(
                      [&loader, &file_info = file_info.value(), &src_file_name, &dst_file_name] {
                          loader->_file_track->overwrite_module(
-                             {{}, src_file_name, time::range{0, file_info.length}, 0, dst_file_name});
+                             {src_file_name, time::range{0, file_info.length}, 0, dst_file_name});
 
                          if (auto const &total_range = loader->_file_track->total_range()) {
                              auto const &total_range_value = total_range.value();

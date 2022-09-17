@@ -45,6 +45,6 @@ struct modules_presenter final {
     modules_presenter &operator=(modules_presenter &&) = delete;
 
     std::optional<time::range> _space_range() const;
-    void _update_all_locations(bool const force);
+    void _update_all_locations(bool const force_updating, bool const force_replacing);
 };
 }  // namespace yas::ae

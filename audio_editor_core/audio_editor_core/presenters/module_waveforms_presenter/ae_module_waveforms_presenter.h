@@ -18,7 +18,7 @@ struct module_waveforms_presenter final {
                                std::shared_ptr<waveform_mesh_importer> const &);
 
     void import(std::size_t const, module_location const &);
-    void cancel_import(identifier const &);
+    void cancel_import(object_id const &);
     observing::endable observe_mesh_importer(std::function<void(waveform_mesh_importer_event const &)> &&);
 
     [[nodiscard]] std::vector<std::optional<module_location>> const &locations() const;

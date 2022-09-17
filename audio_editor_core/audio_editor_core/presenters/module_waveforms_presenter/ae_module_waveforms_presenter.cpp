@@ -29,7 +29,7 @@ void module_waveforms_presenter::import(std::size_t const idx, module_location c
     }
 }
 
-void module_waveforms_presenter::cancel_import(identifier const &identifier) {
+void module_waveforms_presenter::cancel_import(object_id const &identifier) {
     if (auto const importer = this->_mesh_importer.lock()) {
         importer->cancel(identifier);
     }

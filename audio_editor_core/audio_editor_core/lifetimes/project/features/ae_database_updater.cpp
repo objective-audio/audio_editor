@@ -14,39 +14,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<database_updater> database_updater::make_shared(file_track *file_track, edge_holder *edge_holder,
-                                                                pasteboard *pasteboard, database *database) {
-    return std::make_shared<database_updater>(file_track, edge_holder, pasteboard, database);
+std::shared_ptr<database_updater> database_updater::make_shared(edge_holder *edge_holder, pasteboard *pasteboard,
+                                                                database *database) {
+    return std::make_shared<database_updater>(edge_holder, pasteboard, database);
 }
 
-database_updater::database_updater(file_track *file_track, edge_holder *edge_holder, pasteboard *pasteboard,
-                                   database *database)
-    : _file_track(file_track), _edge_holder(edge_holder), _pasteboard(pasteboard), _database(database) {
-    this->_file_track
-        ->observe_event([this](file_track_event const &event) {
-            switch (event.type) {
-                case file_track_event_type::any:
-                    assertion_failure_if_not_test();
-                    break;
-                case file_track_event_type::reverted:
-                    break;
-                case file_track_event_type::inserted: {
-                    auto const &file_module = event.module.value();
-                    this->_database->add_module(file_module);
-                } break;
-                case file_track_event_type::erased: {
-                    auto const &range = event.module.value().range;
-                    this->_database->remove_module(range);
-                } break;
-                case file_track_event_type::detail_updated: {
-                    auto const &file_module = event.module.value();
-                    this->_database->update_module_detail(file_module);
-                } break;
-            }
-        })
-        .end()
-        ->add_to(this->_pool);
-
+database_updater::database_updater(edge_holder *edge_holder, pasteboard *pasteboard, database *database)
+    : _edge_holder(edge_holder), _pasteboard(pasteboard), _database(database) {
     this->_edge_holder
         ->observe_event([this](edge_holder_event const &event) {
             switch (event.type) {

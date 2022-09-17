@@ -27,7 +27,7 @@ waveform_mesh_importer::waveform_mesh_importer(project_path const *project_path,
     : _project_path(project_path),
       _file_track(file_track),
       _notifier(observing::notifier<event>::make_shared()),
-      _task_queue(task_queue<identifier>::make_shared()) {
+      _task_queue(task_queue<object_id>::make_shared()) {
 }
 
 void waveform_mesh_importer::import(std::size_t const idx, module_location const &location) {
@@ -41,9 +41,9 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
     auto path = this->_project_path->editing_files_directory().append(modules.at(location.range).file_name);
     auto const file_frame = modules.at(location.range).file_frame;
 
-    auto const task = yas::task<identifier>::make_shared(
+    auto const task = yas::task<object_id>::make_shared(
         [idx, location, path = std::move(path), file_frame,
-         weak_importer = this->weak_from_this()](yas::task<identifier> const &task) {
+         weak_importer = this->weak_from_this()](yas::task<object_id> const &task) {
             if (weak_importer.expired()) {
                 return;
             }
@@ -238,7 +238,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
     this->_task_queue->push_back(task);
 }
 
-void waveform_mesh_importer::cancel(identifier const &cancel_id) {
+void waveform_mesh_importer::cancel(object_id const &cancel_id) {
     this->_task_queue->cancel([&cancel_id](auto const &identifier) { return cancel_id == identifier; });
 }
 
