@@ -121,13 +121,12 @@ using namespace yas::ae::file_track_test_utils;
     XCTAssertEqual(called.at(0).modules.size(), 2);
     XCTAssertEqual(called.at(0).module, std::nullopt);
 
-    track->insert_module_and_notify({"module_3", {4, 3}, 4, ""});
+    auto const module3_id = track->insert_module_and_notify({"module_3", {4, 3}, 4, ""});
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, file_track_event_type::inserted);
     XCTAssertEqual(called.at(1).modules.size(), 3);
-#warning todo ???
-    //    XCTAssertEqual(called.at(1).module.value().identifier, module3.identifier);
+    XCTAssertEqual(called.at(1).module.value().identifier, module3_id);
 
     track->erase_module_and_notify(module1.range);
 
