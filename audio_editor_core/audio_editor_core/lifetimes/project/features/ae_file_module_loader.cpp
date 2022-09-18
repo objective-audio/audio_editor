@@ -18,17 +18,20 @@
 #include <audio_editor_core/ae_uuid_generator.h>
 #include <cpp_utils/yas_assertion.h>
 
+#include <audio_editor_core/ae_file_ref_pool.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<file_module_loader> file_module_loader::make_shared(
     project_id const &project_id, project_path const *project_path, project_format const &project_format,
     player *player, file_module_loading_state_holder *state_holder, database *database, file_track *file_track,
-    edge_holder *edge_holder, timeline_holder const *timeline_holder) {
+    file_ref_pool *file_ref_pool, edge_holder *edge_holder, timeline_holder const *timeline_holder) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    return std::make_shared<file_module_loader>(
-        uuid_generator::make_shared(), project_id, project_path, project_format, app_lifetime->file_importer.get(),
-        app_lifetime->file_info_loader.get(), player, state_holder, database, file_track, edge_holder, timeline_holder);
+    return std::make_shared<file_module_loader>(uuid_generator::make_shared(), project_id, project_path, project_format,
+                                                app_lifetime->file_importer.get(), app_lifetime->file_info_loader.get(),
+                                                player, state_holder, database, file_track, file_ref_pool, edge_holder,
+                                                timeline_holder);
 }
 
 file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &uuid_generator,
@@ -36,7 +39,7 @@ file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &
                                        project_format const &project_format, file_importer *file_importer,
                                        file_info_loader const *file_info_loader, player *player,
                                        file_module_loading_state_holder *state_holder, database *database,
-                                       file_track *file_track, edge_holder *edge_holder,
+                                       file_track *file_track, file_ref_pool *file_ref_pool, edge_holder *edge_holder,
                                        timeline_holder const *timeline_holder)
     : _uuid_generator(uuid_generator),
       _project_id(project_id),
@@ -48,6 +51,7 @@ file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &
       _state_holder(state_holder),
       _database(database),
       _file_track(file_track),
+      _file_ref_pool(file_ref_pool),
       _edge_holder(edge_holder),
       _timeline_holder(timeline_holder) {
 }
@@ -82,6 +86,8 @@ void file_module_loader::load(std::filesystem::path const &src_path) {
                      [&loader, &file_info = file_info.value(), &src_file_name, &dst_file_name] {
                          loader->_file_track->overwrite_module(
                              {src_file_name, time::range{0, file_info.length}, 0, dst_file_name});
+
+                         loader->_file_ref_pool->insert({dst_file_name});
 
                          if (auto const &total_range = loader->_file_track->total_range()) {
                              auto const &total_range_value = total_range.value();
