@@ -69,6 +69,8 @@ reverter::reverter(database *database, file_track *file_track, marker_pool *mark
             } else {
                 this->_edge_holder->revert_edge(ae::edge::zero());
             }
+
+            this->_pasteboard->clear();
         })
         .end()
         ->add_to(this->_pool);
