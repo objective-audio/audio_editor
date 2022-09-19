@@ -46,14 +46,6 @@ std::optional<db_edge> const &database::edge() const {
     return this->_edge;
 }
 
-std::optional<pasting_value> database::pasting_value() const {
-    if (auto const &subject = this->_pasting_subject) {
-        return to_pasting_value(subject.value().data());
-    } else {
-        return std::nullopt;
-    }
-}
-
 bool database::is_processing() const {
     return this->_processing_count > 0;
 }
@@ -92,17 +84,6 @@ void database::update_module_detail(file_module const &file_module) {
         db_module.set_name(file_module.name);
         this->_save();
     }
-}
-
-void database::set_pasting_value(std::optional<ae::pasting_value> const &value) {
-    if (auto const &subject = this->_pasting_subject) {
-        auto subject_value = subject.value();
-        subject_value.remove();
-    }
-
-    this->_pasting_subject.emplace(db_pasting_subject::create(this->_manager, to_json_string(value)));
-
-    this->_save();
 }
 
 db_marker database::add_marker(frame_index_t const frame, std::string const &name) {
@@ -379,33 +360,6 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                 }
 
                 database->_markers = std::move(markers);
-            } else {
-                assertion_failure_if_not_test();
-            }
-        });
-
-    this->_manager->fetch_objects(
-        db::no_cancellation,
-        [] {
-            return db::to_fetch_option(
-                db::select_option{.table = db_constants::pasting_subject_name::entity,
-                                  .field_orders = {{db::object_id_field, db::order::ascending}}});
-        },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
-            assert(thread::is_main());
-
-            auto const database = weak_db.lock();
-            if (database && result) {
-                auto const &result_objects = result.value();
-
-                database->_pasting_subject.reset();
-
-                if (result_objects.contains(db_constants::pasting_subject_name::entity)) {
-                    auto const &objects = result_objects.at(db_constants::pasting_subject_name::entity);
-                    if (!objects.empty()) {
-                        database->_pasting_subject.emplace(objects.at(0));
-                    }
-                }
             } else {
                 assertion_failure_if_not_test();
             }

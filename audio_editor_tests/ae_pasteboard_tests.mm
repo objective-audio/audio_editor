@@ -30,12 +30,12 @@ using namespace yas::ae;
 
     pasting_file_module const module{"test-name", 3, {1, 2}, "test-file-name"};
 
-    pasteboard->revert_value(module);
+    pasteboard->clear();
 
     XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1), pasteboard_event::reverted);
+    XCTAssertEqual(called.at(1), pasteboard_event::cleared);
 
-    XCTAssertEqual(pasteboard->value(), pasting_value(module));
+    XCTAssertFalse(pasteboard->value().has_value());
 
     canceller->cancel();
 }

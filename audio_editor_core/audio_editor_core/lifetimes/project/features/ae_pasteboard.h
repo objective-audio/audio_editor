@@ -17,7 +17,8 @@ struct pasteboard final {
     void set_file_module(pasting_file_module const &);
 
     [[nodiscard]] std::optional<pasting_value> const &value() const;
-    void revert_value(std::optional<pasting_value> const &);
+
+    void clear();
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(pasteboard_event const &)> &&);
 

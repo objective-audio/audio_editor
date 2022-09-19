@@ -18,7 +18,7 @@ enum class pasting_kind {
 enum class pasteboard_event {
     fetched,
     file_module,
-    reverted,
+    cleared,
 };
 
 struct pasting_file_module final {

@@ -35,18 +35,4 @@ database_updater::database_updater(edge_holder *edge_holder, pasteboard *pastebo
         })
         .end()
         ->add_to(this->_pool);
-
-    this->_pasteboard
-        ->observe_event([this](pasteboard_event const &event) {
-            switch (event) {
-                case pasteboard_event::file_module:
-                    this->_database->set_pasting_value(this->_pasteboard->value());
-                    break;
-                case pasteboard_event::fetched:
-                case pasteboard_event::reverted:
-                    break;
-            }
-        })
-        .end()
-        ->add_to(this->_pool);
 }

@@ -36,9 +36,9 @@ std::optional<pasting_value> const &pasteboard::value() const {
     return this->_value;
 }
 
-void pasteboard::revert_value(std::optional<pasting_value> const &value) {
-    this->_value = value;
-    this->_event_fetcher->push(pasteboard_event::reverted);
+void pasteboard::clear() {
+    this->_value = std::nullopt;
+    this->_event_fetcher->push(pasteboard_event::cleared);
 }
 
 observing::syncable pasteboard::observe_event(std::function<void(pasteboard_event const &)> &&handler) {
