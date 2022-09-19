@@ -5,7 +5,6 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
-#include <audio_editor_core/ae_db_pasting_subject.h>
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_ref_pool_dependencies.h>
@@ -34,14 +33,12 @@ struct database final : std::enable_shared_from_this<database>,
     [[nodiscard]] db_file_refs_map const &file_refs() const;
     [[nodiscard]] db_markers_map const &markers() const;
     [[nodiscard]] std::optional<db_edge> const &edge() const;
-    [[nodiscard]] std::optional<pasting_value> pasting_value() const;
     [[nodiscard]] bool is_processing() const;
 
     [[nodiscard]] db_module add_module(file_module::params const &) override;
     void remove_module(time::range const &) override;
     void update_module(time::range const &, file_module const &) override;
     void update_module_detail(file_module const &);
-    void set_pasting_value(std::optional<ae::pasting_value> const &);
     [[nodiscard]] db_marker add_marker(frame_index_t const frame, std::string const &name) override;
     void remove_marker(frame_index_t const &) override;
     void update_marker(frame_index_t const &prev_frame, marker const &) override;
@@ -70,7 +67,6 @@ struct database final : std::enable_shared_from_this<database>,
     db_file_refs_map _file_refs;
     db_markers_map _markers;
     std::optional<db_edge> _edge;
-    std::optional<db_pasting_subject> _pasting_subject = std::nullopt;
     delaying_caller _save_caller;
     observing::notifier_ptr<std::nullptr_t> const _reverted_notifier;
 
