@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
+#include <audio_editor_core/ae_database_types.h>
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_ref_pool_dependencies.h>
@@ -58,7 +59,7 @@ struct database final : std::enable_shared_from_this<database>,
     [[nodiscard]] bool can_purge() const;
     void purge();
 
-    [[nodiscard]] observing::endable observe_reverted(std::function<void(void)> &&);
+    [[nodiscard]] observing::endable observe(std::function<void(database_event const &)> &&);
 
    private:
     std::size_t _processing_count = 0;
@@ -68,7 +69,7 @@ struct database final : std::enable_shared_from_this<database>,
     db_markers_map _markers;
     std::optional<db_edge> _edge;
     delaying_caller _save_caller;
-    observing::notifier_ptr<std::nullptr_t> const _reverted_notifier;
+    observing::notifier_ptr<database_event> const _event_notifier;
 
     observing::canceller_pool _pool;
 
