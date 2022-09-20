@@ -10,22 +10,28 @@
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
+#include <audio_editor_core/ae_project_path.h>
+#include <cpp_utils/yas_assertion.h>
+#include <cpp_utils/yas_file_manager.h>
 
 #include <audio_editor_core/ae_file_ref_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<reverter> reverter::make_shared(database *database, file_track *file_track, marker_pool *marker_pool,
+std::shared_ptr<reverter> reverter::make_shared(project_path const *project_path, database *database,
+                                                file_track *file_track, marker_pool *marker_pool,
                                                 file_ref_pool *file_ref_pool, pasteboard *pasteboard,
                                                 edge_holder *edge_holder, editing_status const *editing_status) {
-    return std::make_shared<reverter>(database, file_track, marker_pool, file_ref_pool, pasteboard, edge_holder,
-                                      editing_status);
+    return std::make_shared<reverter>(project_path, database, file_track, marker_pool, file_ref_pool, pasteboard,
+                                      edge_holder, editing_status);
 }
 
-reverter::reverter(database *database, file_track *file_track, marker_pool *marker_pool, file_ref_pool *file_ref_pool,
-                   pasteboard *pasteboard, edge_holder *edge_holder, editing_status const *editing_status)
-    : _database(database),
+reverter::reverter(project_path const *project_path, database *database, file_track *file_track,
+                   marker_pool *marker_pool, file_ref_pool *file_ref_pool, pasteboard *pasteboard,
+                   edge_holder *edge_holder, editing_status const *editing_status)
+    : _project_path(project_path),
+      _database(database),
       _file_track(file_track),
       _marker_pool(marker_pool),
       _file_ref_pool(file_ref_pool),
@@ -76,7 +82,32 @@ reverter::reverter(database *database, file_track *file_track, marker_pool *mark
                 } break;
 
                 case database_event::purged: {
-#warning todo
+                    std::set<std::string> file_names;
+
+                    for (auto const &pair : this->_file_track->modules()) {
+                        file_names.emplace(pair.second.file_name);
+                    }
+
+                    auto const directory = this->_project_path->editing_files_directory();
+
+                    if (file_manager::content_exists(directory)) {
+                        auto const paths_result = file_manager::content_paths_in_directory(directory);
+
+                        if (paths_result.is_error()) {
+                            assertion_failure_if_not_test();
+                            return;
+                        }
+
+                        for (std::filesystem::path const &path : paths_result.value()) {
+                            if (path.has_filename() && !file_names.contains(path.filename())) {
+                                auto const result = file_manager::remove_content(path);
+
+                                if (result.is_error()) {
+                                    assertion_failure_if_not_test();
+                                }
+                            }
+                        }
+                    }
                 } break;
             }
         })

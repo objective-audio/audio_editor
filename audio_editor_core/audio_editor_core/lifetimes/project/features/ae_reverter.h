@@ -14,13 +14,15 @@ class file_ref_pool;
 class pasteboard;
 class edge_holder;
 class editing_status;
+class project_path;
 
 struct reverter final {
-    [[nodiscard]] static std::shared_ptr<reverter> make_shared(database *, file_track *, marker_pool *, file_ref_pool *,
-                                                               pasteboard *, edge_holder *, editing_status const *);
+    [[nodiscard]] static std::shared_ptr<reverter> make_shared(project_path const *, database *, file_track *,
+                                                               marker_pool *, file_ref_pool *, pasteboard *,
+                                                               edge_holder *, editing_status const *);
 
-    reverter(database *, file_track *, marker_pool *, file_ref_pool *, pasteboard *, edge_holder *,
-             editing_status const *);
+    reverter(project_path const *, database *, file_track *, marker_pool *, file_ref_pool *, pasteboard *,
+             edge_holder *, editing_status const *);
 
     [[nodiscard]] bool can_undo() const;
     void undo();
@@ -32,6 +34,7 @@ struct reverter final {
     void purge();
 
    private:
+    project_path const *const _project_path;
     database *const _database;
     file_track *const _file_track;
     marker_pool *const _marker_pool;
