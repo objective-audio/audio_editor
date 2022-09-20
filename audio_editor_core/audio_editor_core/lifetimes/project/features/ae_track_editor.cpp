@@ -234,6 +234,8 @@ void track_editor::paste() {
     }
 
     if (auto const module = this->_pasteboard->file_module()) {
+        this->_pasteboard->clear();
+
         this->_database->suspend_saving([this, &module] {
             auto const module_value = module.value();
             auto const current_frame = this->_player->current_frame();
@@ -250,6 +252,8 @@ void track_editor::paste_and_offset() {
     }
 
     if (auto const module = this->_pasteboard->file_module()) {
+        this->_pasteboard->clear();
+
         this->_database->suspend_saving([this, &module] {
             auto const module_value = module.value();
             auto const current_frame = this->_player->current_frame();
