@@ -27,7 +27,7 @@ std::shared_ptr<database> database::make_shared(std::shared_ptr<db::manager> con
 }
 
 database::database(std::shared_ptr<db::manager> const &manager)
-    : _manager(manager), _reverted_notifier(observing::notifier<std::nullptr_t>::make_shared()) {
+    : _manager(manager), _event_notifier(observing::notifier<database_event>::make_shared()) {
 }
 
 db_modules_map const &database::modules() const {
@@ -215,11 +215,12 @@ void database::purge() {
         }
 
         database->_decrement_processing_count();
+        database->_event_notifier->notify(database_event::purged);
     });
 }
 
-observing::endable database::observe_reverted(std::function<void(void)> &&handler) {
-    return this->_reverted_notifier->observe([handler = std::move(handler)](auto const &) { handler(); });
+observing::endable database::observe(std::function<void(database_event const &)> &&handler) {
+    return this->_event_notifier->observe(std::move(handler));
 }
 
 void database::_setup() {
@@ -403,8 +404,8 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                     database->_save();
                 }
 
-                database->_reverted_notifier->notify();
                 database->_decrement_processing_count();
+                database->_event_notifier->notify(database_event::reverted);
             } else {
                 assertion_failure_if_not_test();
             }

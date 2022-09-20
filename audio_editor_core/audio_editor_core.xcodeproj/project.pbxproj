@@ -153,6 +153,7 @@
 		B66FBAA8286B44B200E49B7E /* ae_action_receiver_providable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B66FBAA7286B44B200E49B7E /* ae_action_receiver_providable.cpp */; };
 		B675F93E2765CBB2002FE285 /* ae_waveform_mesh_importer.h in Headers */ = {isa = PBXBuildFile; fileRef = B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B675F93F2765CBB2002FE285 /* ae_waveform_mesh_importer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */; };
+		B67F7ECB28D89002002A35C0 /* ae_database_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B67F7ECA28D89002002A35C0 /* ae_database_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6813579271EE756009CC0FC /* ae_gesture.h in Headers */ = {isa = PBXBuildFile; fileRef = B6813578271EE756009CC0FC /* ae_gesture.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B681357C271EF1FA009CC0FC /* ae_pinch_gesture_controller.h in Headers */ = {isa = PBXBuildFile; fileRef = B681357A271EF1FA009CC0FC /* ae_pinch_gesture_controller.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B681357D271EF1FA009CC0FC /* ae_pinch_gesture_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B681357B271EF1FA009CC0FC /* ae_pinch_gesture_controller.cpp */; };
@@ -568,6 +569,7 @@
 		B66FBAA7286B44B200E49B7E /* ae_action_receiver_providable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_action_receiver_providable.cpp; sourceTree = "<group>"; };
 		B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_waveform_mesh_importer.h; sourceTree = "<group>"; };
 		B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_waveform_mesh_importer.mm; sourceTree = "<group>"; };
+		B67F7ECA28D89002002A35C0 /* ae_database_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_database_types.h; sourceTree = "<group>"; };
 		B6813578271EE756009CC0FC /* ae_gesture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_gesture.h; sourceTree = "<group>"; };
 		B681357A271EF1FA009CC0FC /* ae_pinch_gesture_controller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_pinch_gesture_controller.h; sourceTree = "<group>"; };
 		B681357B271EF1FA009CC0FC /* ae_pinch_gesture_controller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_pinch_gesture_controller.cpp; sourceTree = "<group>"; };
@@ -1657,6 +1659,7 @@
 				B6966F3F272E639D00A90733 /* ae_db_utils.h */,
 				B6966F35272E4D8400A90733 /* ae_database.cpp */,
 				B6966F36272E4D8400A90733 /* ae_database.h */,
+				B67F7ECA28D89002002A35C0 /* ae_database_types.h */,
 				B6E903602745346900DE821F /* ae_exporter.cpp */,
 				B6E903612745346900DE821F /* ae_exporter.h */,
 				B6C3D63A2826684000A8FCFE /* ae_editing_status.cpp */,
@@ -1934,6 +1937,7 @@
 				B63D28552838CA87009C07A8 /* ae_context_menu_lifetime.h in Headers */,
 				B6F8C64728A4F29D0020635B /* ae_ui_time_nudge.hpp in Headers */,
 				B65ABF5F2834A5050096B6C7 /* ae_project_modal_lifecycle.h in Headers */,
+				B67F7ECB28D89002002A35C0 /* ae_database_types.h in Headers */,
 				B61759722823C30700AC880B /* ae_timeline_holder.h in Headers */,
 				B6F4D98227B5FD3B00AE7D5D /* ae_edge_holder.h in Headers */,
 				B64504B02719C4E4009E05D6 /* ae_marker_location.h in Headers */,

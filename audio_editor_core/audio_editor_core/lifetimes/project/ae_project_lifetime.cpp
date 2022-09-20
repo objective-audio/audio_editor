@@ -100,9 +100,9 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       database_updater(
           database_updater::make_shared(this->edge_holder.get(), this->pasteboard.get(), this->database.get())),
       timeline_updater(timeline_updater::make_shared(this->file_track.get(), window_lifetime->timeline_holder.get())),
-      reverter(reverter::make_shared(this->database.get(), this->file_track.get(), this->marker_pool.get(),
-                                     this->file_ref_pool.get(), this->pasteboard.get(), this->edge_holder.get(),
-                                     this->editing_status.get())),
+      reverter(reverter::make_shared(window_lifetime->project_path.get(), this->database.get(), this->file_track.get(),
+                                     this->marker_pool.get(), this->file_ref_pool.get(), this->pasteboard.get(),
+                                     this->edge_holder.get(), this->editing_status.get())),
       file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
       file_module_loader(file_module_loader::make_shared(
           window_lifetime_id.project, window_lifetime->project_path.get(), this->project_format,
