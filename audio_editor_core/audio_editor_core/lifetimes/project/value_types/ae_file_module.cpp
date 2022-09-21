@@ -9,8 +9,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-file_module_object::params::params(std::string const &name, time::range const &range, frame_index_t const file_frame,
-                                   std::string const &file_name)
+file_module::file_module(std::string const &name, time::range const &range, frame_index_t const file_frame,
+                         std::string const &file_name)
     : name(name), range(range), file_frame(file_frame), file_name(file_name) {
 }
 

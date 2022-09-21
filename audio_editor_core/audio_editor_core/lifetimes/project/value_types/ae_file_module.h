@@ -10,16 +10,18 @@
 #include <string>
 
 namespace yas::ae {
-struct file_module_object final {
-    struct params {
-        std::string name;
-        time::range range;
-        frame_index_t file_frame;
-        std::string file_name;
+struct file_module {
+    std::string name;
+    time::range range;
+    frame_index_t file_frame;
+    std::string file_name;
 
-        params(std::string const &name, time::range const &, frame_index_t const file_frame,
-               std::string const &file_name);
-    };
+    file_module(std::string const &name, time::range const &, frame_index_t const file_frame,
+                std::string const &file_name);
+};
+
+struct file_module_object final {
+    using params = file_module;
 
     object_id identifier;
     std::string name;
