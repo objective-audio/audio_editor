@@ -20,18 +20,18 @@ struct file_track final : jumpable_on_jumper {
 
     [[nodiscard]] file_track_module_map_t const &modules() const;
 
-    void revert_modules_and_notify(std::vector<file_module> &&);
-    std::optional<object_id> insert_module_and_notify(file_module::params const &);
+    void revert_modules_and_notify(std::vector<file_module_object> &&);
+    std::optional<object_id> insert_module_and_notify(file_module_object::params const &);
     void erase_module_and_notify(time::range const &ranga);
     void set_module_name_and_notify(time::range const &, std::string const &);
 
     [[nodiscard]] std::optional<time::range> total_range() const;
-    [[nodiscard]] std::optional<file_module> module_at(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module> previous_module_at(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module> next_module_at(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module> splittable_module_at(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module> first_module() const;
-    [[nodiscard]] std::optional<file_module> last_module() const;
+    [[nodiscard]] std::optional<file_module_object> module_at(frame_index_t const) const;
+    [[nodiscard]] std::optional<file_module_object> previous_module_at(frame_index_t const) const;
+    [[nodiscard]] std::optional<file_module_object> next_module_at(frame_index_t const) const;
+    [[nodiscard]] std::optional<file_module_object> splittable_module_at(frame_index_t const) const;
+    [[nodiscard]] std::optional<file_module_object> first_module() const;
+    [[nodiscard]] std::optional<file_module_object> last_module() const;
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
     [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;
 
@@ -42,9 +42,9 @@ struct file_track final : jumpable_on_jumper {
     void drop_tail_at(frame_index_t const);
     void drop_head_and_offset_at(frame_index_t const);
     void drop_tail_and_offset_at(frame_index_t const);
-    void overwrite_module(file_module::params const &);
+    void overwrite_module(file_module_object::params const &);
     void move_modules(std::set<time::range> const &, frame_index_t const offset);
-    void split_and_insert_module_and_offset(file_module::params const &);
+    void split_and_insert_module_and_offset(file_module_object::params const &);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&);
 

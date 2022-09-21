@@ -14,7 +14,7 @@ using namespace yas::ae::db_constants;
 db_module::db_module(db::object_ptr const &object) : _object(object) {
 }
 
-db_module db_module::create(db::manager_ptr const &manager, file_module::params const &params) {
+db_module db_module::create(db::manager_ptr const &manager, file_module_object::params const &params) {
     auto object = manager->create_object(module_name::entity);
     object->set_attribute_value(module_name::attribute::name, db::value{params.name});
     object->set_attribute_value(module_name::attribute::file_frame, db::value{params.file_frame});
@@ -24,7 +24,7 @@ db_module db_module::create(db::manager_ptr const &manager, file_module::params 
     return db_module{std::move(object)};
 }
 
-std::optional<file_module> db_module::file_module() const {
+std::optional<file_module_object> db_module::file_module() const {
     auto const &name_value = this->_object->attribute_value(module_name::attribute::name);
     auto const &file_frame_value = this->_object->attribute_value(module_name::attribute::file_frame);
     auto const &range_frame_value = this->_object->attribute_value(module_name::attribute::range_frame);
@@ -38,8 +38,8 @@ std::optional<file_module> db_module::file_module() const {
             auto const file_frame = file_frame_value.get<db::integer>();
             auto const range_frame = range_frame_value.get<db::integer>();
             auto const file_name = file_name_value.get<db::text>();
-            return ae::file_module{this->_object->object_id(), std::move(name), time::range{range_frame, range_length},
-                                   file_frame, file_name};
+            return ae::file_module_object{this->_object->object_id(), std::move(name),
+                                          time::range{range_frame, range_length}, file_frame, file_name};
         }
     }
 

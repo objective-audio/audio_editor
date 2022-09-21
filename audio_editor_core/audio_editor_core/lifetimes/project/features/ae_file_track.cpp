@@ -24,12 +24,12 @@ file_track_module_map_t const &file_track::modules() const {
     return this->_modules;
 }
 
-void file_track::revert_modules_and_notify(std::vector<file_module> &&modules) {
-    this->_modules = to_map<time::range>(modules, [](file_module const &module) { return module.range; });
+void file_track::revert_modules_and_notify(std::vector<file_module_object> &&modules) {
+    this->_modules = to_map<time::range>(modules, [](file_module_object const &module) { return module.range; });
     this->_event_fetcher->push({.type = file_track_event_type::reverted, .modules = this->_modules});
 }
 
-std::optional<object_id> file_track::insert_module_and_notify(file_module::params const &params) {
+std::optional<object_id> file_track::insert_module_and_notify(file_module_object::params const &params) {
     auto db_module = this->_database->add_module(params);
 
     if (auto const file_module = db_module.file_module(); file_module.has_value()) {
@@ -69,27 +69,27 @@ std::optional<time::range> file_track::total_range() const {
     return file_track_utils::total_range(this->_modules);
 }
 
-std::optional<file_module> file_track::module_at(frame_index_t const frame) const {
+std::optional<file_module_object> file_track::module_at(frame_index_t const frame) const {
     return file_track_utils::module(this->_modules, frame);
 }
 
-std::optional<file_module> file_track::previous_module_at(frame_index_t const frame) const {
+std::optional<file_module_object> file_track::previous_module_at(frame_index_t const frame) const {
     return file_track_utils::previous_module(this->_modules, frame);
 }
 
-std::optional<file_module> file_track::next_module_at(frame_index_t const frame) const {
+std::optional<file_module_object> file_track::next_module_at(frame_index_t const frame) const {
     return file_track_utils::next_module(this->_modules, frame);
 }
 
-std::optional<file_module> file_track::splittable_module_at(frame_index_t const frame) const {
+std::optional<file_module_object> file_track::splittable_module_at(frame_index_t const frame) const {
     return file_track_utils::splittable_module(this->_modules, frame);
 }
 
-std::optional<file_module> file_track::first_module() const {
+std::optional<file_module_object> file_track::first_module() const {
     return file_track_utils::first_module(this->_modules);
 }
 
-std::optional<file_module> file_track::last_module() const {
+std::optional<file_module_object> file_track::last_module() const {
     return file_track_utils::last_module(this->_modules);
 }
 
@@ -187,7 +187,7 @@ void file_track::drop_tail_and_offset_at(frame_index_t const frame) {
     }
 }
 
-void file_track::overwrite_module(file_module::params const &params) {
+void file_track::overwrite_module(file_module_object::params const &params) {
     auto const overlapped_modules = file_track_utils::overlapped_modules(this->_modules, params.range);
     for (auto const &overlapped_module : overlapped_modules) {
         this->erase_module_and_notify(overlapped_module.range);
@@ -204,7 +204,7 @@ void file_track::overwrite_module(file_module::params const &params) {
 }
 
 void file_track::move_modules(std::set<time::range> const &ranges, frame_index_t const offset) {
-    std::vector<file_module::params> movings;
+    std::vector<file_module_object::params> movings;
     for (auto const &range : ranges) {
         if (this->_modules.count(range) > 0) {
             auto const &module = this->_modules.at(range);
@@ -218,7 +218,7 @@ void file_track::move_modules(std::set<time::range> const &ranges, frame_index_t
     }
 }
 
-void file_track::split_and_insert_module_and_offset(file_module::params const &params) {
+void file_track::split_and_insert_module_and_offset(file_module_object::params const &params) {
     this->split_at(params.range.frame);
 
     this->_move_modules_after(params.range.frame, params.range.length);

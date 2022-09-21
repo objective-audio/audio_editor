@@ -14,7 +14,7 @@ using namespace yas::ae;
 namespace yas::ae::module_location_utils {
 using mesh_element = module_location::mesh_element;
 
-static std::vector<std::optional<mesh_element>> make_mesh_elements(file_module const &file_module,
+static std::vector<std::optional<mesh_element>> make_mesh_elements(file_module_object const &file_module,
                                                                    uint32_t const sample_rate,
                                                                    time::range const &space_range, float const scale) {
     std::vector<std::optional<mesh_element>> mesh_elements;
@@ -63,7 +63,7 @@ bool module_location::mesh_element::operator!=(mesh_element const &rhs) const {
     return !(*this == rhs);
 }
 
-module_location::module_location(file_module const &file_module, uint32_t const sample_rate,
+module_location::module_location(file_module_object const &file_module, uint32_t const sample_rate,
                                  time::range const &space_range, float const scale)
     : module_location(file_module.identifier, file_module.range, sample_rate,
                       module_location_utils::make_mesh_elements(file_module, sample_rate, space_range, scale), scale) {

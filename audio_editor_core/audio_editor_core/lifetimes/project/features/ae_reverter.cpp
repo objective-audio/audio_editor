@@ -42,7 +42,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
         ->observe([this](database_event const &event) {
             switch (event) {
                 case database_event::reverted: {
-                    std::vector<file_module> file_modules;
+                    std::vector<file_module_object> file_modules;
 
                     for (auto const &pair : this->_database->modules()) {
                         if (auto file_module = pair.second.file_module()) {
