@@ -245,22 +245,3 @@ void track_editor::paste() {
         });
     }
 }
-
-void track_editor::paste_and_offset() {
-    if (!this->can_paste()) {
-        return;
-    }
-
-    if (auto const module = this->_pasteboard->file_module()) {
-        this->_pasteboard->clear();
-
-        this->_database->suspend_saving([this, &module] {
-            auto const module_value = module.value();
-            auto const current_frame = this->_player->current_frame();
-
-            this->_file_track->split_and_insert_module_and_offset({module_value.name,
-                                                                   module_value.range.offset(current_frame),
-                                                                   module_value.file_frame, module_value.file_name});
-        });
-    }
-}

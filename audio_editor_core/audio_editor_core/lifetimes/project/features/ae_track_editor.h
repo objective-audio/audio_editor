@@ -38,7 +38,6 @@ struct track_editor final {
     void copy();
     [[nodiscard]] bool can_paste() const;
     void paste();
-    void paste_and_offset();
 
    private:
     player *const _player;
