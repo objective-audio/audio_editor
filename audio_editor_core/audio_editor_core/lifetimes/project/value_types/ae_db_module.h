@@ -14,7 +14,7 @@ class file_module_object;
 struct db_module final {
     explicit db_module(db::object_ptr const &);
 
-    [[nodiscard]] static db_module create(db::manager_ptr const &, file_module_object::params const &);
+    [[nodiscard]] static db_module create(db::manager_ptr const &, file_module const &);
 
     [[nodiscard]] std::optional<file_module_object> file_module() const;
 

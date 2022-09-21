@@ -50,7 +50,7 @@ bool database::is_processing() const {
     return this->_processing_count > 0;
 }
 
-db_module database::add_module(file_module_object::params const &args) {
+db_module database::add_module(file_module const &args) {
     auto module = db_module::create(this->_manager, args);
     this->_modules.emplace(args.range, module);
     this->_save();
@@ -65,7 +65,7 @@ void database::remove_module(time::range const &range) {
     }
 }
 
-void database::update_module(time::range const &range, file_module_object const &file_module) {
+void database::update_module(time::range const &range, file_module const &file_module) {
     if (this->_modules.contains(range)) {
         auto &db_module = this->_modules.at(range);
         db_module.set_name(file_module.name);
@@ -76,7 +76,7 @@ void database::update_module(time::range const &range, file_module_object const 
     }
 }
 
-void database::update_module_detail(file_module_object const &file_module) {
+void database::update_module_detail(file_module const &file_module) {
     auto const &range = file_module.range;
 
     if (this->_modules.contains(range)) {
@@ -291,7 +291,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                     for (auto const &object : objects) {
                         db_module module{object};
                         if (auto const file_module = module.file_module()) {
-                            modules.emplace(file_module.value().range, std::move(module));
+                            modules.emplace(file_module.value().value.range, std::move(module));
                         }
                     }
                 }

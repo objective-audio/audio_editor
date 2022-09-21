@@ -27,7 +27,7 @@ module_name_editor::module_name_editor(time::range const &range, file_track *fil
 std::string const &module_name_editor::name() const {
     auto const &modules = this->_file_track->modules();
     if (modules.contains(this->_module_range)) {
-        return modules.at(this->_module_range).name;
+        return modules.at(this->_module_range).value.name;
     }
     return empty_string;
 }

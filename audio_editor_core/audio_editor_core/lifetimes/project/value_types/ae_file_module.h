@@ -18,30 +18,22 @@ struct file_module {
 
     file_module(std::string const &name, time::range const &, frame_index_t const file_frame,
                 std::string const &file_name);
+
+    [[nodiscard]] std::optional<file_module> head_dropped(frame_index_t const) const;
+    [[nodiscard]] std::optional<file_module> tail_dropped(frame_index_t const) const;
+    [[nodiscard]] file_module offset(frame_index_t const) const;
 };
 
 struct file_module_object final {
-    using params = file_module;
-
     object_id identifier;
-    std::string name;
-    time::range range;
-    frame_index_t file_frame;
-    std::string file_name;
+    file_module value;
 
-    file_module_object(object_id const &, params &&);
-    file_module_object(object_id const &, std::string const &name, time::range const &range,
-                       frame_index_t const file_frame, std::string const &file_name);
-
-    [[nodiscard]] file_module_object::params parameters() const;
-    [[nodiscard]] std::optional<file_module_object::params> head_dropped(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module_object::params> tail_dropped(frame_index_t const) const;
-    [[nodiscard]] file_module_object::params offset(frame_index_t const) const;
+    file_module_object(object_id const &, file_module &&);
 };
 }  // namespace yas::ae
 
 namespace yas {
-std::string to_string(ae::file_module_object const &);
+std::string to_string(ae::file_module const &);
 }
 
-std::ostream &operator<<(std::ostream &os, yas::ae::file_module_object const &value);
+std::ostream &operator<<(std::ostream &os, yas::ae::file_module const &value);

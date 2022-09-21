@@ -78,7 +78,7 @@ std::optional<file_module_object> file_track_utils::next_module(file_track_modul
 std::optional<file_module_object> file_track_utils::splittable_module(file_track_module_map_t const &modules,
                                                                       frame_index_t const frame) {
     for (auto const &pair : modules) {
-        if (file_module_utils::can_split_time_range(pair.second.range, frame)) {
+        if (file_module_utils::can_split_time_range(pair.second.value.range, frame)) {
             return pair.second;
         }
     }

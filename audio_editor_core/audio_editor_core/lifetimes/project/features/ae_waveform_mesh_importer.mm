@@ -38,8 +38,8 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
         return;
     }
 
-    auto path = this->_project_path->editing_files_directory().append(modules.at(location.range).file_name);
-    auto const file_frame = modules.at(location.range).file_frame;
+    auto path = this->_project_path->editing_files_directory().append(modules.at(location.range).value.file_name);
+    auto const file_frame = modules.at(location.range).value.file_frame;
 
     auto const task = yas::task<object_id>::make_shared(
         [idx, location, path = std::move(path), file_frame,
