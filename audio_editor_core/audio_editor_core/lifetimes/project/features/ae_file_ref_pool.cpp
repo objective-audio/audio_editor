@@ -18,7 +18,7 @@ file_ref_pool::file_ref_pool(database_for_file_ref_pool *database)
 
 void file_ref_pool::revert(std::vector<file_ref_object> &&refs) {
     this->_refs->replace(
-        to_map<std::string>(std::move(refs), [](file_ref_object const &ref) { return ref.file_name; }));
+        to_map<std::string>(std::move(refs), [](file_ref_object const &ref) { return ref.value.file_name; }));
 }
 
 void file_ref_pool::insert(file_ref const &file_ref) {
