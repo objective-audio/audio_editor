@@ -52,7 +52,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
 
                     this->_file_track->revert_modules_and_notify(std::move(file_modules));
 
-                    std::vector<marker> markers;
+                    std::vector<marker_object> markers;
 
                     for (auto const &pair : this->_database->markers()) {
                         if (auto const marker = pair.second.marker()) {

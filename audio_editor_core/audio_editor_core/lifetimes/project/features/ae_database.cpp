@@ -101,12 +101,12 @@ void database::remove_marker(frame_index_t const &frame) {
     }
 }
 
-void database::update_marker(frame_index_t const &prev_frame, marker const &marker) {
+void database::update_marker(frame_index_t const &prev_frame, marker_object const &marker) {
     if (this->_markers.contains(prev_frame)) {
         auto &db_marker = this->_markers.at(prev_frame);
         db_marker.set_marker(marker);
         this->_markers.erase(prev_frame);
-        this->_markers.emplace(marker.frame, db_marker);
+        this->_markers.emplace(marker.value.frame, db_marker);
         this->_save();
     }
 }
@@ -355,7 +355,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                     for (auto const &object : objects) {
                         db_marker db_marker{object};
                         if (auto const marker = db_marker.marker()) {
-                            markers.emplace(marker.value().frame, std::move(db_marker));
+                            markers.emplace(marker.value().value.frame, std::move(db_marker));
                         }
                     }
                 }

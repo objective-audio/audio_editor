@@ -133,7 +133,7 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
             if (this->_identifier.has_value()) {
                 if (auto const marker_pool = this->_marker_pool.lock()) {
                     if (auto const marker = marker_pool->marker_for_id(this->_identifier.value())) {
-                        this->_controller->select_marker_with_frame(marker.value().frame);
+                        this->_controller->select_marker_with_frame(marker.value().value.frame);
                     }
                 }
             }
@@ -171,7 +171,7 @@ void ui_marker_element::_update_name() {
     if (auto const marker_pool = this->_marker_pool.lock()) {
         if (this->_identifier.has_value()) {
             if (auto const marker = marker_pool->marker_for_id(this->_identifier.value())) {
-                this->_strings->set_text(marker->name);
+                this->_strings->set_text(marker->value.name);
             }
         }
     }

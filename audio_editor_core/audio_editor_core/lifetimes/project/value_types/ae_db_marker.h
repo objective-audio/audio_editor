@@ -8,15 +8,15 @@
 #include <db/yas_db_umbrella.h>
 
 namespace yas::ae {
-class marker;
+class marker_object;
 
 struct db_marker final {
     db_marker(db::object_ptr const &);
 
     [[nodiscard]] static db_marker create(db::manager_ptr const &, frame_index_t const frame, std::string const &name);
 
-    void set_marker(marker const &);
-    std::optional<marker> marker() const;
+    void set_marker(marker_object const &);
+    std::optional<marker_object> marker() const;
 
     void remove();
 

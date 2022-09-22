@@ -22,24 +22,25 @@ db_marker db_marker::create(db::manager_ptr const &manager, frame_index_t const 
     return db_marker{object};
 }
 
-std::optional<marker> db_marker::marker() const {
+std::optional<marker_object> db_marker::marker() const {
     auto const &frame_value = this->_object->attribute_value(marker_name::attribute::frame);
     auto const &name_value = this->_object->attribute_value(marker_name::attribute::name);
 
     if (frame_value && name_value) {
-        return ae::marker{this->_object->object_id(), frame_value.get<db::integer>(), name_value.get<db::text>()};
+        return ae::marker_object{this->_object->object_id(),
+                                 {frame_value.get<db::integer>(), name_value.get<db::text>()}};
     }
 
     return std::nullopt;
 }
 
-void db_marker::set_marker(ae::marker const &marker) {
+void db_marker::set_marker(ae::marker_object const &marker) {
     if (marker.identifier != this->_object->object_id()) {
         return;
     }
 
-    this->_object->set_attribute_value(marker_name::attribute::frame, db::value{marker.frame});
-    this->_object->set_attribute_value(marker_name::attribute::name, db::value{marker.name});
+    this->_object->set_attribute_value(marker_name::attribute::frame, db::value{marker.value.frame});
+    this->_object->set_attribute_value(marker_name::attribute::name, db::value{marker.value.name});
 }
 
 void db_marker::remove() {

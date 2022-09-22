@@ -22,7 +22,7 @@ marker_name_editor::marker_name_editor(int64_t const marker_frame, marker_pool *
 
 std::string marker_name_editor::name() const {
     if (auto const marker = this->_marker_pool->marker_for_frame(this->_marker_frame)) {
-        return marker->name;
+        return marker->value.name;
     }
     return "";
 }
@@ -30,7 +30,7 @@ std::string marker_name_editor::name() const {
 void marker_name_editor::set_name(std::string const &name) {
     if (auto opt_marker = this->_marker_pool->marker_for_frame(this->_marker_frame)) {
         auto marker = opt_marker.value();
-        marker.name = name;
-        this->_marker_pool->update_marker(marker.frame, marker);
+        marker.value.name = name;
+        this->_marker_pool->update_marker(marker.value.frame, marker);
     }
 }
