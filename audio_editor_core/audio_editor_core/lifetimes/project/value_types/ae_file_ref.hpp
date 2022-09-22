@@ -9,7 +9,7 @@
 #include <string>
 
 namespace yas::ae {
-struct file_ref final {
+struct file_ref_object final {
     struct params {
         std::string file_name;
     };
@@ -17,9 +17,7 @@ struct file_ref final {
     object_id identifier;
     std::string file_name;
 
-    file_ref(object_id const &, params &&);
-    file_ref(object_id const &, std::string const &file_name);
-
-    [[nodiscard]] params parameters() const;
+    file_ref_object(object_id const &, params &&);
+    file_ref_object(object_id const &, std::string const &file_name);
 };
 }  // namespace yas::ae

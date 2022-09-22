@@ -8,7 +8,7 @@
 #include <map>
 
 namespace yas::ae {
-using file_ref_module_map_t = std::map<std::string, file_ref>;
+using file_ref_module_map_t = std::map<std::string, file_ref_object>;
 
 static file_ref_module_map_t const empty_file_refs;
 
@@ -21,7 +21,7 @@ enum class file_ref_pool_event_type {
 
 struct file_ref_pool_event final {
     file_ref_pool_event_type type;
-    std::optional<file_ref> ref{std::nullopt};  // inserted, erased
+    std::optional<file_ref_object> ref{std::nullopt};  // inserted, erased
     file_ref_module_map_t const &refs;
 };
 }  // namespace yas::ae
