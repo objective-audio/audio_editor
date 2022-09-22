@@ -7,19 +7,19 @@
 #include <audio_editor_core/ae_common_types.h>
 
 namespace yas::ae {
-struct marker_object final {
-    struct params {
-        frame_index_t frame;
-        std::string name;
-    };
+struct marker {
+    frame_index_t frame;
+    std::string name;
+};
 
+struct marker_object final {
     object_id identifier;
     frame_index_t frame;
     std::string name;
 
-    marker_object(object_id const &, params &&);
+    marker_object(object_id const &, marker &&);
     marker_object(object_id const &, frame_index_t const frame, std::string const &name);
 
-    [[nodiscard]] params parameters() const;
+    [[nodiscard]] marker parameters() const;
 };
 }  // namespace yas::ae
