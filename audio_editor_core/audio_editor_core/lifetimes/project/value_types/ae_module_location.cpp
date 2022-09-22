@@ -14,13 +14,13 @@ using namespace yas::ae;
 namespace yas::ae::module_location_utils {
 using mesh_element = module_location::mesh_element;
 
-static std::vector<std::optional<mesh_element>> make_mesh_elements(file_module const &file_module,
+static std::vector<std::optional<mesh_element>> make_mesh_elements(file_module_object const &file_module,
                                                                    uint32_t const sample_rate,
                                                                    time::range const &space_range, float const scale) {
     std::vector<std::optional<mesh_element>> mesh_elements;
 
     uint32_t const mesh_width_interval = module_location::mesh_element::max_length;
-    double const width = static_cast<double>(file_module.range.length) / static_cast<double>(sample_rate);
+    double const width = static_cast<double>(file_module.value.range.length) / static_cast<double>(sample_rate);
     double const total_mesh_width = width * scale;
     uint32_t const floored_mesh_width = static_cast<uint32_t>(std::floor(total_mesh_width));
     uint32_t const ceiled_mesh_width = static_cast<uint32_t>(std::ceil(total_mesh_width));
@@ -28,7 +28,7 @@ static std::vector<std::optional<mesh_element>> make_mesh_elements(file_module c
     uint32_t const total_rect_count = floored_mesh_width + (has_fraction ? 1 : 0);
 
     uint32_t current_frame = 0;
-    uint32_t const total_length = static_cast<uint32_t>(file_module.range.length);
+    uint32_t const total_length = static_cast<uint32_t>(file_module.value.range.length);
     uint32_t const mod_rect_count = total_rect_count % mesh_width_interval;
     auto const data_count = total_rect_count / mesh_width_interval + (mod_rect_count ? 1 : 0);
     auto each = make_fast_each(data_count);
@@ -37,11 +37,11 @@ static std::vector<std::optional<mesh_element>> make_mesh_elements(file_module c
         uint32_t const rect_count =
             ((idx == (data_count - 1)) && mod_rect_count) ? mod_rect_count : mesh_width_interval;
         double const next_position = static_cast<double>((idx + 1) * mesh_width_interval) / total_mesh_width *
-                                     static_cast<double>(file_module.range.length);
+                                     static_cast<double>(file_module.value.range.length);
         auto const next_frame = std::min(static_cast<uint32_t>(next_position), total_length);
         auto const range = time::range{current_frame, next_frame - current_frame};
 
-        auto const offset_range = range.offset(file_module.range.frame);
+        auto const offset_range = range.offset(file_module.value.range.frame);
         if (offset_range.intersected(space_range)) {
             mesh_elements.emplace_back(mesh_element{.rect_count = rect_count, .range = range});
         } else {
@@ -63,9 +63,9 @@ bool module_location::mesh_element::operator!=(mesh_element const &rhs) const {
     return !(*this == rhs);
 }
 
-module_location::module_location(file_module const &file_module, uint32_t const sample_rate,
+module_location::module_location(file_module_object const &file_module, uint32_t const sample_rate,
                                  time::range const &space_range, float const scale)
-    : module_location(file_module.identifier, file_module.range, sample_rate,
+    : module_location(file_module.identifier, file_module.value.range, sample_rate,
                       module_location_utils::make_mesh_elements(file_module, sample_rate, space_range, scale), scale) {
 }
 

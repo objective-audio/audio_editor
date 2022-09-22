@@ -15,7 +15,7 @@ using namespace yas::ae;
 @implementation ae_file_module_tests
 
 - (void)test_head_dropped {
-    file_module const module{db::make_temporary_id(), "head_dropped_name", {1, 3}, 10, "test-name-1"};
+    file_module const module{"head_dropped_name", {1, 3}, 10, "test-name-1"};
 
     XCTAssertEqual(module.head_dropped(1), std::nullopt);
     XCTAssertEqual(module.head_dropped(2).value().name, "head_dropped_name");
@@ -30,7 +30,7 @@ using namespace yas::ae;
 }
 
 - (void)test_tail_dropped {
-    file_module const module{db::make_temporary_id(), "tail_dropped_name", {1, 3}, 10, "test-name-2"};
+    file_module const module{"tail_dropped_name", {1, 3}, 10, "test-name-2"};
 
     XCTAssertEqual(module.tail_dropped(1), std::nullopt);
     XCTAssertEqual(module.tail_dropped(2).value().name, "tail_dropped_name");
@@ -45,7 +45,7 @@ using namespace yas::ae;
 }
 
 - (void)test_offset {
-    file_module const module{db::make_temporary_id(), "offset_name", {1, 3}, 10, "test-name-3"};
+    file_module const module{"offset_name", {1, 3}, 10, "test-name-3"};
 
     XCTAssertEqual(module.offset(-1).name, "offset_name");
     XCTAssertEqual(module.offset(-1).range, (time::range{0, 3}));

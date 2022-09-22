@@ -42,7 +42,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
         ->observe([this](database_event const &event) {
             switch (event) {
                 case database_event::reverted: {
-                    std::vector<file_module> file_modules;
+                    std::vector<file_module_object> file_modules;
 
                     for (auto const &pair : this->_database->modules()) {
                         if (auto file_module = pair.second.file_module()) {
@@ -85,7 +85,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                     std::set<std::string> file_names;
 
                     for (auto const &pair : this->_file_track->modules()) {
-                        file_names.emplace(pair.second.file_name);
+                        file_names.emplace(pair.second.value.file_name);
                     }
 
                     auto const directory = this->_project_path->editing_files_directory();

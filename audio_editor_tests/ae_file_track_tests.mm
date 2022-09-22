@@ -13,7 +13,7 @@ using namespace yas::ae;
 
 namespace yas::ae::file_track_test_utils {
 struct database_mock : database_for_file_track {
-    db_module add_module(file_module::params const &params) override {
+    db_module add_module(file_module const &params) override {
         auto const model = database_utils::make_model();
         auto const object = db::object::make_shared(model.entity(db_constants::module_name::entity));
         object->set_attribute_value(db_constants::module_name::attribute::name, db::value{params.name});
@@ -46,21 +46,21 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 0);
 
-    file_module::params const module_params_1{"", {0, 4}, 0, ""};
+    file_module const module_params_1{"", {0, 4}, 0, ""};
 
     auto const module1_id = track->insert_module_and_notify(module_params_1);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().at(module_params_1.range).identifier, module1_id.value());
 
-    file_module::params const module_params_2{"", {4, 3}, 4, ""};
+    file_module const module_params_2{"", {4, 3}, 4, ""};
 
     auto const module2_id = track->insert_module_and_notify(module_params_2);
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().at(module_params_2.range).identifier, module2_id.value());
 
-    file_module::params const module_params_3{"", {-2, 2}, 7, ""};
+    file_module const module_params_3{"", {-2, 2}, 7, ""};
 
     auto const module3_id = track->insert_module_and_notify(module_params_3);
 
@@ -79,23 +79,23 @@ using namespace yas::ae::file_track_test_utils;
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 4}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_1", {5, 3}, 5, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 4}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_1", {5, 3}, 5, ""}};
 
     track->revert_modules_and_notify({module1, module2});
 
     XCTAssertEqual(track->modules().size(), 2);
 
-    track->erase_module_and_notify(module1.range);
+    track->erase_module_and_notify({0, 4});
 
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().count(module2.range), 1);
+    XCTAssertEqual(track->modules().count({5, 3}), 1);
 }
 
 - (void)test_observe_event {
     struct called_event {
         file_track_event_type type;
-        std::optional<file_module> module{std::nullopt};
+        std::optional<file_module_object> module{std::nullopt};
         file_track_module_map_t modules;
     };
 
@@ -104,8 +104,8 @@ using namespace yas::ae::file_track_test_utils;
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 4}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_2", {7, 5}, 7, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 4}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {7, 5}, 7, ""}};
 
     track->revert_modules_and_notify({module1, module2});
 
@@ -128,7 +128,7 @@ using namespace yas::ae::file_track_test_utils;
     XCTAssertEqual(called.at(1).modules.size(), 3);
     XCTAssertEqual(called.at(1).module.value().identifier, module3_id);
 
-    track->erase_module_and_notify(module1.range);
+    track->erase_module_and_notify({0, 4});
 
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2).type, file_track_event_type::erased);
@@ -149,32 +149,32 @@ using namespace yas::ae::file_track_test_utils;
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 1}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_2", {1, 2}, 1, ""};
-    file_module const module3{db::make_temporary_id(), "module_3", {4, 3}, 4, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
+    file_module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 4, ""}};
 
     track->revert_modules_and_notify({module1, module2, module3});
 
     XCTAssertEqual(track->module_at(-1), std::nullopt);
-    XCTAssertEqual(track->module_at(0).value().name, "module_1");
-    XCTAssertEqual(track->module_at(0).value().range, (time::range{0, 1}));
-    XCTAssertEqual(track->module_at(0).value().file_frame, 0);
-    XCTAssertEqual(track->module_at(1).value().name, "module_2");
-    XCTAssertEqual(track->module_at(1).value().range, (time::range{1, 2}));
-    XCTAssertEqual(track->module_at(1).value().file_frame, 1);
-    XCTAssertEqual(track->module_at(2).value().name, "module_2");
-    XCTAssertEqual(track->module_at(2).value().range, (time::range{1, 2}));
-    XCTAssertEqual(track->module_at(2).value().file_frame, 1);
+    XCTAssertEqual(track->module_at(0).value().value.name, "module_1");
+    XCTAssertEqual(track->module_at(0).value().value.range, (time::range{0, 1}));
+    XCTAssertEqual(track->module_at(0).value().value.file_frame, 0);
+    XCTAssertEqual(track->module_at(1).value().value.name, "module_2");
+    XCTAssertEqual(track->module_at(1).value().value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->module_at(1).value().value.file_frame, 1);
+    XCTAssertEqual(track->module_at(2).value().value.name, "module_2");
+    XCTAssertEqual(track->module_at(2).value().value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->module_at(2).value().value.file_frame, 1);
     XCTAssertEqual(track->module_at(3), std::nullopt);
-    XCTAssertEqual(track->module_at(4).value().name, "module_3");
-    XCTAssertEqual(track->module_at(4).value().range, (time::range{4, 3}));
-    XCTAssertEqual(track->module_at(4).value().file_frame, 4);
-    XCTAssertEqual(track->module_at(5).value().name, "module_3");
-    XCTAssertEqual(track->module_at(5).value().range, (time::range{4, 3}));
-    XCTAssertEqual(track->module_at(5).value().file_frame, 4);
-    XCTAssertEqual(track->module_at(6).value().name, "module_3");
-    XCTAssertEqual(track->module_at(6).value().range, (time::range{4, 3}));
-    XCTAssertEqual(track->module_at(6).value().file_frame, 4);
+    XCTAssertEqual(track->module_at(4).value().value.name, "module_3");
+    XCTAssertEqual(track->module_at(4).value().value.range, (time::range{4, 3}));
+    XCTAssertEqual(track->module_at(4).value().value.file_frame, 4);
+    XCTAssertEqual(track->module_at(5).value().value.name, "module_3");
+    XCTAssertEqual(track->module_at(5).value().value.range, (time::range{4, 3}));
+    XCTAssertEqual(track->module_at(5).value().value.file_frame, 4);
+    XCTAssertEqual(track->module_at(6).value().value.name, "module_3");
+    XCTAssertEqual(track->module_at(6).value().value.range, (time::range{4, 3}));
+    XCTAssertEqual(track->module_at(6).value().value.file_frame, 4);
     XCTAssertEqual(track->module_at(7), std::nullopt);
 }
 
@@ -182,62 +182,62 @@ using namespace yas::ae::file_track_test_utils;
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 1}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_2", {1, 2}, 1, ""};
-    file_module const module3{db::make_temporary_id(), "module_3", {4, 3}, 4, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
+    file_module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 4, ""}};
 
     track->revert_modules_and_notify({module1, module2, module3});
 
     XCTAssertEqual(track->previous_module_at(-1), std::nullopt);
     XCTAssertEqual(track->previous_module_at(0), std::nullopt);
-    XCTAssertEqual(track->previous_module_at(1).value().name, "module_1");
-    XCTAssertEqual(track->previous_module_at(1).value().range, (time::range{0, 1}));
-    XCTAssertEqual(track->previous_module_at(1).value().file_frame, 0);
-    XCTAssertEqual(track->previous_module_at(2).value().name, "module_1");
-    XCTAssertEqual(track->previous_module_at(2).value().range, (time::range{0, 1}));
-    XCTAssertEqual(track->previous_module_at(2).value().file_frame, 0);
-    XCTAssertEqual(track->previous_module_at(3).value().name, "module_2");
-    XCTAssertEqual(track->previous_module_at(3).value().range, (time::range{1, 2}));
-    XCTAssertEqual(track->previous_module_at(3).value().file_frame, 1);
-    XCTAssertEqual(track->previous_module_at(4).value().name, "module_2");
-    XCTAssertEqual(track->previous_module_at(4).value().range, (time::range{1, 2}));
-    XCTAssertEqual(track->previous_module_at(4).value().file_frame, 1);
-    XCTAssertEqual(track->previous_module_at(5).value().name, "module_2");
-    XCTAssertEqual(track->previous_module_at(5).value().range, (time::range{1, 2}));
-    XCTAssertEqual(track->previous_module_at(5).value().file_frame, 1);
-    XCTAssertEqual(track->previous_module_at(6).value().name, "module_2");
-    XCTAssertEqual(track->previous_module_at(6).value().range, (time::range{1, 2}));
-    XCTAssertEqual(track->previous_module_at(6).value().file_frame, 1);
-    XCTAssertEqual(track->previous_module_at(7).value().name, "module_3");
-    XCTAssertEqual(track->previous_module_at(7).value().range, (time::range{4, 3}));
-    XCTAssertEqual(track->previous_module_at(7).value().file_frame, 4);
+    XCTAssertEqual(track->previous_module_at(1).value().value.name, "module_1");
+    XCTAssertEqual(track->previous_module_at(1).value().value.range, (time::range{0, 1}));
+    XCTAssertEqual(track->previous_module_at(1).value().value.file_frame, 0);
+    XCTAssertEqual(track->previous_module_at(2).value().value.name, "module_1");
+    XCTAssertEqual(track->previous_module_at(2).value().value.range, (time::range{0, 1}));
+    XCTAssertEqual(track->previous_module_at(2).value().value.file_frame, 0);
+    XCTAssertEqual(track->previous_module_at(3).value().value.name, "module_2");
+    XCTAssertEqual(track->previous_module_at(3).value().value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->previous_module_at(3).value().value.file_frame, 1);
+    XCTAssertEqual(track->previous_module_at(4).value().value.name, "module_2");
+    XCTAssertEqual(track->previous_module_at(4).value().value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->previous_module_at(4).value().value.file_frame, 1);
+    XCTAssertEqual(track->previous_module_at(5).value().value.name, "module_2");
+    XCTAssertEqual(track->previous_module_at(5).value().value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->previous_module_at(5).value().value.file_frame, 1);
+    XCTAssertEqual(track->previous_module_at(6).value().value.name, "module_2");
+    XCTAssertEqual(track->previous_module_at(6).value().value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->previous_module_at(6).value().value.file_frame, 1);
+    XCTAssertEqual(track->previous_module_at(7).value().value.name, "module_3");
+    XCTAssertEqual(track->previous_module_at(7).value().value.range, (time::range{4, 3}));
+    XCTAssertEqual(track->previous_module_at(7).value().value.file_frame, 4);
 }
 
 - (void)test_next_module_at {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 1}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_2", {1, 2}, 1, ""};
-    file_module const module3{db::make_temporary_id(), "module_3", {4, 3}, 4, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
+    file_module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 4, ""}};
 
     track->revert_modules_and_notify({module1, module2, module3});
 
-    XCTAssertEqual(track->next_module_at(-1).value().name, "module_1");
-    XCTAssertEqual(track->next_module_at(-1).value().range, (time::range{0, 1}));
-    XCTAssertEqual(track->next_module_at(-1).value().file_frame, 0);
-    XCTAssertEqual(track->next_module_at(0).value().name, "module_2");
-    XCTAssertEqual(track->next_module_at(0).value().range, (time::range{1, 2}));
-    XCTAssertEqual(track->next_module_at(0).value().file_frame, 1);
-    XCTAssertEqual(track->next_module_at(1).value().name, "module_3");
-    XCTAssertEqual(track->next_module_at(1).value().range, (time::range{4, 3}));
-    XCTAssertEqual(track->next_module_at(1).value().file_frame, 4);
-    XCTAssertEqual(track->next_module_at(2).value().name, "module_3");
-    XCTAssertEqual(track->next_module_at(2).value().range, (time::range{4, 3}));
-    XCTAssertEqual(track->next_module_at(2).value().file_frame, 4);
-    XCTAssertEqual(track->next_module_at(3).value().name, "module_3");
-    XCTAssertEqual(track->next_module_at(3).value().range, (time::range{4, 3}));
-    XCTAssertEqual(track->next_module_at(3).value().file_frame, 4);
+    XCTAssertEqual(track->next_module_at(-1).value().value.name, "module_1");
+    XCTAssertEqual(track->next_module_at(-1).value().value.range, (time::range{0, 1}));
+    XCTAssertEqual(track->next_module_at(-1).value().value.file_frame, 0);
+    XCTAssertEqual(track->next_module_at(0).value().value.name, "module_2");
+    XCTAssertEqual(track->next_module_at(0).value().value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->next_module_at(0).value().value.file_frame, 1);
+    XCTAssertEqual(track->next_module_at(1).value().value.name, "module_3");
+    XCTAssertEqual(track->next_module_at(1).value().value.range, (time::range{4, 3}));
+    XCTAssertEqual(track->next_module_at(1).value().value.file_frame, 4);
+    XCTAssertEqual(track->next_module_at(2).value().value.name, "module_3");
+    XCTAssertEqual(track->next_module_at(2).value().value.range, (time::range{4, 3}));
+    XCTAssertEqual(track->next_module_at(2).value().value.file_frame, 4);
+    XCTAssertEqual(track->next_module_at(3).value().value.name, "module_3");
+    XCTAssertEqual(track->next_module_at(3).value().value.range, (time::range{4, 3}));
+    XCTAssertEqual(track->next_module_at(3).value().value.file_frame, 4);
     XCTAssertEqual(track->next_module_at(4), std::nullopt);
     XCTAssertEqual(track->next_module_at(5), std::nullopt);
     XCTAssertEqual(track->next_module_at(6), std::nullopt);
@@ -248,10 +248,10 @@ using namespace yas::ae::file_track_test_utils;
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "", {0, 1}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "", {1, 2}, 1, ""};
-    file_module const module3{db::make_temporary_id(), "", {3, 3}, 3, ""};
-    file_module const module4{db::make_temporary_id(), "", {7, 2}, 7, ""};
+    file_module_object const module1{db::make_temporary_id(), {"", {0, 1}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"", {1, 2}, 1, ""}};
+    file_module_object const module3{db::make_temporary_id(), {"", {3, 3}, 3, ""}};
+    file_module_object const module4{db::make_temporary_id(), {"", {7, 2}, 7, ""}};
 
     track->revert_modules_and_notify({module1, module2, module3, module4});
 
@@ -272,7 +272,7 @@ using namespace yas::ae::file_track_test_utils;
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const src_module{db::make_temporary_id(), "split_module_name", {0, 8}, 0, ""};
+    file_module_object const src_module{db::make_temporary_id(), {"split_module_name", {0, 8}, 0, ""}};
 
     track->revert_modules_and_notify({src_module});
 
@@ -287,38 +287,38 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().count(time::range{0, 1}), 1);
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).range, (time::range{0, 1}));
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).file_frame, 0);
+    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.name, "split_module_name");
+    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.range, (time::range{0, 1}));
+    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.file_frame, 0);
     XCTAssertEqual(track->modules().count(time::range{1, 7}), 1);
-    XCTAssertEqual(track->modules().at(time::range{1, 7}).name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{1, 7}).range, (time::range{1, 7}));
-    XCTAssertEqual(track->modules().at(time::range{1, 7}).file_frame, 1);
+    XCTAssertEqual(track->modules().at(time::range{1, 7}).value.name, "split_module_name");
+    XCTAssertEqual(track->modules().at(time::range{1, 7}).value.range, (time::range{1, 7}));
+    XCTAssertEqual(track->modules().at(time::range{1, 7}).value.file_frame, 1);
 
     track->split_at(3);
 
     XCTAssertEqual(track->modules().size(), 3);
     XCTAssertEqual(track->modules().count(time::range{0, 1}), 1);
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).range, (time::range{0, 1}));
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).file_frame, 0);
+    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.name, "split_module_name");
+    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.range, (time::range{0, 1}));
+    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.file_frame, 0);
     XCTAssertEqual(track->modules().count(time::range{1, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{1, 2}).name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{1, 2}).range, (time::range{1, 2}));
-    XCTAssertEqual(track->modules().at(time::range{1, 2}).file_frame, 1);
+    XCTAssertEqual(track->modules().at(time::range{1, 2}).value.name, "split_module_name");
+    XCTAssertEqual(track->modules().at(time::range{1, 2}).value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->modules().at(time::range{1, 2}).value.file_frame, 1);
     XCTAssertEqual(track->modules().count(time::range{3, 5}), 1);
-    XCTAssertEqual(track->modules().at(time::range{3, 5}).name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{3, 5}).range, (time::range{3, 5}));
-    XCTAssertEqual(track->modules().at(time::range{3, 5}).file_frame, 3);
+    XCTAssertEqual(track->modules().at(time::range{3, 5}).value.name, "split_module_name");
+    XCTAssertEqual(track->modules().at(time::range{3, 5}).value.range, (time::range{3, 5}));
+    XCTAssertEqual(track->modules().at(time::range{3, 5}).value.file_frame, 3);
 }
 
 - (void)test_erase_at {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    track->revert_modules_and_notify({{db::make_temporary_id(), "module_1", {0, 2}, 0, ""},
-                                      {db::make_temporary_id(), "module_2", {2, 2}, 2, ""},
-                                      {db::make_temporary_id(), "module_3", {4, 2}, 4, ""}});
+    track->revert_modules_and_notify({{db::make_temporary_id(), {"module_1", {0, 2}, 0, ""}},
+                                      {db::make_temporary_id(), {"module_2", {2, 2}, 2, ""}},
+                                      {db::make_temporary_id(), {"module_3", {4, 2}, 4, ""}}});
 
     XCTAssertEqual(track->modules().size(), 3);
 
@@ -326,22 +326,22 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().count(time::range{0, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).name, "module_1");
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).range, (time::range{0, 2}));
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).file_frame, 0);
+    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.name, "module_1");
+    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.range, (time::range{0, 2}));
+    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.file_frame, 0);
     XCTAssertEqual(track->modules().count(time::range{4, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{4, 2}).name, "module_3");
-    XCTAssertEqual(track->modules().at(time::range{4, 2}).range, (time::range{4, 2}));
-    XCTAssertEqual(track->modules().at(time::range{4, 2}).file_frame, 4);
+    XCTAssertEqual(track->modules().at(time::range{4, 2}).value.name, "module_3");
+    XCTAssertEqual(track->modules().at(time::range{4, 2}).value.range, (time::range{4, 2}));
+    XCTAssertEqual(track->modules().at(time::range{4, 2}).value.file_frame, 4);
 }
 
 - (void)test_erase_and_offset_at {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    track->revert_modules_and_notify({{db::make_temporary_id(), "module_1", {0, 2}, 0, ""},
-                                      {db::make_temporary_id(), "module_2", {2, 2}, 2, ""},
-                                      {db::make_temporary_id(), "module_3", {4, 2}, 4, ""}});
+    track->revert_modules_and_notify({{db::make_temporary_id(), {"module_1", {0, 2}, 0, ""}},
+                                      {db::make_temporary_id(), {"module_2", {2, 2}, 2, ""}},
+                                      {db::make_temporary_id(), {"module_3", {4, 2}, 4, ""}}});
 
     XCTAssertEqual(track->modules().size(), 3);
 
@@ -349,20 +349,20 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 2);
     XCTAssertEqual(track->modules().count(time::range{0, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).name, "module_1");
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).range, (time::range{0, 2}));
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).file_frame, 0);
+    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.name, "module_1");
+    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.range, (time::range{0, 2}));
+    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.file_frame, 0);
     XCTAssertEqual(track->modules().count(time::range{2, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{2, 2}).name, "module_3");
-    XCTAssertEqual(track->modules().at(time::range{2, 2}).range, (time::range{2, 2}));
-    XCTAssertEqual(track->modules().at(time::range{2, 2}).file_frame, 4);
+    XCTAssertEqual(track->modules().at(time::range{2, 2}).value.name, "module_3");
+    XCTAssertEqual(track->modules().at(time::range{2, 2}).value.range, (time::range{2, 2}));
+    XCTAssertEqual(track->modules().at(time::range{2, 2}).value.file_frame, 4);
 }
 
 - (void)test_drop_head_at {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const src_module{db::make_temporary_id(), "drop_head_module", {10, 4}, 100, ""};
+    file_module_object const src_module{db::make_temporary_id(), {"drop_head_module", {10, 4}, 100, ""}};
 
     track->revert_modules_and_notify({src_module});
 
@@ -378,16 +378,16 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count(time::range{11, 3}), 1);
-    XCTAssertEqual(track->modules().at(time::range{11, 3}).name, "drop_head_module");
-    XCTAssertEqual(track->modules().at(time::range{11, 3}).range, (time::range{11, 3}));
-    XCTAssertEqual(track->modules().at(time::range{11, 3}).file_frame, 101);
+    XCTAssertEqual(track->modules().at(time::range{11, 3}).value.name, "drop_head_module");
+    XCTAssertEqual(track->modules().at(time::range{11, 3}).value.range, (time::range{11, 3}));
+    XCTAssertEqual(track->modules().at(time::range{11, 3}).value.file_frame, 101);
 }
 
 - (void)test_drop_tail_at {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const src_module{db::make_temporary_id(), "drop_tail_module", {10, 4}, 100, ""};
+    file_module_object const src_module{db::make_temporary_id(), {"drop_tail_module", {10, 4}, 100, ""}};
 
     track->revert_modules_and_notify({src_module});
 
@@ -403,18 +403,18 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count(time::range{10, 3}), 1);
-    XCTAssertEqual(track->modules().at(time::range{10, 3}).name, "drop_tail_module");
-    XCTAssertEqual(track->modules().at(time::range{10, 3}).range, (time::range{10, 3}));
-    XCTAssertEqual(track->modules().at(time::range{10, 3}).file_frame, 100);
+    XCTAssertEqual(track->modules().at(time::range{10, 3}).value.name, "drop_tail_module");
+    XCTAssertEqual(track->modules().at(time::range{10, 3}).value.range, (time::range{10, 3}));
+    XCTAssertEqual(track->modules().at(time::range{10, 3}).value.file_frame, 100);
 }
 
 - (void)test_drop_head_and_offset_at {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 1}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_2", {1, 2}, 1, ""};
-    file_module const module3{db::make_temporary_id(), "module_3", {4, 3}, 4, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
+    file_module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 4, ""}};
 
     track->revert_modules_and_notify({module1, module2, module3});
 
@@ -422,24 +422,24 @@ using namespace yas::ae::file_track_test_utils;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(time::range{0, 1}).name, "module_1");
-    XCTAssertEqual(modules.at(time::range{0, 1}).range, (time::range{0, 1}));
-    XCTAssertEqual(modules.at(time::range{0, 1}).file_frame, 0);
-    XCTAssertEqual(modules.at(time::range{1, 1}).name, "module_2");
-    XCTAssertEqual(modules.at(time::range{1, 1}).range, (time::range{1, 1}));
-    XCTAssertEqual(modules.at(time::range{1, 1}).file_frame, 2);
-    XCTAssertEqual(modules.at(time::range{3, 3}).name, "module_3");
-    XCTAssertEqual(modules.at(time::range{3, 3}).range, (time::range{3, 3}));
-    XCTAssertEqual(modules.at(time::range{3, 3}).file_frame, 4);
+    XCTAssertEqual(modules.at(time::range{0, 1}).value.name, "module_1");
+    XCTAssertEqual(modules.at(time::range{0, 1}).value.range, (time::range{0, 1}));
+    XCTAssertEqual(modules.at(time::range{0, 1}).value.file_frame, 0);
+    XCTAssertEqual(modules.at(time::range{1, 1}).value.name, "module_2");
+    XCTAssertEqual(modules.at(time::range{1, 1}).value.range, (time::range{1, 1}));
+    XCTAssertEqual(modules.at(time::range{1, 1}).value.file_frame, 2);
+    XCTAssertEqual(modules.at(time::range{3, 3}).value.name, "module_3");
+    XCTAssertEqual(modules.at(time::range{3, 3}).value.range, (time::range{3, 3}));
+    XCTAssertEqual(modules.at(time::range{3, 3}).value.file_frame, 4);
 }
 
 - (void)test_drop_tail_and_offset {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 1}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_2", {1, 2}, 1, ""};
-    file_module const module3{db::make_temporary_id(), "module_3", {4, 3}, 4, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
+    file_module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 4, ""}};
 
     track->revert_modules_and_notify({module1, module2, module3});
 
@@ -447,22 +447,22 @@ using namespace yas::ae::file_track_test_utils;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(time::range{0, 1}).name, "module_1");
-    XCTAssertEqual(modules.at(time::range{0, 1}).range, (time::range{0, 1}));
-    XCTAssertEqual(modules.at(time::range{0, 1}).file_frame, 0);
-    XCTAssertEqual(modules.at(time::range{1, 1}).name, "module_2");
-    XCTAssertEqual(modules.at(time::range{1, 1}).range, (time::range{1, 1}));
-    XCTAssertEqual(modules.at(time::range{1, 1}).file_frame, 1);
-    XCTAssertEqual(modules.at(time::range{3, 3}).name, "module_3");
-    XCTAssertEqual(modules.at(time::range{3, 3}).range, (time::range{3, 3}));
-    XCTAssertEqual(modules.at(time::range{3, 3}).file_frame, 4);
+    XCTAssertEqual(modules.at(time::range{0, 1}).value.name, "module_1");
+    XCTAssertEqual(modules.at(time::range{0, 1}).value.range, (time::range{0, 1}));
+    XCTAssertEqual(modules.at(time::range{0, 1}).value.file_frame, 0);
+    XCTAssertEqual(modules.at(time::range{1, 1}).value.name, "module_2");
+    XCTAssertEqual(modules.at(time::range{1, 1}).value.range, (time::range{1, 1}));
+    XCTAssertEqual(modules.at(time::range{1, 1}).value.file_frame, 1);
+    XCTAssertEqual(modules.at(time::range{3, 3}).value.name, "module_3");
+    XCTAssertEqual(modules.at(time::range{3, 3}).value.range, (time::range{3, 3}));
+    XCTAssertEqual(modules.at(time::range{3, 3}).value.file_frame, 4);
 }
 
 - (void)test_overwrite_module_middle_cropped {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "base", {10, 4}, 0, ""};
+    file_module_object const module1{db::make_temporary_id(), {"base", {10, 4}, 0, ""}};
 
     track->revert_modules_and_notify({module1});
 
@@ -470,23 +470,23 @@ using namespace yas::ae::file_track_test_utils;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(time::range{10, 1}).name, "base");
-    XCTAssertEqual(modules.at(time::range{10, 1}).range, (time::range{10, 1}));
-    XCTAssertEqual(modules.at(time::range{10, 1}).file_frame, 0);
-    XCTAssertEqual(modules.at(time::range{11, 2}).name, "overwrite");
-    XCTAssertEqual(modules.at(time::range{11, 2}).range, (time::range{11, 2}));
-    XCTAssertEqual(modules.at(time::range{11, 2}).file_frame, 100);
-    XCTAssertEqual(modules.at(time::range{13, 1}).name, "base");
-    XCTAssertEqual(modules.at(time::range{13, 1}).range, (time::range{13, 1}));
-    XCTAssertEqual(modules.at(time::range{13, 1}).file_frame, 3);
+    XCTAssertEqual(modules.at(time::range{10, 1}).value.name, "base");
+    XCTAssertEqual(modules.at(time::range{10, 1}).value.range, (time::range{10, 1}));
+    XCTAssertEqual(modules.at(time::range{10, 1}).value.file_frame, 0);
+    XCTAssertEqual(modules.at(time::range{11, 2}).value.name, "overwrite");
+    XCTAssertEqual(modules.at(time::range{11, 2}).value.range, (time::range{11, 2}));
+    XCTAssertEqual(modules.at(time::range{11, 2}).value.file_frame, 100);
+    XCTAssertEqual(modules.at(time::range{13, 1}).value.name, "base");
+    XCTAssertEqual(modules.at(time::range{13, 1}).value.range, (time::range{13, 1}));
+    XCTAssertEqual(modules.at(time::range{13, 1}).value.file_frame, 3);
 }
 
 - (void)test_overwrite_module_edge_cropped {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "base_1", {100, 3}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "base_2", {103, 3}, 3, ""};
+    file_module_object const module1{db::make_temporary_id(), {"base_1", {100, 3}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"base_2", {103, 3}, 3, ""}};
 
     track->revert_modules_and_notify({module1, module2});
 
@@ -494,22 +494,22 @@ using namespace yas::ae::file_track_test_utils;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(time::range{100, 2}).name, "base_1");
-    XCTAssertEqual(modules.at(time::range{100, 2}).range, (time::range{100, 2}));
-    XCTAssertEqual(modules.at(time::range{100, 2}).file_frame, 0);
-    XCTAssertEqual(modules.at(time::range{102, 2}).name, "overwrite");
-    XCTAssertEqual(modules.at(time::range{102, 2}).range, (time::range{102, 2}));
-    XCTAssertEqual(modules.at(time::range{102, 2}).file_frame, 200);
-    XCTAssertEqual(modules.at(time::range{104, 2}).name, "base_2");
-    XCTAssertEqual(modules.at(time::range{104, 2}).range, (time::range{104, 2}));
-    XCTAssertEqual(modules.at(time::range{104, 2}).file_frame, 4);
+    XCTAssertEqual(modules.at(time::range{100, 2}).value.name, "base_1");
+    XCTAssertEqual(modules.at(time::range{100, 2}).value.range, (time::range{100, 2}));
+    XCTAssertEqual(modules.at(time::range{100, 2}).value.file_frame, 0);
+    XCTAssertEqual(modules.at(time::range{102, 2}).value.name, "overwrite");
+    XCTAssertEqual(modules.at(time::range{102, 2}).value.range, (time::range{102, 2}));
+    XCTAssertEqual(modules.at(time::range{102, 2}).value.file_frame, 200);
+    XCTAssertEqual(modules.at(time::range{104, 2}).value.name, "base_2");
+    XCTAssertEqual(modules.at(time::range{104, 2}).value.range, (time::range{104, 2}));
+    XCTAssertEqual(modules.at(time::range{104, 2}).value.file_frame, 4);
 }
 
 - (void)test_move_one_module {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "move_module", {0, 1}, 0, ""};
+    file_module_object const module1{db::make_temporary_id(), {"move_module", {0, 1}, 0, ""}};
 
     track->revert_modules_and_notify({module1});
 
@@ -517,26 +517,26 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count({1, 1}), 1);
-    XCTAssertEqual(track->modules().at({1, 1}).name, "move_module");
-    XCTAssertEqual(track->modules().at({1, 1}).range, (time::range{1, 1}));
-    XCTAssertEqual(track->modules().at({1, 1}).file_frame, 0);
+    XCTAssertEqual(track->modules().at({1, 1}).value.name, "move_module");
+    XCTAssertEqual(track->modules().at({1, 1}).value.range, (time::range{1, 1}));
+    XCTAssertEqual(track->modules().at({1, 1}).value.file_frame, 0);
 
     track->move_modules({{1, 1}}, -2);
 
     XCTAssertEqual(track->modules().size(), 1);
     XCTAssertEqual(track->modules().count({-1, 1}), 1);
-    XCTAssertEqual(track->modules().at({-1, 1}).name, "move_module");
-    XCTAssertEqual(track->modules().at({-1, 1}).range, (time::range{-1, 1}));
-    XCTAssertEqual(track->modules().at({-1, 1}).file_frame, 0);
+    XCTAssertEqual(track->modules().at({-1, 1}).value.name, "move_module");
+    XCTAssertEqual(track->modules().at({-1, 1}).value.range, (time::range{-1, 1}));
+    XCTAssertEqual(track->modules().at({-1, 1}).value.file_frame, 0);
 }
 
 - (void)test_move_many_modules {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 1}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_2", {1, 1}, 1, ""};
-    file_module const module3{db::make_temporary_id(), "module_3", {2, 1}, 2, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {1, 1}, 1, ""}};
+    file_module_object const module3{db::make_temporary_id(), {"module_3", {2, 1}, 2, ""}};
 
     track->revert_modules_and_notify({module1, module2, module3});
 
@@ -544,25 +544,25 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 3);
     XCTAssertEqual(track->modules().count({0, 1}), 1);
-    XCTAssertEqual(track->modules().at({0, 1}).name, "module_1");
-    XCTAssertEqual(track->modules().at({0, 1}).range, (time::range{0, 1}));
-    XCTAssertEqual(track->modules().at({0, 1}).file_frame, 0);
+    XCTAssertEqual(track->modules().at({0, 1}).value.name, "module_1");
+    XCTAssertEqual(track->modules().at({0, 1}).value.range, (time::range{0, 1}));
+    XCTAssertEqual(track->modules().at({0, 1}).value.file_frame, 0);
     XCTAssertEqual(track->modules().count({2, 1}), 1);
-    XCTAssertEqual(track->modules().at({2, 1}).name, "module_2");
-    XCTAssertEqual(track->modules().at({2, 1}).range, (time::range{2, 1}));
-    XCTAssertEqual(track->modules().at({2, 1}).file_frame, 1);
+    XCTAssertEqual(track->modules().at({2, 1}).value.name, "module_2");
+    XCTAssertEqual(track->modules().at({2, 1}).value.range, (time::range{2, 1}));
+    XCTAssertEqual(track->modules().at({2, 1}).value.file_frame, 1);
     XCTAssertEqual(track->modules().count({3, 1}), 1);
-    XCTAssertEqual(track->modules().at({3, 1}).name, "module_3");
-    XCTAssertEqual(track->modules().at({3, 1}).range, (time::range{3, 1}));
-    XCTAssertEqual(track->modules().at({3, 1}).file_frame, 2);
+    XCTAssertEqual(track->modules().at({3, 1}).value.name, "module_3");
+    XCTAssertEqual(track->modules().at({3, 1}).value.range, (time::range{3, 1}));
+    XCTAssertEqual(track->modules().at({3, 1}).value.file_frame, 2);
 }
 
 - (void)test_move_cropped {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
-    file_module const module1{db::make_temporary_id(), "module_1", {0, 4}, 0, ""};
-    file_module const module2{db::make_temporary_id(), "module_2", {4, 2}, 4, ""};
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 4}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {4, 2}, 4, ""}};
 
     track->revert_modules_and_notify({module1, module2});
 
@@ -574,15 +574,15 @@ using namespace yas::ae::file_track_test_utils;
     XCTAssertEqual(track->modules().count({0, 1}), 1);
     XCTAssertEqual(track->modules().count({1, 2}), 1);
     XCTAssertEqual(track->modules().count({3, 1}), 1);
-    XCTAssertEqual(track->modules().at({0, 1}).name, "module_1");
-    XCTAssertEqual(track->modules().at({0, 1}).range, (time::range{0, 1}));
-    XCTAssertEqual(track->modules().at({0, 1}).file_frame, 0);
-    XCTAssertEqual(track->modules().at({1, 2}).name, "module_2");
-    XCTAssertEqual(track->modules().at({1, 2}).range, (time::range{1, 2}));
-    XCTAssertEqual(track->modules().at({1, 2}).file_frame, 4);
-    XCTAssertEqual(track->modules().at({3, 1}).name, "module_1");
-    XCTAssertEqual(track->modules().at({3, 1}).range, (time::range{3, 1}));
-    XCTAssertEqual(track->modules().at({3, 1}).file_frame, 3);
+    XCTAssertEqual(track->modules().at({0, 1}).value.name, "module_1");
+    XCTAssertEqual(track->modules().at({0, 1}).value.range, (time::range{0, 1}));
+    XCTAssertEqual(track->modules().at({0, 1}).value.file_frame, 0);
+    XCTAssertEqual(track->modules().at({1, 2}).value.name, "module_2");
+    XCTAssertEqual(track->modules().at({1, 2}).value.range, (time::range{1, 2}));
+    XCTAssertEqual(track->modules().at({1, 2}).value.file_frame, 4);
+    XCTAssertEqual(track->modules().at({3, 1}).value.name, "module_1");
+    XCTAssertEqual(track->modules().at({3, 1}).value.range, (time::range{3, 1}));
+    XCTAssertEqual(track->modules().at({3, 1}).value.file_frame, 3);
 }
 
 @end

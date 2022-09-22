@@ -88,10 +88,10 @@ void track_editor::drop_head_and_offset() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    auto const seek_frame = this->_file_track->module_at(current_frame).value().range.frame;
+    auto const seek_frame = this->_file_track->module_at(current_frame).value().value.range.frame;
 
     this->_database->suspend_saving([this, &current_frame] {
-        auto const module_range = this->_file_track->module_at(current_frame)->range;
+        auto const module_range = this->_file_track->module_at(current_frame)->value.range;
         this->_file_track->drop_head_and_offset_at(current_frame);
         auto const dropping_length = current_frame - module_range.frame;
         this->_marker_pool->erase_range({module_range.frame, static_cast<proc::length_t>(dropping_length)});
@@ -109,7 +109,7 @@ void track_editor::drop_tail_and_offset() {
 
     this->_database->suspend_saving([this] {
         auto const current_frame = this->_player->current_frame();
-        auto const module_range = this->_file_track->module_at(current_frame)->range;
+        auto const module_range = this->_file_track->module_at(current_frame)->value.range;
         this->_file_track->drop_tail_and_offset_at(current_frame);
         auto const dropping_length = module_range.next_frame() - current_frame;
         this->_marker_pool->erase_range({current_frame, static_cast<proc::length_t>(dropping_length)});
@@ -148,7 +148,7 @@ void track_editor::erase_and_offset() {
 
     this->_database->suspend_saving([this] {
         auto const current_frame = this->_player->current_frame();
-        auto const erasing_range = this->_file_track->module_at(current_frame)->range;
+        auto const erasing_range = this->_file_track->module_at(current_frame)->value.range;
         this->_file_track->erase_and_offset_at(current_frame);
         this->_marker_pool->erase_range(erasing_range);
         auto const offset = -static_cast<frame_index_t>(erasing_range.length);
@@ -156,7 +156,7 @@ void track_editor::erase_and_offset() {
     });
 
     if (auto const &module = previous_module) {
-        this->_player->seek(module->range.next_frame());
+        this->_player->seek(module->value.range.next_frame());
     }
 }
 
@@ -209,7 +209,7 @@ void track_editor::copy() {
         auto const &file_track = this->_file_track;
         auto const current_frame = this->_player->current_frame();
         if (auto const file_module = file_track->module_at(current_frame)) {
-            auto const &value = file_module.value();
+            auto const &value = file_module.value().value;
             this->_pasteboard->set_file_module(
                 {value.name, value.file_frame, value.range.offset(-current_frame), value.file_name});
         }

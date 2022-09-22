@@ -50,7 +50,7 @@ bool database::is_processing() const {
     return this->_processing_count > 0;
 }
 
-db_module database::add_module(file_module::params const &args) {
+db_module database::add_module(file_module const &args) {
     auto module = db_module::create(this->_manager, args);
     this->_modules.emplace(args.range, module);
     this->_save();
@@ -291,7 +291,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                     for (auto const &object : objects) {
                         db_module module{object};
                         if (auto const file_module = module.file_module()) {
-                            modules.emplace(file_module.value().range, std::move(module));
+                            modules.emplace(file_module.value().value.range, std::move(module));
                         }
                     }
                 }

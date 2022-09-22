@@ -31,7 +31,7 @@ timeline_updater::timeline_updater(file_track *file_track, timeline_holder *time
                     this->_timeline_holder->insert(file_module);
                 } break;
                 case file_track_event_type::erased: {
-                    auto const &range = event.module.value().range;
+                    auto const &range = event.module.value().value.range;
                     this->_timeline_holder->erase(range);
                 } break;
                 case file_track_event_type::detail_updated:

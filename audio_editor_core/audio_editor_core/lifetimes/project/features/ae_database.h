@@ -36,7 +36,7 @@ struct database final : std::enable_shared_from_this<database>,
     [[nodiscard]] std::optional<db_edge> const &edge() const;
     [[nodiscard]] bool is_processing() const;
 
-    [[nodiscard]] db_module add_module(file_module::params const &) override;
+    [[nodiscard]] db_module add_module(file_module const &) override;
     void remove_module(time::range const &) override;
     void update_module(time::range const &, file_module const &) override;
     void update_module_detail(file_module const &);

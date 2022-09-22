@@ -57,14 +57,14 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
                 case file_track_event_type::inserted: {
                     auto const &module = event.module.value();
                     auto const space_range = this->_space_range();
-                    if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
+                    if (space_range.has_value() && module.value.range.is_overlap(space_range.value())) {
                         location_pool->insert({module, sample_rate, space_range.value(), display_space->scale().width});
                     }
                 } break;
                 case file_track_event_type::detail_updated: {
                     auto const &module = event.module.value();
                     auto const space_range = this->_space_range();
-                    if (space_range.has_value() && module.range.is_overlap(space_range.value())) {
+                    if (space_range.has_value() && module.value.range.is_overlap(space_range.value())) {
                         location_pool->replace(
                             {module, sample_rate, space_range.value(), display_space->scale().width});
                     }
@@ -100,7 +100,7 @@ observing::syncable modules_presenter::observe_locations(
 std::string const &modules_presenter::name_for_range(time::range const &range) {
     if (auto const file_track = this->_file_track.lock()) {
         if (file_track->modules().contains(range)) {
-            return file_track->modules().at(range).name;
+            return file_track->modules().at(range).value.name;
         }
     }
 

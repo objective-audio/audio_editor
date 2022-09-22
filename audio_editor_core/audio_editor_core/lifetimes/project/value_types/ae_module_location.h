@@ -8,7 +8,7 @@
 #include <cpp_utils/yas_identifier.h>
 
 namespace yas::ae {
-class file_module;
+class file_module_object;
 
 struct module_location final {
     struct mesh_element final {
@@ -21,7 +21,8 @@ struct module_location final {
         bool operator!=(mesh_element const &rhs) const;
     };
 
-    module_location(file_module const &, uint32_t const sample_rate, time::range const &space_range, float const scale);
+    module_location(file_module_object const &, uint32_t const sample_rate, time::range const &space_range,
+                    float const scale);
     module_location(object_id const &, time::range const &, uint32_t const sample_rate,
                     std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale);
 

@@ -152,7 +152,7 @@ std::optional<frame_index_t> jumper::_next_jumpable_frame() const {
 
 std::optional<frame_index_t> jumper::_first_edge() const {
     if (auto const module = this->_file_track->first_module()) {
-        return module.value().range.frame;
+        return module.value().value.range.frame;
     } else {
         return std::nullopt;
     }
@@ -160,7 +160,7 @@ std::optional<frame_index_t> jumper::_first_edge() const {
 
 std::optional<frame_index_t> jumper::_last_edge() const {
     if (auto const module = this->_file_track->last_module()) {
-        return module.value().range.next_frame();
+        return module.value().value.range.next_frame();
     } else {
         return std::nullopt;
     }

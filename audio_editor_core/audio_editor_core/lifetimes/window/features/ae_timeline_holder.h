@@ -19,7 +19,7 @@ struct timeline_holder final {
     [[nodiscard]] proc::timeline_ptr const &timeline() const;
 
     void replace(file_track_module_map_t const &);
-    void insert(file_module const &);
+    void insert(file_module_object const &);
     void erase(time::range const &);
 
    private:
