@@ -7,13 +7,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-marker::marker(object_id const &identifier, params &&params) : marker(identifier, params.frame, params.name) {
+marker_object::marker_object(object_id const &identifier, params &&params)
+    : marker_object(identifier, params.frame, params.name) {
 }
 
-marker::marker(object_id const &identifier, frame_index_t const frame, std::string const &name)
+marker_object::marker_object(object_id const &identifier, frame_index_t const frame, std::string const &name)
     : identifier(identifier), frame(frame), name(name) {
 }
 
-marker::params marker::parameters() const {
+marker_object::params marker_object::parameters() const {
     return {this->frame, this->name};
 }

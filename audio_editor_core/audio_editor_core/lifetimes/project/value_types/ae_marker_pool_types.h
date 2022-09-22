@@ -9,7 +9,7 @@
 #include <map>
 
 namespace yas::ae {
-using marker_map_t = std::map<frame_index_t, ae::marker>;
+using marker_map_t = std::map<frame_index_t, ae::marker_object>;
 
 static marker_map_t const empty_markers;
 
@@ -23,8 +23,8 @@ enum class marker_pool_event_type {
 
 struct marker_pool_event final {
     marker_pool_event_type type;
-    std::optional<ae::marker> inserted{std::nullopt};
-    std::optional<ae::marker> erased{std::nullopt};
+    std::optional<ae::marker_object> inserted{std::nullopt};
+    std::optional<ae::marker_object> erased{std::nullopt};
     marker_map_t const &markers;
 };
 }  // namespace yas::ae

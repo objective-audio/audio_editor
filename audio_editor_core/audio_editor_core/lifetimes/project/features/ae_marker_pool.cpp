@@ -17,10 +17,10 @@ std::shared_ptr<marker_pool> marker_pool::make_shared(database_for_marker_pool *
 }
 
 marker_pool::marker_pool(database_for_marker_pool *database)
-    : _database(database), _markers(observing::map::holder<frame_index_t, marker>::make_shared()) {
+    : _database(database), _markers(observing::map::holder<frame_index_t, marker_object>::make_shared()) {
 }
 
-void marker_pool::revert_markers(std::vector<marker> &&markers) {
+void marker_pool::revert_markers(std::vector<marker_object> &&markers) {
     this->_markers->replace(to_map<frame_index_t>(std::move(markers), [](auto const &marker) { return marker.frame; }));
 }
 
@@ -36,7 +36,7 @@ void marker_pool::insert_marker(frame_index_t const frame, std::string const &na
     }
 }
 
-void marker_pool::update_marker(frame_index_t const frame, marker const &new_marker) {
+void marker_pool::update_marker(frame_index_t const frame, marker_object const &new_marker) {
     if (this->_markers->contains(frame)) {
         this->_database->update_marker(frame, new_marker);
         if (frame != new_marker.frame) {
@@ -57,7 +57,7 @@ void marker_pool::erase_at(frame_index_t const frame) {
     }
 }
 
-void marker_pool::erase_marker(marker const &marker) {
+void marker_pool::erase_marker(marker_object const &marker) {
     this->erase_at(marker.frame);
 }
 
@@ -93,7 +93,7 @@ marker_map_t const &marker_pool::markers() const {
     return this->_markers->elements();
 }
 
-std::optional<marker> marker_pool::marker_at(std::size_t const idx) const {
+std::optional<marker_object> marker_pool::marker_at(std::size_t const idx) const {
     auto const &markers = this->markers();
     if (markers.size() <= idx) {
         return std::nullopt;
@@ -108,14 +108,14 @@ std::optional<marker> marker_pool::marker_at(std::size_t const idx) const {
     return iterator->second;
 }
 
-std::optional<marker> marker_pool::marker_for_frame(frame_index_t const frame) const {
+std::optional<marker_object> marker_pool::marker_for_frame(frame_index_t const frame) const {
     if (this->_markers->elements().contains(frame)) {
         return this->_markers->elements().at(frame);
     }
     return std::nullopt;
 }
 
-std::optional<marker> marker_pool::marker_for_id(object_id const &identifier) const {
+std::optional<marker_object> marker_pool::marker_for_id(object_id const &identifier) const {
     for (auto const &pair : this->markers()) {
         if (pair.second.identifier == identifier) {
             return pair.second;

@@ -29,13 +29,13 @@ struct db_remove_called {
 
 struct db_update_called {
     frame_index_t frame;
-    marker marker;
+    marker_object marker;
 };
 
 struct database_mock final : database_for_marker_pool {
     std::function<void(frame_index_t const, std::string const &)> add_handler = [](auto const, auto const &) {};
     std::function<void(frame_index_t const)> remove_handler = [](auto const) {};
-    std::function<void(frame_index_t const, marker const &)> update_handler = [](auto const, auto const &) {};
+    std::function<void(frame_index_t const, marker_object const &)> update_handler = [](auto const, auto const &) {};
 
     db_marker add_marker(frame_index_t const frame, std::string const &name) override {
         this->add_handler(frame, name);
@@ -51,7 +51,7 @@ struct database_mock final : database_for_marker_pool {
         this->remove_handler(frame);
     }
 
-    void update_marker(frame_index_t const &prev_frame, marker const &marker) override {
+    void update_marker(frame_index_t const &prev_frame, marker_object const &marker) override {
         this->update_handler(prev_frame, marker);
     }
 };

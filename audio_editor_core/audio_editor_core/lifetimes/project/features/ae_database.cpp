@@ -101,7 +101,7 @@ void database::remove_marker(frame_index_t const &frame) {
     }
 }
 
-void database::update_marker(frame_index_t const &prev_frame, marker const &marker) {
+void database::update_marker(frame_index_t const &prev_frame, marker_object const &marker) {
     if (this->_markers.contains(prev_frame)) {
         auto &db_marker = this->_markers.at(prev_frame);
         db_marker.set_marker(marker);
