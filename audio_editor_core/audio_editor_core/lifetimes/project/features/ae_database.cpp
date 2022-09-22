@@ -121,12 +121,12 @@ void database::set_edge(ae::edge const &edge) {
     this->_save();
 }
 
-std::optional<db_file_ref> database::add_file_ref(file_ref_object::params const &params) {
-    if (!this->_file_refs.contains(params.file_name)) {
-        auto file_ref = db_file_ref::create(this->_manager, params);
-        this->_file_refs.emplace(params.file_name, file_ref);
+std::optional<db_file_ref> database::add_file_ref(file_ref_object::params const &file_ref) {
+    if (!this->_file_refs.contains(file_ref.file_name)) {
+        auto db_file_ref = db_file_ref::create(this->_manager, file_ref);
+        this->_file_refs.emplace(file_ref.file_name, db_file_ref);
         this->_save();
-        return file_ref;
+        return db_file_ref;
     } else {
         // 同じファイルを追加した場合は新規で作らずにスルーする
         return std::nullopt;

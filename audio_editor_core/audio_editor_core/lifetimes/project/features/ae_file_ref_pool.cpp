@@ -21,11 +21,11 @@ void file_ref_pool::revert(std::vector<file_ref_object> &&refs) {
         to_map<std::string>(std::move(refs), [](file_ref_object const &ref) { return ref.file_name; }));
 }
 
-void file_ref_pool::insert(file_ref_object::params const &params) {
-    if (!this->_refs->contains(params.file_name)) {
-        if (auto const db_ref = this->_database->add_file_ref(params); db_ref.has_value()) {
-            if (auto const file_ref = db_ref.value().file_ref(); file_ref.has_value()) {
-                this->_refs->insert_or_replace(params.file_name, file_ref.value());
+void file_ref_pool::insert(file_ref_object::params const &file_ref) {
+    if (!this->_refs->contains(file_ref.file_name)) {
+        if (auto const db_ref = this->_database->add_file_ref(file_ref); db_ref.has_value()) {
+            if (auto const object = db_ref.value().file_ref(); object.has_value()) {
+                this->_refs->insert_or_replace(file_ref.file_name, object.value());
             }
         }
     }
