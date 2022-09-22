@@ -27,8 +27,8 @@ std::optional<marker_object> db_marker::marker() const {
     auto const &name_value = this->_object->attribute_value(marker_name::attribute::name);
 
     if (frame_value && name_value) {
-        return ae::marker_object{this->_object->object_id(), frame_value.get<db::integer>(),
-                                 name_value.get<db::text>()};
+        return ae::marker_object{this->_object->object_id(),
+                                 {frame_value.get<db::integer>(), name_value.get<db::text>()}};
     }
 
     return std::nullopt;
@@ -39,8 +39,8 @@ void db_marker::set_marker(ae::marker_object const &marker) {
         return;
     }
 
-    this->_object->set_attribute_value(marker_name::attribute::frame, db::value{marker.frame});
-    this->_object->set_attribute_value(marker_name::attribute::name, db::value{marker.name});
+    this->_object->set_attribute_value(marker_name::attribute::frame, db::value{marker.value.frame});
+    this->_object->set_attribute_value(marker_name::attribute::name, db::value{marker.value.name});
 }
 
 void db_marker::remove() {

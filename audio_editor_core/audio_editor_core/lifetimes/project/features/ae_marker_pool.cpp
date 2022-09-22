@@ -21,7 +21,8 @@ marker_pool::marker_pool(database_for_marker_pool *database)
 }
 
 void marker_pool::revert_markers(std::vector<marker_object> &&markers) {
-    this->_markers->replace(to_map<frame_index_t>(std::move(markers), [](auto const &marker) { return marker.frame; }));
+    this->_markers->replace(
+        to_map<frame_index_t>(std::move(markers), [](auto const &marker) { return marker.value.frame; }));
 }
 
 void marker_pool::insert_marker(frame_index_t const frame, std::string const &name) {
@@ -39,10 +40,10 @@ void marker_pool::insert_marker(frame_index_t const frame, std::string const &na
 void marker_pool::update_marker(frame_index_t const frame, marker_object const &new_marker) {
     if (this->_markers->contains(frame)) {
         this->_database->update_marker(frame, new_marker);
-        if (frame != new_marker.frame) {
+        if (frame != new_marker.value.frame) {
             this->_markers->erase(frame);
         }
-        this->_markers->insert_or_replace(new_marker.frame, new_marker);
+        this->_markers->insert_or_replace(new_marker.value.frame, new_marker);
     } else {
         assertion_failure_if_not_test();
     }
@@ -55,10 +56,6 @@ void marker_pool::erase_at(frame_index_t const frame) {
     } else {
         assertion_failure_if_not_test();
     }
-}
-
-void marker_pool::erase_marker(marker_object const &marker) {
-    this->erase_at(marker.frame);
 }
 
 void marker_pool::erase_range(time::range const range) {
@@ -74,7 +71,7 @@ void marker_pool::erase_range(time::range const range) {
 void marker_pool::move_at(frame_index_t const frame, frame_index_t const new_frame) {
     if (this->_markers->contains(frame)) {
         auto marker = this->_markers->at(frame);
-        marker.frame = new_frame;
+        marker.value.frame = new_frame;
         this->update_marker(frame, marker);
     } else {
         assertion_failure_if_not_test();

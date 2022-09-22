@@ -14,10 +14,8 @@ struct marker {
 
 struct marker_object final {
     object_id identifier;
-    frame_index_t frame;
-    std::string name;
+    marker value;
 
     marker_object(object_id const &, marker &&);
-    marker_object(object_id const &, frame_index_t const frame, std::string const &name);
 };
 }  // namespace yas::ae

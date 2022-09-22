@@ -89,7 +89,7 @@ void jumper::return_to_zero() {
 bool jumper::can_go_to_marker(std::size_t const marker_idx) const {
     auto const &marker_pool = this->_marker_pool;
     if (auto const marker = marker_pool->marker_at(marker_idx)) {
-        return this->_player->current_frame() != marker->frame;
+        return this->_player->current_frame() != marker->value.frame;
     } else {
         return false;
     }
@@ -102,7 +102,7 @@ void jumper::go_to_marker(std::size_t const marker_idx) {
 
     auto const &marker_pool = this->_marker_pool;
     if (auto const marker = marker_pool->marker_at(marker_idx)) {
-        this->_player->seek(marker->frame);
+        this->_player->seek(marker->value.frame);
     }
 }
 

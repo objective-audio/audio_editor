@@ -21,7 +21,6 @@ struct marker_pool final : jumpable_on_jumper {
     void insert_marker(frame_index_t const, std::string const &name = "");
     void update_marker(frame_index_t const, marker_object const &);
     void erase_at(frame_index_t const);
-    void erase_marker(marker_object const &);
     void erase_range(time::range const);
 
     void move_at(frame_index_t const frame, frame_index_t const new_frame);

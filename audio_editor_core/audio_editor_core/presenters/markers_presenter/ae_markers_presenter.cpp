@@ -52,20 +52,20 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                 case marker_pool_event_type::inserted: {
                     auto const &marker = event.inserted.value();
                     if (auto const space_range = this->_space_range();
-                        space_range.has_value() && space_range.value().is_contain(marker.frame)) {
+                        space_range.has_value() && space_range.value().is_contain(marker.value.frame)) {
                         this->_location_pool->insert(
-                            {marker.identifier, marker.frame, sample_rate, display_space->scale().width});
+                            {marker.identifier, marker.value.frame, sample_rate, display_space->scale().width});
                     }
                 } break;
                 case marker_pool_event_type::replaced: {
                     auto const &inserted = event.inserted.value();
                     auto const &erased = event.erased.value();
 
-                    if (inserted.frame != erased.frame) {
+                    if (inserted.value.frame != erased.value.frame) {
                         if (auto const space_range = this->_space_range();
-                            space_range.has_value() && space_range.value().is_contain(inserted.frame)) {
+                            space_range.has_value() && space_range.value().is_contain(inserted.value.frame)) {
                             this->_location_pool->insert_or_replace(
-                                {inserted.identifier, inserted.frame, sample_rate, display_space->scale().width});
+                                {inserted.identifier, inserted.value.frame, sample_rate, display_space->scale().width});
                         } else {
                             this->_location_pool->erase_for_id(erased.identifier);
                         }
@@ -138,9 +138,9 @@ void markers_presenter::_update_all_locations(update_type const type) {
         auto const locations = filter_map<marker_location>(
             marker_pool->markers(),
             [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale](auto const &pair) {
-                if (space_range_value.is_contain(pair.second.frame)) {
-                    return std::make_optional<marker_location>(pair.second.identifier, pair.second.frame, sample_rate,
-                                                               scale.width);
+                if (space_range_value.is_contain(pair.second.value.frame)) {
+                    return std::make_optional<marker_location>(pair.second.identifier, pair.second.value.frame,
+                                                               sample_rate, scale.width);
                 } else {
                     return std::optional<marker_location>(std::nullopt);
                 }
