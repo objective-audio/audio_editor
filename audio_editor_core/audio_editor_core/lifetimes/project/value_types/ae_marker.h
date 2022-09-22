@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_common_types.h>
 
 namespace yas::ae {
-struct marker {
+struct marker final {
     frame_index_t frame;
     std::string name;
 };
