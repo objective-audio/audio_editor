@@ -19,7 +19,5 @@ struct marker_object final {
 
     marker_object(object_id const &, marker &&);
     marker_object(object_id const &, frame_index_t const frame, std::string const &name);
-
-    [[nodiscard]] marker parameters() const;
 };
 }  // namespace yas::ae
