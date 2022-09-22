@@ -12,6 +12,6 @@ class db_file_ref;
 struct database_for_file_ref_pool {
     virtual ~database_for_file_ref_pool() = default;
 
-    [[nodiscard]] virtual std::optional<db_file_ref> add_file_ref(file_ref_object::params const &) = 0;
+    [[nodiscard]] virtual std::optional<db_file_ref> add_file_ref(file_ref const &) = 0;
 };
 }  // namespace yas::ae

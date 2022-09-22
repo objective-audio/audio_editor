@@ -15,7 +15,7 @@ using namespace yas::ae::db_constants;
 db_file_ref::db_file_ref(db::object_ptr const &object) : _object(object) {
 }
 
-db_file_ref db_file_ref::create(db::manager_ptr const &manager, ae::file_ref_object::params const &file_ref) {
+db_file_ref db_file_ref::create(db::manager_ptr const &manager, ae::file_ref const &file_ref) {
     auto object = manager->create_object(file_ref_name::entity);
     object->set_attribute_value(file_ref_name::attribute::file_name, db::value{file_ref.file_name});
     return db_file_ref{std::move(object)};

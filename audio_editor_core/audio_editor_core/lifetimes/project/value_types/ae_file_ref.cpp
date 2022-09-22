@@ -7,7 +7,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-file_ref_object::file_ref_object(object_id const &identifier, params &&params)
+file_ref_object::file_ref_object(object_id const &identifier, file_ref &&params)
     : file_ref_object(identifier, params.file_name) {
 }
 

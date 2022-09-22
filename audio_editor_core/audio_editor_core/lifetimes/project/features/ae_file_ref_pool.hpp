@@ -13,7 +13,7 @@ struct file_ref_pool final {
     file_ref_pool(database_for_file_ref_pool *);
 
     void revert(std::vector<file_ref_object> &&);
-    void insert(file_ref_object::params const &);
+    void insert(file_ref const &);
 
     [[nodiscard]] std::optional<file_ref_object> ref(std::string const &) const;
 
