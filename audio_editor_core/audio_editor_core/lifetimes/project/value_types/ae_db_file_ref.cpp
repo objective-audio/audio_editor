@@ -21,12 +21,11 @@ db_file_ref db_file_ref::create(db::manager_ptr const &manager, ae::file_ref con
     return db_file_ref{std::move(object)};
 }
 
-std::optional<file_ref_object> db_file_ref::file_ref() const {
+std::optional<file_ref_object> db_file_ref::object() const {
     auto const &file_name_value = this->_object->attribute_value(file_ref_name::attribute::file_name);
 
     if (file_name_value) {
-        auto const file_name = file_name_value.get<db::text>();
-        return ae::file_ref_object{this->_object->object_id(), {file_name}};
+        return ae::file_ref_object{this->_object->object_id(), {file_name_value.get<db::text>()}};
     }
 
     return std::nullopt;

@@ -22,7 +22,7 @@ db_marker db_marker::create(db::manager_ptr const &manager, frame_index_t const 
     return db_marker{object};
 }
 
-std::optional<marker_object> db_marker::marker() const {
+std::optional<marker_object> db_marker::object() const {
     auto const &frame_value = this->_object->attribute_value(marker_name::attribute::frame);
     auto const &name_value = this->_object->attribute_value(marker_name::attribute::name);
 
@@ -34,7 +34,7 @@ std::optional<marker_object> db_marker::marker() const {
     return std::nullopt;
 }
 
-void db_marker::set_marker(ae::marker_object const &marker) {
+void db_marker::set_object(ae::marker_object const &marker) {
     if (marker.identifier != this->_object->object_id()) {
         return;
     }

@@ -27,7 +27,7 @@ void marker_pool::revert_markers(std::vector<marker_object> &&markers) {
 
 void marker_pool::insert_marker(frame_index_t const frame, std::string const &name) {
     if (!this->_markers->contains(frame)) {
-        if (auto marker = this->_database->add_marker(frame, name).marker(); marker.has_value()) {
+        if (auto marker = this->_database->add_marker(frame, name).object(); marker.has_value()) {
             this->_markers->insert_or_replace(frame, marker.value());
         } else {
             assertion_failure_if_not_test();

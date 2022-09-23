@@ -24,7 +24,7 @@ void file_ref_pool::revert(std::vector<file_ref_object> &&refs) {
 void file_ref_pool::insert(file_ref const &file_ref) {
     if (!this->_refs->contains(file_ref.file_name)) {
         if (auto const db_ref = this->_database->add_file_ref(file_ref); db_ref.has_value()) {
-            if (auto const object = db_ref.value().file_ref(); object.has_value()) {
+            if (auto const object = db_ref.value().object(); object.has_value()) {
                 this->_refs->insert_or_replace(file_ref.file_name, object.value());
             }
         }

@@ -24,7 +24,7 @@ db_module db_module::create(db::manager_ptr const &manager, ae::file_module cons
     return db_module{std::move(object)};
 }
 
-std::optional<file_module_object> db_module::file_module() const {
+std::optional<file_module_object> db_module::object() const {
     auto const &name_value = this->_object->attribute_value(module_name::attribute::name);
     auto const &file_frame_value = this->_object->attribute_value(module_name::attribute::file_frame);
     auto const &range_frame_value = this->_object->attribute_value(module_name::attribute::range_frame);

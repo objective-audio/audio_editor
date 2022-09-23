@@ -14,7 +14,7 @@ struct db_file_ref final {
 
     [[nodiscard]] static db_file_ref create(db::manager_ptr const &, file_ref const &);
 
-    [[nodiscard]] std::optional<file_ref_object> file_ref() const;
+    [[nodiscard]] std::optional<file_ref_object> object() const;
 
     void remove();
 

@@ -36,20 +36,20 @@ void timeline_holder::replace(file_track_module_map_t const &modules) {
     auto const ch_count = this->_project_format.channel_count;
 
     for (auto const &pair : modules) {
-        auto const &file_module = pair.second;
+        auto const &file_module = pair.second.value;
         this->_track->push_back_module(timeline_holder_utils::make_module(file_module, this->_project_path, ch_count),
-                                       file_module.value.range);
+                                       file_module.range);
     }
 
     this->_timeline->insert_track(0, this->_track);
 }
 
-void timeline_holder::insert(file_module_object const &file_module) {
+void timeline_holder::insert(file_module const &file_module) {
     if (auto const &track = this->_track) {
         auto const ch_count = this->_project_format.channel_count;
 
         track->push_back_module(timeline_holder_utils::make_module(file_module, this->_project_path, ch_count),
-                                file_module.value.range);
+                                file_module.range);
     } else {
         assert(0);
     }
