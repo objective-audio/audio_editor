@@ -76,16 +76,6 @@ void database::update_module(time::range const &range, file_module const &file_m
     }
 }
 
-void database::update_module_detail(file_module const &file_module) {
-    auto const &range = file_module.range;
-
-    if (this->_modules.contains(range)) {
-        auto &db_module = this->_modules.at(range);
-        db_module.set_name(file_module.name);
-        this->_save();
-    }
-}
-
 db_marker database::add_marker(frame_index_t const frame, std::string const &name) {
     auto marker = db_marker::create(this->_manager, frame, name);
     this->_markers.emplace(frame, marker);
