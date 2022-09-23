@@ -322,7 +322,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                     auto const &objects = result_objects.at(db_constants::file_ref_name::entity);
                     for (auto const &object : objects) {
                         db_file_ref const db_ref{object};
-                        if (auto const ref = db_ref.file_ref()) {
+                        if (auto const ref = db_ref.object()) {
                             file_refs.emplace(ref.value().value.file_name, std::move(db_ref));
                         }
                     }
