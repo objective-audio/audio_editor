@@ -12,9 +12,9 @@ namespace yas::ae {
 struct db_file_ref final {
     explicit db_file_ref(db::object_ptr const &);
 
-    [[nodiscard]] static db_file_ref create(db::manager_ptr const &, file_ref::params const &);
+    [[nodiscard]] static db_file_ref create(db::manager_ptr const &, file_ref const &);
 
-    [[nodiscard]] std::optional<file_ref> file_ref() const;
+    [[nodiscard]] std::optional<file_ref_object> file_ref() const;
 
     void remove();
 

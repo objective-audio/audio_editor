@@ -10,16 +10,13 @@
 
 namespace yas::ae {
 struct file_ref final {
-    struct params {
-        std::string file_name;
-    };
-
-    object_id identifier;
     std::string file_name;
+};
 
-    file_ref(object_id const &, params &&);
-    file_ref(object_id const &, std::string const &file_name);
+struct file_ref_object final {
+    object_id identifier;
+    file_ref value;
 
-    [[nodiscard]] params parameters() const;
+    file_ref_object(object_id const &, file_ref &&);
 };
 }  // namespace yas::ae
