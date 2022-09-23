@@ -55,7 +55,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                     std::vector<marker_object> markers;
 
                     for (auto const &pair : this->_database->markers()) {
-                        if (auto const marker = pair.second.marker()) {
+                        if (auto const marker = pair.second.object()) {
                             markers.emplace_back(std::move(marker.value()));
                         }
                     }
