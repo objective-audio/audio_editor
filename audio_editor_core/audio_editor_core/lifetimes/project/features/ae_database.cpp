@@ -290,8 +290,8 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                     auto const &objects = result_objects.at(db_constants::module_name::entity);
                     for (auto const &object : objects) {
                         db_module module{object};
-                        if (auto const file_module = module.file_module()) {
-                            modules.emplace(file_module.value().value.range, std::move(module));
+                        if (auto const file_module_object = module.object()) {
+                            modules.emplace(file_module_object.value().value.range, std::move(module));
                         }
                     }
                 }

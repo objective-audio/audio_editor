@@ -32,12 +32,12 @@ void file_track::revert_modules_and_notify(std::vector<file_module_object> &&mod
 std::optional<object_id> file_track::insert_module_and_notify(file_module const &params) {
     auto db_module = this->_database->add_module(params);
 
-    if (auto const file_module = db_module.file_module(); file_module.has_value()) {
-        auto const &file_module_value = file_module.value();
-        this->_modules.emplace(file_module_value.value.range, file_module_value);
+    if (auto const object = db_module.object(); object.has_value()) {
+        auto const &file_module = object.value();
+        this->_modules.emplace(file_module.value.range, file_module);
         this->_event_fetcher->push(
-            {.type = file_track_event_type::inserted, .module = file_module_value, .modules = this->_modules});
-        return file_module->identifier;
+            {.type = file_track_event_type::inserted, .module = file_module, .modules = this->_modules});
+        return object->identifier;
     }
 
     return std::nullopt;

@@ -45,8 +45,8 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                     std::vector<file_module_object> file_modules;
 
                     for (auto const &pair : this->_database->modules()) {
-                        if (auto file_module = pair.second.file_module()) {
-                            file_modules.emplace_back(std::move(file_module.value()));
+                        if (auto object = pair.second.object()) {
+                            file_modules.emplace_back(std::move(object.value()));
                         }
                     }
 
