@@ -60,26 +60,6 @@ bool pasting_file_module::operator!=(pasting_file_module const &rhs) const {
     return !(*this == rhs);
 }
 
-std::string yas::to_json_string(std::optional<ae::pasting_value> const &value) {
-    if (value.has_value()) {
-        auto const &pasting_value = value.value();
-
-        if (std::holds_alternative<ae::pasting_file_module>(pasting_value)) {
-            return to_json_string(std::get<ae::pasting_file_module>(pasting_value).json());
-        }
-    }
-
-    return "";
-}
-
-std::optional<ae::pasting_value> yas::to_pasting_value(std::string const &json_string) {
-    if (auto file_module = pasting_file_module::make(to_json_value(json_string))) {
-        return file_module;
-    } else {
-        return std::nullopt;
-    }
-}
-
 std::string yas::to_string(ae::pasting_file_module const &module) {
     return "{name:" + module.name + ", file_frame:" + std::to_string(module.file_frame) +
            ", range:" + to_string(module.range) + ", file_name:" + module.file_name + "}";
