@@ -210,8 +210,8 @@ void track_editor::copy() {
         auto const current_frame = this->_player->current_frame();
         if (auto const file_module = file_track->module_at(current_frame)) {
             auto const &value = file_module.value().value;
-            this->_pasteboard->set_file_module(
-                {value.name, value.file_frame, value.range.offset(-current_frame), value.file_name});
+            this->_pasteboard->set_file_modules(
+                {{value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}});
         }
     });
 }
@@ -221,7 +221,7 @@ bool track_editor::can_paste() const {
         return false;
     }
 
-    if (!this->_pasteboard->file_module().has_value()) {
+    if (this->_pasteboard->file_modules().empty()) {
         return false;
     }
 
@@ -233,15 +233,19 @@ void track_editor::paste() {
         return;
     }
 
-    if (auto const module = this->_pasteboard->file_module()) {
-        this->_pasteboard->clear();
-
-        this->_database->suspend_saving([this, &module] {
-            auto const module_value = module.value();
-            auto const current_frame = this->_player->current_frame();
-
-            this->_file_track->overwrite_module({module_value.name, module_value.range.offset(current_frame),
-                                                 module_value.file_frame, module_value.file_name});
-        });
+    auto const &modules = this->_pasteboard->file_modules();
+    if (modules.empty()) {
+        return;
     }
+
+    this->_database->suspend_saving([this, &modules] {
+        auto const current_frame = this->_player->current_frame();
+
+        for (auto const &module : modules) {
+            this->_file_track->overwrite_module(
+                {module.name, module.range.offset(current_frame), module.file_frame, module.file_name});
+        }
+    });
+
+    this->_pasteboard->clear();
 }

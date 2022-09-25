@@ -38,7 +38,7 @@ struct pasting_file_module final {
     bool operator!=(pasting_file_module const &) const;
 };
 
-using pasting_value = std::variant<pasting_file_module>;
+using pasting_value = std::variant<std::vector<pasting_file_module>>;
 }  // namespace yas::ae
 
 namespace yas {
