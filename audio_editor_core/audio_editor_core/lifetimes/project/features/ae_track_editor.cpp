@@ -205,15 +205,13 @@ void track_editor::copy() {
         return;
     }
 
-    this->_database->suspend_saving([this] {
-        auto const &file_track = this->_file_track;
-        auto const current_frame = this->_player->current_frame();
-        if (auto const file_module = file_track->module_at(current_frame)) {
-            auto const &value = file_module.value().value;
-            this->_pasteboard->set_file_modules(
-                {{value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}});
-        }
-    });
+    auto const &file_track = this->_file_track;
+    auto const current_frame = this->_player->current_frame();
+    if (auto const file_module = file_track->module_at(current_frame)) {
+        auto const &value = file_module.value().value;
+        this->_pasteboard->set_file_modules(
+            {{value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}});
+    }
 }
 
 bool track_editor::can_paste() const {
