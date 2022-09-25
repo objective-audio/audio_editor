@@ -38,13 +38,10 @@ struct pasting_file_module final {
     bool operator!=(pasting_file_module const &) const;
 };
 
-using pasting_value = std::variant<pasting_file_module>;
+using pasting_value = std::variant<std::vector<pasting_file_module>>;
 }  // namespace yas::ae
 
 namespace yas {
-std::string to_json_string(std::optional<ae::pasting_value> const &);
-std::optional<ae::pasting_value> to_pasting_value(std::string const &json_string);
-
 std::string to_string(ae::pasting_file_module const &);
 }  // namespace yas
 
