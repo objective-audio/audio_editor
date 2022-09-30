@@ -27,6 +27,8 @@ struct file_module_object final {
     file_module value;
 
     file_module_object(object_id const &, file_module &&);
+
+    [[nodiscard]] file_module_index index() const;
 };
 }  // namespace yas::ae
 

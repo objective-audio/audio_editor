@@ -44,6 +44,10 @@ file_module file_module::offset(frame_index_t const offset) const {
     return file_module{this->name, this->range.offset(offset), this->file_frame, this->file_name};
 }
 
+file_module_index file_module_object::index() const {
+    return {this->identifier, this->value.range};
+}
+
 std::string yas::to_string(ae::file_module const &file_module) {
     return std::string{"{file_frame:" + std::to_string(file_module.file_frame) +
                        ", range:" + to_string(file_module.range) + ", name:" + file_module.name +
