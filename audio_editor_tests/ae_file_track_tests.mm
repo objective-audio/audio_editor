@@ -24,10 +24,10 @@ struct database_mock : database_for_file_track {
         return db_module{object};
     }
 
-    void remove_module(time::range const &) override {
+    void remove_module(object_id const &) override {
     }
 
-    void update_module(time::range const &, file_module const &) override {
+    void update_module(object_id const &, file_module const &) override {
     }
 };
 }

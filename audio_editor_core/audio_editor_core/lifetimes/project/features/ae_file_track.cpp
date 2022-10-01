@@ -49,8 +49,7 @@ void file_track::erase_module_and_notify(file_module_index const &index) {
     if (this->_modules.contains(index)) {
         auto module = this->_modules.at(index);
         this->_modules.erase(index);
-#warning todo databaseにrangeで渡すのをやめたい
-        this->_database->remove_module(index.range);
+        this->_database->remove_module(index.object_id);
         this->_event_fetcher->push(
             {.type = file_track_event_type::erased, .module = module, .modules = this->_modules});
     }
@@ -61,8 +60,7 @@ void file_track::set_module_name_and_notify(file_module_index const &index, std:
         auto &module = this->_modules.at(index);
         if (module.value.name != name) {
             module.value.name = name;
-#warning todo databaseにrangeで渡すのをやめたい
-            this->_database->update_module(index.range, module.value);
+            this->_database->update_module(index.object_id, module.value);
             this->_event_fetcher->push(
                 {.type = file_track_event_type::detail_updated, .module = module, .modules = this->_modules});
         }

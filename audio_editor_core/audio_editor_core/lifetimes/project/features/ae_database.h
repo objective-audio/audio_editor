@@ -37,8 +37,8 @@ struct database final : std::enable_shared_from_this<database>,
     [[nodiscard]] bool is_processing() const;
 
     [[nodiscard]] db_module add_module(file_module const &) override;
-    void remove_module(time::range const &) override;
-    void update_module(time::range const &, file_module const &) override;
+    void remove_module(object_id const &) override;
+    void update_module(object_id const &, file_module const &) override;
     [[nodiscard]] db_marker add_marker(frame_index_t const frame, std::string const &name) override;
     void remove_marker(frame_index_t const &) override;
     void update_marker(frame_index_t const &prev_frame, marker_object const &) override;
