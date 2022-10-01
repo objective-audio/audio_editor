@@ -4,9 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_common_types.h>
-#include <cpp_utils/yas_identifier.h>
-
+#include <audio_editor_core/ae_file_module_index.hpp>
 #include <string>
 
 namespace yas::ae {
@@ -29,6 +27,8 @@ struct file_module_object final {
     file_module value;
 
     file_module_object(object_id const &, file_module &&);
+
+    [[nodiscard]] file_module_index index() const;
 };
 }  // namespace yas::ae
 
