@@ -156,7 +156,7 @@ void ui_modules::set_locations(std::vector<std::optional<module_location>> const
             auto const &location_value = location.value();
             node->set_is_enabled(true);
             this->_update_name_position(idx, location.value());
-            strings->set_text(this->_presenter->name_for_range(location_value.range));
+            strings->set_text(this->_presenter->name_for_index(location_value.index()));
         } else {
             node->set_is_enabled(false);
             strings->set_text("");
@@ -209,7 +209,7 @@ void ui_modules::update_locations(std::size_t const count,
         auto const &node = strings->rect_plane()->node();
         node->set_is_enabled(true);
         this->_update_name_position(idx, location_value);
-        strings->set_text(this->_presenter->name_for_range(location_value.range));
+        strings->set_text(this->_presenter->name_for_index(location_value.index()));
     }
 
     for (auto const &pair : replaced) {
@@ -217,7 +217,7 @@ void ui_modules::update_locations(std::size_t const count,
         auto const &location_value = pair.second;
         auto const &strings = this->_names.at(idx);
         this->_update_name_position(idx, location_value);
-        strings->set_text(this->_presenter->name_for_range(location_value.range));
+        strings->set_text(this->_presenter->name_for_index(location_value.index()));
     }
 }
 

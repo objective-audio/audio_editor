@@ -97,10 +97,10 @@ observing::syncable modules_presenter::observe_locations(
     }
 }
 
-std::string const &modules_presenter::name_for_range(time::range const &range) {
+std::string const &modules_presenter::name_for_index(file_module_index const &index) {
     if (auto const file_track = this->_file_track.lock()) {
-        if (file_track->modules().contains(range)) {
-            return file_track->modules().at(range).value.name;
+        if (file_track->modules().contains(index)) {
+            return file_track->modules().at(index).value.name;
         }
     }
 
@@ -143,7 +143,7 @@ void modules_presenter::_update_all_locations(bool const force_updating, bool co
         auto const locations = filter_map<module_location>(
             file_track->modules(),
             [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale](auto const &module) {
-                if (module.first.is_overlap(space_range_value)) {
+                if (module.first.range.is_overlap(space_range_value)) {
                     return std::make_optional<module_location>(module.second, sample_rate, space_range_value, scale);
                 } else {
                     return std::optional<module_location>(std::nullopt);

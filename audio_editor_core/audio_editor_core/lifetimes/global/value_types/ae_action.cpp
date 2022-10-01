@@ -22,6 +22,10 @@ time::range const &action::range_value() const {
     return std::get<time::range>(this->value.value());
 }
 
+file_module_index const &action::file_module_index_value() const {
+    return std::get<file_module_index>(this->value.value());
+}
+
 ae::action_name_kind yas::to_kind(ae::action_name const &scope) {
     using kind = ae::action_name_kind;
 

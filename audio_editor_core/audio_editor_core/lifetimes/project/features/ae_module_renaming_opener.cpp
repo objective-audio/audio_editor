@@ -27,10 +27,10 @@ bool module_renaming_opener::can_begin_module_renaming() const {
     return true;
 }
 
-void module_renaming_opener::begin_module_renaming(time::range const &range) {
+void module_renaming_opener::begin_module_renaming(file_module_index const &index) {
     if (!this->can_begin_module_renaming()) {
         return;
     }
 
-    this->_lifecycle->add_module_name_sheet(range);
+    this->_lifecycle->add_module_name_sheet(index);
 }
