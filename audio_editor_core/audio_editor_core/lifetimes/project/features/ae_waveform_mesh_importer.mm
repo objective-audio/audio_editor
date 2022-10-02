@@ -34,12 +34,12 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
     this->_task_queue->cancel([&location](auto const &identifier) { return location.identifier == identifier; });
 
     auto const &modules = this->_file_track->modules();
-    if (!modules.contains(location.range)) {
+    if (!modules.contains(location.index())) {
         return;
     }
 
-    auto path = this->_project_path->editing_files_directory().append(modules.at(location.range).value.file_name);
-    auto const file_frame = modules.at(location.range).value.file_frame;
+    auto path = this->_project_path->editing_files_directory().append(modules.at(location.index()).value.file_name);
+    auto const file_frame = modules.at(location.index()).value.file_frame;
 
     auto const task = yas::task<object_id>::make_shared(
         [idx, location, path = std::move(path), file_frame,

@@ -24,10 +24,10 @@ struct database_mock : database_for_file_track {
         return db_module{object};
     }
 
-    void remove_module(time::range const &) override {
+    void remove_module(object_id const &) override {
     }
 
-    void update_module(time::range const &, file_module const &) override {
+    void update_module(object_id const &, file_module const &) override {
     }
 };
 }
@@ -48,31 +48,31 @@ using namespace yas::ae::file_track_test_utils;
 
     file_module const module_params_1{"", {0, 4}, 0, ""};
 
-    auto const module1_id = track->insert_module_and_notify(module_params_1);
+    auto const module1_index = track->insert_module_and_notify(module_params_1);
 
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().at(module_params_1.range).identifier, module1_id.value());
+    XCTAssertEqual(track->modules().at(module1_index.value()).index(), module1_index.value());
 
     file_module const module_params_2{"", {4, 3}, 4, ""};
 
-    auto const module2_id = track->insert_module_and_notify(module_params_2);
+    auto const module2_index = track->insert_module_and_notify(module_params_2);
 
     XCTAssertEqual(track->modules().size(), 2);
-    XCTAssertEqual(track->modules().at(module_params_2.range).identifier, module2_id.value());
+    XCTAssertEqual(track->modules().at(module2_index.value()).index(), module2_index.value());
 
     file_module const module_params_3{"", {-2, 2}, 7, ""};
 
-    auto const module3_id = track->insert_module_and_notify(module_params_3);
+    auto const module3_index = track->insert_module_and_notify(module_params_3);
 
     XCTAssertEqual(track->modules().size(), 3);
-    XCTAssertEqual(track->modules().at(module_params_3.range).identifier, module3_id.value());
+    XCTAssertEqual(track->modules().at(module3_index.value()).index(), module3_index.value());
 
     auto iterator = track->modules().begin();
-    XCTAssertEqual(iterator->first, module_params_3.range);
+    XCTAssertEqual(iterator->first, module3_index);
     ++iterator;
-    XCTAssertEqual(iterator->first, module_params_1.range);
+    XCTAssertEqual(iterator->first, module1_index);
     ++iterator;
-    XCTAssertEqual(iterator->first, module_params_2.range);
+    XCTAssertEqual(iterator->first, module2_index);
 }
 
 - (void)test_erase_module_and_notify {
@@ -86,10 +86,10 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 2);
 
-    track->erase_module_and_notify({0, 4});
+    track->erase_module_and_notify(module1.index());
 
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().count({5, 3}), 1);
+    XCTAssertEqual(track->modules().count(module2.index()), 1);
 }
 
 - (void)test_observe_event {
@@ -121,14 +121,14 @@ using namespace yas::ae::file_track_test_utils;
     XCTAssertEqual(called.at(0).modules.size(), 2);
     XCTAssertEqual(called.at(0).module, std::nullopt);
 
-    auto const module3_id = track->insert_module_and_notify({"module_3", {4, 3}, 4, ""});
+    auto const module3_index = track->insert_module_and_notify({"module_3", {4, 3}, 4, ""});
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, file_track_event_type::inserted);
     XCTAssertEqual(called.at(1).modules.size(), 3);
-    XCTAssertEqual(called.at(1).module.value().identifier, module3_id);
+    XCTAssertEqual(called.at(1).module.value().index(), module3_index);
 
-    track->erase_module_and_notify({0, 4});
+    track->erase_module_and_notify(module1.index());
 
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2).type, file_track_event_type::erased);
@@ -283,33 +283,52 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 1);
 
-    track->split_at(1);
+    {
+        track->split_at(1);
 
-    XCTAssertEqual(track->modules().size(), 2);
-    XCTAssertEqual(track->modules().count(time::range{0, 1}), 1);
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.range, (time::range{0, 1}));
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.file_frame, 0);
-    XCTAssertEqual(track->modules().count(time::range{1, 7}), 1);
-    XCTAssertEqual(track->modules().at(time::range{1, 7}).value.name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{1, 7}).value.range, (time::range{1, 7}));
-    XCTAssertEqual(track->modules().at(time::range{1, 7}).value.file_frame, 1);
+        XCTAssertEqual(track->modules().size(), 2);
 
-    track->split_at(3);
+        auto iterator = track->modules().begin();
 
-    XCTAssertEqual(track->modules().size(), 3);
-    XCTAssertEqual(track->modules().count(time::range{0, 1}), 1);
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.range, (time::range{0, 1}));
-    XCTAssertEqual(track->modules().at(time::range{0, 1}).value.file_frame, 0);
-    XCTAssertEqual(track->modules().count(time::range{1, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{1, 2}).value.name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{1, 2}).value.range, (time::range{1, 2}));
-    XCTAssertEqual(track->modules().at(time::range{1, 2}).value.file_frame, 1);
-    XCTAssertEqual(track->modules().count(time::range{3, 5}), 1);
-    XCTAssertEqual(track->modules().at(time::range{3, 5}).value.name, "split_module_name");
-    XCTAssertEqual(track->modules().at(time::range{3, 5}).value.range, (time::range{3, 5}));
-    XCTAssertEqual(track->modules().at(time::range{3, 5}).value.file_frame, 3);
+        XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name");
+        XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
+        XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{1, 7}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name");
+        XCTAssertEqual(iterator->second.value.range, (time::range{1, 7}));
+        XCTAssertEqual(iterator->second.value.file_frame, 1);
+    }
+
+    {
+        track->split_at(3);
+
+        XCTAssertEqual(track->modules().size(), 3);
+
+        auto iterator = track->modules().begin();
+
+        XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name");
+        XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
+        XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{1, 2}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name");
+        XCTAssertEqual(iterator->second.value.range, (time::range{1, 2}));
+        XCTAssertEqual(iterator->second.value.file_frame, 1);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{3, 5}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name");
+        XCTAssertEqual(iterator->second.value.range, (time::range{3, 5}));
+        XCTAssertEqual(iterator->second.value.file_frame, 3);
+    }
 }
 
 - (void)test_erase_at {
@@ -325,14 +344,20 @@ using namespace yas::ae::file_track_test_utils;
     track->erase_at(3);
 
     XCTAssertEqual(track->modules().size(), 2);
-    XCTAssertEqual(track->modules().count(time::range{0, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.name, "module_1");
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.range, (time::range{0, 2}));
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.file_frame, 0);
-    XCTAssertEqual(track->modules().count(time::range{4, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{4, 2}).value.name, "module_3");
-    XCTAssertEqual(track->modules().at(time::range{4, 2}).value.range, (time::range{4, 2}));
-    XCTAssertEqual(track->modules().at(time::range{4, 2}).value.file_frame, 4);
+
+    auto iterator = track->modules().begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{0, 2}));
+    XCTAssertEqual(iterator->second.value.name, "module_1");
+    XCTAssertEqual(iterator->second.value.range, (time::range{0, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{4, 2}));
+    XCTAssertEqual(iterator->second.value.name, "module_3");
+    XCTAssertEqual(iterator->second.value.range, (time::range{4, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 4);
 }
 
 - (void)test_erase_and_offset_at {
@@ -348,14 +373,20 @@ using namespace yas::ae::file_track_test_utils;
     track->erase_and_offset_at(3);
 
     XCTAssertEqual(track->modules().size(), 2);
-    XCTAssertEqual(track->modules().count(time::range{0, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.name, "module_1");
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.range, (time::range{0, 2}));
-    XCTAssertEqual(track->modules().at(time::range{0, 2}).value.file_frame, 0);
-    XCTAssertEqual(track->modules().count(time::range{2, 2}), 1);
-    XCTAssertEqual(track->modules().at(time::range{2, 2}).value.name, "module_3");
-    XCTAssertEqual(track->modules().at(time::range{2, 2}).value.range, (time::range{2, 2}));
-    XCTAssertEqual(track->modules().at(time::range{2, 2}).value.file_frame, 4);
+
+    auto iterator = track->modules().begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{0, 2}));
+    XCTAssertEqual(iterator->second.value.name, "module_1");
+    XCTAssertEqual(iterator->second.value.range, (time::range{0, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{2, 2}));
+    XCTAssertEqual(iterator->second.value.name, "module_3");
+    XCTAssertEqual(iterator->second.value.range, (time::range{2, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 4);
 }
 
 - (void)test_drop_head_at {
@@ -372,15 +403,17 @@ using namespace yas::ae::file_track_test_utils;
     track->drop_head_at(15);
 
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().count(time::range{10, 4}), 1);
+    XCTAssertEqual(track->modules().begin()->first.range, (time::range{10, 4}));
 
     track->drop_head_at(11);
 
+    auto iterator = track->modules().begin();
+
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().count(time::range{11, 3}), 1);
-    XCTAssertEqual(track->modules().at(time::range{11, 3}).value.name, "drop_head_module");
-    XCTAssertEqual(track->modules().at(time::range{11, 3}).value.range, (time::range{11, 3}));
-    XCTAssertEqual(track->modules().at(time::range{11, 3}).value.file_frame, 101);
+    XCTAssertEqual(iterator->first.range, (time::range{11, 3}));
+    XCTAssertEqual(iterator->second.value.name, "drop_head_module");
+    XCTAssertEqual(iterator->second.value.range, (time::range{11, 3}));
+    XCTAssertEqual(iterator->second.value.file_frame, 101);
 }
 
 - (void)test_drop_tail_at {
@@ -397,15 +430,17 @@ using namespace yas::ae::file_track_test_utils;
     track->drop_tail_at(15);
 
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().count(time::range{10, 4}), 1);
+    XCTAssertEqual(track->modules().begin()->first.range, (time::range{10, 4}));
 
     track->drop_tail_at(13);
 
+    auto iterator = track->modules().begin();
+
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().count(time::range{10, 3}), 1);
-    XCTAssertEqual(track->modules().at(time::range{10, 3}).value.name, "drop_tail_module");
-    XCTAssertEqual(track->modules().at(time::range{10, 3}).value.range, (time::range{10, 3}));
-    XCTAssertEqual(track->modules().at(time::range{10, 3}).value.file_frame, 100);
+    XCTAssertEqual(iterator->first.range, (time::range{10, 3}));
+    XCTAssertEqual(iterator->second.value.name, "drop_tail_module");
+    XCTAssertEqual(iterator->second.value.range, (time::range{10, 3}));
+    XCTAssertEqual(iterator->second.value.file_frame, 100);
 }
 
 - (void)test_drop_head_and_offset_at {
@@ -422,15 +457,27 @@ using namespace yas::ae::file_track_test_utils;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(time::range{0, 1}).value.name, "module_1");
-    XCTAssertEqual(modules.at(time::range{0, 1}).value.range, (time::range{0, 1}));
-    XCTAssertEqual(modules.at(time::range{0, 1}).value.file_frame, 0);
-    XCTAssertEqual(modules.at(time::range{1, 1}).value.name, "module_2");
-    XCTAssertEqual(modules.at(time::range{1, 1}).value.range, (time::range{1, 1}));
-    XCTAssertEqual(modules.at(time::range{1, 1}).value.file_frame, 2);
-    XCTAssertEqual(modules.at(time::range{3, 3}).value.name, "module_3");
-    XCTAssertEqual(modules.at(time::range{3, 3}).value.range, (time::range{3, 3}));
-    XCTAssertEqual(modules.at(time::range{3, 3}).value.file_frame, 4);
+
+    auto iterator = track->modules().begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_1");
+    XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{1, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_2");
+    XCTAssertEqual(iterator->second.value.range, (time::range{1, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 2);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{3, 3}));
+    XCTAssertEqual(iterator->second.value.name, "module_3");
+    XCTAssertEqual(iterator->second.value.range, (time::range{3, 3}));
+    XCTAssertEqual(iterator->second.value.file_frame, 4);
 }
 
 - (void)test_drop_tail_and_offset {
@@ -447,15 +494,27 @@ using namespace yas::ae::file_track_test_utils;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(time::range{0, 1}).value.name, "module_1");
-    XCTAssertEqual(modules.at(time::range{0, 1}).value.range, (time::range{0, 1}));
-    XCTAssertEqual(modules.at(time::range{0, 1}).value.file_frame, 0);
-    XCTAssertEqual(modules.at(time::range{1, 1}).value.name, "module_2");
-    XCTAssertEqual(modules.at(time::range{1, 1}).value.range, (time::range{1, 1}));
-    XCTAssertEqual(modules.at(time::range{1, 1}).value.file_frame, 1);
-    XCTAssertEqual(modules.at(time::range{3, 3}).value.name, "module_3");
-    XCTAssertEqual(modules.at(time::range{3, 3}).value.range, (time::range{3, 3}));
-    XCTAssertEqual(modules.at(time::range{3, 3}).value.file_frame, 4);
+
+    auto iterator = modules.begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_1");
+    XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{1, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_2");
+    XCTAssertEqual(iterator->second.value.range, (time::range{1, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 1);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{3, 3}));
+    XCTAssertEqual(iterator->second.value.name, "module_3");
+    XCTAssertEqual(iterator->second.value.range, (time::range{3, 3}));
+    XCTAssertEqual(iterator->second.value.file_frame, 4);
 }
 
 - (void)test_overwrite_module_middle_cropped {
@@ -470,15 +529,27 @@ using namespace yas::ae::file_track_test_utils;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(time::range{10, 1}).value.name, "base");
-    XCTAssertEqual(modules.at(time::range{10, 1}).value.range, (time::range{10, 1}));
-    XCTAssertEqual(modules.at(time::range{10, 1}).value.file_frame, 0);
-    XCTAssertEqual(modules.at(time::range{11, 2}).value.name, "overwrite");
-    XCTAssertEqual(modules.at(time::range{11, 2}).value.range, (time::range{11, 2}));
-    XCTAssertEqual(modules.at(time::range{11, 2}).value.file_frame, 100);
-    XCTAssertEqual(modules.at(time::range{13, 1}).value.name, "base");
-    XCTAssertEqual(modules.at(time::range{13, 1}).value.range, (time::range{13, 1}));
-    XCTAssertEqual(modules.at(time::range{13, 1}).value.file_frame, 3);
+
+    auto iterator = modules.begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{10, 1}));
+    XCTAssertEqual(iterator->second.value.name, "base");
+    XCTAssertEqual(iterator->second.value.range, (time::range{10, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{11, 2}));
+    XCTAssertEqual(iterator->second.value.name, "overwrite");
+    XCTAssertEqual(iterator->second.value.range, (time::range{11, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 100);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{13, 1}));
+    XCTAssertEqual(iterator->second.value.name, "base");
+    XCTAssertEqual(iterator->second.value.range, (time::range{13, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 3);
 }
 
 - (void)test_overwrite_module_edge_cropped {
@@ -494,15 +565,27 @@ using namespace yas::ae::file_track_test_utils;
 
     auto const &modules = track->modules();
     XCTAssertEqual(modules.size(), 3);
-    XCTAssertEqual(modules.at(time::range{100, 2}).value.name, "base_1");
-    XCTAssertEqual(modules.at(time::range{100, 2}).value.range, (time::range{100, 2}));
-    XCTAssertEqual(modules.at(time::range{100, 2}).value.file_frame, 0);
-    XCTAssertEqual(modules.at(time::range{102, 2}).value.name, "overwrite");
-    XCTAssertEqual(modules.at(time::range{102, 2}).value.range, (time::range{102, 2}));
-    XCTAssertEqual(modules.at(time::range{102, 2}).value.file_frame, 200);
-    XCTAssertEqual(modules.at(time::range{104, 2}).value.name, "base_2");
-    XCTAssertEqual(modules.at(time::range{104, 2}).value.range, (time::range{104, 2}));
-    XCTAssertEqual(modules.at(time::range{104, 2}).value.file_frame, 4);
+
+    auto iterator = modules.begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{100, 2}));
+    XCTAssertEqual(iterator->second.value.name, "base_1");
+    XCTAssertEqual(iterator->second.value.range, (time::range{100, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{102, 2}));
+    XCTAssertEqual(iterator->second.value.name, "overwrite");
+    XCTAssertEqual(iterator->second.value.range, (time::range{102, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 200);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{104, 2}));
+    XCTAssertEqual(iterator->second.value.name, "base_2");
+    XCTAssertEqual(iterator->second.value.range, (time::range{104, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 4);
 }
 
 - (void)test_move_one_module {
@@ -513,21 +596,31 @@ using namespace yas::ae::file_track_test_utils;
 
     track->revert_modules_and_notify({module1});
 
-    track->move_modules({{0, 1}}, 1);
+    {
+        track->move_modules({module1.index()}, 1);
 
-    XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().count({1, 1}), 1);
-    XCTAssertEqual(track->modules().at({1, 1}).value.name, "move_module");
-    XCTAssertEqual(track->modules().at({1, 1}).value.range, (time::range{1, 1}));
-    XCTAssertEqual(track->modules().at({1, 1}).value.file_frame, 0);
+        XCTAssertEqual(track->modules().size(), 1);
 
-    track->move_modules({{1, 1}}, -2);
+        auto iterator = track->modules().begin();
 
-    XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().count({-1, 1}), 1);
-    XCTAssertEqual(track->modules().at({-1, 1}).value.name, "move_module");
-    XCTAssertEqual(track->modules().at({-1, 1}).value.range, (time::range{-1, 1}));
-    XCTAssertEqual(track->modules().at({-1, 1}).value.file_frame, 0);
+        XCTAssertEqual(iterator->first.range, (time::range{1, 1}));
+        XCTAssertEqual(iterator->second.value.name, "move_module");
+        XCTAssertEqual(iterator->second.value.range, (time::range{1, 1}));
+        XCTAssertEqual(iterator->second.value.file_frame, 0);
+    }
+
+    {
+        track->move_modules({track->first_module()->index()}, -2);
+
+        XCTAssertEqual(track->modules().size(), 1);
+
+        auto iterator = track->modules().begin();
+
+        XCTAssertEqual(iterator->first.range, (time::range{-1, 1}));
+        XCTAssertEqual(iterator->second.value.name, "move_module");
+        XCTAssertEqual(iterator->second.value.range, (time::range{-1, 1}));
+        XCTAssertEqual(iterator->second.value.file_frame, 0);
+    }
 }
 
 - (void)test_move_many_modules {
@@ -540,21 +633,30 @@ using namespace yas::ae::file_track_test_utils;
 
     track->revert_modules_and_notify({module1, module2, module3});
 
-    track->move_modules({{1, 1}, {2, 1}}, 1);
+    track->move_modules({module2.index(), module3.index()}, 1);
 
     XCTAssertEqual(track->modules().size(), 3);
-    XCTAssertEqual(track->modules().count({0, 1}), 1);
-    XCTAssertEqual(track->modules().at({0, 1}).value.name, "module_1");
-    XCTAssertEqual(track->modules().at({0, 1}).value.range, (time::range{0, 1}));
-    XCTAssertEqual(track->modules().at({0, 1}).value.file_frame, 0);
-    XCTAssertEqual(track->modules().count({2, 1}), 1);
-    XCTAssertEqual(track->modules().at({2, 1}).value.name, "module_2");
-    XCTAssertEqual(track->modules().at({2, 1}).value.range, (time::range{2, 1}));
-    XCTAssertEqual(track->modules().at({2, 1}).value.file_frame, 1);
-    XCTAssertEqual(track->modules().count({3, 1}), 1);
-    XCTAssertEqual(track->modules().at({3, 1}).value.name, "module_3");
-    XCTAssertEqual(track->modules().at({3, 1}).value.range, (time::range{3, 1}));
-    XCTAssertEqual(track->modules().at({3, 1}).value.file_frame, 2);
+
+    auto iterator = track->modules().begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_1");
+    XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{2, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_2");
+    XCTAssertEqual(iterator->second.value.range, (time::range{2, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 1);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{3, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_3");
+    XCTAssertEqual(iterator->second.value.range, (time::range{3, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 2);
 }
 
 - (void)test_move_cropped {
@@ -568,21 +670,30 @@ using namespace yas::ae::file_track_test_utils;
 
     XCTAssertEqual(track->modules().size(), 2);
 
-    track->move_modules({{4, 2}}, -3);
+    track->move_modules({module2.index()}, -3);
 
     XCTAssertEqual(track->modules().size(), 3);
-    XCTAssertEqual(track->modules().count({0, 1}), 1);
-    XCTAssertEqual(track->modules().count({1, 2}), 1);
-    XCTAssertEqual(track->modules().count({3, 1}), 1);
-    XCTAssertEqual(track->modules().at({0, 1}).value.name, "module_1");
-    XCTAssertEqual(track->modules().at({0, 1}).value.range, (time::range{0, 1}));
-    XCTAssertEqual(track->modules().at({0, 1}).value.file_frame, 0);
-    XCTAssertEqual(track->modules().at({1, 2}).value.name, "module_2");
-    XCTAssertEqual(track->modules().at({1, 2}).value.range, (time::range{1, 2}));
-    XCTAssertEqual(track->modules().at({1, 2}).value.file_frame, 4);
-    XCTAssertEqual(track->modules().at({3, 1}).value.name, "module_1");
-    XCTAssertEqual(track->modules().at({3, 1}).value.range, (time::range{3, 1}));
-    XCTAssertEqual(track->modules().at({3, 1}).value.file_frame, 3);
+
+    auto iterator = track->modules().begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_1");
+    XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{1, 2}));
+    XCTAssertEqual(iterator->second.value.name, "module_2");
+    XCTAssertEqual(iterator->second.value.range, (time::range{1, 2}));
+    XCTAssertEqual(iterator->second.value.file_frame, 4);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{3, 1}));
+    XCTAssertEqual(iterator->second.value.name, "module_1");
+    XCTAssertEqual(iterator->second.value.range, (time::range{3, 1}));
+    XCTAssertEqual(iterator->second.value.file_frame, 3);
 }
 
 @end

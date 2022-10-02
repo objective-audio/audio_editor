@@ -16,6 +16,7 @@ struct db_module final {
 
     [[nodiscard]] static db_module create(db::manager_ptr const &, file_module const &);
 
+    [[nodiscard]] object_id const &object_id() const;
     [[nodiscard]] std::optional<file_module_object> object() const;
 
     void set_range(time::range const &);

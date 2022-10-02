@@ -52,26 +52,26 @@ bool database::is_processing() const {
 
 db_module database::add_module(file_module const &args) {
     auto module = db_module::create(this->_manager, args);
-    this->_modules.emplace(args.range, module);
+    this->_modules.emplace(module.object_id(), module);
     this->_save();
     return module;
 }
 
-void database::remove_module(time::range const &range) {
-    if (this->_modules.contains(range)) {
-        this->_modules.at(range).remove();
-        this->_modules.erase(range);
+void database::remove_module(object_id const &object_id) {
+    if (this->_modules.contains(object_id)) {
+        this->_modules.at(object_id).remove();
+        this->_modules.erase(object_id);
         this->_save();
     }
 }
 
-void database::update_module(time::range const &range, file_module const &file_module) {
-    if (this->_modules.contains(range)) {
-        auto &db_module = this->_modules.at(range);
+void database::update_module(object_id const &object_id, file_module const &file_module) {
+    if (this->_modules.contains(object_id)) {
+        auto &db_module = this->_modules.at(object_id);
         db_module.set_name(file_module.name);
         db_module.set_range(file_module.range);
-        this->_modules.erase(range);
-        this->_modules.emplace(file_module.range, db_module);
+        this->_modules.erase(object_id);
+        this->_modules.emplace(object_id, db_module);
         this->_save();
     }
 }
@@ -280,9 +280,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                     auto const &objects = result_objects.at(db_constants::module_name::entity);
                     for (auto const &object : objects) {
                         db_module module{object};
-                        if (auto const file_module_object = module.object()) {
-                            modules.emplace(file_module_object.value().value.range, std::move(module));
-                        }
+                        modules.emplace(object->object_id(), std::move(module));
                     }
                 }
 

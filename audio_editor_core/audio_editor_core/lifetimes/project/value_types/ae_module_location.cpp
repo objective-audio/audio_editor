@@ -75,6 +75,10 @@ module_location::module_location(object_id const &identifier, time::range const 
     : identifier(identifier), sample_rate(sample_rate), range(range), mesh_elements(mesh_elements), scale(scale) {
 }
 
+file_module_index module_location::index() const {
+    return {this->identifier, this->range};
+}
+
 float module_location::x() const {
     return static_cast<double>(this->range.frame) / static_cast<double>(this->sample_rate);
 }

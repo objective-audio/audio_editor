@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_db_module.h>
 #include <audio_editor_core/ae_file_track_utils.h>
+#include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 using namespace yas;
@@ -25,40 +26,41 @@ file_track_module_map_t const &file_track::modules() const {
 }
 
 void file_track::revert_modules_and_notify(std::vector<file_module_object> &&modules) {
-    this->_modules = to_map<time::range>(modules, [](file_module_object const &module) { return module.value.range; });
+    this->_modules =
+        to_map<file_module_index>(modules, [](file_module_object const &module) { return module.index(); });
     this->_event_fetcher->push({.type = file_track_event_type::reverted, .modules = this->_modules});
 }
 
-std::optional<object_id> file_track::insert_module_and_notify(file_module const &params) {
+std::optional<file_module_index> file_track::insert_module_and_notify(file_module const &params) {
     auto db_module = this->_database->add_module(params);
 
     if (auto const object = db_module.object(); object.has_value()) {
         auto const &file_module = object.value();
-        this->_modules.emplace(file_module.value.range, file_module);
+        this->_modules.emplace(file_module.index(), file_module);
         this->_event_fetcher->push(
             {.type = file_track_event_type::inserted, .module = file_module, .modules = this->_modules});
-        return object->identifier;
+        return object->index();
     }
 
     return std::nullopt;
 }
 
-void file_track::erase_module_and_notify(time::range const &range) {
-    if (this->_modules.contains(range)) {
-        auto module = this->_modules.at(range);
-        this->_modules.erase(range);
-        this->_database->remove_module(range);
+void file_track::erase_module_and_notify(file_module_index const &index) {
+    if (this->_modules.contains(index)) {
+        auto module = this->_modules.at(index);
+        this->_modules.erase(index);
+        this->_database->remove_module(index.object_id);
         this->_event_fetcher->push(
             {.type = file_track_event_type::erased, .module = module, .modules = this->_modules});
     }
 }
 
-void file_track::set_module_name_and_notify(time::range const &range, std::string const &name) {
-    if (this->_modules.contains(range)) {
-        auto &module = this->_modules.at(range);
+void file_track::set_module_name_and_notify(file_module_index const &index, std::string const &name) {
+    if (this->_modules.contains(index)) {
+        auto &module = this->_modules.at(index);
         if (module.value.name != name) {
             module.value.name = name;
-            this->_database->update_module(range, module.value);
+            this->_database->update_module(index.object_id, module.value);
             this->_event_fetcher->push(
                 {.type = file_track_event_type::detail_updated, .module = module, .modules = this->_modules});
         }
@@ -126,7 +128,7 @@ std::optional<frame_index_t> file_track::previous_jumpable_frame(frame_index_t c
 void file_track::split_at(frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
         auto const &module = module_opt.value().value;
-        this->erase_module_and_notify(module.range);
+        this->erase_module_and_notify(module_opt.value().index());
         this->insert_module_and_notify(module.tail_dropped(frame).value());
         this->insert_module_and_notify(module.head_dropped(frame).value());
     }
@@ -134,7 +136,7 @@ void file_track::split_at(frame_index_t const frame) {
 
 void file_track::erase_at(frame_index_t const frame) {
     if (auto const module_opt = this->module_at(frame); module_opt.has_value()) {
-        this->erase_module_and_notify(module_opt.value().value.range);
+        this->erase_module_and_notify(module_opt.value().index());
     }
 }
 
@@ -143,24 +145,22 @@ void file_track::erase_and_offset_at(frame_index_t const frame) {
         auto const &module = module_opt.value().value;
         frame_index_t const offset = -int64_t(module.range.length);
 
-        this->erase_module_and_notify(module.range);
+        this->erase_module_and_notify(module_opt.value().index());
         this->_move_modules_after(frame, offset);
     }
 }
 
 void file_track::drop_head_at(frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
-        auto const &module = module_opt.value().value;
-        this->erase_module_and_notify(module.range);
-        this->insert_module_and_notify(module.head_dropped(frame).value());
+        this->erase_module_and_notify(module_opt.value().index());
+        this->insert_module_and_notify(module_opt.value().value.head_dropped(frame).value());
     }
 }
 
 void file_track::drop_tail_at(frame_index_t const frame) {
     if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
-        auto const &module = module_opt.value().value;
-        this->erase_module_and_notify(module.range);
-        this->insert_module_and_notify(module.tail_dropped(frame).value());
+        this->erase_module_and_notify(module_opt.value().index());
+        this->insert_module_and_notify(module_opt.value().value.tail_dropped(frame).value());
     }
 }
 
@@ -169,7 +169,7 @@ void file_track::drop_head_and_offset_at(frame_index_t const frame) {
         auto const &module = module_opt.value().value;
         frame_index_t const offset = module.range.frame - frame;
 
-        this->erase_module_and_notify(module.range);
+        this->erase_module_and_notify(module_opt.value().index());
         this->insert_module_and_notify(module.head_dropped(frame).value());
         this->_move_modules_after(frame, offset);
     }
@@ -180,7 +180,7 @@ void file_track::drop_tail_and_offset_at(frame_index_t const frame) {
         auto const &module = module_opt.value().value;
         frame_index_t const offset = frame - module.range.next_frame();
 
-        this->erase_module_and_notify(module.range);
+        this->erase_module_and_notify(module_opt.value().index());
         this->insert_module_and_notify(module.tail_dropped(frame).value());
 
         this->_move_modules_after(frame, offset);
@@ -190,7 +190,7 @@ void file_track::drop_tail_and_offset_at(frame_index_t const frame) {
 void file_track::overwrite_module(file_module const &params) {
     auto const overlapped_modules = file_track_utils::overlapped_modules(this->_modules, params.range);
     for (auto const &overlapped_module : overlapped_modules) {
-        this->erase_module_and_notify(overlapped_module.value.range);
+        this->erase_module_and_notify(overlapped_module.index());
         auto const cropped_ranges = overlapped_module.value.range.cropped(params.range);
         for (auto const &cropped_range : cropped_ranges) {
             frame_index_t const file_frame_offset = cropped_range.frame - overlapped_module.value.range.frame;
@@ -203,13 +203,15 @@ void file_track::overwrite_module(file_module const &params) {
     this->insert_module_and_notify(params);
 }
 
-void file_track::move_modules(std::set<time::range> const &ranges, frame_index_t const offset) {
+void file_track::move_modules(std::set<file_module_index> const &indices, frame_index_t const offset) {
     std::vector<file_module> movings;
-    for (auto const &range : ranges) {
-        if (this->_modules.count(range) > 0) {
-            auto const &module = this->_modules.at(range);
+    for (auto const &index : indices) {
+        if (this->_modules.contains(index)) {
+            auto const &module = this->_modules.at(index);
             movings.emplace_back(module.value.offset(offset));
-            this->erase_module_and_notify(range);
+            this->erase_module_and_notify(index);
+        } else {
+            assertion_failure_if_not_test();
         }
     }
 
@@ -228,9 +230,11 @@ void file_track::split_and_insert_module_and_offset(file_module const &params) {
 void file_track::_move_modules_after(frame_index_t const frame, frame_index_t const offset) {
     auto const copied_modules = this->_modules;
     for (auto const &pair : copied_modules) {
-        if (frame <= pair.first.frame) {
+        auto const &index = pair.first;
+        if (frame <= index.range.frame) {
+#warning todo 同じidのまま移動させたい？
             auto const &moving_module = pair.second.value;
-            this->erase_module_and_notify(moving_module.range);
+            this->erase_module_and_notify(index);
             this->insert_module_and_notify(moving_module.offset(offset));
         }
     }

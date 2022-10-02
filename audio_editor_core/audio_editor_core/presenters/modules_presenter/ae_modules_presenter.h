@@ -9,6 +9,8 @@
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
+#include <audio_editor_core/ae_file_module_index.hpp>
+
 namespace yas::ae {
 class display_space;
 class player;
@@ -24,7 +26,7 @@ struct modules_presenter final {
     [[nodiscard]] std::vector<std::optional<module_location>> const &locations() const;
     [[nodiscard]] observing::syncable observe_locations(std::function<void(module_location_pool_event const &)> &&);
 
-    std::string const &name_for_range(time::range const &);
+    std::string const &name_for_index(file_module_index const &);
 
     void update_if_needed();
 

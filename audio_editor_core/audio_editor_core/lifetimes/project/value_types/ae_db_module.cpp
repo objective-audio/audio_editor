@@ -24,6 +24,10 @@ db_module db_module::create(db::manager_ptr const &manager, ae::file_module cons
     return db_module{std::move(object)};
 }
 
+object_id const &db_module::object_id() const {
+    return this->_object->object_id();
+}
+
 std::optional<file_module_object> db_module::object() const {
     auto const &name_value = this->_object->attribute_value(module_name::attribute::name);
     auto const &file_frame_value = this->_object->attribute_value(module_name::attribute::file_frame);

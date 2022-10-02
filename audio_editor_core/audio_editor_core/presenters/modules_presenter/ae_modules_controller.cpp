@@ -35,7 +35,8 @@ void modules_controller::select_module_at(std::size_t const idx) {
     if (idx < locations.size()) {
         auto const &location = locations.at(idx);
         if (location.has_value()) {
-            action_sender->send(editing_action_name::begin_module_renaming, location.value().range);
+            auto index = location.value().index();
+            action_sender->send(editing_action_name::begin_module_renaming, std::move(index));
         }
     }
 }

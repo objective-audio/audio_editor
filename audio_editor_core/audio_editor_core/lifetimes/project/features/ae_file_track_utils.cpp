@@ -14,9 +14,9 @@ std::optional<time::range> file_track_utils::total_range(file_track_module_map_t
 
     for (auto const &pair : modules) {
         if (result.has_value()) {
-            result = result->merged(pair.first);
+            result = result->merged(pair.first.range);
         } else {
-            result = pair.first;
+            result = pair.first.range;
         }
     }
 
@@ -26,7 +26,7 @@ std::optional<time::range> file_track_utils::total_range(file_track_module_map_t
 std::optional<file_module_object> file_track_utils::module(file_track_module_map_t const &modules,
                                                            frame_index_t const frame) {
     for (auto const &pair : modules) {
-        if (pair.first.is_contain(frame)) {
+        if (pair.first.range.is_contain(frame)) {
             return pair.second;
         }
     }
@@ -55,7 +55,7 @@ std::optional<file_module_object> file_track_utils::previous_module(file_track_m
 
     while (it != modules.rend()) {
         auto const &pair = *it;
-        if (pair.first.next_frame() <= frame) {
+        if (pair.first.range.next_frame() <= frame) {
             return pair.second;
         }
         ++it;
@@ -67,7 +67,7 @@ std::optional<file_module_object> file_track_utils::previous_module(file_track_m
 std::optional<file_module_object> file_track_utils::next_module(file_track_module_map_t const &modules,
                                                                 frame_index_t const frame) {
     for (auto const &pair : modules) {
-        if (frame < pair.first.frame) {
+        if (frame < pair.first.range.frame) {
             return pair.second;
         }
     }
@@ -91,7 +91,7 @@ std::vector<file_module_object> file_track_utils::overlapped_modules(file_track_
 
     std::vector<file_module_object> result;
     for (auto const &pair : modules) {
-        auto const &module_range = pair.first;
+        auto const &module_range = pair.first.range;
         if (next_frame <= module_range.frame) {
             break;
         }

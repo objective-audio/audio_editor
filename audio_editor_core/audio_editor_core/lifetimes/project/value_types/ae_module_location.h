@@ -7,6 +7,8 @@
 #include <audio_editor_core/ae_common_types.h>
 #include <cpp_utils/yas_identifier.h>
 
+#include <audio_editor_core/ae_file_module_index.hpp>
+
 namespace yas::ae {
 class file_module_object;
 
@@ -32,11 +34,13 @@ struct module_location final {
     std::vector<std::optional<mesh_element>> mesh_elements;
     float scale;
 
-    float x() const;
-    float width() const;
-    uint32_t total_rect_count() const;
+    [[nodiscard]] file_module_index index() const;
 
-    std::optional<float> element_offset_x(std::size_t const) const;
+    [[nodiscard]] float x() const;
+    [[nodiscard]] float width() const;
+    [[nodiscard]] uint32_t total_rect_count() const;
+
+    [[nodiscard]] std::optional<float> element_offset_x(std::size_t const) const;
 
     bool operator==(module_location const &rhs) const;
     bool operator!=(module_location const &rhs) const;

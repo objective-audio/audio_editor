@@ -217,7 +217,7 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_editor->paste();
                             break;
                         case editing_action_name::begin_module_renaming:
-                            this->_module_renaming_opener->begin_module_renaming(action.range_value());
+                            this->_module_renaming_opener->begin_module_renaming(action.file_module_index_value());
                             break;
                         case editing_action_name::begin_marker_renaming:
                             this->_marker_renaming_opener->begin_renaming(action.integer_value());
