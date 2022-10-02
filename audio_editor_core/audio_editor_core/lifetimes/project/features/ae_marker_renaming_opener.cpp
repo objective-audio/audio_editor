@@ -27,10 +27,10 @@ bool marker_renaming_opener::can_begin_renaming() const {
     return true;
 }
 
-void marker_renaming_opener::begin_renaming(frame_index_t const &frame) {
+void marker_renaming_opener::begin_renaming(marker_index const &index) {
     if (!this->can_begin_renaming()) {
         return;
     }
 
-    this->_lifecycle->add_marker_name_sheet(frame);
+    this->_lifecycle->add_marker_name_sheet(index);
 }

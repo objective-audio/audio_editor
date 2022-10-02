@@ -15,8 +15,10 @@ struct db_marker final {
 
     [[nodiscard]] static db_marker create(db::manager_ptr const &, frame_index_t const frame, std::string const &name);
 
-    void set_object(marker_object const &);
+    [[nodiscard]] object_id const &object_id() const;
+
     std::optional<marker_object> object() const;
+    void set_object(marker_object const &);
 
     void remove();
 

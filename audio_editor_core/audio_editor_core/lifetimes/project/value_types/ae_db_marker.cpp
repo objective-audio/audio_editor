@@ -22,6 +22,10 @@ db_marker db_marker::create(db::manager_ptr const &manager, frame_index_t const 
     return db_marker{object};
 }
 
+object_id const &db_marker::object_id() const {
+    return this->_object->object_id();
+}
+
 std::optional<marker_object> db_marker::object() const {
     auto const &frame_value = this->_object->attribute_value(marker_name::attribute::frame);
     auto const &name_value = this->_object->attribute_value(marker_name::attribute::name);

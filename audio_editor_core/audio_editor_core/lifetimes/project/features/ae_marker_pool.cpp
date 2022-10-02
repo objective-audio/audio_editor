@@ -17,42 +17,54 @@ std::shared_ptr<marker_pool> marker_pool::make_shared(database_for_marker_pool *
 }
 
 marker_pool::marker_pool(database_for_marker_pool *database)
-    : _database(database), _markers(observing::map::holder<frame_index_t, marker_object>::make_shared()) {
+    : _database(database), _markers(observing::map::holder<marker_index, marker_object>::make_shared()) {
 }
 
 void marker_pool::revert_markers(std::vector<marker_object> &&markers) {
     this->_markers->replace(
-        to_map<frame_index_t>(std::move(markers), [](auto const &marker) { return marker.value.frame; }));
+        to_map<marker_index>(std::move(markers), [](auto const &marker) { return marker.index(); }));
 }
 
-void marker_pool::insert_marker(frame_index_t const frame, std::string const &name) {
-    if (!this->_markers->contains(frame)) {
-        if (auto marker = this->_database->add_marker(frame, name).object(); marker.has_value()) {
-            this->_markers->insert_or_replace(frame, marker.value());
+std::optional<marker_index> marker_pool::insert_marker(frame_index_t const frame, std::string const &name) {
+    if (!this->marker_for_frame(frame)) {
+        if (auto const marker = this->_database->add_marker(frame, name).object(); marker.has_value()) {
+            auto index = marker.value().index();
+            this->_markers->insert_or_replace(index, marker.value());
+            return index;
         } else {
             assertion_failure_if_not_test();
         }
     } else {
         assertion_failure_if_not_test();
     }
+
+    return std::nullopt;
 }
 
-void marker_pool::update_marker(frame_index_t const frame, marker_object const &new_marker) {
-    if (this->_markers->contains(frame)) {
-        this->_database->update_marker(frame, new_marker);
-        if (frame != new_marker.value.frame) {
-            this->_markers->erase(frame);
+void marker_pool::update_marker(marker_index const index, marker_object const &new_marker) {
+    if (this->_markers->contains(index)) {
+        this->_database->update_marker(index.object_id, new_marker);
+        if (index.frame != new_marker.value.frame) {
+            this->_markers->erase(index);
         }
-        this->_markers->insert_or_replace(new_marker.value.frame, new_marker);
+        this->_markers->insert_or_replace(new_marker.index(), new_marker);
+    } else {
+        assertion_failure_if_not_test();
+    }
+}
+
+void marker_pool::erase(marker_index const &index) {
+    if (this->_markers->contains(index)) {
+        this->_markers->erase(index);
+        this->_database->remove_marker(index.object_id);
     } else {
         assertion_failure_if_not_test();
     }
 }
 
 void marker_pool::erase_at(frame_index_t const frame) {
-    if (this->_markers->contains(frame)) {
-        this->_markers->erase(frame);
-        this->_database->remove_marker(frame);
+    if (auto const marker = this->marker_for_frame(frame); marker.has_value()) {
+        this->erase(marker.value().index());
     } else {
         assertion_failure_if_not_test();
     }
@@ -60,29 +72,30 @@ void marker_pool::erase_at(frame_index_t const frame) {
 
 void marker_pool::erase_range(time::range const range) {
     auto const filtered = filter(this->_markers->elements(), [&range](auto const &pair) {
-        return range.frame <= pair.first && pair.first < range.next_frame();
+        return range.frame <= pair.second.value.frame && pair.second.value.frame < range.next_frame();
     });
 
     for (auto const &pair : filtered) {
-        this->erase_at(pair.first);
+        this->erase(pair.first);
     }
 }
 
-void marker_pool::move_at(frame_index_t const frame, frame_index_t const new_frame) {
-    if (this->_markers->contains(frame)) {
-        auto marker = this->_markers->at(frame);
-        marker.value.frame = new_frame;
-        this->update_marker(frame, marker);
+void marker_pool::move_at(marker_index const &index, frame_index_t const new_frame) {
+    if (auto const marker = this->marker_for_index(index); marker.has_value()) {
+        auto marker_value = marker.value();
+        marker_value.value.frame = new_frame;
+        this->update_marker(index, marker_value);
     } else {
         assertion_failure_if_not_test();
     }
 }
 
 void marker_pool::move_offset_from(frame_index_t const from, frame_index_t const offset) {
-    auto const filtered = filter(this->_markers->elements(), [&from](auto const &pair) { return from <= pair.first; });
+    auto const filtered =
+        filter(this->_markers->elements(), [&from](auto const &pair) { return from <= pair.first.frame; });
 
     for (auto const &pair : filtered) {
-        this->move_at(pair.first, pair.first + offset);
+        this->move_at(pair.first, pair.first.frame + offset);
     }
 }
 
@@ -105,9 +118,18 @@ std::optional<marker_object> marker_pool::marker_at(std::size_t const idx) const
     return iterator->second;
 }
 
-std::optional<marker_object> marker_pool::marker_for_frame(frame_index_t const frame) const {
-    if (this->_markers->elements().contains(frame)) {
-        return this->_markers->elements().at(frame);
+std::optional<marker_object> marker_pool::marker_for_index(marker_index const &index) const {
+    if (this->_markers->elements().contains(index)) {
+        return this->_markers->elements().at(index);
+    }
+    return std::nullopt;
+}
+
+std::optional<marker_object> marker_pool::marker_for_frame(frame_index_t const &frame) const {
+    for (auto const &pair : this->markers()) {
+        if (pair.first.frame == frame) {
+            return pair.second;
+        }
     }
     return std::nullopt;
 }
@@ -122,10 +144,12 @@ std::optional<marker_object> marker_pool::marker_for_id(object_id const &identif
 }
 
 std::optional<frame_index_t> marker_pool::next_jumpable_frame(frame_index_t const frame) const {
-    auto const &markers = this->markers();
-    auto upper_it = markers.upper_bound(frame);
-    if (upper_it != markers.end()) {
-        return upper_it->first;
+    if (auto const marker = this->marker_for_frame(frame)) {
+        auto const &markers = this->markers();
+        auto upper_it = markers.upper_bound(marker.value().index());
+        if (upper_it != markers.end()) {
+            return upper_it->first.frame;
+        }
     }
     return std::nullopt;
 }
@@ -133,8 +157,8 @@ std::optional<frame_index_t> marker_pool::next_jumpable_frame(frame_index_t cons
 std::optional<frame_index_t> marker_pool::previous_jumpable_frame(frame_index_t const frame) const {
     auto const &markers = this->markers();
     for (auto it = markers.rbegin(); it != markers.rend(); ++it) {
-        if (it->first < frame) {
-            return it->first;
+        if (it->first.frame < frame) {
+            return it->first.frame;
         }
     }
     return std::nullopt;

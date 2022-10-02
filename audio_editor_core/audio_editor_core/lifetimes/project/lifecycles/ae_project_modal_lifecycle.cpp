@@ -83,14 +83,14 @@ std::shared_ptr<module_name_sheet_lifetime> const &project_modal_lifecycle::modu
     return get<ae::module_name_sheet_lifetime>(this->_current->value());
 }
 
-void project_modal_lifecycle::add_marker_name_sheet(int64_t const frame) {
+void project_modal_lifecycle::add_marker_name_sheet(marker_index const &index) {
     if (this->_current->value().has_value()) {
         throw std::runtime_error("current is not null.");
     }
 
     this->_current->set_value(std::make_shared<ae::marker_name_sheet_lifetime>(
         project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id},
-        frame));
+        index));
 }
 
 void project_modal_lifecycle::remove_marker_name_sheet(project_sub_lifetime_id const &lifetime_id) {

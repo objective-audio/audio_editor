@@ -18,17 +18,19 @@ struct marker_pool final : jumpable_on_jumper {
     marker_pool(database_for_marker_pool *);
 
     void revert_markers(std::vector<marker_object> &&);
-    void insert_marker(frame_index_t const, std::string const &name = "");
-    void update_marker(frame_index_t const, marker_object const &);
+    std::optional<marker_index> insert_marker(frame_index_t const, std::string const &name = "");
+    void update_marker(marker_index const, marker_object const &);
+    void erase(marker_index const &);
     void erase_at(frame_index_t const);
     void erase_range(time::range const);
 
-    void move_at(frame_index_t const frame, frame_index_t const new_frame);
+    void move_at(marker_index const &, frame_index_t const new_frame);
     void move_offset_from(frame_index_t const from, frame_index_t const offset);
 
     [[nodiscard]] marker_map_t const &markers() const;
     [[nodiscard]] std::optional<marker_object> marker_at(std::size_t const) const;
-    [[nodiscard]] std::optional<marker_object> marker_for_frame(frame_index_t const) const;
+    [[nodiscard]] std::optional<marker_object> marker_for_index(marker_index const &) const;
+    [[nodiscard]] std::optional<marker_object> marker_for_frame(frame_index_t const &) const;
     [[nodiscard]] std::optional<marker_object> marker_for_id(object_id const &) const;
 
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
@@ -38,7 +40,7 @@ struct marker_pool final : jumpable_on_jumper {
 
    private:
     database_for_marker_pool *_database;
-    observing::map::holder_ptr<frame_index_t, marker_object> const _markers;
+    observing::map::holder_ptr<marker_index, marker_object> const _markers;
     observing::fetcher_ptr<marker_pool_event> _fetcher;
     observing::canceller_pool _pool;
 };
