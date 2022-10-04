@@ -40,8 +40,8 @@ struct database final : std::enable_shared_from_this<database>,
     void remove_module(object_id const &) override;
     void update_module(object_id const &, file_module const &) override;
     [[nodiscard]] db_marker add_marker(frame_index_t const frame, std::string const &name) override;
-    void remove_marker(frame_index_t const &) override;
-    void update_marker(frame_index_t const &prev_frame, marker_object const &) override;
+    void remove_marker(object_id const &) override;
+    void update_marker(object_id const &, marker_object const &) override;
     void set_edge(ae::edge const &);
     [[nodiscard]] std::optional<db_file_ref> add_file_ref(file_ref const &) override;
 

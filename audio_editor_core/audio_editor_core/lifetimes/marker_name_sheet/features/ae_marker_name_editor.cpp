@@ -11,26 +11,26 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<marker_name_editor> marker_name_editor::make_shared(project_sub_lifetime_id const &lifetime_id,
-                                                                    int64_t const marker_frame) {
+                                                                    marker_index const &index) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
-    return std::make_shared<marker_name_editor>(marker_frame, project_lifetime->marker_pool.get());
+    return std::make_shared<marker_name_editor>(index, project_lifetime->marker_pool.get());
 }
 
-marker_name_editor::marker_name_editor(int64_t const marker_frame, marker_pool *marker_pool)
-    : _marker_frame(marker_frame), _marker_pool(marker_pool) {
+marker_name_editor::marker_name_editor(marker_index const &index, marker_pool *marker_pool)
+    : _marker_index(index), _marker_pool(marker_pool) {
 }
 
 std::string marker_name_editor::name() const {
-    if (auto const marker = this->_marker_pool->marker_for_frame(this->_marker_frame)) {
+    if (auto const marker = this->_marker_pool->marker_for_index(this->_marker_index)) {
         return marker->value.name;
     }
     return "";
 }
 
 void marker_name_editor::set_name(std::string const &name) {
-    if (auto opt_marker = this->_marker_pool->marker_for_frame(this->_marker_frame)) {
+    if (auto opt_marker = this->_marker_pool->marker_for_index(this->_marker_index)) {
         auto marker = opt_marker.value();
         marker.value.name = name;
-        this->_marker_pool->update_marker(marker.value.frame, marker);
+        this->_marker_pool->update_marker(this->_marker_index, marker);
     }
 }

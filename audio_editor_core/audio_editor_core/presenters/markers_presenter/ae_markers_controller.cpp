@@ -20,12 +20,12 @@ markers_controller::markers_controller(std::shared_ptr<project_action_sender> co
     : _action_sender(action_sender) {
 }
 
-void markers_controller::select_marker_with_frame(frame_index_t const frame) {
+void markers_controller::select_marker_with_index(marker_index const &index) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
         return;
     }
 
-    action_sender->send(editing_action_name::begin_marker_renaming, frame);
+    action_sender->send(editing_action_name::begin_marker_renaming, index);
 }

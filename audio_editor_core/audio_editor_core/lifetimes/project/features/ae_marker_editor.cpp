@@ -28,8 +28,8 @@ bool marker_editor::can_insert_marker() const {
         return false;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    return this->_marker_pool->markers().count(current_frame) == 0;
+    auto const frame = this->_player->current_frame();
+    return !this->_marker_pool->marker_for_frame(frame).has_value();
 }
 
 void marker_editor::insert_marker() {

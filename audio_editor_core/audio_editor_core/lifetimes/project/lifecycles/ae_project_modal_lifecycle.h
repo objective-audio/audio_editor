@@ -27,7 +27,7 @@ struct project_modal_lifecycle final : action_receiver_providable {
     void remove_module_name_sheet(project_sub_lifetime_id const &);
     std::shared_ptr<module_name_sheet_lifetime> const &module_name_sheet_lifetime() const;
 
-    void add_marker_name_sheet(int64_t const);
+    void add_marker_name_sheet(marker_index const &);
     void remove_marker_name_sheet(project_sub_lifetime_id const &);
     std::shared_ptr<marker_name_sheet_lifetime> const &marker_name_sheet_lifetime() const;
 

@@ -9,7 +9,7 @@
 #include <map>
 
 namespace yas::ae {
-using marker_map_t = std::map<frame_index_t, ae::marker_object>;
+using marker_map_t = std::map<marker_index, ae::marker_object>;
 
 static marker_map_t const empty_markers;
 
