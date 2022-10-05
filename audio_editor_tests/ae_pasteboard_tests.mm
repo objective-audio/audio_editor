@@ -53,22 +53,27 @@ using namespace yas::ae;
 
     XCTAssertEqual(pasteboard->file_modules().size(), 0);
 
-    pasteboard->set_file_modules(
-        {{"test-name-1", 1, {2, 3}, "test-file-name-1"}, {"test-name-2", 4, {5, 6}, "test-file-name-2"}});
+    identifier const module_id_0;
+    identifier const module_id_1;
+
+    pasteboard->set_file_modules({{module_id_0, {"test-name-1", 1, {2, 3}, "test-file-name-1"}},
+                                  {module_id_1, {"test-name-2", 4, {5, 6}, "test-file-name-2"}}});
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), pasteboard_event::file_module);
 
     auto const modules = pasteboard->file_modules();
     XCTAssertEqual(modules.size(), 2);
-    XCTAssertEqual(modules.at(0).name, "test-name-1");
-    XCTAssertEqual(modules.at(0).file_frame, 1);
-    XCTAssertEqual(modules.at(0).range, time::range(2, 3));
-    XCTAssertEqual(modules.at(0).file_name, "test-file-name-1");
-    XCTAssertEqual(modules.at(1).name, "test-name-2");
-    XCTAssertEqual(modules.at(1).file_frame, 4);
-    XCTAssertEqual(modules.at(1).range, time::range(5, 6));
-    XCTAssertEqual(modules.at(1).file_name, "test-file-name-2");
+    XCTAssertEqual(modules.at(0).identifier, module_id_0);
+    XCTAssertEqual(modules.at(0).value.name, "test-name-1");
+    XCTAssertEqual(modules.at(0).value.file_frame, 1);
+    XCTAssertEqual(modules.at(0).value.range, time::range(2, 3));
+    XCTAssertEqual(modules.at(0).value.file_name, "test-file-name-1");
+    XCTAssertEqual(modules.at(1).identifier, module_id_1);
+    XCTAssertEqual(modules.at(1).value.name, "test-name-2");
+    XCTAssertEqual(modules.at(1).value.file_frame, 4);
+    XCTAssertEqual(modules.at(1).value.range, time::range(5, 6));
+    XCTAssertEqual(modules.at(1).value.file_name, "test-file-name-2");
 }
 
 @end
