@@ -78,6 +78,10 @@ ui::color color::waveform() const {
     return to_color(@"waveform");
 }
 
+ui::color color::pasting_module_frame() const {
+    return to_color(@"pasting_module_frame");
+}
+
 ui::color color::edge_line() const {
     return to_color(@"edge_line");
 }
