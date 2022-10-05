@@ -3,7 +3,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#include <audio_editor_core/ae_pasteboard_types.h>
+#include <audio_editor_core/ae_pasting_file_module.hpp>
 #include <sstream>
 
 using namespace yas;
@@ -14,28 +14,6 @@ using namespace yas::ae;
 @end
 
 @implementation ae_pasting_file_module_tests
-
-- (void)test_data {
-    pasting_file_module const module{"test-name-1", -1, {2, 3}, "test-file-name-1"};
-
-    XCTAssertEqual(to_json_string(module.json()),
-                   "{\"frame\":2,\"kind\":\"file_module\",\"length\":3,\"file_name\":\"test-file-name-1\","
-                   "\"name\":\"test-name-1\",\"file_frame\":-1}");
-}
-
-- (void)test_make {
-    auto const module = pasting_file_module::make(
-        to_json_value("{\"file_frame\":-10,\"file_name\":\"test-file-name-2\",\"kind\":\"file_"
-                      "module\",\"frame\":20,\"length\":30,\"name\":\"test-name-2\"}"));
-
-    XCTAssertTrue(module.has_value());
-    XCTAssertEqual(module.value().name, "test-name-2");
-    XCTAssertEqual(module.value().file_frame, -10);
-    XCTAssertEqual(module.value().range, time::range(20, 30));
-    XCTAssertEqual(module.value().file_name, "test-file-name-2");
-
-    XCTAssertFalse(pasting_file_module::make(to_json_value("")).has_value());
-}
 
 - (void)test_to_string {
     pasting_file_module const module{"test-name-3", 100, {200, 300}, "test-file-name-3"};
