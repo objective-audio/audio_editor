@@ -210,7 +210,7 @@ void track_editor::copy() {
     if (auto const file_module = file_track->module_at(current_frame)) {
         auto const &value = file_module.value().value;
         this->_pasteboard->set_file_modules(
-            {{value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}});
+            {{identifier{}, {value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}}});
     }
 }
 
@@ -240,8 +240,9 @@ void track_editor::paste() {
         auto const current_frame = this->_player->current_frame();
 
         for (auto const &module : modules) {
-            this->_file_track->overwrite_module(
-                {module.name, module.range.offset(current_frame), module.file_frame, module.file_name});
+            auto const &module_value = module.value;
+            this->_file_track->overwrite_module({module_value.name, module_value.range.offset(current_frame),
+                                                 module_value.file_frame, module_value.file_name});
         }
     });
 
