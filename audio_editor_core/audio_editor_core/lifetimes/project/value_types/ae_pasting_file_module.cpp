@@ -16,6 +16,10 @@ pasting_file_module_object::pasting_file_module_object(yas::identifier const &id
     : identifier(identifier), value(std::move(value)) {
 }
 
+pasting_file_module_index pasting_file_module_object::index() const {
+    return {this->identifier, this->value.range};
+}
+
 std::string yas::to_string(ae::pasting_file_module const &module) {
     return "{name:" + module.name + ", file_frame:" + std::to_string(module.file_frame) +
            ", range:" + to_string(module.range) + ", file_name:" + module.file_name + "}";

@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_marker_location_pool.h>
 #include <audio_editor_core/ae_module_location_pool.h>
+#include <audio_editor_core/ae_pasting_module_location_pool.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
@@ -64,6 +65,7 @@ struct project_lifetime final {
     project_format const project_format;
 
     std::shared_ptr<module_location_pool> const module_location_pool;
+    std::shared_ptr<pasting_module_location_pool> const pasting_module_location_pool;
     std::shared_ptr<marker_location_pool> const marker_location_pool;
     std::shared_ptr<ae::project_action_sender> const action_sender;
     std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;

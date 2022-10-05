@@ -60,7 +60,7 @@ using namespace yas::ae;
                                   {module_id_1, {"test-name-2", 4, {5, 6}, "test-file-name-2"}}});
 
     XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1), pasteboard_event::file_module);
+    XCTAssertEqual(called.at(1), pasteboard_event::file_modules);
 
     auto const modules = pasteboard->file_modules();
     XCTAssertEqual(modules.size(), 2);

@@ -14,7 +14,7 @@ enum class pasting_kind {
 
 enum class pasteboard_event {
     fetched,
-    file_module,
+    file_modules,
     cleared,
 };
 

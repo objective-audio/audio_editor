@@ -63,6 +63,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
     : window_lifetime_id(window_lifetime->lifetime_id),
       project_format(window_lifetime->project_format),
       module_location_pool(module_location_pool::make_shared()),
+      pasting_module_location_pool(pasting_module_location_pool::make_shared()),
       marker_location_pool(marker_location_pool::make_shared()),
       action_sender(ae::project_action_sender::make_shared(window_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(ae::pinch_gesture_controller::make_shared(window_lifetime->zooming_pair.get())),
