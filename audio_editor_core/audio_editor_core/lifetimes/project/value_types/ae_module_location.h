@@ -13,6 +13,7 @@ namespace yas::ae {
 class file_module_object;
 
 struct module_location final {
+    /// location内に波形を表示するmeshスライスの位置情報
     struct mesh_element final {
         static uint32_t const max_length = 512;
 
