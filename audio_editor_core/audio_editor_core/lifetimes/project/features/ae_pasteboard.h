@@ -13,8 +13,8 @@ struct pasteboard final {
 
     pasteboard();
 
-    [[nodiscard]] std::vector<pasting_file_module> const &file_modules() const;
-    void set_file_modules(std::vector<pasting_file_module> const &);
+    [[nodiscard]] std::vector<pasting_file_module_object> const &file_modules() const;
+    void set_file_modules(std::vector<pasting_file_module_object> const &);
 
     [[nodiscard]] std::optional<pasting_value> const &value() const;
 

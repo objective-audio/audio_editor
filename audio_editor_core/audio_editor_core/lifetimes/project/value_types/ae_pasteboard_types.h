@@ -18,5 +18,5 @@ enum class pasteboard_event {
     cleared,
 };
 
-using pasting_value = std::variant<std::vector<pasting_file_module>>;
+using pasting_value = std::variant<std::vector<pasting_file_module_object>>;
 }  // namespace yas::ae
