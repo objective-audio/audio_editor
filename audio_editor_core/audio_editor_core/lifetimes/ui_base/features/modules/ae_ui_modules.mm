@@ -64,10 +64,10 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
             switch (event.type) {
                 case module_location_pool_event_type::fetched:
                 case module_location_pool_event_type::replaced:
-                    this->set_locations(event.elements);
+                    this->_set_locations(event.elements);
                     break;
                 case module_location_pool_event_type::updated:
-                    this->update_locations(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    this->_update_locations(event.elements.size(), event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -115,7 +115,7 @@ void ui_modules::set_scale(ui::size const &scale) {
     this->_update_all_name_positions();
 }
 
-void ui_modules::set_locations(std::vector<std::optional<module_location>> const &locations) {
+void ui_modules::_set_locations(std::vector<std::optional<module_location>> const &locations) {
     this->_set_rect_count(locations.size());
 
     this->_vertex_data->write(
@@ -164,10 +164,10 @@ void ui_modules::set_locations(std::vector<std::optional<module_location>> const
     }
 }
 
-void ui_modules::update_locations(std::size_t const count,
-                                  std::vector<std::pair<std::size_t, module_location>> const &inserted,
-                                  std::vector<std::pair<std::size_t, module_location>> const &replaced,
-                                  std::vector<std::pair<std::size_t, module_location>> const &erased) {
+void ui_modules::_update_locations(std::size_t const count,
+                                   std::vector<std::pair<std::size_t, module_location>> const &inserted,
+                                   std::vector<std::pair<std::size_t, module_location>> const &replaced,
+                                   std::vector<std::pair<std::size_t, module_location>> const &erased) {
     this->_set_rect_count(count);
 
     this->_vertex_data->write(

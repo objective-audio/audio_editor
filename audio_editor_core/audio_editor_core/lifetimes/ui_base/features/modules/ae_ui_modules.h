@@ -27,10 +27,6 @@ struct ui_modules final {
                std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ui_module_waveforms> const &);
 
     void set_scale(ui::size const &);
-    void set_locations(std::vector<std::optional<module_location>> const &);
-    void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, module_location>> const &inserted,
-                          std::vector<std::pair<std::size_t, module_location>> const &replaced,
-                          std::vector<std::pair<std::size_t, module_location>> const &erased);
 
    private:
     std::shared_ptr<modules_presenter> const _presenter;
@@ -55,8 +51,14 @@ struct ui_modules final {
 
     observing::canceller_pool _pool;
 
-    void _remake_data_if_needed(std::size_t const);
-    void _set_rect_count(std::size_t const);
+    void _set_locations(std::vector<std::optional<module_location>> const &);
+    void _update_locations(std::size_t const count,
+                           std::vector<std::pair<std::size_t, module_location>> const &inserted,
+                           std::vector<std::pair<std::size_t, module_location>> const &replaced,
+                           std::vector<std::pair<std::size_t, module_location>> const &erased);
+
+    void _remake_data_if_needed(std::size_t const max_count);
+    void _set_rect_count(std::size_t const rect_count);
     void _update_all_name_positions();
     void _update_name_position(std::size_t const idx, ae::module_location const &);
 };

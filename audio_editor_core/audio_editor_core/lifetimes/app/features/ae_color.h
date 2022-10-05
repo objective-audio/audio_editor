@@ -21,6 +21,8 @@ struct color final {
     [[nodiscard]] ui::color module_name() const;
     [[nodiscard]] ui::color waveform() const;
 
+    [[nodiscard]] ui::color pasting_module_frame() const;
+
     [[nodiscard]] ui::color edge_line() const;
     [[nodiscard]] ui::color edge_text() const;
 
