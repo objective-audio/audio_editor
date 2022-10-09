@@ -119,5 +119,6 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
           window_lifetime_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
           this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_opener.get(),
           this->marker_editor.get(), this->module_renaming_opener.get(), this->marker_renaming_opener.get(),
-          this->timing.get(), this->import_interactor.get(), this->export_interactor.get(), this->reverter.get())) {
+          this->timing.get(), this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
+          this->pasteboard.get())) {
 }

@@ -49,6 +49,7 @@ enum class editing_action_name {
     begin_module_renaming,
     begin_marker_renaming,
     begin_time_editing,
+    clear_pasteboard,
 };
 
 enum class time_editing_action_name {

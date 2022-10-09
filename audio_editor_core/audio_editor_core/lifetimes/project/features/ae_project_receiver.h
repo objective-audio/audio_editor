@@ -22,11 +22,13 @@ class timing;
 class import_interactor;
 class export_interactor;
 class reverter;
+class pasteboard;
 
 struct project_receiver final : action_receivable {
     project_receiver(window_lifetime_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *,
                      jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_opener *,
-                     marker_renaming_opener *, timing *, import_interactor *, export_interactor *, reverter *);
+                     marker_renaming_opener *, timing *, import_interactor *, export_interactor *, reverter *,
+                     pasteboard *);
 
    private:
     window_lifetime_id const _window_lifetime_id;
@@ -44,6 +46,7 @@ struct project_receiver final : action_receivable {
     import_interactor *const _import_interactor;
     export_interactor *const _export_interactor;
     reverter *const _reverter;
+    pasteboard *const _pasteboard;
 
     std::optional<action_id> receivable_id() const override;
     std::optional<ae::action> to_action(ae::key const &) const override;

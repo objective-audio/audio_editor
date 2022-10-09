@@ -15,31 +15,6 @@ using namespace yas::ae;
 
 @implementation ae_pasteboard_tests
 
-- (void)test_data {
-    auto const pasteboard = pasteboard::make_shared();
-
-    std::vector<pasteboard_event> called;
-
-    auto const canceller =
-        pasteboard->observe_event([&called](pasteboard_event const &event) { called.push_back(event); }).sync();
-
-    XCTAssertEqual(called.size(), 1);
-    XCTAssertEqual(called.at(0), pasteboard_event::fetched);
-
-    XCTAssertFalse(pasteboard->value().has_value());
-
-    pasting_file_module const module{"test-name", 3, {1, 2}, "test-file-name"};
-
-    pasteboard->clear();
-
-    XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1), pasteboard_event::cleared);
-
-    XCTAssertFalse(pasteboard->value().has_value());
-
-    canceller->cancel();
-}
-
 - (void)test_file_module {
     auto const pasteboard = pasteboard::make_shared();
 
@@ -74,6 +49,11 @@ using namespace yas::ae;
     XCTAssertEqual(modules.at(1).value.file_frame, 4);
     XCTAssertEqual(modules.at(1).value.range, time::range(5, 6));
     XCTAssertEqual(modules.at(1).value.file_name, "test-file-name-2");
+
+    pasteboard->clear();
+
+    XCTAssertEqual(called.size(), 3);
+    XCTAssertEqual(called.at(2), pasteboard_event::cleared);
 }
 
 @end

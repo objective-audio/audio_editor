@@ -37,7 +37,15 @@ std::optional<pasting_value> const &pasteboard::value() const {
     return this->_value;
 }
 
+bool pasteboard::can_clear() {
+    return this->_value.has_value();
+}
+
 void pasteboard::clear() {
+    if (!this->can_clear()) {
+        return;
+    }
+
     this->_value = std::nullopt;
     this->_event_fetcher->push(pasteboard_event::cleared);
 }
