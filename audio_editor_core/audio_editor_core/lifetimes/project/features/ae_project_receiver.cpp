@@ -13,6 +13,7 @@
 #include <audio_editor_core/ae_module_renaming_opener.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
+#include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_time_editor_opener.h>
@@ -30,7 +31,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
                                    marker_editor *marker_editor, module_renaming_opener *module_renaming_opener,
                                    marker_renaming_opener *marker_renaming_opener, timing *timing,
                                    import_interactor *import_interactor, export_interactor *export_interactor,
-                                   reverter *reverter)
+                                   reverter *reverter, pasteboard *pasteboard)
     : _window_lifetime_id(window_lifetime_id),
       _editor(track_editor),
       _playing_toggler(toggler),
@@ -45,7 +46,8 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
       _timing(timing),
       _import_interactor(import_interactor),
       _export_interactor(export_interactor),
-      _reverter(reverter) {
+      _reverter(reverter),
+      _pasteboard(pasteboard) {
 }
 
 std::optional<action_id> project_receiver::receivable_id() const {
@@ -104,8 +106,9 @@ std::optional<ae::action> project_receiver::to_action(ae::key const &key) const 
             return action{editing_action_name::go_to_marker, 7};
         case key::num_9:
             return action{editing_action_name::go_to_marker, 8};
-
         case key::esc:
+            return action{editing_action_name::clear_pasteboard, std::nullopt};
+
         case key::plus:
         case key::hyphen:
         case key::ret:
@@ -216,6 +219,9 @@ void project_receiver::receive(ae::action const &action) const {
                         case editing_action_name::paste:
                             this->_editor->paste();
                             break;
+                        case editing_action_name::clear_pasteboard:
+                            this->_pasteboard->clear();
+                            break;
                         case editing_action_name::begin_module_renaming:
                             this->_module_renaming_opener->begin_module_renaming(action.file_module_index_value());
                             break;
@@ -310,6 +316,8 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_editor->can_copy());
                 case editing_action_name::paste:
                     return to_state(this->_editor->can_paste());
+                case editing_action_name::clear_pasteboard:
+                    return to_state(this->_pasteboard->can_clear());
 
                 case editing_action_name::begin_module_renaming:
                     return to_state(this->_module_renaming_opener->can_begin_module_renaming());

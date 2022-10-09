@@ -18,6 +18,7 @@ struct pasteboard final {
 
     [[nodiscard]] std::optional<pasting_value> const &value() const;
 
+    [[nodiscard]] bool can_clear();
     void clear();
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(pasteboard_event const &)> &&);
