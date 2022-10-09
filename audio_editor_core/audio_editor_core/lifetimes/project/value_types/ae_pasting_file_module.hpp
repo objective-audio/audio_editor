@@ -4,9 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_common_types.h>
-#include <cpp_utils/yas_identifier.h>
-
+#include <audio_editor_core/ae_pasting_file_module_index.hpp>
 #include <string>
 
 namespace yas::ae {
@@ -25,6 +23,8 @@ struct pasting_file_module_object final {
     pasting_file_module value;
 
     pasting_file_module_object(yas::identifier const &, pasting_file_module &&);
+
+    pasting_file_module_index index() const;
 };
 }  // namespace yas::ae
 

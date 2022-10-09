@@ -21,6 +21,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
       time_base_node(ui::node::make_shared()),
       track_node(ui::node::make_shared()),
       modules_node(ui::node::make_shared()),
+      pasting_modules_node(ui::node::make_shared()),
       edge_node(ui::node::make_shared()),
       markers_node(ui::node::make_shared()),
       time_bg_node(ui::node::make_shared()),
@@ -30,6 +31,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     root_node->add_sub_node(this->base_node);
 
     this->base_node->add_sub_node(this->scroller_node);
+    this->base_node->add_sub_node(this->pasting_modules_node);
     this->base_node->add_sub_node(this->playing_line_node);
     this->base_node->add_sub_node(this->modal_bg_node);
     this->base_node->add_sub_node(this->time_base_node);

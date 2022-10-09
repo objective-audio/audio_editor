@@ -16,6 +16,7 @@ using namespace yas;
 using namespace yas::ae;
 
 static std::string const empty_string = "";
+static std::vector<std::optional<module_location>> const _empty_locations;
 
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(window_lifetime_id const &window_lifetime_id,
                                                                   std::shared_ptr<display_space> const &display_space) {
@@ -83,8 +84,7 @@ std::vector<std::optional<module_location>> const &modules_presenter::locations(
     if (auto const location_pool = this->_location_pool.lock()) {
         return location_pool->elements();
     } else {
-        static std::vector<std::optional<module_location>> const _empty;
-        return _empty;
+        return _empty_locations;
     }
 }
 

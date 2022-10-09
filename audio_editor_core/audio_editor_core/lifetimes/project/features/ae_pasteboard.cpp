@@ -30,7 +30,7 @@ std::vector<pasting_file_module_object> const &pasteboard::file_modules() const 
 
 void pasteboard::set_file_modules(std::vector<pasting_file_module_object> const &modules) {
     this->_value = modules;
-    this->_event_fetcher->push(pasteboard_event::file_module);
+    this->_event_fetcher->push(pasteboard_event::file_modules);
 }
 
 std::optional<pasting_value> const &pasteboard::value() const {

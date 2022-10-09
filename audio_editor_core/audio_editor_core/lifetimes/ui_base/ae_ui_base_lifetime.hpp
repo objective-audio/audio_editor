@@ -19,6 +19,7 @@ class ui_node_hierarchy;
 class ui_background;
 class ui_module_waveforms;
 class ui_modules;
+class ui_pasting_modules;
 class ui_edge;
 class ui_markers;
 class ui_track;
@@ -42,6 +43,7 @@ struct ui_base_lifetime final {
     std::shared_ptr<ui_background> const background;
     std::shared_ptr<ui_module_waveforms> const waveforms;
     std::shared_ptr<ui_modules> const modules;
+    std::shared_ptr<ui_pasting_modules> const pasting_modules;
     std::shared_ptr<ui_edge> const edge;
     std::shared_ptr<ui_markers> const markers;
     std::shared_ptr<ui_track> const track;
