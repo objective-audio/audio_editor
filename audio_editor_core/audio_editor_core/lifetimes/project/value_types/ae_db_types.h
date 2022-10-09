@@ -14,5 +14,5 @@
 namespace yas::ae {
 using db_modules_map = std::unordered_map<object_id, db_module>;
 using db_file_refs_map = std::unordered_map<std::string, db_file_ref>;
-using db_markers_map = std::unordered_map<object_id, db_marker>;
+using db_markers_map = std::unordered_map<uintptr_t, db_marker>;
 }  // namespace yas::ae

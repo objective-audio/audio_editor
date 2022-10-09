@@ -78,25 +78,27 @@ void database::update_module(object_id const &object_id, file_module const &file
 
 db_marker database::add_marker(frame_index_t const frame, std::string const &name) {
     auto marker = db_marker::create(this->_manager, frame, name);
-    this->_markers.emplace(marker.object_id(), marker);
+    this->_markers.emplace(marker.object_id().identifier(), marker);
     this->_save();
     return marker;
 }
 
 void database::remove_marker(object_id const &object_id) {
-    if (this->_markers.contains(object_id)) {
-        this->_markers.at(object_id).remove();
-        this->_markers.erase(object_id);
+    auto const identifier = object_id.identifier();
+    if (this->_markers.contains(identifier)) {
+        this->_markers.at(identifier).remove();
+        this->_markers.erase(identifier);
         this->_save();
     }
 }
 
 void database::update_marker(object_id const &object_id, marker_object const &marker) {
-    if (this->_markers.contains(object_id)) {
-        auto &db_marker = this->_markers.at(object_id);
+    auto const identifier = object_id.identifier();
+    if (this->_markers.contains(identifier)) {
+        auto &db_marker = this->_markers.at(identifier);
         db_marker.set_object(marker);
-        this->_markers.erase(object_id);
-        this->_markers.emplace(object_id, db_marker);
+        this->_markers.erase(identifier);
+        this->_markers.emplace(identifier, db_marker);
         this->_save();
     }
 }
@@ -341,7 +343,7 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                 if (result_objects.contains(db_constants::marker_name::entity)) {
                     auto const &objects = result_objects.at(db_constants::marker_name::entity);
                     for (auto const &object : objects) {
-                        markers.emplace(object->object_id(), db_marker{object});
+                        markers.emplace(object->object_id().identifier(), db_marker{object});
                     }
                 }
 
