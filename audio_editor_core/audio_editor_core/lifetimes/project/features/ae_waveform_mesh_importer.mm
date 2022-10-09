@@ -30,19 +30,19 @@ waveform_mesh_importer::waveform_mesh_importer(project_path const *project_path,
       _task_queue(task_queue<object_id>::make_shared()) {
 }
 
-void waveform_mesh_importer::import(std::size_t const idx, module_location const &location) {
-    this->_task_queue->cancel([&location](auto const &identifier) { return location.identifier == identifier; });
+void waveform_mesh_importer::import(std::size_t const idx, module_content const &content) {
+    this->_task_queue->cancel([&content](auto const &identifier) { return content.identifier == identifier; });
 
     auto const &modules = this->_file_track->modules();
-    if (!modules.contains(location.index())) {
+    if (!modules.contains(content.index())) {
         return;
     }
 
-    auto path = this->_project_path->editing_files_directory().append(modules.at(location.index()).value.file_name);
-    auto const file_frame = modules.at(location.index()).value.file_frame;
+    auto path = this->_project_path->editing_files_directory().append(modules.at(content.index()).value.file_name);
+    auto const file_frame = modules.at(content.index()).value.file_frame;
 
     auto const task = yas::task<object_id>::make_shared(
-        [idx, location, path = std::move(path), file_frame,
+        [idx, content, path = std::move(path), file_frame,
          weak_importer = this->weak_from_this()](yas::task<object_id> const &task) {
             if (weak_importer.expired()) {
                 return;
@@ -52,7 +52,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
             auto const file_result = audio::file::make_opened({.file_path = path});
             if (file_result) {
-                auto const &scale = location.scale;
+                auto const &scale = content.scale;
                 double const rect_width = 1.0 / scale;
 
                 struct dynamic_data final {
@@ -66,21 +66,21 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
                 audio::pcm_buffer buffer{format, frames_per_sec};
 
-                auto each = make_fast_each(location.mesh_elements.size());
+                auto each = make_fast_each(content.mesh_elements.size());
                 while (yas_each_next(each)) {
                     if (task.is_canceled()) {
                         break;
                     }
 
                     auto const &data_idx = yas_each_index(each);
-                    auto const &mesh_element = location.mesh_elements.at(data_idx);
+                    auto const &mesh_element = content.mesh_elements.at(data_idx);
 
                     if (!mesh_element.has_value()) {
                         datas.emplace_back(waveform_mesh_importer_event::data{nullptr, nullptr});
                         continue;
                     }
 
-                    auto const rect_count = location.mesh_elements.at(data_idx).value().rect_count;
+                    auto const rect_count = content.mesh_elements.at(data_idx).value().rect_count;
 
                     if (rect_count == 0) {
                         datas.emplace_back(waveform_mesh_importer_event::data{nullptr, nullptr});
@@ -114,7 +114,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
 
                     auto const &mesh_element_value = mesh_element.value();
 
-                    auto const mesh_element_offset_x = location.element_offset_x(data_idx);
+                    auto const mesh_element_offset_x = content.element_offset_x(data_idx);
                     if (!mesh_element_offset_x.has_value()) {
                         continue;
                     }
@@ -148,7 +148,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                     };
 
                     uint32_t file_head_frame = 0;
-                    while (file_head_frame < location.range.length) {
+                    while (file_head_frame < content.range.length) {
                         if (task.is_canceled()) {
                             break;
                         }
@@ -211,9 +211,9 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                 auto const mesh_index_data = ui::static_mesh_index_data::make_shared(2);
                 datas.emplace_back(waveform_mesh_importer_event::data{mesh_vertex_data, mesh_index_data});
 
-                mesh_vertex_data->write_once([&location](std::vector<ui::vertex2d_t> &vector) {
+                mesh_vertex_data->write_once([&content](std::vector<ui::vertex2d_t> &vector) {
                     vector[0].position = {0.0f, 0.0f};
-                    vector[1].position = {location.width(), 0.0f};
+                    vector[1].position = {content.width(), 0.0f};
                 });
 
                 mesh_index_data->write_once([](std::vector<ui::index2d_t> &vector) {
@@ -226,14 +226,14 @@ void waveform_mesh_importer::import(std::size_t const idx, module_location const
                 return;
             }
 
-            thread::perform_async_on_main([weak_importer, idx, identifier = location.identifier,
+            thread::perform_async_on_main([weak_importer, idx, identifier = content.identifier,
                                            datas = std::move(datas)] {
                 if (auto const importer = weak_importer.lock()) {
                     importer->_notifier->notify({.index = idx, .identifier = identifier, .datas = std::move(datas)});
                 }
             });
         },
-        {.canceller = location.identifier});
+        {.canceller = content.identifier});
 
     this->_task_queue->push_back(task);
 }

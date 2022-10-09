@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_module_location.h>
+#include <audio_editor_core/ae_module_content.h>
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <cpp_utils/yas_task_queue.h>
@@ -21,7 +21,7 @@ struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh
 
     waveform_mesh_importer(project_path const *, file_track *);
 
-    void import(std::size_t const, module_location const &);
+    void import(std::size_t const, module_content const &);
     void cancel(object_id const &);
     void cancel_all();
 

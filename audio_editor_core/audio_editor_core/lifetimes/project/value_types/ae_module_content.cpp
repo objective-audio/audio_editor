@@ -1,8 +1,8 @@
 //
-//  ae_module_location.cpp
+//  ae_module_content.cpp
 //
 
-#include "ae_module_location.h"
+#include "ae_module_content.h"
 
 #include <audio_editor_core/ae_file_module.h>
 #include <cpp_utils/yas_fast_each.h>
@@ -11,15 +11,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-namespace yas::ae::module_location_utils {
-using mesh_element = module_location::mesh_element;
+namespace yas::ae::module_content_utils {
+using mesh_element = module_content::mesh_element;
 
 static std::vector<std::optional<mesh_element>> make_mesh_elements(time::range const &module_range,
                                                                    uint32_t const sample_rate,
                                                                    time::range const &space_range, float const scale) {
     std::vector<std::optional<mesh_element>> mesh_elements;
 
-    uint32_t const mesh_width_interval = module_location::mesh_element::max_length;
+    uint32_t const mesh_width_interval = module_content::mesh_element::max_length;
     double const width = static_cast<double>(module_range.length) / static_cast<double>(sample_rate);
     double const total_mesh_width = width * scale;
     uint32_t const floored_mesh_width = static_cast<uint32_t>(std::floor(total_mesh_width));
@@ -53,41 +53,41 @@ static std::vector<std::optional<mesh_element>> make_mesh_elements(time::range c
 
     return mesh_elements;
 }
-}  // namespace yas::ae::module_location_utils
+}  // namespace yas::ae::module_content_utils
 
-bool module_location::mesh_element::operator==(mesh_element const &rhs) const {
+bool module_content::mesh_element::operator==(mesh_element const &rhs) const {
     return this->rect_count == rhs.rect_count && this->range == rhs.range;
 }
 
-bool module_location::mesh_element::operator!=(mesh_element const &rhs) const {
+bool module_content::mesh_element::operator!=(mesh_element const &rhs) const {
     return !(*this == rhs);
 }
 
-module_location::module_location(file_module_object const &file_module, uint32_t const sample_rate,
-                                 time::range const &space_range, float const scale)
-    : module_location(
-          file_module.identifier, file_module.value.range, sample_rate,
-          module_location_utils::make_mesh_elements(file_module.value.range, sample_rate, space_range, scale), scale) {
+module_content::module_content(file_module_object const &file_module, uint32_t const sample_rate,
+                               time::range const &space_range, float const scale)
+    : module_content(file_module.identifier, file_module.value.range, sample_rate,
+                     module_content_utils::make_mesh_elements(file_module.value.range, sample_rate, space_range, scale),
+                     scale) {
 }
 
-module_location::module_location(object_id const &identifier, time::range const &range, uint32_t const sample_rate,
-                                 std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale)
+module_content::module_content(object_id const &identifier, time::range const &range, uint32_t const sample_rate,
+                               std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale)
     : identifier(identifier), sample_rate(sample_rate), range(range), mesh_elements(mesh_elements), scale(scale) {
 }
 
-file_module_index module_location::index() const {
+file_module_index module_content::index() const {
     return {this->identifier, this->range};
 }
 
-float module_location::x() const {
+float module_content::x() const {
     return static_cast<double>(this->range.frame) / static_cast<double>(this->sample_rate);
 }
 
-float module_location::width() const {
+float module_content::width() const {
     return static_cast<double>(this->range.length) / static_cast<double>(this->sample_rate);
 }
 
-uint32_t module_location::total_rect_count() const {
+uint32_t module_content::total_rect_count() const {
     uint32_t total_rect_count = 0;
 
     for (auto const &element : this->mesh_elements) {
@@ -97,7 +97,7 @@ uint32_t module_location::total_rect_count() const {
     return total_rect_count;
 }
 
-std::optional<float> module_location::element_offset_x(std::size_t const idx) const {
+std::optional<float> module_content::element_offset_x(std::size_t const idx) const {
     if (auto const &element = this->mesh_elements.at(idx)) {
         return static_cast<double>(element.value().range.frame) / static_cast<double>(this->sample_rate);
     } else {
@@ -105,11 +105,11 @@ std::optional<float> module_location::element_offset_x(std::size_t const idx) co
     }
 }
 
-bool module_location::operator==(module_location const &rhs) const {
+bool module_content::operator==(module_content const &rhs) const {
     return this->identifier == rhs.identifier && this->sample_rate == rhs.sample_rate && this->range == rhs.range &&
            this->scale == rhs.scale && equal(this->mesh_elements, rhs.mesh_elements);
 }
 
-bool module_location::operator!=(module_location const &rhs) const {
+bool module_content::operator!=(module_content const &rhs) const {
     return !(*this == rhs);
 }

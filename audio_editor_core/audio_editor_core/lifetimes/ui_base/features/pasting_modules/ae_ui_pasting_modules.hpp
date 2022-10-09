@@ -8,7 +8,7 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-class pasting_module_location;
+class pasting_module_content;
 class pasting_modules_presenter;
 class display_space;
 class color;
@@ -35,11 +35,11 @@ struct ui_pasting_modules final {
 
     observing::canceller_pool _pool;
 
-    void _set_locations(std::vector<std::optional<pasting_module_location>> const &locations);
-    void _update_locations(std::size_t const count,
-                           std::vector<std::pair<std::size_t, pasting_module_location>> const &inserted,
-                           std::vector<std::pair<std::size_t, pasting_module_location>> const &replaced,
-                           std::vector<std::pair<std::size_t, pasting_module_location>> const &erased);
+    void _set_contents(std::vector<std::optional<pasting_module_content>> const &);
+    void _update_contents(std::size_t const count,
+                          std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
+                          std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
+                          std::vector<std::pair<std::size_t, pasting_module_content>> const &erased);
 
     void _remake_data_if_needed(std::size_t const max_count);
     void _set_rect_count(std::size_t const rect_count);

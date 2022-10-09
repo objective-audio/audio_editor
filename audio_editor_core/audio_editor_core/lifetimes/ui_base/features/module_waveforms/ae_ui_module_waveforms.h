@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_module_location_pool.h>
+#include <audio_editor_core/ae_module_content_pool.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-class module_location;
+class module_content;
 class module_waveforms_presenter;
 class waveform_mesh_importer;
 class color;
@@ -24,10 +24,10 @@ struct ui_module_waveforms final {
 
     void set_scale(ui::size const &);
 
-    void set_locations(std::vector<std::optional<module_location>> const &, bool const clear_mesh_nodes);
-    void update_locations(std::size_t const count, std::vector<std::pair<std::size_t, module_location>> const &erased,
-                          std::vector<std::pair<std::size_t, module_location>> const &inserted,
-                          std::vector<std::pair<std::size_t, module_location>> const &replaced);
+    void set_contents(std::vector<std::optional<module_content>> const &, bool const clear_mesh_nodes);
+    void update_contents(std::size_t const count, std::vector<std::pair<std::size_t, module_content>> const &erased,
+                         std::vector<std::pair<std::size_t, module_content>> const &inserted,
+                         std::vector<std::pair<std::size_t, module_content>> const &replaced);
 
    private:
     std::shared_ptr<module_waveforms_presenter> const _presenter;

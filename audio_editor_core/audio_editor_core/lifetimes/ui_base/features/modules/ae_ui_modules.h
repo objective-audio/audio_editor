@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_module_location_pool.h>
+#include <audio_editor_core/ae_module_content_pool.h>
 #include <audio_editor_core/ae_ui_types.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-class module_location;
+class module_content;
 class modules_presenter;
 class modules_controller;
 class display_space;
@@ -51,15 +51,14 @@ struct ui_modules final {
 
     observing::canceller_pool _pool;
 
-    void _set_locations(std::vector<std::optional<module_location>> const &);
-    void _update_locations(std::size_t const count,
-                           std::vector<std::pair<std::size_t, module_location>> const &inserted,
-                           std::vector<std::pair<std::size_t, module_location>> const &replaced,
-                           std::vector<std::pair<std::size_t, module_location>> const &erased);
+    void _set_contents(std::vector<std::optional<module_content>> const &);
+    void _update_contents(std::size_t const count, std::vector<std::pair<std::size_t, module_content>> const &inserted,
+                          std::vector<std::pair<std::size_t, module_content>> const &replaced,
+                          std::vector<std::pair<std::size_t, module_content>> const &erased);
 
     void _remake_data_if_needed(std::size_t const max_count);
     void _set_rect_count(std::size_t const rect_count);
     void _update_all_name_positions();
-    void _update_name_position(std::size_t const idx, ae::module_location const &);
+    void _update_name_position(std::size_t const idx, ae::module_content const &);
 };
 }  // namespace yas::ae

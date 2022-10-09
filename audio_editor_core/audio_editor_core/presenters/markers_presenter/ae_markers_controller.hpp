@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_marker_location_pool.h>
+#include <audio_editor_core/ae_marker_content_pool.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
 #include <audio_editor_core/ae_marker_index.hpp>

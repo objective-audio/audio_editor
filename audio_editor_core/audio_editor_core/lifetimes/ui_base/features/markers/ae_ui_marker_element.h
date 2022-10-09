@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_marker_location.h>
+#include <audio_editor_core/ae_marker_content.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
@@ -25,9 +25,9 @@ struct ui_marker_element final {
 
     std::shared_ptr<ui::node> const node;
 
-    void set_location(marker_location const &);
-    void update_location(marker_location const &);
-    void reset_location();
+    void set_content(marker_content const &);
+    void update_content(marker_content const &);
+    void reset_content();
 
     void finalize();
 
