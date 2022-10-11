@@ -42,14 +42,14 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
     this->_set_rect_count(0);
 
     presenter
-        ->observe_locations([this](pasting_module_location_pool_event const &event) {
+        ->observe_contents([this](pasting_module_content_pool_event const &event) {
             switch (event.type) {
-                case pasting_module_location_pool_event_type::fetched:
-                case pasting_module_location_pool_event_type::replaced:
-                    this->_set_locations(event.elements);
+                case pasting_module_content_pool_event_type::fetched:
+                case pasting_module_content_pool_event_type::replaced:
+                    this->_set_contents(event.elements);
                     break;
-                case pasting_module_location_pool_event_type::updated:
-                    this->_update_locations(event.elements.size(), event.inserted, event.replaced, event.erased);
+                case pasting_module_content_pool_event_type::updated:
+                    this->_update_contents(event.elements.size(), event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -73,19 +73,19 @@ void ui_pasting_modules::set_scale(ui::size const &scale) {
     this->_line_node->set_scale(scale);
 }
 
-void ui_pasting_modules::_set_locations(std::vector<std::optional<pasting_module_location>> const &locations) {
-    this->_set_rect_count(locations.size());
+void ui_pasting_modules::_set_contents(std::vector<std::optional<pasting_module_content>> const &contents) {
+    this->_set_rect_count(contents.size());
 
-    this->_vertex_data->write([&locations](std::vector<ui::vertex2d_t> &vertices) {
+    this->_vertex_data->write([&contents](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
-        auto each = make_fast_each(locations.size());
+        auto each = make_fast_each(contents.size());
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
-            auto const &location = locations.at(idx);
+            auto const &content = contents.at(idx);
 
-            if (location.has_value()) {
-                auto const &value = location.value();
+            if (content.has_value()) {
+                auto const &value = content.value();
                 ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
                                         .size = {.width = value.width(), .height = 1.0f}};
                 vertex_rects[idx].set_position(region);
@@ -96,10 +96,10 @@ void ui_pasting_modules::_set_locations(std::vector<std::optional<pasting_module
     });
 }
 
-void ui_pasting_modules::_update_locations(std::size_t const count,
-                                           std::vector<std::pair<std::size_t, pasting_module_location>> const &inserted,
-                                           std::vector<std::pair<std::size_t, pasting_module_location>> const &replaced,
-                                           std::vector<std::pair<std::size_t, pasting_module_location>> const &erased) {
+void ui_pasting_modules::_update_contents(std::size_t const count,
+                                          std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
+                                          std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
+                                          std::vector<std::pair<std::size_t, pasting_module_content>> const &erased) {
     this->_set_rect_count(count);
 
     this->_vertex_data->write([&erased, &inserted](std::vector<ui::vertex2d_t> &vertices) {

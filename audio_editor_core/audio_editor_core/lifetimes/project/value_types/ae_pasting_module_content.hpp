@@ -1,5 +1,5 @@
 //
-//  ae_pasting_module_location.hpp
+//  ae_pasting_module_content.hpp
 //
 
 #pragma once
@@ -12,22 +12,21 @@
 namespace yas::ae {
 class pasting_file_module_object;
 
-struct pasting_module_location final {
+struct pasting_module_content final {
     identifier identifier;
     time::range range;
     uint32_t sample_rate;
     float scale;
 
-    pasting_module_location(pasting_file_module_object const &, uint32_t const sample_rate, float const scale);
-    pasting_module_location(yas::identifier const &, time::range const &, uint32_t const sample_rate,
-                            float const scale);
+    pasting_module_content(pasting_file_module_object const &, uint32_t const sample_rate, float const scale);
+    pasting_module_content(yas::identifier const &, time::range const &, uint32_t const sample_rate, float const scale);
 
     [[nodiscard]] pasting_file_module_index index() const;
 
     [[nodiscard]] float x() const;
     [[nodiscard]] float width() const;
 
-    bool operator==(pasting_module_location const &rhs) const;
-    bool operator!=(pasting_module_location const &rhs) const;
+    bool operator==(pasting_module_content const &rhs) const;
+    bool operator!=(pasting_module_content const &rhs) const;
 };
 }  // namespace yas::ae

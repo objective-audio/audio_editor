@@ -142,23 +142,23 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
         ->add_to(this->_pool);
 }
 
-void ui_marker_element::set_location(marker_location const &location) {
-    this->_identifier = location.identifier;
+void ui_marker_element::set_content(marker_content const &content) {
+    this->_identifier = content.identifier;
     this->node->set_is_enabled(true);
-    this->node->set_position({location.x, this->node->position().y});
+    this->node->set_position({content.x, this->node->position().y});
     this->_update_name();
 }
 
-void ui_marker_element::update_location(marker_location const &location) {
-    if (this->_identifier == location.identifier) {
-        this->node->set_position({location.x, this->node->position().y});
+void ui_marker_element::update_content(marker_content const &content) {
+    if (this->_identifier == content.identifier) {
+        this->node->set_position({content.x, this->node->position().y});
         this->_update_name();
     } else {
         assertion_failure_if_not_test();
     }
 }
 
-void ui_marker_element::reset_location() {
+void ui_marker_element::reset_content() {
     this->_identifier = std::nullopt;
     this->node->set_is_enabled(false);
 }

@@ -23,7 +23,7 @@ std::shared_ptr<ui_markers> ui_markers::make_shared(window_lifetime_id const &wi
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
     auto const presenter = markers_presenter::make_shared(window_lifetime_id, resource_lifetime->display_space,
-                                                          project_lifetime->marker_location_pool);
+                                                          project_lifetime->marker_content_pool);
     return std::make_shared<ui_markers>(window_lifetime_id, presenter, resource_lifetime->standard, node.get());
 }
 
@@ -35,14 +35,14 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
       _presenter(presenter),
       _top_guide(standard->view_look()->view_layout_guide()->top()) {
     this->_presenter
-        ->observe_locations([this](marker_location_pool_event const &event) {
+        ->observe_contents([this](marker_content_pool_event const &event) {
             switch (event.type) {
-                case marker_location_pool_event_type::fetched:
-                case marker_location_pool_event_type::replaced:
-                    this->_replace_locations(event.elements);
+                case marker_content_pool_event_type::fetched:
+                case marker_content_pool_event_type::replaced:
+                    this->_replace_contents(event.elements);
                     break;
-                case marker_location_pool_event_type::updated:
-                    this->_update_locations(event.elements.size(), event.erased, event.inserted, event.replaced);
+                case marker_content_pool_event_type::updated:
+                    this->_update_contents(event.elements.size(), event.erased, event.inserted, event.replaced);
                     break;
             }
         })
@@ -55,69 +55,68 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
         ->add_to(this->_pool);
 }
 
-void ui_markers::_replace_locations(std::vector<std::optional<marker_location>> const &locations) {
-    this->_set_count(locations.size());
+void ui_markers::_replace_contents(std::vector<std::optional<marker_content>> const &contents) {
+    this->_set_count(contents.size());
 
-    auto each = make_fast_each(locations.size());
+    auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
-        auto const &location = locations.at(idx);
+        auto const &content = contents.at(idx);
         auto const &element = this->_elements.at(idx);
-        if (location.has_value()) {
-            auto const &location_value = location.value();
-            element->set_location(location_value);
+        if (content.has_value()) {
+            auto const &content_value = content.value();
+            element->set_content(content_value);
         } else {
-            element->reset_location();
+            element->reset_content();
         }
     }
 }
 
-void ui_markers::_update_locations(std::size_t const count,
-                                   std::vector<std::pair<std::size_t, marker_location>> const &erased,
-                                   std::vector<std::pair<std::size_t, marker_location>> const &inserted,
-                                   std::vector<std::pair<std::size_t, marker_location>> const &replaced) {
+void ui_markers::_update_contents(std::size_t const count,
+                                  std::vector<std::pair<std::size_t, marker_content>> const &erased,
+                                  std::vector<std::pair<std::size_t, marker_content>> const &inserted,
+                                  std::vector<std::pair<std::size_t, marker_content>> const &replaced) {
     this->_set_count(count);
 
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
         if (idx < count) {
-            this->_elements.at(idx)->reset_location();
+            this->_elements.at(idx)->reset_content();
         }
     }
 
     for (auto const &pair : inserted) {
         auto const &idx = pair.first;
-        auto const &location = pair.second;
+        auto const &content = pair.second;
         auto const &element = this->_elements.at(idx);
-        element->set_location(location);
+        element->set_content(content);
     }
 
     for (auto const &pair : replaced) {
         auto const &idx = pair.first;
-        auto const &location = pair.second;
+        auto const &content = pair.second;
         auto const &element = this->_elements.at(idx);
-        element->update_location(location);
+        element->update_content(content);
     }
 }
 
-void ui_markers::_set_count(std::size_t const location_count) {
+void ui_markers::_set_count(std::size_t const content_count) {
     auto const prev_element_count = this->_elements.size();
 
-    if (prev_element_count < location_count) {
-        this->_elements.reserve(
-            common_utils::reserving_count(location_count, ui_markers_constants::reserving_interval));
+    if (prev_element_count < content_count) {
+        this->_elements.reserve(common_utils::reserving_count(content_count, ui_markers_constants::reserving_interval));
 
-        auto each = make_fast_each(location_count - prev_element_count);
+        auto each = make_fast_each(content_count - prev_element_count);
         while (yas_each_next(each)) {
             auto element = ui_marker_element::make_shared(this->_window_lifetime_id, this->_node);
             this->_elements.emplace_back(std::move(element));
         }
-    } else if (location_count < prev_element_count) {
-        auto each = make_fast_each(prev_element_count - location_count);
+    } else if (content_count < prev_element_count) {
+        auto each = make_fast_each(prev_element_count - content_count);
         while (yas_each_next(each)) {
             auto const idx = prev_element_count - 1 - yas_each_index(each);
             this->_elements.at(idx)->finalize();
         }
-        this->_elements.resize(location_count);
+        this->_elements.resize(content_count);
     }
 }

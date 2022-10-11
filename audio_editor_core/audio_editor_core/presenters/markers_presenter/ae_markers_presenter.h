@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_marker_location_pool.h>
+#include <audio_editor_core/ae_marker_content_pool.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
@@ -16,13 +16,13 @@ class marker_pool;
 struct markers_presenter final {
     [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(window_lifetime_id const &,
                                                                         std::shared_ptr<display_space> const &,
-                                                                        std::shared_ptr<marker_location_pool> const &);
+                                                                        std::shared_ptr<marker_content_pool> const &);
 
     markers_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,
-                      std::shared_ptr<display_space> const &, std::shared_ptr<marker_location_pool> const &);
+                      std::shared_ptr<display_space> const &, std::shared_ptr<marker_content_pool> const &);
 
-    [[nodiscard]] std::vector<std::optional<marker_location>> locations() const;
-    [[nodiscard]] observing::syncable observe_locations(std::function<void(marker_location_pool_event const &)> &&);
+    [[nodiscard]] std::vector<std::optional<marker_content>> contents() const;
+    [[nodiscard]] observing::syncable observe_contents(std::function<void(marker_content_pool_event const &)> &&);
 
     void update_if_needed();
 
@@ -31,7 +31,7 @@ struct markers_presenter final {
     std::weak_ptr<player> const _player;
     std::weak_ptr<marker_pool> const _marker_pool;
     std::weak_ptr<display_space> const _display_space;
-    std::shared_ptr<marker_location_pool> const _location_pool;
+    std::shared_ptr<marker_content_pool> const _content_pool;
     observing::canceller_pool _canceller_pool;
 
     std::optional<frame_index_t> _last_frame = std::nullopt;
@@ -50,6 +50,6 @@ struct markers_presenter final {
         update_if_changed,  // 前回の更新から変更などがあったら更新
     };
 
-    void _update_all_locations(update_type const type);
+    void _update_all_contents(update_type const type);
 };
 }  // namespace yas::ae

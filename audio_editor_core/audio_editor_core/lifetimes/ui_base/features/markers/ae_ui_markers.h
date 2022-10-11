@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_marker_location_pool.h>
+#include <audio_editor_core/ae_marker_content_pool.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
@@ -32,9 +32,9 @@ struct ui_markers final {
     observing::canceller_pool _pool;
 
     void _set_count(std::size_t const);
-    void _replace_locations(std::vector<std::optional<marker_location>> const &);
-    void _update_locations(std::size_t const count, std::vector<std::pair<std::size_t, marker_location>> const &erased,
-                           std::vector<std::pair<std::size_t, marker_location>> const &inserted,
-                           std::vector<std::pair<std::size_t, marker_location>> const &replaced);
+    void _replace_contents(std::vector<std::optional<marker_content>> const &);
+    void _update_contents(std::size_t const count, std::vector<std::pair<std::size_t, marker_content>> const &erased,
+                          std::vector<std::pair<std::size_t, marker_content>> const &inserted,
+                          std::vector<std::pair<std::size_t, marker_content>> const &replaced);
 };
 }  // namespace yas::ae

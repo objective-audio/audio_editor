@@ -55,14 +55,14 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
         ->add_to(this->_pool);
 
     presenter
-        ->observe_locations([this](module_location_pool_event const &event) {
+        ->observe_contents([this](module_content_pool_event const &event) {
             switch (event.type) {
-                case module_location_pool_event_type::fetched:
-                case module_location_pool_event_type::replaced:
-                    this->set_locations(event.elements, true);
+                case module_content_pool_event_type::fetched:
+                case module_content_pool_event_type::replaced:
+                    this->set_contents(event.elements, true);
                     break;
-                case module_location_pool_event_type::updated:
-                    this->update_locations(event.elements.size(), event.erased, event.inserted, event.replaced);
+                case module_content_pool_event_type::updated:
+                    this->update_contents(event.elements.size(), event.erased, event.inserted, event.replaced);
                     break;
             }
         })
@@ -92,7 +92,7 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
         this->_scale = scale.width;
 
         if (prev_null) {
-            this->set_locations(this->_presenter->locations(), false);
+            this->set_contents(this->_presenter->contents(), false);
         }
 
         if (auto const scale = this->_waveform_scale()) {
@@ -103,41 +103,41 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
     }
 }
 
-void ui_module_waveforms::set_locations(std::vector<std::optional<module_location>> const &locations,
-                                        bool const clear_mesh_nodes) {
+void ui_module_waveforms::set_contents(std::vector<std::optional<module_content>> const &contents,
+                                       bool const clear_mesh_nodes) {
     if (!this->_scale.has_value()) {
         this->_resize_sub_nodes(0);
         return;
     }
 
-    this->_resize_sub_nodes(locations.size());
+    this->_resize_sub_nodes(contents.size());
 
     auto const sub_nodes = this->node->sub_nodes();
 
-    auto each = make_fast_each(locations.size());
+    auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
-        auto const &location = locations.at(idx);
+        auto const &content = contents.at(idx);
         auto const &sub_node = sub_nodes.at(idx);
 
         if (clear_mesh_nodes) {
             sub_node->remove_all_sub_nodes();
         }
 
-        if (location.has_value()) {
+        if (content.has_value()) {
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.value().x() * location.value().scale, .y = 0.0f});
-            this->_presenter->import(idx, location.value());
+            sub_node->set_position({.x = content.value().x() * content.value().scale, .y = 0.0f});
+            this->_presenter->import(idx, content.value());
         } else {
             sub_node->set_is_enabled(false);
         }
     }
 }
 
-void ui_module_waveforms::update_locations(std::size_t const count,
-                                           std::vector<std::pair<std::size_t, module_location>> const &erased,
-                                           std::vector<std::pair<std::size_t, module_location>> const &inserted,
-                                           std::vector<std::pair<std::size_t, module_location>> const &replaced) {
+void ui_module_waveforms::update_contents(std::size_t const count,
+                                          std::vector<std::pair<std::size_t, module_content>> const &erased,
+                                          std::vector<std::pair<std::size_t, module_content>> const &inserted,
+                                          std::vector<std::pair<std::size_t, module_content>> const &replaced) {
     if (!this->_scale.has_value()) {
         this->_resize_sub_nodes(0);
         return;
@@ -149,7 +149,7 @@ void ui_module_waveforms::update_locations(std::size_t const count,
     while (yas_each_next(each)) {
         auto const &pair = erased.at(yas_each_index(each));
         auto const &idx = pair.first;
-        auto const &location = pair.second;
+        auto const &content = pair.second;
 
         if (idx < this->node->sub_nodes().size()) {
             auto const &sub_node = this->node->sub_nodes().at(idx);
@@ -157,7 +157,7 @@ void ui_module_waveforms::update_locations(std::size_t const count,
             sub_node->set_is_enabled(false);
         }
 
-        this->_presenter->cancel_import(location.identifier);
+        this->_presenter->cancel_import(content.identifier);
     }
 
     each = make_fast_each(replaced.size());
@@ -166,11 +166,11 @@ void ui_module_waveforms::update_locations(std::size_t const count,
         auto const &idx = pair.first;
 
         if (idx < this->node->sub_nodes().size()) {
-            auto const &location = pair.second;
+            auto const &content = pair.second;
             auto const &sub_node = this->node->sub_nodes().at(idx);
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.x() * location.scale, .y = 0.0f});
-            this->_presenter->import(idx, location);
+            sub_node->set_position({.x = content.x() * content.scale, .y = 0.0f});
+            this->_presenter->import(idx, content);
         }
     }
 
@@ -180,12 +180,12 @@ void ui_module_waveforms::update_locations(std::size_t const count,
         auto const &idx = pair.first;
 
         if (idx < this->node->sub_nodes().size()) {
-            auto const &location = pair.second;
+            auto const &content = pair.second;
             auto const &sub_node = this->node->sub_nodes().at(idx);
             sub_node->remove_all_sub_nodes();
             sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = location.x() * location.scale, .y = 0.0f});
-            this->_presenter->import(idx, location);
+            sub_node->set_position({.x = content.x() * content.scale, .y = 0.0f});
+            this->_presenter->import(idx, content);
         }
     }
 }

@@ -6,7 +6,7 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_common_utils.h>
 #include <audio_editor_core/ae_display_space.h>
-#include <audio_editor_core/ae_module_location.h>
+#include <audio_editor_core/ae_module_content.h>
 #include <audio_editor_core/ae_module_waveforms_presenter.h>
 #include <audio_editor_core/ae_modules_controller.h>
 #include <audio_editor_core/ae_modules_presenter.h>
@@ -60,14 +60,14 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
     this->_set_rect_count(0);
 
     presenter
-        ->observe_locations([this](module_location_pool_event const &event) {
+        ->observe_contents([this](module_content_pool_event const &event) {
             switch (event.type) {
-                case module_location_pool_event_type::fetched:
-                case module_location_pool_event_type::replaced:
-                    this->_set_locations(event.elements);
+                case module_content_pool_event_type::fetched:
+                case module_content_pool_event_type::replaced:
+                    this->_set_contents(event.elements);
                     break;
-                case module_location_pool_event_type::updated:
-                    this->_update_locations(event.elements.size(), event.inserted, event.replaced, event.erased);
+                case module_content_pool_event_type::updated:
+                    this->_update_contents(event.elements.size(), event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -115,21 +115,21 @@ void ui_modules::set_scale(ui::size const &scale) {
     this->_update_all_name_positions();
 }
 
-void ui_modules::_set_locations(std::vector<std::optional<module_location>> const &locations) {
-    this->_set_rect_count(locations.size());
+void ui_modules::_set_contents(std::vector<std::optional<module_content>> const &contents) {
+    this->_set_rect_count(contents.size());
 
     this->_vertex_data->write(
-        [&locations, &colliders = this->_triangle_node->colliders()](std::vector<ui::vertex2d_t> &vertices) {
+        [&contents, &colliders = this->_triangle_node->colliders()](std::vector<ui::vertex2d_t> &vertices) {
             auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
-            auto each = make_fast_each(locations.size());
+            auto each = make_fast_each(contents.size());
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
-                auto const &location = locations.at(idx);
+                auto const &content = contents.at(idx);
                 auto const &collider = colliders.at(idx);
 
-                if (location.has_value()) {
-                    auto const &value = location.value();
+                if (content.has_value()) {
+                    auto const &value = content.value();
                     ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
                                             .size = {.width = value.width(), .height = 1.0f}};
                     vertex_rects[idx].set_position(region);
@@ -145,18 +145,18 @@ void ui_modules::_set_locations(std::vector<std::optional<module_location>> cons
             }
         });
 
-    auto each = make_fast_each(locations.size());
+    auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
-        auto const &location = locations.at(idx);
+        auto const &content = contents.at(idx);
         auto const &strings = this->_names.at(idx);
         auto const &node = strings->rect_plane()->node();
 
-        if (location.has_value()) {
-            auto const &location_value = location.value();
+        if (content.has_value()) {
+            auto const &content_value = content.value();
             node->set_is_enabled(true);
-            this->_update_name_position(idx, location.value());
-            strings->set_text(this->_presenter->name_for_index(location_value.index()));
+            this->_update_name_position(idx, content.value());
+            strings->set_text(this->_presenter->name_for_index(content_value.index()));
         } else {
             node->set_is_enabled(false);
             strings->set_text("");
@@ -164,10 +164,10 @@ void ui_modules::_set_locations(std::vector<std::optional<module_location>> cons
     }
 }
 
-void ui_modules::_update_locations(std::size_t const count,
-                                   std::vector<std::pair<std::size_t, module_location>> const &inserted,
-                                   std::vector<std::pair<std::size_t, module_location>> const &replaced,
-                                   std::vector<std::pair<std::size_t, module_location>> const &erased) {
+void ui_modules::_update_contents(std::size_t const count,
+                                  std::vector<std::pair<std::size_t, module_content>> const &inserted,
+                                  std::vector<std::pair<std::size_t, module_content>> const &replaced,
+                                  std::vector<std::pair<std::size_t, module_content>> const &erased) {
     this->_set_rect_count(count);
 
     this->_vertex_data->write(
@@ -204,20 +204,20 @@ void ui_modules::_update_locations(std::size_t const count,
 
     for (auto const &pair : inserted) {
         auto const &idx = pair.first;
-        auto const &location_value = pair.second;
+        auto const &content_value = pair.second;
         auto const &strings = this->_names.at(idx);
         auto const &node = strings->rect_plane()->node();
         node->set_is_enabled(true);
-        this->_update_name_position(idx, location_value);
-        strings->set_text(this->_presenter->name_for_index(location_value.index()));
+        this->_update_name_position(idx, content_value);
+        strings->set_text(this->_presenter->name_for_index(content_value.index()));
     }
 
     for (auto const &pair : replaced) {
         auto const &idx = pair.first;
-        auto const &location_value = pair.second;
+        auto const &content_value = pair.second;
         auto const &strings = this->_names.at(idx);
-        this->_update_name_position(idx, location_value);
-        strings->set_text(this->_presenter->name_for_index(location_value.index()));
+        this->_update_name_position(idx, content_value);
+        strings->set_text(this->_presenter->name_for_index(content_value.index()));
     }
 }
 
@@ -325,25 +325,25 @@ void ui_modules::_set_rect_count(std::size_t const rect_count) {
 }
 
 void ui_modules::_update_all_name_positions() {
-    auto const &locations = this->_presenter->locations();
+    auto const &contents = this->_presenter->contents();
 
-    auto each = make_fast_each(locations.size());
+    auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
-        auto const &location = locations.at(idx);
+        auto const &content = contents.at(idx);
 
-        if (location.has_value()) {
-            this->_update_name_position(idx, location.value());
+        if (content.has_value()) {
+            this->_update_name_position(idx, content.value());
         }
     }
 }
 
-void ui_modules::_update_name_position(std::size_t const idx, ae::module_location const &location_value) {
+void ui_modules::_update_name_position(std::size_t const idx, ae::module_content const &content) {
     auto const &strings = this->_names.at(idx);
     auto const &node = strings->rect_plane()->node();
 
-    node->set_position({.x = location_value.x() * this->_scale.width, .y = this->_scale.height * 0.5f});
+    node->set_position({.x = content.x() * this->_scale.width, .y = this->_scale.height * 0.5f});
     strings->preferred_layout_guide()->set_region(
         {.origin = {.x = 0.0f, .y = -this->_scale.height},
-         .size = {.width = location_value.width() * this->_scale.width, .height = this->_scale.height}});
+         .size = {.width = content.width() * this->_scale.width, .height = this->_scale.height}});
 }

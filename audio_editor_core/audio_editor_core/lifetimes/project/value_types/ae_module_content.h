@@ -1,5 +1,5 @@
 //
-//  ae_module_location.h
+//  ae_module_content.h
 //
 
 #pragma once
@@ -12,22 +12,22 @@
 namespace yas::ae {
 class file_module_object;
 
-struct module_location final {
-    /// location内に波形を表示するmeshスライスの位置情報
+struct module_content final {
+    /// content内に波形を表示するmeshスライスの位置情報
     struct mesh_element final {
         static uint32_t const max_length = 512;
 
         uint32_t rect_count;
-        time::range range;  // module_location内の位置
+        time::range range;  // module_content内の位置
 
         bool operator==(mesh_element const &rhs) const;
         bool operator!=(mesh_element const &rhs) const;
     };
 
-    module_location(file_module_object const &, uint32_t const sample_rate, time::range const &space_range,
-                    float const scale);
-    module_location(object_id const &, time::range const &, uint32_t const sample_rate,
-                    std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale);
+    module_content(file_module_object const &, uint32_t const sample_rate, time::range const &space_range,
+                   float const scale);
+    module_content(object_id const &, time::range const &, uint32_t const sample_rate,
+                   std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale);
 
     object_id identifier;  // file_moduleと同じID
     time::range range;     // track内の位置
@@ -43,7 +43,7 @@ struct module_location final {
 
     [[nodiscard]] std::optional<float> element_offset_x(std::size_t const) const;
 
-    bool operator==(module_location const &rhs) const;
-    bool operator!=(module_location const &rhs) const;
+    bool operator==(module_content const &rhs) const;
+    bool operator!=(module_content const &rhs) const;
 };
 }  // namespace yas::ae
