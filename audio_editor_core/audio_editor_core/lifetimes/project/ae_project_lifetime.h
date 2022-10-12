@@ -67,8 +67,8 @@ struct project_lifetime final {
     std::shared_ptr<module_content_pool> const module_content_pool;
     std::shared_ptr<pasting_module_content_pool> const pasting_module_content_pool;
     std::shared_ptr<marker_content_pool> const marker_content_pool;
-    std::shared_ptr<ae::project_action_sender> const action_sender;
-    std::shared_ptr<ae::pinch_gesture_controller> const pinch_gesture_controller;
+    std::shared_ptr<project_action_sender> const action_sender;
+    std::shared_ptr<pinch_gesture_controller> const pinch_gesture_controller;
     std::shared_ptr<scroll_gesture_controller> const scroll_gesture_controller;
 
     std::shared_ptr<database> const database;
