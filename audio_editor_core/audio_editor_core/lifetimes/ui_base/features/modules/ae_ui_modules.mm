@@ -102,7 +102,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->add_to(this->_pool);
 
     this->_multiple_touch
-        ->observe([this](std::uintptr_t const &collider_idx) { this->_controller->select_module_at(collider_idx); })
+        ->observe(
+            [this](std::uintptr_t const &collider_idx) { this->_controller->begin_module_renaming_at(collider_idx); })
         .end()
         ->add_to(this->_pool);
 }

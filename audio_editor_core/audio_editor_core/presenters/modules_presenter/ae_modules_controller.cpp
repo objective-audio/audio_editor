@@ -22,7 +22,7 @@ modules_controller::modules_controller(std::shared_ptr<project_action_sender> co
     : _action_sender(action_sender), _content_pool(content_pool) {
 }
 
-void modules_controller::select_module_at(std::size_t const idx) {
+void modules_controller::begin_module_renaming_at(std::size_t const idx) {
     auto const action_sender = this->_action_sender.lock();
     auto const content_pool = this->_content_pool.lock();
     if (!action_sender || !content_pool) {
