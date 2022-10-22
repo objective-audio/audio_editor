@@ -38,8 +38,9 @@ static time::range const dummy_range{0, 1};
     auto const id_2 = db::make_temporary_id();
 
     {
-        pool->replace_all(
-            {{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
+        pool->replace_all({{id_0, dummy_range, false, 0, {}, 0},
+                           {id_1, dummy_range, false, 0, {}, 0},
+                           {id_2, dummy_range, false, 0, {}, 0}});
 
         auto const contents = pool->elements();
         XCTAssertEqual(contents.size(), 3);
@@ -55,7 +56,7 @@ static time::range const dummy_range{0, 1};
     auto const id_4 = db::make_temporary_id();
 
     {
-        pool->replace_all({{id_3, dummy_range, 0, {}, 0}, {id_4, dummy_range, 0, {}, 0}});
+        pool->replace_all({{id_3, dummy_range, false, 0, {}, 0}, {id_4, dummy_range, false, 0, {}, 0}});
 
         auto const contents = pool->elements();
         XCTAssertEqual(contents.size(), 2);
@@ -91,7 +92,7 @@ static time::range const dummy_range{0, 1};
     {
         // 元が空なので全てinserted
 
-        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}}, false);
+        pool->update_all({{id_0, dummy_range, false, 0, {}, 0}, {id_2, dummy_range, false, 0, {}, 0}}, false);
 
         auto const contents = pool->elements();
         XCTAssertEqual(contents.size(), 2);
@@ -114,7 +115,9 @@ static time::range const dummy_range{0, 1};
     {
         // 追加された要素だけがinserted
 
-        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}},
+        pool->update_all({{id_0, dummy_range, false, 0, {}, 0},
+                          {id_1, dummy_range, false, 0, {}, 0},
+                          {id_2, dummy_range, false, 0, {}, 0}},
                          false);
 
         auto const contents = pool->elements();
@@ -137,7 +140,7 @@ static time::range const dummy_range{0, 1};
     {
         // 削除された要素がerased。減った要素のインデックスはnullで残る
 
-        pool->update_all({{id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}}, false);
+        pool->update_all({{id_1, dummy_range, false, 0, {}, 0}, {id_2, dummy_range, false, 0, {}, 0}}, false);
 
         auto const contents = pool->elements();
         XCTAssertEqual(contents.size(), 3);
@@ -159,10 +162,10 @@ static time::range const dummy_range{0, 1};
     {
         // 追加したらnullの要素から埋められる
 
-        pool->update_all({{id_1, dummy_range, 0, {}, 0},
-                          {id_2, dummy_range, 0, {}, 0},
-                          {id_3, dummy_range, 0, {}, 0},
-                          {id_4, dummy_range, 0, {}, 0}},
+        pool->update_all({{id_1, dummy_range, false, 0, {}, 0},
+                          {id_2, dummy_range, false, 0, {}, 0},
+                          {id_3, dummy_range, false, 0, {}, 0},
+                          {id_4, dummy_range, false, 0, {}, 0}},
                          false);
         auto const contents = pool->elements();
         XCTAssertEqual(contents.size(), 4);
@@ -189,7 +192,9 @@ static time::range const dummy_range{0, 1};
 
         time::range const other_range{0, 2};
 
-        pool->update_all({{id_1, dummy_range, 0, {}, 0}, {id_4, other_range, 0, {}, 0}, {id_5, dummy_range, 0, {}, 0}},
+        pool->update_all({{id_1, dummy_range, false, 0, {}, 0},
+                          {id_4, other_range, false, 0, {}, 0},
+                          {id_5, dummy_range, false, 0, {}, 0}},
                          false);
         auto const contents = pool->elements();
         XCTAssertEqual(contents.size(), 4);
@@ -221,7 +226,9 @@ static time::range const dummy_range{0, 1};
 
         time::range const other_range{1, 3};
 
-        pool->update_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_5, other_range, 0, {}, 0}},
+        pool->update_all({{id_0, dummy_range, false, 0, {}, 0},
+                          {id_1, dummy_range, false, 0, {}, 0},
+                          {id_5, other_range, false, 0, {}, 0}},
                          true);
         auto const contents = pool->elements();
         XCTAssertEqual(contents.size(), 4);
@@ -257,7 +264,9 @@ static time::range const dummy_range{0, 1};
     auto const id_2 = db::make_temporary_id();
     auto const id_3 = db::make_temporary_id();
 
-    pool->replace_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 0, {}, 0}, {id_2, dummy_range, 0, {}, 0}});
+    pool->replace_all({{id_0, dummy_range, false, 0, {}, 0},
+                       {id_1, dummy_range, false, 0, {}, 0},
+                       {id_2, dummy_range, false, 0, {}, 0}});
 
     auto canceller =
         pool->observe_event([&called](module_content_pool_event const &event) { called.emplace_back(event); }).sync();
@@ -309,7 +318,7 @@ static time::range const dummy_range{0, 1};
     XCTAssertEqual(pool->elements().size(), 0);
 
     {
-        pool->insert({id_0, dummy_range, 0, {}, 0});
+        pool->insert({id_0, dummy_range, false, 0, {}, 0});
 
         auto const &contents = pool->elements();
         XCTAssertEqual(contents.size(), 1);
@@ -325,7 +334,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->insert({id_0, dummy_range, 0, {}, 0});
+        pool->insert({id_0, dummy_range, false, 0, {}, 0});
 
         XCTAssertEqual(pool->elements().size(), 1);
 
@@ -333,7 +342,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->insert({id_1, dummy_range, 0, {}, 0});
+        pool->insert({id_1, dummy_range, false, 0, {}, 0});
 
         auto const &contents = pool->elements();
         XCTAssertEqual(contents.size(), 2);
@@ -364,7 +373,7 @@ static time::range const dummy_range{0, 1};
     }
 
     {
-        pool->insert({id_2, dummy_range, 0, {}, 0});
+        pool->insert({id_2, dummy_range, false, 0, {}, 0});
 
         auto const &contents = pool->elements();
         XCTAssertEqual(contents.size(), 2);
@@ -390,7 +399,9 @@ static time::range const dummy_range{0, 1};
     auto const id_1 = db::make_temporary_id();
     auto const id_2 = db::make_temporary_id();
 
-    pool->replace_all({{id_0, dummy_range, 0, {}, 0}, {id_1, dummy_range, 1, {}, 0}, {id_2, dummy_range, 2, {}, 0}});
+    pool->replace_all({{id_0, dummy_range, false, 0, {}, 0},
+                       {id_1, dummy_range, false, 1, {}, 0},
+                       {id_2, dummy_range, false, 2, {}, 0}});
 
     auto canceller =
         pool->observe_event([&called](module_content_pool_event const &event) { called.emplace_back(event); }).sync();
@@ -398,7 +409,7 @@ static time::range const dummy_range{0, 1};
     XCTAssertEqual(called.size(), 1);
 
     {
-        pool->replace({id_1, dummy_range, 11, {}, 0});
+        pool->replace({id_1, dummy_range, false, 11, {}, 0});
 
         auto const &contents = pool->elements();
         XCTAssertEqual(contents.size(), 3);
@@ -418,7 +429,7 @@ static time::range const dummy_range{0, 1};
     {
         auto const id_other = db::make_temporary_id();
 
-        pool->replace({id_other, dummy_range, 100, {}, 0});
+        pool->replace({id_other, dummy_range, false, 100, {}, 0});
 
         auto const &contents = pool->elements();
         XCTAssertEqual(contents.size(), 3);
