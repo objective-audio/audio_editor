@@ -1,0 +1,32 @@
+//
+//  ae_module_selector.cpp
+//
+
+#include "ae_module_selector.hpp"
+
+#include <audio_editor_core/ae_file_track.h>
+#include <audio_editor_core/ae_hierarchy.h>
+#include <cpp_utils/yas_assertion.h>
+
+#include <audio_editor_core/ae_selected_file_module.hpp>
+#include <audio_editor_core/ae_selected_file_module_pool.hpp>
+
+using namespace yas;
+using namespace yas::ae;
+
+module_selector::module_selector(file_track const *file_track, selected_file_module_pool *selected_pool)
+    : _file_track(file_track), _selected_pool(selected_pool) {
+}
+
+bool module_selector::can_toggle() const {
+#warning todo time_editingとか何か操作中の条件によってfalseにする？
+    return true;
+}
+
+void module_selector::toggle_module_at(file_module_index const &index) {
+    if (this->_file_track->modules().contains(index)) {
+        this->_selected_pool->toggle_module(selected_file_module_object{index.object_id, {index.range}});
+    } else {
+        assertion_failure_if_not_test();
+    }
+}

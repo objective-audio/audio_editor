@@ -21,6 +21,7 @@
 #include <audio_editor_core/ae_track_editor.h>
 
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
+#include <audio_editor_core/ae_module_selector.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -31,7 +32,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
                                    marker_editor *marker_editor, module_renaming_opener *module_renaming_opener,
                                    marker_renaming_opener *marker_renaming_opener, timing *timing,
                                    import_interactor *import_interactor, export_interactor *export_interactor,
-                                   reverter *reverter, pasteboard *pasteboard)
+                                   reverter *reverter, pasteboard *pasteboard, module_selector *module_selector)
     : _window_lifetime_id(window_lifetime_id),
       _editor(track_editor),
       _playing_toggler(toggler),
@@ -47,7 +48,8 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
       _import_interactor(import_interactor),
       _export_interactor(export_interactor),
       _reverter(reverter),
-      _pasteboard(pasteboard) {
+      _pasteboard(pasteboard),
+      _module_selector(module_selector) {
 }
 
 std::optional<action_id> project_receiver::receivable_id() const {
@@ -222,6 +224,9 @@ void project_receiver::receive(ae::action const &action) const {
                         case editing_action_name::clear_pasteboard:
                             this->_pasteboard->clear();
                             break;
+                        case editing_action_name::toggle_module_selection:
+                            this->_module_selector->toggle_module_at(action.file_module_index_value());
+                            break;
                         case editing_action_name::begin_module_renaming:
                             this->_module_renaming_opener->begin_module_renaming(action.file_module_index_value());
                             break;
@@ -319,6 +324,8 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                 case editing_action_name::clear_pasteboard:
                     return to_state(this->_pasteboard->can_clear());
 
+                case editing_action_name::toggle_module_selection:
+                    return to_state(this->_module_selector->can_toggle());
                 case editing_action_name::begin_module_renaming:
                     return to_state(this->_module_renaming_opener->can_begin_module_renaming());
                 case editing_action_name::begin_marker_renaming:

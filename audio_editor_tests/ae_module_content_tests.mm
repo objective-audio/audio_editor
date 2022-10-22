@@ -19,6 +19,8 @@ using namespace yas::ae;
     auto const id_2 = db::make_temporary_id();
     time::range const range_1(0, 1);
     time::range const range_2(0, 2);
+    bool const is_selected_1 = false;
+    bool const is_selected_2 = true;
     uint32_t const sample_rate_1 = 1;
     uint32_t const sample_rate_2 = 2;
     float const scale_1 = 1.0f;
@@ -28,31 +30,35 @@ using namespace yas::ae;
         return std::vector<std::optional<module_content::mesh_element>>{{{.range = {1, length}}}};
     };
 
-    XCTAssertTrue(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
-                  module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1));
-    XCTAssertFalse(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
-                   module_content(id_2, range_1, sample_rate_1, make_mesh_elements(1), scale_1));
-    XCTAssertFalse(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
-                   module_content(id_1, range_2, sample_rate_1, make_mesh_elements(1), scale_1));
-    XCTAssertFalse(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
-                   module_content(id_1, range_1, sample_rate_2, make_mesh_elements(1), scale_1));
-    XCTAssertFalse(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
-                   module_content(id_1, range_1, sample_rate_1, make_mesh_elements(2), scale_1));
-    XCTAssertFalse(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
-                   module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_2));
+    XCTAssertTrue(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
+                  module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1));
+    XCTAssertFalse(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
+                   module_content(id_2, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1));
+    XCTAssertFalse(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
+                   module_content(id_1, range_2, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1));
+    XCTAssertFalse(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
+                   module_content(id_1, range_1, is_selected_2, sample_rate_1, make_mesh_elements(1), scale_1));
+    XCTAssertFalse(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
+                   module_content(id_1, range_1, is_selected_1, sample_rate_2, make_mesh_elements(1), scale_1));
+    XCTAssertFalse(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
+                   module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(2), scale_1));
+    XCTAssertFalse(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) ==
+                   module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_2));
 
-    XCTAssertFalse(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
-                   module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1));
-    XCTAssertTrue(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
-                  module_content(id_2, range_1, sample_rate_1, make_mesh_elements(1), scale_1));
-    XCTAssertTrue(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
-                  module_content(id_1, range_2, sample_rate_1, make_mesh_elements(1), scale_1));
-    XCTAssertTrue(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
-                  module_content(id_1, range_1, sample_rate_2, make_mesh_elements(1), scale_1));
-    XCTAssertTrue(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
-                  module_content(id_1, range_1, sample_rate_1, make_mesh_elements(2), scale_1));
-    XCTAssertTrue(module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
-                  module_content(id_1, range_1, sample_rate_1, make_mesh_elements(1), scale_2));
+    XCTAssertFalse(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
+                   module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1));
+    XCTAssertTrue(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
+                  module_content(id_2, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1));
+    XCTAssertTrue(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
+                  module_content(id_1, range_2, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1));
+    XCTAssertTrue(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
+                  module_content(id_1, range_1, is_selected_2, sample_rate_1, make_mesh_elements(1), scale_1));
+    XCTAssertTrue(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
+                  module_content(id_1, range_1, is_selected_1, sample_rate_2, make_mesh_elements(1), scale_1));
+    XCTAssertTrue(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
+                  module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(2), scale_1));
+    XCTAssertTrue(module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_1) !=
+                  module_content(id_1, range_1, is_selected_1, sample_rate_1, make_mesh_elements(1), scale_2));
 }
 
 @end

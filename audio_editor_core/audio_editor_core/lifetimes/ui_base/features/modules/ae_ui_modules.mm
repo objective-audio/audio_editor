@@ -48,7 +48,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_triangle_node)),
       _multiple_touch(ui::multiple_touch::make_shared()),
       _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, nullptr)),
-      _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
+      _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true}, nullptr,
+                                       nullptr, nullptr)) {
     node->add_sub_node(this->_triangle_node);
     node->add_sub_node(this->_waveforms->node);
     node->add_sub_node(this->_line_node);
@@ -81,7 +82,25 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
     standard->view_look()
         ->observe_appearance([this](auto const &) {
-            this->_line_node->set_color(this->_color->module_frame());
+            this->_vertex_data->write([this](std::vector<ui::vertex2d_t> &vertices) {
+                auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+                auto const &contents = this->_presenter->contents();
+                auto const normal_frame_color = this->_color->module_frame().v;
+                auto const selected_frame_color = this->_color->selected_module_frame().v;
+
+                auto each = make_fast_each(contents.size());
+                while (yas_each_next(each)) {
+                    auto const &idx = yas_each_index(each);
+                    auto const &content = contents.at(idx);
+
+                    if (content.has_value()) {
+                        auto const &frame_color =
+                            content.value().is_selected ? selected_frame_color : normal_frame_color;
+                        vertex_rects[idx].set_color(frame_color);
+                    }
+                }
+            });
+
             this->_triangle_node->set_color(this->_color->module_bg());
 
             auto const module_name_color = this->_color->module_name();
@@ -95,6 +114,9 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
     this->_touch_tracker
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
+                if (context.phase == ui::touch_tracker_phase::ended) {
+                    this->_controller->toggle_module_selection_at(context.collider_idx);
+                }
                 this->_multiple_touch->handle_event(context.phase, context.collider_idx);
             }
         })
@@ -102,7 +124,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->add_to(this->_pool);
 
     this->_multiple_touch
-        ->observe([this](std::uintptr_t const &collider_idx) { this->_controller->select_module_at(collider_idx); })
+        ->observe(
+            [this](std::uintptr_t const &collider_idx) { this->_controller->begin_module_renaming_at(collider_idx); })
         .end()
         ->add_to(this->_pool);
 }
@@ -118,32 +141,39 @@ void ui_modules::set_scale(ui::size const &scale) {
 void ui_modules::_set_contents(std::vector<std::optional<module_content>> const &contents) {
     this->_set_rect_count(contents.size());
 
-    this->_vertex_data->write(
-        [&contents, &colliders = this->_triangle_node->colliders()](std::vector<ui::vertex2d_t> &vertices) {
-            auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+    this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
+        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
-            auto each = make_fast_each(contents.size());
-            while (yas_each_next(each)) {
-                auto const &idx = yas_each_index(each);
-                auto const &content = contents.at(idx);
-                auto const &collider = colliders.at(idx);
+        auto const normal_frame_color = this->_color->module_frame().v;
+        auto const selected_frame_color = this->_color->selected_module_frame().v;
+        auto const &colliders = this->_triangle_node->colliders();
 
-                if (content.has_value()) {
-                    auto const &value = content.value();
-                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
-                                            .size = {.width = value.width(), .height = 1.0f}};
-                    vertex_rects[idx].set_position(region);
+        auto each = make_fast_each(contents.size());
+        while (yas_each_next(each)) {
+            auto const &idx = yas_each_index(each);
+            auto const &content = contents.at(idx);
+            auto const &collider = colliders.at(idx);
 
-                    collider->set_shape(ui::shape::make_shared({.rect = region}));
-                    collider->set_enabled(true);
-                } else {
-                    vertex_rects[idx].set_position(ui::region::zero());
+            if (content.has_value()) {
+                auto const &value = content.value();
+                ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
+                                        .size = {.width = value.width(), .height = 1.0f}};
+                auto &rect = vertex_rects[idx];
+                rect.set_position(region);
 
-                    collider->set_enabled(false);
-                    collider->set_shape(nullptr);
-                }
+                auto const &frame_color = value.is_selected ? selected_frame_color : normal_frame_color;
+                rect.set_color(frame_color);
+
+                collider->set_shape(ui::shape::make_shared({.rect = region}));
+                collider->set_enabled(true);
+            } else {
+                vertex_rects[idx].set_position(ui::region::zero());
+
+                collider->set_enabled(false);
+                collider->set_shape(nullptr);
             }
-        });
+        }
+    });
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
@@ -170,30 +200,43 @@ void ui_modules::_update_contents(std::size_t const count,
                                   std::vector<std::pair<std::size_t, module_content>> const &erased) {
     this->_set_rect_count(count);
 
-    this->_vertex_data->write(
-        [&erased, &inserted, &colliders = this->_triangle_node->colliders()](std::vector<ui::vertex2d_t> &vertices) {
-            auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+    this->_vertex_data->write([&erased, &inserted, &replaced, &colliders = this->_triangle_node->colliders(),
+                               &color = this->_color](std::vector<ui::vertex2d_t> &vertices) {
+        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
-            for (auto const &pair : erased) {
-                vertex_rects[pair.first].set_position(ui::region::zero());
+        for (auto const &pair : erased) {
+            vertex_rects[pair.first].set_position(ui::region::zero());
 
-                auto const &collider = colliders.at(pair.first);
-                collider->set_enabled(false);
-                collider->set_shape(nullptr);
-            }
+            auto const &collider = colliders.at(pair.first);
+            collider->set_enabled(false);
+            collider->set_shape(nullptr);
+        }
 
-            for (auto const &pair : inserted) {
-                auto const &value = pair.second;
-                ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
-                                        .size = {.width = value.width(), .height = 1.0f}};
+        auto const normal_frame_color = color->module_frame().v;
+        auto const selected_frame_color = color->selected_module_frame().v;
 
-                vertex_rects[pair.first].set_position(region);
+        for (auto const &pair : inserted) {
+            auto const &value = pair.second;
+            ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
+                                    .size = {.width = value.width(), .height = 1.0f}};
 
-                auto const &collider = colliders.at(pair.first);
-                collider->set_shape(ui::shape::make_shared({.rect = region}));
-                collider->set_enabled(true);
-            }
-        });
+            auto &rect = vertex_rects[pair.first];
+            rect.set_position(region);
+
+            auto const &frame_color = value.is_selected ? selected_frame_color : normal_frame_color;
+            rect.set_color(frame_color);
+
+            auto const &collider = colliders.at(pair.first);
+            collider->set_shape(ui::shape::make_shared({.rect = region}));
+            collider->set_enabled(true);
+        }
+
+        for (auto const &pair : replaced) {
+            auto const &value = pair.second;
+            auto const &frame_color = value.is_selected ? selected_frame_color : normal_frame_color;
+            vertex_rects[pair.first].set_color(frame_color);
+        }
+    });
 
     for (auto const &pair : erased) {
         auto const &idx = pair.first;

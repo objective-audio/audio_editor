@@ -24,13 +24,14 @@ struct module_content final {
         bool operator!=(mesh_element const &rhs) const;
     };
 
-    module_content(file_module_object const &, uint32_t const sample_rate, time::range const &space_range,
-                   float const scale);
-    module_content(object_id const &, time::range const &, uint32_t const sample_rate,
+    module_content(file_module_object const &, bool const is_selected, uint32_t const sample_rate,
+                   time::range const &space_range, float const scale);
+    module_content(object_id const &, time::range const &, bool const is_selected, uint32_t const sample_rate,
                    std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale);
 
     object_id identifier;  // file_moduleと同じID
     time::range range;     // track内の位置
+    bool is_selected;
     uint32_t sample_rate;
     std::vector<std::optional<mesh_element>> mesh_elements;
     float scale;

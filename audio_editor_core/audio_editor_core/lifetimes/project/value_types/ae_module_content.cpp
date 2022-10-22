@@ -63,16 +63,22 @@ bool module_content::mesh_element::operator!=(mesh_element const &rhs) const {
     return !(*this == rhs);
 }
 
-module_content::module_content(file_module_object const &file_module, uint32_t const sample_rate,
-                               time::range const &space_range, float const scale)
-    : module_content(file_module.identifier, file_module.value.range, sample_rate,
+module_content::module_content(file_module_object const &file_module, bool const is_selected,
+                               uint32_t const sample_rate, time::range const &space_range, float const scale)
+    : module_content(file_module.identifier, file_module.value.range, is_selected, sample_rate,
                      module_content_utils::make_mesh_elements(file_module.value.range, sample_rate, space_range, scale),
                      scale) {
 }
 
-module_content::module_content(object_id const &identifier, time::range const &range, uint32_t const sample_rate,
+module_content::module_content(object_id const &identifier, time::range const &range, bool const is_selected,
+                               uint32_t const sample_rate,
                                std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale)
-    : identifier(identifier), sample_rate(sample_rate), range(range), mesh_elements(mesh_elements), scale(scale) {
+    : identifier(identifier),
+      sample_rate(sample_rate),
+      range(range),
+      is_selected(is_selected),
+      mesh_elements(mesh_elements),
+      scale(scale) {
 }
 
 file_module_index module_content::index() const {
@@ -107,7 +113,8 @@ std::optional<float> module_content::element_offset_x(std::size_t const idx) con
 
 bool module_content::operator==(module_content const &rhs) const {
     return this->identifier == rhs.identifier && this->sample_rate == rhs.sample_rate && this->range == rhs.range &&
-           this->scale == rhs.scale && equal(this->mesh_elements, rhs.mesh_elements);
+           this->is_selected == rhs.is_selected && this->scale == rhs.scale &&
+           equal(this->mesh_elements, rhs.mesh_elements);
 }
 
 bool module_content::operator!=(module_content const &rhs) const {

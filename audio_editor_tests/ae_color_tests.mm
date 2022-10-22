@@ -28,6 +28,10 @@ using namespace yas::ae;
     XCTAssertNoThrow(color->module_name());
     XCTAssertNoThrow(color->waveform());
 
+    XCTAssertNoThrow(color->selected_module_frame());
+
+    XCTAssertNoThrow(color->pasting_module_frame());
+
     XCTAssertNoThrow(color->edge_line());
     XCTAssertNoThrow(color->edge_text());
 
