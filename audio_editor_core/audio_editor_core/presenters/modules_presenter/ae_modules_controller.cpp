@@ -22,20 +22,44 @@ modules_controller::modules_controller(std::shared_ptr<project_action_sender> co
     : _action_sender(action_sender), _content_pool(content_pool) {
 }
 
-void modules_controller::begin_module_renaming_at(std::size_t const idx) {
+void modules_controller::toggle_module_selection_at(std::size_t const idx) {
     auto const action_sender = this->_action_sender.lock();
-    auto const content_pool = this->_content_pool.lock();
-    if (!action_sender || !content_pool) {
+    if (!action_sender) {
         assertion_failure_if_not_test();
         return;
+    }
+
+    if (auto index = this->index_at(idx)) {
+        action_sender->send(editing_action_name::toggle_module_selection, std::move(index.value()));
+    }
+}
+
+void modules_controller::begin_module_renaming_at(std::size_t const idx) {
+    auto const action_sender = this->_action_sender.lock();
+    if (!action_sender) {
+        assertion_failure_if_not_test();
+        return;
+    }
+
+    if (auto index = this->index_at(idx)) {
+        action_sender->send(editing_action_name::begin_module_renaming, std::move(index.value()));
+    }
+}
+
+std::optional<file_module_index> modules_controller::index_at(std::size_t const idx) const {
+    auto const content_pool = this->_content_pool.lock();
+    if (!content_pool) {
+        assertion_failure_if_not_test();
+        return std::nullopt;
     }
 
     auto const &contents = content_pool->elements();
     if (idx < contents.size()) {
         auto const &content = contents.at(idx);
         if (content.has_value()) {
-            auto index = content.value().index();
-            action_sender->send(editing_action_name::begin_module_renaming, std::move(index));
+            return content.value().index();
         }
     }
+
+    return std::nullopt;
 }
