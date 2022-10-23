@@ -15,6 +15,7 @@
 #include <cpp_utils/yas_file_manager.h>
 
 #include <audio_editor_core/ae_file_ref_pool.hpp>
+#include <audio_editor_core/ae_selected_file_module_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -22,14 +23,16 @@ using namespace yas::ae;
 std::shared_ptr<reverter> reverter::make_shared(project_path const *project_path, database *database,
                                                 file_track *file_track, marker_pool *marker_pool,
                                                 file_ref_pool *file_ref_pool, pasteboard *pasteboard,
-                                                edge_holder *edge_holder, editing_status const *editing_status) {
+                                                edge_holder *edge_holder, selected_file_module_pool *selected_pool,
+                                                editing_status const *editing_status) {
     return std::make_shared<reverter>(project_path, database, file_track, marker_pool, file_ref_pool, pasteboard,
-                                      edge_holder, editing_status);
+                                      edge_holder, selected_pool, editing_status);
 }
 
 reverter::reverter(project_path const *project_path, database *database, file_track *file_track,
                    marker_pool *marker_pool, file_ref_pool *file_ref_pool, pasteboard *pasteboard,
-                   edge_holder *edge_holder, editing_status const *editing_status)
+                   edge_holder *edge_holder, selected_file_module_pool *selected_pool,
+                   editing_status const *editing_status)
     : _project_path(project_path),
       _database(database),
       _file_track(file_track),
@@ -37,6 +40,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
       _file_ref_pool(file_ref_pool),
       _pasteboard(pasteboard),
       _edge_holder(edge_holder),
+      _selected_file_module_pool(selected_pool),
       _editing_status(editing_status) {
     this->_database
         ->observe([this](database_event const &event) {
@@ -79,6 +83,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                     }
 
                     this->_pasteboard->clear();
+                    this->_selected_file_module_pool->clear();
                 } break;
 
                 case database_event::purged: {
