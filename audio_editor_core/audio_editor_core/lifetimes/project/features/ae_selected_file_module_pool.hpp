@@ -36,6 +36,8 @@ struct selected_file_module_pool {
     void toggle_module(selected_file_module_object const &);
     void insert_module(selected_file_module_object const &);
     void erase_module(file_module_index const &);
+
+    [[nodiscard]] bool can_clear() const;
     void clear();
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(event const &)> &&);

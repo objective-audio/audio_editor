@@ -62,8 +62,12 @@ void selected_file_module_pool::erase_module(file_module_index const &index) {
     this->_event_fetcher->push({.type = event_type::erased, .module = erasing, .modules = this->_modules});
 }
 
+bool selected_file_module_pool::can_clear() const {
+    return !this->_modules.empty();
+}
+
 void selected_file_module_pool::clear() {
-    if (this->_modules.empty()) {
+    if (!this->can_clear()) {
         return;
     }
 

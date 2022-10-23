@@ -37,7 +37,7 @@ std::optional<pasting_value> const &pasteboard::value() const {
     return this->_value;
 }
 
-bool pasteboard::can_clear() {
+bool pasteboard::can_clear() const {
     return this->_value.has_value();
 }
 
