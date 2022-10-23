@@ -161,6 +161,8 @@
 		B66FBAA8286B44B200E49B7E /* ae_action_receiver_providable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B66FBAA7286B44B200E49B7E /* ae_action_receiver_providable.cpp */; };
 		B675F93E2765CBB2002FE285 /* ae_waveform_mesh_importer.h in Headers */ = {isa = PBXBuildFile; fileRef = B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B675F93F2765CBB2002FE285 /* ae_waveform_mesh_importer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */; };
+		B67DFBA629053DC5008DC8C7 /* ae_escaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67DFBA429053DC5008DC8C7 /* ae_escaper.cpp */; };
+		B67DFBA729053DC5008DC8C7 /* ae_escaper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B67DFBA529053DC5008DC8C7 /* ae_escaper.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B67F7ECB28D89002002A35C0 /* ae_database_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B67F7ECA28D89002002A35C0 /* ae_database_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6813579271EE756009CC0FC /* ae_gesture.h in Headers */ = {isa = PBXBuildFile; fileRef = B6813578271EE756009CC0FC /* ae_gesture.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B681357C271EF1FA009CC0FC /* ae_pinch_gesture_controller.h in Headers */ = {isa = PBXBuildFile; fileRef = B681357A271EF1FA009CC0FC /* ae_pinch_gesture_controller.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -597,6 +599,8 @@
 		B66FBAA7286B44B200E49B7E /* ae_action_receiver_providable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_action_receiver_providable.cpp; sourceTree = "<group>"; };
 		B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_waveform_mesh_importer.h; sourceTree = "<group>"; };
 		B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_waveform_mesh_importer.mm; sourceTree = "<group>"; };
+		B67DFBA429053DC5008DC8C7 /* ae_escaper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_escaper.cpp; sourceTree = "<group>"; };
+		B67DFBA529053DC5008DC8C7 /* ae_escaper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_escaper.hpp; sourceTree = "<group>"; };
 		B67F7ECA28D89002002A35C0 /* ae_database_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_database_types.h; sourceTree = "<group>"; };
 		B6813578271EE756009CC0FC /* ae_gesture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_gesture.h; sourceTree = "<group>"; };
 		B681357A271EF1FA009CC0FC /* ae_pinch_gesture_controller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_pinch_gesture_controller.h; sourceTree = "<group>"; };
@@ -1776,6 +1780,8 @@
 				B636F6402848F22E00CD2265 /* ae_import_interactor.h */,
 				B6EA40DC2641722600BF3D06 /* ae_track_editor.cpp */,
 				B6EA40DD2641722600BF3D06 /* ae_track_editor.h */,
+				B67DFBA429053DC5008DC8C7 /* ae_escaper.cpp */,
+				B67DFBA529053DC5008DC8C7 /* ae_escaper.hpp */,
 			);
 			path = features;
 			sourceTree = "<group>";
@@ -2234,6 +2240,7 @@
 				B69E476B2827E00F002F2AFF /* ae_reverter.h in Headers */,
 				B69E4EE1286BFF2400911280 /* ae_time_editor_receiver.h in Headers */,
 				B66FAF7128E1577F005A3D47 /* ae_ui_pasting_modules.hpp in Headers */,
+				B67DFBA729053DC5008DC8C7 /* ae_escaper.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2384,6 +2391,7 @@
 				B693BE2B28251D2F00A82877 /* ae_project_id.cpp in Sources */,
 				B6D3C70E28B5136300099257 /* ae_module_name_editor.cpp in Sources */,
 				B6DBC36F2764447D001AF1D3 /* ae_marker_content.cpp in Sources */,
+				B67DFBA629053DC5008DC8C7 /* ae_escaper.cpp in Sources */,
 				B6A55ECC266C81980039E56F /* ae_ui_layout_utils.cpp in Sources */,
 				B63561CC28A63CA100A7AD28 /* ae_ui_playing_line.mm in Sources */,
 				B637D583289EB0B1007E30A1 /* ae_ui_resource_lifecycle.mm in Sources */,

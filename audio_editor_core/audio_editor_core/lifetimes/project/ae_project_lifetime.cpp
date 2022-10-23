@@ -47,6 +47,7 @@
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <audio_editor_core/ae_zooming_pair.h>
 
+#include <audio_editor_core/ae_escaper.hpp>
 #include <audio_editor_core/ae_file_ref_pool.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
@@ -77,13 +78,13 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       waveforms_mesh_importer(
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->file_track.get())),
       selected_file_module_pool(selected_file_module_pool::make_shared()),
-      module_selector(
-          std::make_shared<ae::module_selector>(this->file_track.get(), this->selected_file_module_pool.get())),
       marker_pool(marker_pool::make_shared(this->database.get())),
       file_ref_pool(std::make_shared<ae::file_ref_pool>(this->database.get())),
       pasteboard(pasteboard::make_shared()),
       exporter(exporter::make_shared()),
       editing_status(editing_status::make_shared(this->exporter.get())),
+      module_selector(std::make_shared<ae::module_selector>(
+          this->file_track.get(), this->selected_file_module_pool.get(), this->editing_status.get())),
       playing_toggler(playing_toggler::make_shared(window_lifetime->player.get())),
       modal_lifecycle(project_modal_lifecycle::make_shared(window_lifetime_id)),
       nudger(nudger::make_shared(window_lifetime->player.get(), this->nudge_settings.get())),
@@ -108,7 +109,8 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       timeline_updater(timeline_updater::make_shared(this->file_track.get(), window_lifetime->timeline_holder.get())),
       reverter(reverter::make_shared(window_lifetime->project_path.get(), this->database.get(), this->file_track.get(),
                                      this->marker_pool.get(), this->file_ref_pool.get(), this->pasteboard.get(),
-                                     this->edge_holder.get(), this->editing_status.get())),
+                                     this->edge_holder.get(), this->selected_file_module_pool.get(),
+                                     this->editing_status.get())),
       file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
       file_module_loader(file_module_loader::make_shared(
           window_lifetime_id.project, window_lifetime->project_path.get(), this->project_format,
@@ -120,10 +122,11 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       track_editor(track_editor::make_shared(window_lifetime->player.get(), this->file_track.get(),
                                              this->marker_pool.get(), this->pasteboard.get(), this->database.get(),
                                              this->editing_status.get())),
+      escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_file_module_pool.get())),
       receiver(std::make_shared<project_receiver>(
           window_lifetime_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
           this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_opener.get(),
           this->marker_editor.get(), this->module_renaming_opener.get(), this->marker_renaming_opener.get(),
           this->timing.get(), this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
-          this->pasteboard.get(), this->module_selector.get())) {
+          this->module_selector.get(), this->escaper.get())) {
 }

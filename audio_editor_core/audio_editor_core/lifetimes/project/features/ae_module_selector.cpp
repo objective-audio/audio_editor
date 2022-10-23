@@ -4,6 +4,7 @@
 
 #include "ae_module_selector.hpp"
 
+#include <audio_editor_core/ae_editing_status.h>
 #include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <cpp_utils/yas_assertion.h>
@@ -14,13 +15,13 @@
 using namespace yas;
 using namespace yas::ae;
 
-module_selector::module_selector(file_track const *file_track, selected_file_module_pool *selected_pool)
-    : _file_track(file_track), _selected_pool(selected_pool) {
+module_selector::module_selector(file_track const *file_track, selected_file_module_pool *selected_pool,
+                                 editing_status const *editing_status)
+    : _file_track(file_track), _selected_pool(selected_pool), _editing_status(editing_status) {
 }
 
 bool module_selector::can_toggle() const {
-#warning todo time_editingとか何か操作中の条件によってfalseにする？
-    return true;
+    return this->_editing_status->can_editing();
 }
 
 void module_selector::toggle_module_at(file_module_index const &index) {

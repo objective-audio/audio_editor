@@ -50,7 +50,7 @@ enum class editing_action_name {
     toggle_module_selection,
     begin_marker_renaming,
     begin_time_editing,
-    clear_pasteboard,
+    escape,
 };
 
 enum class time_editing_action_name {
