@@ -109,7 +109,7 @@ std::optional<ae::action> project_receiver::to_action(ae::key const &key) const 
         case key::num_9:
             return action{editing_action_name::go_to_marker, 8};
         case key::esc:
-            return action{editing_action_name::clear_pasteboard, std::nullopt};
+            return action{editing_action_name::escape, std::nullopt};
 
         case key::plus:
         case key::hyphen:
@@ -221,7 +221,7 @@ void project_receiver::receive(ae::action const &action) const {
                         case editing_action_name::paste:
                             this->_editor->paste();
                             break;
-                        case editing_action_name::clear_pasteboard:
+                        case editing_action_name::escape:
                             this->_pasteboard->clear();
                             break;
                         case editing_action_name::toggle_module_selection:
@@ -321,7 +321,7 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_editor->can_copy());
                 case editing_action_name::paste:
                     return to_state(this->_editor->can_paste());
-                case editing_action_name::clear_pasteboard:
+                case editing_action_name::escape:
                     return to_state(this->_pasteboard->can_clear());
 
                 case editing_action_name::toggle_module_selection:
