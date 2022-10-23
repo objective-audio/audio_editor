@@ -47,6 +47,7 @@
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <audio_editor_core/ae_zooming_pair.h>
 
+#include <audio_editor_core/ae_escaper.hpp>
 #include <audio_editor_core/ae_file_ref_pool.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
@@ -121,6 +122,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       track_editor(track_editor::make_shared(window_lifetime->player.get(), this->file_track.get(),
                                              this->marker_pool.get(), this->pasteboard.get(), this->database.get(),
                                              this->editing_status.get())),
+      escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_file_module_pool.get())),
       receiver(std::make_shared<project_receiver>(
           window_lifetime_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
           this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_opener.get(),
