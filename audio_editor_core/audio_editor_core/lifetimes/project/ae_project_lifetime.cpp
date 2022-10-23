@@ -77,13 +77,13 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       waveforms_mesh_importer(
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->file_track.get())),
       selected_file_module_pool(selected_file_module_pool::make_shared()),
-      module_selector(
-          std::make_shared<ae::module_selector>(this->file_track.get(), this->selected_file_module_pool.get())),
       marker_pool(marker_pool::make_shared(this->database.get())),
       file_ref_pool(std::make_shared<ae::file_ref_pool>(this->database.get())),
       pasteboard(pasteboard::make_shared()),
       exporter(exporter::make_shared()),
       editing_status(editing_status::make_shared(this->exporter.get())),
+      module_selector(std::make_shared<ae::module_selector>(
+          this->file_track.get(), this->selected_file_module_pool.get(), this->editing_status.get())),
       playing_toggler(playing_toggler::make_shared(window_lifetime->player.get())),
       modal_lifecycle(project_modal_lifecycle::make_shared(window_lifetime_id)),
       nudger(nudger::make_shared(window_lifetime->player.get(), this->nudge_settings.get())),

@@ -79,12 +79,12 @@ struct project_lifetime final {
     std::shared_ptr<file_track> const file_track;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<selected_file_module_pool> const selected_file_module_pool;
-    std::shared_ptr<module_selector> const module_selector;
     std::shared_ptr<marker_pool> const marker_pool;
     std::shared_ptr<file_ref_pool> const file_ref_pool;
     std::shared_ptr<pasteboard> const pasteboard;
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<editing_status> const editing_status;
+    std::shared_ptr<module_selector> const module_selector;
     std::shared_ptr<playing_toggler> const playing_toggler;
     std::shared_ptr<project_modal_lifecycle> const modal_lifecycle;
     std::shared_ptr<nudger> const nudger;
