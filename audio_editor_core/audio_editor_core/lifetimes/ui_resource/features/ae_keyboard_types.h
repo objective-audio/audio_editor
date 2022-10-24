@@ -41,25 +41,4 @@ enum class key {
     num_8,
     num_9,
 };
-
-enum class modifier {
-    alpha_shift,
-    shift,
-    control,
-    alternate,
-    command,
-    numeric_pad,
-    help,
-    function,
-};
-
-enum class modifier_event_state {
-    began,
-    ended,
-};
-
-struct modifier_event final {
-    modifier_event_state state;
-    modifier modifier;
-};
 }  // namespace yas::ae
