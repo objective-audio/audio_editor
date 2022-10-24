@@ -12,6 +12,8 @@
 #include <unordered_set>
 
 namespace yas::ae {
+class modifiers_holder;
+
 struct keyboard final {
     [[nodiscard]] observing::endable observe_key(std::function<void(ae::key const &)> &&);
     [[nodiscard]] observing::endable observe_modifier(std::function<void(ae::modifier_event const &)> &&);
