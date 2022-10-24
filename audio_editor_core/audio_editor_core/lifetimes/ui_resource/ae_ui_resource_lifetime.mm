@@ -6,6 +6,7 @@
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_ui_mesh_data.h>
+#include <audio_editor_core/ae_modifiers_holder.hpp>
 #include <audio_editor_core/ae_ui_base_lifecycle.hpp>
 
 using namespace yas;
@@ -76,6 +77,7 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
       triangle_data(ui_resource_lifetime_utils::make_triangle_data()),
       square_data(ui_resource_lifetime_utils::make_square_data()),
       display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
-      keyboard(ae::keyboard::make_shared(standard->event_manager())),
+      modifiers_holder(std::make_shared<ae::modifiers_holder>(standard->event_manager())),
+      keyboard(std::make_shared<ae::keyboard>(standard->event_manager(), this->modifiers_holder.get())),
       base_lifecycle(std::make_shared<ae::ui_base_lifecycle>(lifetime_id)) {
 }

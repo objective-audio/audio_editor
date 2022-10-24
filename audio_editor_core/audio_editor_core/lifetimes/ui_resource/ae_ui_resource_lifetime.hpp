@@ -9,6 +9,7 @@
 
 namespace yas::ae {
 class display_space;
+class modifiers_holder;
 class keyboard;
 class ui_mesh_data;
 class ui_base_lifecycle;
@@ -26,6 +27,7 @@ struct ui_resource_lifetime final {
     std::shared_ptr<ui_mesh_data> const triangle_data;
     std::shared_ptr<ui_mesh_data> const square_data;
     std::shared_ptr<ae::display_space> const display_space;
+    std::shared_ptr<ae::modifiers_holder> const modifiers_holder;
     std::shared_ptr<ae::keyboard> const keyboard;
 
     std::shared_ptr<ui_base_lifecycle> const base_lifecycle;
