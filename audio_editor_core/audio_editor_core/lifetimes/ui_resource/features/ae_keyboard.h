@@ -18,7 +18,6 @@ struct keyboard final {
     keyboard(std::shared_ptr<ui::event_manager> const &, modifiers_holder *);
 
     [[nodiscard]] observing::endable observe_key(std::function<void(ae::key const &)> &&);
-    [[nodiscard]] observing::endable observe_modifier(std::function<void(ae::modifier_event const &)> &&);
 
    private:
     std::shared_ptr<ui::event_manager> const _event_manager;

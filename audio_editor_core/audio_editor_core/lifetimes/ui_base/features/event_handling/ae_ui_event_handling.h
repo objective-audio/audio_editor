@@ -12,12 +12,14 @@ namespace yas::ae {
 class project_action_sender;
 class pinch_gesture_controller;
 class keyboard;
+class modifiers_holder;
 
 struct ui_event_handling final {
     [[nodiscard]] static std::shared_ptr<ui_event_handling> make_shared(window_lifetime_id const &);
 
     ui_event_handling(std::shared_ptr<ui::standard> const &, std::shared_ptr<project_action_sender> const &,
-                      std::shared_ptr<pinch_gesture_controller> const &, std::shared_ptr<ae::keyboard> const &);
+                      std::shared_ptr<pinch_gesture_controller> const &, std::shared_ptr<ae::keyboard> const &,
+                      std::shared_ptr<ae::modifiers_holder> const &);
 
    private:
     std::weak_ptr<project_action_sender> const _action_sender;

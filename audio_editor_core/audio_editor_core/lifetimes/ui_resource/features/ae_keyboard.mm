@@ -42,7 +42,3 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager, modifiers_
 observing::endable keyboard::observe_key(std::function<void(ae::key const &)> &&handler) {
     return this->_key_notifier->observe(std::move(handler));
 }
-
-observing::endable keyboard::observe_modifier(std::function<void(ae::modifier_event const &)> &&handler) {
-    return this->_modifiers_holder->observe_modifier(std::move(handler));
-}
