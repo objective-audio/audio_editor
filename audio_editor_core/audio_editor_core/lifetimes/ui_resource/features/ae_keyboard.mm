@@ -4,6 +4,7 @@
 
 #include "ae_keyboard.h"
 #include <audio_editor_core/ae_keyboard_utils.h>
+#include <audio_editor_core/ae_modifier_utils.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -18,7 +19,7 @@ keyboard::keyboard(std::shared_ptr<ui::event_manager> const &manager)
                 case ui::event_type::modifier: {
                     auto const modifier_event = event->get<ui::modifier>();
                     auto const flags = modifier_event.flag;
-                    auto const modifier = keyboard_utils::to_modifier(flags);
+                    auto const modifier = modifier_utils::to_modifier(flags);
 
                     switch (event->phase()) {
                         case ui::event_phase::began: {

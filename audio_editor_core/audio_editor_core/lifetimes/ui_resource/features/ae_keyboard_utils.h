@@ -13,5 +13,4 @@
 
 namespace yas::ae::keyboard_utils {
 std::optional<key> to_key(ui::key_event const &, std::unordered_set<ae::modifier> const &);
-ae::modifier to_modifier(ui::modifier_flags const flag);
 }  // namespace yas::ae::keyboard_utils
