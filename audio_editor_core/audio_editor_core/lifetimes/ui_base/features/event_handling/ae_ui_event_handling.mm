@@ -31,7 +31,7 @@ ui_event_handling::ui_event_handling(std::shared_ptr<ui::standard> const &standa
                                      std::shared_ptr<ae::modifiers_holder> const &modifiers_holder)
     : _action_sender(action_sender), _pinch_gesture_controller(pinch_gesture_controller) {
     keyboard
-        ->observe_key([this](ae::key const &key) {
+        ->observe([this](ae::key const &key) {
             if (auto const action_sender = this->_action_sender.lock()) {
                 action_sender->send(key);
             }
@@ -40,7 +40,7 @@ ui_event_handling::ui_event_handling(std::shared_ptr<ui::standard> const &standa
         ->add_to(this->_pool);
 
     modifiers_holder
-        ->observe_modifier([this](ae::modifier_event const &event) {
+        ->observe([this](ae::modifier_event const &event) {
             switch (event.modifier) {
                 case ae::modifier::shift:
                     if (auto const controller = this->_pinch_gesture_controller.lock()) {

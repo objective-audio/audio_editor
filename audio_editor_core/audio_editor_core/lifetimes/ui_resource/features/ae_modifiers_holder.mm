@@ -56,6 +56,6 @@ std::unordered_set<ae::modifier> const &modifiers_holder::modifiers() const {
     return this->_modifiers;
 }
 
-observing::endable modifiers_holder::observe_modifier(std::function<void(ae::modifier_event const &)> &&handler) {
+observing::endable modifiers_holder::observe(std::function<void(ae::modifier_event const &)> &&handler) {
     return this->_modifier_notifier->observe(std::move(handler));
 }

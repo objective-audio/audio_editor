@@ -15,7 +15,7 @@ struct modifiers_holder final {
 
     std::unordered_set<ae::modifier> const &modifiers() const;
 
-    [[nodiscard]] observing::endable observe_modifier(std::function<void(ae::modifier_event const &)> &&);
+    [[nodiscard]] observing::endable observe(std::function<void(ae::modifier_event const &)> &&);
 
    private:
     std::shared_ptr<ui::event_manager> const _event_manager;
