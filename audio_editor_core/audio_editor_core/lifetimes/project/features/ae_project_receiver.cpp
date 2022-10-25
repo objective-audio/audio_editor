@@ -224,6 +224,9 @@ void project_receiver::receive(ae::action const &action) const {
                         case editing_action_name::escape:
                             this->_escaper->espace();
                             break;
+                        case editing_action_name::select_module:
+                            this->_module_selector->select_module_at(action.file_module_index_value());
+                            break;
                         case editing_action_name::toggle_module_selection:
                             this->_module_selector->toggle_module_at(action.file_module_index_value());
                             break;
@@ -324,6 +327,8 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                 case editing_action_name::escape:
                     return to_state(this->_escaper->can_escape());
 
+                case editing_action_name::select_module:
+                    return to_state(this->_module_selector->can_select());
                 case editing_action_name::toggle_module_selection:
                     return to_state(this->_module_selector->can_toggle());
                 case editing_action_name::begin_module_renaming:

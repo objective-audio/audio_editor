@@ -22,6 +22,18 @@ modules_controller::modules_controller(std::shared_ptr<project_action_sender> co
     : _action_sender(action_sender), _content_pool(content_pool) {
 }
 
+void modules_controller::select_module_at(std::size_t const idx) {
+    auto const action_sender = this->_action_sender.lock();
+    if (!action_sender) {
+        assertion_failure_if_not_test();
+        return;
+    }
+
+    if (auto index = this->index_at(idx)) {
+        action_sender->send(editing_action_name::select_module, std::move(index.value()));
+    }
+}
+
 void modules_controller::toggle_module_selection_at(std::size_t const idx) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {

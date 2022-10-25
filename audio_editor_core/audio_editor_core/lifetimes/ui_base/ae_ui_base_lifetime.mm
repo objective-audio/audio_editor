@@ -33,7 +33,7 @@ ui_base_lifetime::ui_base_lifetime(ae::window_lifetime_id const &lifetime_id)
       node_hierarchy(ui_node_hierarchy::make_shared(lifetime_id)),
       background(ui_background::make_shared(lifetime_id)),
       waveforms(ui_module_waveforms::make_shared(lifetime_id)),
-      modules(ui_modules::make_shared(lifetime_id, this->node_hierarchy->modules_node, this->waveforms)),
+      modules(ui_modules::make_shared(lifetime_id, this->node_hierarchy->modules_node, this->waveforms.get())),
       pasting_modules(ui_pasting_modules::make_shared(lifetime_id, this->node_hierarchy->pasting_modules_node)),
       edge(ui_edge::make_shared(lifetime_id, this->node_hierarchy->edge_node)),
       markers(ui_markers::make_shared(lifetime_id, this->node_hierarchy->markers_node)),
