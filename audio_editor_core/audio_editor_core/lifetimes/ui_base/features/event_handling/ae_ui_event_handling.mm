@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_project_action_sender.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_modifiers_holder.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -19,16 +20,18 @@ std::shared_ptr<ui_event_handling> ui_event_handling::make_shared(window_lifetim
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
     return std::make_shared<ui_event_handling>(resource_lifetime->standard, project_lifetime->action_sender,
-                                               project_lifetime->pinch_gesture_controller, resource_lifetime->keyboard);
+                                               project_lifetime->pinch_gesture_controller, resource_lifetime->keyboard,
+                                               resource_lifetime->modifiers_holder);
 }
 
 ui_event_handling::ui_event_handling(std::shared_ptr<ui::standard> const &standard,
                                      std::shared_ptr<project_action_sender> const &action_sender,
                                      std::shared_ptr<pinch_gesture_controller> const &pinch_gesture_controller,
-                                     std::shared_ptr<ae::keyboard> const &keyboard)
+                                     std::shared_ptr<ae::keyboard> const &keyboard,
+                                     std::shared_ptr<ae::modifiers_holder> const &modifiers_holder)
     : _action_sender(action_sender), _pinch_gesture_controller(pinch_gesture_controller) {
     keyboard
-        ->observe_key([this](ae::key const &key) {
+        ->observe([this](ae::key const &key) {
             if (auto const action_sender = this->_action_sender.lock()) {
                 action_sender->send(key);
             }
@@ -36,8 +39,8 @@ ui_event_handling::ui_event_handling(std::shared_ptr<ui::standard> const &standa
         .end()
         ->add_to(this->_pool);
 
-    keyboard
-        ->observe_modifier([this](ae::modifier_event const &event) {
+    modifiers_holder
+        ->observe([this](ae::modifier_event const &event) {
             switch (event.modifier) {
                 case ae::modifier::shift:
                     if (auto const controller = this->_pinch_gesture_controller.lock()) {
