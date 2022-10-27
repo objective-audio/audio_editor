@@ -15,6 +15,9 @@ class editing_status;
 struct module_selector final {
     module_selector(file_track const *, selected_file_module_pool *, editing_status const *);
 
+    [[nodiscard]] bool can_select() const;
+    void select_module_at(file_module_index const &);
+
     [[nodiscard]] bool can_toggle() const;
     void toggle_module_at(file_module_index const &);
 

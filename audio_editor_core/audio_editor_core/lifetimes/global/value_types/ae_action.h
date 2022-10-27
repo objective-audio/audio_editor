@@ -47,6 +47,7 @@ enum class editing_action_name {
     copy,
     paste,
     begin_module_renaming,
+    select_module,
     toggle_module_selection,
     begin_marker_renaming,
     begin_time_editing,

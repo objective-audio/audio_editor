@@ -15,16 +15,17 @@ class modules_presenter;
 class modules_controller;
 class display_space;
 class ui_module_waveforms;
+class modifiers_holder;
 class color;
 
 struct ui_modules final {
     [[nodiscard]] static std::shared_ptr<ui_modules> make_shared(window_lifetime_id const &,
                                                                  std::shared_ptr<ui::node> const &,
-                                                                 std::shared_ptr<ui_module_waveforms> const &);
+                                                                 ui_module_waveforms *);
 
     ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<modules_controller> const &,
                std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::node> const &, ae::color *,
-               std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ui_module_waveforms> const &);
+               std::shared_ptr<ui::font_atlas> const &, ui_module_waveforms *, modifiers_holder *);
 
     void set_scale(ui::size const &);
 
@@ -33,12 +34,13 @@ struct ui_modules final {
     std::shared_ptr<modules_controller> const _controller;
     ae::color *const _color;
     std::shared_ptr<ui::font_atlas> const _name_font_atlas;
-    std::shared_ptr<ui_module_waveforms> const _waveforms;
+    ui_module_waveforms *const _waveforms;
     std::shared_ptr<ui::node> const _triangle_node;
     std::shared_ptr<ui::node> const _line_node;
     std::shared_ptr<ui::node> const _names_root_node;
     std::shared_ptr<ui::touch_tracker> const _touch_tracker;
     std::shared_ptr<ui::multiple_touch> const _multiple_touch;
+    modifiers_holder *const _modifiers_holder;
 
     ui::size _scale{.width = 1.0f, .height = 1.0f};
     std::size_t _remaked_count = 0;

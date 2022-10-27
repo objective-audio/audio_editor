@@ -12,6 +12,7 @@
 #include <audio_editor_core/ae_modules_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
+#include <audio_editor_core/ae_modifiers_holder.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -22,21 +23,22 @@ static std::size_t const reserving_interval = 100;
 
 std::shared_ptr<ui_modules> ui_modules::make_shared(window_lifetime_id const &window_lifetime_id,
                                                     std::shared_ptr<ui::node> const &node,
-                                                    std::shared_ptr<ui_module_waveforms> const &waveforms) {
+                                                    ui_module_waveforms *waveforms) {
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
     auto const modules_presenter = modules_presenter::make_shared(window_lifetime_id, resource_lifetime->display_space);
     auto const modules_controller = modules_controller::make_shared(window_lifetime_id);
     return std::make_shared<ui_modules>(modules_presenter, modules_controller, resource_lifetime->standard, node,
-                                        app_lifetime->color.get(), resource_lifetime->normal_font_atlas, waveforms);
+                                        app_lifetime->color.get(), resource_lifetime->normal_font_atlas, waveforms,
+                                        resource_lifetime->modifiers_holder.get());
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                        std::shared_ptr<modules_controller> const &controller,
                        std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::node> const &node,
                        ae::color *color, std::shared_ptr<ui::font_atlas> const &name_font_atlas,
-                       std::shared_ptr<ui_module_waveforms> const &waveforms)
+                       ui_module_waveforms *waveforms, modifiers_holder *modifiers_holder)
     : _presenter(presenter),
       _controller(controller),
       _color(color),
@@ -47,6 +49,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _names_root_node(ui::node::make_shared()),
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_triangle_node)),
       _multiple_touch(ui::multiple_touch::make_shared()),
+      _modifiers_holder(modifiers_holder),
       _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, nullptr)),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true}, nullptr,
                                        nullptr, nullptr)) {
@@ -115,7 +118,11 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
                 if (context.phase == ui::touch_tracker_phase::ended) {
-                    this->_controller->toggle_module_selection_at(context.collider_idx);
+                    if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
+                        this->_controller->toggle_module_selection_at(context.collider_idx);
+                    } else {
+                        this->_controller->select_module_at(context.collider_idx);
+                    }
                 }
                 this->_multiple_touch->handle_event(context.phase, context.collider_idx);
             }
