@@ -52,7 +52,7 @@ struct modules_presenter final {
     std::optional<time::range> _space_range() const;
     void _insert_content(file_module_object const &);
     void _erase_content(object_id const &);
-    void _replace_content(file_module_index const &);
+    void _replace_contents(std::vector<file_module_index> const &);
     void _update_all_contents(bool const force_updating, bool const force_replacing);
 };
 }  // namespace yas::ae

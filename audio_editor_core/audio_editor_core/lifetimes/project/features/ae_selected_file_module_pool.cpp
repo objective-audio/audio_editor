@@ -14,8 +14,8 @@ std::shared_ptr<selected_file_module_pool> selected_file_module_pool::make_share
 }
 
 selected_file_module_pool::selected_file_module_pool() {
-    this->_event_fetcher = observing::fetcher<event>::make_shared(
-        [this] { return event{.type = event_type::any, .modules = this->_modules}; });
+    this->_event_fetcher =
+        observing::fetcher<event>::make_shared([this] { return event{.type = event_type::fetched}; });
 }
 
 selected_file_module_pool::module_map const &selected_file_module_pool::modules() const {
@@ -44,9 +44,9 @@ void selected_file_module_pool::insert_module(selected_file_module_object const 
         return;
     }
 
-    this->_modules.emplace(std::move(index), module);
+    this->_modules.emplace(index, module);
 
-    this->_event_fetcher->push({.type = event_type::inserted, .module = module, .modules = this->_modules});
+    this->_event_fetcher->push({.type = event_type::inserted, .modules = {{index, module}}});
 }
 
 void selected_file_module_pool::erase_module(file_module_index const &index) {
@@ -59,7 +59,7 @@ void selected_file_module_pool::erase_module(file_module_index const &index) {
 
     this->_modules.erase(index);
 
-    this->_event_fetcher->push({.type = event_type::erased, .module = erasing, .modules = this->_modules});
+    this->_event_fetcher->push({.type = event_type::erased, .modules = {{index, erasing}}});
 }
 
 bool selected_file_module_pool::can_clear() const {
@@ -71,9 +71,11 @@ void selected_file_module_pool::clear() {
         return;
     }
 
+    auto erased = std::move(this->_modules);
+
     this->_modules.clear();
 
-    this->_event_fetcher->push({.type = event_type::any, .modules = this->_modules});
+    this->_event_fetcher->push({.type = event_type::erased, .modules = std::move(erased)});
 }
 
 observing::syncable selected_file_module_pool::observe_event(std::function<void(event const &)> &&handler) {
