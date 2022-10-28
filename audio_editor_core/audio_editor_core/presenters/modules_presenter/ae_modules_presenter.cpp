@@ -58,7 +58,7 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
                     this->_insert_content(event.module.value());
                 } break;
                 case file_track_event_type::detail_updated: {
-                    this->_replace_content(event.module.value().index());
+                    this->_replace_contents({event.module.value().index()});
                 } break;
             }
         })
@@ -70,12 +70,14 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
             using event_type = selected_file_module_pool::event_type;
 
             switch (event.type) {
-                case event_type::any:
+                case event_type::fetched:
                     this->_update_all_contents(true, false);
                     break;
                 case event_type::inserted:
                 case event_type::erased: {
-                    this->_replace_content(event.module.value().index());
+                    auto const indices =
+                        to_vector<file_module_index>(event.modules, [](auto const &pair) { return pair.first; });
+                    this->_replace_contents(indices);
                 } break;
             }
         })
@@ -162,7 +164,7 @@ void modules_presenter::_erase_content(object_id const &object_id) {
     content_pool->erase_for_id(object_id);
 }
 
-void modules_presenter::_replace_content(file_module_index const &index) {
+void modules_presenter::_replace_contents(std::vector<file_module_index> const &indices) {
     auto const content_pool = this->_content_pool.lock();
     auto const display_space = this->_display_space.lock();
     auto const file_track = this->_file_track.lock();
@@ -173,11 +175,14 @@ void modules_presenter::_replace_content(file_module_index const &index) {
     }
 
     auto const space_range = this->_space_range();
-    if (space_range.has_value() && index.range.is_overlap(space_range.value()) &&
-        file_track->modules().contains(index)) {
-        auto const &module = file_track->modules().at(index);
-        content_pool->replace({module, selected_pool->contains(index), this->_project_format.sample_rate,
-                               space_range.value(), display_space->scale().width});
+    if (space_range.has_value()) {
+        for (auto const &index : indices) {
+            if (index.range.is_overlap(space_range.value()) && file_track->modules().contains(index)) {
+                auto const &module = file_track->modules().at(index);
+                content_pool->replace({module, selected_pool->contains(index), this->_project_format.sample_rate,
+                                       space_range.value(), display_space->scale().width});
+            }
+        }
     }
 }
 

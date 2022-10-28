@@ -14,15 +14,14 @@ struct selected_file_module_pool {
     using module_map = std::map<file_module_index, selected_file_module_object>;
 
     enum class event_type {
-        any,
+        fetched,
         inserted,
         erased,
     };
 
     struct event final {
         event_type type;
-        std::optional<selected_file_module_object> module{std::nullopt};  // inserted, erased
-        module_map const &modules;
+        module_map modules;  // inserted, erased
     };
 
     [[nodiscard]] static std::shared_ptr<selected_file_module_pool> make_shared();
