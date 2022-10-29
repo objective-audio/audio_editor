@@ -71,6 +71,14 @@ std::optional<time::range> file_track::total_range() const {
     return file_track_utils::total_range(this->_modules);
 }
 
+std::optional<file_module_object> file_track::module_at(file_module_index const &index) const {
+    if (this->_modules.contains(index)) {
+        return this->_modules.at(index);
+    } else {
+        return std::nullopt;
+    }
+}
+
 std::optional<file_module_object> file_track::module_at(frame_index_t const frame) const {
     return file_track_utils::module(this->_modules, frame);
 }
