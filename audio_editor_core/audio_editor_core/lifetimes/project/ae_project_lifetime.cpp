@@ -120,8 +120,8 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       import_interactor(import_interactor::make_shared(this->modal_lifecycle.get(), this->editing_status.get(),
                                                        this->file_module_loader.get())),
       track_editor(track_editor::make_shared(window_lifetime->player.get(), this->file_track.get(),
-                                             this->marker_pool.get(), this->pasteboard.get(), this->database.get(),
-                                             this->editing_status.get())),
+                                             this->marker_pool.get(), this->selected_file_module_pool.get(),
+                                             this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_file_module_pool.get())),
       receiver(std::make_shared<project_receiver>(
           window_lifetime_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
