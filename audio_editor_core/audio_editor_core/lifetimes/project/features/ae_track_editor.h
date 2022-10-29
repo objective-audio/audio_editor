@@ -38,7 +38,7 @@ struct track_editor final {
     [[nodiscard]] bool can_copy() const;
     void copy();
     [[nodiscard]] bool can_paste() const;
-    void paste();
+    void paste(bool const withClearing);
 
    private:
     player *const _player;

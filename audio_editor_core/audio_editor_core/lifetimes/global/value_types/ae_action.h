@@ -46,6 +46,7 @@ enum class editing_action_name {
     cut,
     copy,
     paste,
+    paste_without_clearing,
     begin_module_renaming,
     select_module,
     toggle_module_selection,
