@@ -51,21 +51,21 @@ using namespace yas::ae::file_track_test_utils;
     auto const module1_index = track->insert_module_and_notify(module_params_1);
 
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().at(module1_index.value()).index(), module1_index.value());
+    XCTAssertEqual(track->module_at(module1_index.value()).value().index(), module1_index.value());
 
     file_module const module_params_2{"", {4, 3}, 4, ""};
 
     auto const module2_index = track->insert_module_and_notify(module_params_2);
 
     XCTAssertEqual(track->modules().size(), 2);
-    XCTAssertEqual(track->modules().at(module2_index.value()).index(), module2_index.value());
+    XCTAssertEqual(track->module_at(module2_index.value()).value().index(), module2_index.value());
 
     file_module const module_params_3{"", {-2, 2}, 7, ""};
 
     auto const module3_index = track->insert_module_and_notify(module_params_3);
 
     XCTAssertEqual(track->modules().size(), 3);
-    XCTAssertEqual(track->modules().at(module3_index.value()).index(), module3_index.value());
+    XCTAssertEqual(track->module_at(module3_index.value()).value().index(), module3_index.value());
 
     auto iterator = track->modules().begin();
     XCTAssertEqual(iterator->first, module3_index);

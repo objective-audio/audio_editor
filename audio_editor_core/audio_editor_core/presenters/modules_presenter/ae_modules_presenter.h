@@ -28,7 +28,7 @@ struct modules_presenter final {
     [[nodiscard]] std::vector<std::optional<module_content>> const &contents() const;
     [[nodiscard]] observing::syncable observe_contents(std::function<void(module_content_pool_event const &)> &&);
 
-    std::string const &name_for_index(file_module_index const &);
+    std::string name_for_index(file_module_index const &);
 
     void update_if_needed();
 

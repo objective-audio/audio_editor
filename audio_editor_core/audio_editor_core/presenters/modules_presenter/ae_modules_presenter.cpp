@@ -111,10 +111,10 @@ observing::syncable modules_presenter::observe_contents(
     }
 }
 
-std::string const &modules_presenter::name_for_index(file_module_index const &index) {
+std::string modules_presenter::name_for_index(file_module_index const &index) {
     if (auto const file_track = this->_file_track.lock()) {
-        if (file_track->modules().contains(index)) {
-            return file_track->modules().at(index).value.name;
+        if (auto const module = file_track->module_at(index)) {
+            return module.value().value.name;
         }
     }
 
@@ -177,10 +177,12 @@ void modules_presenter::_replace_contents(std::vector<file_module_index> const &
     auto const space_range = this->_space_range();
     if (space_range.has_value()) {
         for (auto const &index : indices) {
-            if (index.range.is_overlap(space_range.value()) && file_track->modules().contains(index)) {
-                auto const &module = file_track->modules().at(index);
-                content_pool->replace({module, selected_pool->contains(index), this->_project_format.sample_rate,
-                                       space_range.value(), display_space->scale().width});
+            if (index.range.is_overlap(space_range.value())) {
+                if (auto const module = file_track->module_at(index)) {
+                    content_pool->replace({module.value(), selected_pool->contains(index),
+                                           this->_project_format.sample_rate, space_range.value(),
+                                           display_space->scale().width});
+                }
             }
         }
     }
