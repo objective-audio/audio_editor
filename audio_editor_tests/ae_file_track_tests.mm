@@ -51,21 +51,21 @@ using namespace yas::ae::file_track_test_utils;
     auto const module1_index = track->insert_module_and_notify(module_params_1);
 
     XCTAssertEqual(track->modules().size(), 1);
-    XCTAssertEqual(track->modules().at(module1_index.value()).index(), module1_index.value());
+    XCTAssertEqual(track->module_at(module1_index.value()).value().index(), module1_index.value());
 
     file_module const module_params_2{"", {4, 3}, 4, ""};
 
     auto const module2_index = track->insert_module_and_notify(module_params_2);
 
     XCTAssertEqual(track->modules().size(), 2);
-    XCTAssertEqual(track->modules().at(module2_index.value()).index(), module2_index.value());
+    XCTAssertEqual(track->module_at(module2_index.value()).value().index(), module2_index.value());
 
     file_module const module_params_3{"", {-2, 2}, 7, ""};
 
     auto const module3_index = track->insert_module_and_notify(module_params_3);
 
     XCTAssertEqual(track->modules().size(), 3);
-    XCTAssertEqual(track->modules().at(module3_index.value()).index(), module3_index.value());
+    XCTAssertEqual(track->module_at(module3_index.value()).value().index(), module3_index.value());
 
     auto iterator = track->modules().begin();
     XCTAssertEqual(iterator->first, module3_index);
@@ -145,7 +145,7 @@ using namespace yas::ae::file_track_test_utils;
     canceller->cancel();
 }
 
-- (void)test_module_at {
+- (void)test_module_at_frame {
     auto const database = std::make_shared<database_mock>();
     auto const track = file_track::make_shared(database.get());
 
@@ -176,6 +176,24 @@ using namespace yas::ae::file_track_test_utils;
     XCTAssertEqual(track->module_at(6).value().value.range, (time::range{4, 3}));
     XCTAssertEqual(track->module_at(6).value().value.file_frame, 4);
     XCTAssertEqual(track->module_at(7), std::nullopt);
+}
+
+- (void)test_module_at_index {
+    auto const database = std::make_shared<database_mock>();
+    auto const track = file_track::make_shared(database.get());
+
+    file_module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
+    file_module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
+    file_module_object const other_module{db::make_temporary_id(), {"other_module", {100, 100}, 100, ""}};
+
+    track->revert_modules_and_notify({module1, module2});
+
+    XCTAssertEqual(track->module_at(other_module.index()), std::nullopt);
+
+    auto const stored_module1 = track->module_at(module1.index());
+    XCTAssertEqual(stored_module1.value().value.name, "module_1");
+    auto const stored_module2 = track->module_at(module2.index());
+    XCTAssertEqual(stored_module2.value().value.name, "module_2");
 }
 
 - (void)test_previous_module_at {
