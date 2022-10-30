@@ -217,12 +217,6 @@ using namespace yas::ae;
     }
 }
 
-- (IBAction)pasteWithoutClearing:(id)sender {
-    if (auto const action_sender = self->_action_sender.lock()) {
-        action_sender->send(editing_action_name::paste_without_clearing);
-    }
-}
-
 - (IBAction)purge:(id)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
         action_sender->send(editing_action_name::purge);
@@ -265,8 +259,6 @@ using namespace yas::ae;
         return editing_action_name::copy;
     } else if (selector == @selector(paste:)) {
         return editing_action_name::paste;
-    } else if (selector == @selector(pasteWithoutClearing:)) {
-        return editing_action_name::paste_without_clearing;
     } else if (selector == @selector(purge:)) {
         return editing_action_name::purge;
     }

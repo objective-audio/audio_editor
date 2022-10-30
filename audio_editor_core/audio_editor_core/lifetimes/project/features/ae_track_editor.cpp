@@ -213,7 +213,7 @@ bool track_editor::can_paste() const {
     return true;
 }
 
-void track_editor::paste(bool const withClearing) {
+void track_editor::paste() {
     if (!this->can_paste()) {
         return;
     }
@@ -234,10 +234,6 @@ void track_editor::paste(bool const withClearing) {
                                                  module_value.file_frame, module_value.file_name});
         }
     });
-
-    if (withClearing) {
-        this->_pasteboard->clear();
-    }
 }
 
 bool track_editor::_has_target_modules() const {
