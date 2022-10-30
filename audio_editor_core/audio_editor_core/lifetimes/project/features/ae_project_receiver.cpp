@@ -219,10 +219,7 @@ void project_receiver::receive(ae::action const &action) const {
                             this->_editor->copy();
                             break;
                         case editing_action_name::paste:
-                            this->_editor->paste(true);
-                            break;
-                        case editing_action_name::paste_without_clearing:
-                            this->_editor->paste(false);
+                            this->_editor->paste();
                             break;
                         case editing_action_name::escape:
                             this->_escaper->espace();
@@ -326,7 +323,6 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                 case editing_action_name::copy:
                     return to_state(this->_editor->can_copy());
                 case editing_action_name::paste:
-                case editing_action_name::paste_without_clearing:
                     return to_state(this->_editor->can_paste());
                 case editing_action_name::escape:
                     return to_state(this->_escaper->can_escape());
