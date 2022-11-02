@@ -8,14 +8,12 @@
 #include <audio_editor_core/ae_database_types.h>
 #include <audio_editor_core/ae_db_types.h>
 #include <audio_editor_core/ae_file_module.h>
-#include <audio_editor_core/ae_file_ref_pool_dependencies.h>
 #include <audio_editor_core/ae_file_track_dependencies.h>
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_marker_pool_dependencies.h>
 #include <audio_editor_core/ae_pasteboard_types.h>
 #include <cpp_utils/yas_delaying_caller.h>
 
-#include <audio_editor_core/ae_file_ref.hpp>
 #include <filesystem>
 
 namespace yas::db {
@@ -23,15 +21,11 @@ class manager;
 }  // namespace yas::db
 
 namespace yas::ae {
-struct database final : std::enable_shared_from_this<database>,
-                        database_for_marker_pool,
-                        database_for_file_track,
-                        database_for_file_ref_pool {
+struct database final : std::enable_shared_from_this<database>, database_for_marker_pool, database_for_file_track {
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::filesystem::path const &db_file_path);
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);
 
     [[nodiscard]] db_modules_map const &modules() const;
-    [[nodiscard]] db_file_refs_map const &file_refs() const;
     [[nodiscard]] db_markers_map const &markers() const;
     [[nodiscard]] std::optional<db_edge> const &edge() const;
     [[nodiscard]] bool is_processing() const;
@@ -43,7 +37,6 @@ struct database final : std::enable_shared_from_this<database>,
     void remove_marker(object_id const &) override;
     void update_marker(object_id const &, marker_object const &) override;
     void set_edge(ae::edge const &);
-    [[nodiscard]] std::optional<db_file_ref> add_file_ref(file_ref const &) override;
 
     void suspend_saving(std::function<void(void)> &&);
 
@@ -64,7 +57,6 @@ struct database final : std::enable_shared_from_this<database>,
     std::size_t _processing_count = 0;
     std::shared_ptr<db::manager> const _manager;
     db_modules_map _modules;
-    db_file_refs_map _file_refs;
     db_markers_map _markers;
     std::optional<db_edge> _edge;
     delaying_caller _save_caller;

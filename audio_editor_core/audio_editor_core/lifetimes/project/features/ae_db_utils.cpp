@@ -12,7 +12,7 @@ using namespace yas::ae;
 using namespace yas::ae::db_constants;
 
 db::model database_utils::make_model() {
-    yas::version version{"0.0.3"};
+    yas::version version{"0.0.4"};
 
     db::entity_args module_entity{.name = module_name::entity,
                                   .attributes = {{.name = module_name::attribute::name,
@@ -37,13 +37,6 @@ db::model database_utils::make_model() {
                                                   .not_null = true}},
                                   .relations = {}};
 
-    db::entity_args file_reference_entity{.name = file_ref_name::entity,
-                                          .attributes = {{.name = file_ref_name::attribute::file_name,
-                                                          .type = db::attribute_type::text,
-                                                          .default_value = db::value{""},
-                                                          .not_null = true}},
-                                          .relations = {}};
-
     db::entity_args marker_entity{.name = marker_name::entity,
                                   .attributes = {{.name = marker_name::attribute::frame,
                                                   .type = db::attribute_type::integer,
@@ -65,8 +58,8 @@ db::model database_utils::make_model() {
                                                 .not_null = true}},
                                 .relations = {}};
 
-    return db::model{db::model_args{.version = std::move(version),
-                                    .entities = {std::move(module_entity), std::move(file_reference_entity),
-                                                 std::move(marker_entity), std::move(edge_entity)},
-                                    .indices = {}}};
+    return db::model{
+        db::model_args{.version = std::move(version),
+                       .entities = {std::move(module_entity), std::move(marker_entity), std::move(edge_entity)},
+                       .indices = {}}};
 }

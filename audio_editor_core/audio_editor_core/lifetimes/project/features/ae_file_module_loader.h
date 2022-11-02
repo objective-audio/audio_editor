@@ -17,7 +17,6 @@ class file_info_loader;
 class file_module_loading_state_holder;
 class database;
 class file_track;
-class file_ref_pool;
 class edge_holder;
 class player;
 class timeline_holder;
@@ -27,12 +26,12 @@ struct file_module_loader final : std::enable_shared_from_this<file_module_loade
     [[nodiscard]] static std::shared_ptr<file_module_loader> make_shared(project_id const &, project_path const *,
                                                                          project_format const &, player *,
                                                                          file_module_loading_state_holder *, database *,
-                                                                         file_track *, file_ref_pool *, edge_holder *,
+                                                                         file_track *, edge_holder *,
                                                                          timeline_holder const *);
 
     file_module_loader(std::shared_ptr<uuid_generatable> const &, project_id const &, project_path const *,
                        project_format const &, file_importer *, file_info_loader const *, player *,
-                       file_module_loading_state_holder *, database *, file_track *, file_ref_pool *, edge_holder *,
+                       file_module_loading_state_holder *, database *, file_track *, edge_holder *,
                        timeline_holder const *);
 
     void load(std::filesystem::path const &src_path);
@@ -48,7 +47,6 @@ struct file_module_loader final : std::enable_shared_from_this<file_module_loade
     file_module_loading_state_holder *const _state_holder;
     database *const _database;
     file_track *const _file_track;
-    file_ref_pool *const _file_ref_pool;
     edge_holder *const _edge_holder;
     timeline_holder const *const _timeline_holder;
 };

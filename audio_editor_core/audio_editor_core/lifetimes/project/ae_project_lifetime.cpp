@@ -48,7 +48,6 @@
 #include <audio_editor_core/ae_zooming_pair.h>
 
 #include <audio_editor_core/ae_escaper.hpp>
-#include <audio_editor_core/ae_file_ref_pool.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_selected_file_module_pool.hpp>
@@ -79,7 +78,6 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->file_track.get())),
       selected_file_module_pool(selected_file_module_pool::make_shared()),
       marker_pool(marker_pool::make_shared(this->database.get())),
-      file_ref_pool(std::make_shared<ae::file_ref_pool>(this->database.get())),
       pasteboard(pasteboard::make_shared()),
       exporter(exporter::make_shared()),
       editing_status(editing_status::make_shared(this->exporter.get())),
@@ -108,15 +106,13 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
           database_updater::make_shared(this->edge_holder.get(), this->pasteboard.get(), this->database.get())),
       timeline_updater(timeline_updater::make_shared(this->file_track.get(), window_lifetime->timeline_holder.get())),
       reverter(reverter::make_shared(window_lifetime->project_path.get(), this->database.get(), this->file_track.get(),
-                                     this->marker_pool.get(), this->file_ref_pool.get(), this->pasteboard.get(),
-                                     this->edge_holder.get(), this->selected_file_module_pool.get(),
-                                     this->editing_status.get())),
+                                     this->marker_pool.get(), this->pasteboard.get(), this->edge_holder.get(),
+                                     this->selected_file_module_pool.get(), this->editing_status.get())),
       file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
       file_module_loader(file_module_loader::make_shared(
           window_lifetime_id.project, window_lifetime->project_path.get(), this->project_format,
           window_lifetime->player.get(), this->file_module_loading_state_holder.get(), this->database.get(),
-          this->file_track.get(), this->file_ref_pool.get(), this->edge_holder.get(),
-          window_lifetime->timeline_holder.get())),
+          this->file_track.get(), this->edge_holder.get(), window_lifetime->timeline_holder.get())),
       import_interactor(import_interactor::make_shared(this->modal_lifecycle.get(), this->editing_status.get(),
                                                        this->file_module_loader.get())),
       track_editor(track_editor::make_shared(window_lifetime->player.get(), this->file_track.get(),

@@ -27,7 +27,6 @@ class file_track;
 class selected_file_module_pool;
 class module_selector;
 class marker_pool;
-class file_ref_pool;
 class pasteboard;
 class database;
 class exporter;
@@ -81,7 +80,6 @@ struct project_lifetime final {
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<selected_file_module_pool> const selected_file_module_pool;
     std::shared_ptr<marker_pool> const marker_pool;
-    std::shared_ptr<file_ref_pool> const file_ref_pool;
     std::shared_ptr<pasteboard> const pasteboard;
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<editing_status> const editing_status;
