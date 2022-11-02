@@ -14,7 +14,6 @@
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_file_manager.h>
 
-#include <audio_editor_core/ae_file_ref_pool.hpp>
 #include <audio_editor_core/ae_selected_file_module_pool.hpp>
 
 using namespace yas;
@@ -22,22 +21,20 @@ using namespace yas::ae;
 
 std::shared_ptr<reverter> reverter::make_shared(project_path const *project_path, database *database,
                                                 file_track *file_track, marker_pool *marker_pool,
-                                                file_ref_pool *file_ref_pool, pasteboard *pasteboard,
-                                                edge_holder *edge_holder, selected_file_module_pool *selected_pool,
+                                                pasteboard *pasteboard, edge_holder *edge_holder,
+                                                selected_file_module_pool *selected_pool,
                                                 editing_status const *editing_status) {
-    return std::make_shared<reverter>(project_path, database, file_track, marker_pool, file_ref_pool, pasteboard,
-                                      edge_holder, selected_pool, editing_status);
+    return std::make_shared<reverter>(project_path, database, file_track, marker_pool, pasteboard, edge_holder,
+                                      selected_pool, editing_status);
 }
 
 reverter::reverter(project_path const *project_path, database *database, file_track *file_track,
-                   marker_pool *marker_pool, file_ref_pool *file_ref_pool, pasteboard *pasteboard,
-                   edge_holder *edge_holder, selected_file_module_pool *selected_pool,
-                   editing_status const *editing_status)
+                   marker_pool *marker_pool, pasteboard *pasteboard, edge_holder *edge_holder,
+                   selected_file_module_pool *selected_pool, editing_status const *editing_status)
     : _project_path(project_path),
       _database(database),
       _file_track(file_track),
       _marker_pool(marker_pool),
-      _file_ref_pool(file_ref_pool),
       _pasteboard(pasteboard),
       _edge_holder(edge_holder),
       _selected_file_module_pool(selected_pool),
@@ -65,16 +62,6 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                     }
 
                     this->_marker_pool->revert_markers(std::move(markers));
-
-                    std::vector<file_ref_object> file_refs;
-
-                    for (auto const &pair : this->_database->file_refs()) {
-                        if (auto const file_ref = pair.second.object()) {
-                            file_refs.emplace_back(std::move(file_ref.value()));
-                        }
-                    }
-
-                    this->_file_ref_pool->revert(std::move(file_refs));
 
                     if (auto const &db_edge = this->_database->edge()) {
                         this->_edge_holder->revert_edge(db_edge.value().edge());

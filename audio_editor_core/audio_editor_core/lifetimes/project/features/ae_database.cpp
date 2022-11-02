@@ -11,8 +11,6 @@
 #include <cpp_utils/yas_thread.h>
 #include <db/yas_db_umbrella.h>
 
-#include <audio_editor_core/ae_file_ref.hpp>
-
 using namespace yas;
 using namespace yas::ae;
 
@@ -32,10 +30,6 @@ database::database(std::shared_ptr<db::manager> const &manager)
 
 db_modules_map const &database::modules() const {
     return this->_modules;
-}
-
-db_file_refs_map const &database::file_refs() const {
-    return this->_file_refs;
 }
 
 db_markers_map const &database::markers() const {
@@ -113,18 +107,6 @@ void database::set_edge(ae::edge const &edge) {
     }
 
     this->_save();
-}
-
-std::optional<db_file_ref> database::add_file_ref(file_ref const &file_ref) {
-    if (!this->_file_refs.contains(file_ref.file_name)) {
-        auto db_file_ref = db_file_ref::create(this->_manager, file_ref);
-        this->_file_refs.emplace(file_ref.file_name, db_file_ref);
-        this->_save();
-        return db_file_ref;
-    } else {
-        // 同じファイルを追加した場合は新規で作らずにスルーする
-        return std::nullopt;
-    }
 }
 
 void database::suspend_saving(std::function<void(void)> &&handler) {
@@ -289,38 +271,6 @@ void database::_revert(db::integer::type const revert_id, bool const is_initial)
                 }
 
                 database->_modules = std::move(modules);
-            } else {
-                assertion_failure_if_not_test();
-            }
-        });
-
-    this->_manager->fetch_objects(
-        db::no_cancellation,
-        [] {
-            return db::to_fetch_option(
-                db::select_option{.table = db_constants::file_ref_name::entity,
-                                  .field_orders = {{db::object_id_field, db::order::ascending}}});
-        },
-        [weak_db = this->weak_from_this()](db::manager_vector_result_t result) {
-            assert(thread::is_main());
-
-            auto const database = weak_db.lock();
-            if (database && result) {
-                auto const &result_objects = result.value();
-
-                db_file_refs_map file_refs;
-
-                if (result_objects.contains(db_constants::file_ref_name::entity)) {
-                    auto const &objects = result_objects.at(db_constants::file_ref_name::entity);
-                    for (auto const &object : objects) {
-                        db_file_ref const db_ref{object};
-                        if (auto const ref = db_ref.object()) {
-                            file_refs.emplace(ref.value().value.file_name, std::move(db_ref));
-                        }
-                    }
-                }
-
-                database->_file_refs = std::move(file_refs);
             } else {
                 assertion_failure_if_not_test();
             }
