@@ -111,8 +111,7 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
       file_module_loading_state_holder(file_module_loading_state_holder::make_shared()),
       file_module_loader(file_module_loader::make_shared(
           window_lifetime_id.project, window_lifetime->project_path.get(), this->project_format,
-          window_lifetime->player.get(), this->file_module_loading_state_holder.get(), this->database.get(),
-          this->file_track.get(), this->edge_holder.get(), window_lifetime->timeline_holder.get())),
+          this->file_module_loading_state_holder.get(), this->database.get(), this->pasteboard.get())),
       import_interactor(import_interactor::make_shared(this->modal_lifecycle.get(), this->editing_status.get(),
                                                        this->file_module_loader.get())),
       track_editor(track_editor::make_shared(window_lifetime->player.get(), this->file_track.get(),

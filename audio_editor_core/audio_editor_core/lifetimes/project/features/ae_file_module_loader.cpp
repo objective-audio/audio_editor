@@ -5,14 +5,12 @@
 #include "ae_file_module_loader.h"
 
 #include <audio_editor_core/ae_database.h>
-#include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_file_importer.h>
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_file_module_loading_state_holder.h>
-#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_player.h>
+#include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_uuid_generator.h>
@@ -21,35 +19,32 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<file_module_loader> file_module_loader::make_shared(
-    project_id const &project_id, project_path const *project_path, project_format const &project_format,
-    player *player, file_module_loading_state_holder *state_holder, database *database, file_track *file_track,
-    edge_holder *edge_holder, timeline_holder const *timeline_holder) {
+std::shared_ptr<file_module_loader> file_module_loader::make_shared(project_id const &project_id,
+                                                                    project_path const *project_path,
+                                                                    project_format const &project_format,
+                                                                    file_module_loading_state_holder *state_holder,
+                                                                    database *database, pasteboard *pasteboard) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    return std::make_shared<file_module_loader>(
-        uuid_generator::make_shared(), project_id, project_path, project_format, app_lifetime->file_importer.get(),
-        app_lifetime->file_info_loader.get(), player, state_holder, database, file_track, edge_holder, timeline_holder);
+    return std::make_shared<file_module_loader>(uuid_generator::make_shared(), project_id, project_path, project_format,
+                                                app_lifetime->file_importer.get(), app_lifetime->file_info_loader.get(),
+                                                state_holder, database, pasteboard);
 }
 
 file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &uuid_generator,
                                        project_id const &project_id, project_path const *project_path,
                                        project_format const &project_format, file_importer *file_importer,
-                                       file_info_loader const *file_info_loader, player *player,
+                                       file_info_loader const *file_info_loader,
                                        file_module_loading_state_holder *state_holder, database *database,
-                                       file_track *file_track, edge_holder *edge_holder,
-                                       timeline_holder const *timeline_holder)
+                                       pasteboard *pasteboard)
     : _uuid_generator(uuid_generator),
       _project_id(project_id),
       _project_path(project_path),
       _project_format(project_format),
       _file_importer(file_importer),
       _file_info_loader(file_info_loader),
-      _player(player),
       _state_holder(state_holder),
       _database(database),
-      _file_track(file_track),
-      _edge_holder(edge_holder),
-      _timeline_holder(timeline_holder) {
+      _pasteboard(pasteboard) {
 }
 
 void file_module_loader::load(std::filesystem::path const &src_path) {
@@ -80,14 +75,9 @@ void file_module_loader::load(std::filesystem::path const &src_path) {
              if (auto const file_info = loader->_file_info_loader->load_file_info(dst_path)) {
                  loader->_database->suspend_saving(
                      [&loader, &file_info = file_info.value(), &src_file_name, &dst_file_name] {
-                         loader->_file_track->overwrite_module(
-                             {src_file_name, time::range{0, file_info.length}, 0, dst_file_name});
-
-                         if (auto const &total_range = loader->_file_track->total_range()) {
-                             auto const &total_range_value = total_range.value();
-                             loader->_edge_holder->set_edge(
-                                 {total_range_value.frame, static_cast<frame_index_t>(total_range_value.next_frame())});
-                         }
+                         loader->_pasteboard->set_file_modules({pasting_file_module_object{
+                             identifier{},
+                             pasting_file_module{src_file_name, 0, time::range{0, file_info.length}, dst_file_name}}});
                      });
              }
 
