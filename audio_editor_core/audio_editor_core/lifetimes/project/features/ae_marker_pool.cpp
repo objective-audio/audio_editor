@@ -144,11 +144,9 @@ std::optional<marker_object> marker_pool::marker_for_id(object_id const &identif
 }
 
 std::optional<frame_index_t> marker_pool::next_jumpable_frame(frame_index_t const frame) const {
-    if (auto const marker = this->marker_for_frame(frame)) {
-        auto const &markers = this->markers();
-        auto upper_it = markers.upper_bound(marker.value().index());
-        if (upper_it != markers.end()) {
-            return upper_it->first.frame;
+    for (auto const &pair : this->markers()) {
+        if (frame < pair.first.frame) {
+            return pair.first.frame;
         }
     }
     return std::nullopt;
