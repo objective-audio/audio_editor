@@ -16,23 +16,18 @@ class file_importer;
 class file_info_loader;
 class file_module_loading_state_holder;
 class database;
-class file_track;
-class edge_holder;
-class player;
-class timeline_holder;
 class uuid_generatable;
+class pasteboard;
 
 struct file_module_loader final : std::enable_shared_from_this<file_module_loader> {
     [[nodiscard]] static std::shared_ptr<file_module_loader> make_shared(project_id const &, project_path const *,
-                                                                         project_format const &, player *,
+                                                                         project_format const &,
                                                                          file_module_loading_state_holder *, database *,
-                                                                         file_track *, edge_holder *,
-                                                                         timeline_holder const *);
+                                                                         pasteboard *);
 
     file_module_loader(std::shared_ptr<uuid_generatable> const &, project_id const &, project_path const *,
-                       project_format const &, file_importer *, file_info_loader const *, player *,
-                       file_module_loading_state_holder *, database *, file_track *, edge_holder *,
-                       timeline_holder const *);
+                       project_format const &, file_importer *, file_info_loader const *,
+                       file_module_loading_state_holder *, database *, pasteboard *);
 
     void load(std::filesystem::path const &src_path);
 
@@ -43,11 +38,8 @@ struct file_module_loader final : std::enable_shared_from_this<file_module_loade
     project_format const _project_format;
     file_importer *const _file_importer;
     file_info_loader const *const _file_info_loader;
-    player *const _player;
     file_module_loading_state_holder *const _state_holder;
     database *const _database;
-    file_track *const _file_track;
-    edge_holder *const _edge_holder;
-    timeline_holder const *const _timeline_holder;
+    pasteboard *const _pasteboard;
 };
 }  // namespace yas::ae
