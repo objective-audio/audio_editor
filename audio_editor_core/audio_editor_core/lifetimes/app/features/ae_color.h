@@ -30,6 +30,7 @@ struct color final {
 
     [[nodiscard]] ui::color marker_square() const;
     [[nodiscard]] ui::color marker_line() const;
+    [[nodiscard]] ui::color marker_selected_line() const;
     [[nodiscard]] ui::color marker_text() const;
 
     [[nodiscard]] ui::color modal_bg() const;

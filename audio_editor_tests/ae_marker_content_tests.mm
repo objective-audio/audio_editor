@@ -23,28 +23,34 @@ using namespace yas::ae;
     uint32_t const sample_rate_2 = 2;
     float const scale_1 = 1.0f;
     float const scale_2 = 2.0f;
+    bool const is_selected_1 = false;
+    bool const is_selected_2 = true;
 
-    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1) ==
-                  marker_content(id_1, frame_1, sample_rate_1, scale_1));
-    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1) ==
-                   marker_content(id_2, frame_1, sample_rate_1, scale_1));
-    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1) ==
-                   marker_content(id_1, frame_2, sample_rate_1, scale_1));
-    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1) ==
-                   marker_content(id_1, frame_1, sample_rate_2, scale_1));
-    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1) ==
-                   marker_content(id_1, frame_1, sample_rate_1, scale_2));
+    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) ==
+                  marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1));
+    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) ==
+                   marker_content(id_2, frame_1, sample_rate_1, scale_1, is_selected_1));
+    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) ==
+                   marker_content(id_1, frame_2, sample_rate_1, scale_1, is_selected_1));
+    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) ==
+                   marker_content(id_1, frame_1, sample_rate_2, scale_1, is_selected_1));
+    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) ==
+                   marker_content(id_1, frame_1, sample_rate_1, scale_2, is_selected_1));
+    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) ==
+                   marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_2));
 
-    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1) !=
-                   marker_content(id_1, frame_1, sample_rate_1, scale_1));
-    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1) !=
-                  marker_content(id_2, frame_1, sample_rate_1, scale_1));
-    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1) !=
-                  marker_content(id_1, frame_2, sample_rate_1, scale_1));
-    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1) !=
-                  marker_content(id_1, frame_1, sample_rate_2, scale_1));
-    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1) !=
-                  marker_content(id_1, frame_1, sample_rate_1, scale_2));
+    XCTAssertFalse(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) !=
+                   marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1));
+    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) !=
+                  marker_content(id_2, frame_1, sample_rate_1, scale_1, is_selected_1));
+    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) !=
+                  marker_content(id_1, frame_2, sample_rate_1, scale_1, is_selected_1));
+    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) !=
+                  marker_content(id_1, frame_1, sample_rate_2, scale_1, is_selected_1));
+    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) !=
+                  marker_content(id_1, frame_1, sample_rate_1, scale_2, is_selected_1));
+    XCTAssertTrue(marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_1) !=
+                  marker_content(id_1, frame_1, sample_rate_1, scale_1, is_selected_2));
 }
 
 @end

@@ -35,7 +35,7 @@ struct recycle_pool final {
     void erase_for_id(object_id const &);
     /// 単独の要素を追加する
     void insert(Element const &);
-    /// identifierの一致する単独の要素を置き換える
+    /// identifierの一致する単独の要素を置き換える。なければ何もしない
     void replace(Element const &);
     /// identifierの一致する要素があれば置き換え、なければ追加する
     void insert_or_replace(Element const &);

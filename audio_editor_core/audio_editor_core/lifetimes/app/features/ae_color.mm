@@ -102,6 +102,10 @@ ui::color color::marker_line() const {
     return to_color(@"marker_line");
 }
 
+ui::color color::marker_selected_line() const {
+    return to_color(@"marker_selected_line");
+}
+
 ui::color color::marker_text() const {
     return to_color(@"marker_text");
 }

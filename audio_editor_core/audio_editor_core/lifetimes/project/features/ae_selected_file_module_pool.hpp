@@ -10,7 +10,7 @@
 #include <map>
 
 namespace yas::ae {
-struct selected_file_module_pool {
+struct selected_file_module_pool final {
     using module_map = std::map<file_module_index, selected_file_module_object>;
 
     enum class event_type {
