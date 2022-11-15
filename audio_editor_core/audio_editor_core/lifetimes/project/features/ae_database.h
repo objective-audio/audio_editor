@@ -11,7 +11,6 @@
 #include <audio_editor_core/ae_file_track_dependencies.h>
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_marker_pool_dependencies.h>
-#include <audio_editor_core/ae_pasteboard_types.h>
 #include <cpp_utils/yas_delaying_caller.h>
 
 #include <filesystem>

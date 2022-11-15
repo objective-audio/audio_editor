@@ -331,8 +331,6 @@
 		B6CB616228CC347C007A6B57 /* ae_marker_pool_dependencies.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CB616128CC3479007A6B57 /* ae_marker_pool_dependencies.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CCC48D274B4B1600B563C8 /* ae_pasteboard.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CCC48B274B4B1600B563C8 /* ae_pasteboard.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CCC48E274B4B1600B563C8 /* ae_pasteboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6CCC48C274B4B1600B563C8 /* ae_pasteboard.cpp */; };
-		B6CCC490274BC16C00B563C8 /* ae_pasteboard_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CCC48F274BC16B00B563C8 /* ae_pasteboard_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B6CCC498274BD2C300B563C8 /* ae_pasteboard_constants.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CCC497274BD25C00B563C8 /* ae_pasteboard_constants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6CF425A2632ED2A00F9F297 /* ae_window_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6CF42582632ED2A00F9F297 /* ae_window_presenter.cpp */; };
 		B6CF425B2632ED2A00F9F297 /* ae_window_presenter.h in Headers */ = {isa = PBXBuildFile; fileRef = B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -767,8 +765,6 @@
 		B6CB616128CC3479007A6B57 /* ae_marker_pool_dependencies.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_marker_pool_dependencies.h; sourceTree = "<group>"; };
 		B6CCC48B274B4B1600B563C8 /* ae_pasteboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_pasteboard.h; sourceTree = "<group>"; };
 		B6CCC48C274B4B1600B563C8 /* ae_pasteboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_pasteboard.cpp; sourceTree = "<group>"; };
-		B6CCC48F274BC16B00B563C8 /* ae_pasteboard_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_pasteboard_types.h; sourceTree = "<group>"; };
-		B6CCC497274BD25C00B563C8 /* ae_pasteboard_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_pasteboard_constants.h; sourceTree = "<group>"; };
 		B6CF424E2631C38D00F9F297 /* ae_app_presenter_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_app_presenter_dependency.h; sourceTree = "<group>"; };
 		B6CF42582632ED2A00F9F297 /* ae_window_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_window_presenter.cpp; sourceTree = "<group>"; };
 		B6CF42592632ED2A00F9F297 /* ae_window_presenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_window_presenter.h; sourceTree = "<group>"; };
@@ -981,8 +977,6 @@
 				B6B5FB3D28E5CCB000A7FD0B /* ae_pasting_file_module.hpp */,
 				B6D81B9928EDCAE400E4BD87 /* ae_pasting_file_module_index.cpp */,
 				B6D81B9A28EDCAE400E4BD87 /* ae_pasting_file_module_index.hpp */,
-				B6CCC497274BD25C00B563C8 /* ae_pasteboard_constants.h */,
-				B6CCC48F274BC16B00B563C8 /* ae_pasteboard_types.h */,
 				B6D6DBFF28F99EE700DC915C /* ae_selected_file_module.cpp */,
 				B6D6DC0028F99EE700DC915C /* ae_selected_file_module.hpp */,
 				B606EB032747EDCF006C3DD2 /* ae_exporter_types.h */,
@@ -2080,7 +2074,6 @@
 				B6693E59268814D2004C8F50 /* ae_action.h in Headers */,
 				B68D822128389B4A00C2FC23 /* ae_dialog_lifetime.h in Headers */,
 				B6BBA30E28C2F84600A20EA2 /* ae_db_edge_constants.h in Headers */,
-				B6CCC498274BD2C300B563C8 /* ae_pasteboard_constants.h in Headers */,
 				B68483F127C50B9400792D17 /* ae_context_menu.h in Headers */,
 				B693BE2C28251D2F00A82877 /* ae_project_id.h in Headers */,
 				B6D283AF288110BE00F294EC /* AEModuleNameViewController.h in Headers */,
@@ -2130,7 +2123,6 @@
 				B629D7722717101300EE379A /* ae_ui_markers.h in Headers */,
 				B6BE6BA1273681090097C99D /* ae_window_presenter_dependency.h in Headers */,
 				B695A3892764D87E004CB28F /* ae_display_space_types.h in Headers */,
-				B6CCC490274BC16C00B563C8 /* ae_pasteboard_types.h in Headers */,
 				B6C3D6332825F31E00A8FCFE /* ae_time_editor_opener.h in Headers */,
 				B6C681E128719907004D26CD /* ae_action_receivable_state.h in Headers */,
 				B6D55914281F849500C9427C /* ae_playing_toggler.h in Headers */,
