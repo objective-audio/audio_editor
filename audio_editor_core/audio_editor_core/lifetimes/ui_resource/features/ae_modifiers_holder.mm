@@ -9,7 +9,8 @@ using namespace yas;
 using namespace yas::ae;
 
 modifiers_holder::modifiers_holder(std::shared_ptr<ui::event_manager> const &event_manager)
-    : _event_manager(event_manager), _modifier_notifier(observing::notifier<ae::modifier_event>::make_shared()) {
+    : _event_manager(event_manager),
+      _modifier_notifier(observing::notifier<ae::modifiers_holder_event>::make_shared()) {
     this->_event_manager
         ->observe([this](std::shared_ptr<ui::event> const &event) {
             switch (event->type()) {
@@ -23,7 +24,7 @@ modifiers_holder::modifiers_holder(std::shared_ptr<ui::event_manager> const &eve
                             if (!this->_modifiers.contains(modifier)) {
                                 this->_modifiers.insert(modifier);
                                 this->_modifier_notifier->notify(
-                                    {.state = ae::modifier_event_state::began, .modifier = modifier});
+                                    {.state = ae::modifiers_holder_event_state::began, .modifier = modifier});
                             }
                         } break;
 
@@ -31,7 +32,7 @@ modifiers_holder::modifiers_holder(std::shared_ptr<ui::event_manager> const &eve
                             if (this->_modifiers.contains(modifier)) {
                                 this->_modifiers.erase(modifier);
                                 this->_modifier_notifier->notify(
-                                    {.state = ae::modifier_event_state::ended, .modifier = modifier});
+                                    {.state = ae::modifiers_holder_event_state::ended, .modifier = modifier});
                             }
                         } break;
 
@@ -56,6 +57,6 @@ std::unordered_set<ae::modifier> const &modifiers_holder::modifiers() const {
     return this->_modifiers;
 }
 
-observing::endable modifiers_holder::observe(std::function<void(ae::modifier_event const &)> &&handler) {
+observing::endable modifiers_holder::observe(std::function<void(ae::modifiers_holder_event const &)> &&handler) {
     return this->_modifier_notifier->observe(std::move(handler));
 }

@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_gesture.h>
 #include <audio_editor_core/ae_key.h>
-#include <audio_editor_core/ae_modifier_types.h>
+#include <audio_editor_core/ae_modifiers_holder_event.h>
 
 #include <memory>
 
@@ -19,7 +19,7 @@ struct pinch_gesture_controller final {
     pinch_gesture_controller(zooming_pair *);
 
     void handle_gesture(pinch_gesture const &);
-    void handle_modifier(modifier_event_state const &);
+    void handle_modifier(modifiers_holder_event_state const &);
 
    private:
     zooming_pair *const _zooming_pair;
