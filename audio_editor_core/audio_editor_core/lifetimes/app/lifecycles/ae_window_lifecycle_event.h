@@ -1,12 +1,10 @@
 //
-//  ae_window_lifecycle_types.h
+//  ae_window_lifecycle_event.h
 //
 
 #pragma once
 
 #include <audio_editor_core/ae_window_lifetime_id.h>
-
-#include <string>
 
 namespace yas::ae {
 enum class window_lifecycle_event_type {

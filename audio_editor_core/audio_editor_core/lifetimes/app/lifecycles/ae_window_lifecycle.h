@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_action_receiver_providable.h>
 #include <audio_editor_core/ae_app_presenter_dependency.h>
-#include <audio_editor_core/ae_window_lifecycle_types.h>
+#include <audio_editor_core/ae_window_lifecycle_event.h>
 
 #include <filesystem>
 
