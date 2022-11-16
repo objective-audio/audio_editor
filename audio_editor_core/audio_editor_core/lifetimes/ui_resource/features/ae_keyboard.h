@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_keyboard_types.h>
+#include <audio_editor_core/ae_key.h>
 #include <audio_editor_core/ae_modifier_types.h>
 #include <ui/yas_ui_umbrella.h>
 
