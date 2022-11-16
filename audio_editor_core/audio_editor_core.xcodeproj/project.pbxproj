@@ -239,6 +239,7 @@
 		B69E4EE5286C005100911280 /* ae_project_receiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B69E4EE3286C005100911280 /* ae_project_receiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69ED0C82824D6E400AC9AB1 /* ae_jumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B69ED0C62824D6E400AC9AB1 /* ae_jumper.cpp */; };
 		B69ED0C92824D6E400AC9AB1 /* ae_jumper.h in Headers */ = {isa = PBXBuildFile; fileRef = B69ED0C72824D6E400AC9AB1 /* ae_jumper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6A05405292492430087ABB5 /* ae_modifier.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A05404292492310087ABB5 /* ae_modifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A123772788373E00F31B31 /* ae_nudge_settings_dependency.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A123762788373E00F31B31 /* ae_nudge_settings_dependency.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A12381278932B900F31B31 /* ae_ui_time_buttons.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A1237F278932B900F31B31 /* ae_ui_time_buttons.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6A12382278932B900F31B31 /* ae_ui_time_buttons.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A12380278932B900F31B31 /* ae_ui_time_buttons.mm */; };
@@ -670,6 +671,7 @@
 		B69E4EE3286C005100911280 /* ae_project_receiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_receiver.h; sourceTree = "<group>"; };
 		B69ED0C62824D6E400AC9AB1 /* ae_jumper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_jumper.cpp; sourceTree = "<group>"; };
 		B69ED0C72824D6E400AC9AB1 /* ae_jumper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_jumper.h; sourceTree = "<group>"; };
+		B6A05404292492310087ABB5 /* ae_modifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_modifier.h; sourceTree = "<group>"; };
 		B6A123762788373E00F31B31 /* ae_nudge_settings_dependency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudge_settings_dependency.h; sourceTree = "<group>"; };
 		B6A1237F278932B900F31B31 /* ae_ui_time_buttons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_time_buttons.h; sourceTree = "<group>"; };
 		B6A12380278932B900F31B31 /* ae_ui_time_buttons.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_time_buttons.mm; sourceTree = "<group>"; };
@@ -1484,6 +1486,7 @@
 				B657D4D0268037720048C6AD /* ae_keyboard.h */,
 				B657D4CF268037720048C6AD /* ae_keyboard.mm */,
 				B6355E292906C653000BB735 /* ae_modifier_types.h */,
+				B6A05404292492310087ABB5 /* ae_modifier.h */,
 				B6355E2B2906C937000BB735 /* ae_modifier_utils.cpp */,
 				B6355E2C2906C937000BB735 /* ae_modifier_utils.hpp */,
 				B6355E252906C5E9000BB735 /* ae_modifiers_holder.mm */,
@@ -2006,6 +2009,7 @@
 				B6650B9E2854BE86004BB7C9 /* ae_window_lifetime.h in Headers */,
 				B6D2839F2881064000F294EC /* AEProjectFormatView.h in Headers */,
 				B6DC139128B776FD00355F53 /* ae_module_name_sheet_lifetime.hpp in Headers */,
+				B6A05405292492430087ABB5 /* ae_modifier.h in Headers */,
 				B62D8FA02723CB6A00779D42 /* ae_scrolling.h in Headers */,
 				B6047AEA2875AC3000BC91F6 /* ae_window_lifetime_id.h in Headers */,
 				B66FAF7628E1587E005A3D47 /* ae_pasting_modules_presenter.hpp in Headers */,

@@ -4,18 +4,9 @@
 
 #pragma once
 
-namespace yas::ae {
-enum class modifier {
-    alpha_shift,
-    shift,
-    control,
-    alternate,
-    command,
-    numeric_pad,
-    help,
-    function,
-};
+#include <audio_editor_core/ae_modifier.h>
 
+namespace yas::ae {
 enum class modifier_event_state {
     began,
     ended,
