@@ -4,7 +4,7 @@
 
 #include "ae_ui_time_nudge.hpp"
 #include <audio_editor_core/ae_color.h>
-#include <audio_editor_core/ae_time_unit_presenter.h>
+#include <audio_editor_core/ae_time_numbers_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_time_constants.h>
 #include <audio_editor_core/ae_time_nudge_presenter.hpp>
@@ -18,7 +18,7 @@ std::shared_ptr<ui_time_nudge> ui_time_nudge::make_shared(window_lifetime_id con
                                                           std::shared_ptr<ui::node> const &node) {
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
-    auto const unit_presenter = time_unit_presenter::make_shared(lifetime_id);
+    auto const unit_presenter = time_numbers_presenter::make_shared(lifetime_id);
     auto const nudge_preseneter = time_nudge_presenter::make_shared(lifetime_id);
 
     return std::make_shared<ui_time_nudge>(app_lifetime->color.get(), resource_lifetime->standard->view_look(),
@@ -26,7 +26,7 @@ std::shared_ptr<ui_time_nudge> ui_time_nudge::make_shared(window_lifetime_id con
 }
 
 ui_time_nudge::ui_time_nudge(ae::color *color, std::shared_ptr<ui::view_look> const &view_look,
-                             ui_time_numbers *time_numbers, std::shared_ptr<time_unit_presenter> const &presenter,
+                             ui_time_numbers *time_numbers, std::shared_ptr<time_numbers_presenter> const &presenter,
                              std::shared_ptr<time_nudge_presenter> const &nudge_presenter,
                              std::shared_ptr<ui::node> const &node)
     : _color(color),

@@ -1,8 +1,8 @@
 //
-//  ae_time_unit_presenter_utils.cpp
+//  ae_time_numbers_presenter_utils.cpp
 //
 
-#include "ae_time_unit_presenter_utils.h"
+#include "ae_time_numbers_presenter_utils.h"
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_math.h>
@@ -15,11 +15,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::string time_unit_presenter_utils::to_sign_string(ae::number_components const &components) {
+std::string time_numbers_presenter_utils::to_sign_string(ae::number_components const &components) {
     return components.is_minus() ? "-" : "+";
 }
 
-std::string time_unit_presenter_utils::to_string(number_components_unit const &unit) {
+std::string time_numbers_presenter_utils::to_string(number_components_unit const &unit) {
     std::stringstream stream;
 
     if (unit.size > 0) {
@@ -32,7 +32,7 @@ std::string time_unit_presenter_utils::to_string(number_components_unit const &u
     return stream.str();
 }
 
-std::string time_unit_presenter_utils::time_text(number_components const &components) {
+std::string time_numbers_presenter_utils::time_text(number_components const &components) {
     std::stringstream stream;
 
     stream << to_sign_string(components);
@@ -53,8 +53,8 @@ std::string time_unit_presenter_utils::time_text(number_components const &compon
     return stream.str();
 }
 
-index_range time_unit_presenter_utils::to_time_text_range(number_components const &components,
-                                                          std::size_t const target_unit_idx) {
+index_range time_numbers_presenter_utils::to_time_text_range(number_components const &components,
+                                                             std::size_t const target_unit_idx) {
     if (target_unit_idx >= components.size()) {
         throw std::out_of_range("out of range target_unit_idx.");
     }

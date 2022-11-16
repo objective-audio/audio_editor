@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_action_receivable_state.h>
-#include <audio_editor_core/ae_keyboard_types.h>
+#include <audio_editor_core/ae_key.h>
 
 #include <optional>
 

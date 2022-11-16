@@ -40,7 +40,7 @@ ui_event_handling::ui_event_handling(std::shared_ptr<ui::standard> const &standa
         ->add_to(this->_pool);
 
     modifiers_holder
-        ->observe([this](ae::modifier_event const &event) {
+        ->observe([this](ae::modifiers_holder_event const &event) {
             switch (event.modifier) {
                 case ae::modifier::shift:
                     if (auto const controller = this->_pinch_gesture_controller.lock()) {

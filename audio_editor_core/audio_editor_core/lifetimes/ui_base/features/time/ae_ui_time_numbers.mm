@@ -5,7 +5,7 @@
 #include "ae_ui_time_numbers.hpp"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_time_unit_presenter.h>
+#include <audio_editor_core/ae_time_numbers_presenter.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 
 using namespace yas;
@@ -13,7 +13,7 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_time_numbers> ui_time_numbers::make_shared(window_lifetime_id const &lifetime_id,
                                                               std::shared_ptr<ui::node> const &node) {
-    auto const presenter = time_unit_presenter::make_shared(lifetime_id);
+    auto const presenter = time_numbers_presenter::make_shared(lifetime_id);
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
 
@@ -21,7 +21,7 @@ std::shared_ptr<ui_time_numbers> ui_time_numbers::make_shared(window_lifetime_id
                                              app_lifetime->color.get(), node);
 }
 
-ui_time_numbers::ui_time_numbers(std::shared_ptr<time_unit_presenter> const &presenter,
+ui_time_numbers::ui_time_numbers(std::shared_ptr<time_numbers_presenter> const &presenter,
                                  std::shared_ptr<ui::font_atlas> const &font_atlas,
                                  std::shared_ptr<ui::standard> const &standard, ae::color *color,
                                  std::shared_ptr<ui::node> const &node)

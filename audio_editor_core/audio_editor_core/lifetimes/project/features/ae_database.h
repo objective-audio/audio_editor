@@ -6,12 +6,13 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_database_types.h>
-#include <audio_editor_core/ae_db_types.h>
+#include <audio_editor_core/ae_db_edge.h>
+#include <audio_editor_core/ae_db_marker.h>
+#include <audio_editor_core/ae_db_module.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_dependencies.h>
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_marker_pool_dependencies.h>
-#include <audio_editor_core/ae_pasteboard_types.h>
 #include <cpp_utils/yas_delaying_caller.h>
 
 #include <filesystem>
@@ -21,6 +22,9 @@ class manager;
 }  // namespace yas::db
 
 namespace yas::ae {
+using db_modules_map = std::unordered_map<uintptr_t, db_module>;
+using db_markers_map = std::unordered_map<uintptr_t, db_marker>;
+
 struct database final : std::enable_shared_from_this<database>, database_for_marker_pool, database_for_file_track {
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::filesystem::path const &db_file_path);
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);

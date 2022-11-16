@@ -4,10 +4,24 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_pasteboard_types.h>
 #include <observing/yas_observing_umbrella.h>
 
+#include <audio_editor_core/ae_pasting_file_module.hpp>
+#include <variant>
+
 namespace yas::ae {
+enum class pasting_kind {
+    file_module,
+};
+
+enum class pasteboard_event {
+    fetched,
+    file_modules,
+    cleared,
+};
+
+using pasting_value = std::variant<std::vector<pasting_file_module_object>>;
+
 struct pasteboard final {
     [[nodiscard]] static std::shared_ptr<pasteboard> make_shared();
 

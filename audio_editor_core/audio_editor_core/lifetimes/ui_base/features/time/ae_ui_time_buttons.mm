@@ -6,7 +6,7 @@
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_action_sender.h>
-#include <audio_editor_core/ae_time_unit_presenter.h>
+#include <audio_editor_core/ae_time_numbers_presenter.h>
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_layout_utils.h>
@@ -21,7 +21,7 @@ using namespace yas::ae;
 std::shared_ptr<ui_time_buttons> ui_time_buttons::make_shared(window_lifetime_id const &window_lifetime_id,
 
                                                               ui::node *node, ui_time_numbers *time_numbers) {
-    auto const presenter = time_unit_presenter::make_shared(window_lifetime_id);
+    auto const presenter = time_numbers_presenter::make_shared(window_lifetime_id);
 
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
@@ -32,7 +32,7 @@ std::shared_ptr<ui_time_buttons> ui_time_buttons::make_shared(window_lifetime_id
 }
 
 ui_time_buttons::ui_time_buttons(std::shared_ptr<ui::standard> const &standard, ae::color *color,
-                                 std::shared_ptr<time_unit_presenter> const &presenter,
+                                 std::shared_ptr<time_numbers_presenter> const &presenter,
                                  std::shared_ptr<project_action_sender> const &action_sender, ui::node *node,
                                  ui_time_numbers *time_numbers)
     : _presenter(presenter),

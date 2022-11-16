@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_color.h>
-#include <audio_editor_core/ae_keyboard_types.h>
+#include <audio_editor_core/ae_key.h>
 #include <audio_editor_core/ae_playing_line_state.h>
 #include <ui/yas_ui_rgb_color.h>
 

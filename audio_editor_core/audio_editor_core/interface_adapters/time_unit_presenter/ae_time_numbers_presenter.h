@@ -1,5 +1,5 @@
 //
-//  ae_time_unit_presenter.h
+//  ae_time_numbers_presenter.h
 //
 
 #pragma once
@@ -14,11 +14,11 @@ class player;
 class time_editor_lifetime;
 class project_modal_lifecycle;
 
-struct time_unit_presenter final {
-    [[nodiscard]] static std::shared_ptr<time_unit_presenter> make_shared(window_lifetime_id const &);
+struct time_numbers_presenter final {
+    [[nodiscard]] static std::shared_ptr<time_numbers_presenter> make_shared(window_lifetime_id const &);
 
-    time_unit_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &,
-                        std::shared_ptr<project_modal_lifecycle> const &);
+    time_numbers_presenter(std::shared_ptr<timing> const &, std::shared_ptr<player> const &,
+                           std::shared_ptr<project_modal_lifecycle> const &);
 
     [[nodiscard]] std::string time_text() const;
     [[nodiscard]] std::vector<index_range> time_text_unit_ranges() const;

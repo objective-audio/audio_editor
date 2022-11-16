@@ -8,7 +8,7 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-class time_unit_presenter;
+class time_numbers_presenter;
 class project_action_sender;
 class color;
 class ui_time_numbers;
@@ -17,7 +17,7 @@ struct ui_time_buttons final {
     [[nodiscard]] static std::shared_ptr<ui_time_buttons> make_shared(window_lifetime_id const &, ui::node *node,
                                                                       ui_time_numbers *time_numbers);
 
-    ui_time_buttons(std::shared_ptr<ui::standard> const &, ae::color *, std::shared_ptr<time_unit_presenter> const &,
+    ui_time_buttons(std::shared_ptr<ui::standard> const &, ae::color *, std::shared_ptr<time_numbers_presenter> const &,
                     std::shared_ptr<project_action_sender> const &, ui::node *node, ui_time_numbers *time_numbers);
 
    private:
@@ -26,7 +26,7 @@ struct ui_time_buttons final {
         observing::cancellable_ptr canceller;
     };
 
-    std::shared_ptr<time_unit_presenter> const _presenter;
+    std::shared_ptr<time_numbers_presenter> const _presenter;
     std::weak_ptr<project_action_sender> const _action_sender;
     std::weak_ptr<ui::standard> const _standard;
     ae::color *const _color;
