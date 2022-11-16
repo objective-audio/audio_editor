@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_app_presenter_types.h>
+#include <audio_editor_core/ae_app_presenter_event.h>
 #include <audio_editor_core/ae_window_lifecycle_event.h>
 
 namespace yas::ae {
