@@ -50,6 +50,8 @@ enum class editing_action_name {
     select_module,
     toggle_module_selection,
     begin_marker_renaming,
+    select_marker,
+    toggle_marker_selection,
     begin_time_editing,
     escape,
 };

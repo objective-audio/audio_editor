@@ -35,9 +35,9 @@ using namespace yas::ae;
                                   {module_id_1, {"test-name-2", 4, {5, 6}, "test-file-name-2"}}});
 
     XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1), pasteboard_event::file_modules);
+    XCTAssertEqual(called.at(1), pasteboard_event::file_modules_replaced);
 
-    auto const modules = pasteboard->file_modules();
+    auto const &modules = pasteboard->file_modules();
     XCTAssertEqual(modules.size(), 2);
     XCTAssertEqual(modules.at(0).identifier, module_id_0);
     XCTAssertEqual(modules.at(0).value.name, "test-name-1");
@@ -53,7 +53,47 @@ using namespace yas::ae;
     pasteboard->clear();
 
     XCTAssertEqual(called.size(), 3);
-    XCTAssertEqual(called.at(2), pasteboard_event::cleared);
+    XCTAssertEqual(called.at(2), pasteboard_event::file_modules_cleared);
+
+    XCTAssertEqual(pasteboard->file_modules().size(), 0);
+}
+
+- (void)test_marker {
+    auto const pasteboard = pasteboard::make_shared();
+
+    std::vector<pasteboard_event> called;
+
+    auto const canceller =
+        pasteboard->observe_event([&called](pasteboard_event const &event) { called.push_back(event); }).sync();
+
+    XCTAssertEqual(called.size(), 1);
+    XCTAssertEqual(called.at(0), pasteboard_event::fetched);
+
+    XCTAssertEqual(pasteboard->markers().size(), 0);
+
+    identifier const marker_id_0;
+    identifier const marker_id_1;
+
+    pasteboard->set_markers({{marker_id_0, {1, "test-marker-name-1"}}, {marker_id_1, {2, "test-marker-name-2"}}});
+
+    XCTAssertEqual(called.size(), 2);
+    XCTAssertEqual(called.at(1), pasteboard_event::markers_replaced);
+
+    auto const &markers = pasteboard->markers();
+    XCTAssertEqual(markers.size(), 2);
+    XCTAssertEqual(markers.at(0).identifier, marker_id_0);
+    XCTAssertEqual(markers.at(0).value.frame, 1);
+    XCTAssertEqual(markers.at(0).value.name, "test-marker-name-1");
+    XCTAssertEqual(markers.at(1).identifier, marker_id_1);
+    XCTAssertEqual(markers.at(1).value.frame, 2);
+    XCTAssertEqual(markers.at(1).value.name, "test-marker-name-2");
+
+    pasteboard->clear();
+
+    XCTAssertEqual(called.size(), 3);
+    XCTAssertEqual(called.at(2), pasteboard_event::markers_cleared);
+
+    XCTAssertEqual(pasteboard->markers().size(), 0);
 }
 
 @end

@@ -10,6 +10,8 @@
 #include <audio_editor_core/ae_ui_mesh_data.h>
 #include <cpp_utils/yas_assertion.h>
 #include <audio_editor_core/ae_markers_controller.hpp>
+#include <audio_editor_core/ae_modifiers_holder.hpp>
+#include <audio_editor_core/ae_selected_marker_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -21,21 +23,21 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetim
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
     auto const controller = markers_controller::make_shared(lifetime_id);
 
-    return std::shared_ptr<ui_marker_element>(
-        new ui_marker_element{project_lifetime->marker_pool, controller, resource_lifetime->standard,
-                              app_lifetime->color, resource_lifetime->vertical_line_data,
-                              resource_lifetime->square_data, resource_lifetime->normal_font_atlas, parent_node});
+    return std::shared_ptr<ui_marker_element>(new ui_marker_element{
+        project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller, resource_lifetime->standard,
+        app_lifetime->color, resource_lifetime->vertical_line_data, resource_lifetime->square_data,
+        resource_lifetime->normal_font_atlas, parent_node, resource_lifetime->modifiers_holder.get()});
 }
 
-ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_pool,
-                                     std::shared_ptr<markers_controller> const &controller,
-                                     std::shared_ptr<ui::standard> const &standard,
-                                     std::shared_ptr<ae::color> const &color,
-                                     std::shared_ptr<ui_mesh_data> const &vertical_line_data,
-                                     std::shared_ptr<ui_mesh_data> const &square_data,
-                                     std::shared_ptr<ui::font_atlas> const &font_atlas, ui::node *parent_node)
+ui_marker_element::ui_marker_element(
+    std::shared_ptr<marker_pool> const &marker_pool, std::shared_ptr<selected_marker_pool> const &selected_marker_pool,
+    std::shared_ptr<markers_controller> const &controller, std::shared_ptr<ui::standard> const &standard,
+    std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_mesh_data> const &vertical_line_data,
+    std::shared_ptr<ui_mesh_data> const &square_data, std::shared_ptr<ui::font_atlas> const &font_atlas,
+    ui::node *parent_node, modifiers_holder *modifiers_holder)
     : node(ui::node::make_shared()),
       _marker_pool(marker_pool),
+      _selected_marker_pool(selected_marker_pool),
       _controller(controller),
       _line_node(ui::node::make_shared()),
       _square_collider_node(ui::node::make_shared()),
@@ -47,7 +49,8 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
       _color(color),
       _collider(ui::collider::make_shared()),
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_square_collider_node)),
-      _multiple_touch(ui::multiple_touch::make_shared()) {
+      _multiple_touch(ui::multiple_touch::make_shared()),
+      _modifiers_holder(modifiers_holder) {
     parent_node->add_sub_node(this->node);
 
     auto const line_mesh =
@@ -74,11 +77,7 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
         ->add_to(this->_pool);
 
     standard->view_look()
-        ->observe_appearance([this](auto const &) {
-            this->_line_node->set_color(this->_color->marker_line());
-            this->_square_mesh_node->set_color(this->_color->marker_square());
-            this->_strings->rect_plane()->node()->set_color(this->_color->marker_text());
-        })
+        ->observe_appearance([this](auto const &) { this->_update_color(); })
         .sync()
         ->add_to(this->_pool);
 
@@ -104,7 +103,8 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
         ->observe_event([this](marker_pool_event const &event) {
             switch (event.type) {
                 case marker_pool_event_type::replaced:
-                    if (event.inserted.value().identifier == this->_identifier) {
+                    if (this->_content.has_value() &&
+                        this->_content.value().identifier == event.inserted.value().identifier) {
                         this->_update_name();
                     }
                     break;
@@ -122,6 +122,15 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
     this->_touch_tracker
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
+                if (context.phase == ui::touch_tracker_phase::ended) {
+                    if (auto const marker_index = this->_marker_index()) {
+                        if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
+                            this->_controller->toggle_marker_selection_at(marker_index.value());
+                        } else {
+                            this->_controller->select_marker_at(marker_index.value());
+                        }
+                    }
+                }
                 this->_multiple_touch->handle_event(context.phase, context.collider_idx);
             }
         })
@@ -130,12 +139,8 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
 
     this->_multiple_touch
         ->observe([this](std::uintptr_t const &) {
-            if (this->_identifier.has_value()) {
-                if (auto const marker_pool = this->_marker_pool.lock()) {
-                    if (auto const marker = marker_pool->marker_for_id(this->_identifier.value())) {
-                        this->_controller->select_marker_with_index(marker.value().index());
-                    }
-                }
+            if (auto const marker_index = this->_marker_index()) {
+                this->_controller->begin_marker_renaming_at(marker_index.value());
             }
         })
         .end()
@@ -143,23 +148,26 @@ ui_marker_element::ui_marker_element(std::shared_ptr<marker_pool> const &marker_
 }
 
 void ui_marker_element::set_content(marker_content const &content) {
-    this->_identifier = content.identifier;
+    this->_content = content;
     this->node->set_is_enabled(true);
     this->node->set_position({content.x, this->node->position().y});
     this->_update_name();
+    this->_update_color();
 }
 
 void ui_marker_element::update_content(marker_content const &content) {
-    if (this->_identifier == content.identifier) {
+    if (this->_content.has_value() && this->_content.value().identifier == content.identifier) {
+        this->_content = content;
         this->node->set_position({content.x, this->node->position().y});
         this->_update_name();
+        this->_update_color();
     } else {
         assertion_failure_if_not_test();
     }
 }
 
 void ui_marker_element::reset_content() {
-    this->_identifier = std::nullopt;
+    this->_content = std::nullopt;
     this->node->set_is_enabled(false);
 }
 
@@ -169,10 +177,31 @@ void ui_marker_element::finalize() {
 
 void ui_marker_element::_update_name() {
     if (auto const marker_pool = this->_marker_pool.lock()) {
-        if (this->_identifier.has_value()) {
-            if (auto const marker = marker_pool->marker_for_id(this->_identifier.value())) {
+        if (this->_content.has_value()) {
+            if (auto const marker = marker_pool->marker_for_id(this->_content.value().identifier)) {
                 this->_strings->set_text(marker->value.name);
             }
         }
     }
+}
+
+void ui_marker_element::_update_color() {
+    if (auto const &content = this->_content) {
+        bool const is_selected = content.value().is_selected;
+        auto const line_color = is_selected ? this->_color->marker_selected_line() : this->_color->marker_line();
+        this->_line_node->set_color(line_color);
+        this->_square_mesh_node->set_color(this->_color->marker_square());
+        this->_strings->rect_plane()->node()->set_color(this->_color->marker_text());
+    }
+}
+
+std::optional<marker_index> ui_marker_element::_marker_index() const {
+    if (this->_content.has_value()) {
+        if (auto const marker_pool = this->_marker_pool.lock()) {
+            if (auto const marker = marker_pool->marker_for_id(this->_content.value().identifier)) {
+                return marker.value().index();
+            }
+        }
+    }
+    return std::nullopt;
 }

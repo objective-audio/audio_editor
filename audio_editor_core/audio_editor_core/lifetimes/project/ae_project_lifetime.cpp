@@ -47,10 +47,13 @@
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <audio_editor_core/ae_zooming_pair.h>
 
+#include <audio_editor_core/ae_deselector.hpp>
 #include <audio_editor_core/ae_escaper.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
+#include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_selected_file_module_pool.hpp>
+#include <audio_editor_core/ae_selected_marker_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -78,11 +81,17 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->file_track.get())),
       selected_file_module_pool(selected_file_module_pool::make_shared()),
       marker_pool(marker_pool::make_shared(this->database.get())),
+      selected_marker_pool(selected_marker_pool::make_shared()),
       pasteboard(pasteboard::make_shared()),
       exporter(exporter::make_shared()),
       editing_status(editing_status::make_shared(this->exporter.get())),
-      module_selector(std::make_shared<ae::module_selector>(
-          this->file_track.get(), this->selected_file_module_pool.get(), this->editing_status.get())),
+      deselector(
+          std::make_shared<ae::deselector>(this->selected_file_module_pool.get(), this->selected_marker_pool.get())),
+      module_selector(std::make_shared<ae::module_selector>(this->file_track.get(),
+                                                            this->selected_file_module_pool.get(),
+                                                            this->editing_status.get(), this->deselector.get())),
+      marker_selector(std::make_shared<ae::marker_selector>(this->marker_pool.get(), this->selected_marker_pool.get(),
+                                                            this->editing_status.get(), this->deselector.get())),
       playing_toggler(playing_toggler::make_shared(window_lifetime->player.get())),
       modal_lifecycle(project_modal_lifecycle::make_shared(window_lifetime_id)),
       nudger(nudger::make_shared(window_lifetime->player.get(), this->nudge_settings.get())),
@@ -95,10 +104,10 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
                                                          this->modal_lifecycle.get())),
       marker_editor(marker_editor::make_shared(window_lifetime->player.get(), this->marker_pool.get(),
                                                this->database.get(), this->editing_status.get())),
-      module_renaming_opener(
-          module_renaming_opener::make_shared(this->modal_lifecycle.get(), this->editing_status.get())),
-      marker_renaming_opener(
-          marker_renaming_opener::make_shared(this->modal_lifecycle.get(), this->editing_status.get())),
+      module_renaming_opener(module_renaming_opener::make_shared(this->modal_lifecycle.get(),
+                                                                 this->editing_status.get(), this->deselector.get())),
+      marker_renaming_opener(marker_renaming_opener::make_shared(this->modal_lifecycle.get(),
+                                                                 this->editing_status.get(), this->deselector.get())),
       export_interactor(export_interactor::make_shared(
           project_format, this->modal_lifecycle.get(), this->editing_status.get(), this->edge_holder.get(),
           window_lifetime->player.get(), this->exporter.get(), window_lifetime->timeline_holder.get())),
@@ -123,5 +132,5 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
           this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_opener.get(),
           this->marker_editor.get(), this->module_renaming_opener.get(), this->marker_renaming_opener.get(),
           this->timing.get(), this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
-          this->module_selector.get(), this->escaper.get())) {
+          this->module_selector.get(), this->marker_selector.get(), this->escaper.get())) {
 }

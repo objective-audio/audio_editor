@@ -32,9 +32,12 @@ pasting_modules_presenter::pasting_modules_presenter(project_format const &proje
         ->observe_event([this](pasteboard_event const &event) {
             switch (event) {
                 case pasteboard_event::fetched:
-                case pasteboard_event::file_modules:
-                case pasteboard_event::cleared:
+                case pasteboard_event::file_modules_replaced:
+                case pasteboard_event::file_modules_cleared:
                     this->_update_all_contents(true, true);
+                    break;
+                case pasteboard_event::markers_replaced:
+                case pasteboard_event::markers_cleared:
                     break;
             }
         })

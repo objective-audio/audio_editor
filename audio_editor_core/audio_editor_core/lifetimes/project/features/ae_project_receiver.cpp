@@ -21,6 +21,7 @@
 
 #include <audio_editor_core/ae_escaper.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
+#include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
 
 using namespace yas;
@@ -32,7 +33,8 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
                                    marker_editor *marker_editor, module_renaming_opener *module_renaming_opener,
                                    marker_renaming_opener *marker_renaming_opener, timing *timing,
                                    import_interactor *import_interactor, export_interactor *export_interactor,
-                                   reverter *reverter, module_selector *module_selector, escaper *escaper)
+                                   reverter *reverter, module_selector *module_selector,
+                                   marker_selector *marker_selector, escaper *escaper)
     : _window_lifetime_id(window_lifetime_id),
       _editor(track_editor),
       _playing_toggler(toggler),
@@ -49,6 +51,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
       _export_interactor(export_interactor),
       _reverter(reverter),
       _module_selector(module_selector),
+      _marker_selector(marker_selector),
       _escaper(escaper) {
 }
 
@@ -233,6 +236,12 @@ void project_receiver::receive(ae::action const &action) const {
                         case editing_action_name::begin_module_renaming:
                             this->_module_renaming_opener->begin_module_renaming(action.file_module_index_value());
                             break;
+                        case editing_action_name::select_marker:
+                            this->_marker_selector->select_marker_at(action.marker_index_value());
+                            break;
+                        case editing_action_name::toggle_marker_selection:
+                            this->_marker_selector->toggle_marker_at(action.marker_index_value());
+                            break;
                         case editing_action_name::begin_marker_renaming:
                             this->_marker_renaming_opener->begin_renaming(action.marker_index_value());
                             break;
@@ -335,6 +344,10 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_module_renaming_opener->can_begin_module_renaming());
                 case editing_action_name::begin_marker_renaming:
                     return to_state(this->_marker_renaming_opener->can_begin_renaming());
+                case editing_action_name::select_marker:
+                    return to_state(this->_marker_selector->can_select());
+                case editing_action_name::toggle_marker_selection:
+                    return to_state(this->_marker_selector->can_toggle());
 
                 case editing_action_name::begin_time_editing:
                     return to_state(this->_time_editor_opener->can_begin_time_editing());

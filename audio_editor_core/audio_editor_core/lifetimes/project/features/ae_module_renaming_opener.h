@@ -12,12 +12,13 @@
 namespace yas::ae {
 class project_modal_lifecycle;
 class editing_status;
+class deselector;
 
 struct module_renaming_opener final {
     [[nodiscard]] static std::shared_ptr<module_renaming_opener> make_shared(project_modal_lifecycle *,
-                                                                             editing_status const *);
+                                                                             editing_status const *, deselector *);
 
-    module_renaming_opener(project_modal_lifecycle *, editing_status const *);
+    module_renaming_opener(project_modal_lifecycle *, editing_status const *, deselector *);
 
     [[nodiscard]] bool can_begin_module_renaming() const;
     void begin_module_renaming(file_module_index const &);
@@ -25,5 +26,6 @@ struct module_renaming_opener final {
    private:
     project_modal_lifecycle *const _lifecycle;
     editing_status const *const _editing_status;
+    deselector *const _deselector;
 };
 }  // namespace yas::ae
