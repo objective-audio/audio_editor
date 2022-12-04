@@ -13,10 +13,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<action_sender> action_sender::make_shared(action_receiver_providable *root_provider) {
-    return std::make_shared<action_sender>(root_provider);
-}
-
 action_sender::action_sender(action_receiver_providable *root_provider) : _root_provider(root_provider) {
 }
 

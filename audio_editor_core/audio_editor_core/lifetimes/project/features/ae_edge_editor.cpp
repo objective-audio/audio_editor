@@ -46,10 +46,8 @@ void edge_editor::set_begin() {
         return;
     }
 
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
-        this->_holder->set_begin_frame(current_frame);
-    });
+    auto const current_frame = this->_player->current_frame();
+    this->_holder->set_begin_frame(current_frame);
 }
 
 void edge_editor::set_end() {
@@ -57,8 +55,6 @@ void edge_editor::set_end() {
         return;
     }
 
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
-        this->_holder->set_end_frame(current_frame);
-    });
+    auto const current_frame = this->_player->current_frame();
+    this->_holder->set_end_frame(current_frame);
 }

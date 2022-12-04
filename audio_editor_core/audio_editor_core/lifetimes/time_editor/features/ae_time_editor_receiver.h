@@ -8,18 +8,18 @@
 #include <audio_editor_core/ae_project_sub_lifetime_id.h>
 
 namespace yas::ae {
+class database;
 class time_editor;
 class time_editor_closer;
 class time_editor_responder;
 
 struct time_editor_receiver : action_receivable {
-    [[nodiscard]] static std::shared_ptr<time_editor_receiver> make_shared(project_sub_lifetime_id const &,
-                                                                           time_editor *, time_editor_closer *);
-
-    time_editor_receiver(project_sub_lifetime_id const &, time_editor *, time_editor_closer *);
+    time_editor_receiver(project_sub_lifetime_id const &, std::shared_ptr<database> const &, time_editor *,
+                         time_editor_closer *);
 
    private:
     project_sub_lifetime_id const _lifetime_id;
+    std::weak_ptr<database> const _database;
     time_editor *const _editor;
     time_editor_closer *const _closer;
 

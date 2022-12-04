@@ -27,7 +27,7 @@ std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
     auto const worker = worker::make_shared();
     auto const system_path = system_path::make_shared();
     auto const file_info_loader = file_info_loader::make_shared();
-    auto const action_sender = action_sender::make_shared(hierarchy::app_lifecycle().get());
+    auto const action_sender = std::make_shared<ae::action_sender>(hierarchy::app_lifecycle().get());
     auto const id_generator = id_generator::make_shared();
     auto const uuid_generator = uuid_generator::make_shared();
     auto const window_lifecycle = window_lifecycle::make_shared(id_generator.get(), uuid_generator.get());

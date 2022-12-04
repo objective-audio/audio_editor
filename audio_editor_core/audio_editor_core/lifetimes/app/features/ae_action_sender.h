@@ -16,9 +16,7 @@ class action_id;
 class action_receiver_providable;
 
 struct action_sender final {
-    [[nodiscard]] static std::shared_ptr<action_sender> make_shared(action_receiver_providable *root_provider);
-
-    action_sender(action_receiver_providable *root_provider);
+    explicit action_sender(action_receiver_providable *root_provider);
 
     void send(ae::action const &, ae::action_id const &);
     void send(ae::key const &, ae::action_id const &);

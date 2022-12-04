@@ -73,12 +73,9 @@ void file_module_loader::load(std::filesystem::path const &src_path) {
              }
 
              if (auto const file_info = loader->_file_info_loader->load_file_info(dst_path)) {
-                 loader->_database->suspend_saving(
-                     [&loader, &file_info = file_info.value(), &src_file_name, &dst_file_name] {
-                         loader->_pasteboard->set_file_modules({pasting_file_module_object{
-                             identifier{},
-                             pasting_file_module{src_file_name, 0, time::range{0, file_info.length}, dst_file_name}}});
-                     });
+                 loader->_pasteboard->set_file_modules({pasting_file_module_object{
+                     identifier{},
+                     pasting_file_module{src_file_name, 0, time::range{0, file_info.value().length}, dst_file_name}}});
              }
 
              loader->_state_holder->set_state(file_module_loading_state::waiting);

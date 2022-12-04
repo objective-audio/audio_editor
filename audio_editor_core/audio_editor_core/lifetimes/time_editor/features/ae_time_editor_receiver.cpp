@@ -5,21 +5,17 @@
 #include "ae_time_editor_receiver.h"
 
 #include <audio_editor_core/ae_action.h>
+#include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_time_editor_closer.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_receiver> time_editor_receiver::make_shared(project_sub_lifetime_id const &lifetime_id,
-                                                                        time_editor *editor,
-                                                                        time_editor_closer *closer) {
-    return std::make_shared<time_editor_receiver>(lifetime_id, editor, closer);
-}
-
-time_editor_receiver::time_editor_receiver(project_sub_lifetime_id const &lifetime_id, time_editor *editor,
+time_editor_receiver::time_editor_receiver(project_sub_lifetime_id const &lifetime_id,
+                                           std::shared_ptr<database> const &database, time_editor *editor,
                                            time_editor_closer *closer)
-    : _lifetime_id(lifetime_id), _editor(editor), _closer(closer) {
+    : _lifetime_id(lifetime_id), _database(database), _editor(editor), _closer(closer) {
 }
 
 std::optional<action_id> time_editor_receiver::receivable_id() const {
@@ -91,40 +87,44 @@ void time_editor_receiver::receive(ae::action const &action) const {
         case action_receivable_state::accepting: {
             switch (to_kind(action.name)) {
                 case action_name_kind::time_editing: {
-                    switch (get<time_editing_action_name>(action.name)) {
-                        case time_editing_action_name::finish_time_editing:
-                            this->_closer->finish();
-                            break;
-                        case time_editing_action_name::cancel_time_editing:
-                            this->_closer->cancel();
-                            break;
-                        case time_editing_action_name::move_to_previous_time_unit:
-                            this->_editor->move_to_previous_unit();
-                            break;
-                        case time_editing_action_name::move_to_next_time_unit:
-                            this->_editor->move_to_next_unit();
-                            break;
-                        case time_editing_action_name::input_time:
-                            this->_editor->input_number(static_cast<uint32_t>(action.integer_value()));
-                            break;
-                        case time_editing_action_name::delete_time:
-                            this->_editor->delete_number();
-                            break;
-                        case time_editing_action_name::increment_time:
-                            this->_editor->increment_number();
-                            break;
-                        case time_editing_action_name::decrement_time:
-                            this->_editor->decrement_number();
-                            break;
-                        case time_editing_action_name::change_time_sign_to_plus:
-                            this->_editor->change_sign_to_plus();
-                            break;
-                        case time_editing_action_name::change_time_sign_to_minus:
-                            this->_editor->change_sign_to_minus();
-                            break;
-                        case time_editing_action_name::select_time_unit:
-                            this->_editor->set_unit_idx(action.integer_value());
-                            break;
+                    if (auto const database = this->_database.lock()) {
+                        database->suspend_saving([this, &action] {
+                            switch (get<time_editing_action_name>(action.name)) {
+                                case time_editing_action_name::finish_time_editing:
+                                    this->_closer->finish();
+                                    break;
+                                case time_editing_action_name::cancel_time_editing:
+                                    this->_closer->cancel();
+                                    break;
+                                case time_editing_action_name::move_to_previous_time_unit:
+                                    this->_editor->move_to_previous_unit();
+                                    break;
+                                case time_editing_action_name::move_to_next_time_unit:
+                                    this->_editor->move_to_next_unit();
+                                    break;
+                                case time_editing_action_name::input_time:
+                                    this->_editor->input_number(static_cast<uint32_t>(action.integer_value()));
+                                    break;
+                                case time_editing_action_name::delete_time:
+                                    this->_editor->delete_number();
+                                    break;
+                                case time_editing_action_name::increment_time:
+                                    this->_editor->increment_number();
+                                    break;
+                                case time_editing_action_name::decrement_time:
+                                    this->_editor->decrement_number();
+                                    break;
+                                case time_editing_action_name::change_time_sign_to_plus:
+                                    this->_editor->change_sign_to_plus();
+                                    break;
+                                case time_editing_action_name::change_time_sign_to_minus:
+                                    this->_editor->change_sign_to_minus();
+                                    break;
+                                case time_editing_action_name::select_time_unit:
+                                    this->_editor->set_unit_idx(action.integer_value());
+                                    break;
+                            }
+                        });
                     }
                 } break;
                 case action_name_kind::editing:
