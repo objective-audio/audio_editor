@@ -10,10 +10,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<playing_toggler> playing_toggler::make_shared(player_for_playing_toggler *player) {
-    return std::make_shared<playing_toggler>(player);
-}
-
 playing_toggler::playing_toggler(player_for_playing_toggler *player) : _player(player) {
 }
 

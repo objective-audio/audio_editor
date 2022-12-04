@@ -9,8 +9,6 @@
 
 namespace yas::ae {
 struct nudge_settings final {
-    [[nodiscard]] static std::shared_ptr<nudge_settings> make_shared(timing_for_nudge_settings const *);
-
     nudge_settings(timing_for_nudge_settings const *);
 
     void rotate_next_unit();

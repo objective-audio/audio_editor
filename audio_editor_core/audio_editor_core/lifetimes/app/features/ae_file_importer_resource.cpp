@@ -44,7 +44,3 @@ std::vector<std::string> file_importer_resource::pull_cancel_ids() {
 
     return {};
 }
-
-std::shared_ptr<file_importer_resource> file_importer_resource::make_shared() {
-    return std::shared_ptr<file_importer_resource>(new file_importer_resource{});
-}

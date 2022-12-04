@@ -13,9 +13,6 @@ class database;
 class editing_status;
 
 struct marker_editor final {
-    [[nodiscard]] static std::shared_ptr<marker_editor> make_shared(player const *, marker_pool *, database *,
-                                                                    editing_status const *);
-
     marker_editor(player const *, marker_pool *, database *, editing_status const *);
 
     [[nodiscard]] bool can_insert_marker() const;

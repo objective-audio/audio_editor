@@ -12,8 +12,6 @@
 
 namespace yas::ae {
 struct file_info_loader final {
-    [[nodiscard]] static std::shared_ptr<file_info_loader> make_shared();
-
     file_info_loader();
 
     [[nodiscard]] std::optional<file_info> load_file_info(std::filesystem::path const &) const;

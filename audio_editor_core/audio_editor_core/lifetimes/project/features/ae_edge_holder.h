@@ -10,8 +10,6 @@
 
 namespace yas::ae {
 struct edge_holder final : jumpable_on_jumper {
-    [[nodiscard]] static std::shared_ptr<edge_holder> make_shared();
-
     edge_holder();
 
     [[nodiscard]] ae::edge const &edge() const;

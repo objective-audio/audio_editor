@@ -11,9 +11,6 @@
 
 namespace yas::ae {
 struct dialog_lifetime final {
-    [[nodiscard]] static std::shared_ptr<dialog_lifetime> make_shared(project_sub_lifetime_id const &,
-                                                                      dialog_content const);
-
     dialog_lifetime(project_sub_lifetime_id const &, dialog_content const);
 
     project_sub_lifetime_id const lifetime_id;

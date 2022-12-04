@@ -12,12 +12,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_launcher> project_launcher::make_shared(project_format const &project_format, player *player,
-                                                                timeline_holder const *timeline_holder,
-                                                                project_lifecycle *lifecycle) {
-    return std::make_shared<ae::project_launcher>(project_format, player, timeline_holder, lifecycle);
-}
-
 project_launcher::project_launcher(project_format const &project_format, player *player,
                                    timeline_holder const *timeline_holder, project_lifecycle *lifecycle)
     : _project_format(project_format),

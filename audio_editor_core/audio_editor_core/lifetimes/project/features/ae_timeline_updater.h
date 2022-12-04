@@ -11,8 +11,6 @@ class file_track;
 class timeline_holder;
 
 struct timeline_updater final {
-    [[nodiscard]] static std::shared_ptr<timeline_updater> make_shared(file_track *, timeline_holder *);
-
     timeline_updater(file_track *, timeline_holder *);
 
    private:

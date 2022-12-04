@@ -13,9 +13,6 @@ class timing;
 class project_modal_lifecycle;
 
 struct time_editor_opener final {
-    [[nodiscard]] static std::shared_ptr<time_editor_opener> make_shared(player const *, timing const *,
-                                                                         project_modal_lifecycle *);
-
     time_editor_opener(player const *, timing const *, project_modal_lifecycle *);
 
     [[nodiscard]] bool can_begin_time_editing() const;

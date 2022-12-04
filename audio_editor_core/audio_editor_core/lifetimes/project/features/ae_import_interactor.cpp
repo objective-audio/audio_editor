@@ -11,12 +11,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<import_interactor> import_interactor::make_shared(project_modal_lifecycle *lifecycle,
-                                                                  editing_status const *editing_status,
-                                                                  file_module_loader *file_module_loader) {
-    return std::make_shared<import_interactor>(lifecycle, editing_status, file_module_loader);
-}
-
 import_interactor::import_interactor(project_modal_lifecycle *lifecycle, editing_status const *editing_status,
                                      file_module_loader *file_module_loader)
     : _lifecycle(lifecycle), _editing_status(editing_status), _file_module_loader(file_module_loader) {

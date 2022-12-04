@@ -10,10 +10,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<timing> timing::make_shared(sample_rate_t const sample_rate) {
-    return std::make_shared<timing>(sample_rate);
-}
-
 timing::timing(sample_rate_t const sample_rate)
     : _sample_rate(sample_rate),
       _fraction_kind(observing::value::holder<timing_fraction_kind>::make_shared(timing_fraction_kind::sample)) {

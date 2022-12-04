@@ -76,7 +76,7 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
       vertical_line_data(ui_resource_lifetime_utils::make_vertical_line_data()),
       triangle_data(ui_resource_lifetime_utils::make_triangle_data()),
       square_data(ui_resource_lifetime_utils::make_square_data()),
-      display_space(display_space::make_shared(standard->view_look()->view_layout_guide()->region())),
+      display_space(std::make_shared<ae::display_space>(standard->view_look()->view_layout_guide()->region())),
       modifiers_holder(std::make_shared<ae::modifiers_holder>(standard->event_manager())),
       keyboard(std::make_shared<ae::keyboard>(standard->event_manager(), this->modifiers_holder.get())),
       base_lifecycle(std::make_shared<ae::ui_base_lifecycle>(lifetime_id)) {

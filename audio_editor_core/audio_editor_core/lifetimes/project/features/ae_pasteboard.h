@@ -27,8 +27,6 @@ enum class pasteboard_event {
 using pasting_value = std::variant<std::vector<pasting_file_module_object>, std::vector<pasting_marker_object>>;
 
 struct pasteboard final {
-    [[nodiscard]] static std::shared_ptr<pasteboard> make_shared();
-
     pasteboard();
 
     [[nodiscard]] bool has_file_modules() const;

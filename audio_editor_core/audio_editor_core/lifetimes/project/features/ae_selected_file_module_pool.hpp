@@ -24,8 +24,6 @@ struct selected_file_module_pool final {
         module_map modules;  // inserted, erased
     };
 
-    [[nodiscard]] static std::shared_ptr<selected_file_module_pool> make_shared();
-
     selected_file_module_pool();
 
     [[nodiscard]] module_map const &modules() const;

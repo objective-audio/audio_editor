@@ -13,8 +13,6 @@ class window_lifecycle;
 class project_format;
 
 struct window_opener final {
-    [[nodiscard]] static std::shared_ptr<window_opener> make_shared(file_info_loader const *, window_lifecycle *);
-
     window_opener(file_info_loader const *, window_lifecycle *);
 
     void open(project_format const &, std::filesystem::path const &project_path);

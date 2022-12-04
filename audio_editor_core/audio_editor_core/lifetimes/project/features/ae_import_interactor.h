@@ -13,9 +13,6 @@ class editing_status;
 class file_module_loader;
 
 struct import_interactor final {
-    [[nodiscard]] static std::shared_ptr<import_interactor> make_shared(project_modal_lifecycle *,
-                                                                        editing_status const *, file_module_loader *);
-
     import_interactor(project_modal_lifecycle *, editing_status const *, file_module_loader *);
 
     [[nodiscard]] bool can_select_file_for_import() const;

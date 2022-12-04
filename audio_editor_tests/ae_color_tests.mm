@@ -15,7 +15,7 @@ using namespace yas::ae;
 @implementation ae_color_tests
 
 - (void)test_color {
-    auto const color = ae::color::make_shared();
+    auto const color = std::make_shared<ae::color>();
 
     XCTAssertNoThrow(color->background());
 

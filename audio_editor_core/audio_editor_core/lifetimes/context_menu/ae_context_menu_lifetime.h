@@ -11,9 +11,6 @@
 
 namespace yas::ae {
 struct context_menu_lifetime final {
-    [[nodiscard]] static std::shared_ptr<context_menu_lifetime> make_shared(project_sub_lifetime_id const &,
-                                                                            context_menu const &);
-
     context_menu_lifetime(project_sub_lifetime_id const &, context_menu const &);
 
     project_sub_lifetime_id const lifetime_id;

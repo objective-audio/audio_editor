@@ -19,15 +19,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<reverter> reverter::make_shared(project_path const *project_path, database *database,
-                                                file_track *file_track, marker_pool *marker_pool,
-                                                pasteboard *pasteboard, edge_holder *edge_holder,
-                                                selected_file_module_pool *selected_pool,
-                                                editing_status const *editing_status) {
-    return std::make_shared<reverter>(project_path, database, file_track, marker_pool, pasteboard, edge_holder,
-                                      selected_pool, editing_status);
-}
-
 reverter::reverter(project_path const *project_path, database *database, file_track *file_track,
                    marker_pool *marker_pool, pasteboard *pasteboard, edge_holder *edge_holder,
                    selected_file_module_pool *selected_pool, editing_status const *editing_status)

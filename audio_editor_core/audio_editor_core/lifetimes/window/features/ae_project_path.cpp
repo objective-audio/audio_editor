@@ -7,10 +7,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_path> project_path::make_shared(std::filesystem::path const &root) {
-    return std::shared_ptr<project_path>(new project_path{root});
-}
-
 project_path::project_path(std::filesystem::path const &root) : _root(root) {
 }
 

@@ -16,10 +16,6 @@ class editing_status;
 class selected_file_module_pool;
 
 struct track_editor final {
-    [[nodiscard]] static std::shared_ptr<track_editor> make_shared(player *, file_track *, marker_pool *,
-                                                                   selected_file_module_pool *, pasteboard *,
-                                                                   database *, editing_status const *);
-
     track_editor(player *, file_track *, marker_pool *, selected_file_module_pool *, pasteboard *, database *,
                  editing_status const *);
 

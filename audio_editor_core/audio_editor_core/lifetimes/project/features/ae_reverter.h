@@ -17,10 +17,6 @@ class editing_status;
 class project_path;
 
 struct reverter final {
-    [[nodiscard]] static std::shared_ptr<reverter> make_shared(project_path const *, database *, file_track *,
-                                                               marker_pool *, pasteboard *, edge_holder *,
-                                                               selected_file_module_pool *, editing_status const *);
-
     reverter(project_path const *, database *, file_track *, marker_pool *, pasteboard *, edge_holder *,
              selected_file_module_pool *, editing_status const *);
 

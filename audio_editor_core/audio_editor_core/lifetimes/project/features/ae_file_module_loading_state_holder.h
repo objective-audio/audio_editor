@@ -9,8 +9,6 @@
 
 namespace yas::ae {
 struct file_module_loading_state_holder final {
-    [[nodiscard]] static std::shared_ptr<file_module_loading_state_holder> make_shared();
-
     file_module_loading_state_holder();
 
     [[nodiscard]] file_module_loading_state const &state() const;

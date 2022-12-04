@@ -18,14 +18,14 @@ using namespace yas::ae;
 
 - (void)test_initial {
     auto const timing = std::make_shared<test_utils::timing_stub>(48000);
-    auto const settings = nudge_settings::make_shared(timing.get());
+    auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
     XCTAssertEqual(settings->unit_index(), 0);
 }
 
 - (void)test_rotate_next {
     auto const timing = std::make_shared<test_utils::timing_stub>(48000);
-    auto const settings = nudge_settings::make_shared(timing.get());
+    auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
     XCTAssertEqual(settings->unit_index(), 0);
 
@@ -44,7 +44,7 @@ using namespace yas::ae;
 
 - (void)test_rotate_previous {
     auto const timing = std::make_shared<test_utils::timing_stub>(48000);
-    auto const settings = nudge_settings::make_shared(timing.get());
+    auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
     XCTAssertEqual(settings->unit_index(), 0);
 
@@ -78,7 +78,7 @@ using namespace yas::ae;
         return timing_utils::to_frame(components, fraction_kind, sample_rate);
     };
 
-    auto const settings = nudge_settings::make_shared(timing.get());
+    auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
     XCTAssertEqual(settings->next_frame(0, 1), 10);
     XCTAssertEqual(settings->next_frame(0, 10), 100);

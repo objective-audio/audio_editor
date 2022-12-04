@@ -10,11 +10,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<timeline_updater> timeline_updater::make_shared(file_track *file_track,
-                                                                timeline_holder *timeline_holder) {
-    return std::make_shared<timeline_updater>(file_track, timeline_holder);
-}
-
 timeline_updater::timeline_updater(file_track *file_track, timeline_holder *timeline_holder)
     : _file_track(file_track), _timeline_holder(timeline_holder) {
     this->_file_track

@@ -8,8 +8,6 @@
 
 namespace yas::ae {
 struct zooming final {
-    [[nodiscard]] static std::shared_ptr<zooming> make_shared();
-
     zooming();
 
     void begin();

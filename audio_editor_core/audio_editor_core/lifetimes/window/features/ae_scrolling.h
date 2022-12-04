@@ -10,8 +10,6 @@
 
 namespace yas::ae {
 struct scrolling final : scrolling_for_player, scrolling_for_gesture_controller {
-    [[nodiscard]] static std::shared_ptr<scrolling> make_shared();
-
     scrolling();
 
     void begin() override;

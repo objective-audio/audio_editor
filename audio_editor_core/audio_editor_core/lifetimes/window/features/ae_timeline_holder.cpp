@@ -12,11 +12,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<timeline_holder> timeline_holder::make_shared(project_format const &project_format,
-                                                              project_path const *project_path) {
-    return std::make_shared<timeline_holder>(project_format, project_path);
-}
-
 timeline_holder::timeline_holder(project_format const &project_format, project_path const *project_path)
     : _project_format(project_format),
       _project_path(project_path),

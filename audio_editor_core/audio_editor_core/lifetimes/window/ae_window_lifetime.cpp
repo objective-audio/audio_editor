@@ -27,17 +27,17 @@ std::shared_ptr<window_lifetime> window_lifetime::make_shared(window_lifetime_id
 }
 
 window_lifetime::window_lifetime(window_lifetime_id const &lifetime_id, ae::project_format const &project_format,
-                                 std::filesystem::path const &project_dir_path, app_lifetime *app_lifetime)
+                                 std::filesystem::path const &project_dir_path, app_lifetime const *app_lifetime)
     : lifetime_id(lifetime_id),
       project_format(project_format),
       project_directory_path(project_dir_path),
-      project_path(ae::project_path::make_shared(project_dir_path)),
-      zooming_pair(zooming_pair::make_shared()),
-      scrolling(scrolling::make_shared()),
-      player(player::make_shared(app_lifetime->system_path->playing_directory(), lifetime_id.project,
-                                 this->scrolling.get())),
-      timeline_holder(timeline_holder::make_shared(this->project_format, this->project_path.get())),
-      project_lifecycle(ae::project_lifecycle::make_shared(lifetime_id)),
-      closer(ae::window_closer::make_shared(lifetime_id, app_lifetime->window_lifecycle.get())),
-      receiver(ae::window_receiver::make_shared(lifetime_id)) {
+      project_path(std::make_shared<ae::project_path>(project_dir_path)),
+      zooming_pair(std::make_shared<ae::zooming_pair>()),
+      scrolling(std::make_shared<ae::scrolling>()),
+      player(std::make_shared<ae::player>(app_lifetime->system_path->playing_directory(), lifetime_id.project,
+                                          this->scrolling.get())),
+      timeline_holder(std::make_shared<ae::timeline_holder>(this->project_format, this->project_path.get())),
+      project_lifecycle(std::make_shared<ae::project_lifecycle>(lifetime_id)),
+      closer(std::make_shared<ae::window_closer>(lifetime_id, app_lifetime->window_lifecycle.get())),
+      receiver(std::make_shared<ae::window_receiver>(lifetime_id)) {
 }

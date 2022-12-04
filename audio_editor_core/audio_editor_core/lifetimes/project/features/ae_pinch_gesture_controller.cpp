@@ -11,10 +11,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<pinch_gesture_controller> pinch_gesture_controller::make_shared(zooming_pair *zooming_pair) {
-    return std::make_shared<pinch_gesture_controller>(zooming_pair);
-}
-
 pinch_gesture_controller::pinch_gesture_controller(zooming_pair *zooming_pair) : _zooming_pair(zooming_pair) {
 }
 

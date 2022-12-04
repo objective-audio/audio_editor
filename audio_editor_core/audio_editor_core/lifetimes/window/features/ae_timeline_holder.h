@@ -12,8 +12,6 @@ namespace yas::ae {
 class project_path;
 
 struct timeline_holder final {
-    [[nodiscard]] static std::shared_ptr<timeline_holder> make_shared(project_format const &, project_path const *);
-
     timeline_holder(project_format const &, project_path const *);
 
     [[nodiscard]] proc::timeline_ptr const &timeline() const;

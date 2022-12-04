@@ -13,8 +13,6 @@ namespace yas::ae {
 class id_generatable;
 
 struct app_modal_lifecycle final : action_receiver_providable {
-    [[nodiscard]] static std::shared_ptr<app_modal_lifecycle> make_shared(id_generatable const *);
-
     app_modal_lifecycle(id_generatable const *);
 
     [[nodiscard]] std::optional<app_modal_sub_lifetime> const &current() const;

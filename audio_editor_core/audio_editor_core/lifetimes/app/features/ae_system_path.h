@@ -8,15 +8,13 @@
 
 namespace yas::ae {
 struct system_path final {
+    system_path();
+
     [[nodiscard]] std::filesystem::path document_directory() const;
     [[nodiscard]] std::filesystem::path app_directory() const;
     [[nodiscard]] std::filesystem::path playing_directory() const;
 
-    [[nodiscard]] static std::shared_ptr<system_path> make_shared();
-
    private:
-    system_path();
-
     system_path(system_path const &) = delete;
     system_path(system_path &&) = delete;
     system_path &operator=(system_path const &) = delete;

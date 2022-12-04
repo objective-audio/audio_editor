@@ -11,7 +11,6 @@
 
 namespace yas::ae {
 struct window_receiver final : action_receivable {
-    [[nodiscard]] static std::shared_ptr<window_receiver> make_shared(window_lifetime_id const &);
     window_receiver(window_lifetime_id const &);
 
     [[nodiscard]] std::optional<action_id> receivable_id() const override;

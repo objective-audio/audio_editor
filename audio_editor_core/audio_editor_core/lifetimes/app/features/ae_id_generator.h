@@ -14,8 +14,6 @@ struct id_generatable {
 };
 
 struct id_generator final : id_generatable {
-    [[nodiscard]] static std::shared_ptr<id_generator> make_shared();
-
     identifier generate() const;
 };
 }  // namespace yas::ae

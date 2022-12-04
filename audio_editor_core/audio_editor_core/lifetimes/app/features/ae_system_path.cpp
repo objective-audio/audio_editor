@@ -29,10 +29,6 @@ std::filesystem::path system_path::playing_directory() const {
     return this->app_directory().append("playing");
 }
 
-std::shared_ptr<system_path> system_path::make_shared() {
-    return std::shared_ptr<system_path>(new system_path{});
-}
-
 void system_path::_log_app_directory() const {
     std::cout << this->app_directory() << std::endl;
 }

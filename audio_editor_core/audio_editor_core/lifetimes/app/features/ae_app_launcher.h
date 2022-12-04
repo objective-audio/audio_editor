@@ -10,9 +10,6 @@ namespace yas::ae {
 class system_path;
 
 struct app_launcher final {
-    [[nodiscard]] static std::shared_ptr<app_launcher> make_shared(std::shared_ptr<workable> const &,
-                                                                   std::shared_ptr<ae::system_path> const &);
-
     app_launcher(std::shared_ptr<workable> const &, std::shared_ptr<ae::system_path> const &);
 
     void launch();

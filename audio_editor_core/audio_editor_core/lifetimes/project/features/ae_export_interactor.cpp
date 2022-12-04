@@ -15,13 +15,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<export_interactor> export_interactor::make_shared(
-    project_format const &project_format, project_modal_lifecycle *lifecycle, editing_status const *editing_status,
-    edge_holder const *edge_holder, player *player, exporter *exporter, timeline_holder const *timeline_holder) {
-    return std::make_shared<export_interactor>(project_format, lifecycle, editing_status, edge_holder, player, exporter,
-                                               timeline_holder);
-}
-
 export_interactor::export_interactor(project_format const &project_format, project_modal_lifecycle *lifecycle,
                                      editing_status const *editing_status, edge_holder const *edge_holder,
                                      player *player, exporter *exporter, timeline_holder const *timeline_holder)

@@ -10,7 +10,7 @@
 
 namespace yas::ae {
 struct display_space final {
-    [[nodiscard]] static std::shared_ptr<display_space> make_shared(ui::region const view_region);
+    explicit display_space(ui::region const view_region);
 
     void set_view_region(ui::region const);
     void set_scale(ui::size const);
@@ -29,8 +29,6 @@ struct display_space final {
     observing::fetcher_ptr<display_space_event> _fetcher;
 
     observing::canceller_pool _pool;
-
-    display_space(ui::region const view_region);
 
     void _update_region_and_notify(display_space_event_source const);
 };

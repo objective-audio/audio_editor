@@ -9,10 +9,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<file_info_loader> file_info_loader::make_shared() {
-    return std::make_shared<file_info_loader>();
-}
-
 file_info_loader::file_info_loader() {
 }
 

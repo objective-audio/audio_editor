@@ -25,15 +25,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<track_editor> track_editor::make_shared(player *player, file_track *file_track,
-                                                        marker_pool *marker_pool,
-                                                        selected_file_module_pool *selected_pool,
-                                                        pasteboard *pasteboard, database *database,
-                                                        editing_status const *editing_status) {
-    return std::make_shared<track_editor>(player, file_track, marker_pool, selected_pool, pasteboard, database,
-                                          editing_status);
-}
-
 track_editor::track_editor(player *player, file_track *file_track, marker_pool *marker_pool,
                            selected_file_module_pool *selected_pool, pasteboard *pasteboard, database *database,
                            editing_status const *editing_status)

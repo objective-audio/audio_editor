@@ -13,8 +13,6 @@ namespace yas::ae {
 class database;
 
 struct marker_pool final : jumpable_on_jumper {
-    [[nodiscard]] static std::shared_ptr<marker_pool> make_shared(database_for_marker_pool *);
-
     marker_pool(database_for_marker_pool *);
 
     void revert_markers(std::vector<marker_object> &&);

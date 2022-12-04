@@ -11,12 +11,10 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<player> player::make_shared(std::filesystem::path const &root_path, project_id const &project_id,
-                                            scrolling_for_player *scrolling) {
-    return std::make_shared<player>(
-        playing::coordinator::make_shared(
-            root_path, playing::renderer::make_shared(audio::mac_device::renewable_default_output_device())),
-        project_id, scrolling);
+player::player(std::filesystem::path const &root_path, project_id const &project_id, scrolling_for_player *scrolling)
+    : player(playing::coordinator::make_shared(
+                 root_path, playing::renderer::make_shared(audio::mac_device::renewable_default_output_device())),
+             project_id, scrolling) {
 }
 
 player::player(std::shared_ptr<playing::coordinator> const &coordinator, project_id const &project_id,

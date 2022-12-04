@@ -13,10 +13,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<app_lifecycle> app_lifecycle::make_shared() {
-    return std::make_shared<app_lifecycle>();
-}
-
 app_lifecycle::app_lifecycle() {
 }
 

@@ -15,14 +15,14 @@ using namespace yas::ae;
 @implementation ae_scrolling_tests
 
 - (void)test_initial {
-    auto const scrolling = scrolling::make_shared();
+    auto const scrolling = std::make_shared<ae::scrolling>();
 
     XCTAssertFalse(scrolling->is_began());
     XCTAssertTrue(scrolling->is_enabled());
 }
 
 - (void)test_observe {
-    auto const scrolling = scrolling::make_shared();
+    auto const scrolling = std::make_shared<ae::scrolling>();
 
     std::vector<scrolling_event> called;
 
@@ -62,7 +62,7 @@ using namespace yas::ae;
 }
 
 - (void)test_is_enabled {
-    auto const scrolling = scrolling::make_shared();
+    auto const scrolling = std::make_shared<ae::scrolling>();
 
     std::vector<scrolling_event> called;
 

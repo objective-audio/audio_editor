@@ -12,10 +12,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<exporter> exporter::make_shared() {
-    return std::make_shared<exporter>();
-}
-
 exporter::exporter()
     : _last_result(nullptr),
       _is_exporting(observing::value::holder<bool>::make_shared(false)),

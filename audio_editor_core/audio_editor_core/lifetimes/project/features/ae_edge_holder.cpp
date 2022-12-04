@@ -7,10 +7,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<edge_holder> edge_holder::make_shared() {
-    return std::make_shared<edge_holder>();
-}
-
 edge_holder::edge_holder() : _edge(ae::edge::zero()) {
     this->_fetcher = observing::fetcher<edge_holder_event>::make_shared(
         [this] { return edge_holder_event{.type = edge_holder_event_type::fetched, .edge = this->_edge}; });

@@ -9,11 +9,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<window_closer> window_closer::make_shared(window_lifetime_id const &lifetime_id,
-                                                          window_lifecycle *window_lifecycle) {
-    return std::make_shared<window_closer>(lifetime_id, window_lifecycle);
-}
-
 window_closer::window_closer(window_lifetime_id const &lifetime_id, window_lifecycle *window_lifecycle)
     : _lifetime_id(lifetime_id), _window_lifecycle(window_lifecycle) {
 }

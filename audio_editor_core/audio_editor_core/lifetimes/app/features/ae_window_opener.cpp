@@ -13,11 +13,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<window_opener> window_opener::make_shared(file_info_loader const *file_info_loader,
-                                                          window_lifecycle *lifecycle) {
-    return std::make_shared<window_opener>(file_info_loader, lifecycle);
-}
-
 window_opener::window_opener(file_info_loader const *file_info_loader, window_lifecycle *lifecycle)
     : _file_info_loader(file_info_loader), _window_lifecycle(lifecycle) {
 }

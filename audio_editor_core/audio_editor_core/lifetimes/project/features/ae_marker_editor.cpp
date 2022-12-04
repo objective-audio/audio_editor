@@ -13,11 +13,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<marker_editor> marker_editor::make_shared(player const *player, marker_pool *marker_pool,
-                                                          database *database, editing_status const *editing_status) {
-    return std::make_shared<marker_editor>(player, marker_pool, database, editing_status);
-}
-
 marker_editor::marker_editor(player const *player, marker_pool *marker_pool, database *database,
                              editing_status const *editing_status)
     : _player(player), _marker_pool(marker_pool), _database(database), _editing_status(editing_status) {

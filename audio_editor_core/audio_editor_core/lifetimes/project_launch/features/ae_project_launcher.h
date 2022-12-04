@@ -15,9 +15,6 @@ class timeline_holder;
 class project_lifecycle;
 
 struct project_launcher final : std::enable_shared_from_this<project_launcher> {
-    [[nodiscard]] static std::shared_ptr<project_launcher> make_shared(project_format const &, player *,
-                                                                       timeline_holder const *, project_lifecycle *);
-
     project_launcher(project_format const &, player *, timeline_holder const *, project_lifecycle *);
 
     void launch();

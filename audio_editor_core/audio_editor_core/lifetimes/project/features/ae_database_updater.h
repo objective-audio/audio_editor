@@ -12,13 +12,10 @@ class pasteboard;
 class database;
 
 struct database_updater final {
-    [[nodiscard]] static std::shared_ptr<database_updater> make_shared(edge_holder *, pasteboard *, database *);
-
-    database_updater(edge_holder *, pasteboard *, database *);
+    database_updater(edge_holder *, database *);
 
    private:
     edge_holder *const _edge_holder;
-    pasteboard *const _pasteboard;
     database *const _database;
 
     observing::canceller_pool _pool;

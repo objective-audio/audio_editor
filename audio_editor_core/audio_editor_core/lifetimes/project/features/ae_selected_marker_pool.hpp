@@ -24,8 +24,6 @@ struct selected_marker_pool final {
         marker_map markers;  // inserted, erased
     };
 
-    [[nodiscard]] static std::shared_ptr<selected_marker_pool> make_shared();
-
     selected_marker_pool();
 
     [[nodiscard]] marker_map const &markers() const;

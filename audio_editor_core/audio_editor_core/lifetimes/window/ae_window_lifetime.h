@@ -28,7 +28,7 @@ struct window_lifetime final {
                                                                       std::filesystem::path const &project_dir_path);
 
     window_lifetime(window_lifetime_id const &, project_format const &, std::filesystem::path const &project_dir_path,
-                    app_lifetime *);
+                    app_lifetime const *);
 
     window_lifetime_id const lifetime_id;
     project_format const project_format;

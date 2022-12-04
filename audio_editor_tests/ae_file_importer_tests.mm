@@ -46,7 +46,7 @@ audio::pcm_format const pcm_format = audio::pcm_format::int16;
     [self setup_src_file:src_path];
 
     auto const worker = worker_stub::make_shared();
-    auto const importer = file_importer::make_shared(worker, 0);
+    auto const importer = std::make_shared<file_importer>(worker, 0);
 
     worker->start();
 

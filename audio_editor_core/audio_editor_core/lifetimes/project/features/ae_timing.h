@@ -10,8 +10,6 @@
 
 namespace yas::ae {
 struct timing final : timing_for_nudge_settings {
-    [[nodiscard]] static std::shared_ptr<timing> make_shared(sample_rate_t const);
-
     timing(sample_rate_t const);
 
     [[nodiscard]] sample_rate_t sample_rate() const override;

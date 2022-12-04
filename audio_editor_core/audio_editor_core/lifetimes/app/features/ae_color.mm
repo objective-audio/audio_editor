@@ -39,13 +39,6 @@ static ui::color to_color(NSString *name) {
 }
 }
 
-std::shared_ptr<color> color::make_shared() {
-    return std::shared_ptr<color>(new color{});
-}
-
-color::color() {
-}
-
 ui::color color::background() const {
     return to_color(@"background");
 }

@@ -11,8 +11,6 @@
 
 namespace yas::ae {
 struct time_editor final {
-    [[nodiscard]] static std::shared_ptr<time_editor> make_shared(number_components const &);
-
     time_editor(number_components const &);
 
     [[nodiscard]] bool can_input_number() const;

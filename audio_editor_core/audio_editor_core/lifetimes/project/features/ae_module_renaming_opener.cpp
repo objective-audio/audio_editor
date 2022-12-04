@@ -12,12 +12,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<module_renaming_opener> module_renaming_opener::make_shared(project_modal_lifecycle *lifecycle,
-                                                                            editing_status const *editing_status,
-                                                                            deselector *deselector) {
-    return std::make_shared<module_renaming_opener>(lifecycle, editing_status, deselector);
-}
-
 module_renaming_opener::module_renaming_opener(project_modal_lifecycle *lifecycle, editing_status const *editing_status,
                                                deselector *deselector)
     : _lifecycle(lifecycle), _editing_status(editing_status), _deselector(deselector) {

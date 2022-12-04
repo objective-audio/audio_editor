@@ -8,8 +8,6 @@
 
 namespace yas::ae {
 struct color final {
-    [[nodiscard]] static std::shared_ptr<color> make_shared();
-
     [[nodiscard]] ui::color background() const;
 
     [[nodiscard]] ui::color playing_line_pausing() const;
@@ -46,8 +44,5 @@ struct color final {
     [[nodiscard]] ui::color time_unit_selected_tracking() const;
 
     [[nodiscard]] ui::color debug_text() const;
-
-   private:
-    color();
 };
 }  // namespace yas::ae

@@ -19,7 +19,7 @@ std::shared_ptr<project_launch_lifetime> project_launch_lifetime::make_shared(
 
 project_launch_lifetime::project_launch_lifetime(ae::window_lifetime *window_lifetime)
     : window_lifetime_id(window_lifetime->lifetime_id),
-      launcher(project_launcher::make_shared(window_lifetime->project_format, window_lifetime->player.get(),
-                                             window_lifetime->timeline_holder.get(),
-                                             window_lifetime->project_lifecycle.get())) {
+      launcher(std::make_shared<ae::project_launcher>(window_lifetime->project_format, window_lifetime->player.get(),
+                                                      window_lifetime->timeline_holder.get(),
+                                                      window_lifetime->project_lifecycle.get())) {
 }

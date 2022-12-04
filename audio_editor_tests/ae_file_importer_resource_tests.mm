@@ -15,7 +15,7 @@ using namespace yas::ae;
 @implementation ae_file_importer_resource_tests
 
 - (void)test_push_and_pull_context {
-    auto const resource = file_importer_resource::make_shared();
+    auto const resource = std::make_shared<ae::file_importer_resource>();
 
     XCTAssertFalse(resource->pull_context_on_task().has_value());
 
@@ -40,7 +40,7 @@ using namespace yas::ae;
 }
 
 - (void)test_cancel_context {
-    auto const resource = file_importer_resource::make_shared();
+    auto const resource = std::make_shared<ae::file_importer_resource>();
 
     resource->push_context_on_main({.project_id = "0",
                                     .src_path = std::filesystem::path("test/src0.wav"),
@@ -59,7 +59,7 @@ using namespace yas::ae;
 }
 
 - (void)test_pull_cancel_ids {
-    auto const resource = file_importer_resource::make_shared();
+    auto const resource = std::make_shared<ae::file_importer_resource>();
 
     resource->cancel_on_main({"2"});
     resource->cancel_on_main({"3"});
@@ -74,7 +74,7 @@ using namespace yas::ae;
 }
 
 - (void)test_clear_cancel_ids_at_pull_context {
-    auto const resource = file_importer_resource::make_shared();
+    auto const resource = std::make_shared<ae::file_importer_resource>();
 
     resource->cancel_on_main({"4"});
     resource->cancel_on_main({"5"});

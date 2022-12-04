@@ -12,8 +12,6 @@ namespace yas::ae {
 class app_lifetime;
 
 struct app_lifecycle final : action_receiver_providable {
-    [[nodiscard]] static std::shared_ptr<app_lifecycle> make_shared();
-
     app_lifecycle();
 
     std::shared_ptr<app_lifetime> const &lifetime() const;

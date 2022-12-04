@@ -12,8 +12,6 @@ namespace yas::ae {
 class window_lifecycle;
 
 struct window_closer final {
-    [[nodiscard]] static std::shared_ptr<window_closer> make_shared(window_lifetime_id const &, window_lifecycle *);
-
     window_closer(window_lifetime_id const &, window_lifecycle *);
 
     [[nodiscard]] bool can_close() const;

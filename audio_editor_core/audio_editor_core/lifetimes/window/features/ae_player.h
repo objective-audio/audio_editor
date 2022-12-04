@@ -15,9 +15,7 @@
 
 namespace yas::ae {
 struct player final : player_for_playing_toggler {
-    [[nodiscard]] static std::shared_ptr<player> make_shared(std::filesystem::path const &root_path,
-                                                             project_id const &project_id, scrolling_for_player *);
-
+    player(std::filesystem::path const &root_path, project_id const &project_id, scrolling_for_player *);
     player(std::shared_ptr<playing::coordinator> const &, project_id const &, scrolling_for_player *);
 
     void begin_rendering();

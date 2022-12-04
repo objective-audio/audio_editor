@@ -15,9 +15,6 @@ class editing_status;
 class deselector;
 
 struct module_renaming_opener final {
-    [[nodiscard]] static std::shared_ptr<module_renaming_opener> make_shared(project_modal_lifecycle *,
-                                                                             editing_status const *, deselector *);
-
     module_renaming_opener(project_modal_lifecycle *, editing_status const *, deselector *);
 
     [[nodiscard]] bool can_begin_module_renaming() const;

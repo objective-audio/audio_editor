@@ -11,8 +11,6 @@
 
 namespace yas::ae {
 struct exporter final : std::enable_shared_from_this<exporter> {
-    [[nodiscard]] static std::shared_ptr<exporter> make_shared();
-
     exporter();
 
     void begin(std::filesystem::path const &export_path, std::shared_ptr<proc::timeline> const &,

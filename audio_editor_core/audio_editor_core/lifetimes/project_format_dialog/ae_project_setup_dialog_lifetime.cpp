@@ -12,7 +12,7 @@ using namespace yas::ae;
 
 std::shared_ptr<project_setup_dialog_lifetime> project_setup_dialog_lifetime::make_shared(
     project_setup_dialog_lifetime_id const &lifetime_id) {
-    auto const format_setup = project_format_setup::make_shared();
+    auto const format_setup = std::make_shared<ae::project_format_setup>();
     auto const setup = project_setup::make_shared(lifetime_id, format_setup.get());
 
     return std::make_shared<project_setup_dialog_lifetime>(lifetime_id, format_setup, setup);

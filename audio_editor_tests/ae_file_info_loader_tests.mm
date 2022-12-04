@@ -46,7 +46,7 @@ using namespace yas::ae;
 
     file->close();
 
-    auto const loader = file_info_loader::make_shared();
+    auto const loader = std::make_shared<file_info_loader>();
     auto const file_info = loader->load_file_info(path);
 
     XCTAssertEqual(file_info.value().sample_rate, 48000);
