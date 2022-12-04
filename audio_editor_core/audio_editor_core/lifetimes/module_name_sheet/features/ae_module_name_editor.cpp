@@ -33,6 +33,5 @@ std::string const &module_name_editor::name() const {
 }
 
 void module_name_editor::set_name(std::string const &name) {
-    this->_database->suspend_saving(
-        [this, &name] { this->_file_track->set_module_name_and_notify(this->_module_index, name); });
+    this->_file_track->set_module_name_and_notify(this->_module_index, name);
 }

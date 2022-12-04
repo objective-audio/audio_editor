@@ -64,7 +64,7 @@ class window_lifetime;
 struct project_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &);
 
-    project_lifetime(window_lifetime *, app_lifetime *);
+    project_lifetime(window_lifetime const *, app_lifetime const *);
 
     window_lifetime_id const window_lifetime_id;
     project_format const project_format;

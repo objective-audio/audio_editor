@@ -63,10 +63,8 @@ void track_editor::split() {
 
     this->_selected_pool->clear();
 
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
-        this->_file_track->split_at(current_frame);
-    });
+    auto const current_frame = this->_player->current_frame();
+    this->_file_track->split_at(current_frame);
 }
 
 void track_editor::drop_head() {
@@ -74,10 +72,8 @@ void track_editor::drop_head() {
         return;
     }
 
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
-        this->_file_track->drop_head_at(current_frame);
-    });
+    auto const current_frame = this->_player->current_frame();
+    this->_file_track->drop_head_at(current_frame);
 }
 
 void track_editor::drop_tail() {
@@ -87,10 +83,8 @@ void track_editor::drop_tail() {
 
     this->_selected_pool->clear();
 
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
-        this->_file_track->drop_tail_at(current_frame);
-    });
+    auto const current_frame = this->_player->current_frame();
+    this->_file_track->drop_tail_at(current_frame);
 }
 
 void track_editor::drop_head_and_offset() {
@@ -103,14 +97,12 @@ void track_editor::drop_head_and_offset() {
     auto const current_frame = this->_player->current_frame();
     auto const seek_frame = this->_file_track->module_at(current_frame).value().value.range.frame;
 
-    this->_database->suspend_saving([this, &current_frame] {
-        auto const module_range = this->_file_track->module_at(current_frame)->value.range;
-        this->_file_track->drop_head_and_offset_at(current_frame);
-        auto const dropping_length = current_frame - module_range.frame;
-        this->_marker_pool->erase_range({module_range.frame, static_cast<proc::length_t>(dropping_length)});
-        auto const offset = -dropping_length;
-        this->_marker_pool->move_offset_from(current_frame, offset);
-    });
+    auto const module_range = this->_file_track->module_at(current_frame)->value.range;
+    this->_file_track->drop_head_and_offset_at(current_frame);
+    auto const dropping_length = current_frame - module_range.frame;
+    this->_marker_pool->erase_range({module_range.frame, static_cast<proc::length_t>(dropping_length)});
+    auto const offset = -dropping_length;
+    this->_marker_pool->move_offset_from(current_frame, offset);
 
     this->_player->seek(seek_frame);
 }
@@ -122,15 +114,13 @@ void track_editor::drop_tail_and_offset() {
 
     this->_selected_pool->clear();
 
-    this->_database->suspend_saving([this] {
-        auto const current_frame = this->_player->current_frame();
-        auto const module_range = this->_file_track->module_at(current_frame)->value.range;
-        this->_file_track->drop_tail_and_offset_at(current_frame);
-        auto const dropping_length = module_range.next_frame() - current_frame;
-        this->_marker_pool->erase_range({current_frame, static_cast<proc::length_t>(dropping_length)});
-        auto const offset = -dropping_length;
-        this->_marker_pool->move_offset_from(module_range.next_frame(), offset);
-    });
+    auto const current_frame = this->_player->current_frame();
+    auto const module_range = this->_file_track->module_at(current_frame)->value.range;
+    this->_file_track->drop_tail_and_offset_at(current_frame);
+    auto const dropping_length = module_range.next_frame() - current_frame;
+    this->_marker_pool->erase_range({current_frame, static_cast<proc::length_t>(dropping_length)});
+    auto const offset = -dropping_length;
+    this->_marker_pool->move_offset_from(module_range.next_frame(), offset);
 }
 
 bool track_editor::can_erase() const {
@@ -146,7 +136,7 @@ void track_editor::erase() {
         return;
     }
 
-    this->_erase(false);
+    this->_erase_with_copy(false);
 }
 
 bool track_editor::can_cut() const {
@@ -158,7 +148,7 @@ void track_editor::cut() {
         return;
     }
 
-    this->_erase(true);
+    this->_erase_with_copy(true);
 }
 
 bool track_editor::can_copy() const {
@@ -225,15 +215,13 @@ void track_editor::paste() {
         return;
     }
 
-    this->_database->suspend_saving([this, &modules] {
-        auto const current_frame = this->_player->current_frame();
+    auto const current_frame = this->_player->current_frame();
 
-        for (auto const &module : modules) {
-            auto const &module_value = module.value;
-            this->_file_track->overwrite_module({module_value.name, module_value.range.offset(current_frame),
-                                                 module_value.file_frame, module_value.file_name});
-        }
-    });
+    for (auto const &module : modules) {
+        auto const &module_value = module.value;
+        this->_file_track->overwrite_module({module_value.name, module_value.range.offset(current_frame),
+                                             module_value.file_frame, module_value.file_name});
+    }
 }
 
 bool track_editor::_has_target_modules() const {
@@ -245,24 +233,22 @@ bool track_editor::_has_target_modules() const {
     }
 }
 
-void track_editor::_erase(bool const withCopy) {
-    this->_database->suspend_saving([this, withCopy] {
-        // copyでクリアされるので先に保持しておく
-        auto const selected_modules = this->_selected_pool->modules();
+void track_editor::_erase_with_copy(bool const with_copy) {
+    // copyでクリアされるので先に保持しておく
+    auto const selected_modules = this->_selected_pool->modules();
 
-        if (withCopy) {
-            this->copy();
+    if (with_copy) {
+        this->copy();
+    }
+
+    if (!selected_modules.empty()) {
+        this->_selected_pool->clear();
+
+        for (auto const &pair : selected_modules) {
+            this->_file_track->erase_module_and_notify(pair.first);
         }
-
-        if (!selected_modules.empty()) {
-            this->_selected_pool->clear();
-
-            for (auto const &pair : selected_modules) {
-                this->_file_track->erase_module_and_notify(pair.first);
-            }
-        } else {
-            auto const current_frame = this->_player->current_frame();
-            this->_file_track->erase_at(current_frame);
-        }
-    });
+    } else {
+        auto const current_frame = this->_player->current_frame();
+        this->_file_track->erase_at(current_frame);
+    }
 }

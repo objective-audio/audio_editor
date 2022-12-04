@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
 namespace yas::ae {
+class database;
 class track_editor;
 class playing_toggler;
 class nudge_settings;
@@ -27,14 +28,15 @@ class marker_selector;
 class escaper;
 
 struct project_receiver final : action_receivable {
-    project_receiver(window_lifetime_id const &, track_editor *, playing_toggler *, nudge_settings *, nudger *,
-                     jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_opener *,
+    project_receiver(window_lifetime_id const &, database *, track_editor *, playing_toggler *, nudge_settings *,
+                     nudger *, jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_opener *,
                      marker_renaming_opener *, timing *, import_interactor *, export_interactor *, reverter *,
                      module_selector *, marker_selector *, escaper *);
 
    private:
     window_lifetime_id const _window_lifetime_id;
-    track_editor *const _editor;
+    database *const _database;
+    track_editor *const _track_editor;
     playing_toggler *const _playing_toggler;
     nudge_settings *const _nudge_settings;
     nudger *const _nudger;

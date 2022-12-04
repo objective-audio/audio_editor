@@ -64,7 +64,7 @@ std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::window_lifet
     return std::make_shared<project_lifetime>(window_lifetime.get(), hierarchy::app_lifetime().get());
 }
 
-project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetime *app_lifetime)
+project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_lifetime const *app_lifetime)
     : window_lifetime_id(window_lifetime->lifetime_id),
       project_format(window_lifetime->project_format),
       module_content_pool(module_content_pool::make_shared()),
@@ -128,9 +128,10 @@ project_lifetime::project_lifetime(window_lifetime *window_lifetime, app_lifetim
                                              this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_file_module_pool.get())),
       receiver(std::make_shared<project_receiver>(
-          window_lifetime_id, this->track_editor.get(), this->playing_toggler.get(), this->nudge_settings.get(),
-          this->nudger.get(), this->jumper.get(), this->edge_editor.get(), this->time_editor_opener.get(),
-          this->marker_editor.get(), this->module_renaming_opener.get(), this->marker_renaming_opener.get(),
-          this->timing.get(), this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
-          this->module_selector.get(), this->marker_selector.get(), this->escaper.get())) {
+          window_lifetime_id, this->database.get(), this->track_editor.get(), this->playing_toggler.get(),
+          this->nudge_settings.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
+          this->time_editor_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
+          this->marker_renaming_opener.get(), this->timing.get(), this->import_interactor.get(),
+          this->export_interactor.get(), this->reverter.get(), this->module_selector.get(), this->marker_selector.get(),
+          this->escaper.get())) {
 }

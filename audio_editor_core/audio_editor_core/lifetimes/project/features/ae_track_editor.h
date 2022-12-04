@@ -57,6 +57,6 @@ struct track_editor final {
     track_editor &operator=(track_editor &&) = delete;
 
     bool _has_target_modules() const;
-    void _erase(bool const withCopy);
+    void _erase_with_copy(bool const withCopy);
 };
 }  // namespace yas::ae
