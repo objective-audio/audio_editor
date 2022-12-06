@@ -20,5 +20,10 @@ struct window_receiver final : action_receivable {
 
    private:
     window_lifetime_id const _lifetime_id;
+
+    window_receiver(window_receiver const &) = delete;
+    window_receiver(window_receiver &&) = delete;
+    window_receiver &operator=(window_receiver const &) = delete;
+    window_receiver &operator=(window_receiver &&) = delete;
 };
 }  // namespace yas::ae

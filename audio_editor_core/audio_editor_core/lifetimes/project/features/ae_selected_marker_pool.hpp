@@ -43,5 +43,10 @@ struct selected_marker_pool final {
     marker_map _markers;
 
     observing::fetcher_ptr<event> _event_fetcher;
+
+    selected_marker_pool(selected_marker_pool const &) = delete;
+    selected_marker_pool(selected_marker_pool &&) = delete;
+    selected_marker_pool &operator=(selected_marker_pool const &) = delete;
+    selected_marker_pool &operator=(selected_marker_pool &&) = delete;
 };
 }  // namespace yas::ae

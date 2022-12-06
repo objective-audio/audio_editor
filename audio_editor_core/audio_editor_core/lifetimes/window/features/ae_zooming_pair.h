@@ -20,5 +20,10 @@ struct zooming_pair final {
    private:
     observing::fetcher_ptr<zooming_scale> _scale_fetcher;
     observing::canceller_pool _pool;
+
+    zooming_pair(zooming_pair const &) = delete;
+    zooming_pair(zooming_pair &&) = delete;
+    zooming_pair &operator=(zooming_pair const &) = delete;
+    zooming_pair &operator=(zooming_pair &&) = delete;
 };
 }  // namespace yas::ae

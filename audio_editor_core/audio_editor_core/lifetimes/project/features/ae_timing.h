@@ -27,5 +27,10 @@ struct timing final : timing_for_nudge_settings {
    private:
     sample_rate_t const _sample_rate;
     observing::value::holder_ptr<timing_fraction_kind> const _fraction_kind;
+
+    timing(timing const &) = delete;
+    timing(timing &&) = delete;
+    timing &operator=(timing const &) = delete;
+    timing &operator=(timing &&) = delete;
 };
 }  // namespace yas::ae

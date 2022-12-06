@@ -27,6 +27,11 @@ struct app_modal_lifecycle final : action_receiver_providable {
     id_generatable const *const _id_generator;
     observing::value::holder_ptr<std::optional<app_modal_sub_lifetime>> const _current;
 
+    app_modal_lifecycle(app_modal_lifecycle const &) = delete;
+    app_modal_lifecycle(app_modal_lifecycle &&) = delete;
+    app_modal_lifecycle &operator=(app_modal_lifecycle const &) = delete;
+    app_modal_lifecycle &operator=(app_modal_lifecycle &&) = delete;
+
 #pragma mark - action_receiver_provider
 
     std::optional<action_id> receivable_id() const override;

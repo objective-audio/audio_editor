@@ -15,5 +15,11 @@ struct context_menu_lifetime final {
 
     project_sub_lifetime_id const lifetime_id;
     context_menu const context_menu;
+
+   private:
+    context_menu_lifetime(context_menu_lifetime const &) = delete;
+    context_menu_lifetime(context_menu_lifetime &&) = delete;
+    context_menu_lifetime &operator=(context_menu_lifetime const &) = delete;
+    context_menu_lifetime &operator=(context_menu_lifetime &&) = delete;
 };
 }  // namespace yas::ae

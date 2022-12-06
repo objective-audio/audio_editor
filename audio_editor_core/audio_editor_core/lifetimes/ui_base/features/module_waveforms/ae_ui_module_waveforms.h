@@ -36,6 +36,11 @@ struct ui_module_waveforms final {
 
     observing::canceller_pool _pool;
 
+    ui_module_waveforms(ui_module_waveforms const &) = delete;
+    ui_module_waveforms(ui_module_waveforms &&) = delete;
+    ui_module_waveforms &operator=(ui_module_waveforms const &) = delete;
+    ui_module_waveforms &operator=(ui_module_waveforms &&) = delete;
+
     void _resize_sub_nodes(std::size_t const);
     std::optional<ui::size> _waveform_scale() const;
 };

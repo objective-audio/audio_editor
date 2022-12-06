@@ -22,5 +22,10 @@ struct marker_name_editor final {
    private:
     marker_index const _marker_index;
     marker_pool *const _marker_pool;
+
+    marker_name_editor(marker_name_editor const &) = delete;
+    marker_name_editor(marker_name_editor &&) = delete;
+    marker_name_editor &operator=(marker_name_editor const &) = delete;
+    marker_name_editor &operator=(marker_name_editor &&) = delete;
 };
 }  // namespace yas::ae

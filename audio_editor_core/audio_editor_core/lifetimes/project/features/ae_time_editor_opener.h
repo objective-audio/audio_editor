@@ -22,5 +22,10 @@ struct time_editor_opener final {
     player const *const _player;
     timing const *const _timing;
     project_modal_lifecycle *const _lifecycle;
+
+    time_editor_opener(time_editor_opener const &) = delete;
+    time_editor_opener(time_editor_opener &&) = delete;
+    time_editor_opener &operator=(time_editor_opener const &) = delete;
+    time_editor_opener &operator=(time_editor_opener &&) = delete;
 };
 }  // namespace yas::ae

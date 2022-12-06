@@ -52,6 +52,11 @@ struct ui_marker_element final {
 
     observing::canceller_pool _pool;
 
+    ui_marker_element(ui_marker_element const &) = delete;
+    ui_marker_element(ui_marker_element &&) = delete;
+    ui_marker_element &operator=(ui_marker_element const &) = delete;
+    ui_marker_element &operator=(ui_marker_element &&) = delete;
+
     void _update_name();
     void _update_color();
     std::optional<marker_index> _marker_index() const;

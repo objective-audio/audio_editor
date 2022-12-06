@@ -48,5 +48,11 @@ struct app_lifetime final {
     std::shared_ptr<window_opener> const window_opener;
 
     std::shared_ptr<action_sender> const action_sender;
+
+   private:
+    app_lifetime(app_lifetime const &) = delete;
+    app_lifetime(app_lifetime &&) = delete;
+    app_lifetime &operator=(app_lifetime const &) = delete;
+    app_lifetime &operator=(app_lifetime &&) = delete;
 };
 }  // namespace yas::ae

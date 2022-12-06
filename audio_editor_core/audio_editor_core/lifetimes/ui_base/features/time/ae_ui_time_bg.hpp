@@ -24,5 +24,10 @@ struct ui_time_bg final {
     std::shared_ptr<ui::button> const _button;
 
     observing::canceller_pool _pool;
+
+    ui_time_bg(ui_time_bg const &) = delete;
+    ui_time_bg(ui_time_bg &&) = delete;
+    ui_time_bg &operator=(ui_time_bg const &) = delete;
+    ui_time_bg &operator=(ui_time_bg &&) = delete;
 };
 }  // namespace yas::ae

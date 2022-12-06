@@ -16,5 +16,10 @@ struct file_module_loading_state_holder final {
 
    private:
     observing::value::holder_ptr<file_module_loading_state> const _state;
+
+    file_module_loading_state_holder(file_module_loading_state_holder const &) = delete;
+    file_module_loading_state_holder(file_module_loading_state_holder &&) = delete;
+    file_module_loading_state_holder &operator=(file_module_loading_state_holder const &) = delete;
+    file_module_loading_state_holder &operator=(file_module_loading_state_holder &&) = delete;
 };
 }  // namespace yas::ae

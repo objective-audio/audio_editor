@@ -42,6 +42,11 @@ struct time_editor_closer final {
 
     std::optional<dependencies> _dependencies;
 
+    time_editor_closer(time_editor_closer const &) = delete;
+    time_editor_closer(time_editor_closer &&) = delete;
+    time_editor_closer &operator=(time_editor_closer const &) = delete;
+    time_editor_closer &operator=(time_editor_closer &&) = delete;
+
     void _finalize();
 };
 }  // namespace yas::ae

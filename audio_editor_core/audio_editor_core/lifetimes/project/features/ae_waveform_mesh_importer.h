@@ -33,5 +33,10 @@ struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh
 
     observing::notifier_ptr<event> const _notifier;
     std::shared_ptr<task_queue<object_id>> const _task_queue;
+
+    waveform_mesh_importer(waveform_mesh_importer const &) = delete;
+    waveform_mesh_importer(waveform_mesh_importer &&) = delete;
+    waveform_mesh_importer &operator=(waveform_mesh_importer const &) = delete;
+    waveform_mesh_importer &operator=(waveform_mesh_importer &&) = delete;
 };
 }  // namespace yas::ae

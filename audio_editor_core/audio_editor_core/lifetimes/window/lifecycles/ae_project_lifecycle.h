@@ -27,6 +27,11 @@ struct project_lifecycle final : action_receiver_providable {
    private:
     observing::value::holder_ptr<std::optional<project_sub_lifetime>> const _current;
 
+    project_lifecycle(project_lifecycle const &) = delete;
+    project_lifecycle(project_lifecycle &&) = delete;
+    project_lifecycle &operator=(project_lifecycle const &) = delete;
+    project_lifecycle &operator=(project_lifecycle &&) = delete;
+
 #pragma mark - action_receiver_provider
 
     std::optional<action_id> receivable_id() const override;

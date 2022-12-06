@@ -22,5 +22,10 @@ struct modifiers_holder final {
     std::unordered_set<ae::modifier> _modifiers;
     observing::notifier_ptr<ae::modifiers_holder_event> const _modifier_notifier;
     observing::canceller_pool _pool;
+
+    modifiers_holder(modifiers_holder const &) = delete;
+    modifiers_holder(modifiers_holder &&) = delete;
+    modifiers_holder &operator=(modifiers_holder const &) = delete;
+    modifiers_holder &operator=(modifiers_holder &&) = delete;
 };
 }  // namespace yas::ae

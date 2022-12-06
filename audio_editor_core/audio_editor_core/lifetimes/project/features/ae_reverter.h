@@ -40,5 +40,10 @@ struct reverter final {
     editing_status const *const _editing_status;
 
     observing::canceller_pool _pool;
+
+    reverter(reverter const &) = delete;
+    reverter(reverter &&) = delete;
+    reverter &operator=(reverter const &) = delete;
+    reverter &operator=(reverter &&) = delete;
 };
 }  // namespace yas::ae

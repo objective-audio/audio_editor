@@ -29,5 +29,11 @@ struct time_editor_lifetime final {
     std::shared_ptr<time_editor> const editor;
     std::shared_ptr<time_editor_closer> const closer;
     std::shared_ptr<time_editor_receiver> const receiver;
+
+   private:
+    time_editor_lifetime(time_editor_lifetime const &) = delete;
+    time_editor_lifetime(time_editor_lifetime &&) = delete;
+    time_editor_lifetime &operator=(time_editor_lifetime const &) = delete;
+    time_editor_lifetime &operator=(time_editor_lifetime &&) = delete;
 };
 }  // namespace yas::ae

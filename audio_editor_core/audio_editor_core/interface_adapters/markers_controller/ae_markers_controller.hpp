@@ -23,5 +23,10 @@ struct markers_controller final {
 
    private:
     std::weak_ptr<project_action_sender> const _action_sender;
+
+    markers_controller(markers_controller const &) = delete;
+    markers_controller(markers_controller &&) = delete;
+    markers_controller &operator=(markers_controller const &) = delete;
+    markers_controller &operator=(markers_controller &&) = delete;
 };
 }  // namespace yas::ae

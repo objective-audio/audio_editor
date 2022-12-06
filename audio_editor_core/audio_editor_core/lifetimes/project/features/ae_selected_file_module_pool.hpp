@@ -43,5 +43,10 @@ struct selected_file_module_pool final {
     module_map _modules;
 
     observing::fetcher_ptr<event> _event_fetcher;
+
+    selected_file_module_pool(selected_file_module_pool const &) = delete;
+    selected_file_module_pool(selected_file_module_pool &&) = delete;
+    selected_file_module_pool &operator=(selected_file_module_pool const &) = delete;
+    selected_file_module_pool &operator=(selected_file_module_pool &&) = delete;
 };
 }  // namespace yas::ae

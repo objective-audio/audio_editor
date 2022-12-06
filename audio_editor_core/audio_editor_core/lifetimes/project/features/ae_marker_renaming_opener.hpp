@@ -7,7 +7,6 @@
 #include <audio_editor_core/ae_common_types.h>
 
 #include <audio_editor_core/ae_marker_index.hpp>
-#include <memory>
 
 namespace yas::ae {
 class project_modal_lifecycle;
@@ -24,5 +23,10 @@ struct marker_renaming_opener final {
     project_modal_lifecycle *const _lifecycle;
     editing_status const *const _editing_status;
     deselector *const _deselector;
+
+    marker_renaming_opener(marker_renaming_opener const &) = delete;
+    marker_renaming_opener(marker_renaming_opener &&) = delete;
+    marker_renaming_opener &operator=(marker_renaming_opener const &) = delete;
+    marker_renaming_opener &operator=(marker_renaming_opener &&) = delete;
 };
 }  // namespace yas::ae

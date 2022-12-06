@@ -25,5 +25,10 @@ struct module_name_editor final {
     file_module_index const _module_index;
     file_track *const _file_track;
     database *const _database;
+
+    module_name_editor(module_name_editor const &) = delete;
+    module_name_editor(module_name_editor &&) = delete;
+    module_name_editor &operator=(module_name_editor const &) = delete;
+    module_name_editor &operator=(module_name_editor &&) = delete;
 };
 }  // namespace yas::ae

@@ -8,8 +8,7 @@
 
 namespace yas::ae {
 struct ui_button final {
-    [[nodiscard]] static std::shared_ptr<ui_button> make_shared(std::shared_ptr<ui::font_atlas> const &,
-                                                                std::shared_ptr<ui::standard> const &);
+    ui_button(std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ui::standard> const &);
 
     void set_text(std::string const &);
     void set_enabled(bool const);
@@ -25,6 +24,9 @@ struct ui_button final {
     std::shared_ptr<ui::strings> const _strings;
     observing::canceller_pool _pool;
 
-    ui_button(std::shared_ptr<ui::font_atlas> const &, std::shared_ptr<ui::standard> const &);
+    ui_button(ui_button const &) = delete;
+    ui_button(ui_button &&) = delete;
+    ui_button &operator=(ui_button const &) = delete;
+    ui_button &operator=(ui_button &&) = delete;
 };
 }  // namespace yas::ae

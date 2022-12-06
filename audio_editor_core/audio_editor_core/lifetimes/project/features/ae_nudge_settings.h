@@ -24,5 +24,10 @@ struct nudge_settings final {
    private:
     timing_for_nudge_settings const *const _timing;
     observing::value::holder_ptr<std::size_t> const _unit_idx;
+
+    nudge_settings(nudge_settings const &) = delete;
+    nudge_settings(nudge_settings &&) = delete;
+    nudge_settings &operator=(nudge_settings const &) = delete;
+    nudge_settings &operator=(nudge_settings &&) = delete;
 };
 }  // namespace yas::ae

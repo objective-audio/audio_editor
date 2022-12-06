@@ -35,5 +35,10 @@ struct export_interactor final {
     player *const _player;
     exporter *const _exporter;
     timeline_holder const *const _timeline_holder;
+
+    export_interactor(export_interactor const &) = delete;
+    export_interactor(export_interactor &&) = delete;
+    export_interactor &operator=(export_interactor const &) = delete;
+    export_interactor &operator=(export_interactor &&) = delete;
 };
 }  // namespace yas::ae

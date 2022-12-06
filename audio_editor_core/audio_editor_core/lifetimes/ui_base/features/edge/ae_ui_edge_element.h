@@ -30,5 +30,10 @@ struct ui_edge_element final {
     std::shared_ptr<ae::color> const _color;
 
     observing::canceller_pool _pool;
+
+    ui_edge_element(ui_edge_element const &) = delete;
+    ui_edge_element(ui_edge_element &&) = delete;
+    ui_edge_element &operator=(ui_edge_element const &) = delete;
+    ui_edge_element &operator=(ui_edge_element &&) = delete;
 };
 }  // namespace yas::ae

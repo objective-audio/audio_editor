@@ -18,5 +18,11 @@ struct module_name_sheet_lifetime final {
 
     project_sub_lifetime_id const lifetime_id;
     std::shared_ptr<module_name_editor> const editor;
+
+   private:
+    module_name_sheet_lifetime(module_name_sheet_lifetime const &) = delete;
+    module_name_sheet_lifetime(module_name_sheet_lifetime &&) = delete;
+    module_name_sheet_lifetime &operator=(module_name_sheet_lifetime const &) = delete;
+    module_name_sheet_lifetime &operator=(module_name_sheet_lifetime &&) = delete;
 };
 }  // namespace yas::ae

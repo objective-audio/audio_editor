@@ -21,5 +21,10 @@ struct ui_base_lifecycle final {
 
    private:
     std::shared_ptr<ui_base_lifetime> _lifetime;
+
+    ui_base_lifecycle(ui_base_lifecycle const &) = delete;
+    ui_base_lifecycle(ui_base_lifecycle &&) = delete;
+    ui_base_lifecycle &operator=(ui_base_lifecycle const &) = delete;
+    ui_base_lifecycle &operator=(ui_base_lifecycle &&) = delete;
 };
 }  // namespace yas::ae

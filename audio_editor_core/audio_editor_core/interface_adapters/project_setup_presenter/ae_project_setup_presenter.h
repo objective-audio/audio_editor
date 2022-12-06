@@ -20,5 +20,10 @@ struct project_setup_presenter final {
 
    private:
     std::weak_ptr<project_setup> const _setup;
+
+    project_setup_presenter(project_setup_presenter const &) = delete;
+    project_setup_presenter(project_setup_presenter &&) = delete;
+    project_setup_presenter &operator=(project_setup_presenter const &) = delete;
+    project_setup_presenter &operator=(project_setup_presenter &&) = delete;
 };
 }  // namespace yas::ae

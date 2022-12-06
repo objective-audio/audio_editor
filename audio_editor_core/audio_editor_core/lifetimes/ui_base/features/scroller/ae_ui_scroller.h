@@ -26,5 +26,10 @@ struct ui_scroller final {
     ui::node *const _node;
 
     observing::canceller_pool _pool;
+
+    ui_scroller(ui_scroller const &) = delete;
+    ui_scroller(ui_scroller &&) = delete;
+    ui_scroller &operator=(ui_scroller const &) = delete;
+    ui_scroller &operator=(ui_scroller &&) = delete;
 };
 }  // namespace yas::ae

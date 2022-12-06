@@ -53,6 +53,11 @@ struct ui_modules final {
 
     observing::canceller_pool _pool;
 
+    ui_modules(ui_modules const &) = delete;
+    ui_modules(ui_modules &&) = delete;
+    ui_modules &operator=(ui_modules const &) = delete;
+    ui_modules &operator=(ui_modules &&) = delete;
+
     void _set_contents(std::vector<std::optional<module_content>> const &);
     void _update_contents(std::size_t const count, std::vector<std::pair<std::size_t, module_content>> const &inserted,
                           std::vector<std::pair<std::size_t, module_content>> const &replaced,

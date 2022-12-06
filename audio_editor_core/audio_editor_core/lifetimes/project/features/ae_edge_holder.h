@@ -28,6 +28,11 @@ struct edge_holder final : jumpable_on_jumper {
 
     observing::fetcher_ptr<edge_holder_event> _fetcher;
 
+    edge_holder(edge_holder const &) = delete;
+    edge_holder(edge_holder &&) = delete;
+    edge_holder &operator=(edge_holder const &) = delete;
+    edge_holder &operator=(edge_holder &&) = delete;
+
     void _set_edge_and_notify(ae::edge const &, edge_holder_event_type const);
 };
 }  // namespace yas::ae

@@ -23,5 +23,10 @@ struct zooming final {
 
     std::optional<double> _began_scale = std::nullopt;
     std::optional<double> _magnification = std::nullopt;
+
+    zooming(zooming const &) = delete;
+    zooming(zooming &&) = delete;
+    zooming &operator=(zooming const &) = delete;
+    zooming &operator=(zooming &&) = delete;
 };
 }  // namespace yas::ae

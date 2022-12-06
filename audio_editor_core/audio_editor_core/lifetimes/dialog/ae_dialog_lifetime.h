@@ -15,5 +15,11 @@ struct dialog_lifetime final {
 
     project_sub_lifetime_id const lifetime_id;
     dialog_content const content;
+
+   private:
+    dialog_lifetime(dialog_lifetime const &) = delete;
+    dialog_lifetime(dialog_lifetime &&) = delete;
+    dialog_lifetime &operator=(dialog_lifetime const &) = delete;
+    dialog_lifetime &operator=(dialog_lifetime &&) = delete;
 };
 }  // namespace yas::ae

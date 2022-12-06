@@ -22,6 +22,11 @@ struct modules_controller final {
     std::weak_ptr<project_action_sender> const _action_sender;
     std::weak_ptr<module_content_pool> const _content_pool;
 
+    modules_controller(modules_controller const &) = delete;
+    modules_controller(modules_controller &&) = delete;
+    modules_controller &operator=(modules_controller const &) = delete;
+    modules_controller &operator=(modules_controller &&) = delete;
+
     std::optional<file_module_index> index_at(std::size_t const) const;
 };
 }  // namespace yas::ae

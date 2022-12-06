@@ -23,5 +23,11 @@ struct project_setup_dialog_lifetime final {
     project_setup_dialog_lifetime_id const lifetime_id;
     std::shared_ptr<project_format_setup> const format_setup;
     std::shared_ptr<project_setup> const setup;
+
+   private:
+    project_setup_dialog_lifetime(project_setup_dialog_lifetime const &) = delete;
+    project_setup_dialog_lifetime(project_setup_dialog_lifetime &&) = delete;
+    project_setup_dialog_lifetime &operator=(project_setup_dialog_lifetime const &) = delete;
+    project_setup_dialog_lifetime &operator=(project_setup_dialog_lifetime &&) = delete;
 };
 }  // namespace yas::ae

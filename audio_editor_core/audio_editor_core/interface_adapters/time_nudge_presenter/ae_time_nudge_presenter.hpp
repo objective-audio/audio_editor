@@ -20,5 +20,10 @@ struct time_nudge_presenter final {
 
    private:
     std::weak_ptr<nudge_settings> const _nudge_settings;
+
+    time_nudge_presenter(time_nudge_presenter const &) = delete;
+    time_nudge_presenter(time_nudge_presenter &&) = delete;
+    time_nudge_presenter &operator=(time_nudge_presenter const &) = delete;
+    time_nudge_presenter &operator=(time_nudge_presenter &&) = delete;
 };
 }  // namespace yas::ae

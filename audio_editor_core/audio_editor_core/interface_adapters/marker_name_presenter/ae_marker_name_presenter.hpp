@@ -25,6 +25,11 @@ struct marker_name_presenter final {
     std::weak_ptr<marker_name_editor> _editor;
     std::weak_ptr<project_modal_lifecycle> _lifecycle;
 
+    marker_name_presenter(marker_name_presenter const &) = delete;
+    marker_name_presenter(marker_name_presenter &&) = delete;
+    marker_name_presenter &operator=(marker_name_presenter const &) = delete;
+    marker_name_presenter &operator=(marker_name_presenter &&) = delete;
+
     void _finalize();
 };
 }  // namespace yas::ae

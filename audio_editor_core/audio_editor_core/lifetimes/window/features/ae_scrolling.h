@@ -27,5 +27,10 @@ struct scrolling final : scrolling_for_player, scrolling_for_gesture_controller 
 
     bool _is_enabled = true;
     bool _is_began = false;
+
+    scrolling(scrolling const &) = delete;
+    scrolling(scrolling &&) = delete;
+    scrolling &operator=(scrolling const &) = delete;
+    scrolling &operator=(scrolling &&) = delete;
 };
 }  // namespace yas::ae

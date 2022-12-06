@@ -16,5 +16,10 @@ struct playing_toggler final {
 
    private:
     player_for_playing_toggler *const _player;
+
+    playing_toggler(playing_toggler const &) = delete;
+    playing_toggler(playing_toggler &&) = delete;
+    playing_toggler &operator=(playing_toggler const &) = delete;
+    playing_toggler &operator=(playing_toggler &&) = delete;
 };
 }  // namespace yas::ae

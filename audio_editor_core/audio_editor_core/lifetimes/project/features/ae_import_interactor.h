@@ -24,5 +24,10 @@ struct import_interactor final {
     project_modal_lifecycle *const _lifecycle;
     editing_status const *const _editing_status;
     file_module_loader *const _file_module_loader;
+
+    import_interactor(import_interactor const &) = delete;
+    import_interactor(import_interactor &&) = delete;
+    import_interactor &operator=(import_interactor const &) = delete;
+    import_interactor &operator=(import_interactor &&) = delete;
 };
 }  // namespace yas::ae

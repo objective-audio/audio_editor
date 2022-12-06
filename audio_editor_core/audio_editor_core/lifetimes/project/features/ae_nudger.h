@@ -20,5 +20,10 @@ struct nudger final {
    private:
     player *const _player;
     nudge_settings const *const _settings;
+
+    nudger(nudger const &) = delete;
+    nudger(nudger &&) = delete;
+    nudger &operator=(nudger const &) = delete;
+    nudger &operator=(nudger &&) = delete;
 };
 }  // namespace yas::ae

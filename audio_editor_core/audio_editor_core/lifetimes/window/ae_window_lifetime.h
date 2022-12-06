@@ -42,5 +42,11 @@ struct window_lifetime final {
     std::shared_ptr<project_lifecycle> const project_lifecycle;
     std::shared_ptr<window_closer> const closer;
     std::shared_ptr<window_receiver> const receiver;
+
+   private:
+    window_lifetime(window_lifetime const &) = delete;
+    window_lifetime(window_lifetime &&) = delete;
+    window_lifetime &operator=(window_lifetime const &) = delete;
+    window_lifetime &operator=(window_lifetime &&) = delete;
 };
 }  // namespace yas::ae

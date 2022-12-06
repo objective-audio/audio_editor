@@ -26,5 +26,10 @@ struct ui_event_handling final {
     std::weak_ptr<pinch_gesture_controller> const _pinch_gesture_controller;
 
     observing::canceller_pool _pool;
+
+    ui_event_handling(ui_event_handling const &) = delete;
+    ui_event_handling(ui_event_handling &&) = delete;
+    ui_event_handling &operator=(ui_event_handling const &) = delete;
+    ui_event_handling &operator=(ui_event_handling &&) = delete;
 };
 }  // namespace yas::ae

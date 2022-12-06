@@ -36,6 +36,11 @@ struct ui_time_buttons final {
 
     observing::canceller_pool _pool;
 
+    ui_time_buttons(ui_time_buttons const &) = delete;
+    ui_time_buttons(ui_time_buttons &&) = delete;
+    ui_time_buttons &operator=(ui_time_buttons const &) = delete;
+    ui_time_buttons &operator=(ui_time_buttons &&) = delete;
+
     void _resize_buttons();
     void _update_button_positions();
     void _update_unit_states();

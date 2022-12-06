@@ -40,6 +40,11 @@ struct jumper final {
     marker_pool const *const _marker_pool;
     edge_holder const *const _edge_holder;
 
+    jumper(jumper const &) = delete;
+    jumper(jumper &&) = delete;
+    jumper &operator=(jumper const &) = delete;
+    jumper &operator=(jumper &&) = delete;
+
     std::optional<frame_index_t> _previous_jumpable_frame() const;
     std::optional<frame_index_t> _next_jumpable_frame() const;
     std::optional<frame_index_t> _first_edge() const;

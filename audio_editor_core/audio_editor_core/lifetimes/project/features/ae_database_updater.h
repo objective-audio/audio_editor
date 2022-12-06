@@ -20,6 +20,11 @@ struct database_updater final {
 
     observing::canceller_pool _pool;
 
+    database_updater(database_updater const &) = delete;
+    database_updater(database_updater &&) = delete;
+    database_updater &operator=(database_updater const &) = delete;
+    database_updater &operator=(database_updater &&) = delete;
+
     void _setup();
 };
 }  // namespace yas::ae

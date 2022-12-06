@@ -21,5 +21,10 @@ struct project_action_sender final {
    private:
     window_lifetime_id const _window_lifetime_id;
     action_sender *const _action_sender;
+
+    project_action_sender(project_action_sender const &) = delete;
+    project_action_sender(project_action_sender &&) = delete;
+    project_action_sender &operator=(project_action_sender const &) = delete;
+    project_action_sender &operator=(project_action_sender &&) = delete;
 };
 }  // namespace yas::ae

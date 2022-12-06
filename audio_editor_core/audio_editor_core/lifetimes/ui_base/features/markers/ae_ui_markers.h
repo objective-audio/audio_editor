@@ -31,6 +31,11 @@ struct ui_markers final {
 
     observing::canceller_pool _pool;
 
+    ui_markers(ui_markers const &) = delete;
+    ui_markers(ui_markers &&) = delete;
+    ui_markers &operator=(ui_markers const &) = delete;
+    ui_markers &operator=(ui_markers &&) = delete;
+
     void _set_count(std::size_t const);
     void _replace_contents(std::vector<std::optional<marker_content>> const &);
     void _update_contents(std::size_t const count, std::vector<std::pair<std::size_t, marker_content>> const &erased,

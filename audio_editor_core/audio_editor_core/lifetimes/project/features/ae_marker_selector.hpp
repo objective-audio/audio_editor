@@ -26,5 +26,10 @@ struct marker_selector final {
     selected_marker_pool *const _selected_pool;
     editing_status const *const _editing_status;
     deselector *const _deselector;
+
+    marker_selector(marker_selector const &) = delete;
+    marker_selector(marker_selector &&) = delete;
+    marker_selector &operator=(marker_selector const &) = delete;
+    marker_selector &operator=(marker_selector &&) = delete;
 };
 }  // namespace yas::ae

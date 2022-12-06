@@ -19,5 +19,10 @@ struct ui_background final {
     ae::color *const _color;
 
     observing::canceller_pool _pool;
+
+    ui_background(ui_background const &) = delete;
+    ui_background(ui_background &&) = delete;
+    ui_background &operator=(ui_background const &) = delete;
+    ui_background &operator=(ui_background &&) = delete;
 };
 }  // namespace yas::ae

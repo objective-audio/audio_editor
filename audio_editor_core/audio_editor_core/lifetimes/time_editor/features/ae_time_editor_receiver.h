@@ -23,6 +23,11 @@ struct time_editor_receiver : action_receivable {
     time_editor *const _editor;
     time_editor_closer *const _closer;
 
+    time_editor_receiver(time_editor_receiver const &) = delete;
+    time_editor_receiver(time_editor_receiver &&) = delete;
+    time_editor_receiver &operator=(time_editor_receiver const &) = delete;
+    time_editor_receiver &operator=(time_editor_receiver &&) = delete;
+
     std::optional<action_id> receivable_id() const override;
     std::optional<ae::action> to_action(ae::key const &) const override;
     void receive(ae::action const &) const override;

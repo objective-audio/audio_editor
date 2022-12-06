@@ -29,6 +29,11 @@ struct ui_time_nudge final {
 
     observing::canceller_pool _pool;
 
+    ui_time_nudge(ui_time_nudge const &) = delete;
+    ui_time_nudge(ui_time_nudge &&) = delete;
+    ui_time_nudge &operator=(ui_time_nudge const &) = delete;
+    ui_time_nudge &operator=(ui_time_nudge &&) = delete;
+
     void _update_nudge_position();
 };
 }  // namespace yas::ae

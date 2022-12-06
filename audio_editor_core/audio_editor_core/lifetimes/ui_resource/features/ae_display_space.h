@@ -30,6 +30,11 @@ struct display_space final {
 
     observing::canceller_pool _pool;
 
+    display_space(display_space const &) = delete;
+    display_space(display_space &&) = delete;
+    display_space &operator=(display_space const &) = delete;
+    display_space &operator=(display_space &&) = delete;
+
     void _update_region_and_notify(display_space_event_source const);
 };
 }  // namespace yas::ae

@@ -47,5 +47,10 @@ struct pasteboard final {
    private:
     std::optional<pasting_value> _value;
     observing::fetcher_ptr<pasteboard_event> const _event_fetcher;
+
+    pasteboard(pasteboard const &) = delete;
+    pasteboard(pasteboard &&) = delete;
+    pasteboard &operator=(pasteboard const &) = delete;
+    pasteboard &operator=(pasteboard &&) = delete;
 };
 }  // namespace yas::ae
