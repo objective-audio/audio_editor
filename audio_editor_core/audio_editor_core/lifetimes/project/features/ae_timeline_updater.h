@@ -11,8 +11,6 @@ class file_track;
 class timeline_holder;
 
 struct timeline_updater final {
-    [[nodiscard]] static std::shared_ptr<timeline_updater> make_shared(file_track *, timeline_holder *);
-
     timeline_updater(file_track *, timeline_holder *);
 
    private:
@@ -20,5 +18,10 @@ struct timeline_updater final {
     timeline_holder *_timeline_holder;
 
     observing::canceller_pool _pool;
+
+    timeline_updater(timeline_updater const &) = delete;
+    timeline_updater(timeline_updater &&) = delete;
+    timeline_updater &operator=(timeline_updater const &) = delete;
+    timeline_updater &operator=(timeline_updater &&) = delete;
 };
 }  // namespace yas::ae

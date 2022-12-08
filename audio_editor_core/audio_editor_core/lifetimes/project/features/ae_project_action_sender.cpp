@@ -10,11 +10,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_action_sender> project_action_sender::make_shared(window_lifetime_id const &window_lifetime_id,
-                                                                          action_sender *action_sender) {
-    return std::make_shared<project_action_sender>(window_lifetime_id, action_sender);
-}
-
 project_action_sender::project_action_sender(window_lifetime_id const &window_lifetime_id, action_sender *action_sender)
     : _window_lifetime_id(window_lifetime_id), _action_sender(action_sender) {
 }

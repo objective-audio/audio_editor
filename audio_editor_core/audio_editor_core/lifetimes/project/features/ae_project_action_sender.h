@@ -12,9 +12,6 @@ namespace yas::ae {
 class action_sender;
 
 struct project_action_sender final {
-    [[nodiscard]] static std::shared_ptr<project_action_sender> make_shared(window_lifetime_id const &,
-                                                                            action_sender *);
-
     project_action_sender(window_lifetime_id const &, action_sender *);
 
     void send(action const &);
@@ -24,5 +21,10 @@ struct project_action_sender final {
    private:
     window_lifetime_id const _window_lifetime_id;
     action_sender *const _action_sender;
+
+    project_action_sender(project_action_sender const &) = delete;
+    project_action_sender(project_action_sender &&) = delete;
+    project_action_sender &operator=(project_action_sender const &) = delete;
+    project_action_sender &operator=(project_action_sender &&) = delete;
 };
 }  // namespace yas::ae

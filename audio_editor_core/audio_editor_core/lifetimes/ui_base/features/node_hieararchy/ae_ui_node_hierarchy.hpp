@@ -31,5 +31,11 @@ struct ui_node_hierarchy final {
     std::shared_ptr<ui::node> const time_buttons_node;
     std::shared_ptr<ui::node> const time_nudge_node;
     std::shared_ptr<ui::node> const time_strings_node;
+
+   private:
+    ui_node_hierarchy(ui_node_hierarchy const &) = delete;
+    ui_node_hierarchy(ui_node_hierarchy &&) = delete;
+    ui_node_hierarchy &operator=(ui_node_hierarchy const &) = delete;
+    ui_node_hierarchy &operator=(ui_node_hierarchy &&) = delete;
 };
 }  // namespace yas::ae

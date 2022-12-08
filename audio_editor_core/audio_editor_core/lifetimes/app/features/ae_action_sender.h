@@ -24,5 +24,10 @@ struct action_sender final {
 
    private:
     action_receiver_providable *const _root_provider;
+
+    action_sender(action_sender const &) = delete;
+    action_sender(action_sender &&) = delete;
+    action_sender &operator=(action_sender const &) = delete;
+    action_sender &operator=(action_sender &&) = delete;
 };
 }  // namespace yas::ae

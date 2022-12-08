@@ -11,8 +11,6 @@
 
 namespace yas::ae {
 struct project_format_setup {
-    [[nodiscard]] static std::shared_ptr<project_format_setup> make_shared();
-
     project_format_setup();
 
     std::array<uint32_t, 4> const available_sample_rates;

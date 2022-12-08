@@ -17,9 +17,6 @@ class marker_pool;
 class edge_holder;
 
 struct jumper final {
-    [[nodiscard]] static std::shared_ptr<jumper> make_shared(player *, file_track const *, marker_pool const *,
-                                                             edge_holder const *);
-
     jumper(player *, file_track const *, marker_pool const *, edge_holder const *);
 
     [[nodiscard]] bool can_jump_to_previous_edge() const;
@@ -42,6 +39,11 @@ struct jumper final {
     file_track const *const _file_track;
     marker_pool const *const _marker_pool;
     edge_holder const *const _edge_holder;
+
+    jumper(jumper const &) = delete;
+    jumper(jumper &&) = delete;
+    jumper &operator=(jumper const &) = delete;
+    jumper &operator=(jumper &&) = delete;
 
     std::optional<frame_index_t> _previous_jumpable_frame() const;
     std::optional<frame_index_t> _next_jumpable_frame() const;

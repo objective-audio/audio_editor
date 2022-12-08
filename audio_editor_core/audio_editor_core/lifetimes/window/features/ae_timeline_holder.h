@@ -12,8 +12,6 @@ namespace yas::ae {
 class project_path;
 
 struct timeline_holder final {
-    [[nodiscard]] static std::shared_ptr<timeline_holder> make_shared(project_format const &, project_path const *);
-
     timeline_holder(project_format const &, project_path const *);
 
     [[nodiscard]] proc::timeline_ptr const &timeline() const;
@@ -28,5 +26,10 @@ struct timeline_holder final {
 
     proc::timeline_ptr const _timeline;
     proc::track_ptr _track;
+
+    timeline_holder(timeline_holder const &) = delete;
+    timeline_holder(timeline_holder &&) = delete;
+    timeline_holder &operator=(timeline_holder const &) = delete;
+    timeline_holder &operator=(timeline_holder &&) = delete;
 };
 }  // namespace yas::ae

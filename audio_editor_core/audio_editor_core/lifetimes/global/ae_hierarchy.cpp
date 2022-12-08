@@ -13,7 +13,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-static std::shared_ptr<app_lifecycle> const _global_app_lifecycle = app_lifecycle::make_shared();
+static std::shared_ptr<app_lifecycle> const _global_app_lifecycle = std::make_shared<app_lifecycle>();
 
 std::shared_ptr<app_lifecycle> const &hierarchy::app_lifecycle() {
     return _global_app_lifecycle;

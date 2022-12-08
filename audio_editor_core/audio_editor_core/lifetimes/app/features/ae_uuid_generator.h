@@ -15,11 +15,14 @@ struct uuid_generatable {
 };
 
 struct uuid_generator final : uuid_generatable {
+    uuid_generator() = default;
+
     [[nodiscard]] std::string generate() const override;
 
-    [[nodiscard]] static std::shared_ptr<uuid_generator> make_shared();
-
    private:
-    uuid_generator() = default;
+    uuid_generator(uuid_generator const &) = delete;
+    uuid_generator(uuid_generator &&) = delete;
+    uuid_generator &operator=(uuid_generator const &) = delete;
+    uuid_generator &operator=(uuid_generator &&) = delete;
 };
 }  // namespace yas::ae

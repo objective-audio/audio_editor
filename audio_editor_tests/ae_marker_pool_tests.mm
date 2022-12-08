@@ -67,14 +67,14 @@ using namespace marker_pool_test_utils;
 
 - (void)test_initial {
     auto const database = std::make_shared<database_mock>();
-    auto const pool = marker_pool::make_shared(database.get());
+    auto const pool = std::make_shared<ae::marker_pool>(database.get());
 
     XCTAssertEqual(pool->markers().size(), 0);
 }
 
 - (void)test_revert {
     auto const database = std::make_shared<database_mock>();
-    auto const pool = marker_pool::make_shared(database.get());
+    auto const pool = std::make_shared<ae::marker_pool>(database.get());
 
     auto const id_0 = db::make_temporary_id();
     auto const id_1 = db::make_temporary_id();
@@ -103,7 +103,7 @@ using namespace marker_pool_test_utils;
 
 - (void)test_insert {
     auto const database = std::make_shared<database_mock>();
-    auto const pool = marker_pool::make_shared(database.get());
+    auto const pool = std::make_shared<ae::marker_pool>(database.get());
 
     std::vector<db_called> called;
     std::vector<db_add_called> add_called;
@@ -140,7 +140,7 @@ using namespace marker_pool_test_utils;
 
 - (void)test_erase_at {
     auto const database = std::make_shared<database_mock>();
-    auto const pool = marker_pool::make_shared(database.get());
+    auto const pool = std::make_shared<ae::marker_pool>(database.get());
 
     auto const id_0 = db::make_temporary_id();
     auto const id_1 = db::make_temporary_id();
@@ -174,7 +174,7 @@ using namespace marker_pool_test_utils;
 
 - (void)test_erase_range {
     auto const database = std::make_shared<database_mock>();
-    auto const pool = marker_pool::make_shared(database.get());
+    auto const pool = std::make_shared<ae::marker_pool>(database.get());
 
     auto const id_0 = db::make_temporary_id();
     auto const id_1 = db::make_temporary_id();
@@ -211,7 +211,7 @@ using namespace marker_pool_test_utils;
 
 - (void)test_move_marker_at {
     auto const database = std::make_shared<database_mock>();
-    auto const pool = marker_pool::make_shared(database.get());
+    auto const pool = std::make_shared<ae::marker_pool>(database.get());
 
     auto const id_0 = db::make_temporary_id();
     auto const id_1 = db::make_temporary_id();
@@ -252,7 +252,7 @@ using namespace marker_pool_test_utils;
 
 - (void)test_move_offset_from {
     auto const database = std::make_shared<database_mock>();
-    auto const pool = marker_pool::make_shared(database.get());
+    auto const pool = std::make_shared<ae::marker_pool>(database.get());
 
     auto const id_0 = db::make_temporary_id();
     auto const id_1 = db::make_temporary_id();
@@ -297,7 +297,7 @@ using namespace marker_pool_test_utils;
 
 - (void)test_observe {
     auto const database = std::make_shared<database_mock>();
-    auto const pool = marker_pool::make_shared(database.get());
+    auto const pool = std::make_shared<ae::marker_pool>(database.get());
 
     auto const id_0 = db::make_temporary_id();
     auto const id_1 = db::make_temporary_id();

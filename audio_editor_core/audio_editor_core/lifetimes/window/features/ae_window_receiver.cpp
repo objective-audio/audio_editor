@@ -9,10 +9,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<window_receiver> window_receiver::make_shared(window_lifetime_id const &lifetime_id) {
-    return std::make_shared<window_receiver>(lifetime_id);
-}
-
 window_receiver::window_receiver(window_lifetime_id const &lifetime_id) : _lifetime_id(lifetime_id) {
 }
 

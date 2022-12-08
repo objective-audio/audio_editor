@@ -23,5 +23,10 @@ struct ui_resource_lifecycle final {
 
    private:
     std::map<window_lifetime_id, std::shared_ptr<ui_resource_lifetime>> _lifetimes;
+
+    ui_resource_lifecycle(ui_resource_lifecycle const &) = delete;
+    ui_resource_lifecycle(ui_resource_lifecycle &&) = delete;
+    ui_resource_lifecycle &operator=(ui_resource_lifecycle const &) = delete;
+    ui_resource_lifecycle &operator=(ui_resource_lifecycle &&) = delete;
 };
 }  // namespace yas::ae

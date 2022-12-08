@@ -13,10 +13,6 @@ using namespace yas::ae;
 
 static std::vector<std::string> const _zero_string_vector{"0"};
 
-std::shared_ptr<time_editor> time_editor::make_shared(number_components const &components) {
-    return std::make_shared<time_editor>(components);
-}
-
 time_editor::time_editor(number_components const &components)
     : _original_components(components),
       _commited_components(time_editor_utils::to_editing_components(components)),

@@ -19,5 +19,10 @@ struct playing_line_presenter final {
 
    private:
     std::weak_ptr<player> const _player;
+
+    playing_line_presenter(playing_line_presenter const &) = delete;
+    playing_line_presenter(playing_line_presenter &&) = delete;
+    playing_line_presenter &operator=(playing_line_presenter const &) = delete;
+    playing_line_presenter &operator=(playing_line_presenter &&) = delete;
 };
 }  // namespace yas::ae

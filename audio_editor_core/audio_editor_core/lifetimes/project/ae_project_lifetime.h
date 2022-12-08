@@ -15,12 +15,6 @@
 
 namespace yas::ae {
 class app_lifetime;
-class project_path;
-class zooming_pair;
-class scrolling;
-class system_path;
-class player;
-class project_launcher;
 class timing;
 class nudge_settings;
 class file_track;
@@ -110,5 +104,11 @@ struct project_lifetime final {
     std::shared_ptr<track_editor> const track_editor;
     std::shared_ptr<escaper> const escaper;
     std::shared_ptr<project_receiver> const receiver;
+
+   private:
+    project_lifetime(project_lifetime const &) = delete;
+    project_lifetime(project_lifetime &&) = delete;
+    project_lifetime &operator=(project_lifetime const &) = delete;
+    project_lifetime &operator=(project_lifetime &&) = delete;
 };
 }  // namespace yas::ae

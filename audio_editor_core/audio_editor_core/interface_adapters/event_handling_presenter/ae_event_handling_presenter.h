@@ -21,5 +21,10 @@ struct event_handling_presenter final {
    private:
     window_lifetime_id const _window_lifetime_id;
     std::weak_ptr<action_sender> const _action_sender;
+
+    event_handling_presenter(event_handling_presenter const &) = delete;
+    event_handling_presenter(event_handling_presenter &&) = delete;
+    event_handling_presenter &operator=(event_handling_presenter const &) = delete;
+    event_handling_presenter &operator=(event_handling_presenter &&) = delete;
 };
 }  // namespace yas::ae

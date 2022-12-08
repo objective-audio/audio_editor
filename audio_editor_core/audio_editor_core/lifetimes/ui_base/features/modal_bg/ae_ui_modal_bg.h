@@ -25,5 +25,10 @@ struct ui_modal_bg {
     std::weak_ptr<project_action_sender> const _action_sender;
 
     observing::canceller_pool _pool;
+
+    ui_modal_bg(ui_modal_bg const &) = delete;
+    ui_modal_bg(ui_modal_bg &&) = delete;
+    ui_modal_bg &operator=(ui_modal_bg const &) = delete;
+    ui_modal_bg &operator=(ui_modal_bg &&) = delete;
 };
 }  // namespace yas::ae

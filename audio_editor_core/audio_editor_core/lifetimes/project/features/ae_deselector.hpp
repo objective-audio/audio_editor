@@ -16,5 +16,10 @@ struct deselector final {
    private:
     selected_file_module_pool *const _selected_file_module_pool;
     selected_marker_pool *const _selected_marker_pool;
+
+    deselector(deselector const &) = delete;
+    deselector(deselector &&) = delete;
+    deselector &operator=(deselector const &) = delete;
+    deselector &operator=(deselector &&) = delete;
 };
 }  // namespace yas::ae

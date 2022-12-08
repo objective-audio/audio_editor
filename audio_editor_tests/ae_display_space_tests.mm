@@ -16,20 +16,20 @@ using namespace yas::ae;
 
 - (void)test_initial {
     {
-        auto const space = display_space::make_shared(ui::region::zero());
+        auto const space = std::make_shared<ae::display_space>(ui::region::zero());
         XCTAssertTrue(space->region() == ui::region::zero());
     }
 
     {
         auto const region = ui::region{.origin = {.x = -1.0, .y = -2.0}, .size = {.width = 2.0, .height = 4.0}};
-        auto const space = display_space::make_shared(region);
+        auto const space = std::make_shared<ae::display_space>(region);
         XCTAssertTrue(space->region() == region);
     }
 }
 
 - (void)test_scaled_region {
     auto const region = ui::region{.origin = {.x = -1.0, .y = -2.0}, .size = {.width = 2.0, .height = 4.0}};
-    auto const space = display_space::make_shared(region);
+    auto const space = std::make_shared<ae::display_space>(region);
 
     {
         space->set_scale({0.5, 0.25});
@@ -53,7 +53,7 @@ using namespace yas::ae;
 }
 
 - (void)test_observe {
-    auto const space = display_space::make_shared(ui::region::zero());
+    auto const space = std::make_shared<ae::display_space>(ui::region::zero());
 
     struct called_event {
         display_space_event_source source;

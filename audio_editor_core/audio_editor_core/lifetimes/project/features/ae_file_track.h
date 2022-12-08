@@ -14,8 +14,6 @@
 
 namespace yas::ae {
 struct file_track final : jumpable_on_jumper {
-    [[nodiscard]] static std::shared_ptr<file_track> make_shared(database_for_file_track *);
-
     file_track(database_for_file_track *);
 
     [[nodiscard]] file_track_module_map_t const &modules() const;

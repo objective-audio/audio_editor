@@ -16,7 +16,7 @@ using namespace yas::ae;
 @implementation ae_pasteboard_tests
 
 - (void)test_file_module {
-    auto const pasteboard = pasteboard::make_shared();
+    auto const pasteboard = std::make_shared<ae::pasteboard>();
 
     std::vector<pasteboard_event> called;
 
@@ -59,7 +59,7 @@ using namespace yas::ae;
 }
 
 - (void)test_marker {
-    auto const pasteboard = pasteboard::make_shared();
+    auto const pasteboard = std::make_shared<ae::pasteboard>();
 
     std::vector<pasteboard_event> called;
 

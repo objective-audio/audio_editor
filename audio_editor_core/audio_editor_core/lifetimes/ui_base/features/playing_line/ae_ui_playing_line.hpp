@@ -22,5 +22,10 @@ struct ui_playing_line final {
     std::shared_ptr<playing_line_presenter> const _presenter;
     std::shared_ptr<ui::rect_plane> const _playing_line;
     observing::canceller_pool _pool;
+
+    ui_playing_line(ui_playing_line const &) = delete;
+    ui_playing_line(ui_playing_line &&) = delete;
+    ui_playing_line &operator=(ui_playing_line const &) = delete;
+    ui_playing_line &operator=(ui_playing_line &&) = delete;
 };
 }  // namespace yas::ae

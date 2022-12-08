@@ -30,6 +30,11 @@ struct module_name_presenter final {
     std::weak_ptr<module_name_editor> _module_name_editor;
     std::weak_ptr<project_modal_lifecycle> _lifecycle;
 
+    module_name_presenter(module_name_presenter const &) = delete;
+    module_name_presenter(module_name_presenter &&) = delete;
+    module_name_presenter &operator=(module_name_presenter const &) = delete;
+    module_name_presenter &operator=(module_name_presenter &&) = delete;
+
     void _finalize();
 };
 }  // namespace yas::ae

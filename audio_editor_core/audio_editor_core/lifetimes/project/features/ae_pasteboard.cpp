@@ -10,10 +10,6 @@ using namespace yas::ae;
 static std::vector<pasting_file_module_object> const _empty_modules;
 static std::vector<pasting_marker_object> const _empty_markers;
 
-std::shared_ptr<pasteboard> pasteboard::make_shared() {
-    return std::make_shared<pasteboard>();
-}
-
 pasteboard::pasteboard()
     : _event_fetcher(observing::fetcher<pasteboard_event>::make_shared([] { return pasteboard_event::fetched; })) {
 }

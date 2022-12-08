@@ -15,14 +15,14 @@ using namespace yas::ae;
 @implementation ae_timing_tests
 
 - (void)test_sample_rate {
-    XCTAssertEqual(timing::make_shared(1)->sample_rate(), 1);
-    XCTAssertEqual(timing::make_shared(44100)->sample_rate(), 44100);
-    XCTAssertEqual(timing::make_shared(48000)->sample_rate(), 48000);
-    XCTAssertEqual(timing::make_shared(96000)->sample_rate(), 96000);
+    XCTAssertEqual(std::make_shared<ae::timing>(1)->sample_rate(), 1);
+    XCTAssertEqual(std::make_shared<ae::timing>(44100)->sample_rate(), 44100);
+    XCTAssertEqual(std::make_shared<ae::timing>(48000)->sample_rate(), 48000);
+    XCTAssertEqual(std::make_shared<ae::timing>(96000)->sample_rate(), 96000);
 }
 
 - (void)test_set_fraction_kind {
-    auto const timing = timing::make_shared(48000);
+    auto const timing = std::make_shared<ae::timing>(48000);
 
     std::vector<timing_fraction_kind> called;
 
@@ -50,7 +50,7 @@ using namespace yas::ae;
 }
 
 - (void)test_components_fraction_of_sample {
-    auto const timing = timing::make_shared(48000);
+    auto const timing = std::make_shared<ae::timing>(48000);
 
     timing->set_fraction_kind(timing_fraction_kind::sample);
 
@@ -89,7 +89,7 @@ using namespace yas::ae;
 }
 
 - (void)test_components_fraction_of_milisecond {
-    auto const timing = timing::make_shared(48000);
+    auto const timing = std::make_shared<ae::timing>(48000);
 
     timing->set_fraction_kind(timing_fraction_kind::milisecond);
 
@@ -140,7 +140,7 @@ using namespace yas::ae;
 }
 
 - (void)test_components_fraction_of_frame30 {
-    auto const timing = timing::make_shared(48000);
+    auto const timing = std::make_shared<ae::timing>(48000);
 
     timing->set_fraction_kind(timing_fraction_kind::frame30);
 
@@ -191,7 +191,7 @@ using namespace yas::ae;
 }
 
 - (void)test_fraction_digits {
-    auto const timing = timing::make_shared(48000);
+    auto const timing = std::make_shared<ae::timing>(48000);
 
     timing->set_fraction_kind(timing_fraction_kind::sample);
 
@@ -207,7 +207,7 @@ using namespace yas::ae;
 }
 
 - (void)test_frame {
-    auto const timing = timing::make_shared(10000);
+    auto const timing = std::make_shared<ae::timing>(10000);
 
     timing->set_fraction_kind(timing_fraction_kind::sample);
 

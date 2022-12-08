@@ -9,10 +9,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<selected_marker_pool> selected_marker_pool::make_shared() {
-    return std::make_shared<selected_marker_pool>();
-}
-
 selected_marker_pool::selected_marker_pool() {
     this->_event_fetcher =
         observing::fetcher<event>::make_shared([this] { return event{.type = event_type::fetched}; });

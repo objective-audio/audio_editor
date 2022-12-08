@@ -16,7 +16,7 @@ using namespace yas::ae;
 @implementation ae_uuid_generator_tests
 
 - (void)test_generate {
-    auto const generator = uuid_generator::make_shared();
+    auto const generator = std::make_shared<uuid_generator>();
 
     std::string const uuid = generator->generate();
 

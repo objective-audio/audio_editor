@@ -33,6 +33,11 @@ struct edge_presenter final {
 
     observing::canceller_pool _pool;
 
+    edge_presenter(edge_presenter const &) = delete;
+    edge_presenter(edge_presenter &&) = delete;
+    edge_presenter &operator=(edge_presenter const &) = delete;
+    edge_presenter &operator=(edge_presenter &&) = delete;
+
     void _update_locations();
 };
 }  // namespace yas::ae

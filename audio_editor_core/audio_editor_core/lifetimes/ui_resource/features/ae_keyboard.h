@@ -24,5 +24,10 @@ struct keyboard final {
     modifiers_holder *const _modifiers_holder;
     observing::notifier_ptr<ae::key> const _key_notifier;
     observing::canceller_pool _pool;
+
+    keyboard(keyboard const &) = delete;
+    keyboard(keyboard &&) = delete;
+    keyboard &operator=(keyboard const &) = delete;
+    keyboard &operator=(keyboard &&) = delete;
 };
 }  // namespace yas::ae

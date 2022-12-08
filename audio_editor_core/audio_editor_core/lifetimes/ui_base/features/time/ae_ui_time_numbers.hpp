@@ -28,6 +28,11 @@ struct ui_time_numbers final {
     ae::color *const _color;
     observing::canceller_pool _pool;
 
+    ui_time_numbers(ui_time_numbers const &) = delete;
+    ui_time_numbers(ui_time_numbers &&) = delete;
+    ui_time_numbers &operator=(ui_time_numbers const &) = delete;
+    ui_time_numbers &operator=(ui_time_numbers &&) = delete;
+
     void _update_time_strings_attributes();
 };
 }  // namespace yas::ae

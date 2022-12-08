@@ -11,12 +11,15 @@
 
 namespace yas::ae {
 struct context_menu_lifetime final {
-    [[nodiscard]] static std::shared_ptr<context_menu_lifetime> make_shared(project_sub_lifetime_id const &,
-                                                                            context_menu const &);
-
     context_menu_lifetime(project_sub_lifetime_id const &, context_menu const &);
 
     project_sub_lifetime_id const lifetime_id;
     context_menu const context_menu;
+
+   private:
+    context_menu_lifetime(context_menu_lifetime const &) = delete;
+    context_menu_lifetime(context_menu_lifetime &&) = delete;
+    context_menu_lifetime &operator=(context_menu_lifetime const &) = delete;
+    context_menu_lifetime &operator=(context_menu_lifetime &&) = delete;
 };
 }  // namespace yas::ae

@@ -20,5 +20,11 @@ struct project_launch_lifetime final {
     window_lifetime_id const window_lifetime_id;
 
     std::shared_ptr<project_launcher> const launcher;
+
+   private:
+    project_launch_lifetime(project_launch_lifetime const &) = delete;
+    project_launch_lifetime(project_launch_lifetime &&) = delete;
+    project_launch_lifetime &operator=(project_launch_lifetime const &) = delete;
+    project_launch_lifetime &operator=(project_launch_lifetime &&) = delete;
 };
 }  // namespace yas::ae

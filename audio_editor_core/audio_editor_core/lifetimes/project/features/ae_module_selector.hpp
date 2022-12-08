@@ -26,5 +26,10 @@ struct module_selector final {
     selected_file_module_pool *const _selected_pool;
     editing_status const *const _editing_status;
     deselector *const _deselector;
+
+    module_selector(module_selector const &) = delete;
+    module_selector(module_selector &&) = delete;
+    module_selector &operator=(module_selector const &) = delete;
+    module_selector &operator=(module_selector &&) = delete;
 };
 }  // namespace yas::ae

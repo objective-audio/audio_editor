@@ -13,10 +13,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_lifecycle> project_lifecycle::make_shared(ae::window_lifetime_id const &window_lifetime_id) {
-    return std::make_shared<project_lifecycle>(window_lifetime_id);
-}
-
 project_lifecycle::project_lifecycle(ae::window_lifetime_id const &window_lifetime_id)
     : window_lifetime_id(window_lifetime_id),
       _current(observing::value::holder<std::optional<project_sub_lifetime>>::make_shared(std::nullopt)) {

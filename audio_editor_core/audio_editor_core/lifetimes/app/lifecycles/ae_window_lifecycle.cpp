@@ -20,11 +20,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<window_lifecycle> window_lifecycle::make_shared(id_generatable const *id_generator,
-                                                                uuid_generatable const *uuid_generator) {
-    return std::make_shared<window_lifecycle>(id_generator, uuid_generator);
-}
-
 window_lifecycle::window_lifecycle(id_generatable const *id_generator, uuid_generatable const *uuid_generator)
     : _id_generator(id_generator), _uuid_generator(uuid_generator) {
 }

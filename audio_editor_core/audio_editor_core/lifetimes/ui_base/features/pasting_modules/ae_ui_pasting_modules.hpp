@@ -35,6 +35,11 @@ struct ui_pasting_modules final {
 
     observing::canceller_pool _pool;
 
+    ui_pasting_modules(ui_pasting_modules const &) = delete;
+    ui_pasting_modules(ui_pasting_modules &&) = delete;
+    ui_pasting_modules &operator=(ui_pasting_modules const &) = delete;
+    ui_pasting_modules &operator=(ui_pasting_modules &&) = delete;
+
     void _set_contents(std::vector<std::optional<pasting_module_content>> const &);
     void _update_contents(std::size_t const count,
                           std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,

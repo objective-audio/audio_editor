@@ -59,5 +59,11 @@ struct ui_base_lifetime final {
 
     std::shared_ptr<ui_playing_line> const playing_line;
     std::shared_ptr<ui_event_handling> const event_handling;
+
+   private:
+    ui_base_lifetime(ui_base_lifetime const &) = delete;
+    ui_base_lifetime(ui_base_lifetime &&) = delete;
+    ui_base_lifetime &operator=(ui_base_lifetime const &) = delete;
+    ui_base_lifetime &operator=(ui_base_lifetime &&) = delete;
 };
 }  // namespace yas::ae

@@ -22,7 +22,7 @@ time_editor_lifetime::time_editor_lifetime(project_sub_lifetime_id const &lifeti
                                            project_lifetime const *project_lifetime,
                                            number_components const &components)
     : lifetime_id(lifetime_id),
-      editor(time_editor::make_shared(components)),
+      editor(std::make_shared<ae::time_editor>(components)),
       closer(time_editor_closer::make_shared(lifetime_id, lifetime_id.instance, this->editor.get())),
       receiver(std::make_shared<time_editor_receiver>(lifetime_id, project_lifetime->database, this->editor.get(),
                                                       this->closer.get())) {

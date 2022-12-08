@@ -13,9 +13,6 @@ class database;
 class editing_status;
 
 struct marker_editor final {
-    [[nodiscard]] static std::shared_ptr<marker_editor> make_shared(player const *, marker_pool *, database *,
-                                                                    editing_status const *);
-
     marker_editor(player const *, marker_pool *, database *, editing_status const *);
 
     [[nodiscard]] bool can_insert_marker() const;
@@ -26,5 +23,10 @@ struct marker_editor final {
     marker_pool *const _marker_pool;
     database *const _database;
     editing_status const *const _editing_status;
+
+    marker_editor(marker_editor const &) = delete;
+    marker_editor(marker_editor &&) = delete;
+    marker_editor &operator=(marker_editor const &) = delete;
+    marker_editor &operator=(marker_editor &&) = delete;
 };
 }  // namespace yas::ae

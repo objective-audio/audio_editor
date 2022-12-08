@@ -25,19 +25,19 @@ using namespace yas::ae;
 
 std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
     auto const worker = worker::make_shared();
-    auto const system_path = system_path::make_shared();
-    auto const file_info_loader = file_info_loader::make_shared();
+    auto const system_path = std::make_shared<ae::system_path>();
+    auto const file_info_loader = std::make_shared<ae::file_info_loader>();
     auto const action_sender = std::make_shared<ae::action_sender>(hierarchy::app_lifecycle().get());
-    auto const id_generator = id_generator::make_shared();
-    auto const uuid_generator = uuid_generator::make_shared();
-    auto const window_lifecycle = window_lifecycle::make_shared(id_generator.get(), uuid_generator.get());
+    auto const id_generator = std::make_shared<ae::id_generator>();
+    auto const uuid_generator = std::make_shared<ae::uuid_generator>();
+    auto const window_lifecycle = std::make_shared<ae::window_lifecycle>(id_generator.get(), uuid_generator.get());
 
     return std::make_shared<app_lifetime>(
-        worker, system_path, app_launcher::make_shared(worker, system_path),
-        file_importer::make_shared(worker, static_cast<uint32_t>(worker_priority::file_importing)), file_info_loader,
-        ae::color::make_shared(), uuid_generator, id_generator, window_lifecycle,
-        app_modal_lifecycle::make_shared(id_generator.get()), std::make_shared<ae::ui_resource_lifecycle>(),
-        window_opener::make_shared(file_info_loader.get(), window_lifecycle.get()), action_sender);
+        worker, system_path, std::make_shared<app_launcher>(worker, system_path),
+        std::make_shared<ae::file_importer>(worker, static_cast<uint32_t>(worker_priority::file_importing)),
+        file_info_loader, std::make_shared<ae::color>(), uuid_generator, id_generator, window_lifecycle,
+        std::make_shared<app_modal_lifecycle>(id_generator.get()), std::make_shared<ae::ui_resource_lifecycle>(),
+        std::make_shared<ae::window_opener>(file_info_loader.get(), window_lifecycle.get()), action_sender);
 }
 
 app_lifetime::app_lifetime(

@@ -28,5 +28,10 @@ struct module_waveforms_presenter final {
    private:
     std::weak_ptr<waveform_mesh_importer> const _mesh_importer;
     std::weak_ptr<module_content_pool> const _content_pool;
+
+    module_waveforms_presenter(module_waveforms_presenter const &) = delete;
+    module_waveforms_presenter(module_waveforms_presenter &&) = delete;
+    module_waveforms_presenter &operator=(module_waveforms_presenter const &) = delete;
+    module_waveforms_presenter &operator=(module_waveforms_presenter &&) = delete;
 };
 }  // namespace yas::ae

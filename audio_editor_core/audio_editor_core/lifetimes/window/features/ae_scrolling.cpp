@@ -7,10 +7,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<scrolling> scrolling::make_shared() {
-    return std::make_shared<scrolling>();
-}
-
 scrolling::scrolling() : _notifier(observing::notifier<scrolling_event>::make_shared()) {
 }
 

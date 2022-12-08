@@ -14,11 +14,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<jumper> jumper::make_shared(player *player, file_track const *file_track,
-                                            marker_pool const *marker_pool, edge_holder const *edge_holder) {
-    return std::make_shared<jumper>(player, file_track, marker_pool, edge_holder);
-}
-
 jumper::jumper(player *player, file_track const *file_track, marker_pool const *marker_pool,
                edge_holder const *edge_holder)
     : _player(player), _file_track(file_track), _marker_pool(marker_pool), _edge_holder(edge_holder) {

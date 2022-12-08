@@ -9,7 +9,7 @@
 
 namespace yas::ae {
 struct zooming_pair final {
-    [[nodiscard]] static std::shared_ptr<zooming_pair> make_shared();
+    zooming_pair();
 
     std::shared_ptr<zooming> const horizontal;
     std::shared_ptr<zooming> const vertical;
@@ -21,6 +21,9 @@ struct zooming_pair final {
     observing::fetcher_ptr<zooming_scale> _scale_fetcher;
     observing::canceller_pool _pool;
 
-    zooming_pair();
+    zooming_pair(zooming_pair const &) = delete;
+    zooming_pair(zooming_pair &&) = delete;
+    zooming_pair &operator=(zooming_pair const &) = delete;
+    zooming_pair &operator=(zooming_pair &&) = delete;
 };
 }  // namespace yas::ae

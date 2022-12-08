@@ -13,9 +13,6 @@ class editing_status;
 class file_module_loader;
 
 struct import_interactor final {
-    [[nodiscard]] static std::shared_ptr<import_interactor> make_shared(project_modal_lifecycle *,
-                                                                        editing_status const *, file_module_loader *);
-
     import_interactor(project_modal_lifecycle *, editing_status const *, file_module_loader *);
 
     [[nodiscard]] bool can_select_file_for_import() const;
@@ -27,5 +24,10 @@ struct import_interactor final {
     project_modal_lifecycle *const _lifecycle;
     editing_status const *const _editing_status;
     file_module_loader *const _file_module_loader;
+
+    import_interactor(import_interactor const &) = delete;
+    import_interactor(import_interactor &&) = delete;
+    import_interactor &operator=(import_interactor const &) = delete;
+    import_interactor &operator=(import_interactor &&) = delete;
 };
 }  // namespace yas::ae

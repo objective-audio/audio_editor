@@ -19,9 +19,6 @@ class file_info_loader;
 class project_format;
 
 struct window_lifecycle final : window_lifecycle_for_app_presenter, action_receiver_providable {
-    [[nodiscard]] static std::shared_ptr<window_lifecycle> make_shared(id_generatable const *,
-                                                                       uuid_generatable const *);
-
     window_lifecycle(id_generatable const *, uuid_generatable const *);
 
     void add_lifetime(std::filesystem::path const &project_dir_path, project_format const &);

@@ -8,7 +8,7 @@
 
 namespace yas::ae {
 struct color final {
-    [[nodiscard]] static std::shared_ptr<color> make_shared();
+    color() = default;
 
     [[nodiscard]] ui::color background() const;
 
@@ -48,6 +48,9 @@ struct color final {
     [[nodiscard]] ui::color debug_text() const;
 
    private:
-    color();
+    color(color const &) = delete;
+    color(color &&) = delete;
+    color &operator=(color const &) = delete;
+    color &operator=(color &&) = delete;
 };
 }  // namespace yas::ae

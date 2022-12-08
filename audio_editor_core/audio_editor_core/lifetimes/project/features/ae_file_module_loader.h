@@ -41,5 +41,10 @@ struct file_module_loader final : std::enable_shared_from_this<file_module_loade
     file_module_loading_state_holder *const _state_holder;
     database *const _database;
     pasteboard *const _pasteboard;
+
+    file_module_loader(file_module_loader const &) = delete;
+    file_module_loader(file_module_loader &&) = delete;
+    file_module_loader &operator=(file_module_loader const &) = delete;
+    file_module_loader &operator=(file_module_loader &&) = delete;
 };
 }  // namespace yas::ae

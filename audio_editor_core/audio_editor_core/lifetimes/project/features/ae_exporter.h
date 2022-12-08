@@ -11,8 +11,6 @@
 
 namespace yas::ae {
 struct exporter final : std::enable_shared_from_this<exporter> {
-    [[nodiscard]] static std::shared_ptr<exporter> make_shared();
-
     exporter();
 
     void begin(std::filesystem::path const &export_path, std::shared_ptr<proc::timeline> const &,
@@ -28,5 +26,10 @@ struct exporter final : std::enable_shared_from_this<exporter> {
     observing::value::holder_ptr<bool> const _is_exporting;
 
     std::shared_ptr<task_queue<std::nullptr_t>> const _queue;
+
+    exporter(exporter const &) = delete;
+    exporter(exporter &&) = delete;
+    exporter &operator=(exporter const &) = delete;
+    exporter &operator=(exporter &&) = delete;
 };
 }  // namespace yas::ae

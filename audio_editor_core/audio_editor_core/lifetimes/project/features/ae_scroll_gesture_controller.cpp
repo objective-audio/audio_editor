@@ -11,11 +11,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<scroll_gesture_controller> scroll_gesture_controller::make_shared(
-    scrolling_for_gesture_controller *scrolling) {
-    return std::make_shared<scroll_gesture_controller>(scrolling);
-}
-
 scroll_gesture_controller::scroll_gesture_controller(scrolling_for_gesture_controller *scrolling)
     : _scrolling(scrolling) {
 }

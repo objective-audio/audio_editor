@@ -14,13 +14,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<database_updater> database_updater::make_shared(edge_holder *edge_holder, pasteboard *pasteboard,
-                                                                database *database) {
-    return std::make_shared<database_updater>(edge_holder, pasteboard, database);
-}
-
-database_updater::database_updater(edge_holder *edge_holder, pasteboard *pasteboard, database *database)
-    : _edge_holder(edge_holder), _pasteboard(pasteboard), _database(database) {
+database_updater::database_updater(edge_holder *edge_holder, database *database)
+    : _edge_holder(edge_holder), _database(database) {
     this->_edge_holder
         ->observe_event([this](edge_holder_event const &event) {
             switch (event.type) {

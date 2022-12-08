@@ -39,6 +39,11 @@ struct pasting_modules_presenter final {
     std::optional<frame_index_t> _last_frame = std::nullopt;
     std::optional<time::range> _last_space_range = std::nullopt;
 
+    pasting_modules_presenter(pasting_modules_presenter const &) = delete;
+    pasting_modules_presenter(pasting_modules_presenter &&) = delete;
+    pasting_modules_presenter &operator=(pasting_modules_presenter const &) = delete;
+    pasting_modules_presenter &operator=(pasting_modules_presenter &&) = delete;
+
     std::optional<time::range> _space_range() const;
     void _update_all_contents(bool const force_updating, bool const force_replacing);
 };

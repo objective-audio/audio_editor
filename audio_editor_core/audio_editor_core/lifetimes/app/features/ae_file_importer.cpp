@@ -14,12 +14,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<file_importer> file_importer::make_shared(workable_ptr const &worker, uint32_t const priority) {
-    return std::make_shared<file_importer>(worker, priority);
-}
-
 file_importer::file_importer(workable_ptr const &worker, uint32_t const priority)
-    : _worker(worker), _priority(priority), _resource(file_importer_resource::make_shared()) {
+    : _worker(worker), _priority(priority), _resource(std::make_shared<ae::file_importer_resource>()) {
     this->_worker->add_task(this->_priority, [resource = this->_resource] {
         auto context_opt = resource->pull_context_on_task();
         if (!context_opt.has_value()) {

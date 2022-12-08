@@ -24,8 +24,6 @@ struct selected_marker_pool final {
         marker_map markers;  // inserted, erased
     };
 
-    [[nodiscard]] static std::shared_ptr<selected_marker_pool> make_shared();
-
     selected_marker_pool();
 
     [[nodiscard]] marker_map const &markers() const;
@@ -45,5 +43,10 @@ struct selected_marker_pool final {
     marker_map _markers;
 
     observing::fetcher_ptr<event> _event_fetcher;
+
+    selected_marker_pool(selected_marker_pool const &) = delete;
+    selected_marker_pool(selected_marker_pool &&) = delete;
+    selected_marker_pool &operator=(selected_marker_pool const &) = delete;
+    selected_marker_pool &operator=(selected_marker_pool &&) = delete;
 };
 }  // namespace yas::ae

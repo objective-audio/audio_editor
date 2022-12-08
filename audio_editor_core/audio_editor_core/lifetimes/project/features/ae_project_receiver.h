@@ -54,6 +54,11 @@ struct project_receiver final : action_receivable {
     marker_selector *const _marker_selector;
     escaper *const _escaper;
 
+    project_receiver(project_receiver const &) = delete;
+    project_receiver(project_receiver &&) = delete;
+    project_receiver &operator=(project_receiver const &) = delete;
+    project_receiver &operator=(project_receiver &&) = delete;
+
     std::optional<action_id> receivable_id() const override;
     std::optional<ae::action> to_action(ae::key const &) const override;
     void receive(ae::action const &) const override;

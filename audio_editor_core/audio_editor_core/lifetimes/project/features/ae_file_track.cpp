@@ -12,10 +12,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<file_track> file_track::make_shared(database_for_file_track *database) {
-    return std::make_shared<file_track>(database);
-}
-
 file_track::file_track(database_for_file_track *database) : _database(database) {
     this->_event_fetcher = observing::fetcher<file_track_event>::make_shared(
         [this] { return file_track_event{.type = file_track_event_type::any, .modules = this->_modules}; });

@@ -8,8 +8,6 @@
 
 namespace yas::ae {
 struct project_path final {
-    static std::shared_ptr<project_path> make_shared(std::filesystem::path const &root);
-
     project_path(std::filesystem::path const &root);
 
     [[nodiscard]] std::filesystem::path const &root_directory() const;

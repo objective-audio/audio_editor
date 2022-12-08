@@ -36,6 +36,11 @@ struct time_numbers_presenter final {
 
     observing::canceller_pool _pool;
 
+    time_numbers_presenter(time_numbers_presenter const &) = delete;
+    time_numbers_presenter(time_numbers_presenter &&) = delete;
+    time_numbers_presenter &operator=(time_numbers_presenter const &) = delete;
+    time_numbers_presenter &operator=(time_numbers_presenter &&) = delete;
+
     std::shared_ptr<time_editor_lifetime> const &_lifetime() const;
 };
 }  // namespace yas::ae

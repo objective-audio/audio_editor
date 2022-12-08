@@ -15,13 +15,13 @@ using namespace yas::ae;
 @implementation ae_edge_holder_tests
 
 - (void)test_initial {
-    auto const editor = edge_holder::make_shared();
+    auto const editor = std::make_shared<ae::edge_holder>();
 
     XCTAssertEqual(editor->edge(), ae::edge::zero());
 }
 
 - (void)test_set_edge {
-    auto const holder = edge_holder::make_shared();
+    auto const holder = std::make_shared<ae::edge_holder>();
 
     std::vector<edge_holder_event> called;
 
@@ -48,7 +48,7 @@ using namespace yas::ae;
 }
 
 - (void)test_set_begin_frame {
-    auto const holder = edge_holder::make_shared();
+    auto const holder = std::make_shared<ae::edge_holder>();
     holder->set_edge({0, 2});
 
     std::vector<edge_holder_event> called;
@@ -80,7 +80,7 @@ using namespace yas::ae;
 }
 
 - (void)test_set_end_frame {
-    auto const holder = edge_holder::make_shared();
+    auto const holder = std::make_shared<ae::edge_holder>();
     holder->set_edge({1, 2});
 
     std::vector<edge_holder_event> called;
@@ -112,7 +112,7 @@ using namespace yas::ae;
 }
 
 - (void)test_revert_edge {
-    auto const holder = edge_holder::make_shared();
+    auto const holder = std::make_shared<ae::edge_holder>();
     holder->set_edge({0, 2});
 
     std::vector<edge_holder_event> called;

@@ -7,10 +7,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<nudge_settings> nudge_settings::make_shared(timing_for_nudge_settings const *timing) {
-    return std::make_shared<nudge_settings>(timing);
-}
-
 nudge_settings::nudge_settings(timing_for_nudge_settings const *timing)
     : _timing(timing), _unit_idx(observing::value::holder<std::size_t>::make_shared(0)) {
 }

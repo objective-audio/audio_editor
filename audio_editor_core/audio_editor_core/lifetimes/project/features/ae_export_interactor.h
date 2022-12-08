@@ -19,11 +19,6 @@ class exporter;
 class timeline_holder;
 
 struct export_interactor final {
-    [[nodiscard]] static std::shared_ptr<export_interactor> make_shared(project_format const &,
-                                                                        project_modal_lifecycle *,
-                                                                        editing_status const *, edge_holder const *,
-                                                                        player *, exporter *, timeline_holder const *);
-
     export_interactor(project_format const &, project_modal_lifecycle *, editing_status const *, edge_holder const *,
                       player *, exporter *, timeline_holder const *);
 
@@ -40,5 +35,10 @@ struct export_interactor final {
     player *const _player;
     exporter *const _exporter;
     timeline_holder const *const _timeline_holder;
+
+    export_interactor(export_interactor const &) = delete;
+    export_interactor(export_interactor &&) = delete;
+    export_interactor &operator=(export_interactor const &) = delete;
+    export_interactor &operator=(export_interactor &&) = delete;
 };
 }  // namespace yas::ae

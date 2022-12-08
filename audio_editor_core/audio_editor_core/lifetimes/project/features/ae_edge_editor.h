@@ -25,5 +25,10 @@ struct edge_editor final {
     player const *const _player;
     editing_status const *const _editing_status;
     database *const _database;
+
+    edge_editor(edge_editor const &) = delete;
+    edge_editor(edge_editor &&) = delete;
+    edge_editor &operator=(edge_editor const &) = delete;
+    edge_editor &operator=(edge_editor &&) = delete;
 };
 }  // namespace yas::ae

@@ -18,5 +18,11 @@ struct marker_name_sheet_lifetime final {
 
     project_sub_lifetime_id const lifetime_id;
     std::shared_ptr<marker_name_editor> const editor;
+
+   private:
+    marker_name_sheet_lifetime(marker_name_sheet_lifetime const &) = delete;
+    marker_name_sheet_lifetime(marker_name_sheet_lifetime &&) = delete;
+    marker_name_sheet_lifetime &operator=(marker_name_sheet_lifetime const &) = delete;
+    marker_name_sheet_lifetime &operator=(marker_name_sheet_lifetime &&) = delete;
 };
 }  // namespace yas::ae

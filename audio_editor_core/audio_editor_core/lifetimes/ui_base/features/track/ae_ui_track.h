@@ -31,6 +31,11 @@ struct ui_track final {
 
     observing::canceller_pool _pool;
 
+    ui_track(ui_track const &) = delete;
+    ui_track(ui_track &&) = delete;
+    ui_track &operator=(ui_track const &) = delete;
+    ui_track &operator=(ui_track &&) = delete;
+
     void _update_scale();
 };
 }  // namespace yas::ae

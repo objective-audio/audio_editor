@@ -28,5 +28,10 @@ struct ui_edge final {
     std::shared_ptr<ui_edge_element> const _end_edge;
 
     observing::canceller_pool _pool;
+
+    ui_edge(ui_edge const &) = delete;
+    ui_edge(ui_edge &&) = delete;
+    ui_edge &operator=(ui_edge const &) = delete;
+    ui_edge &operator=(ui_edge &&) = delete;
 };
 }  // namespace yas::ae

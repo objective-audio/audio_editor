@@ -25,5 +25,10 @@ struct scroller_presenter final {
     project_format const _project_format;
     std::weak_ptr<player> _player;
     std::weak_ptr<zooming_pair> _zooming_pair;
+
+    scroller_presenter(scroller_presenter const &) = delete;
+    scroller_presenter(scroller_presenter &&) = delete;
+    scroller_presenter &operator=(scroller_presenter const &) = delete;
+    scroller_presenter &operator=(scroller_presenter &&) = delete;
 };
 }  // namespace yas::ae

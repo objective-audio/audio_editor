@@ -18,5 +18,10 @@ struct ui_time_base final {
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
 
     observing::canceller_pool _pool;
+
+    ui_time_base(ui_time_base const &) = delete;
+    ui_time_base(ui_time_base &&) = delete;
+    ui_time_base &operator=(ui_time_base const &) = delete;
+    ui_time_base &operator=(ui_time_base &&) = delete;
 };
 }  // namespace yas::ae

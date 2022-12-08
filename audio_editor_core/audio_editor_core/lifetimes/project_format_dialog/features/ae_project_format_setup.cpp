@@ -9,10 +9,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_format_setup> project_format_setup::make_shared() {
-    return std::make_shared<project_format_setup>();
-}
-
 project_format_setup::project_format_setup()
     : available_sample_rates({96000, 48000, 44100, 22050}),
       min_channel_count(1),

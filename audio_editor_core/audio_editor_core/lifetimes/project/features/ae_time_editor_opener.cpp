@@ -14,11 +14,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_opener> time_editor_opener::make_shared(player const *player, timing const *timing,
-                                                                    project_modal_lifecycle *lifecycle) {
-    return std::make_shared<time_editor_opener>(player, timing, lifecycle);
-}
-
 time_editor_opener::time_editor_opener(player const *player, timing const *timing, project_modal_lifecycle *lifecycle)
     : _player(player), _timing(timing), _lifecycle(lifecycle) {
 }

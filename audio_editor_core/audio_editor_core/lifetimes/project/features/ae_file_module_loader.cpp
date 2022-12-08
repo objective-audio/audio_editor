@@ -25,9 +25,9 @@ std::shared_ptr<file_module_loader> file_module_loader::make_shared(project_id c
                                                                     file_module_loading_state_holder *state_holder,
                                                                     database *database, pasteboard *pasteboard) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    return std::make_shared<file_module_loader>(uuid_generator::make_shared(), project_id, project_path, project_format,
-                                                app_lifetime->file_importer.get(), app_lifetime->file_info_loader.get(),
-                                                state_holder, database, pasteboard);
+    return std::make_shared<file_module_loader>(
+        std::make_shared<ae::uuid_generator>(), project_id, project_path, project_format,
+        app_lifetime->file_importer.get(), app_lifetime->file_info_loader.get(), state_holder, database, pasteboard);
 }
 
 file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &uuid_generator,

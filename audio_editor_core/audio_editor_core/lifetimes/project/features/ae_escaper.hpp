@@ -17,5 +17,10 @@ struct escaper final {
    private:
     pasteboard *const _pasteboard;
     selected_file_module_pool *const _selected_pool;
+
+    escaper(escaper const &) = delete;
+    escaper(escaper &&) = delete;
+    escaper &operator=(escaper const &) = delete;
+    escaper &operator=(escaper &&) = delete;
 };
 }  // namespace yas::ae

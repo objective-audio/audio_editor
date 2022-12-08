@@ -27,8 +27,6 @@ enum class pasteboard_event {
 using pasting_value = std::variant<std::vector<pasting_file_module_object>, std::vector<pasting_marker_object>>;
 
 struct pasteboard final {
-    [[nodiscard]] static std::shared_ptr<pasteboard> make_shared();
-
     pasteboard();
 
     [[nodiscard]] bool has_file_modules() const;
@@ -49,5 +47,10 @@ struct pasteboard final {
    private:
     std::optional<pasting_value> _value;
     observing::fetcher_ptr<pasteboard_event> const _event_fetcher;
+
+    pasteboard(pasteboard const &) = delete;
+    pasteboard(pasteboard &&) = delete;
+    pasteboard &operator=(pasteboard const &) = delete;
+    pasteboard &operator=(pasteboard &&) = delete;
 };
 }  // namespace yas::ae

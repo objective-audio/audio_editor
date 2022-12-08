@@ -7,10 +7,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<file_module_loading_state_holder> file_module_loading_state_holder::make_shared() {
-    return std::make_shared<file_module_loading_state_holder>();
-}
-
 file_module_loading_state_holder::file_module_loading_state_holder()
     : _state(observing::value::holder<file_module_loading_state>::make_shared(file_module_loading_state::waiting)) {
 }

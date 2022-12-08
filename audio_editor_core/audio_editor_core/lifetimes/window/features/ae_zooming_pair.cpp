@@ -7,11 +7,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<zooming_pair> zooming_pair::make_shared() {
-    return std::shared_ptr<zooming_pair>(new zooming_pair{});
-}
-
-zooming_pair::zooming_pair() : horizontal(zooming::make_shared()), vertical(zooming::make_shared()) {
+zooming_pair::zooming_pair() : horizontal(std::make_shared<zooming>()), vertical(std::make_shared<zooming>()) {
     this->_scale_fetcher = observing::fetcher<zooming_scale>::make_shared([this] { return this->scale(); });
 
     this->horizontal->observe_scale([this](double const &) { this->_scale_fetcher->push(); })

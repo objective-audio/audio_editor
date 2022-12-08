@@ -7,10 +7,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<display_space> display_space::make_shared(ui::region const view_region) {
-    return std::shared_ptr<display_space>(new display_space{view_region});
-}
-
 display_space::display_space(ui::region const view_region)
     : _region(ui::region::zero()), _view_region(view_region), _scale({1.0f, 1.0f}) {
     this->_fetcher = observing::fetcher<display_space_event>::make_shared([this] {

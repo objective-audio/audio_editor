@@ -31,5 +31,11 @@ struct ui_resource_lifetime final {
     std::shared_ptr<ae::keyboard> const keyboard;
 
     std::shared_ptr<ui_base_lifecycle> const base_lifecycle;
+
+   private:
+    ui_resource_lifetime(ui_resource_lifetime const &) = delete;
+    ui_resource_lifetime(ui_resource_lifetime &&) = delete;
+    ui_resource_lifetime &operator=(ui_resource_lifetime const &) = delete;
+    ui_resource_lifetime &operator=(ui_resource_lifetime &&) = delete;
 };
 }  // namespace yas::ae

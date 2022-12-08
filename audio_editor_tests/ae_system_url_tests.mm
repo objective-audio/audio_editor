@@ -15,13 +15,13 @@ using namespace yas::ae;
 @implementation ae_system_path_tests
 
 - (void)test_document_directory {
-    auto const system_path = system_path::make_shared();
+    auto const system_path = std::make_shared<ae::system_path>();
 
     XCTAssertEqual(system_path->document_directory().filename(), "Documents");
 }
 
 - (void)test_app_directory {
-    auto const system_path = system_path::make_shared();
+    auto const system_path = std::make_shared<ae::system_path>();
     auto app_path = system_path->app_directory();
 
     XCTAssertEqual(app_path.filename(), "audio_editor_app");

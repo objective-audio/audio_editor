@@ -70,6 +70,11 @@ struct database final : std::enable_shared_from_this<database>, database_for_mar
 
     database(std::shared_ptr<db::manager> const &);
 
+    database(database const &) = delete;
+    database(database &&) = delete;
+    database &operator=(database const &) = delete;
+    database &operator=(database &&) = delete;
+
     void _setup();
     void _increment_processing_count();
     void _decrement_processing_count();

@@ -12,10 +12,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<nudger> nudger::make_shared(player *player, nudge_settings *settings) {
-    return std::make_shared<nudger>(player, settings);
-}
-
 nudger::nudger(player *player, nudge_settings *settings) : _player(player), _settings(settings) {
 }
 
