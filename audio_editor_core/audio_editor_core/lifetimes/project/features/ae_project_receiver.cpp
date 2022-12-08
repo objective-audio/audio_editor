@@ -184,7 +184,7 @@ void project_receiver::receive(ae::action const &action) const {
                                 this->_track_editor->erase();
                                 break;
                             case editing_action_name::insert_marker:
-                                this->_marker_editor->insert_marker();
+                                this->_marker_editor->insert();
                                 break;
                             case editing_action_name::set_begin_edge:
                                 this->_edge_editor->set_begin();
@@ -309,7 +309,7 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_track_editor->can_erase());
 
                 case editing_action_name::insert_marker:
-                    return to_state(this->_marker_editor->can_insert_marker());
+                    return to_state(this->_marker_editor->can_insert());
 
                 case editing_action_name::return_to_zero:
                     return to_state(this->_jumper->can_return_to_zero());
