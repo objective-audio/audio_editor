@@ -14,7 +14,7 @@ selected_marker_pool::selected_marker_pool() {
         observing::fetcher<event>::make_shared([this] { return event{.type = event_type::fetched}; });
 }
 
-selected_marker_pool::marker_map const &selected_marker_pool::markers() const {
+selected_marker_map const &selected_marker_pool::markers() const {
     return this->_markers;
 }
 

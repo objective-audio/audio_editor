@@ -184,6 +184,7 @@ void project_receiver::receive(ae::action const &action) const {
                                 break;
                             case editing_action_name::erase:
                                 this->_track_editor->erase();
+                                this->_marker_editor->erase();
                                 break;
                             case editing_action_name::insert_marker:
                                 this->_marker_editor->insert();
@@ -224,13 +225,16 @@ void project_receiver::receive(ae::action const &action) const {
                             case editing_action_name::cut:
                                 this->_pasteboard->clear();
                                 this->_track_editor->cut();
+                                this->_marker_editor->cut();
                                 break;
                             case editing_action_name::copy:
                                 this->_pasteboard->clear();
                                 this->_track_editor->copy();
+                                this->_marker_editor->copy();
                                 break;
                             case editing_action_name::paste:
                                 this->_track_editor->paste();
+                                this->_marker_editor->paste();
                                 break;
                             case editing_action_name::escape:
                                 this->_escaper->espace();
@@ -310,7 +314,7 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_track_editor->can_split());
 
                 case editing_action_name::erase:
-                    return to_state(this->_track_editor->can_erase());
+                    return to_state(this->_track_editor->can_erase() || this->_marker_editor->can_erase());
 
                 case editing_action_name::insert_marker:
                     return to_state(this->_marker_editor->can_insert());
@@ -337,11 +341,11 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_export_interactor->can_export_to_file());
 
                 case editing_action_name::cut:
-                    return to_state(this->_track_editor->can_cut());
+                    return to_state(this->_track_editor->can_cut() || this->_marker_editor->can_cut());
                 case editing_action_name::copy:
-                    return to_state(this->_track_editor->can_copy());
+                    return to_state(this->_track_editor->can_copy() || this->_marker_editor->can_copy());
                 case editing_action_name::paste:
-                    return to_state(this->_track_editor->can_paste());
+                    return to_state(this->_track_editor->can_paste() || this->_marker_editor->can_paste());
                 case editing_action_name::escape:
                     return to_state(this->_escaper->can_escape());
 

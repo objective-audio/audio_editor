@@ -8,7 +8,6 @@
 
 #include <audio_editor_core/ae_pasting_file_module.hpp>
 #include <audio_editor_core/ae_pasting_marker.hpp>
-#include <variant>
 
 namespace yas::ae {
 enum class pasting_kind {

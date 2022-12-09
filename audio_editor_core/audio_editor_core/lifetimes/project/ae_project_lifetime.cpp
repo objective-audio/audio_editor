@@ -103,7 +103,8 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       time_editor_opener(std::make_shared<ae::time_editor_opener>(window_lifetime->player.get(), this->timing.get(),
                                                                   this->modal_lifecycle.get())),
       marker_editor(std::make_shared<ae::marker_editor>(window_lifetime->player.get(), this->marker_pool.get(),
-                                                        this->database.get(), this->editing_status.get())),
+                                                        this->database.get(), this->editing_status.get(),
+                                                        this->selected_marker_pool.get(), this->pasteboard.get())),
       module_renaming_opener(std::make_shared<ae::module_renaming_opener>(
           this->modal_lifecycle.get(), this->editing_status.get(), this->deselector.get())),
       marker_renaming_opener(std::make_shared<ae::marker_renaming_opener>(
