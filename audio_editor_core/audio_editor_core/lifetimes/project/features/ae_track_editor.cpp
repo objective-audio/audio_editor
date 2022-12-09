@@ -127,7 +127,8 @@ void track_editor::erase() {
         return;
     }
 
-    this->_erase_with_copy(false);
+    auto selected_modules = this->_selected_pool->modules();
+    this->_erase_modules(std::move(selected_modules));
 }
 
 bool track_editor::can_cut() const {
@@ -139,7 +140,10 @@ void track_editor::cut() {
         return;
     }
 
-    this->_erase_with_copy(true);
+    // copyでクリアされるので先に保持しておく
+    auto selected_modules = this->_selected_pool->modules();
+    this->copy();
+    this->_erase_modules(std::move(selected_modules));
 }
 
 bool track_editor::can_copy() const {
@@ -224,14 +228,7 @@ bool track_editor::_has_target_modules() const {
     }
 }
 
-void track_editor::_erase_with_copy(bool const with_copy) {
-    // copyでクリアされるので先に保持しておく
-    auto const selected_modules = this->_selected_pool->modules();
-
-    if (with_copy) {
-        this->copy();
-    }
-
+void track_editor::_erase_modules(selected_file_module_map &&selected_modules) {
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
 
