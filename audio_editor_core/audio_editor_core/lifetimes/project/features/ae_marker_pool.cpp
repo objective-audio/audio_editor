@@ -22,14 +22,10 @@ void marker_pool::revert_markers(std::vector<marker_object> &&markers) {
 }
 
 std::optional<marker_index> marker_pool::insert_marker(frame_index_t const frame, std::string const &name) {
-    if (!this->marker_for_frame(frame)) {
-        if (auto const marker = this->_database->add_marker(frame, name).object(); marker.has_value()) {
-            auto index = marker.value().index();
-            this->_markers->insert_or_replace(index, marker.value());
-            return index;
-        } else {
-            assertion_failure_if_not_test();
-        }
+    if (auto const marker = this->_database->add_marker(frame, name).object(); marker.has_value()) {
+        auto index = marker.value().index();
+        this->_markers->insert_or_replace(index, marker.value());
+        return index;
     } else {
         assertion_failure_if_not_test();
     }
@@ -59,8 +55,12 @@ void marker_pool::erase(marker_index const &index) {
 }
 
 void marker_pool::erase_at(frame_index_t const frame) {
-    if (auto const marker = this->marker_for_frame(frame); marker.has_value()) {
-        this->erase(marker.value().index());
+    auto const markers = this->markers_for_frame(frame);
+
+    if (!markers.empty()) {
+        for (auto const &marker : markers) {
+            this->erase(marker.index());
+        }
     } else {
         assertion_failure_if_not_test();
     }
@@ -121,13 +121,16 @@ std::optional<marker_object> marker_pool::marker_for_index(marker_index const &i
     return std::nullopt;
 }
 
-std::optional<marker_object> marker_pool::marker_for_frame(frame_index_t const &frame) const {
+std::vector<marker_object> marker_pool::markers_for_frame(frame_index_t const &frame) const {
+    std::vector<marker_object> markers;
+
     for (auto const &pair : this->markers()) {
         if (pair.first.frame == frame) {
-            return pair.second;
+            markers.emplace_back(pair.second);
         }
     }
-    return std::nullopt;
+
+    return markers;
 }
 
 std::optional<marker_object> marker_pool::marker_for_id(object_id const &identifier) const {
@@ -137,6 +140,15 @@ std::optional<marker_object> marker_pool::marker_for_id(object_id const &identif
         }
     }
     return std::nullopt;
+}
+
+bool marker_pool::marker_exists_for_frame(frame_index_t const frame) const {
+    for (auto const &pair : this->markers()) {
+        if (pair.first.frame == frame) {
+            return true;
+        }
+    }
+    return false;
 }
 
 std::optional<frame_index_t> marker_pool::next_jumpable_frame(frame_index_t const frame) const {
