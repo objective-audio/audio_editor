@@ -14,7 +14,7 @@ selected_file_module_pool::selected_file_module_pool() {
         observing::fetcher<event>::make_shared([this] { return event{.type = event_type::fetched}; });
 }
 
-selected_file_module_pool::module_map const &selected_file_module_pool::modules() const {
+selected_file_module_map const &selected_file_module_pool::modules() const {
     return this->_modules;
 }
 

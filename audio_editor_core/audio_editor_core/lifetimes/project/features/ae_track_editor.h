@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_selected_file_module_pool_types.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
@@ -53,6 +54,6 @@ struct track_editor final {
     track_editor &operator=(track_editor &&) = delete;
 
     bool _has_target_modules() const;
-    void _erase_with_copy(bool const withCopy);
+    void _erase_modules(selected_file_module_map &&);
 };
 }  // namespace yas::ae
