@@ -31,6 +31,6 @@ void marker_name_editor::set_name(std::string const &name) {
     if (auto opt_marker = this->_marker_pool->marker_for_index(this->_marker_index)) {
         auto marker = opt_marker.value();
         marker.value.name = name;
-        this->_marker_pool->update_marker(this->_marker_index, marker);
+        this->_marker_pool->update(this->_marker_index, marker);
     }
 }

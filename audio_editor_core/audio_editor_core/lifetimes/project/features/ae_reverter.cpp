@@ -52,7 +52,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                         }
                     }
 
-                    this->_marker_pool->revert_markers(std::move(markers));
+                    this->_marker_pool->revert(std::move(markers));
 
                     if (auto const &db_edge = this->_database->edge()) {
                         this->_edge_holder->revert_edge(db_edge.value().edge());
