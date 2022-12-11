@@ -15,14 +15,14 @@ class database;
 struct marker_pool final : jumpable_on_jumper {
     marker_pool(database_for_marker_pool *);
 
-    void revert_markers(std::vector<marker_object> &&);
-    std::optional<marker_index> insert_marker(frame_index_t const, std::string const &name = "");
-    void update_marker(marker_index const, marker_object const &);
+    void revert(std::vector<marker_object> &&);
+    std::optional<marker_index> insert(frame_index_t const, std::string const &name = "");
+    void update(marker_index const, marker_object const &);
     void erase(marker_index const &);
-    void erase_at(frame_index_t const);
-    void erase_range(time::range const);
+    void erase(frame_index_t const);
+    void erase(time::range const);
 
-    void move_at(marker_index const &, frame_index_t const new_frame);
+    void move(marker_index const &, frame_index_t const new_frame);
     void move_offset_from(frame_index_t const from, frame_index_t const offset);
 
     [[nodiscard]] marker_map_t const &markers() const;

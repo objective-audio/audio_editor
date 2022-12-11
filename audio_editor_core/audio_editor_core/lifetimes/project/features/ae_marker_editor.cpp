@@ -18,7 +18,7 @@ marker_editor::marker_editor(player const *player, marker_pool *marker_pool, dat
     : _player(player), _marker_pool(marker_pool), _database(database), _editing_status(editing_status) {
 }
 
-bool marker_editor::can_insert_marker() const {
+bool marker_editor::can_insert() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -26,11 +26,11 @@ bool marker_editor::can_insert_marker() const {
     return true;
 }
 
-void marker_editor::insert_marker() {
-    if (!this->can_insert_marker()) {
+void marker_editor::insert() {
+    if (!this->can_insert()) {
         return;
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->_marker_pool->insert_marker(current_frame);
+    this->_marker_pool->insert(current_frame);
 }

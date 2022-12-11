@@ -16,12 +16,12 @@ marker_pool::marker_pool(database_for_marker_pool *database)
     : _database(database), _markers(observing::map::holder<marker_index, marker_object>::make_shared()) {
 }
 
-void marker_pool::revert_markers(std::vector<marker_object> &&markers) {
+void marker_pool::revert(std::vector<marker_object> &&markers) {
     this->_markers->replace(
         to_map<marker_index>(std::move(markers), [](auto const &marker) { return marker.index(); }));
 }
 
-std::optional<marker_index> marker_pool::insert_marker(frame_index_t const frame, std::string const &name) {
+std::optional<marker_index> marker_pool::insert(frame_index_t const frame, std::string const &name) {
     if (auto const marker = this->_database->add_marker(frame, name).object(); marker.has_value()) {
         auto index = marker.value().index();
         this->_markers->insert_or_replace(index, marker.value());
@@ -33,7 +33,7 @@ std::optional<marker_index> marker_pool::insert_marker(frame_index_t const frame
     return std::nullopt;
 }
 
-void marker_pool::update_marker(marker_index const index, marker_object const &new_marker) {
+void marker_pool::update(marker_index const index, marker_object const &new_marker) {
     if (this->_markers->contains(index)) {
         this->_database->update_marker(index.object_id, new_marker);
         if (index.frame != new_marker.value.frame) {
@@ -54,7 +54,7 @@ void marker_pool::erase(marker_index const &index) {
     }
 }
 
-void marker_pool::erase_at(frame_index_t const frame) {
+void marker_pool::erase(frame_index_t const frame) {
     auto const markers = this->markers_for_frame(frame);
 
     if (!markers.empty()) {
@@ -66,7 +66,7 @@ void marker_pool::erase_at(frame_index_t const frame) {
     }
 }
 
-void marker_pool::erase_range(time::range const range) {
+void marker_pool::erase(time::range const range) {
     auto const filtered = filter(this->_markers->elements(), [&range](auto const &pair) {
         return range.frame <= pair.second.value.frame && pair.second.value.frame < range.next_frame();
     });
@@ -76,11 +76,11 @@ void marker_pool::erase_range(time::range const range) {
     }
 }
 
-void marker_pool::move_at(marker_index const &index, frame_index_t const new_frame) {
+void marker_pool::move(marker_index const &index, frame_index_t const new_frame) {
     if (auto const marker = this->marker_for_index(index); marker.has_value()) {
         auto marker_value = marker.value();
         marker_value.value.frame = new_frame;
-        this->update_marker(index, marker_value);
+        this->update(index, marker_value);
     } else {
         assertion_failure_if_not_test();
     }
@@ -91,7 +91,7 @@ void marker_pool::move_offset_from(frame_index_t const from, frame_index_t const
         filter(this->_markers->elements(), [&from](auto const &pair) { return from <= pair.first.frame; });
 
     for (auto const &pair : filtered) {
-        this->move_at(pair.first, pair.first.frame + offset);
+        this->move(pair.first, pair.first.frame + offset);
     }
 }
 

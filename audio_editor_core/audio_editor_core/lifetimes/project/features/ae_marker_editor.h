@@ -15,8 +15,8 @@ class editing_status;
 struct marker_editor final {
     marker_editor(player const *, marker_pool *, database *, editing_status const *);
 
-    [[nodiscard]] bool can_insert_marker() const;
-    void insert_marker();
+    [[nodiscard]] bool can_insert() const;
+    void insert();
 
    private:
     player const *const _player;

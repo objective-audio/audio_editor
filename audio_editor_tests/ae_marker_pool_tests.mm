@@ -80,7 +80,7 @@ using namespace marker_pool_test_utils;
     auto const id_1 = db::make_temporary_id();
     auto const id_m1 = db::make_temporary_id();
 
-    pool->revert_markers({{id_0, {0, ""}}, {id_1, {1, ""}}, {id_m1, {-1, ""}}});
+    pool->revert({{id_0, {0, ""}}, {id_1, {1, ""}}, {id_m1, {-1, ""}}});
 
     XCTAssertEqual(pool->markers().size(), 3);
 
@@ -115,7 +115,7 @@ using namespace marker_pool_test_utils;
     database->remove_handler = [&called](auto const) { called.emplace_back(db_called::remove); };
     database->update_handler = [&called](auto const, auto const &) { called.emplace_back(db_called::update); };
 
-    auto const index0 = pool->insert_marker(0);
+    auto const index0 = pool->insert(0);
     XCTAssertTrue(index0.has_value());
 
     XCTAssertEqual(pool->markers().size(), 1);
@@ -126,7 +126,7 @@ using namespace marker_pool_test_utils;
     XCTAssertEqual(add_called.size(), 1);
     XCTAssertEqual(add_called.at(0).frame, 0);
 
-    auto const index1 = pool->insert_marker(1);
+    auto const index1 = pool->insert(1);
     XCTAssertTrue(index1.has_value());
 
     XCTAssertEqual(pool->markers().size(), 2);
@@ -148,7 +148,7 @@ using namespace marker_pool_test_utils;
     marker_index const index_1{id_1, 1};
     marker_index const index_m1{id_m1, -1};
 
-    pool->revert_markers({{id_0, {0, ""}}, {id_1, {1, ""}}, {id_m1, {-1, ""}}});
+    pool->revert({{id_0, {0, ""}}, {id_1, {1, ""}}, {id_m1, {-1, ""}}});
 
     std::vector<db_called> called;
     std::vector<db_remove_called> remove_called;
@@ -160,7 +160,7 @@ using namespace marker_pool_test_utils;
     };
     database->update_handler = [&called](auto const, auto const &) { called.emplace_back(db_called::update); };
 
-    pool->erase_at(0);
+    pool->erase(0);
 
     XCTAssertEqual(pool->markers().size(), 2);
     XCTAssertEqual(pool->markers().at(index_m1).identifier, id_m1);
@@ -183,7 +183,7 @@ using namespace marker_pool_test_utils;
     marker_index const index_0{id_0, 0};
     marker_index const index_3{id_3, 3};
 
-    pool->revert_markers({{id_0, {0, ""}}, {id_1, {1, ""}}, {id_2, {2, ""}}, {id_3, {3, ""}}});
+    pool->revert({{id_0, {0, ""}}, {id_1, {1, ""}}, {id_2, {2, ""}}, {id_3, {3, ""}}});
 
     std::vector<db_called> called;
     std::vector<db_remove_called> remove_called;
@@ -195,7 +195,7 @@ using namespace marker_pool_test_utils;
     };
     database->update_handler = [&called](auto const, auto const &) { called.emplace_back(db_called::update); };
 
-    pool->erase_range({1, 2});
+    pool->erase({1, 2});
 
     XCTAssertEqual(pool->markers().size(), 2);
     XCTAssertEqual(pool->markers().at(index_0).identifier, id_0);
@@ -221,7 +221,7 @@ using namespace marker_pool_test_utils;
     marker_index const index_m1{id_m1, -1};
     marker_index const index_2{id_0, 2};
 
-    pool->revert_markers({{id_m1, {-1, ""}}, {id_0, {0, ""}}, {id_1, {1, ""}}});
+    pool->revert({{id_m1, {-1, ""}}, {id_0, {0, ""}}, {id_1, {1, ""}}});
 
     std::vector<db_called> called;
     std::vector<db_update_called> update_called;
@@ -233,7 +233,7 @@ using namespace marker_pool_test_utils;
         called.emplace_back(db_called::update);
     };
 
-    pool->move_at(index_0, 2);
+    pool->move(index_0, 2);
 
     XCTAssertEqual(pool->markers().size(), 3);
     XCTAssertEqual(pool->markers().at(index_m1).identifier, id_m1);
@@ -261,7 +261,7 @@ using namespace marker_pool_test_utils;
     marker_index const index_2{id_0, 2};
     marker_index const index_3{id_1, 3};
 
-    pool->revert_markers({{id_m1, {-1, ""}}, {id_0, {0, ""}}, {id_1, {1, ""}}});
+    pool->revert({{id_m1, {-1, ""}}, {id_0, {0, ""}}, {id_1, {1, ""}}});
 
     std::vector<db_called> called;
     std::vector<db_update_called> update_called;
@@ -303,7 +303,7 @@ using namespace marker_pool_test_utils;
     auto const id_1 = db::make_temporary_id();
     marker_index const index_1{id_1, 1};
 
-    pool->revert_markers({{id_0, {0, "0"}}, {id_1, {1, "1"}}});
+    pool->revert({{id_0, {0, "0"}}, {id_1, {1, "1"}}});
 
     std::vector<marker_pool_event> called;
 
@@ -314,14 +314,14 @@ using namespace marker_pool_test_utils;
     XCTAssertEqual(called.at(0).inserted, std::nullopt);
     XCTAssertEqual(called.at(0).erased, std::nullopt);
 
-    pool->insert_marker(-1, "-1");
+    pool->insert(-1, "-1");
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1).type, marker_pool_event_type::inserted);
     XCTAssertEqual(called.at(1).inserted.value().value.frame, -1);
 
     // nameだけを変更
-    pool->update_marker(index_1, {id_1, {1, "1b"}});
+    pool->update(index_1, {id_1, {1, "1b"}});
 
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2).type, marker_pool_event_type::replaced);
@@ -331,7 +331,7 @@ using namespace marker_pool_test_utils;
     XCTAssertEqual(called.at(2).inserted.value().value.name, "1b");
 
     // frameだけを変更
-    pool->update_marker(index_1, {id_1, {10, "1b"}});
+    pool->update(index_1, {id_1, {10, "1b"}});
 
     XCTAssertEqual(called.size(), 5);
     XCTAssertEqual(called.at(3).type, marker_pool_event_type::erased);
@@ -341,7 +341,7 @@ using namespace marker_pool_test_utils;
     XCTAssertEqual(called.at(4).inserted.value().identifier, id_1);
     XCTAssertEqual(called.at(4).inserted.value().value.name, "1b");
 
-    pool->erase_at(0);
+    pool->erase(0);
 
     XCTAssertEqual(called.size(), 6);
     XCTAssertEqual(called.at(5).type, marker_pool_event_type::erased);
