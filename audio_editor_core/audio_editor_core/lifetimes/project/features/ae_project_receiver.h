@@ -26,12 +26,13 @@ class reverter;
 class module_selector;
 class marker_selector;
 class escaper;
+class pasteboard;
 
 struct project_receiver final : action_receivable {
     project_receiver(window_lifetime_id const &, database *, track_editor *, playing_toggler *, nudge_settings *,
                      nudger *, jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_opener *,
                      marker_renaming_opener *, timing *, import_interactor *, export_interactor *, reverter *,
-                     module_selector *, marker_selector *, escaper *);
+                     module_selector *, marker_selector *, escaper *, pasteboard *);
 
    private:
     window_lifetime_id const _window_lifetime_id;
@@ -53,6 +54,7 @@ struct project_receiver final : action_receivable {
     module_selector *const _module_selector;
     marker_selector *const _marker_selector;
     escaper *const _escaper;
+    pasteboard *const _pasteboard;
 
     project_receiver(project_receiver const &) = delete;
     project_receiver(project_receiver &&) = delete;

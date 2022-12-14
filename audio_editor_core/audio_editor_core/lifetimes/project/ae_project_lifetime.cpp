@@ -135,5 +135,5 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
           this->time_editor_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
           this->marker_renaming_opener.get(), this->timing.get(), this->import_interactor.get(),
           this->export_interactor.get(), this->reverter.get(), this->module_selector.get(), this->marker_selector.get(),
-          this->escaper.get())) {
+          this->escaper.get(), this->pasteboard.get())) {
 }

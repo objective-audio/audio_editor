@@ -24,8 +24,6 @@ enum class pasteboard_event {
     markers_cleared,
 };
 
-using pasting_value = std::variant<std::vector<pasting_file_module_object>, std::vector<pasting_marker_object>>;
-
 struct pasteboard final {
     pasteboard();
 
@@ -37,15 +35,15 @@ struct pasteboard final {
     [[nodiscard]] std::vector<pasting_marker_object> const &markers() const;
     void set_markers(std::vector<pasting_marker_object> const &);
 
-    [[nodiscard]] std::optional<pasting_value> const &value() const;
-
     [[nodiscard]] bool can_clear() const;
     void clear();
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(pasteboard_event const &)> &&);
 
    private:
-    std::optional<pasting_value> _value;
+    std::vector<pasting_file_module_object> _modules;
+    std::vector<pasting_marker_object> _markers;
+
     observing::fetcher_ptr<pasteboard_event> const _event_fetcher;
 
     pasteboard(pasteboard const &) = delete;
