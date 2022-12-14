@@ -14,6 +14,7 @@
 #include <audio_editor_core/ae_module_renaming_opener.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
+#include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_time_editor_opener.h>
@@ -36,7 +37,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
                                    marker_renaming_opener *marker_renaming_opener, timing *timing,
                                    import_interactor *import_interactor, export_interactor *export_interactor,
                                    reverter *reverter, module_selector *module_selector,
-                                   marker_selector *marker_selector, escaper *escaper)
+                                   marker_selector *marker_selector, escaper *escaper, pasteboard *pasteboard)
     : _window_lifetime_id(window_lifetime_id),
       _database(database),
       _track_editor(track_editor),
@@ -55,7 +56,8 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
       _reverter(reverter),
       _module_selector(module_selector),
       _marker_selector(marker_selector),
-      _escaper(escaper) {
+      _escaper(escaper),
+      _pasteboard(pasteboard) {
 }
 
 std::optional<action_id> project_receiver::receivable_id() const {
@@ -220,9 +222,11 @@ void project_receiver::receive(ae::action const &action) const {
                                 this->_export_interactor->export_to_file(action.string_value());
                                 break;
                             case editing_action_name::cut:
+                                this->_pasteboard->clear();
                                 this->_track_editor->cut();
                                 break;
                             case editing_action_name::copy:
+                                this->_pasteboard->clear();
                                 this->_track_editor->copy();
                                 break;
                             case editing_action_name::paste:
