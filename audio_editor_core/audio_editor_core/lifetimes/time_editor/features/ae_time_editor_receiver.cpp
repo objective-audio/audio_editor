@@ -25,46 +25,46 @@ std::optional<action_id> time_editor_receiver::receivable_id() const {
 std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key) const {
     switch (key) {
         case ae::key::ret:
-            return action{time_editing_action_name::finish_time_editing, ""};
+            return action{time_editing_action_name::finish_time_editing};
         case ae::key::esc:
-            return action{time_editing_action_name::cancel_time_editing, ""};
+            return action{time_editing_action_name::cancel_time_editing};
         case ae::key::left:
         case ae::key::shift_tab:
-            return action{time_editing_action_name::move_to_previous_time_unit, ""};
+            return action{time_editing_action_name::move_to_previous_time_unit};
         case ae::key::right:
         case ae::key::tab:
-            return action{time_editing_action_name::move_to_next_time_unit, ""};
+            return action{time_editing_action_name::move_to_next_time_unit};
         case ae::key::up:
-            return action{time_editing_action_name::increment_time, ""};
+            return action{time_editing_action_name::increment_time};
         case ae::key::down:
-            return action{time_editing_action_name::decrement_time, ""};
+            return action{time_editing_action_name::decrement_time};
         case ae::key::plus:
-            return action{time_editing_action_name::change_time_sign_to_plus, ""};
+            return action{time_editing_action_name::change_time_sign_to_plus};
         case ae::key::hyphen:
-            return action{time_editing_action_name::change_time_sign_to_minus, ""};
+            return action{time_editing_action_name::change_time_sign_to_minus};
 
         case ae::key::num_0:
-            return action{time_editing_action_name::input_time, "0"};
+            return action{time_editing_action_name::input_time, 0};
         case ae::key::num_1:
-            return action{time_editing_action_name::input_time, "1"};
+            return action{time_editing_action_name::input_time, 1};
         case ae::key::num_2:
-            return action{time_editing_action_name::input_time, "2"};
+            return action{time_editing_action_name::input_time, 2};
         case ae::key::num_3:
-            return action{time_editing_action_name::input_time, "3"};
+            return action{time_editing_action_name::input_time, 3};
         case ae::key::num_4:
-            return action{time_editing_action_name::input_time, "4"};
+            return action{time_editing_action_name::input_time, 4};
         case ae::key::num_5:
-            return action{time_editing_action_name::input_time, "5"};
+            return action{time_editing_action_name::input_time, 5};
         case ae::key::num_6:
-            return action{time_editing_action_name::input_time, "6"};
+            return action{time_editing_action_name::input_time, 6};
         case ae::key::num_7:
-            return action{time_editing_action_name::input_time, "7"};
+            return action{time_editing_action_name::input_time, 7};
         case ae::key::num_8:
-            return action{time_editing_action_name::input_time, "8"};
+            return action{time_editing_action_name::input_time, 8};
         case ae::key::num_9:
-            return action{time_editing_action_name::input_time, "9"};
+            return action{time_editing_action_name::input_time, 9};
         case ae::key::del:
-            return action{time_editing_action_name::delete_time, ""};
+            return action{time_editing_action_name::delete_time};
 
         case key::space:
         case key::a:

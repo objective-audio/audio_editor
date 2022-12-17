@@ -67,37 +67,37 @@ std::optional<action_id> project_receiver::receivable_id() const {
 std::optional<ae::action> project_receiver::to_action(ae::key const &key) const {
     switch (key) {
         case key::space:
-            return action{editing_action_name::toggle_play, std::nullopt};
+            return action{editing_action_name::toggle_play};
         case key::del:
-            return action{editing_action_name::erase, std::nullopt};
+            return action{editing_action_name::erase};
         case key::a:
-            return action{editing_action_name::drop_head, std::nullopt};
+            return action{editing_action_name::drop_head};
         case key::s:
-            return action{editing_action_name::split, std::nullopt};
+            return action{editing_action_name::split};
         case key::d:
-            return action{editing_action_name::drop_tail, std::nullopt};
+            return action{editing_action_name::drop_tail};
         case key::n:
-            return action{editing_action_name::rotate_nudging_next_unit, std::nullopt};
+            return action{editing_action_name::rotate_nudging_next_unit};
         case key::shift_n:
-            return action{editing_action_name::rotate_nudging_previous_unit, std::nullopt};
+            return action{editing_action_name::rotate_nudging_previous_unit};
         case key::f:
-            return action{editing_action_name::rotate_timing_fraction, std::nullopt};
+            return action{editing_action_name::rotate_timing_fraction};
         case key::t:
-            return action{editing_action_name::begin_time_editing, std::nullopt};
+            return action{editing_action_name::begin_time_editing};
         case key::left_bracket:
-            return action{editing_action_name::set_begin_edge, std::nullopt};
+            return action{editing_action_name::set_begin_edge};
         case key::right_bracket:
-            return action{editing_action_name::set_end_edge, std::nullopt};
+            return action{editing_action_name::set_end_edge};
         case key::left:
-            return action{editing_action_name::nudge_previous, std::nullopt};
+            return action{editing_action_name::nudge_previous};
         case key::right:
-            return action{editing_action_name::nudge_next, std::nullopt};
+            return action{editing_action_name::nudge_next};
         case key::shift_left:
-            return action{editing_action_name::nudge_previous_more, std::nullopt};
+            return action{editing_action_name::nudge_previous_more};
         case key::shift_right:
-            return action{editing_action_name::nudge_next_more, std::nullopt};
+            return action{editing_action_name::nudge_next_more};
         case key::num_0:
-            return action{editing_action_name::return_to_zero, std::nullopt};
+            return action{editing_action_name::return_to_zero};
         case key::num_1:
             return action{editing_action_name::go_to_marker, 0};
         case key::num_2:
@@ -117,7 +117,7 @@ std::optional<ae::action> project_receiver::to_action(ae::key const &key) const 
         case key::num_9:
             return action{editing_action_name::go_to_marker, 8};
         case key::esc:
-            return action{editing_action_name::escape, std::nullopt};
+            return action{editing_action_name::escape};
 
         case key::plus:
         case key::hyphen:

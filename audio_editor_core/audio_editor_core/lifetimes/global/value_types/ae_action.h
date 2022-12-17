@@ -83,7 +83,7 @@ struct action {
     action_name name;
     std::optional<action_value> value;
 
-    action(action_name const name, std::optional<action_value> &&value);
+    action(action_name const name, std::optional<action_value> &&value = std::nullopt);
 
     [[nodiscard]] int64_t const &integer_value() const;
     [[nodiscard]] std::string const &string_value() const;
