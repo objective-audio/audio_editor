@@ -24,7 +24,7 @@ player::player(std::shared_ptr<playing::coordinator> const &coordinator, project
         ->observe([this](scrolling_event const &event) {
             switch (event.state) {
                 case scrolling_state::began:
-                    this->_reserved_frame = this->_coordinator->current_frame();
+                    this->_reserved_frame = this->current_frame();
                     this->_seeking_frame = std::nullopt;
                     this->_update_reserved_frame_if_began(event.delta_time);
                     break;
