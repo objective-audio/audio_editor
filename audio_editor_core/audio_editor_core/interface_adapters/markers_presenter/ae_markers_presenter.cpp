@@ -62,10 +62,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                     auto const &inserted = event.inserted.value();
                     auto const &erased = event.erased.value();
 
-                    // 場所が移動した時のみ更新する。名前が変更されたらelement側で更新（やっぱりここで全部やる？）
-                    if (inserted.value.frame != erased.value.frame) {
-                        this->_replace_or_erase_content_if_in_space_range(inserted.index(), erased.index());
-                    }
+                    this->_replace_or_erase_content_if_in_space_range(inserted.index(), erased.index());
                 } break;
             }
         })
@@ -155,7 +152,8 @@ void markers_presenter::_update_all_contents(update_type const type) {
                 bool const is_selected = this->_is_selected({marker.identifier, marker.value.frame});
                 if (space_range_value.is_contain(pair.second.value.frame)) {
                     return std::make_optional<marker_content>(pair.second.identifier, pair.second.value.frame,
-                                                              sample_rate, scale.width, is_selected);
+                                                              sample_rate, scale.width, pair.second.value.name,
+                                                              is_selected);
                 } else {
                     return std::optional<marker_content>(std::nullopt);
                 }
@@ -197,7 +195,8 @@ void markers_presenter::_insert_content_if_in_space_range(marker_index const &in
     if (space_range.value().is_contain(marker_value.value.frame)) {
         bool const is_selected = this->_is_selected({marker_value.identifier, marker_value.value.frame});
         this->_content_pool->insert({marker_value.identifier, marker_value.value.frame,
-                                     this->_project_format.sample_rate, display_space->scale().width, is_selected});
+                                     this->_project_format.sample_rate, display_space->scale().width,
+                                     marker_value.value.name, is_selected});
     }
 }
 
@@ -222,7 +221,7 @@ void markers_presenter::_replace_or_erase_content_if_in_space_range(marker_index
         bool const is_selected = this->_is_selected({inserted_value.identifier, inserted_value.value.frame});
         this->_content_pool->insert_or_replace({inserted_value.identifier, inserted_value.value.frame,
                                                 this->_project_format.sample_rate, display_space->scale().width,
-                                                is_selected});
+                                                inserted_value.value.name, is_selected});
     } else {
         this->_content_pool->erase_for_id(erased_index.object_id);
     }
@@ -247,7 +246,8 @@ void markers_presenter::_replace_content_if_in_space_range(marker_index const &i
     if (space_range.value().is_contain(marker_value.value.frame)) {
         bool const is_selected = this->_is_selected({marker_value.identifier, marker_value.value.frame});
         this->_content_pool->replace({marker_value.identifier, marker_value.value.frame,
-                                      this->_project_format.sample_rate, display_space->scale().width, is_selected});
+                                      this->_project_format.sample_rate, display_space->scale().width,
+                                      marker_value.value.name, is_selected});
     }
 }
 

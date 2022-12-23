@@ -10,9 +10,7 @@
 
 namespace yas::ae {
 class markers_presenter;
-class display_space;
 class ui_marker_element;
-class ui_mesh_data;
 
 struct ui_markers final {
     [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(window_lifetime_id const &,
@@ -36,10 +34,10 @@ struct ui_markers final {
     ui_markers &operator=(ui_markers const &) = delete;
     ui_markers &operator=(ui_markers &&) = delete;
 
-    void _set_count(std::size_t const);
     void _replace_contents(std::vector<std::optional<marker_content>> const &);
     void _update_contents(std::size_t const count, std::vector<std::pair<std::size_t, marker_content>> const &erased,
                           std::vector<std::pair<std::size_t, marker_content>> const &inserted,
                           std::vector<std::pair<std::size_t, marker_content>> const &replaced);
+    void _set_count(std::size_t const);
 };
 }  // namespace yas::ae

@@ -26,8 +26,6 @@ struct ui_marker_element final {
                       std::shared_ptr<ui_mesh_data> const &square_data, std::shared_ptr<ui::font_atlas> const &,
                       ui::node *parent_node, modifiers_holder *);
 
-    std::shared_ptr<ui::node> const node;
-
     void set_content(marker_content const &);
     void update_content(marker_content const &);
     void reset_content();
@@ -35,6 +33,7 @@ struct ui_marker_element final {
     void finalize();
 
    private:
+    std::shared_ptr<ui::node> const _node;
     std::optional<marker_content> _content;
 
     std::weak_ptr<marker_pool> const _marker_pool;
