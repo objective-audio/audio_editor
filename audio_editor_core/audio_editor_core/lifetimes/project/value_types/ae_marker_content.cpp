@@ -4,15 +4,10 @@
 
 #include "ae_marker_content.h"
 
+#include <audio_editor_core/ae_marker_content_utils.hpp>
+
 using namespace yas;
 using namespace yas::ae;
-
-namespace yas::ae::marker_content_utils {
-static float to_x(frame_index_t const &frame, uint32_t const sample_rate, float const scale) {
-    double const position = static_cast<double>(frame) / static_cast<double>(sample_rate);
-    return static_cast<float>(position * scale);
-}
-}  // namespace yas::ae::marker_content_utils
 
 marker_content::marker_content(object_id const &identifier, frame_index_t const &frame, uint32_t const sample_rate,
                                float const scale, std::string const &name, bool const is_selected)

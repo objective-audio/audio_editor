@@ -17,6 +17,7 @@
 #include <audio_editor_core/ae_ui_track.h>
 #include <audio_editor_core/ae_ui_background.hpp>
 #include <audio_editor_core/ae_ui_node_hierarchy.hpp>
+#include <audio_editor_core/ae_ui_pasting_markers.hpp>
 #include <audio_editor_core/ae_ui_pasting_modules.hpp>
 #include <audio_editor_core/ae_ui_playing_line.hpp>
 #include <audio_editor_core/ae_ui_resource_lifetime.hpp>
@@ -37,6 +38,7 @@ ui_base_lifetime::ui_base_lifetime(ae::window_lifetime_id const &lifetime_id)
       pasting_modules(ui_pasting_modules::make_shared(lifetime_id, this->node_hierarchy->pasting_modules_node)),
       edge(ui_edge::make_shared(lifetime_id, this->node_hierarchy->edge_node)),
       markers(ui_markers::make_shared(lifetime_id, this->node_hierarchy->markers_node)),
+      pasting_markers(ui_pasting_markers::make_shared(lifetime_id, this->node_hierarchy->pasting_markers_node)),
       track(ui_track::make_shared(lifetime_id, this->modules.get(), this->pasting_modules.get())),
       scroller(ui_scroller::make_shared(lifetime_id, this->node_hierarchy->scroller_node.get())),
       modal_bg(ui_modal_bg::make_shared(lifetime_id, this->node_hierarchy->modal_bg_node)),

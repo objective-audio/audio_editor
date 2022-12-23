@@ -45,6 +45,11 @@ struct pasting_modules_presenter final {
     pasting_modules_presenter &operator=(pasting_modules_presenter &&) = delete;
 
     std::optional<time::range> _space_range() const;
+
+    /// 全ての要素を更新する
+    /// - Parameters:
+    ///   - force_updating: 表示位置が変わっていなくても強制的に更新する
+    ///   - force_replacing: 要素が変わっていなくても強制的に更新する
     void _update_all_contents(bool const force_updating, bool const force_replacing);
 };
 }  // namespace yas::ae
