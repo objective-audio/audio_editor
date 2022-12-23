@@ -35,7 +35,7 @@ ui_marker_element::ui_marker_element(
     std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_mesh_data> const &vertical_line_data,
     std::shared_ptr<ui_mesh_data> const &square_data, std::shared_ptr<ui::font_atlas> const &font_atlas,
     ui::node *parent_node, modifiers_holder *modifiers_holder)
-    : node(ui::node::make_shared()),
+    : _node(ui::node::make_shared()),
       _marker_pool(marker_pool),
       _selected_marker_pool(selected_marker_pool),
       _controller(controller),
@@ -51,7 +51,7 @@ ui_marker_element::ui_marker_element(
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_square_collider_node)),
       _multiple_touch(ui::multiple_touch::make_shared()),
       _modifiers_holder(modifiers_holder) {
-    parent_node->add_sub_node(this->node);
+    parent_node->add_sub_node(this->_node);
 
     auto const line_mesh =
         ui::mesh::make_shared({.primitive_type = vertical_line_data->primitive_type}, vertical_line_data->vertex_data,
@@ -62,10 +62,10 @@ ui_marker_element::ui_marker_element(
                                                    square_data->vertex_data, square_data->index_data, nullptr);
     this->_square_mesh_node->set_mesh(square_mesh);
 
-    this->node->add_sub_node(this->_line_node);
-    this->node->add_sub_node(this->_square_collider_node);
+    this->_node->add_sub_node(this->_line_node);
+    this->_node->add_sub_node(this->_square_collider_node);
     this->_square_collider_node->add_sub_node(this->_square_mesh_node);
-    this->node->add_sub_node(this->_strings->rect_plane()->node());
+    this->_node->add_sub_node(this->_strings->rect_plane()->node());
 
     standard->view_look()
         ->view_layout_guide()
@@ -99,26 +99,6 @@ ui_marker_element::ui_marker_element(
         .sync()
         ->add_to(this->_pool);
 
-    marker_pool
-        ->observe_event([this](marker_pool_event const &event) {
-            switch (event.type) {
-                case marker_pool_event_type::replaced:
-                    if (this->_content.has_value() &&
-                        this->_content.value().identifier == event.inserted.value().identifier) {
-                        this->_update_name();
-                    }
-                    break;
-
-                case marker_pool_event_type::any:
-                case marker_pool_event_type::reverted:
-                case marker_pool_event_type::inserted:
-                case marker_pool_event_type::erased:
-                    break;
-            }
-        })
-        .end()
-        ->add_to(this->_pool);
-
     this->_touch_tracker
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
@@ -149,8 +129,8 @@ ui_marker_element::ui_marker_element(
 
 void ui_marker_element::set_content(marker_content const &content) {
     this->_content = content;
-    this->node->set_is_enabled(true);
-    this->node->set_position({content.x, this->node->position().y});
+    this->_node->set_is_enabled(true);
+    this->_node->set_position({content.x, this->_node->position().y});
     this->_update_name();
     this->_update_color();
 }
@@ -158,7 +138,7 @@ void ui_marker_element::set_content(marker_content const &content) {
 void ui_marker_element::update_content(marker_content const &content) {
     if (this->_content.has_value() && this->_content.value().identifier == content.identifier) {
         this->_content = content;
-        this->node->set_position({content.x, this->node->position().y});
+        this->_node->set_position({content.x, this->_node->position().y});
         this->_update_name();
         this->_update_color();
     } else {
@@ -168,19 +148,17 @@ void ui_marker_element::update_content(marker_content const &content) {
 
 void ui_marker_element::reset_content() {
     this->_content = std::nullopt;
-    this->node->set_is_enabled(false);
+    this->_node->set_is_enabled(false);
 }
 
 void ui_marker_element::finalize() {
-    this->node->remove_from_super_node();
+    this->_node->remove_from_super_node();
 }
 
 void ui_marker_element::_update_name() {
     if (auto const marker_pool = this->_marker_pool.lock()) {
         if (this->_content.has_value()) {
-            if (auto const marker = marker_pool->marker_for_id(this->_content.value().identifier)) {
-                this->_strings->set_text(marker->value.name);
-            }
+            this->_strings->set_text(this->_content.value().name);
         }
     }
 }
