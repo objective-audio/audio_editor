@@ -25,7 +25,8 @@ marker_content::marker_content(object_id const &identifier, float const x, std::
 }
 
 bool marker_content::operator==(marker_content const &rhs) const {
-    return this->identifier == rhs.identifier && this->x == rhs.x && this->is_selected == rhs.is_selected;
+    return this->identifier == rhs.identifier && this->x == rhs.x && this->name == rhs.name &&
+           this->is_selected == rhs.is_selected;
 }
 
 bool marker_content::operator!=(marker_content const &rhs) const {
