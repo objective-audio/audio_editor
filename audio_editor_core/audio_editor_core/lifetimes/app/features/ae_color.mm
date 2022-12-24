@@ -103,6 +103,10 @@ ui::color color::marker_text() const {
     return to_color(@"marker_text");
 }
 
+ui::color color::pasting_marker_line() const {
+    return to_color(@"pasting_marker_line");
+}
+
 ui::color color::modal_bg() const {
     return to_color(@"modal_bg");
 }

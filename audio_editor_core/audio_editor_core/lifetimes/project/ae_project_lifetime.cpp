@@ -70,6 +70,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       module_content_pool(module_content_pool::make_shared()),
       pasting_module_content_pool(pasting_module_content_pool::make_shared()),
       marker_content_pool(marker_content_pool::make_shared()),
+      pasting_marker_content_pool(pasting_marker_content_pool::make_shared()),
       action_sender(std::make_shared<ae::project_action_sender>(window_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(std::make_shared<ae::pinch_gesture_controller>(window_lifetime->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(window_lifetime->scrolling.get())),
