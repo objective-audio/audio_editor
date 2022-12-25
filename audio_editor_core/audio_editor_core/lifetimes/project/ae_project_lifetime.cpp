@@ -6,7 +6,6 @@
 
 #include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_database.h>
-#include <audio_editor_core/ae_database_updater.h>
 #include <audio_editor_core/ae_edge_editor.h>
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
@@ -113,7 +112,6 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       export_interactor(std::make_shared<ae::export_interactor>(
           project_format, this->modal_lifecycle.get(), this->editing_status.get(), this->edge_holder.get(),
           window_lifetime->player.get(), this->exporter.get(), window_lifetime->timeline_holder.get())),
-      database_updater(std::make_shared<ae::database_updater>(this->edge_holder.get(), this->database.get())),
       timeline_updater(
           std::make_shared<ae::timeline_updater>(this->file_track.get(), window_lifetime->timeline_holder.get())),
       reverter(std::make_shared<ae::reverter>(window_lifetime->project_path.get(), this->database.get(),
