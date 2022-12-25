@@ -97,7 +97,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       nudger(std::make_shared<ae::nudger>(window_lifetime->player.get(), this->nudge_settings.get())),
       edge_holder(std::make_shared<ae::edge_holder>(this->database.get())),
       edge_editor(std::make_shared<ae::edge_editor>(this->edge_holder.get(), window_lifetime->player.get(),
-                                                    this->editing_status.get(), this->database.get())),
+                                                    this->editing_status.get())),
       jumper(std::make_shared<ae::jumper>(window_lifetime->player.get(), this->file_track.get(),
                                           this->marker_pool.get(), this->edge_holder.get())),
       time_editor_opener(std::make_shared<ae::time_editor_opener>(window_lifetime->player.get(), this->timing.get(),
