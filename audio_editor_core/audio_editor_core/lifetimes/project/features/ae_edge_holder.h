@@ -9,8 +9,10 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
+class database;
+
 struct edge_holder final : jumpable_on_jumper {
-    edge_holder();
+    edge_holder(database *);
 
     [[nodiscard]] ae::edge const &edge() const;
     void set_edge(ae::edge const &);
@@ -25,6 +27,7 @@ struct edge_holder final : jumpable_on_jumper {
 
    private:
     ae::edge _edge;
+    database *const _database;
 
     observing::fetcher_ptr<edge_holder_event> _fetcher;
 

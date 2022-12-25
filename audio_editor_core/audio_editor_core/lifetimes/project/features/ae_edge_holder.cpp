@@ -4,10 +4,12 @@
 
 #include "ae_edge_holder.h"
 
+#include <audio_editor_core/ae_database.h>
+
 using namespace yas;
 using namespace yas::ae;
 
-edge_holder::edge_holder() : _edge(ae::edge::zero()) {
+edge_holder::edge_holder(database *database) : _edge(ae::edge::zero()), _database(database) {
     this->_fetcher = observing::fetcher<edge_holder_event>::make_shared(
         [this] { return edge_holder_event{.type = edge_holder_event_type::fetched, .edge = this->_edge}; });
 }
@@ -65,6 +67,15 @@ void edge_holder::_set_edge_and_notify(ae::edge const &edge, edge_holder_event_t
         }
 
         this->_edge = edge;
+
+        switch (event_type) {
+            case edge_holder_event_type::updated:
+                this->_database->set_edge(edge);
+                break;
+            case edge_holder_event_type::fetched:
+            case edge_holder_event_type::reverted:
+                break;
+        }
 
         this->_fetcher->push({.type = event_type, .edge = this->_edge});
     }

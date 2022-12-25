@@ -96,7 +96,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       playing_toggler(std::make_shared<ae::playing_toggler>(window_lifetime->player.get())),
       modal_lifecycle(project_modal_lifecycle::make_shared(window_lifetime_id)),
       nudger(std::make_shared<ae::nudger>(window_lifetime->player.get(), this->nudge_settings.get())),
-      edge_holder(std::make_shared<ae::edge_holder>()),
+      edge_holder(std::make_shared<ae::edge_holder>(this->database.get())),
       edge_editor(std::make_shared<ae::edge_editor>(this->edge_holder.get(), window_lifetime->player.get(),
                                                     this->editing_status.get(), this->database.get())),
       jumper(std::make_shared<ae::jumper>(window_lifetime->player.get(), this->file_track.get(),
