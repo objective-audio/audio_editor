@@ -35,6 +35,11 @@ struct ui_pasting_marker_element final {
 
     observing::canceller_pool _pool;
 
+    ui_pasting_marker_element(ui_pasting_marker_element const &) = delete;
+    ui_pasting_marker_element(ui_pasting_marker_element &&) = delete;
+    ui_pasting_marker_element &operator=(ui_pasting_marker_element const &) = delete;
+    ui_pasting_marker_element &operator=(ui_pasting_marker_element &&) = delete;
+
     void _update_color();
 };
 }  // namespace yas::ae
