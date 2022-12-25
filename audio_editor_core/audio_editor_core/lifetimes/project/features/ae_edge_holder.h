@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_edge_holder_dependencies.h>
 #include <audio_editor_core/ae_edge_holder_types.h>
 #include <audio_editor_core/ae_jumper_dependency.h>
 #include <observing/yas_observing_umbrella.h>
@@ -12,7 +13,7 @@ namespace yas::ae {
 class database;
 
 struct edge_holder final : jumpable_on_jumper {
-    edge_holder(database *);
+    edge_holder(database_for_edge_holder *);
 
     [[nodiscard]] ae::edge const &edge() const;
     void set_edge(ae::edge const &);
@@ -27,7 +28,7 @@ struct edge_holder final : jumpable_on_jumper {
 
    private:
     ae::edge _edge;
-    database *const _database;
+    database_for_edge_holder *const _database;
 
     observing::fetcher_ptr<edge_holder_event> _fetcher;
 

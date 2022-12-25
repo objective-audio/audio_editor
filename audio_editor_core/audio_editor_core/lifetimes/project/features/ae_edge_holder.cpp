@@ -9,7 +9,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-edge_holder::edge_holder(database *database) : _edge(ae::edge::zero()), _database(database) {
+edge_holder::edge_holder(database_for_edge_holder *database) : _edge(ae::edge::zero()), _database(database) {
     this->_fetcher = observing::fetcher<edge_holder_event>::make_shared(
         [this] { return edge_holder_event{.type = edge_holder_event_type::fetched, .edge = this->_edge}; });
 }
