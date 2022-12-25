@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_db_edge.h>
 #include <audio_editor_core/ae_db_marker.h>
 #include <audio_editor_core/ae_db_module.h>
+#include <audio_editor_core/ae_edge_holder_dependencies.h>
 #include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_dependencies.h>
 #include <audio_editor_core/ae_marker.h>
@@ -25,7 +26,10 @@ namespace yas::ae {
 using db_modules_map = std::unordered_map<uintptr_t, db_module>;
 using db_markers_map = std::unordered_map<uintptr_t, db_marker>;
 
-struct database final : std::enable_shared_from_this<database>, database_for_marker_pool, database_for_file_track {
+struct database final : std::enable_shared_from_this<database>,
+                        database_for_marker_pool,
+                        database_for_file_track,
+                        database_for_edge_holder {
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::filesystem::path const &db_file_path);
     [[nodiscard]] static std::shared_ptr<database> make_shared(std::shared_ptr<db::manager> const &);
 
@@ -40,7 +44,7 @@ struct database final : std::enable_shared_from_this<database>, database_for_mar
     [[nodiscard]] db_marker add_marker(frame_index_t const frame, std::string const &name) override;
     void remove_marker(object_id const &) override;
     void update_marker(object_id const &, marker_object const &) override;
-    void set_edge(ae::edge const &);
+    void set_edge(ae::edge const &) override;
 
     void suspend_saving(std::function<void(void)> &&);
 

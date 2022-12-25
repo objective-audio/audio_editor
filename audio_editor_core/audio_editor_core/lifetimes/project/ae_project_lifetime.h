@@ -42,7 +42,6 @@ class module_renaming_opener;
 class marker_renaming_opener;
 class import_interactor;
 class export_interactor;
-class database_updater;
 class timeline_updater;
 class reverter;
 class file_module_loading_state_holder;
@@ -97,7 +96,6 @@ struct project_lifetime final {
     std::shared_ptr<module_renaming_opener> const module_renaming_opener;
     std::shared_ptr<marker_renaming_opener> const marker_renaming_opener;
     std::shared_ptr<export_interactor> const export_interactor;
-    std::shared_ptr<database_updater> const database_updater;
     std::shared_ptr<timeline_updater> const timeline_updater;
     std::shared_ptr<reverter> const reverter;
     std::shared_ptr<file_module_loading_state_holder> const file_module_loading_state_holder;

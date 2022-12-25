@@ -14,9 +14,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-edge_editor::edge_editor(edge_holder *holder, player const *player, editing_status const *editing_status,
-                         database *database)
-    : _holder(holder), _player(player), _editing_status(editing_status), _database(database) {
+edge_editor::edge_editor(edge_holder *holder, player const *player, editing_status const *editing_status)
+    : _holder(holder), _player(player), _editing_status(editing_status) {
 }
 
 bool edge_editor::can_set_begin() const {
