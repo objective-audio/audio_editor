@@ -49,6 +49,8 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     this->time_base_node->add_sub_node(this->time_strings_node);
 
     this->modules_node->set_batch(ui::batch::make_shared());
+    this->pasting_modules_node->set_batch(ui::batch::make_shared());
     this->markers_node->set_batch(ui::batch::make_shared());
+    this->pasting_markers_node->set_batch(ui::batch::make_shared());
     this->time_base_node->set_batch(ui::batch::make_shared());
 }
