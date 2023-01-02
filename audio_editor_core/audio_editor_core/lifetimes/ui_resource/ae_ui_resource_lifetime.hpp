@@ -13,6 +13,7 @@ class modifiers_holder;
 class keyboard;
 class ui_mesh_data;
 class ui_base_lifecycle;
+class ui_atlas;
 
 struct ui_resource_lifetime final {
     ui_resource_lifetime(std::shared_ptr<ui::standard> const &, window_lifetime_id const &);
@@ -23,6 +24,7 @@ struct ui_resource_lifetime final {
     std::shared_ptr<ui::texture> const texture;
     std::shared_ptr<ui::font_atlas> const normal_font_atlas;
     std::shared_ptr<ui::font_atlas> const time_font_atlas;
+    std::shared_ptr<ui_atlas> const atlas;
     std::shared_ptr<ui_mesh_data> const vertical_line_data;
     std::shared_ptr<ui_mesh_data> const triangle_data;
     std::shared_ptr<ui_mesh_data> const square_data;
