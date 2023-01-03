@@ -12,6 +12,7 @@
 #include <audio_editor_core/ae_markers_controller.hpp>
 #include <audio_editor_core/ae_modifiers_holder.hpp>
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
+#include <audio_editor_core/ae_ui_atlas.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -23,25 +24,26 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetim
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
     auto const controller = markers_controller::make_shared(lifetime_id);
 
-    return std::shared_ptr<ui_marker_element>(new ui_marker_element{
-        project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller, resource_lifetime->standard,
-        app_lifetime->color, resource_lifetime->vertical_line_data, resource_lifetime->square_data,
-        resource_lifetime->normal_font_atlas, parent_node, resource_lifetime->modifiers_holder.get()});
+    return std::shared_ptr<ui_marker_element>(
+        new ui_marker_element{project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller,
+                              resource_lifetime->standard, app_lifetime->color, resource_lifetime->vertical_line_data,
+                              resource_lifetime->square_data, resource_lifetime->normal_font_atlas,
+                              resource_lifetime->atlas, parent_node, resource_lifetime->modifiers_holder.get()});
 }
 
 ui_marker_element::ui_marker_element(
     std::shared_ptr<marker_pool> const &marker_pool, std::shared_ptr<selected_marker_pool> const &selected_marker_pool,
     std::shared_ptr<markers_controller> const &controller, std::shared_ptr<ui::standard> const &standard,
     std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_mesh_data> const &vertical_line_data,
-    std::shared_ptr<ui_mesh_data> const &square_data, std::shared_ptr<ui::font_atlas> const &font_atlas,
-    ui::node *parent_node, modifiers_holder *modifiers_holder)
+    std::shared_ptr<ui_mesh_data> const &, std::shared_ptr<ui::font_atlas> const &font_atlas,
+    std::shared_ptr<ui_atlas> const &atlas, ui::node *parent_node, modifiers_holder *modifiers_holder)
     : _node(ui::node::make_shared()),
       _marker_pool(marker_pool),
       _selected_marker_pool(selected_marker_pool),
       _controller(controller),
       _line_node(ui::node::make_shared()),
       _square_collider_node(ui::node::make_shared()),
-      _square_mesh_node(ui::node::make_shared()),
+      _square_plane(ui::rect_plane::make_shared(1)),
       _strings(ui::strings::make_shared(
           {.frame = ui::region{.origin = ui::point::zero(),
                                .size = {0.0f, -static_cast<float>(font_atlas->ascent() + font_atlas->descent())}}},
@@ -58,13 +60,18 @@ ui_marker_element::ui_marker_element(
                               vertical_line_data->index_data, nullptr);
     this->_line_node->set_mesh(line_mesh);
 
-    auto const square_mesh = ui::mesh::make_shared({.primitive_type = square_data->primitive_type},
-                                                   square_data->vertex_data, square_data->index_data, nullptr);
-    this->_square_mesh_node->set_mesh(square_mesh);
+    this->_square_plane->data()->set_rect_position({.origin = ui::point::zero(), .size = {.width = 1, .height = 1}}, 0);
+    this->_square_plane->node()->mesh()->set_texture(atlas->texture());
+    atlas
+        ->observe_white_filled_tex_coords([this](const ui::uint_region &tex_coords) {
+            this->_square_plane->data()->set_rect_tex_coords(tex_coords, 0);
+        })
+        .sync()
+        ->add_to(this->_pool);
 
     this->_node->add_sub_node(this->_line_node);
     this->_node->add_sub_node(this->_square_collider_node);
-    this->_square_collider_node->add_sub_node(this->_square_mesh_node);
+    this->_square_collider_node->add_sub_node(this->_square_plane->node());
     this->_node->add_sub_node(this->_strings->rect_plane()->node());
 
     standard->view_look()
@@ -92,7 +99,7 @@ ui_marker_element::ui_marker_element(
             ui::region const target_region{
                 .size = {.width = std::max(region.size.width, ui_marker_constants::min_square_width),
                          .height = -font_height}};
-            this->_square_mesh_node->set_scale(target_region.size);
+            this->_square_plane->node()->set_scale(target_region.size);
             this->_collider->set_shape(ui::shape::make_shared({.rect = target_region}));
             this->_square_collider_node->set_colliders({this->_collider});
         })
@@ -168,7 +175,7 @@ void ui_marker_element::_update_color() {
         bool const is_selected = content.value().is_selected;
         auto const line_color = is_selected ? this->_color->marker_selected_line() : this->_color->marker_line();
         this->_line_node->set_color(line_color);
-        this->_square_mesh_node->set_color(this->_color->marker_square());
+        this->_square_plane->node()->set_color(this->_color->marker_square());
         this->_strings->rect_plane()->node()->set_color(this->_color->marker_text());
     }
 }

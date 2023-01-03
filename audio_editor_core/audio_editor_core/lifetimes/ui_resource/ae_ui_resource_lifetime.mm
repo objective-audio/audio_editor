@@ -67,7 +67,7 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
     : standard(standard),
       window_lifetime_id(lifetime_id),
       texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
-      atlas(std::make_shared<ui_atlas>(this->texture.get())),
+      atlas(std::make_shared<ui_atlas>(this->texture)),
       normal_font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",
            .font_size = 14.0f,
