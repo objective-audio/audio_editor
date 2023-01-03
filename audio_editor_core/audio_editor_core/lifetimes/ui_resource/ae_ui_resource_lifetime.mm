@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_keyboard.h>
 #include <audio_editor_core/ae_ui_mesh_data.h>
 #include <audio_editor_core/ae_modifiers_holder.hpp>
+#include <audio_editor_core/ae_ui_atlas.hpp>
 #include <audio_editor_core/ae_ui_base_lifecycle.hpp>
 
 using namespace yas;
@@ -66,13 +67,14 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
     : standard(standard),
       window_lifetime_id(lifetime_id),
       texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
+      atlas(std::make_shared<ui_atlas>(this->texture)),
       normal_font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",
            .font_size = 14.0f,
            .words = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-.:[]"},
           this->texture)),
       time_font_atlas(ui::font_atlas::make_shared(
-          {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, texture)),
+          {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, this->texture)),
       vertical_line_data(ui_resource_lifetime_utils::make_vertical_line_data()),
       triangle_data(ui_resource_lifetime_utils::make_triangle_data()),
       square_data(ui_resource_lifetime_utils::make_square_data()),
