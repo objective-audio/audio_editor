@@ -14,7 +14,7 @@ ui_atlas::ui_atlas(std::shared_ptr<ui::texture> const &texture) : _texture(textu
     }
 
     this->_white_filled_element = texture->add_draw_handler({2, 2}, [](CGContextRef const ctx) {
-        CGContextSetRGBFillColor(ctx, 1, 0, 0, 1);
+        CGContextSetRGBFillColor(ctx, 1, 1, 1, 1);
         CGContextFillRect(ctx, CGRectMake(0, 0, 2, 2));
     });
 }
