@@ -53,12 +53,11 @@ std::shared_ptr<ui_mesh_data> make_triangle_data() {
     return mesh_data;
 }
 
-std::shared_ptr<ui_mesh_data> make_square_data() {
+std::shared_ptr<ui::rect_plane_data> make_square_data() {
     auto const plane_data = ui::rect_plane_data::make_shared(1);
     plane_data->set_rect_position(ui::region{.origin = {0.0f, 0.0f}, .size = {1.0f, 1.0f}}, 0);
 
-    return std::make_shared<ae::ui_mesh_data>(ui::primitive_type::triangle, plane_data->dynamic_vertex_data(),
-                                              plane_data->dynamic_index_data());
+    return plane_data;
 }
 }
 
