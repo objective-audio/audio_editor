@@ -24,7 +24,7 @@ struct ui_marker_element final {
     ui_marker_element(std::shared_ptr<marker_pool> const &, std::shared_ptr<selected_marker_pool> const &,
                       std::shared_ptr<markers_controller> const &, std::shared_ptr<ui::standard> const &,
                       std::shared_ptr<ae::color> const &, std::shared_ptr<ui_mesh_data> const &vertical_line_data,
-                      std::shared_ptr<ui_mesh_data> const &square_data, std::shared_ptr<ui::font_atlas> const &,
+                      std::shared_ptr<ui::rect_plane_data> const &square_data, std::shared_ptr<ui::font_atlas> const &,
                       std::shared_ptr<ui_atlas> const &, ui::node *parent_node, modifiers_holder *);
 
     void set_content(marker_content const &);
@@ -42,7 +42,7 @@ struct ui_marker_element final {
     std::shared_ptr<markers_controller> const _controller;
     std::shared_ptr<ui::node> const _line_node;
     std::shared_ptr<ui::node> const _square_collider_node;
-    std::shared_ptr<ui::rect_plane> const _square_plane;
+    std::shared_ptr<ui::node> const _square_node;
     std::shared_ptr<ui::strings> const _strings;
     std::shared_ptr<ae::color> const _color;
     std::shared_ptr<ui::collider> const _collider;
