@@ -11,14 +11,14 @@
 
 namespace yas::ae {
 class color;
-class ui_mesh_data;
+class ui_square_mesh_data;
 
 struct ui_pasting_marker_element final {
     [[nodiscard]] static std::shared_ptr<ui_pasting_marker_element> make_shared(window_lifetime_id const &,
                                                                                 ui::node *parent_node);
 
     ui_pasting_marker_element(std::shared_ptr<ui::standard> const &, ui::node *parent_node,
-                              std::shared_ptr<ui_mesh_data> const &vertical_line_data);
+                              std::shared_ptr<ui_square_mesh_data> const &);
 
     void set_content(pasting_marker_content const &);
     void update_content(pasting_marker_content const &);

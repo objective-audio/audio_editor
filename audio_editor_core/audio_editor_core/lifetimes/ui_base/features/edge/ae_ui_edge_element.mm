@@ -5,7 +5,6 @@
 #include "ae_ui_edge_element.h"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
-#include <audio_editor_core/ae_ui_mesh_data.h>
 #include <audio_editor_core/ae_ui_square_mesh_data.hpp>
 
 using namespace yas;
