@@ -27,16 +27,15 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetim
 
     return std::shared_ptr<ui_marker_element>(new ui_marker_element{
         project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller, resource_lifetime->standard,
-        app_lifetime->color, resource_lifetime->vertical_line_data, resource_lifetime->square_mesh_data,
-        resource_lifetime->normal_font_atlas, parent_node, resource_lifetime->modifiers_holder.get()});
+        app_lifetime->color, resource_lifetime->square_mesh_data, resource_lifetime->normal_font_atlas, parent_node,
+        resource_lifetime->modifiers_holder.get()});
 }
 
 ui_marker_element::ui_marker_element(
     std::shared_ptr<marker_pool> const &marker_pool, std::shared_ptr<selected_marker_pool> const &selected_marker_pool,
     std::shared_ptr<markers_controller> const &controller, std::shared_ptr<ui::standard> const &standard,
-    std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_mesh_data> const &vertical_line_data,
-    std::shared_ptr<ui_square_mesh_data> const &square_data, std::shared_ptr<ui::font_atlas> const &font_atlas,
-    ui::node *parent_node, modifiers_holder *modifiers_holder)
+    std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_square_mesh_data> const &square_data,
+    std::shared_ptr<ui::font_atlas> const &font_atlas, ui::node *parent_node, modifiers_holder *modifiers_holder)
     : _node(ui::node::make_shared()),
       _marker_pool(marker_pool),
       _selected_marker_pool(selected_marker_pool),
@@ -56,8 +55,8 @@ ui_marker_element::ui_marker_element(
     parent_node->add_sub_node(this->_node);
 
     auto const line_mesh =
-        ui::mesh::make_shared({.primitive_type = vertical_line_data->primitive_type}, vertical_line_data->vertex_data,
-                              vertical_line_data->index_data, nullptr);
+        ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_data->vertex_data(),
+                              square_data->index_data(), square_data->texture());
     this->_line_node->set_mesh(line_mesh);
 
     auto const square_mesh =
@@ -73,8 +72,8 @@ ui_marker_element::ui_marker_element(
     standard->view_look()
         ->view_layout_guide()
         ->observe([this](ui::region const &region) {
-            ui::size const scale{.width = 1.0f, .height = region.size.height};
-            this->_line_node->set_scale(scale);
+            this->_line_node->set_position({.x = 0.0f, .y = -region.size.height * 0.5f});
+            this->_line_node->set_scale({.width = 0.5f, .height = region.size.height});
         })
         .sync()
         ->add_to(this->_pool);
