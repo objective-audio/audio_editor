@@ -15,22 +15,6 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::ui_resource_lifetime_utils {
-std::shared_ptr<ui_mesh_data> make_vertical_line_data() {
-    auto const vertex_data = ui::static_mesh_vertex_data::make_shared(2);
-    auto const index_data = ui::static_mesh_index_data::make_shared(2);
-
-    auto mesh_data = std::make_shared<ae::ui_mesh_data>(ui::primitive_type::line, vertex_data, index_data);
-    vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
-        vertices.at(0).position = {0.0f, -0.5f};
-        vertices.at(1).position = {0.0f, 0.5f};
-    });
-    index_data->write_once([](std::vector<ui::index2d_t> &indices) {
-        indices.at(0) = 0;
-        indices.at(1) = 1;
-    });
-    return mesh_data;
-}
-
 std::shared_ptr<ui_mesh_data> make_triangle_data() {
     auto const vertex_data = ui::static_mesh_vertex_data::make_shared(3);
     auto const index_data = ui::static_mesh_index_data::make_shared(3);
@@ -68,7 +52,6 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
           this->texture)),
       time_font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, this->texture)),
-      vertical_line_data(ui_resource_lifetime_utils::make_vertical_line_data()),
       triangle_data(ui_resource_lifetime_utils::make_triangle_data()),
       square_mesh_data(std::make_shared<ui_square_mesh_data>(this->atlas)),
       display_space(std::make_shared<ae::display_space>(standard->view_look()->view_layout_guide()->region())),
