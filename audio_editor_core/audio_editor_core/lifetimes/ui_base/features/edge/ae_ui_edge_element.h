@@ -8,11 +8,11 @@
 
 namespace yas::ae {
 class color;
-class ui_mesh_data;
+class ui_square_mesh_data;
 
 struct ui_edge_element final {
     struct args final {
-        std::shared_ptr<ui_mesh_data> const &vertical_line_data;
+        std::shared_ptr<ui_square_mesh_data> const &square_mesh_data;
     };
 
     [[nodiscard]] static std::shared_ptr<ui_edge_element> make_shared(
