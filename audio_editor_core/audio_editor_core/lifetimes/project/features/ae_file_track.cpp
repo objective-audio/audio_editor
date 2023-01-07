@@ -21,27 +21,26 @@ file_track_module_map_t const &file_track::modules() const {
     return this->_modules;
 }
 
-void file_track::revert_modules_and_notify(std::vector<file_module_object> &&modules) {
-    this->_modules =
-        to_map<file_module_index>(modules, [](file_module_object const &module) { return module.index(); });
+void file_track::revert_modules_and_notify(std::vector<module_object> &&modules) {
+    this->_modules = to_map<module_index>(modules, [](module_object const &module) { return module.index(); });
     this->_event_fetcher->push({.type = file_track_event_type::reverted, .modules = this->_modules});
 }
 
-std::optional<file_module_index> file_track::insert_module_and_notify(file_module const &params) {
+std::optional<module_index> file_track::insert_module_and_notify(module const &params) {
     auto db_module = this->_database->add_module(params);
 
     if (auto const object = db_module.object(); object.has_value()) {
-        auto const &file_module = object.value();
-        this->_modules.emplace(file_module.index(), file_module);
+        auto const &module = object.value();
+        this->_modules.emplace(module.index(), module);
         this->_event_fetcher->push(
-            {.type = file_track_event_type::inserted, .module = file_module, .modules = this->_modules});
+            {.type = file_track_event_type::inserted, .module = module, .modules = this->_modules});
         return object->index();
     }
 
     return std::nullopt;
 }
 
-void file_track::erase_module_and_notify(file_module_index const &index) {
+void file_track::erase_module_and_notify(module_index const &index) {
     if (this->_modules.contains(index)) {
         auto module = this->_modules.at(index);
         this->_modules.erase(index);
@@ -51,7 +50,7 @@ void file_track::erase_module_and_notify(file_module_index const &index) {
     }
 }
 
-void file_track::set_module_name_and_notify(file_module_index const &index, std::string const &name) {
+void file_track::set_module_name_and_notify(module_index const &index, std::string const &name) {
     if (this->_modules.contains(index)) {
         auto &module = this->_modules.at(index);
         if (module.value.name != name) {
@@ -67,7 +66,7 @@ std::optional<time::range> file_track::total_range() const {
     return file_track_utils::total_range(this->_modules);
 }
 
-std::optional<file_module_object> file_track::module_at(file_module_index const &index) const {
+std::optional<module_object> file_track::module_at(module_index const &index) const {
     if (this->_modules.contains(index)) {
         return this->_modules.at(index);
     } else {
@@ -75,27 +74,27 @@ std::optional<file_module_object> file_track::module_at(file_module_index const 
     }
 }
 
-std::optional<file_module_object> file_track::module_at(frame_index_t const frame) const {
+std::optional<module_object> file_track::module_at(frame_index_t const frame) const {
     return file_track_utils::module(this->_modules, frame);
 }
 
-std::optional<file_module_object> file_track::previous_module_at(frame_index_t const frame) const {
+std::optional<module_object> file_track::previous_module_at(frame_index_t const frame) const {
     return file_track_utils::previous_module(this->_modules, frame);
 }
 
-std::optional<file_module_object> file_track::next_module_at(frame_index_t const frame) const {
+std::optional<module_object> file_track::next_module_at(frame_index_t const frame) const {
     return file_track_utils::next_module(this->_modules, frame);
 }
 
-std::optional<file_module_object> file_track::splittable_module_at(frame_index_t const frame) const {
+std::optional<module_object> file_track::splittable_module_at(frame_index_t const frame) const {
     return file_track_utils::splittable_module(this->_modules, frame);
 }
 
-std::optional<file_module_object> file_track::first_module() const {
+std::optional<module_object> file_track::first_module() const {
     return file_track_utils::first_module(this->_modules);
 }
 
-std::optional<file_module_object> file_track::last_module() const {
+std::optional<module_object> file_track::last_module() const {
     return file_track_utils::last_module(this->_modules);
 }
 
@@ -191,7 +190,7 @@ void file_track::drop_tail_and_offset_at(frame_index_t const frame) {
     }
 }
 
-void file_track::overwrite_module(file_module const &params) {
+void file_track::overwrite_module(module const &params) {
     auto const overlapped_modules = file_track_utils::overlapped_modules(this->_modules, params.range);
     for (auto const &overlapped_module : overlapped_modules) {
         this->erase_module_and_notify(overlapped_module.index());
@@ -207,8 +206,8 @@ void file_track::overwrite_module(file_module const &params) {
     this->insert_module_and_notify(params);
 }
 
-void file_track::move_modules(std::set<file_module_index> const &indices, frame_index_t const offset) {
-    std::vector<file_module> movings;
+void file_track::move_modules(std::set<module_index> const &indices, frame_index_t const offset) {
+    std::vector<module> movings;
     for (auto const &index : indices) {
         if (this->_modules.contains(index)) {
             auto const &module = this->_modules.at(index);
@@ -224,7 +223,7 @@ void file_track::move_modules(std::set<file_module_index> const &indices, frame_
     }
 }
 
-void file_track::split_and_insert_module_and_offset(file_module const &params) {
+void file_track::split_and_insert_module_and_offset(module const &params) {
     this->split_at(params.range.frame);
 
     this->_move_modules_after(params.range.frame, params.range.length);

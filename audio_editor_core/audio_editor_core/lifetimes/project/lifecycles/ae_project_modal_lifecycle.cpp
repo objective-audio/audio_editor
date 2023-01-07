@@ -57,7 +57,7 @@ std::shared_ptr<time_editor_lifetime> const &project_modal_lifecycle::time_edito
     return get<ae::time_editor_lifetime>(this->_current->value());
 }
 
-void project_modal_lifecycle::add_module_name_sheet(file_module_index const &index) {
+void project_modal_lifecycle::add_module_name_sheet(module_index const &index) {
     if (this->_current->value().has_value()) {
         throw std::runtime_error("current is not null.");
     }

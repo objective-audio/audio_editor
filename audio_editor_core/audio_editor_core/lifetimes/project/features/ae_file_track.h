@@ -18,19 +18,19 @@ struct file_track final : jumpable_on_jumper {
 
     [[nodiscard]] file_track_module_map_t const &modules() const;
 
-    void revert_modules_and_notify(std::vector<file_module_object> &&);
-    std::optional<file_module_index> insert_module_and_notify(file_module const &);
-    void erase_module_and_notify(file_module_index const &);
-    void set_module_name_and_notify(file_module_index const &, std::string const &);
+    void revert_modules_and_notify(std::vector<module_object> &&);
+    std::optional<module_index> insert_module_and_notify(module const &);
+    void erase_module_and_notify(module_index const &);
+    void set_module_name_and_notify(module_index const &, std::string const &);
 
     [[nodiscard]] std::optional<time::range> total_range() const;
-    [[nodiscard]] std::optional<file_module_object> module_at(file_module_index const &) const;
-    [[nodiscard]] std::optional<file_module_object> module_at(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module_object> previous_module_at(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module_object> next_module_at(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module_object> splittable_module_at(frame_index_t const) const;
-    [[nodiscard]] std::optional<file_module_object> first_module() const;
-    [[nodiscard]] std::optional<file_module_object> last_module() const;
+    [[nodiscard]] std::optional<module_object> module_at(module_index const &) const;
+    [[nodiscard]] std::optional<module_object> module_at(frame_index_t const) const;
+    [[nodiscard]] std::optional<module_object> previous_module_at(frame_index_t const) const;
+    [[nodiscard]] std::optional<module_object> next_module_at(frame_index_t const) const;
+    [[nodiscard]] std::optional<module_object> splittable_module_at(frame_index_t const) const;
+    [[nodiscard]] std::optional<module_object> first_module() const;
+    [[nodiscard]] std::optional<module_object> last_module() const;
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
     [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;
 
@@ -41,9 +41,9 @@ struct file_track final : jumpable_on_jumper {
     void drop_tail_at(frame_index_t const);
     void drop_head_and_offset_at(frame_index_t const);
     void drop_tail_and_offset_at(frame_index_t const);
-    void overwrite_module(file_module const &);
-    void move_modules(std::set<file_module_index> const &, frame_index_t const offset);
-    void split_and_insert_module_and_offset(file_module const &);
+    void overwrite_module(module const &);
+    void move_modules(std::set<module_index> const &, frame_index_t const offset);
+    void split_and_insert_module_and_offset(module const &);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&);
 

@@ -15,8 +15,8 @@ using namespace yas::ae;
 @implementation ae_file_track_utils_tests
 
 - (void)test_overlapped_modules {
-    file_module_object const module1{db::make_temporary_id(), {"", time::range{0, 3}, 0, ""}};
-    file_module_object const module2{db::make_temporary_id(), {"", time::range{3, 2}, 3, ""}};
+    module_object const module1{db::make_temporary_id(), {"", time::range{0, 3}, 0, ""}};
+    module_object const module2{db::make_temporary_id(), {"", time::range{3, 2}, 3, ""}};
 
     file_track_module_map_t const modules{{module1.index(), module1}, {module2.index(), module2}};
 

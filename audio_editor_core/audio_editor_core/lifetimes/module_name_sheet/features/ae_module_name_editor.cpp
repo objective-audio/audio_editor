@@ -14,13 +14,13 @@ using namespace yas::ae;
 static std::string const empty_string = "";
 
 std::shared_ptr<module_name_editor> module_name_editor::make_shared(project_sub_lifetime_id const &lifetime_id,
-                                                                    file_module_index const &index) {
+                                                                    module_index const &index) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
     return std::make_shared<module_name_editor>(index, project_lifetime->file_track.get(),
                                                 project_lifetime->database.get());
 }
 
-module_name_editor::module_name_editor(file_module_index const &index, file_track *file_track, database *database)
+module_name_editor::module_name_editor(module_index const &index, file_track *file_track, database *database)
     : _module_index(index), _file_track(file_track), _database(database) {
 }
 

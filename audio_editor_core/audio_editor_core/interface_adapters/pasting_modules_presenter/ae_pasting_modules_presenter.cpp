@@ -32,8 +32,8 @@ pasting_modules_presenter::pasting_modules_presenter(project_format const &proje
         ->observe_event([this](pasteboard_event const &event) {
             switch (event) {
                 case pasteboard_event::fetched:
-                case pasteboard_event::file_modules_replaced:
-                case pasteboard_event::file_modules_cleared:
+                case pasteboard_event::modules_replaced:
+                case pasteboard_event::modules_cleared:
                     this->_update_all_contents(true, true);
                     break;
                 case pasteboard_event::markers_replaced:
@@ -95,8 +95,8 @@ void pasting_modules_presenter::_update_all_contents(bool const force_updating, 
         auto const scale = display_space->scale().width;
 
         auto const contents = filter_map<pasting_module_content>(
-            pasteboard->file_modules(), [&space_range_value, sample_rate = this->_project_format.sample_rate,
-                                         &scale](pasting_file_module_object const &module) {
+            pasteboard->modules(), [&space_range_value, sample_rate = this->_project_format.sample_rate,
+                                    &scale](pasting_module_object const &module) {
                 if (module.value.range.is_overlap(space_range_value)) {
                     return std::make_optional<pasting_module_content>(module, sample_rate, scale);
                 } else {

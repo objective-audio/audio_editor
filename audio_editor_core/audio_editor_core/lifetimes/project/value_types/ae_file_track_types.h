@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_file_module.h>
+#include <audio_editor_core/ae_module.h>
 
 #include <map>
 
 namespace yas::ae {
-using file_track_module_map_t = std::map<file_module_index, file_module_object>;
+using file_track_module_map_t = std::map<module_index, module_object>;
 
 enum class file_track_event_type {
     any,
@@ -21,7 +21,7 @@ enum class file_track_event_type {
 
 struct file_track_event final {
     file_track_event_type type;
-    std::optional<file_module_object> module{std::nullopt};  // inserted, erased
+    std::optional<module_object> module{std::nullopt};  // inserted, erased
     file_track_module_map_t const &modules;
 };
 }  // namespace yas::ae

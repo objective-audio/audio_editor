@@ -4,7 +4,7 @@
 
 #include "ae_file_track_utils.h"
 
-#include <audio_editor_core/ae_file_module_utils.h>
+#include <audio_editor_core/ae_module_utils.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -23,8 +23,8 @@ std::optional<time::range> file_track_utils::total_range(file_track_module_map_t
     return result;
 }
 
-std::optional<file_module_object> file_track_utils::module(file_track_module_map_t const &modules,
-                                                           frame_index_t const frame) {
+std::optional<module_object> file_track_utils::module(file_track_module_map_t const &modules,
+                                                      frame_index_t const frame) {
     for (auto const &pair : modules) {
         if (pair.first.range.is_contain(frame)) {
             return pair.second;
@@ -33,7 +33,7 @@ std::optional<file_module_object> file_track_utils::module(file_track_module_map
     return std::nullopt;
 }
 
-std::optional<file_module_object> file_track_utils::first_module(file_track_module_map_t const &modules) {
+std::optional<module_object> file_track_utils::first_module(file_track_module_map_t const &modules) {
     auto const iterator = modules.cbegin();
     if (iterator != modules.cend()) {
         return iterator->second;
@@ -41,7 +41,7 @@ std::optional<file_module_object> file_track_utils::first_module(file_track_modu
     return std::nullopt;
 }
 
-std::optional<file_module_object> file_track_utils::last_module(file_track_module_map_t const &modules) {
+std::optional<module_object> file_track_utils::last_module(file_track_module_map_t const &modules) {
     auto const iterator = modules.crbegin();
     if (iterator != modules.crend()) {
         return iterator->second;
@@ -49,8 +49,8 @@ std::optional<file_module_object> file_track_utils::last_module(file_track_modul
     return std::nullopt;
 }
 
-std::optional<file_module_object> file_track_utils::previous_module(file_track_module_map_t const &modules,
-                                                                    frame_index_t const frame) {
+std::optional<module_object> file_track_utils::previous_module(file_track_module_map_t const &modules,
+                                                               frame_index_t const frame) {
     auto it = modules.rbegin();
 
     while (it != modules.rend()) {
@@ -64,8 +64,8 @@ std::optional<file_module_object> file_track_utils::previous_module(file_track_m
     return std::nullopt;
 }
 
-std::optional<file_module_object> file_track_utils::next_module(file_track_module_map_t const &modules,
-                                                                frame_index_t const frame) {
+std::optional<module_object> file_track_utils::next_module(file_track_module_map_t const &modules,
+                                                           frame_index_t const frame) {
     for (auto const &pair : modules) {
         if (frame < pair.first.range.frame) {
             return pair.second;
@@ -75,21 +75,21 @@ std::optional<file_module_object> file_track_utils::next_module(file_track_modul
     return std::nullopt;
 }
 
-std::optional<file_module_object> file_track_utils::splittable_module(file_track_module_map_t const &modules,
-                                                                      frame_index_t const frame) {
+std::optional<module_object> file_track_utils::splittable_module(file_track_module_map_t const &modules,
+                                                                 frame_index_t const frame) {
     for (auto const &pair : modules) {
-        if (file_module_utils::can_split_time_range(pair.second.value.range, frame)) {
+        if (module_utils::can_split_time_range(pair.second.value.range, frame)) {
             return pair.second;
         }
     }
     return std::nullopt;
 }
 
-std::vector<file_module_object> file_track_utils::overlapped_modules(file_track_module_map_t const &modules,
-                                                                     time::range const &range) {
+std::vector<module_object> file_track_utils::overlapped_modules(file_track_module_map_t const &modules,
+                                                                time::range const &range) {
     auto const next_frame = range.next_frame();
 
-    std::vector<file_module_object> result;
+    std::vector<module_object> result;
     for (auto const &pair : modules) {
         auto const &module_range = pair.first.range;
         if (next_frame <= module_range.frame) {

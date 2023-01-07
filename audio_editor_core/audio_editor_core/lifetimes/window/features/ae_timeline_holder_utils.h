@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_file_module.h>
+#include <audio_editor_core/ae_module.h>
 #include <processing/yas_processing_umbrella.h>
 
 namespace yas::ae {
@@ -12,5 +12,5 @@ class project_path;
 }
 
 namespace yas::ae::timeline_holder_utils {
-proc::module_ptr make_module(file_module const &file_module, project_path const *, uint32_t const ch_count);
+proc::module_ptr make_module(module const &, project_path const *, uint32_t const ch_count);
 }

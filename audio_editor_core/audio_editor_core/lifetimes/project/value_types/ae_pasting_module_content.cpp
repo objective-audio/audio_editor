@@ -4,12 +4,12 @@
 
 #include "ae_pasting_module_content.hpp"
 
-#include <audio_editor_core/ae_pasting_file_module.hpp>
+#include <audio_editor_core/ae_pasting_module.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
-pasting_module_content::pasting_module_content(pasting_file_module_object const &module, uint32_t const sample_rate,
+pasting_module_content::pasting_module_content(pasting_module_object const &module, uint32_t const sample_rate,
                                                float const scale)
     : pasting_module_content(module.identifier, module.value.range, sample_rate, scale) {
 }
@@ -19,7 +19,7 @@ pasting_module_content::pasting_module_content(yas::identifier const &identifier
     : identifier(identifier), range(range), sample_rate(sample_rate), scale(scale) {
 }
 
-pasting_file_module_index pasting_module_content::index() const {
+pasting_module_index pasting_module_content::index() const {
     return {this->identifier, this->range};
 }
 

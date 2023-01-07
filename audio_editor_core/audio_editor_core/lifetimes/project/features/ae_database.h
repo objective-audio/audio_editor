@@ -10,10 +10,10 @@
 #include <audio_editor_core/ae_db_marker.h>
 #include <audio_editor_core/ae_db_module.h>
 #include <audio_editor_core/ae_edge_holder_dependencies.h>
-#include <audio_editor_core/ae_file_module.h>
 #include <audio_editor_core/ae_file_track_dependencies.h>
 #include <audio_editor_core/ae_marker.h>
 #include <audio_editor_core/ae_marker_pool_dependencies.h>
+#include <audio_editor_core/ae_module.h>
 #include <cpp_utils/yas_delaying_caller.h>
 
 #include <filesystem>
@@ -38,9 +38,9 @@ struct database final : std::enable_shared_from_this<database>,
     [[nodiscard]] std::optional<db_edge> const &edge() const;
     [[nodiscard]] bool is_processing() const;
 
-    [[nodiscard]] db_module add_module(file_module const &) override;
+    [[nodiscard]] db_module add_module(module const &) override;
     void remove_module(object_id const &) override;
-    void update_module(object_id const &, file_module const &) override;
+    void update_module(object_id const &, module const &) override;
     [[nodiscard]] db_marker add_marker(frame_index_t const frame, std::string const &name) override;
     void remove_marker(object_id const &) override;
     void update_marker(object_id const &, marker_object const &) override;

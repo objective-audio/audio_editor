@@ -4,7 +4,7 @@
 
 #include "ae_module_content.h"
 
-#include <audio_editor_core/ae_file_module.h>
+#include <audio_editor_core/ae_module.h>
 #include <cpp_utils/yas_fast_each.h>
 #include <cpp_utils/yas_stl_utils.h>
 
@@ -63,10 +63,10 @@ bool module_content::mesh_element::operator!=(mesh_element const &rhs) const {
     return !(*this == rhs);
 }
 
-module_content::module_content(file_module_object const &file_module, bool const is_selected,
-                               uint32_t const sample_rate, time::range const &space_range, float const scale)
-    : module_content(file_module.identifier, file_module.value.range, is_selected, sample_rate,
-                     module_content_utils::make_mesh_elements(file_module.value.range, sample_rate, space_range, scale),
+module_content::module_content(module_object const &module, bool const is_selected, uint32_t const sample_rate,
+                               time::range const &space_range, float const scale)
+    : module_content(module.identifier, module.value.range, is_selected, sample_rate,
+                     module_content_utils::make_mesh_elements(module.value.range, sample_rate, space_range, scale),
                      scale) {
 }
 
@@ -81,7 +81,7 @@ module_content::module_content(object_id const &identifier, time::range const &r
       scale(scale) {
 }
 
-file_module_index module_content::index() const {
+module_index module_content::index() const {
     return {this->identifier, this->range};
 }
 

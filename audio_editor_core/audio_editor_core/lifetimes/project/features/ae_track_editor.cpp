@@ -20,13 +20,13 @@
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
 
-#include <audio_editor_core/ae_selected_file_module_pool.hpp>
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 track_editor::track_editor(player *player, file_track *file_track, marker_pool *marker_pool,
-                           selected_file_module_pool *selected_pool, pasteboard *pasteboard, database *database,
+                           selected_module_pool *selected_pool, pasteboard *pasteboard, database *database,
                            editing_status const *editing_status)
     : _player(player),
       _file_track(file_track),
@@ -166,21 +166,21 @@ void track_editor::copy() {
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
 
-        std::vector<pasting_file_module_object> pasting_modules;
+        std::vector<pasting_module_object> pasting_modules;
 
         for (auto const &pair : selected_modules) {
-            if (auto const file_module = file_track->module_at(pair.first)) {
-                auto const &value = file_module.value().value;
-                pasting_modules.emplace_back(pasting_file_module_object{
+            if (auto const module = file_track->module_at(pair.first)) {
+                auto const &value = module.value().value;
+                pasting_modules.emplace_back(pasting_module_object{
                     identifier{}, {value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}});
             }
         }
 
-        this->_pasteboard->set_file_modules(pasting_modules);
+        this->_pasteboard->set_modules(pasting_modules);
     } else {
-        if (auto const file_module = file_track->module_at(current_frame)) {
-            auto const &value = file_module.value().value;
-            this->_pasteboard->set_file_modules(
+        if (auto const module = file_track->module_at(current_frame)) {
+            auto const &value = module.value().value;
+            this->_pasteboard->set_modules(
                 {{identifier{}, {value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}}});
         }
     }
@@ -191,7 +191,7 @@ bool track_editor::can_paste() const {
         return false;
     }
 
-    if (this->_pasteboard->file_modules().empty()) {
+    if (this->_pasteboard->modules().empty()) {
         return false;
     }
 
@@ -205,7 +205,7 @@ void track_editor::paste() {
 
     this->_selected_pool->clear();
 
-    auto const &modules = this->_pasteboard->file_modules();
+    auto const &modules = this->_pasteboard->modules();
     if (modules.empty()) {
         return;
     }
@@ -228,7 +228,7 @@ bool track_editor::_has_target_modules() const {
     }
 }
 
-void track_editor::_erase_modules(selected_file_module_map &&selected_modules) {
+void track_editor::_erase_modules(selected_module_map &&selected_modules) {
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
 

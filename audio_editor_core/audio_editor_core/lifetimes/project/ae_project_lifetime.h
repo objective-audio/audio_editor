@@ -19,7 +19,7 @@ class app_lifetime;
 class timing;
 class nudge_settings;
 class file_track;
-class selected_file_module_pool;
+class selected_module_pool;
 class module_selector;
 class marker_pool;
 class selected_marker_pool;
@@ -76,7 +76,7 @@ struct project_lifetime final {
     std::shared_ptr<nudge_settings> const nudge_settings;
     std::shared_ptr<file_track> const file_track;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
-    std::shared_ptr<selected_file_module_pool> const selected_file_module_pool;
+    std::shared_ptr<selected_module_pool> const selected_module_pool;
     std::shared_ptr<marker_pool> const marker_pool;
     std::shared_ptr<selected_marker_pool> const selected_marker_pool;
     std::shared_ptr<pasteboard> const pasteboard;

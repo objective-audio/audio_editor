@@ -14,35 +14,35 @@
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_file_manager.h>
 
-#include <audio_editor_core/ae_selected_file_module_pool.hpp>
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 reverter::reverter(project_path const *project_path, database *database, file_track *file_track,
                    marker_pool *marker_pool, pasteboard *pasteboard, edge_holder *edge_holder,
-                   selected_file_module_pool *selected_pool, editing_status const *editing_status)
+                   selected_module_pool *selected_pool, editing_status const *editing_status)
     : _project_path(project_path),
       _database(database),
       _file_track(file_track),
       _marker_pool(marker_pool),
       _pasteboard(pasteboard),
       _edge_holder(edge_holder),
-      _selected_file_module_pool(selected_pool),
+      _selected_module_pool(selected_pool),
       _editing_status(editing_status) {
     this->_database
         ->observe([this](database_event const &event) {
             switch (event) {
                 case database_event::reverted: {
-                    std::vector<file_module_object> file_modules;
+                    std::vector<module_object> modules;
 
                     for (auto const &pair : this->_database->modules()) {
                         if (auto object = pair.second.object()) {
-                            file_modules.emplace_back(std::move(object.value()));
+                            modules.emplace_back(std::move(object.value()));
                         }
                     }
 
-                    this->_file_track->revert_modules_and_notify(std::move(file_modules));
+                    this->_file_track->revert_modules_and_notify(std::move(modules));
 
                     std::vector<marker_object> markers;
 
@@ -61,7 +61,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                     }
 
                     this->_pasteboard->clear();
-                    this->_selected_file_module_pool->clear();
+                    this->_selected_module_pool->clear();
                 } break;
 
                 case database_event::purged: {

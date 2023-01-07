@@ -44,7 +44,7 @@ bool database::is_processing() const {
     return this->_processing_count > 0;
 }
 
-db_module database::add_module(file_module const &args) {
+db_module database::add_module(module const &args) {
     auto module = db_module::create(this->_manager, args);
     this->_modules.emplace(module.object_id().identifier(), module);
     this->_save();
@@ -60,12 +60,12 @@ void database::remove_module(object_id const &object_id) {
     }
 }
 
-void database::update_module(object_id const &object_id, file_module const &file_module) {
+void database::update_module(object_id const &object_id, module const &module) {
     auto const identifier = object_id.identifier();
     if (this->_modules.contains(identifier)) {
         auto &db_module = this->_modules.at(identifier);
-        db_module.set_name(file_module.name);
-        db_module.set_range(file_module.range);
+        db_module.set_name(module.name);
+        db_module.set_range(module.range);
         this->_modules.erase(identifier);
         this->_modules.emplace(identifier, db_module);
         this->_save();
