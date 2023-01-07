@@ -26,7 +26,6 @@ struct ui_resource_lifetime final {
     std::shared_ptr<ui::font_atlas> const normal_font_atlas;
     std::shared_ptr<ui::font_atlas> const time_font_atlas;
     std::shared_ptr<ui_atlas> const atlas;
-    std::shared_ptr<ui_mesh_data> const triangle_data;
     std::shared_ptr<ui_square_mesh_data> const square_mesh_data;
     std::shared_ptr<ae::display_space> const display_space;
     std::shared_ptr<ae::modifiers_holder> const modifiers_holder;

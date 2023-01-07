@@ -14,31 +14,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-namespace yas::ae::ui_resource_lifetime_utils {
-std::shared_ptr<ui_mesh_data> make_triangle_data() {
-    auto const vertex_data = ui::static_mesh_vertex_data::make_shared(3);
-    auto const index_data = ui::static_mesh_index_data::make_shared(3);
-
-    auto mesh_data = std::make_shared<ae::ui_mesh_data>(ui::primitive_type::triangle, vertex_data, index_data);
-
-    vertex_data->write_once([](std::vector<ui::vertex2d_t> &vertices) {
-        float const half_width = -5.0f;
-        float const height = 10.0f;
-        vertices[0].position = {0.0f, -height};
-        vertices[1].position = {-half_width, 0.0f};
-        vertices[2].position = {half_width, 0.0f};
-    });
-
-    index_data->write_once([](std::vector<ui::index2d_t> &indices) {
-        indices[0] = 0;
-        indices[1] = 1;
-        indices[2] = 2;
-    });
-
-    return mesh_data;
-}
-}
-
 ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &standard,
                                            ae::window_lifetime_id const &lifetime_id)
     : standard(standard),
@@ -52,7 +27,6 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
           this->texture)),
       time_font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, this->texture)),
-      triangle_data(ui_resource_lifetime_utils::make_triangle_data()),
       square_mesh_data(std::make_shared<ui_square_mesh_data>(this->atlas)),
       display_space(std::make_shared<ae::display_space>(standard->view_look()->view_layout_guide()->region())),
       modifiers_holder(std::make_shared<ae::modifiers_holder>(standard->event_manager())),
