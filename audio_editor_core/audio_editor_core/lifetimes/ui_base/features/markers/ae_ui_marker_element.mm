@@ -13,6 +13,7 @@
 #include <audio_editor_core/ae_modifiers_holder.hpp>
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_ui_atlas.hpp>
+#include <audio_editor_core/ae_ui_square_mesh_data.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -24,19 +25,17 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetim
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
     auto const controller = markers_controller::make_shared(lifetime_id);
 
-    return std::shared_ptr<ui_marker_element>(
-        new ui_marker_element{project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller,
-                              resource_lifetime->standard, app_lifetime->color, resource_lifetime->vertical_line_data,
-                              resource_lifetime->square_data, resource_lifetime->normal_font_atlas,
-                              resource_lifetime->atlas, parent_node, resource_lifetime->modifiers_holder.get()});
+    return std::shared_ptr<ui_marker_element>(new ui_marker_element{
+        project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller, resource_lifetime->standard,
+        app_lifetime->color, resource_lifetime->square_mesh_data, resource_lifetime->normal_font_atlas, parent_node,
+        resource_lifetime->modifiers_holder.get()});
 }
 
 ui_marker_element::ui_marker_element(
     std::shared_ptr<marker_pool> const &marker_pool, std::shared_ptr<selected_marker_pool> const &selected_marker_pool,
     std::shared_ptr<markers_controller> const &controller, std::shared_ptr<ui::standard> const &standard,
-    std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_mesh_data> const &vertical_line_data,
-    std::shared_ptr<ui::rect_plane_data> const &square_data, std::shared_ptr<ui::font_atlas> const &font_atlas,
-    std::shared_ptr<ui_atlas> const &atlas, ui::node *parent_node, modifiers_holder *modifiers_holder)
+    std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_square_mesh_data> const &square_data,
+    std::shared_ptr<ui::font_atlas> const &font_atlas, ui::node *parent_node, modifiers_holder *modifiers_holder)
     : _node(ui::node::make_shared()),
       _marker_pool(marker_pool),
       _selected_marker_pool(selected_marker_pool),
@@ -56,21 +55,14 @@ ui_marker_element::ui_marker_element(
     parent_node->add_sub_node(this->_node);
 
     auto const line_mesh =
-        ui::mesh::make_shared({.primitive_type = vertical_line_data->primitive_type}, vertical_line_data->vertex_data,
-                              vertical_line_data->index_data, nullptr);
+        ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_data->vertex_data(),
+                              square_data->index_data(), square_data->texture());
     this->_line_node->set_mesh(line_mesh);
 
-    auto const square_mesh = ui::mesh::make_shared();
-    square_mesh->set_vertex_data(square_data->dynamic_vertex_data());
-    square_mesh->set_index_data(square_data->dynamic_index_data());
-    square_mesh->set_texture(atlas->texture());
+    auto const square_mesh =
+        ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_data->vertex_data(),
+                              square_data->index_data(), square_data->texture());
     this->_square_node->set_mesh(square_mesh);
-
-    atlas
-        ->observe_white_filled_tex_coords(
-            [square_data](ui::uint_region const &tex_coords) { square_data->set_rect_tex_coords(tex_coords, 0); })
-        .sync()
-        ->add_to(this->_pool);
 
     this->_node->add_sub_node(this->_line_node);
     this->_node->add_sub_node(this->_square_collider_node);
@@ -80,8 +72,8 @@ ui_marker_element::ui_marker_element(
     standard->view_look()
         ->view_layout_guide()
         ->observe([this](ui::region const &region) {
-            ui::size const scale{.width = 1.0f, .height = region.size.height};
-            this->_line_node->set_scale(scale);
+            this->_line_node->set_position({.x = 0.0f, .y = -region.size.height * 0.5f});
+            this->_line_node->set_scale({.width = 0.5f, .height = region.size.height});
         })
         .sync()
         ->add_to(this->_pool);

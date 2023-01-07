@@ -5,8 +5,8 @@
 #include "ae_ui_pasting_marker_element.hpp"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
-#include <audio_editor_core/ae_ui_mesh_data.h>
 #include <cpp_utils/yas_assertion.h>
+#include <audio_editor_core/ae_ui_square_mesh_data.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -16,18 +16,18 @@ std::shared_ptr<ui_pasting_marker_element> ui_pasting_marker_element::make_share
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
 
     return std::make_shared<ui_pasting_marker_element>(resource_lifetime->standard, parent_node,
-                                                       resource_lifetime->vertical_line_data);
+                                                       resource_lifetime->square_mesh_data);
 }
 
 ui_pasting_marker_element::ui_pasting_marker_element(std::shared_ptr<ui::standard> const &standard,
                                                      ui::node *parent_node,
-                                                     std::shared_ptr<ui_mesh_data> const &vertical_line_data)
+                                                     std::shared_ptr<ui_square_mesh_data> const &square_mesh_data)
     : _node(ui::node::make_shared()), _line_node(ui::node::make_shared()) {
     parent_node->add_sub_node(this->_node);
 
     auto const line_mesh =
-        ui::mesh::make_shared({.primitive_type = vertical_line_data->primitive_type}, vertical_line_data->vertex_data,
-                              vertical_line_data->index_data, nullptr);
+        ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_mesh_data->vertex_data(),
+                              square_mesh_data->index_data(), square_mesh_data->texture());
     this->_line_node->set_mesh(line_mesh);
 
     this->_node->add_sub_node(this->_line_node);
@@ -35,8 +35,8 @@ ui_pasting_marker_element::ui_pasting_marker_element(std::shared_ptr<ui::standar
     standard->view_look()
         ->view_layout_guide()
         ->observe([this](ui::region const &region) {
-            ui::size const scale{.width = 1.0f, .height = region.size.height};
-            this->_line_node->set_scale(scale);
+            this->_line_node->set_position({.x = 0.0f, .y = -region.size.height * 0.5f});
+            this->_line_node->set_scale({.width = 0.5f, .height = region.size.height});
         })
         .sync()
         ->add_to(this->_pool);

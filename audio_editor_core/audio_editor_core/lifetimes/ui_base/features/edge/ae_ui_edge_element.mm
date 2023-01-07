@@ -5,7 +5,7 @@
 #include "ae_ui_edge_element.h"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
-#include <audio_editor_core/ae_ui_mesh_data.h>
+#include <audio_editor_core/ae_ui_square_mesh_data.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -26,8 +26,8 @@ ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::st
       _text(ui::strings::make_shared({.text = text}, font_atlas)),
       _color(color) {
     auto const mesh =
-        ui::mesh::make_shared({.primitive_type = args.vertical_line_data->primitive_type},
-                              args.vertical_line_data->vertex_data, args.vertical_line_data->index_data, nullptr);
+        ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, args.square_mesh_data->vertex_data(),
+                              args.square_mesh_data->index_data(), args.square_mesh_data->texture());
     this->_line_node->set_mesh(mesh);
 
     this->_text->rect_plane()->node()->set_position({2.0f, 0.0f});
@@ -40,8 +40,8 @@ ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::st
     standard->view_look()
         ->view_layout_guide()
         ->observe([this](ui::region const &region) {
-            ui::size const scale{.width = 1.0f, .height = region.size.height};
-            this->_line_node->set_scale(scale);
+            this->_line_node->set_position({.x = 0.0f, .y = -region.size.height * 0.5f});
+            this->_line_node->set_scale({.width = 0.5f, .height = region.size.height});
         })
         .sync()
         ->add_to(this->_pool);

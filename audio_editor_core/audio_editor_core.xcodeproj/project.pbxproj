@@ -123,6 +123,8 @@
 		B65ABF5B2833DBB30096B6C7 /* ae_window_opener.h in Headers */ = {isa = PBXBuildFile; fileRef = B65ABF592833DBB30096B6C7 /* ae_window_opener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B65ABF5E2834A5050096B6C7 /* ae_project_modal_lifecycle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B65ABF5C2834A5050096B6C7 /* ae_project_modal_lifecycle.cpp */; };
 		B65ABF5F2834A5050096B6C7 /* ae_project_modal_lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = B65ABF5D2834A5050096B6C7 /* ae_project_modal_lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B65DA2EA2967061E0065B392 /* ae_ui_square_mesh_data.mm in Sources */ = {isa = PBXBuildFile; fileRef = B65DA2E82967061E0065B392 /* ae_ui_square_mesh_data.mm */; };
+		B65DA2EB2967061E0065B392 /* ae_ui_square_mesh_data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B65DA2E92967061E0065B392 /* ae_ui_square_mesh_data.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B65E31DB28E71CD50077D84B /* ae_file_module_index.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B65E31D928E71CD50077D84B /* ae_file_module_index.cpp */; };
 		B65E31DC28E71CD50077D84B /* ae_file_module_index.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B65E31DA28E71CD50077D84B /* ae_file_module_index.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6604F802646D7DF003439F1 /* ae_file_track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6604F7E2646D7DF003439F1 /* ae_file_track.cpp */; };
@@ -579,6 +581,8 @@
 		B65ABF592833DBB30096B6C7 /* ae_window_opener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_window_opener.h; sourceTree = "<group>"; };
 		B65ABF5C2834A5050096B6C7 /* ae_project_modal_lifecycle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_modal_lifecycle.cpp; sourceTree = "<group>"; };
 		B65ABF5D2834A5050096B6C7 /* ae_project_modal_lifecycle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_modal_lifecycle.h; sourceTree = "<group>"; };
+		B65DA2E82967061E0065B392 /* ae_ui_square_mesh_data.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_square_mesh_data.mm; sourceTree = "<group>"; };
+		B65DA2E92967061E0065B392 /* ae_ui_square_mesh_data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_ui_square_mesh_data.hpp; sourceTree = "<group>"; };
 		B65E31D928E71CD50077D84B /* ae_file_module_index.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_module_index.cpp; sourceTree = "<group>"; };
 		B65E31DA28E71CD50077D84B /* ae_file_module_index.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_file_module_index.hpp; sourceTree = "<group>"; };
 		B6604F7E2646D7DF003439F1 /* ae_file_track.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_track.cpp; sourceTree = "<group>"; };
@@ -1570,6 +1574,8 @@
 				B6355E292906C653000BB735 /* ae_modifiers_holder_event.h */,
 				B6355E252906C5E9000BB735 /* ae_modifiers_holder.mm */,
 				B6355E262906C5E9000BB735 /* ae_modifiers_holder.hpp */,
+				B65DA2E82967061E0065B392 /* ae_ui_square_mesh_data.mm */,
+				B65DA2E92967061E0065B392 /* ae_ui_square_mesh_data.hpp */,
 			);
 			path = features;
 			sourceTree = "<group>";
@@ -2250,6 +2256,7 @@
 				B6AAB8DD282E90EB007A87B5 /* ae_project_format.h in Headers */,
 				B6CF424F2631C38D00F9F297 /* ae_app_presenter_dependency.h in Headers */,
 				B666CDE92634125E00C1693D /* ae_system_path.h in Headers */,
+				B65DA2EB2967061E0065B392 /* ae_ui_square_mesh_data.hpp in Headers */,
 				B6F4D97A27B3DE2F00AE7D5D /* ae_edge.h in Headers */,
 				B6F3E065264287C90067E53A /* ae_player_dependency.h in Headers */,
 				B695726B2737E19E00E97EAE /* ae_modules_presenter_dependency.h in Headers */,
@@ -2414,6 +2421,7 @@
 				B63561D128A6497D00A7AD28 /* ae_playing_line_presenter.cpp in Sources */,
 				B69708EA2639A15E0045E975 /* ae_file_importer.cpp in Sources */,
 				B64B96472930BCD400E88A6E /* ae_selected_marker.cpp in Sources */,
+				B65DA2EA2967061E0065B392 /* ae_ui_square_mesh_data.mm in Sources */,
 				B6D283AA288110BE00F294EC /* AEMetalViewController.mm in Sources */,
 				B637D57F289EAFE1007E30A1 /* ae_ui_resource_lifetime.mm in Sources */,
 				B63D1E8F282AA943005F606E /* ae_app_lifecycle.cpp in Sources */,

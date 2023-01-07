@@ -16,7 +16,7 @@ std::shared_ptr<ui_edge> ui_edge::make_shared(window_lifetime_id const &window_l
                                               std::shared_ptr<ui::node> const &node) {
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
-    ui_edge_element::args const args{.vertical_line_data = resource_lifetime->vertical_line_data};
+    ui_edge_element::args const args{.square_mesh_data = resource_lifetime->square_mesh_data};
 
     auto const begin_edge =
         ui_edge_element::make_shared("BEGIN", args, resource_lifetime->standard, resource_lifetime->normal_font_atlas);
