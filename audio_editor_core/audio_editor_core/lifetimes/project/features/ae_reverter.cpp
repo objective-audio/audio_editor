@@ -7,8 +7,8 @@
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
-#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_marker_pool.h>
+#include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_project_path.h>
 #include <cpp_utils/yas_assertion.h>
@@ -19,12 +19,12 @@
 using namespace yas;
 using namespace yas::ae;
 
-reverter::reverter(project_path const *project_path, database *database, file_track *file_track,
+reverter::reverter(project_path const *project_path, database *database, module_pool *module_pool,
                    marker_pool *marker_pool, pasteboard *pasteboard, edge_holder *edge_holder,
                    selected_module_pool *selected_pool, editing_status const *editing_status)
     : _project_path(project_path),
       _database(database),
-      _file_track(file_track),
+      _module_pool(module_pool),
       _marker_pool(marker_pool),
       _pasteboard(pasteboard),
       _edge_holder(edge_holder),
@@ -42,7 +42,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                         }
                     }
 
-                    this->_file_track->revert_modules_and_notify(std::move(modules));
+                    this->_module_pool->revert_modules_and_notify(std::move(modules));
 
                     std::vector<marker_object> markers;
 
@@ -67,7 +67,7 @@ reverter::reverter(project_path const *project_path, database *database, file_tr
                 case database_event::purged: {
                     std::set<std::string> file_names;
 
-                    for (auto const &pair : this->_file_track->modules()) {
+                    for (auto const &pair : this->_module_pool->modules()) {
                         file_names.emplace(pair.second.value.file_name);
                     }
 

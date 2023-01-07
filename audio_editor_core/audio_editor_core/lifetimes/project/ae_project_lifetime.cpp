@@ -15,12 +15,12 @@
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_file_module_loader.h>
 #include <audio_editor_core/ae_file_module_loading_state_holder.h>
-#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_import_interactor.h>
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_editor.h>
 #include <audio_editor_core/ae_marker_pool.h>
+#include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_module_renaming_opener.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
@@ -76,9 +76,9 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       database(database::make_shared(window_lifetime->project_path->db_file())),
       timing(std::make_shared<ae::timing>(project_format.sample_rate)),
       nudge_settings(std::make_shared<ae::nudge_settings>(this->timing.get())),
-      file_track(std::make_shared<ae::file_track>(this->database.get())),
+      module_pool(std::make_shared<ae::module_pool>(this->database.get())),
       waveforms_mesh_importer(
-          waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->file_track.get())),
+          waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->module_pool.get())),
       selected_module_pool(std::make_shared<ae::selected_module_pool>()),
       marker_pool(std::make_shared<ae::marker_pool>(this->database.get())),
       selected_marker_pool(std::make_shared<ae::selected_marker_pool>()),
@@ -86,7 +86,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       exporter(std::make_shared<ae::exporter>()),
       editing_status(std::make_shared<ae::editing_status>(this->exporter.get())),
       deselector(std::make_shared<ae::deselector>(this->selected_module_pool.get(), this->selected_marker_pool.get())),
-      module_selector(std::make_shared<ae::module_selector>(this->file_track.get(), this->selected_module_pool.get(),
+      module_selector(std::make_shared<ae::module_selector>(this->module_pool.get(), this->selected_module_pool.get(),
                                                             this->editing_status.get(), this->deselector.get())),
       marker_selector(std::make_shared<ae::marker_selector>(this->marker_pool.get(), this->selected_marker_pool.get(),
                                                             this->editing_status.get(), this->deselector.get())),
@@ -96,7 +96,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       edge_holder(std::make_shared<ae::edge_holder>(this->database.get())),
       edge_editor(std::make_shared<ae::edge_editor>(this->edge_holder.get(), window_lifetime->player.get(),
                                                     this->editing_status.get())),
-      jumper(std::make_shared<ae::jumper>(window_lifetime->player.get(), this->file_track.get(),
+      jumper(std::make_shared<ae::jumper>(window_lifetime->player.get(), this->module_pool.get(),
                                           this->marker_pool.get(), this->edge_holder.get())),
       time_editor_opener(std::make_shared<ae::time_editor_opener>(window_lifetime->player.get(), this->timing.get(),
                                                                   this->modal_lifecycle.get())),
@@ -111,9 +111,9 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
           project_format, this->modal_lifecycle.get(), this->editing_status.get(), this->edge_holder.get(),
           window_lifetime->player.get(), this->exporter.get(), window_lifetime->timeline_holder.get())),
       timeline_updater(
-          std::make_shared<ae::timeline_updater>(this->file_track.get(), window_lifetime->timeline_holder.get())),
+          std::make_shared<ae::timeline_updater>(this->module_pool.get(), window_lifetime->timeline_holder.get())),
       reverter(std::make_shared<ae::reverter>(window_lifetime->project_path.get(), this->database.get(),
-                                              this->file_track.get(), this->marker_pool.get(), this->pasteboard.get(),
+                                              this->module_pool.get(), this->marker_pool.get(), this->pasteboard.get(),
                                               this->edge_holder.get(), this->selected_module_pool.get(),
                                               this->editing_status.get())),
       file_module_loading_state_holder(std::make_shared<ae::file_module_loading_state_holder>()),
@@ -123,7 +123,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       import_interactor(std::make_shared<ae::import_interactor>(this->modal_lifecycle.get(), this->editing_status.get(),
                                                                 this->file_module_loader.get())),
       track_editor(std::make_shared<ae::track_editor>(
-          window_lifetime->player.get(), this->file_track.get(), this->marker_pool.get(),
+          window_lifetime->player.get(), this->module_pool.get(), this->marker_pool.get(),
           this->selected_module_pool.get(), this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get())),
       receiver(std::make_shared<project_receiver>(

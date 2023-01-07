@@ -14,14 +14,14 @@
 namespace yas::ae {
 class display_space;
 class player;
-class file_track;
+class module_pool;
 class selected_module_pool;
 
 struct modules_presenter final {
     [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(window_lifetime_id const &,
                                                                         std::shared_ptr<display_space> const &);
 
-    modules_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<file_track> const &,
+    modules_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<module_pool> const &,
                       std::shared_ptr<selected_module_pool> const &, std::shared_ptr<display_space> const &,
                       std::shared_ptr<module_content_pool> const &);
 
@@ -35,7 +35,7 @@ struct modules_presenter final {
    private:
     project_format const _project_format;
     std::weak_ptr<player> const _player;
-    std::weak_ptr<file_track> const _file_track;
+    std::weak_ptr<module_pool> const _module_pool;
     std::weak_ptr<selected_module_pool> const _selected_pool;
     std::weak_ptr<display_space> const _display_space;
     std::weak_ptr<module_content_pool> const _content_pool;

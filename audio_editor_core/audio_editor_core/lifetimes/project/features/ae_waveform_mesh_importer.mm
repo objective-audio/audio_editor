@@ -6,8 +6,8 @@
 #include <Accelerate/Accelerate.h>
 #include <audio/yas_audio_file.h>
 #include <audio/yas_audio_pcm_buffer.h>
-#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_ui_track_constants.h>
 #include <cpp_utils/yas_thread.h>
@@ -17,15 +17,15 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<waveform_mesh_importer> waveform_mesh_importer::make_shared(window_lifetime_id const &lifetime_id,
-                                                                            file_track *file_track) {
+                                                                            module_pool *module_pool) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
 
-    return std::make_shared<waveform_mesh_importer>(window_lifetime->project_path.get(), file_track);
+    return std::make_shared<waveform_mesh_importer>(window_lifetime->project_path.get(), module_pool);
 }
 
-waveform_mesh_importer::waveform_mesh_importer(project_path const *project_path, file_track *file_track)
+waveform_mesh_importer::waveform_mesh_importer(project_path const *project_path, module_pool *module_pool)
     : _project_path(project_path),
-      _file_track(file_track),
+      _module_pool(module_pool),
       _notifier(observing::notifier<event>::make_shared()),
       _task_queue(task_queue<object_id>::make_shared()) {
 }
@@ -33,7 +33,7 @@ waveform_mesh_importer::waveform_mesh_importer(project_path const *project_path,
 void waveform_mesh_importer::import(std::size_t const idx, module_content const &content) {
     this->_task_queue->cancel([&content](auto const &identifier) { return content.identifier == identifier; });
 
-    auto const &modules = this->_file_track->modules();
+    auto const &modules = this->_module_pool->modules();
     if (!modules.contains(content.index())) {
         return;
     }

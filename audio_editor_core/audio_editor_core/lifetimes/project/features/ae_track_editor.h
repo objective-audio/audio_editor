@@ -9,7 +9,7 @@
 
 namespace yas::ae {
 class player;
-class file_track;
+class module_pool;
 class marker_pool;
 class pasteboard;
 class database;
@@ -17,7 +17,7 @@ class editing_status;
 class selected_module_pool;
 
 struct track_editor final {
-    track_editor(player *, file_track *, marker_pool *, selected_module_pool *, pasteboard *, database *,
+    track_editor(player *, module_pool *, marker_pool *, selected_module_pool *, pasteboard *, database *,
                  editing_status const *);
 
     [[nodiscard]] bool can_split() const;
@@ -39,7 +39,7 @@ struct track_editor final {
 
    private:
     player *const _player;
-    file_track *const _file_track;
+    module_pool *const _module_pool;
     marker_pool *const _marker_pool;
     selected_module_pool *const _selected_pool;
     pasteboard *const _pasteboard;

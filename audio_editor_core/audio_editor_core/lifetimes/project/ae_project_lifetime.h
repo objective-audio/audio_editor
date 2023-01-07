@@ -18,7 +18,7 @@ namespace yas::ae {
 class app_lifetime;
 class timing;
 class nudge_settings;
-class file_track;
+class module_pool;
 class selected_module_pool;
 class module_selector;
 class marker_pool;
@@ -74,7 +74,7 @@ struct project_lifetime final {
     std::shared_ptr<database> const database;
     std::shared_ptr<timing> const timing;
     std::shared_ptr<nudge_settings> const nudge_settings;
-    std::shared_ptr<file_track> const file_track;
+    std::shared_ptr<module_pool> const module_pool;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<selected_module_pool> const selected_module_pool;
     std::shared_ptr<marker_pool> const marker_pool;

@@ -1,5 +1,5 @@
 //
-//  ae_file_track_dependencies.h
+//  ae_module_pool_dependencies.h
 //
 
 #pragma once
@@ -9,8 +9,8 @@
 namespace yas::ae {
 class db_module;
 
-struct database_for_file_track {
-    virtual ~database_for_file_track() = default;
+struct database_for_module_pool {
+    virtual ~database_for_module_pool() = default;
 
     [[nodiscard]] virtual db_module add_module(module const &) = 0;
     virtual void remove_module(object_id const &) = 0;

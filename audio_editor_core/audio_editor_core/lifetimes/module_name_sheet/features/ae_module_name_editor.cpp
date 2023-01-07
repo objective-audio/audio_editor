@@ -5,8 +5,8 @@
 #include "ae_module_name_editor.hpp"
 
 #include <audio_editor_core/ae_database.h>
-#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_module_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -16,16 +16,16 @@ static std::string const empty_string = "";
 std::shared_ptr<module_name_editor> module_name_editor::make_shared(project_sub_lifetime_id const &lifetime_id,
                                                                     module_index const &index) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
-    return std::make_shared<module_name_editor>(index, project_lifetime->file_track.get(),
+    return std::make_shared<module_name_editor>(index, project_lifetime->module_pool.get(),
                                                 project_lifetime->database.get());
 }
 
-module_name_editor::module_name_editor(module_index const &index, file_track *file_track, database *database)
-    : _module_index(index), _file_track(file_track), _database(database) {
+module_name_editor::module_name_editor(module_index const &index, module_pool *module_pool, database *database)
+    : _module_index(index), _module_pool(module_pool), _database(database) {
 }
 
 std::string const &module_name_editor::name() const {
-    auto const &modules = this->_file_track->modules();
+    auto const &modules = this->_module_pool->modules();
     if (modules.contains(this->_module_index)) {
         return modules.at(this->_module_index).value.name;
     }
@@ -33,5 +33,5 @@ std::string const &module_name_editor::name() const {
 }
 
 void module_name_editor::set_name(std::string const &name) {
-    this->_file_track->set_module_name_and_notify(this->_module_index, name);
+    this->_module_pool->set_module_name_and_notify(this->_module_index, name);
 }

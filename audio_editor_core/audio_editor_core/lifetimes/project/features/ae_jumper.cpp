@@ -5,18 +5,18 @@
 #include "ae_jumper.h"
 
 #include <audio_editor_core/ae_edge_holder.h>
-#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>
+#include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_player.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-jumper::jumper(player *player, file_track const *file_track, marker_pool const *marker_pool,
+jumper::jumper(player *player, module_pool const *module_pool, marker_pool const *marker_pool,
                edge_holder const *edge_holder)
-    : _player(player), _file_track(file_track), _marker_pool(marker_pool), _edge_holder(edge_holder) {
+    : _player(player), _module_pool(module_pool), _marker_pool(marker_pool), _edge_holder(edge_holder) {
 }
 
 bool jumper::can_jump_to_previous_edge() const {
@@ -108,7 +108,7 @@ std::optional<frame_index_t> jumper::_previous_jumpable_frame() const {
 
     std::optional<frame_index_t> result{std::nullopt};
 
-    std::initializer_list<jumpable_on_jumper const *> const editors{this->_file_track, this->_marker_pool,
+    std::initializer_list<jumpable_on_jumper const *> const editors{this->_module_pool, this->_marker_pool,
                                                                     this->_edge_holder};
 
     for (auto const &editor : editors) {
@@ -129,7 +129,7 @@ std::optional<frame_index_t> jumper::_next_jumpable_frame() const {
 
     std::optional<frame_index_t> result{std::nullopt};
 
-    std::initializer_list<jumpable_on_jumper const *> const editors{this->_file_track, this->_marker_pool,
+    std::initializer_list<jumpable_on_jumper const *> const editors{this->_module_pool, this->_marker_pool,
                                                                     this->_edge_holder};
 
     for (auto const &editor : editors) {
@@ -146,7 +146,7 @@ std::optional<frame_index_t> jumper::_next_jumpable_frame() const {
 }
 
 std::optional<frame_index_t> jumper::_first_edge() const {
-    if (auto const module = this->_file_track->first_module()) {
+    if (auto const module = this->_module_pool->first_module()) {
         return module.value().value.range.frame;
     } else {
         return std::nullopt;
@@ -154,7 +154,7 @@ std::optional<frame_index_t> jumper::_first_edge() const {
 }
 
 std::optional<frame_index_t> jumper::_last_edge() const {
-    if (auto const module = this->_file_track->last_module()) {
+    if (auto const module = this->_module_pool->last_module()) {
         return module.value().value.range.next_frame();
     } else {
         return std::nullopt;

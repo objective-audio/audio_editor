@@ -8,7 +8,7 @@
 
 namespace yas::ae {
 class database;
-class file_track;
+class module_pool;
 class marker_pool;
 class pasteboard;
 class edge_holder;
@@ -17,7 +17,7 @@ class editing_status;
 class project_path;
 
 struct reverter final {
-    reverter(project_path const *, database *, file_track *, marker_pool *, pasteboard *, edge_holder *,
+    reverter(project_path const *, database *, module_pool *, marker_pool *, pasteboard *, edge_holder *,
              selected_module_pool *, editing_status const *);
 
     [[nodiscard]] bool can_undo() const;
@@ -32,7 +32,7 @@ struct reverter final {
    private:
     project_path const *const _project_path;
     database *const _database;
-    file_track *const _file_track;
+    module_pool *const _module_pool;
     marker_pool *const _marker_pool;
     pasteboard *const _pasteboard;
     edge_holder *const _edge_holder;

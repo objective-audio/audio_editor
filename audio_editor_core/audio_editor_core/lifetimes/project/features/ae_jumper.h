@@ -12,12 +12,12 @@
 
 namespace yas::ae {
 class player;
-class file_track;
+class module_pool;
 class marker_pool;
 class edge_holder;
 
 struct jumper final {
-    jumper(player *, file_track const *, marker_pool const *, edge_holder const *);
+    jumper(player *, module_pool const *, marker_pool const *, edge_holder const *);
 
     [[nodiscard]] bool can_jump_to_previous_edge() const;
     [[nodiscard]] bool can_jump_to_next_edge() const;
@@ -36,7 +36,7 @@ struct jumper final {
 
    private:
     player *_player;
-    file_track const *const _file_track;
+    module_pool const *const _module_pool;
     marker_pool const *const _marker_pool;
     edge_holder const *const _edge_holder;
 
