@@ -7,8 +7,8 @@
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>
+#include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_track_editor.h>
 
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 

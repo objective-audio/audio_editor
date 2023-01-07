@@ -9,7 +9,7 @@
 
 namespace yas::ae {
 class database;
-class track_editor;
+class module_editor;
 class playing_toggler;
 class nudge_settings;
 class nudger;
@@ -29,7 +29,7 @@ class escaper;
 class pasteboard;
 
 struct project_receiver final : action_receivable {
-    project_receiver(window_lifetime_id const &, database *, track_editor *, playing_toggler *, nudge_settings *,
+    project_receiver(window_lifetime_id const &, database *, module_editor *, playing_toggler *, nudge_settings *,
                      nudger *, jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_opener *,
                      marker_renaming_opener *, timing *, import_interactor *, export_interactor *, reverter *,
                      module_selector *, marker_selector *, escaper *, pasteboard *);
@@ -37,7 +37,7 @@ struct project_receiver final : action_receivable {
    private:
     window_lifetime_id const _window_lifetime_id;
     database *const _database;
-    track_editor *const _track_editor;
+    module_editor *const _module_editor;
     playing_toggler *const _playing_toggler;
     nudge_settings *const _nudge_settings;
     nudger *const _nudger;

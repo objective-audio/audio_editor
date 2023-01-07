@@ -20,6 +20,7 @@
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_editor.h>
 #include <audio_editor_core/ae_marker_pool.h>
+#include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_module_renaming_opener.h>
 #include <audio_editor_core/ae_nudge_settings.h>
@@ -41,7 +42,6 @@
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
-#include <audio_editor_core/ae_track_editor.h>
 #include <audio_editor_core/ae_waveform_mesh_importer.h>
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <audio_editor_core/ae_zooming_pair.h>
@@ -122,12 +122,12 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
           this->file_module_loading_state_holder.get(), this->database.get(), this->pasteboard.get())),
       import_interactor(std::make_shared<ae::import_interactor>(this->modal_lifecycle.get(), this->editing_status.get(),
                                                                 this->file_module_loader.get())),
-      track_editor(std::make_shared<ae::track_editor>(
+      module_editor(std::make_shared<ae::module_editor>(
           window_lifetime->player.get(), this->module_pool.get(), this->marker_pool.get(),
           this->selected_module_pool.get(), this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get())),
       receiver(std::make_shared<project_receiver>(
-          window_lifetime_id, this->database.get(), this->track_editor.get(), this->playing_toggler.get(),
+          window_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
           this->nudge_settings.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
           this->time_editor_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
           this->marker_renaming_opener.get(), this->timing.get(), this->import_interactor.get(),

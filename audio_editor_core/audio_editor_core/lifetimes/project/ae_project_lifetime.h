@@ -46,7 +46,7 @@ class timeline_updater;
 class reverter;
 class file_module_loading_state_holder;
 class file_module_loader;
-class track_editor;
+class module_editor;
 class project_action_sender;
 class pinch_gesture_controller;
 class scroll_gesture_controller;
@@ -101,7 +101,7 @@ struct project_lifetime final {
     std::shared_ptr<file_module_loading_state_holder> const file_module_loading_state_holder;
     std::shared_ptr<file_module_loader> const file_module_loader;
     std::shared_ptr<import_interactor> const import_interactor;
-    std::shared_ptr<track_editor> const track_editor;
+    std::shared_ptr<module_editor> const module_editor;
     std::shared_ptr<escaper> const escaper;
     std::shared_ptr<project_receiver> const receiver;
 

@@ -11,6 +11,7 @@
 #include <audio_editor_core/ae_import_interactor.h>
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_editor.h>
+#include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_module_renaming_opener.h>
 #include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
@@ -19,7 +20,6 @@
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_time_editor_opener.h>
 #include <audio_editor_core/ae_timing.h>
-#include <audio_editor_core/ae_track_editor.h>
 
 #include <audio_editor_core/ae_escaper.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
@@ -30,17 +30,17 @@ using namespace yas;
 using namespace yas::ae;
 
 project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id, database *database,
-                                   track_editor *track_editor, playing_toggler *toggler, nudge_settings *nudge_settings,
-                                   nudger *nudger, jumper *jumper, edge_editor *edge_editor,
-                                   time_editor_opener *time_editor_opener, marker_editor *marker_editor,
-                                   module_renaming_opener *module_renaming_opener,
+                                   module_editor *module_editor, playing_toggler *toggler,
+                                   nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
+                                   edge_editor *edge_editor, time_editor_opener *time_editor_opener,
+                                   marker_editor *marker_editor, module_renaming_opener *module_renaming_opener,
                                    marker_renaming_opener *marker_renaming_opener, timing *timing,
                                    import_interactor *import_interactor, export_interactor *export_interactor,
                                    reverter *reverter, module_selector *module_selector,
                                    marker_selector *marker_selector, escaper *escaper, pasteboard *pasteboard)
     : _window_lifetime_id(window_lifetime_id),
       _database(database),
-      _track_editor(track_editor),
+      _module_editor(module_editor),
       _playing_toggler(toggler),
       _nudge_settings(nudge_settings),
       _nudger(nudger),
@@ -174,16 +174,16 @@ void project_receiver::receive(ae::action const &action) const {
                                 this->_jumper->jump_to_end();
                                 break;
                             case editing_action_name::drop_head:
-                                this->_track_editor->drop_head();
+                                this->_module_editor->drop_head();
                                 break;
                             case editing_action_name::split:
-                                this->_track_editor->split();
+                                this->_module_editor->split();
                                 break;
                             case editing_action_name::drop_tail:
-                                this->_track_editor->drop_tail();
+                                this->_module_editor->drop_tail();
                                 break;
                             case editing_action_name::erase:
-                                this->_track_editor->erase();
+                                this->_module_editor->erase();
                                 this->_marker_editor->erase();
                                 break;
                             case editing_action_name::insert_marker:
@@ -224,16 +224,16 @@ void project_receiver::receive(ae::action const &action) const {
                                 break;
                             case editing_action_name::cut:
                                 this->_pasteboard->clear();
-                                this->_track_editor->cut();
+                                this->_module_editor->cut();
                                 this->_marker_editor->cut();
                                 break;
                             case editing_action_name::copy:
                                 this->_pasteboard->clear();
-                                this->_track_editor->copy();
+                                this->_module_editor->copy();
                                 this->_marker_editor->copy();
                                 break;
                             case editing_action_name::paste:
-                                this->_track_editor->paste();
+                                this->_module_editor->paste();
                                 this->_marker_editor->paste();
                                 break;
                             case editing_action_name::escape:
@@ -307,14 +307,14 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_jumper->can_jump_to_end());
 
                 case editing_action_name::drop_head:
-                    return to_state(this->_track_editor->can_split());
+                    return to_state(this->_module_editor->can_split());
                 case editing_action_name::split:
-                    return to_state(this->_track_editor->can_split());
+                    return to_state(this->_module_editor->can_split());
                 case editing_action_name::drop_tail:
-                    return to_state(this->_track_editor->can_split());
+                    return to_state(this->_module_editor->can_split());
 
                 case editing_action_name::erase:
-                    return to_state(this->_track_editor->can_erase() || this->_marker_editor->can_erase());
+                    return to_state(this->_module_editor->can_erase() || this->_marker_editor->can_erase());
 
                 case editing_action_name::insert_marker:
                     return to_state(this->_marker_editor->can_insert());
@@ -341,11 +341,11 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_export_interactor->can_export_to_file());
 
                 case editing_action_name::cut:
-                    return to_state(this->_track_editor->can_cut() || this->_marker_editor->can_cut());
+                    return to_state(this->_module_editor->can_cut() || this->_marker_editor->can_cut());
                 case editing_action_name::copy:
-                    return to_state(this->_track_editor->can_copy() || this->_marker_editor->can_copy());
+                    return to_state(this->_module_editor->can_copy() || this->_marker_editor->can_copy());
                 case editing_action_name::paste:
-                    return to_state(this->_track_editor->can_paste() || this->_marker_editor->can_paste());
+                    return to_state(this->_module_editor->can_paste() || this->_marker_editor->can_paste());
                 case editing_action_name::escape:
                     return to_state(this->_escaper->can_escape());
 

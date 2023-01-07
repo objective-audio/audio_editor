@@ -1,8 +1,8 @@
 //
-//  ae_track_editor.cpp
+//  ae_module_editor.cpp
 //
 
-#include "ae_track_editor.h"
+#include "ae_module_editor.h"
 
 #include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_holder.h>
@@ -25,9 +25,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-track_editor::track_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
-                           selected_module_pool *selected_pool, pasteboard *pasteboard, database *database,
-                           editing_status const *editing_status)
+module_editor::module_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
+                             selected_module_pool *selected_pool, pasteboard *pasteboard, database *database,
+                             editing_status const *editing_status)
     : _player(player),
       _module_pool(module_pool),
       _marker_pool(marker_pool),
@@ -37,7 +37,7 @@ track_editor::track_editor(player *player, module_pool *module_pool, marker_pool
       _editing_status(editing_status) {
 }
 
-bool track_editor::can_split() const {
+bool module_editor::can_split() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -47,7 +47,7 @@ bool track_editor::can_split() const {
     return module_pool->splittable_module_at(current_frame).has_value();
 }
 
-void track_editor::split() {
+void module_editor::split() {
     if (!this->can_split()) {
         return;
     }
@@ -58,7 +58,7 @@ void track_editor::split() {
     this->_module_pool->split_at(current_frame);
 }
 
-void track_editor::drop_head() {
+void module_editor::drop_head() {
     if (!this->can_split()) {
         return;
     }
@@ -67,7 +67,7 @@ void track_editor::drop_head() {
     this->_module_pool->drop_head_at(current_frame);
 }
 
-void track_editor::drop_tail() {
+void module_editor::drop_tail() {
     if (!this->can_split()) {
         return;
     }
@@ -78,7 +78,7 @@ void track_editor::drop_tail() {
     this->_module_pool->drop_tail_at(current_frame);
 }
 
-void track_editor::drop_head_and_offset() {
+void module_editor::drop_head_and_offset() {
     if (!this->can_split()) {
         return;
     }
@@ -98,7 +98,7 @@ void track_editor::drop_head_and_offset() {
     this->_player->seek(seek_frame);
 }
 
-void track_editor::drop_tail_and_offset() {
+void module_editor::drop_tail_and_offset() {
     if (!this->can_split()) {
         return;
     }
@@ -114,7 +114,7 @@ void track_editor::drop_tail_and_offset() {
     this->_marker_pool->move_offset_from(module_range.next_frame(), offset);
 }
 
-bool track_editor::can_erase() const {
+bool module_editor::can_erase() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -122,7 +122,7 @@ bool track_editor::can_erase() const {
     return this->_has_target_modules();
 }
 
-void track_editor::erase() {
+void module_editor::erase() {
     if (!this->can_erase()) {
         return;
     }
@@ -131,11 +131,11 @@ void track_editor::erase() {
     this->_erase_modules(std::move(selected_modules));
 }
 
-bool track_editor::can_cut() const {
+bool module_editor::can_cut() const {
     return this->can_copy();
 }
 
-void track_editor::cut() {
+void module_editor::cut() {
     if (!this->can_cut()) {
         return;
     }
@@ -146,7 +146,7 @@ void track_editor::cut() {
     this->_erase_modules(std::move(selected_modules));
 }
 
-bool track_editor::can_copy() const {
+bool module_editor::can_copy() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -154,7 +154,7 @@ bool track_editor::can_copy() const {
     return this->_has_target_modules();
 }
 
-void track_editor::copy() {
+void module_editor::copy() {
     if (!this->can_copy()) {
         return;
     }
@@ -186,7 +186,7 @@ void track_editor::copy() {
     }
 }
 
-bool track_editor::can_paste() const {
+bool module_editor::can_paste() const {
     if (!this->_editing_status->can_editing()) {
         return false;
     }
@@ -198,7 +198,7 @@ bool track_editor::can_paste() const {
     return true;
 }
 
-void track_editor::paste() {
+void module_editor::paste() {
     if (!this->can_paste()) {
         return;
     }
@@ -219,7 +219,7 @@ void track_editor::paste() {
     }
 }
 
-bool track_editor::_has_target_modules() const {
+bool module_editor::_has_target_modules() const {
     if (!this->_selected_pool->modules().empty()) {
         return true;
     } else {
@@ -228,7 +228,7 @@ bool track_editor::_has_target_modules() const {
     }
 }
 
-void track_editor::_erase_modules(selected_module_map &&selected_modules) {
+void module_editor::_erase_modules(selected_module_map &&selected_modules) {
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
 

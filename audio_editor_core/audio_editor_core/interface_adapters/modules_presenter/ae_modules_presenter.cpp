@@ -7,9 +7,9 @@
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_module_content_pool.h>
+#include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_track_editor.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 #include <audio_editor_core/ae_selected_module_pool.hpp>

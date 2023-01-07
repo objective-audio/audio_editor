@@ -1,5 +1,5 @@
 //
-//  ae_track_editor.h
+//  ae_module_editor.h
 //
 
 #pragma once
@@ -16,9 +16,9 @@ class database;
 class editing_status;
 class selected_module_pool;
 
-struct track_editor final {
-    track_editor(player *, module_pool *, marker_pool *, selected_module_pool *, pasteboard *, database *,
-                 editing_status const *);
+struct module_editor final {
+    module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, pasteboard *, database *,
+                  editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -48,10 +48,10 @@ struct track_editor final {
 
     observing::canceller_pool _pool;
 
-    track_editor(track_editor const &) = delete;
-    track_editor(track_editor &&) = delete;
-    track_editor &operator=(track_editor const &) = delete;
-    track_editor &operator=(track_editor &&) = delete;
+    module_editor(module_editor const &) = delete;
+    module_editor(module_editor &&) = delete;
+    module_editor &operator=(module_editor const &) = delete;
+    module_editor &operator=(module_editor &&) = delete;
 
     bool _has_target_modules() const;
     void _erase_modules(selected_module_map &&);
