@@ -9,18 +9,19 @@
 
 namespace yas::ae {
 class color;
+class ui_square_mesh_data;
 class playing_line_presenter;
 
 struct ui_playing_line final {
     [[nodiscard]] static std::shared_ptr<ui_playing_line> make_shared(window_lifetime_id const &,
                                                                       std::shared_ptr<ui::node> const &);
     ui_playing_line(ae::color *, std::shared_ptr<playing_line_presenter> const &, std::shared_ptr<ui::standard> const &,
-                    std::shared_ptr<ui::node> const &);
+                    std::shared_ptr<ui::node> const &, std::shared_ptr<ui_square_mesh_data> const &);
 
    private:
     ae::color *const _color;
     std::shared_ptr<playing_line_presenter> const _presenter;
-    std::shared_ptr<ui::rect_plane> const _playing_line;
+    std::shared_ptr<ui::node> const _node;
     observing::canceller_pool _pool;
 
     ui_playing_line(ui_playing_line const &) = delete;

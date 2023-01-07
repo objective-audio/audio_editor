@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_playing_line_utils.h>
 #include <audio_editor_core/ae_playing_line_presenter.hpp>
+#include <audio_editor_core/ae_ui_square_mesh_data.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -18,17 +19,24 @@ std::shared_ptr<ui_playing_line> ui_playing_line::make_shared(window_lifetime_id
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
     auto const presenter = playing_line_presenter::make_shared(lifetime_id);
 
-    return std::make_shared<ui_playing_line>(app_lifetime->color.get(), presenter, resource_lifetime->standard, node);
+    return std::make_shared<ui_playing_line>(app_lifetime->color.get(), presenter, resource_lifetime->standard, node,
+                                             resource_lifetime->square_mesh_data);
 }
 
 ui_playing_line::ui_playing_line(ae::color *color, std::shared_ptr<playing_line_presenter> const &presenter,
-                                 std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::node> const &node)
-    : _color(color), _presenter(presenter), _playing_line(ui::rect_plane::make_shared(1)) {
-    node->add_sub_node(this->_playing_line->node());
+                                 std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::node> const &node,
+                                 std::shared_ptr<ui_square_mesh_data> const &square_mesh_data)
+    : _color(color), _presenter(presenter), _node(ui::node::make_shared()) {
+    auto const mesh =
+        ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_mesh_data->vertex_data(),
+                              square_mesh_data->index_data(), square_mesh_data->texture());
+    this->_node->set_mesh(mesh);
+
+    node->add_sub_node(this->_node);
 
     standard->renderer()
         ->observe_will_render([this](auto const &) {
-            this->_playing_line->node()->set_color(
+            this->_node->set_color(
                 ui_playing_line_utils::to_playing_line_color(this->_presenter->playing_line_state(), this->_color));
         })
         .end()
@@ -37,9 +45,8 @@ ui_playing_line::ui_playing_line(ae::color *color, std::shared_ptr<playing_line_
     standard->view_look()
         ->safe_area_layout_guide()
         ->observe([this](ui::region const &src_region) {
-            ui::region const dst_region{.origin = {.x = src_region.center().x - 0.5f, .y = src_region.origin.y},
-                                        .size = {.width = 1.0f, .height = src_region.size.height}};
-            this->_playing_line->data()->set_rect_position(dst_region, 0);
+            this->_node->set_position({.x = src_region.center().x - 0.5f, .y = src_region.origin.y});
+            this->_node->set_scale({.width = 1.0f, .height = src_region.size.height});
         })
         .sync()
         ->add_to(this->_pool);
