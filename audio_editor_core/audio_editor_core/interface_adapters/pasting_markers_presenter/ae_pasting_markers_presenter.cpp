@@ -37,8 +37,8 @@ pasting_markers_presenter::pasting_markers_presenter(project_format const &proje
                     this->_update_all_contents(true, true);
                     break;
 
-                case pasteboard_event::file_modules_replaced:
-                case pasteboard_event::file_modules_cleared:
+                case pasteboard_event::modules_replaced:
+                case pasteboard_event::modules_cleared:
                     break;
             }
         })

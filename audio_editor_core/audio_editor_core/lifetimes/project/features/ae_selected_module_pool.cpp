@@ -1,28 +1,28 @@
 //
-//  ae_selected_file_module_pool.cpp
+//  ae_selected_module_pool.cpp
 //
 
-#include "ae_selected_file_module_pool.hpp"
+#include "ae_selected_module_pool.hpp"
 
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-selected_file_module_pool::selected_file_module_pool() {
+selected_module_pool::selected_module_pool() {
     this->_event_fetcher =
         observing::fetcher<event>::make_shared([this] { return event{.type = event_type::fetched}; });
 }
 
-selected_file_module_map const &selected_file_module_pool::modules() const {
+selected_module_map const &selected_module_pool::modules() const {
     return this->_modules;
 }
 
-bool selected_file_module_pool::contains(file_module_index const &index) const {
+bool selected_module_pool::contains(module_index const &index) const {
     return this->_modules.contains(index);
 }
 
-void selected_file_module_pool::toggle_module(selected_file_module_object const &module) {
+void selected_module_pool::toggle_module(selected_module_object const &module) {
     auto const index = module.index();
 
     if (this->_modules.contains(index)) {
@@ -32,7 +32,7 @@ void selected_file_module_pool::toggle_module(selected_file_module_object const 
     }
 }
 
-void selected_file_module_pool::insert_module(selected_file_module_object const &module) {
+void selected_module_pool::insert_module(selected_module_object const &module) {
     auto index = module.index();
 
     if (this->_modules.contains(index)) {
@@ -45,7 +45,7 @@ void selected_file_module_pool::insert_module(selected_file_module_object const 
     this->_event_fetcher->push({.type = event_type::inserted, .modules = {{index, module}}});
 }
 
-void selected_file_module_pool::erase_module(file_module_index const &index) {
+void selected_module_pool::erase_module(module_index const &index) {
     if (!this->_modules.contains(index)) {
         assertion_failure_if_not_test();
         return;
@@ -58,11 +58,11 @@ void selected_file_module_pool::erase_module(file_module_index const &index) {
     this->_event_fetcher->push({.type = event_type::erased, .modules = {{index, erasing}}});
 }
 
-bool selected_file_module_pool::can_clear() const {
+bool selected_module_pool::can_clear() const {
     return !this->_modules.empty();
 }
 
-void selected_file_module_pool::clear() {
+void selected_module_pool::clear() {
     if (!this->can_clear()) {
         return;
     }
@@ -74,6 +74,6 @@ void selected_file_module_pool::clear() {
     this->_event_fetcher->push({.type = event_type::erased, .modules = std::move(erased)});
 }
 
-observing::syncable selected_file_module_pool::observe_event(std::function<void(event const &)> &&handler) {
+observing::syncable selected_module_pool::observe_event(std::function<void(event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }

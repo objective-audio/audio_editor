@@ -12,7 +12,7 @@
 #include <audio_editor_core/ae_track_editor.h>
 #include <cpp_utils/yas_stl_utils.h>
 
-#include <audio_editor_core/ae_selected_file_module_pool.hpp>
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -24,14 +24,14 @@ std::shared_ptr<modules_presenter> modules_presenter::make_shared(window_lifetim
                                                                   std::shared_ptr<display_space> const &display_space) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<modules_presenter>(
-        project_lifetime->project_format, window_lifetime->player, project_lifetime->file_track,
-        project_lifetime->selected_file_module_pool, display_space, project_lifetime->module_content_pool);
+    return std::make_shared<modules_presenter>(project_lifetime->project_format, window_lifetime->player,
+                                               project_lifetime->file_track, project_lifetime->selected_module_pool,
+                                               display_space, project_lifetime->module_content_pool);
 }
 
 modules_presenter::modules_presenter(project_format const &project_format, std::shared_ptr<player> const &player,
                                      std::shared_ptr<file_track> const &file_track,
-                                     std::shared_ptr<selected_file_module_pool> const &selected_pool,
+                                     std::shared_ptr<selected_module_pool> const &selected_pool,
                                      std::shared_ptr<display_space> const &display_space,
                                      std::shared_ptr<module_content_pool> const &content_pool)
     : _project_format(project_format),
@@ -66,8 +66,8 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
         ->add_to(this->_canceller_pool);
 
     selected_pool
-        ->observe_event([this, sample_rate](selected_file_module_pool::event const &event) {
-            using event_type = selected_file_module_pool::event_type;
+        ->observe_event([this, sample_rate](selected_module_pool::event const &event) {
+            using event_type = selected_module_pool::event_type;
 
             switch (event.type) {
                 case event_type::fetched:
@@ -76,7 +76,7 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
                 case event_type::inserted:
                 case event_type::erased: {
                     auto const indices =
-                        to_vector<file_module_index>(event.modules, [](auto const &pair) { return pair.first; });
+                        to_vector<module_index>(event.modules, [](auto const &pair) { return pair.first; });
                     this->_replace_contents(indices);
                 } break;
             }
@@ -111,7 +111,7 @@ observing::syncable modules_presenter::observe_contents(
     }
 }
 
-std::string modules_presenter::name_for_index(file_module_index const &index) {
+std::string modules_presenter::name_for_index(module_index const &index) {
     if (auto const file_track = this->_file_track.lock()) {
         if (auto const module = file_track->module_at(index)) {
             return module.value().value.name;
@@ -138,7 +138,7 @@ std::optional<time::range> modules_presenter::_space_range() const {
     }
 }
 
-void modules_presenter::_insert_content(file_module_object const &module) {
+void modules_presenter::_insert_content(module_object const &module) {
     auto const content_pool = this->_content_pool.lock();
     auto const display_space = this->_display_space.lock();
     auto const selected_pool = this->_selected_pool.lock();
@@ -164,7 +164,7 @@ void modules_presenter::_erase_content(object_id const &object_id) {
     content_pool->erase_for_id(object_id);
 }
 
-void modules_presenter::_replace_contents(std::vector<file_module_index> const &indices) {
+void modules_presenter::_replace_contents(std::vector<module_index> const &indices) {
     auto const content_pool = this->_content_pool.lock();
     auto const display_space = this->_display_space.lock();
     auto const file_track = this->_file_track.lock();

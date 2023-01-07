@@ -27,6 +27,6 @@ struct modules_controller final {
     modules_controller &operator=(modules_controller const &) = delete;
     modules_controller &operator=(modules_controller &&) = delete;
 
-    std::optional<file_module_index> index_at(std::size_t const) const;
+    std::optional<module_index> index_at(std::size_t const) const;
 };
 }  // namespace yas::ae

@@ -6,12 +6,12 @@
 
 #include <audio_editor_core/ae_pasteboard.h>
 
-#include <audio_editor_core/ae_selected_file_module_pool.hpp>
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
-escaper::escaper(pasteboard *pasteboard, selected_file_module_pool *selected_pool)
+escaper::escaper(pasteboard *pasteboard, selected_module_pool *selected_pool)
     : _pasteboard(pasteboard), _selected_pool(selected_pool) {
 }
 

@@ -7,24 +7,24 @@
 using namespace yas;
 using namespace yas::ae;
 
-static std::vector<pasting_file_module_object> const _empty_modules;
+static std::vector<pasting_module_object> const _empty_modules;
 static std::vector<pasting_marker_object> const _empty_markers;
 
 pasteboard::pasteboard()
     : _event_fetcher(observing::fetcher<pasteboard_event>::make_shared([] { return pasteboard_event::fetched; })) {
 }
 
-bool pasteboard::has_file_modules() const {
+bool pasteboard::has_modules() const {
     return !this->_modules.empty();
 }
 
-std::vector<pasting_file_module_object> const &pasteboard::file_modules() const {
+std::vector<pasting_module_object> const &pasteboard::modules() const {
     return this->_modules;
 }
 
-void pasteboard::set_file_modules(std::vector<pasting_file_module_object> const &modules) {
+void pasteboard::set_modules(std::vector<pasting_module_object> const &modules) {
     this->_modules = modules;
-    this->_event_fetcher->push(pasteboard_event::file_modules_replaced);
+    this->_event_fetcher->push(pasteboard_event::modules_replaced);
 }
 
 bool pasteboard::has_markers() const {
@@ -47,7 +47,7 @@ bool pasteboard::can_clear() const {
 void pasteboard::clear() {
     if (!this->_modules.empty()) {
         this->_modules.clear();
-        this->_event_fetcher->push(pasteboard_event::file_modules_cleared);
+        this->_event_fetcher->push(pasteboard_event::modules_cleared);
     }
 
     if (!this->_markers.empty()) {

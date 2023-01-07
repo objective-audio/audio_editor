@@ -58,7 +58,7 @@ void modules_controller::begin_module_renaming_at(std::size_t const idx) {
     }
 }
 
-std::optional<file_module_index> modules_controller::index_at(std::size_t const idx) const {
+std::optional<module_index> modules_controller::index_at(std::size_t const idx) const {
     auto const content_pool = this->_content_pool.lock();
     if (!content_pool) {
         assertion_failure_if_not_test();

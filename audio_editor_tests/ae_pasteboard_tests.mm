@@ -15,7 +15,7 @@ using namespace yas::ae;
 
 @implementation ae_pasteboard_tests
 
-- (void)test_file_module {
+- (void)test_module {
     auto const pasteboard = std::make_shared<ae::pasteboard>();
 
     std::vector<pasteboard_event> called;
@@ -26,18 +26,18 @@ using namespace yas::ae;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), pasteboard_event::fetched);
 
-    XCTAssertEqual(pasteboard->file_modules().size(), 0);
+    XCTAssertEqual(pasteboard->modules().size(), 0);
 
     identifier const module_id_0;
     identifier const module_id_1;
 
-    pasteboard->set_file_modules({{module_id_0, {"test-name-1", 1, {2, 3}, "test-file-name-1"}},
-                                  {module_id_1, {"test-name-2", 4, {5, 6}, "test-file-name-2"}}});
+    pasteboard->set_modules({{module_id_0, {"test-name-1", 1, {2, 3}, "test-file-name-1"}},
+                             {module_id_1, {"test-name-2", 4, {5, 6}, "test-file-name-2"}}});
 
     XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1), pasteboard_event::file_modules_replaced);
+    XCTAssertEqual(called.at(1), pasteboard_event::modules_replaced);
 
-    auto const &modules = pasteboard->file_modules();
+    auto const &modules = pasteboard->modules();
     XCTAssertEqual(modules.size(), 2);
     XCTAssertEqual(modules.at(0).identifier, module_id_0);
     XCTAssertEqual(modules.at(0).value.name, "test-name-1");
@@ -53,9 +53,9 @@ using namespace yas::ae;
     pasteboard->clear();
 
     XCTAssertEqual(called.size(), 3);
-    XCTAssertEqual(called.at(2), pasteboard_event::file_modules_cleared);
+    XCTAssertEqual(called.at(2), pasteboard_event::modules_cleared);
 
-    XCTAssertEqual(pasteboard->file_modules().size(), 0);
+    XCTAssertEqual(pasteboard->modules().size(), 0);
 }
 
 - (void)test_marker {

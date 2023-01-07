@@ -240,13 +240,13 @@ void project_receiver::receive(ae::action const &action) const {
                                 this->_escaper->espace();
                                 break;
                             case editing_action_name::select_module:
-                                this->_module_selector->select_module_at(action.file_module_index_value());
+                                this->_module_selector->select_module_at(action.module_index_value());
                                 break;
                             case editing_action_name::toggle_module_selection:
-                                this->_module_selector->toggle_module_at(action.file_module_index_value());
+                                this->_module_selector->toggle_module_at(action.module_index_value());
                                 break;
                             case editing_action_name::begin_module_renaming:
-                                this->_module_renaming_opener->begin_module_renaming(action.file_module_index_value());
+                                this->_module_renaming_opener->begin_module_renaming(action.module_index_value());
                                 break;
                             case editing_action_name::select_marker:
                                 this->_marker_selector->select_marker_at(action.marker_index_value());
