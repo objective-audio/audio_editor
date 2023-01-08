@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_ui_button_utils.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_time_constants.h>
+#include <audio_editor_core/ae_ui_atlas.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -21,19 +22,30 @@ std::shared_ptr<ui_time_bg> ui_time_bg::make_shared(
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
 
     return std::make_shared<ui_time_bg>(project_lifetime->action_sender, app_lifetime->color.get(),
-                                        resource_lifetime->standard, node, time_strings_layout);
+                                        resource_lifetime->standard, node, time_strings_layout,
+                                        resource_lifetime->atlas.get());
 }
 
 ui_time_bg::ui_time_bg(std::shared_ptr<project_action_sender> const &action_sender, ae::color *color,
                        std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::node> const &node,
-                       std::shared_ptr<ui::layout_region_source> const &time_strings_layout)
+                       std::shared_ptr<ui::layout_region_source> const &time_strings_layout, ui_atlas const *atlas)
     : _action_sender(action_sender),
       _color(color),
       _button(ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard)) {
     node->add_sub_node(this->_button->rect_plane()->node());
 
-    auto const &bg_plane = this->_button->rect_plane();
-    bg_plane->node()->mesh()->set_use_mesh_color(true);
+    auto const &bg_mesh = this->_button->rect_plane()->node()->mesh();
+    bg_mesh->set_use_mesh_color(true);
+    bg_mesh->set_texture(atlas->texture());
+
+    atlas
+        ->observe_white_filled_tex_coords([this](ui::uint_region const &tex_coords) {
+            auto const &bg_data = this->_button->rect_plane()->data();
+            bg_data->set_rect_tex_coords(tex_coords, 0);
+            bg_data->set_rect_tex_coords(tex_coords, 1);
+        })
+        .sync()
+        ->add_to(this->_pool);
 
     standard->view_look()
         ->observe_appearance([this](auto const &) {

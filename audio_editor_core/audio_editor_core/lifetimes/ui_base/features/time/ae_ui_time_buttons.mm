@@ -13,6 +13,7 @@
 #include <audio_editor_core/ae_ui_time_constants.h>
 #include <audio_editor_core/ae_ui_types.h>
 #include <cpp_utils/yas_fast_each.h>
+#include <audio_editor_core/ae_ui_atlas.hpp>
 #include <audio_editor_core/ae_ui_time_numbers.hpp>
 
 using namespace yas;
@@ -28,21 +29,36 @@ std::shared_ptr<ui_time_buttons> ui_time_buttons::make_shared(window_lifetime_id
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
     return std::make_shared<ui_time_buttons>(resource_lifetime->standard, app_lifetime->color.get(), presenter,
-                                             project_lifetime->action_sender, node, time_numbers);
+                                             project_lifetime->action_sender, node, time_numbers,
+                                             resource_lifetime->atlas.get());
 }
 
 ui_time_buttons::ui_time_buttons(std::shared_ptr<ui::standard> const &standard, ae::color *color,
                                  std::shared_ptr<time_numbers_presenter> const &presenter,
                                  std::shared_ptr<project_action_sender> const &action_sender, ui::node *node,
-                                 ui_time_numbers *time_numbers)
+                                 ui_time_numbers *time_numbers, ui_atlas const *atlas)
     : _presenter(presenter),
       _action_sender(action_sender),
       _standard(standard),
       _color(color),
       _node(node),
-      _time_numbers(time_numbers) {
+      _time_numbers(time_numbers),
+      _atlas(atlas) {
     // 現状ではUnitの個数が変わらないので初期化時だけ呼び出す
     this->_resize_buttons();
+
+    atlas
+        ->observe_white_filled_tex_coords([this](ui::uint_region const &tex_coords) {
+            for (auto const &element : this->_button_elements) {
+                auto const &button_data = element.button->rect_plane()->data();
+                auto each = make_fast_each(button_data->rect_count());
+                while (yas_each_next(each)) {
+                    button_data->set_rect_tex_coords(tex_coords, yas_each_index(each));
+                }
+            }
+        })
+        .sync()
+        ->add_to(this->_pool);
 
     time_numbers->observe_button_regions([this] { this->_update_button_positions(); }).end()->add_to(this->_pool);
 
@@ -92,6 +108,7 @@ void ui_time_buttons::_resize_buttons() {
             button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
 
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
+            button->rect_plane()->node()->mesh()->set_texture(this->_atlas->texture());
 
             auto canceller = button
                                  ->observe([this, idx](ui::button::context const &context) {

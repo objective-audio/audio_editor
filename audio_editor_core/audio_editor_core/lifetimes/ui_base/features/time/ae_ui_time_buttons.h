@@ -12,13 +12,15 @@ class time_numbers_presenter;
 class project_action_sender;
 class color;
 class ui_time_numbers;
+class ui_atlas;
 
 struct ui_time_buttons final {
     [[nodiscard]] static std::shared_ptr<ui_time_buttons> make_shared(window_lifetime_id const &, ui::node *node,
                                                                       ui_time_numbers *time_numbers);
 
     ui_time_buttons(std::shared_ptr<ui::standard> const &, ae::color *, std::shared_ptr<time_numbers_presenter> const &,
-                    std::shared_ptr<project_action_sender> const &, ui::node *node, ui_time_numbers *time_numbers);
+                    std::shared_ptr<project_action_sender> const &, ui::node *node, ui_time_numbers *time_numbers,
+                    ui_atlas const *);
 
    private:
     struct button_element {
@@ -33,6 +35,7 @@ struct ui_time_buttons final {
     ui::node *const _node;
     std::vector<button_element> _button_elements;
     ui_time_numbers *const _time_numbers;
+    ui_atlas const *const _atlas;
 
     observing::canceller_pool _pool;
 
