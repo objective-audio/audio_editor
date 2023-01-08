@@ -10,13 +10,15 @@
 namespace yas::ae {
 class project_action_sender;
 class color;
+class ui_atlas;
 
 struct ui_time_bg final {
     [[nodiscard]] static std::shared_ptr<ui_time_bg> make_shared(
         window_lifetime_id const &, std::shared_ptr<ui::node> const &,
         std::shared_ptr<ui::layout_region_source> const &time_strings_layout);
     ui_time_bg(std::shared_ptr<project_action_sender> const &, color *color, std::shared_ptr<ui::standard> const &,
-               std::shared_ptr<ui::node> const &, std::shared_ptr<ui::layout_region_source> const &time_strings_layout);
+               std::shared_ptr<ui::node> const &, std::shared_ptr<ui::layout_region_source> const &time_strings_layout,
+               ui_atlas const *);
 
    private:
     std::weak_ptr<project_action_sender> const _action_sender;
