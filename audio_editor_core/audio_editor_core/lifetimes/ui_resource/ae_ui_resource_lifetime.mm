@@ -19,7 +19,6 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
     : standard(standard),
       window_lifetime_id(lifetime_id),
       texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
-      atlas(std::make_shared<ui_atlas>(this->texture)),
       normal_font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",
            .font_size = 14.0f,
@@ -27,7 +26,8 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
           this->texture)),
       time_font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, this->texture)),
-      square_mesh_data(std::make_shared<ui_square_mesh_data>(this->atlas)),
+      atlas(std::make_shared<ui_atlas>(this->texture)),
+      square_mesh_data(std::make_shared<ui_square_mesh_data>(this->atlas.get())),
       display_space(std::make_shared<ae::display_space>(standard->view_look()->view_layout_guide()->region())),
       modifiers_holder(std::make_shared<ae::modifiers_holder>(standard->event_manager())),
       keyboard(std::make_shared<ae::keyboard>(standard->event_manager(), this->modifiers_holder.get())),

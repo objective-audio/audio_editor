@@ -8,7 +8,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-ui_square_mesh_data::ui_square_mesh_data(std::shared_ptr<ui_atlas> const &atlas)
+ui_square_mesh_data::ui_square_mesh_data(ui_atlas const *atlas)
     : _data(ui::rect_plane_data::make_shared(1)), _atlas(atlas) {
     this->_data->set_rect_position(ui::region{.origin = {0.0f, 0.0f}, .size = {1.0f, 1.0f}}, 0);
 
@@ -27,10 +27,6 @@ std::shared_ptr<ui::mesh_index_data> ui_square_mesh_data::index_data() const {
     return this->_data->dynamic_index_data();
 }
 
-std::shared_ptr<ui::texture> ui_square_mesh_data::texture() const {
-    if (auto const atlas = this->_atlas.lock()) {
-        return atlas->texture();
-    } else {
-        return nullptr;
-    }
+std::shared_ptr<ui::texture> const &ui_square_mesh_data::texture() const {
+    return this->_atlas->texture();
 }
