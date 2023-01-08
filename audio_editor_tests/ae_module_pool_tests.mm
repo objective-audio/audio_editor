@@ -1,18 +1,18 @@
 //
-//  ae_file_track_tests.mm
+//  ae_module_pool_tests.mm
 //
 
 #import <XCTest/XCTest.h>
 #import <audio_editor_core/ae_db_constants.h>
 #import <audio_editor_core/ae_db_module.h>
 #import <audio_editor_core/ae_db_utils.h>
-#import <audio_editor_core/ae_file_track.h>
+#import <audio_editor_core/ae_module_pool.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-namespace yas::ae::file_track_test_utils {
-struct database_mock : database_for_file_track {
+namespace yas::ae::module_pool_test_utils {
+struct database_mock : database_for_module_pool {
     db_module add_module(module const &params) override {
         auto const model = database_utils::make_model();
         auto const object = db::object::make_shared(model.entity(db_constants::module_name::entity));
@@ -32,17 +32,17 @@ struct database_mock : database_for_file_track {
 };
 }
 
-using namespace yas::ae::file_track_test_utils;
+using namespace yas::ae::module_pool_test_utils;
 
-@interface ae_file_track_tests : XCTestCase
+@interface ae_module_pool_tests : XCTestCase
 
 @end
 
-@implementation ae_file_track_tests
+@implementation ae_module_pool_tests
 
 - (void)test_insert_module_and_notify {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     XCTAssertEqual(track->modules().size(), 0);
 
@@ -77,7 +77,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_erase_module_and_notify {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 4}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_1", {5, 3}, 5, ""}};
@@ -94,15 +94,15 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_observe_event {
     struct called_event {
-        file_track_event_type type;
+        module_pool_event_type type;
         std::optional<module_object> module{std::nullopt};
-        file_track_module_map_t modules;
+        module_pool_module_map_t modules;
     };
 
     std::vector<called_event> called;
 
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 4}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {7, 5}, 7, ""}};
@@ -117,28 +117,28 @@ using namespace yas::ae::file_track_test_utils;
             .sync();
 
     XCTAssertEqual(called.size(), 1);
-    XCTAssertEqual(called.at(0).type, file_track_event_type::any);
+    XCTAssertEqual(called.at(0).type, module_pool_event_type::any);
     XCTAssertEqual(called.at(0).modules.size(), 2);
     XCTAssertEqual(called.at(0).module, std::nullopt);
 
     auto const module3_index = track->insert_module_and_notify({"module_3", {4, 3}, 4, ""});
 
     XCTAssertEqual(called.size(), 2);
-    XCTAssertEqual(called.at(1).type, file_track_event_type::inserted);
+    XCTAssertEqual(called.at(1).type, module_pool_event_type::inserted);
     XCTAssertEqual(called.at(1).modules.size(), 3);
     XCTAssertEqual(called.at(1).module.value().index(), module3_index);
 
     track->erase_module_and_notify(module1.index());
 
     XCTAssertEqual(called.size(), 3);
-    XCTAssertEqual(called.at(2).type, file_track_event_type::erased);
+    XCTAssertEqual(called.at(2).type, module_pool_event_type::erased);
     XCTAssertEqual(called.at(2).modules.size(), 2);
     XCTAssertEqual(called.at(2).module.value().identifier, module1.identifier);
 
     track->revert_modules_and_notify({module2});
 
     XCTAssertEqual(called.size(), 4);
-    XCTAssertEqual(called.at(3).type, file_track_event_type::reverted);
+    XCTAssertEqual(called.at(3).type, module_pool_event_type::reverted);
     XCTAssertEqual(called.at(3).modules.size(), 1);
     XCTAssertEqual(called.at(3).module, std::nullopt);
 
@@ -147,7 +147,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_module_at_frame {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
@@ -180,7 +180,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_module_at_index {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
@@ -198,7 +198,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_previous_module_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
@@ -233,7 +233,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_next_module_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
@@ -264,7 +264,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_splittable_module_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"", {0, 1}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"", {1, 2}, 1, ""}};
@@ -288,7 +288,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_split_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const src_module{db::make_temporary_id(), {"split_module_name", {0, 8}, 0, ""}};
 
@@ -351,7 +351,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_erase_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     track->revert_modules_and_notify({{db::make_temporary_id(), {"module_1", {0, 2}, 0, ""}},
                                       {db::make_temporary_id(), {"module_2", {2, 2}, 2, ""}},
@@ -380,7 +380,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_erase_and_offset_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     track->revert_modules_and_notify({{db::make_temporary_id(), {"module_1", {0, 2}, 0, ""}},
                                       {db::make_temporary_id(), {"module_2", {2, 2}, 2, ""}},
@@ -409,7 +409,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_drop_head_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const src_module{db::make_temporary_id(), {"drop_head_module", {10, 4}, 100, ""}};
 
@@ -436,7 +436,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_drop_tail_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const src_module{db::make_temporary_id(), {"drop_tail_module", {10, 4}, 100, ""}};
 
@@ -463,7 +463,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_drop_head_and_offset_at {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
@@ -500,7 +500,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_drop_tail_and_offset {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, ""}};
@@ -537,7 +537,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_overwrite_module_middle_cropped {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"base", {10, 4}, 0, ""}};
 
@@ -572,7 +572,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_overwrite_module_edge_cropped {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"base_1", {100, 3}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"base_2", {103, 3}, 3, ""}};
@@ -608,7 +608,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_move_one_module {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"move_module", {0, 1}, 0, ""}};
 
@@ -643,7 +643,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_move_many_modules {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {1, 1}, 1, ""}};
@@ -679,7 +679,7 @@ using namespace yas::ae::file_track_test_utils;
 
 - (void)test_move_cropped {
     auto const database = std::make_shared<database_mock>();
-    auto const track = std::make_shared<ae::file_track>(database.get());
+    auto const track = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 4}, 0, ""}};
     module_object const module2{db::make_temporary_id(), {"module_2", {4, 2}, 4, ""}};

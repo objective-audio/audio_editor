@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_file_track_types.h>
+#include <audio_editor_core/ae_module_pool_types.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <processing/yas_processing_ptr.h>
 
@@ -16,7 +16,7 @@ struct timeline_holder final {
 
     [[nodiscard]] proc::timeline_ptr const &timeline() const;
 
-    void replace(file_track_module_map_t const &);
+    void replace(module_pool_module_map_t const &);
     void insert(module const &);
     void erase(time::range const &);
 

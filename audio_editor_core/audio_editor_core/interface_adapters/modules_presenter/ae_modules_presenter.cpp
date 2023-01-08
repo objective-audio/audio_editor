@@ -5,11 +5,11 @@
 #include "ae_modules_presenter.h"
 
 #include <audio_editor_core/ae_display_space.h>
-#include <audio_editor_core/ae_file_track.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_module_content_pool.h>
+#include <audio_editor_core/ae_module_editor.h>
+#include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_track_editor.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 #include <audio_editor_core/ae_selected_module_pool.hpp>
@@ -25,39 +25,39 @@ std::shared_ptr<modules_presenter> modules_presenter::make_shared(window_lifetim
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<modules_presenter>(project_lifetime->project_format, window_lifetime->player,
-                                               project_lifetime->file_track, project_lifetime->selected_module_pool,
+                                               project_lifetime->module_pool, project_lifetime->selected_module_pool,
                                                display_space, project_lifetime->module_content_pool);
 }
 
 modules_presenter::modules_presenter(project_format const &project_format, std::shared_ptr<player> const &player,
-                                     std::shared_ptr<file_track> const &file_track,
+                                     std::shared_ptr<module_pool> const &module_pool,
                                      std::shared_ptr<selected_module_pool> const &selected_pool,
                                      std::shared_ptr<display_space> const &display_space,
                                      std::shared_ptr<module_content_pool> const &content_pool)
     : _project_format(project_format),
       _player(player),
-      _file_track(file_track),
+      _module_pool(module_pool),
       _selected_pool(selected_pool),
       _display_space(display_space),
       _content_pool(content_pool) {
     auto const sample_rate = this->_project_format.sample_rate;
 
-    file_track
-        ->observe_event([this, sample_rate](file_track_event const &event) {
+    module_pool
+        ->observe_event([this, sample_rate](module_pool_event const &event) {
             switch (event.type) {
-                case file_track_event_type::any:
-                case file_track_event_type::reverted:
+                case module_pool_event_type::any:
+                case module_pool_event_type::reverted:
                     // 初期状態やアンドゥした時に呼ばれる
                     // とにかく強制的に全部更新する
                     this->_update_all_contents(true, true);
                     break;
-                case file_track_event_type::erased: {
+                case module_pool_event_type::erased: {
                     this->_erase_content(event.module.value().identifier);
                 } break;
-                case file_track_event_type::inserted: {
+                case module_pool_event_type::inserted: {
                     this->_insert_content(event.module.value());
                 } break;
-                case file_track_event_type::detail_updated: {
+                case module_pool_event_type::detail_updated: {
                     this->_replace_contents({event.module.value().index()});
                 } break;
             }
@@ -112,8 +112,8 @@ observing::syncable modules_presenter::observe_contents(
 }
 
 std::string modules_presenter::name_for_index(module_index const &index) {
-    if (auto const file_track = this->_file_track.lock()) {
-        if (auto const module = file_track->module_at(index)) {
+    if (auto const module_pool = this->_module_pool.lock()) {
+        if (auto const module = module_pool->module_at(index)) {
             return module.value().value.name;
         }
     }
@@ -167,10 +167,10 @@ void modules_presenter::_erase_content(object_id const &object_id) {
 void modules_presenter::_replace_contents(std::vector<module_index> const &indices) {
     auto const content_pool = this->_content_pool.lock();
     auto const display_space = this->_display_space.lock();
-    auto const file_track = this->_file_track.lock();
+    auto const module_pool = this->_module_pool.lock();
     auto const selected_pool = this->_selected_pool.lock();
 
-    if (!content_pool || !display_space || !file_track || !selected_pool) {
+    if (!content_pool || !display_space || !module_pool || !selected_pool) {
         return;
     }
 
@@ -178,7 +178,7 @@ void modules_presenter::_replace_contents(std::vector<module_index> const &indic
     if (space_range.has_value()) {
         for (auto const &index : indices) {
             if (index.range.is_overlap(space_range.value())) {
-                if (auto const module = file_track->module_at(index)) {
+                if (auto const module = module_pool->module_at(index)) {
                     content_pool->replace({module.value(), selected_pool->contains(index),
                                            this->_project_format.sample_rate, space_range.value(),
                                            display_space->scale().width});
@@ -193,12 +193,12 @@ void modules_presenter::_replace_contents(std::vector<module_index> const &indic
 void modules_presenter::_update_all_contents(bool const force_updating, bool const force_replacing) {
     auto const space_range = this->_space_range();
     auto const player = this->_player.lock();
-    auto const file_track = this->_file_track.lock();
+    auto const module_pool = this->_module_pool.lock();
     auto const display_space = this->_display_space.lock();
     auto const content_pool = this->_content_pool.lock();
     auto const selected_pool = this->_selected_pool.lock();
 
-    if (player && file_track && space_range.has_value() && display_space && content_pool && selected_pool) {
+    if (player && module_pool && space_range.has_value() && display_space && content_pool && selected_pool) {
         auto const current_frame = player->current_frame();
 
         if (space_range == this->_last_space_range && current_frame == this->_last_frame && !force_updating) {
@@ -209,8 +209,8 @@ void modules_presenter::_update_all_contents(bool const force_updating, bool con
         auto const scale = display_space->scale().width;
 
         auto const contents = filter_map<module_content>(
-            file_track->modules(), [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale,
-                                    &selected_pool](auto const &module) {
+            module_pool->modules(), [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale,
+                                     &selected_pool](auto const &module) {
                 if (module.first.range.is_overlap(space_range_value)) {
                     return std::make_optional<module_content>(module.second,
                                                               selected_pool->contains(module.second.index()),

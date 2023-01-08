@@ -1,22 +1,22 @@
 //
-//  ae_file_track.h
+//  ae_module_pool.h
 //
 
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
-#include <audio_editor_core/ae_file_track_dependencies.h>
-#include <audio_editor_core/ae_file_track_types.h>
 #include <audio_editor_core/ae_jumper_dependency.h>
+#include <audio_editor_core/ae_module_pool_dependencies.h>
+#include <audio_editor_core/ae_module_pool_types.h>
 #include <observing/yas_observing_umbrella.h>
 
 #include <set>
 
 namespace yas::ae {
-struct file_track final : jumpable_on_jumper {
-    file_track(database_for_file_track *);
+struct module_pool final : jumpable_on_jumper {
+    module_pool(database_for_module_pool *);
 
-    [[nodiscard]] file_track_module_map_t const &modules() const;
+    [[nodiscard]] module_pool_module_map_t const &modules() const;
 
     void revert_modules_and_notify(std::vector<module_object> &&);
     std::optional<module_index> insert_module_and_notify(module const &);
@@ -45,19 +45,19 @@ struct file_track final : jumpable_on_jumper {
     void move_modules(std::set<module_index> const &, frame_index_t const offset);
     void split_and_insert_module_and_offset(module const &);
 
-    [[nodiscard]] observing::syncable observe_event(std::function<void(file_track_event const &)> &&);
+    [[nodiscard]] observing::syncable observe_event(std::function<void(module_pool_event const &)> &&);
 
    private:
-    database_for_file_track *_database;
+    database_for_module_pool *_database;
 
-    file_track_module_map_t _modules;
+    module_pool_module_map_t _modules;
 
-    observing::fetcher_ptr<file_track_event> _event_fetcher;
+    observing::fetcher_ptr<module_pool_event> _event_fetcher;
 
-    file_track(file_track const &) = delete;
-    file_track(file_track &&) = delete;
-    file_track &operator=(file_track const &) = delete;
-    file_track &operator=(file_track &&) = delete;
+    module_pool(module_pool const &) = delete;
+    module_pool(module_pool &&) = delete;
+    module_pool &operator=(module_pool const &) = delete;
+    module_pool &operator=(module_pool &&) = delete;
 
     void _move_modules_after(frame_index_t const frame, frame_index_t const offset);
 };

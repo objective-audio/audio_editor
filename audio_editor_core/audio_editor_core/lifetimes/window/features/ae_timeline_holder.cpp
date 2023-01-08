@@ -24,7 +24,7 @@ proc::timeline_ptr const &timeline_holder::timeline() const {
     return this->_timeline;
 }
 
-void timeline_holder::replace(file_track_module_map_t const &modules) {
+void timeline_holder::replace(module_pool_module_map_t const &modules) {
     this->_timeline->erase_track(0);
     this->_track = proc::track::make_shared();
 

@@ -18,7 +18,7 @@ namespace yas::ae {
 class app_lifetime;
 class timing;
 class nudge_settings;
-class file_track;
+class module_pool;
 class selected_module_pool;
 class module_selector;
 class marker_pool;
@@ -46,7 +46,7 @@ class timeline_updater;
 class reverter;
 class file_module_loading_state_holder;
 class file_module_loader;
-class track_editor;
+class module_editor;
 class project_action_sender;
 class pinch_gesture_controller;
 class scroll_gesture_controller;
@@ -74,7 +74,7 @@ struct project_lifetime final {
     std::shared_ptr<database> const database;
     std::shared_ptr<timing> const timing;
     std::shared_ptr<nudge_settings> const nudge_settings;
-    std::shared_ptr<file_track> const file_track;
+    std::shared_ptr<module_pool> const module_pool;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<selected_module_pool> const selected_module_pool;
     std::shared_ptr<marker_pool> const marker_pool;
@@ -101,7 +101,7 @@ struct project_lifetime final {
     std::shared_ptr<file_module_loading_state_holder> const file_module_loading_state_holder;
     std::shared_ptr<file_module_loader> const file_module_loader;
     std::shared_ptr<import_interactor> const import_interactor;
-    std::shared_ptr<track_editor> const track_editor;
+    std::shared_ptr<module_editor> const module_editor;
     std::shared_ptr<escaper> const escaper;
     std::shared_ptr<project_receiver> const receiver;
 

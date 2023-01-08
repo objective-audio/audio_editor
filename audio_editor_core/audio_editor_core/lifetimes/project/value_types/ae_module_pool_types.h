@@ -1,5 +1,5 @@
 //
-//  ae_file_track_types.h
+//  ae_module_pool_types.h
 //
 
 #pragma once
@@ -9,9 +9,9 @@
 #include <map>
 
 namespace yas::ae {
-using file_track_module_map_t = std::map<module_index, module_object>;
+using module_pool_module_map_t = std::map<module_index, module_object>;
 
-enum class file_track_event_type {
+enum class module_pool_event_type {
     any,
     reverted,
     inserted,
@@ -19,9 +19,9 @@ enum class file_track_event_type {
     detail_updated,
 };
 
-struct file_track_event final {
-    file_track_event_type type;
+struct module_pool_event final {
+    module_pool_event_type type;
     std::optional<module_object> module{std::nullopt};  // inserted, erased
-    file_track_module_map_t const &modules;
+    module_pool_module_map_t const &modules;
 };
 }  // namespace yas::ae

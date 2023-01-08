@@ -12,14 +12,14 @@
 
 namespace yas::ae {
 class project_path;
-class file_track;
+class module_pool;
 
 struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh_importer> {
     using event = waveform_mesh_importer_event;
 
-    [[nodiscard]] static std::shared_ptr<waveform_mesh_importer> make_shared(window_lifetime_id const &, file_track *);
+    [[nodiscard]] static std::shared_ptr<waveform_mesh_importer> make_shared(window_lifetime_id const &, module_pool *);
 
-    waveform_mesh_importer(project_path const *, file_track *);
+    waveform_mesh_importer(project_path const *, module_pool *);
 
     void import(std::size_t const, module_content const &);
     void cancel(object_id const &);
@@ -29,7 +29,7 @@ struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh
 
    private:
     project_path const *const _project_path;
-    file_track const *const _file_track;
+    module_pool const *const _module_pool;
 
     observing::notifier_ptr<event> const _notifier;
     std::shared_ptr<task_queue<object_id>> const _task_queue;
