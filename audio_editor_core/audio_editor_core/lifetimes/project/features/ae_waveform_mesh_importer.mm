@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_project_path.h>
-#include <audio_editor_core/ae_ui_track_constants.h>
+#include <audio_editor_core/ae_ui_zooming_constants.h>
 #include <cpp_utils/yas_thread.h>
 #include <ui/yas_ui_umbrella.h>
 

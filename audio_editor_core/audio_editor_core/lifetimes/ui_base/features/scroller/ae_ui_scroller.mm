@@ -9,8 +9,8 @@
 #include <audio_editor_core/ae_ui_edge.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_markers.h>
-#include <audio_editor_core/ae_ui_track.h>
-#include <audio_editor_core/ae_ui_track_constants.h>
+#include <audio_editor_core/ae_ui_zooming.h>
+#include <audio_editor_core/ae_ui_zooming_constants.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -32,7 +32,7 @@ ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard, ui::node
         ->observe_will_render([this](auto const &) {
             auto const time = this->_presenter->current_position();
             auto const scale = this->_presenter->horizontal_zooming_scale();
-            float const x = -time * ui_track_constants::standard_width_per_sec * scale;
+            float const x = -time * ui_zooming_constants::standard_width_per_sec * scale;
             this->_node->set_position(ui::point{x, 0.0f});
         })
         .end()
@@ -45,7 +45,7 @@ ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard, ui::node
                 gesture_state const state = to_gesture_state(event->phase());
 
                 auto const sec_width =
-                    ui_track_constants::standard_width_per_sec * this->_presenter->horizontal_zooming_scale();
+                    ui_zooming_constants::standard_width_per_sec * this->_presenter->horizontal_zooming_scale();
                 auto const delta_time = -scroll_event.delta_x / sec_width;
 
                 this->_scroll_gesture_controller->handle_gesture(

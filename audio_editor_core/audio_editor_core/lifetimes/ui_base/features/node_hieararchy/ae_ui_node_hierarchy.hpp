@@ -22,7 +22,7 @@ struct ui_node_hierarchy final {
     std::shared_ptr<ui::node> const time_base_node;
 
     // scroller
-    std::shared_ptr<ui::node> const track_node;
+    std::shared_ptr<ui::node> const zooming_node;
     std::shared_ptr<ui::node> const modules_node;
     std::shared_ptr<ui::node> const edge_node;
     std::shared_ptr<ui::node> const markers_node;

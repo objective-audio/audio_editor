@@ -10,7 +10,7 @@
 namespace yas::ae {
 class scroller_presenter;
 class scroll_gesture_controller;
-class ui_track;
+class ui_zooming;
 class ui_edge;
 class ui_markers;
 
