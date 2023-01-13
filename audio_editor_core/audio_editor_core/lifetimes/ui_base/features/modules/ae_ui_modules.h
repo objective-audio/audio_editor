@@ -17,6 +17,7 @@ class display_space;
 class ui_module_waveforms;
 class modifiers_holder;
 class color;
+class ui_atlas;
 
 struct ui_modules final {
     [[nodiscard]] static std::shared_ptr<ui_modules> make_shared(window_lifetime_id const &,
@@ -25,7 +26,7 @@ struct ui_modules final {
 
     ui_modules(std::shared_ptr<modules_presenter> const &, std::shared_ptr<modules_controller> const &,
                std::shared_ptr<ui::standard> const &, std::shared_ptr<ui::node> const &, ae::color *,
-               std::shared_ptr<ui::font_atlas> const &, ui_module_waveforms *, modifiers_holder *);
+               std::shared_ptr<ui::font_atlas> const &, ui_module_waveforms *, modifiers_holder *, ui_atlas const *);
 
     void set_scale(ui::size const &);
 
@@ -34,6 +35,7 @@ struct ui_modules final {
     std::shared_ptr<modules_controller> const _controller;
     ae::color *const _color;
     std::shared_ptr<ui::font_atlas> const _name_font_atlas;
+    ui_atlas const *const _atlas;
     ui_module_waveforms *const _waveforms;
     std::shared_ptr<ui::node> const _triangle_node;
     std::shared_ptr<ui::node> const _line_node;
