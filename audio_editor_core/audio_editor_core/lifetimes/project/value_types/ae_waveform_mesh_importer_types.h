@@ -13,7 +13,7 @@ struct waveform_mesh_importer_event final {
     object_id identifier;
 
     struct data final {
-        std::shared_ptr<ui::mesh_vertex_data> vertex_data;
+        std::shared_ptr<ui::dynamic_mesh_vertex_data> vertex_data;
         std::shared_ptr<ui::mesh_index_data> index_data;
     };
 

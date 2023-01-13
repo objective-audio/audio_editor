@@ -207,11 +207,11 @@ void waveform_mesh_importer::import(std::size_t const idx, module_content const 
 
                 file->close();
             } else {
-                auto const mesh_vertex_data = ui::static_mesh_vertex_data::make_shared(2);
+                auto const mesh_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(2);
                 auto const mesh_index_data = ui::static_mesh_index_data::make_shared(2);
                 datas.emplace_back(waveform_mesh_importer_event::data{mesh_vertex_data, mesh_index_data});
 
-                mesh_vertex_data->write_once([&content](std::vector<ui::vertex2d_t> &vector) {
+                mesh_vertex_data->write([&content](std::vector<ui::vertex2d_t> &vector) {
                     vector[0].position = {0.0f, 0.0f};
                     vector[1].position = {content.width(), 0.0f};
                 });
