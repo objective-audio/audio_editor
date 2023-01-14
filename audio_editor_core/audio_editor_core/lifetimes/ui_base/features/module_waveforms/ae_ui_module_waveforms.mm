@@ -9,45 +9,96 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
 #include <cpp_utils/yas_fast_each.h>
+#include <audio_editor_core/ae_ui_atlas.hpp>
 
 using namespace yas;
 using namespace yas::ae;
+
+namespace yas::ae {
+struct ui_module_waveforms::element {
+    std::shared_ptr<ui::node> const node;
+
+    element(std::shared_ptr<ui::node> &&node) : node(std::move(node)) {
+    }
+
+    std::vector<waveform_mesh_data> const &datas() const {
+        return this->_datas;
+    }
+
+    void set_datas(std::vector<waveform_mesh_data> const &datas) {
+        this->_datas = datas;
+    }
+
+    std::vector<std::shared_ptr<ui::node>> const &mesh_nodes() const {
+        return this->node->sub_nodes();
+    }
+
+    void clear() {
+        this->node->remove_all_sub_nodes();
+        this->_datas.clear();
+    }
+
+    void add_mesh_node(std::shared_ptr<ui::node> const &mesh_node) {
+        this->node->add_sub_node(mesh_node);
+    }
+
+    void finalize() {
+        this->node->remove_from_super_node();
+    }
+
+   private:
+    std::vector<waveform_mesh_data> _datas;
+};
+}
 
 std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(window_lifetime_id const &window_lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
     auto const presenter = module_waveforms_presenter::make_shared(window_lifetime_id);
 
-    return std::make_shared<ui_module_waveforms>(resource_lifetime->standard, app_lifetime->color.get(), presenter);
+    return std::make_shared<ui_module_waveforms>(resource_lifetime->standard, app_lifetime->color.get(),
+                                                 resource_lifetime->atlas.get(), presenter);
 }
 
 ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &standard, ae::color *color,
+                                         ui_atlas const *atlas,
                                          std::shared_ptr<module_waveforms_presenter> const &presenter)
-    : node(ui::node::make_shared()), _presenter(presenter), _color(color) {
+    : node(ui::node::make_shared()), _presenter(presenter), _color(color), _atlas(atlas) {
     this->_presenter
         ->observe_mesh_importer([this](waveform_mesh_importer_event const &event) {
-            auto const &sub_nodes = this->node->sub_nodes();
-            if (event.index < sub_nodes.size()) {
-                auto const &sub_node = sub_nodes.at(event.index);
-                if (sub_node->is_enabled()) {
-                    sub_node->remove_all_sub_nodes();
+            if (event.index < this->_elements.size()) {
+                auto &element = this->_elements.at(event.index);
+                if (element->node->is_enabled()) {
+                    element->clear();
 
                     auto const &waveform_color = this->_color->waveform();
+                    auto const tex_coord = to_float2(this->_atlas->white_filled_tex_coords().origin);
 
                     auto each = make_fast_each(event.datas.size());
                     while (yas_each_next(each)) {
                         auto const &idx = yas_each_index(each);
                         auto const mesh_node = ui::node::make_shared();
-                        auto const mesh = ui::mesh::make_shared();
-                        mesh->set_primitive_type(ui::primitive_type::triangle);
-                        mesh->set_vertex_data(event.datas.at(idx).vertex_data);
-                        mesh->set_index_data(event.datas.at(idx).index_data);
+                        auto const &vertex_data = event.datas.at(idx).vertex_data;
+
+                        if (vertex_data != nullptr) {
+                            vertex_data->write([&tex_coord](std::vector<ui::vertex2d_t> &vertices) {
+                                for (auto &vertex : vertices) {
+                                    vertex.tex_coord = tex_coord;
+                                }
+                            });
+                        }
+
+                        auto const mesh =
+                            ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, vertex_data,
+                                                  event.datas.at(idx).index_data, this->_atlas->texture());
 
                         mesh_node->set_color(waveform_color);
-
                         mesh_node->set_mesh(mesh);
-                        sub_node->add_sub_node(mesh_node);
+
+                        element->add_mesh_node(mesh_node);
                     }
+
+                    element->set_datas(event.datas);
                 }
             }
         })
@@ -72,14 +123,15 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
     standard->view_look()
         ->observe_appearance([this](auto const &) {
             auto const &waveform_color = this->_color->waveform();
-
-            for (auto const &sub_node : this->node->sub_nodes()) {
-                for (auto const &mesh_node : sub_node->sub_nodes()) {
-                    mesh_node->set_color(waveform_color);
-                }
-            }
+            this->_update_all_waveform_colors(waveform_color);
         })
         .end()
+        ->add_to(this->_pool);
+
+    atlas
+        ->observe_white_filled_tex_coords(
+            [this](ui::uint_region const &tex_coord) { this->_update_all_tex_coords(tex_coord.origin); })
+        .sync()
         ->add_to(this->_pool);
 }
 
@@ -96,40 +148,38 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
         }
 
         if (auto const scale = this->_waveform_scale()) {
-            for (auto const &sub_node : this->node->sub_nodes()) {
-                sub_node->set_scale(scale.value());
+            for (auto const &element : this->_elements) {
+                element->node->set_scale(scale.value());
             }
         }
     }
 }
 
 void ui_module_waveforms::set_contents(std::vector<std::optional<module_content>> const &contents,
-                                       bool const clear_mesh_nodes) {
+                                       bool const clear_meshes) {
     if (!this->_scale.has_value()) {
-        this->_resize_sub_nodes(0);
+        this->_resize_elements(0);
         return;
     }
 
-    this->_resize_sub_nodes(contents.size());
-
-    auto const sub_nodes = this->node->sub_nodes();
+    this->_resize_elements(contents.size());
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
         auto const &content = contents.at(idx);
-        auto const &sub_node = sub_nodes.at(idx);
+        auto &element = this->_elements.at(idx);
 
-        if (clear_mesh_nodes) {
-            sub_node->remove_all_sub_nodes();
+        if (clear_meshes) {
+            element->clear();
         }
 
         if (content.has_value()) {
-            sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = content.value().x() * content.value().scale, .y = 0.0f});
+            element->node->set_is_enabled(true);
+            element->node->set_position({.x = content.value().x() * content.value().scale, .y = 0.0f});
             this->_presenter->import(idx, content.value());
         } else {
-            sub_node->set_is_enabled(false);
+            element->node->set_is_enabled(false);
         }
     }
 }
@@ -139,11 +189,12 @@ void ui_module_waveforms::update_contents(std::size_t const count,
                                           std::vector<std::pair<std::size_t, module_content>> const &inserted,
                                           std::vector<std::pair<std::size_t, module_content>> const &replaced) {
     if (!this->_scale.has_value()) {
-        this->_resize_sub_nodes(0);
+        this->_resize_elements(0);
+        this->_elements.clear();
         return;
     }
 
-    this->_resize_sub_nodes(count);
+    this->_resize_elements(count);
 
     auto each = make_fast_each(erased.size());
     while (yas_each_next(each)) {
@@ -151,10 +202,10 @@ void ui_module_waveforms::update_contents(std::size_t const count,
         auto const &idx = pair.first;
         auto const &content = pair.second;
 
-        if (idx < this->node->sub_nodes().size()) {
-            auto const &sub_node = this->node->sub_nodes().at(idx);
-            sub_node->remove_all_sub_nodes();
-            sub_node->set_is_enabled(false);
+        if (idx < this->_elements.size()) {
+            auto &element = this->_elements.at(idx);
+            element->clear();
+            element->node->set_is_enabled(false);
         }
 
         this->_presenter->cancel_import(content.identifier);
@@ -165,11 +216,11 @@ void ui_module_waveforms::update_contents(std::size_t const count,
         auto const &pair = replaced.at(yas_each_index(each));
         auto const &idx = pair.first;
 
-        if (idx < this->node->sub_nodes().size()) {
+        if (idx < this->_elements.size()) {
             auto const &content = pair.second;
-            auto const &sub_node = this->node->sub_nodes().at(idx);
-            sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = content.x() * content.scale, .y = 0.0f});
+            auto &element = this->_elements.at(idx);
+            element->node->set_is_enabled(true);
+            element->node->set_position({.x = content.x() * content.scale, .y = 0.0f});
             this->_presenter->import(idx, content);
         }
     }
@@ -179,39 +230,41 @@ void ui_module_waveforms::update_contents(std::size_t const count,
         auto const &pair = inserted.at(yas_each_index(each));
         auto const &idx = pair.first;
 
-        if (idx < this->node->sub_nodes().size()) {
+        if (idx < this->_elements.size()) {
             auto const &content = pair.second;
-            auto const &sub_node = this->node->sub_nodes().at(idx);
-            sub_node->remove_all_sub_nodes();
-            sub_node->set_is_enabled(true);
-            sub_node->set_position({.x = content.x() * content.scale, .y = 0.0f});
+            auto &element = this->_elements.at(idx);
+            element->clear();
+            element->node->set_is_enabled(true);
+            element->node->set_position({.x = content.x() * content.scale, .y = 0.0f});
             this->_presenter->import(idx, content);
         }
     }
 }
 
-void ui_module_waveforms::_resize_sub_nodes(std::size_t const count) {
-    auto const &prev_count = this->node->sub_nodes().size();
+void ui_module_waveforms::_resize_elements(std::size_t const count) {
+    auto const prev_count = this->_elements.size();
 
     if (prev_count < count) {
         auto const scale = this->_waveform_scale();
 
         auto each = make_fast_each(count - prev_count);
         while (yas_each_next(each)) {
-            auto const node = ui::node::make_shared();
-            node->set_is_enabled(false);
+            auto element_node = ui::node::make_shared();
+            element_node->set_is_enabled(false);
 
             if (scale.has_value()) {
-                node->set_scale(scale.value());
+                element_node->set_scale(scale.value());
             }
 
-            this->node->add_sub_node(node);
+            this->node->add_sub_node(element_node);
+            this->_elements.emplace_back(std::make_shared<element>(std::move(element_node)));
         }
     } else if (prev_count > count) {
         auto each = make_fast_each(prev_count - count);
         while (yas_each_next(each)) {
             auto const idx = prev_count - yas_each_index(each) - 1;
-            this->node->sub_nodes().at(idx)->remove_from_super_node();
+            this->_elements.at(idx)->finalize();
+            yas::erase_at(this->_elements, idx);
         }
     }
 }
@@ -222,5 +275,29 @@ std::optional<ui::size> ui_module_waveforms::_waveform_scale() const {
         return ui::size{.width = scale, .height = 1.0f};
     } else {
         return std::nullopt;
+    }
+}
+
+void ui_module_waveforms::_update_all_tex_coords(ui::uint_point const &tex_coord_origin) {
+    auto const tex_coord = to_float2(tex_coord_origin);
+
+    for (auto &element : this->_elements) {
+        for (auto const &mesh_data : element->datas()) {
+            if (mesh_data.vertex_data) {
+                mesh_data.vertex_data->write([&tex_coord](std::vector<ui::vertex2d_t> &vertices) {
+                    for (auto &vertex : vertices) {
+                        vertex.tex_coord = tex_coord;
+                    }
+                });
+            }
+        }
+    }
+}
+
+void ui_module_waveforms::_update_all_waveform_colors(ui::color const &color) {
+    for (auto const &element : this->_elements) {
+        for (auto const &mesh_node : element->mesh_nodes()) {
+            mesh_node->set_color(color);
+        }
     }
 }

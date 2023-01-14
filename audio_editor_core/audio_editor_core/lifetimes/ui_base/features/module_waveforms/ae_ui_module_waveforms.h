@@ -13,11 +13,13 @@ class module_content;
 class module_waveforms_presenter;
 class waveform_mesh_importer;
 class color;
+class ui_atlas;
+class waveform_mesh_data;
 
 struct ui_module_waveforms final {
     [[nodiscard]] static std::shared_ptr<ui_module_waveforms> make_shared(window_lifetime_id const &);
 
-    ui_module_waveforms(std::shared_ptr<ui::standard> const &, ae::color *,
+    ui_module_waveforms(std::shared_ptr<ui::standard> const &, ae::color *, ui_atlas const *,
                         std::shared_ptr<module_waveforms_presenter> const &);
 
     std::shared_ptr<ui::node> const node;
@@ -32,7 +34,11 @@ struct ui_module_waveforms final {
    private:
     std::shared_ptr<module_waveforms_presenter> const _presenter;
     ae::color *const _color;
+    ui_atlas const *const _atlas;
     std::optional<float> _scale = std::nullopt;
+
+    struct element;
+    std::vector<std::shared_ptr<element>> _elements;
 
     observing::canceller_pool _pool;
 
@@ -41,7 +47,9 @@ struct ui_module_waveforms final {
     ui_module_waveforms &operator=(ui_module_waveforms const &) = delete;
     ui_module_waveforms &operator=(ui_module_waveforms &&) = delete;
 
-    void _resize_sub_nodes(std::size_t const);
+    void _resize_elements(std::size_t const);
     std::optional<ui::size> _waveform_scale() const;
+    void _update_all_tex_coords(ui::uint_point const &);
+    void _update_all_waveform_colors(ui::color const &);
 };
 }  // namespace yas::ae

@@ -13,6 +13,7 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_ui_module_waveforms.h>
 #include <audio_editor_core/ae_modifiers_holder.hpp>
+#include <audio_editor_core/ae_ui_atlas.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -31,18 +32,19 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(window_lifetime_id const &wi
     auto const modules_controller = modules_controller::make_shared(window_lifetime_id);
     return std::make_shared<ui_modules>(modules_presenter, modules_controller, resource_lifetime->standard, node,
                                         app_lifetime->color.get(), resource_lifetime->normal_font_atlas, waveforms,
-                                        resource_lifetime->modifiers_holder.get());
+                                        resource_lifetime->modifiers_holder.get(), resource_lifetime->atlas.get());
 }
 
 ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                        std::shared_ptr<modules_controller> const &controller,
                        std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::node> const &node,
                        ae::color *color, std::shared_ptr<ui::font_atlas> const &name_font_atlas,
-                       ui_module_waveforms *waveforms, modifiers_holder *modifiers_holder)
+                       ui_module_waveforms *waveforms, modifiers_holder *modifiers_holder, ui_atlas const *atlas)
     : _presenter(presenter),
       _controller(controller),
       _color(color),
       _name_font_atlas(name_font_atlas),
+      _atlas(atlas),
       _waveforms(waveforms),
       _triangle_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
@@ -50,9 +52,9 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_triangle_node)),
       _multiple_touch(ui::multiple_touch::make_shared()),
       _modifiers_holder(modifiers_holder),
-      _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, nullptr)),
+      _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, atlas->texture())),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true}, nullptr,
-                                       nullptr, nullptr)) {
+                                       nullptr, atlas->texture())) {
     node->add_sub_node(this->_triangle_node);
     node->add_sub_node(this->_waveforms->node);
     node->add_sub_node(this->_line_node);
@@ -114,6 +116,17 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         .sync()
         ->add_to(this->_pool);
 
+    atlas
+        ->observe_white_filled_tex_coords([this](ui::uint_region const &tex_coords) {
+            this->_vertex_data->write([&tex_coords](std::vector<ui::vertex2d_t> &vertices) {
+                for (auto &vertex : vertices) {
+                    vertex.tex_coord = to_float2(tex_coords.origin);
+                }
+            });
+        })
+        .sync()
+        ->add_to(this->_pool);
+
     this->_touch_tracker
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
@@ -154,6 +167,7 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
         auto const normal_frame_color = this->_color->module_frame().v;
         auto const selected_frame_color = this->_color->selected_module_frame().v;
         auto const &colliders = this->_triangle_node->colliders();
+        auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
         auto each = make_fast_each(contents.size());
         while (yas_each_next(each)) {
@@ -167,6 +181,7 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
                                         .size = {.width = value.width(), .height = 1.0f}};
                 auto &rect = vertex_rects[idx];
                 rect.set_position(region);
+                rect.set_tex_coord(filled_tex_coords);
 
                 auto const &frame_color = value.is_selected ? selected_frame_color : normal_frame_color;
                 rect.set_color(frame_color);
