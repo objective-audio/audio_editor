@@ -50,6 +50,6 @@ struct ui_module_waveforms final {
     void _resize_elements(std::size_t const);
     std::optional<ui::size> _waveform_scale() const;
     void _update_all_tex_coords(ui::uint_point const &);
-    void _update_all_waveform_colors(ui::color const &);
+    void _update_all_colors(ui::color const &);
 };
 }  // namespace yas::ae
