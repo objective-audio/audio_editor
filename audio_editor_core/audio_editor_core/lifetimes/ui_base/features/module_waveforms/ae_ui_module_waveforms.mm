@@ -21,16 +21,8 @@ struct ui_module_waveforms::element {
     element(std::shared_ptr<ui::node> &&node) : node(std::move(node)) {
     }
 
-    std::vector<waveform_mesh_data> const &datas() const {
-        return this->_datas;
-    }
-
     void set_datas(std::vector<waveform_mesh_data> const &datas) {
         this->_datas = datas;
-    }
-
-    std::vector<std::shared_ptr<ui::node>> const &mesh_nodes() const {
-        return this->node->sub_nodes();
     }
 
     void clear() {
@@ -42,12 +34,34 @@ struct ui_module_waveforms::element {
         this->node->add_sub_node(mesh_node);
     }
 
+    void update_tex_coords(simd::float2 const &tex_coord) {
+        for (auto const &mesh_data : this->_datas) {
+            if (mesh_data.vertex_data) {
+                mesh_data.vertex_data->write([&tex_coord](std::vector<ui::vertex2d_t> &vertices) {
+                    for (auto &vertex : vertices) {
+                        vertex.tex_coord = tex_coord;
+                    }
+                });
+            }
+        }
+    }
+
+    void update_colors(ui::color const &color) {
+        for (auto const &mesh_node : this->_mesh_nodes()) {
+            mesh_node->set_color(color);
+        }
+    }
+
     void finalize() {
         this->node->remove_from_super_node();
     }
 
    private:
     std::vector<waveform_mesh_data> _datas;
+
+    std::vector<std::shared_ptr<ui::node>> const &_mesh_nodes() const {
+        return this->node->sub_nodes();
+    }
 };
 }
 
@@ -123,7 +137,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
     standard->view_look()
         ->observe_appearance([this](auto const &) {
             auto const &waveform_color = this->_color->waveform();
-            this->_update_all_waveform_colors(waveform_color);
+            this->_update_all_colors(waveform_color);
         })
         .end()
         ->add_to(this->_pool);
@@ -282,22 +296,12 @@ void ui_module_waveforms::_update_all_tex_coords(ui::uint_point const &tex_coord
     auto const tex_coord = to_float2(tex_coord_origin);
 
     for (auto &element : this->_elements) {
-        for (auto const &mesh_data : element->datas()) {
-            if (mesh_data.vertex_data) {
-                mesh_data.vertex_data->write([&tex_coord](std::vector<ui::vertex2d_t> &vertices) {
-                    for (auto &vertex : vertices) {
-                        vertex.tex_coord = tex_coord;
-                    }
-                });
-            }
-        }
+        element->update_tex_coords(tex_coord);
     }
 }
 
-void ui_module_waveforms::_update_all_waveform_colors(ui::color const &color) {
+void ui_module_waveforms::_update_all_colors(ui::color const &color) {
     for (auto const &element : this->_elements) {
-        for (auto const &mesh_node : element->mesh_nodes()) {
-            mesh_node->set_color(color);
-        }
+        element->update_colors(color);
     }
 }
