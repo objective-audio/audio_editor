@@ -49,7 +49,6 @@ struct ui_modules final {
     std::shared_ptr<ui::dynamic_mesh_vertex_data> _vertex_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _triangle_index_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _line_index_data;
-    std::shared_ptr<ui::mesh> const _triangle_mesh;
     std::shared_ptr<ui::mesh> const _line_mesh;
     std::vector<std::shared_ptr<ui::strings>> _names;
 

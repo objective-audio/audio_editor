@@ -52,7 +52,6 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_triangle_node)),
       _multiple_touch(ui::multiple_touch::make_shared()),
       _modifiers_holder(modifiers_holder),
-      _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, atlas->texture())),
       _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true}, nullptr,
                                        nullptr, atlas->texture())) {
     node->add_sub_node(this->_triangle_node);
@@ -60,7 +59,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
     node->add_sub_node(this->_line_node);
     node->add_sub_node(this->_names_root_node);
 
-    this->_triangle_node->set_mesh(this->_triangle_mesh);
+    auto const triangle_mesh = ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, atlas->texture());
+    this->_triangle_node->set_mesh(triangle_mesh);
     this->_line_node->set_mesh(this->_line_mesh);
 
     this->_set_rect_count(0);
@@ -295,8 +295,8 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     this->_vertex_data = nullptr;
     this->_triangle_index_data = nullptr;
     this->_line_index_data = nullptr;
-    this->_triangle_mesh->set_vertex_data(nullptr);
-    this->_triangle_mesh->set_index_data(nullptr);
+    this->_triangle_node->mesh()->set_vertex_data(nullptr);
+    this->_triangle_node->mesh()->set_index_data(nullptr);
     this->_line_mesh->set_vertex_data(nullptr);
     this->_line_mesh->set_index_data(nullptr);
     this->_triangle_node->set_colliders({});
@@ -329,8 +329,8 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         }
     });
 
-    this->_triangle_mesh->set_vertex_data(this->_vertex_data);
-    this->_triangle_mesh->set_index_data(this->_triangle_index_data);
+    this->_triangle_node->mesh()->set_vertex_data(this->_vertex_data);
+    this->_triangle_node->mesh()->set_index_data(this->_triangle_index_data);
     this->_line_mesh->set_vertex_data(this->_vertex_data);
     this->_line_mesh->set_index_data(this->_line_index_data);
 
