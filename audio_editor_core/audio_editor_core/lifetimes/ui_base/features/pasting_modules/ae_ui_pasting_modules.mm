@@ -33,11 +33,11 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
                                        std::shared_ptr<ui::node> const &node, ae::color *color)
     : _presenter(presenter),
       _color(color),
-      _line_node(ui::node::make_shared()),
-      _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
-    node->add_sub_node(this->_line_node);
+      _frame_node(ui::node::make_shared()),
+      _frame_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
+    node->add_sub_node(this->_frame_node);
 
-    this->_line_node->set_mesh(this->_line_mesh);
+    this->_frame_node->set_mesh(this->_frame_mesh);
 
     this->_set_rect_count(0);
 
@@ -63,14 +63,14 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
 
     standard->view_look()
         ->observe_appearance(
-            [this](auto const &) { this->_line_node->set_color(this->_color->pasting_module_frame()); })
+            [this](auto const &) { this->_frame_node->set_color(this->_color->pasting_module_frame()); })
         .sync()
         ->add_to(this->_pool);
 }
 
 void ui_pasting_modules::set_scale(ui::size const &scale) {
     this->_scale = scale;
-    this->_line_node->set_scale(scale);
+    this->_frame_node->set_scale(scale);
 }
 
 void ui_pasting_modules::_set_contents(std::vector<std::optional<pasting_module_content>> const &contents) {
@@ -120,20 +120,20 @@ void ui_pasting_modules::_update_contents(std::size_t const count,
 }
 
 void ui_pasting_modules::_remake_data_if_needed(std::size_t const max_count) {
-    if (max_count <= this->_remaked_count && (this->_vertex_data != nullptr || this->_line_index_data != nullptr)) {
+    if (max_count <= this->_remaked_count && (this->_vertex_data != nullptr || this->_frame_index_data != nullptr)) {
         return;
     }
 
     this->_vertex_data = nullptr;
-    this->_line_index_data = nullptr;
-    this->_line_mesh->set_vertex_data(nullptr);
-    this->_line_mesh->set_index_data(nullptr);
+    this->_frame_index_data = nullptr;
+    this->_frame_mesh->set_vertex_data(nullptr);
+    this->_frame_mesh->set_index_data(nullptr);
 
     this->_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(max_count * vertex2d_rect::vector_count);
-    this->_line_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * line_index2d_rect::vector_count);
+    this->_frame_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * frame_index2d_rect::vector_count);
 
-    this->_line_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
-        auto *index_rects = (line_index2d_rect *)indices.data();
+    this->_frame_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
+        auto *index_rects = (frame_index2d_rect *)indices.data();
 
         auto each = make_fast_each(max_count);
         while (yas_each_next(each)) {
@@ -143,8 +143,8 @@ void ui_pasting_modules::_remake_data_if_needed(std::size_t const max_count) {
         }
     });
 
-    this->_line_mesh->set_vertex_data(this->_vertex_data);
-    this->_line_mesh->set_index_data(this->_line_index_data);
+    this->_frame_mesh->set_vertex_data(this->_vertex_data);
+    this->_frame_mesh->set_index_data(this->_frame_index_data);
 
     this->_remaked_count = max_count;
 }
@@ -157,7 +157,7 @@ void ui_pasting_modules::_set_rect_count(std::size_t const rect_count) {
         this->_vertex_data->set_count(rect_count * vertex2d_rect::vector_count);
     }
 
-    if (this->_line_index_data) {
-        this->_line_index_data->set_count(rect_count * line_index2d_rect::vector_count);
+    if (this->_frame_index_data) {
+        this->_frame_index_data->set_count(rect_count * frame_index2d_rect::vector_count);
     }
 }

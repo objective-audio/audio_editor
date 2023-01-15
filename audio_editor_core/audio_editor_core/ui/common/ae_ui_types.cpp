@@ -7,7 +7,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-void ae::line_index2d_rect::set_all(ui::index2d_t const first) {
+void ae::frame_index2d_rect::set_all(ui::index2d_t const first) {
     this->v[0] = this->v[7] = first;
     this->v[1] = this->v[2] = first + 1;
     this->v[3] = this->v[4] = first + 3;
