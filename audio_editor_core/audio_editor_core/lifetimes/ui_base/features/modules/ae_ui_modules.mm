@@ -46,22 +46,23 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _name_font_atlas(name_font_atlas),
       _atlas(atlas),
       _waveforms(waveforms),
-      _triangle_node(ui::node::make_shared()),
+      _fill_node(ui::node::make_shared()),
       _line_node(ui::node::make_shared()),
       _names_root_node(ui::node::make_shared()),
-      _touch_tracker(ui::touch_tracker::make_shared(standard, this->_triangle_node)),
+      _touch_tracker(ui::touch_tracker::make_shared(standard, this->_fill_node)),
       _multiple_touch(ui::multiple_touch::make_shared()),
-      _modifiers_holder(modifiers_holder),
-      _triangle_mesh(ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, atlas->texture())),
-      _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true}, nullptr,
-                                       nullptr, atlas->texture())) {
-    node->add_sub_node(this->_triangle_node);
+      _modifiers_holder(modifiers_holder) {
+    node->add_sub_node(this->_fill_node);
     node->add_sub_node(this->_waveforms->node);
     node->add_sub_node(this->_line_node);
     node->add_sub_node(this->_names_root_node);
 
-    this->_triangle_node->set_mesh(this->_triangle_mesh);
-    this->_line_node->set_mesh(this->_line_mesh);
+    auto const fill_mesh = ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, atlas->texture());
+    this->_fill_node->set_mesh(fill_mesh);
+
+    auto const line_mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true},
+                                                 nullptr, nullptr, atlas->texture());
+    this->_line_node->set_mesh(line_mesh);
 
     this->_set_rect_count(0);
 
@@ -106,7 +107,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                 }
             });
 
-            this->_triangle_node->set_color(this->_color->module_bg());
+            this->_fill_node->set_color(this->_color->module_bg());
 
             auto const module_name_color = this->_color->module_name();
             for (auto const &name : this->_names) {
@@ -152,7 +153,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
 void ui_modules::set_scale(ui::size const &scale) {
     this->_scale = scale;
-    this->_triangle_node->set_scale(scale);
+    this->_fill_node->set_scale(scale);
     this->_line_node->set_scale(scale);
     this->_waveforms->set_scale(scale);
     this->_update_all_name_positions();
@@ -166,7 +167,7 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
 
         auto const normal_frame_color = this->_color->module_frame().v;
         auto const selected_frame_color = this->_color->selected_module_frame().v;
-        auto const &colliders = this->_triangle_node->colliders();
+        auto const &colliders = this->_fill_node->colliders();
         auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
         auto each = make_fast_each(contents.size());
@@ -222,7 +223,7 @@ void ui_modules::_update_contents(std::size_t const count,
                                   std::vector<std::pair<std::size_t, module_content>> const &erased) {
     this->_set_rect_count(count);
 
-    this->_vertex_data->write([&erased, &inserted, &replaced, &colliders = this->_triangle_node->colliders(),
+    this->_vertex_data->write([&erased, &inserted, &replaced, &colliders = this->_fill_node->colliders(),
                                &color = this->_color](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
@@ -288,27 +289,29 @@ void ui_modules::_update_contents(std::size_t const count,
 
 void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     if (max_count <= this->_remaked_count &&
-        (this->_vertex_data != nullptr || this->_triangle_index_data != nullptr || this->_line_index_data != nullptr)) {
+        (this->_vertex_data != nullptr || this->_fill_index_data != nullptr || this->_line_index_data != nullptr)) {
         return;
     }
 
+    auto const &fill_mesh = this->_fill_node->mesh();
+    auto const &line_mesh = this->_line_node->mesh();
+
     this->_vertex_data = nullptr;
-    this->_triangle_index_data = nullptr;
+    this->_fill_index_data = nullptr;
     this->_line_index_data = nullptr;
-    this->_triangle_mesh->set_vertex_data(nullptr);
-    this->_triangle_mesh->set_index_data(nullptr);
-    this->_line_mesh->set_vertex_data(nullptr);
-    this->_line_mesh->set_index_data(nullptr);
-    this->_triangle_node->set_colliders({});
+    fill_mesh->set_vertex_data(nullptr);
+    fill_mesh->set_index_data(nullptr);
+    line_mesh->set_vertex_data(nullptr);
+    line_mesh->set_index_data(nullptr);
+    this->_fill_node->set_colliders({});
     this->_names_root_node->remove_all_sub_nodes();
 
     this->_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(max_count * vertex2d_rect::vector_count);
-    this->_triangle_index_data =
-        ui::dynamic_mesh_index_data::make_shared(max_count * triangle_index2d_rect::vector_count);
+    this->_fill_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * fill_index2d_rect::vector_count);
     this->_line_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * line_index2d_rect::vector_count);
 
-    this->_triangle_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
-        auto *index_rects = (triangle_index2d_rect *)indices.data();
+    this->_fill_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
+        auto *index_rects = (fill_index2d_rect *)indices.data();
 
         auto each = make_fast_each(max_count);
         while (yas_each_next(each)) {
@@ -329,10 +332,10 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         }
     });
 
-    this->_triangle_mesh->set_vertex_data(this->_vertex_data);
-    this->_triangle_mesh->set_index_data(this->_triangle_index_data);
-    this->_line_mesh->set_vertex_data(this->_vertex_data);
-    this->_line_mesh->set_index_data(this->_line_index_data);
+    fill_mesh->set_vertex_data(this->_vertex_data);
+    fill_mesh->set_index_data(this->_fill_index_data);
+    line_mesh->set_vertex_data(this->_vertex_data);
+    line_mesh->set_index_data(this->_line_index_data);
 
     if (this->_names.size() < max_count) {
         auto const module_name_color = this->_color->module_name();
@@ -357,7 +360,7 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
             colliders.emplace_back(std::move(collider));
         }
 
-        this->_triangle_node->set_colliders(std::move(colliders));
+        this->_fill_node->set_colliders(std::move(colliders));
     }
 
     this->_remaked_count = max_count;
@@ -370,8 +373,8 @@ void ui_modules::_set_rect_count(std::size_t const rect_count) {
         this->_vertex_data->set_count(rect_count * vertex2d_rect::vector_count);
     }
 
-    if (this->_triangle_index_data) {
-        this->_triangle_index_data->set_count(rect_count * triangle_index2d_rect::vector_count);
+    if (this->_fill_index_data) {
+        this->_fill_index_data->set_count(rect_count * fill_index2d_rect::vector_count);
     }
 
     if (this->_line_index_data) {
