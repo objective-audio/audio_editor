@@ -38,7 +38,7 @@ struct ui_modules final {
     ui_atlas const *const _atlas;
     ui_module_waveforms *const _waveforms;
     std::shared_ptr<ui::node> const _fill_node;
-    std::shared_ptr<ui::node> const _line_node;
+    std::shared_ptr<ui::node> const _frame_node;
     std::shared_ptr<ui::node> const _names_root_node;
     std::shared_ptr<ui::touch_tracker> const _touch_tracker;
     std::shared_ptr<ui::multiple_touch> const _multiple_touch;
@@ -48,7 +48,7 @@ struct ui_modules final {
     std::size_t _remaked_count = 0;
     std::shared_ptr<ui::dynamic_mesh_vertex_data> _vertex_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _fill_index_data;
-    std::shared_ptr<ui::dynamic_mesh_index_data> _line_index_data;
+    std::shared_ptr<ui::dynamic_mesh_index_data> _frame_index_data;
     std::vector<std::shared_ptr<ui::strings>> _names;
 
     observing::canceller_pool _pool;

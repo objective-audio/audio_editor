@@ -13,7 +13,7 @@ namespace yas::ae {
 using vertex2d_rect = ui::vertex2d_rect;
 using fill_index2d_rect = ui::index2d_rect;
 
-struct line_index2d_rect final {
+struct frame_index2d_rect final {
     static std::size_t constexpr vector_count = 8;
 
     ui::index2d_t v[vector_count];

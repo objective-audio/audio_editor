@@ -25,13 +25,13 @@ struct ui_pasting_modules final {
    private:
     std::shared_ptr<pasting_modules_presenter> const _presenter;
     ae::color *const _color;
-    std::shared_ptr<ui::node> const _line_node;
+    std::shared_ptr<ui::node> const _frame_node;
 
     ui::size _scale{.width = 1.0f, .height = 1.0f};
     std::size_t _remaked_count = 0;
     std::shared_ptr<ui::dynamic_mesh_vertex_data> _vertex_data;
-    std::shared_ptr<ui::dynamic_mesh_index_data> _line_index_data;
-    std::shared_ptr<ui::mesh> const _line_mesh;
+    std::shared_ptr<ui::dynamic_mesh_index_data> _frame_index_data;
+    std::shared_ptr<ui::mesh> const _frame_mesh;
 
     observing::canceller_pool _pool;
 
