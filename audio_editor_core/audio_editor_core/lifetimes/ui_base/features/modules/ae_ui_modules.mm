@@ -51,9 +51,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _names_root_node(ui::node::make_shared()),
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_triangle_node)),
       _multiple_touch(ui::multiple_touch::make_shared()),
-      _modifiers_holder(modifiers_holder),
-      _line_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true}, nullptr,
-                                       nullptr, atlas->texture())) {
+      _modifiers_holder(modifiers_holder) {
     node->add_sub_node(this->_triangle_node);
     node->add_sub_node(this->_waveforms->node);
     node->add_sub_node(this->_line_node);
@@ -61,7 +59,10 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
     auto const triangle_mesh = ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, atlas->texture());
     this->_triangle_node->set_mesh(triangle_mesh);
-    this->_line_node->set_mesh(this->_line_mesh);
+
+    auto const line_mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true},
+                                                 nullptr, nullptr, atlas->texture());
+    this->_line_node->set_mesh(line_mesh);
 
     this->_set_rect_count(0);
 
@@ -292,13 +293,16 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         return;
     }
 
+    auto const &triangle_mesh = this->_triangle_node->mesh();
+    auto const &line_mesh = this->_line_node->mesh();
+
     this->_vertex_data = nullptr;
     this->_triangle_index_data = nullptr;
     this->_line_index_data = nullptr;
-    this->_triangle_node->mesh()->set_vertex_data(nullptr);
-    this->_triangle_node->mesh()->set_index_data(nullptr);
-    this->_line_mesh->set_vertex_data(nullptr);
-    this->_line_mesh->set_index_data(nullptr);
+    triangle_mesh->set_vertex_data(nullptr);
+    triangle_mesh->set_index_data(nullptr);
+    line_mesh->set_vertex_data(nullptr);
+    line_mesh->set_index_data(nullptr);
     this->_triangle_node->set_colliders({});
     this->_names_root_node->remove_all_sub_nodes();
 
@@ -329,10 +333,10 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         }
     });
 
-    this->_triangle_node->mesh()->set_vertex_data(this->_vertex_data);
-    this->_triangle_node->mesh()->set_index_data(this->_triangle_index_data);
-    this->_line_mesh->set_vertex_data(this->_vertex_data);
-    this->_line_mesh->set_index_data(this->_line_index_data);
+    triangle_mesh->set_vertex_data(this->_vertex_data);
+    triangle_mesh->set_index_data(this->_triangle_index_data);
+    line_mesh->set_vertex_data(this->_vertex_data);
+    line_mesh->set_index_data(this->_line_index_data);
 
     if (this->_names.size() < max_count) {
         auto const module_name_color = this->_color->module_name();
