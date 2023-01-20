@@ -125,7 +125,8 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       module_editor(std::make_shared<ae::module_editor>(
           window_lifetime->player.get(), this->module_pool.get(), this->marker_pool.get(),
           this->selected_module_pool.get(), this->pasteboard.get(), this->database.get(), this->editing_status.get())),
-      escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get())),
+      escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get(),
+                                            this->selected_marker_pool.get())),
       receiver(std::make_shared<project_receiver>(
           window_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
           this->nudge_settings.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
