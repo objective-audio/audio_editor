@@ -14,9 +14,7 @@ class selected_marker_pool;
 class markers_controller;
 class modifiers_holder;
 class color;
-class ui_mesh_data;
 class marker_index;
-class ui_atlas;
 class ui_square_mesh_data;
 
 struct ui_marker_element final {
