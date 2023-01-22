@@ -131,13 +131,29 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
     this->_touch_tracker
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
-                if (context.phase == ui::touch_tracker_phase::ended) {
-                    if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
-                        this->_controller->toggle_module_selection_at(context.collider_idx);
-                    } else {
-                        this->_controller->select_module_at(context.collider_idx);
-                    }
+                switch (context.phase) {
+                    case ui::touch_tracker_phase::began:
+                        this->_began_collider_idx = context.collider_idx;
+                        break;
+                    case ui::touch_tracker_phase::ended:
+                        if (this->_began_collider_idx == context.collider_idx) {
+                            if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
+                                this->_controller->toggle_module_selection_at(context.collider_idx);
+                            } else {
+                                this->_controller->select_module_at(context.collider_idx);
+                            }
+                        }
+                        this->_began_collider_idx = std::nullopt;
+                        break;
+                    case ui::touch_tracker_phase::canceled:
+                    case ui::touch_tracker_phase::leaved:
+                        this->_began_collider_idx = std::nullopt;
+                        break;
+                    case ui::touch_tracker_phase::moved:
+                    case ui::touch_tracker_phase::entered:
+                        break;
                 }
+
                 this->_multiple_touch->handle_event(context.phase, context.collider_idx);
             }
         })

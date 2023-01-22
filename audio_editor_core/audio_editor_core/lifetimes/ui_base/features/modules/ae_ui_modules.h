@@ -41,6 +41,7 @@ struct ui_modules final {
     std::shared_ptr<ui::node> const _frame_node;
     std::shared_ptr<ui::node> const _names_root_node;
     std::shared_ptr<ui::touch_tracker> const _touch_tracker;
+    std::optional<std::size_t> _began_collider_idx;
     std::shared_ptr<ui::multiple_touch> const _multiple_touch;
     modifiers_holder *const _modifiers_holder;
 
