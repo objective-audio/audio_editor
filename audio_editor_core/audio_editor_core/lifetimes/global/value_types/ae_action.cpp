@@ -26,8 +26,16 @@ module_index const &action::module_index_value() const {
     return std::get<module_index>(this->value.value());
 }
 
+std::vector<module_index> const &action::module_indices_value() const {
+    return std::get<std::vector<module_index>>(this->value.value());
+}
+
 marker_index const &action::marker_index_value() const {
     return std::get<marker_index>(this->value.value());
+}
+
+std::vector<marker_index> const &action::marker_indices_value() const {
+    return std::get<std::vector<marker_index>>(this->value.value());
 }
 
 ae::action_name_kind yas::to_kind(ae::action_name const &scope) {
