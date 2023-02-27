@@ -28,6 +28,7 @@ struct selected_marker_pool final {
 
     void toggle_marker(selected_marker_object const &);
     void insert_marker(selected_marker_object const &);
+    void insert_markers(std::vector<selected_marker_object> const &);
     void erase_marker(marker_index const &);
 
     [[nodiscard]] bool can_clear() const;
