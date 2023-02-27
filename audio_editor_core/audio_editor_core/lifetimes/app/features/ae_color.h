@@ -14,7 +14,7 @@ struct color final {
 
     [[nodiscard]] ui::color playing_line_pausing() const;
     [[nodiscard]] ui::color playing_line_playing() const;
-    [[nodiscard]] ui::color playing_line_scroling() const;
+    [[nodiscard]] ui::color playing_line_scrolling() const;
 
     [[nodiscard]] ui::color module_frame() const;
     [[nodiscard]] ui::color module_bg() const;

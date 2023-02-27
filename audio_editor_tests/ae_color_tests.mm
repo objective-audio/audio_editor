@@ -21,7 +21,7 @@ using namespace yas::ae;
 
     XCTAssertNoThrow(color->playing_line_pausing());
     XCTAssertNoThrow(color->playing_line_playing());
-    XCTAssertNoThrow(color->playing_line_scroling());
+    XCTAssertNoThrow(color->playing_line_scrolling());
 
     XCTAssertNoThrow(color->module_frame());
     XCTAssertNoThrow(color->module_bg());
