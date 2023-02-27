@@ -168,9 +168,10 @@ void ui_marker_element::_update_name() {
 void ui_marker_element::_update_color() {
     if (auto const &content = this->_content) {
         bool const is_selected = content.value().is_selected;
-        auto const line_color = is_selected ? this->_color->marker_selected_line() : this->_color->marker_line();
-        this->_line_node->set_color(line_color);
-        this->_square_node->set_color(this->_color->marker_square());
+        auto const square_color = is_selected ? this->_color->selected_marker_square() : this->_color->marker_square();
+
+        this->_line_node->set_color(this->_color->marker_line());
+        this->_square_node->set_color(square_color);
         this->_strings->rect_plane()->node()->set_color(this->_color->marker_text());
     }
 }
