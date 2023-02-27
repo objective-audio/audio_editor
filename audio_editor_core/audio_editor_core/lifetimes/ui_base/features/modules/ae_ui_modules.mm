@@ -57,10 +57,11 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
     node->add_sub_node(this->_frame_node);
     node->add_sub_node(this->_names_root_node);
 
-    auto const fill_mesh = ui::mesh::make_shared({.use_mesh_color = false}, nullptr, nullptr, atlas->texture());
+    auto const fill_mesh = ui::mesh::make_shared(
+        {.primitive_type = ui::primitive_type::triangle, .use_mesh_color = true}, nullptr, nullptr, atlas->texture());
     this->_fill_node->set_mesh(fill_mesh);
 
-    auto const frame_mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = true},
+    auto const frame_mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = false},
                                                   nullptr, nullptr, atlas->texture());
     this->_frame_node->set_mesh(frame_mesh);
 
@@ -91,8 +92,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
             this->_vertex_data->write([this](std::vector<ui::vertex2d_t> &vertices) {
                 auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
                 auto const &contents = this->_presenter->contents();
-                auto const normal_frame_color = this->_color->module_frame().v;
-                auto const selected_frame_color = this->_color->selected_module_frame().v;
+                auto const normal_bg_color = this->_color->module_bg().v;
+                auto const selected_bg_color = this->_color->selected_module_bg().v;
 
                 auto each = make_fast_each(contents.size());
                 while (yas_each_next(each)) {
@@ -100,14 +101,13 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                     auto const &content = contents.at(idx);
 
                     if (content.has_value()) {
-                        auto const &frame_color =
-                            content.value().is_selected ? selected_frame_color : normal_frame_color;
-                        vertex_rects[idx].set_color(frame_color);
+                        auto const &bg_color = content.value().is_selected ? selected_bg_color : normal_bg_color;
+                        vertex_rects[idx].set_color(bg_color);
                     }
                 }
             });
 
-            this->_fill_node->set_color(this->_color->module_bg());
+            this->_frame_node->set_color(this->_color->module_frame());
 
             auto const module_name_color = this->_color->module_name();
             for (auto const &name : this->_names) {
@@ -181,8 +181,8 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
     this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
-        auto const normal_frame_color = this->_color->module_frame().v;
-        auto const selected_frame_color = this->_color->selected_module_frame().v;
+        auto const normal_bg_color = this->_color->module_bg().v;
+        auto const selected_bg_color = this->_color->selected_module_bg().v;
         auto const &colliders = this->_fill_node->colliders();
         auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
@@ -200,8 +200,8 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
                 rect.set_position(region);
                 rect.set_tex_coord(filled_tex_coords);
 
-                auto const &frame_color = value.is_selected ? selected_frame_color : normal_frame_color;
-                rect.set_color(frame_color);
+                auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+                rect.set_color(bg_color);
 
                 collider->set_shape(ui::shape::make_shared({.rect = region}));
                 collider->set_enabled(true);
@@ -251,8 +251,8 @@ void ui_modules::_update_contents(std::size_t const count,
             collider->set_shape(nullptr);
         }
 
-        auto const normal_frame_color = color->module_frame().v;
-        auto const selected_frame_color = color->selected_module_frame().v;
+        auto const normal_bg_color = color->module_bg().v;
+        auto const selected_bg_color = color->selected_module_bg().v;
 
         for (auto const &pair : inserted) {
             auto const &value = pair.second;
@@ -262,8 +262,8 @@ void ui_modules::_update_contents(std::size_t const count,
             auto &rect = vertex_rects[pair.first];
             rect.set_position(region);
 
-            auto const &frame_color = value.is_selected ? selected_frame_color : normal_frame_color;
-            rect.set_color(frame_color);
+            auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+            rect.set_color(bg_color);
 
             auto const &collider = colliders.at(pair.first);
             collider->set_shape(ui::shape::make_shared({.rect = region}));
@@ -272,8 +272,8 @@ void ui_modules::_update_contents(std::size_t const count,
 
         for (auto const &pair : replaced) {
             auto const &value = pair.second;
-            auto const &frame_color = value.is_selected ? selected_frame_color : normal_frame_color;
-            vertex_rects[pair.first].set_color(frame_color);
+            auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+            vertex_rects[pair.first].set_color(bg_color);
         }
     });
 
