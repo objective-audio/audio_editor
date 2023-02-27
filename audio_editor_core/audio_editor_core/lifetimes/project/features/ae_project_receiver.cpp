@@ -243,7 +243,7 @@ void project_receiver::receive(ae::action const &action) const {
                                 this->_module_selector->select_module_at(action.module_index_value());
                                 break;
                             case editing_action_name::toggle_module_selection:
-                                this->_module_selector->toggle_module_at(action.module_index_value());
+                                this->_module_selector->toggle(action.module_index_value());
                                 break;
                             case editing_action_name::begin_module_renaming:
                                 this->_module_renaming_opener->begin_module_renaming(action.module_index_value());
@@ -252,7 +252,7 @@ void project_receiver::receive(ae::action const &action) const {
                                 this->_marker_selector->select_marker_at(action.marker_index_value());
                                 break;
                             case editing_action_name::toggle_marker_selection:
-                                this->_marker_selector->toggle_marker_at(action.marker_index_value());
+                                this->_marker_selector->toggle(action.marker_index_value());
                                 break;
                             case editing_action_name::begin_marker_renaming:
                                 this->_marker_renaming_opener->begin_renaming(action.marker_index_value());

@@ -19,7 +19,7 @@ struct marker_selector final {
     void select_marker_at(marker_index const &);
 
     [[nodiscard]] bool can_toggle() const;
-    void toggle_marker_at(marker_index const &);
+    void toggle(marker_index const &);
 
    private:
     marker_pool const *const _marker_pool;

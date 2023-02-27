@@ -40,7 +40,7 @@ bool marker_selector::can_toggle() const {
     return this->_editing_status->can_editing();
 }
 
-void marker_selector::toggle_marker_at(marker_index const &index) {
+void marker_selector::toggle(marker_index const &index) {
     if (this->_marker_pool->markers().contains(index)) {
         this->_selected_pool->toggle_marker(selected_marker_object{index.object_id, selected_marker{index.frame}});
     } else {

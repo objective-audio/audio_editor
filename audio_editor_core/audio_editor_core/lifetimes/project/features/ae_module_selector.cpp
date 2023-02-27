@@ -40,7 +40,7 @@ bool module_selector::can_toggle() const {
     return this->_editing_status->can_editing();
 }
 
-void module_selector::toggle_module_at(module_index const &index) {
+void module_selector::toggle(module_index const &index) {
     if (this->_module_pool->modules().contains(index)) {
         this->_selected_pool->toggle_module(selected_module_object{index.object_id, {index.range}});
     } else {

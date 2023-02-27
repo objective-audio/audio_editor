@@ -19,7 +19,7 @@ struct module_selector final {
     void select_module_at(module_index const &);
 
     [[nodiscard]] bool can_toggle() const;
-    void toggle_module_at(module_index const &);
+    void toggle(module_index const &);
 
    private:
     module_pool const *const _module_pool;
