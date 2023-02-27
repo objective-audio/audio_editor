@@ -11,7 +11,7 @@
 namespace yas::ae {
 class marker_pool;
 class selected_marker_pool;
-class markers_controller;
+class marker_element_controller;
 class modifiers_holder;
 class color;
 class marker_index;
@@ -21,7 +21,7 @@ struct ui_marker_element final {
     [[nodiscard]] static std::shared_ptr<ui_marker_element> make_shared(window_lifetime_id const &,
                                                                         ui::node *parent_node);
     ui_marker_element(std::shared_ptr<marker_pool> const &, std::shared_ptr<selected_marker_pool> const &,
-                      std::shared_ptr<markers_controller> const &, std::shared_ptr<ui::standard> const &,
+                      std::shared_ptr<marker_element_controller> const &, std::shared_ptr<ui::standard> const &,
                       std::shared_ptr<ae::color> const &, std::shared_ptr<ui_square_mesh_data> const &square_data,
                       std::shared_ptr<ui::font_atlas> const &, ui::node *parent_node, modifiers_holder *);
 
@@ -37,7 +37,7 @@ struct ui_marker_element final {
 
     std::weak_ptr<marker_pool> const _marker_pool;
     std::weak_ptr<selected_marker_pool> const _selected_marker_pool;
-    std::shared_ptr<markers_controller> const _controller;
+    std::shared_ptr<marker_element_controller> const _controller;
     std::shared_ptr<ui::node> const _line_node;
     std::shared_ptr<ui::node> const _square_collider_node;
     std::shared_ptr<ui::node> const _square_node;

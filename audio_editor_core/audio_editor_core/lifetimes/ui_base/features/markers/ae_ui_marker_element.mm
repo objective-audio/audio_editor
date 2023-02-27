@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_ui_marker_constants.h>
 #include <audio_editor_core/ae_ui_mesh_data.h>
 #include <cpp_utils/yas_assertion.h>
-#include <audio_editor_core/ae_markers_controller.hpp>
+#include <audio_editor_core/ae_marker_element_controller.hpp>
 #include <audio_editor_core/ae_modifiers_holder.hpp>
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_ui_atlas.hpp>
@@ -23,7 +23,7 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetim
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
-    auto const controller = markers_controller::make_shared(lifetime_id);
+    auto const controller = marker_element_controller::make_shared(lifetime_id);
 
     return std::shared_ptr<ui_marker_element>(new ui_marker_element{
         project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller, resource_lifetime->standard,
@@ -33,7 +33,7 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetim
 
 ui_marker_element::ui_marker_element(
     std::shared_ptr<marker_pool> const &marker_pool, std::shared_ptr<selected_marker_pool> const &selected_marker_pool,
-    std::shared_ptr<markers_controller> const &controller, std::shared_ptr<ui::standard> const &standard,
+    std::shared_ptr<marker_element_controller> const &controller, std::shared_ptr<ui::standard> const &standard,
     std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_square_mesh_data> const &square_data,
     std::shared_ptr<ui::font_atlas> const &font_atlas, ui::node *parent_node, modifiers_holder *modifiers_holder)
     : _node(ui::node::make_shared()),
