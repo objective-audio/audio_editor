@@ -30,6 +30,7 @@ struct selected_module_pool final {
 
     void toggle_module(selected_module_object const &);
     void insert_module(selected_module_object const &);
+    void insert_modules(std::vector<selected_module_object> const &);
     void erase_module(module_index const &);
 
     [[nodiscard]] bool can_clear() const;
