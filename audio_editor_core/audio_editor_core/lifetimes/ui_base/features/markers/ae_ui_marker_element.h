@@ -29,6 +29,8 @@ struct ui_marker_element final {
     void update_content(marker_content const &);
     void reset_content();
 
+    [[nodiscard]] std::optional<marker_index> marker_index() const;
+
     void finalize();
 
    private:
@@ -57,6 +59,5 @@ struct ui_marker_element final {
 
     void _update_name();
     void _update_color();
-    std::optional<marker_index> _marker_index() const;
 };
 }  // namespace yas::ae

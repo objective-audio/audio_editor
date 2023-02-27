@@ -105,7 +105,7 @@ ui_marker_element::ui_marker_element(
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
                 if (context.phase == ui::touch_tracker_phase::ended) {
-                    if (auto const marker_index = this->_marker_index()) {
+                    if (auto const marker_index = this->marker_index()) {
                         if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
                             this->_controller->toggle_marker_selection_at(marker_index.value());
                         } else {
@@ -121,7 +121,7 @@ ui_marker_element::ui_marker_element(
 
     this->_multiple_touch
         ->observe([this](std::uintptr_t const &) {
-            if (auto const marker_index = this->_marker_index()) {
+            if (auto const marker_index = this->marker_index()) {
                 this->_controller->begin_marker_renaming_at(marker_index.value());
             }
         })
@@ -153,6 +153,17 @@ void ui_marker_element::reset_content() {
     this->_node->set_is_enabled(false);
 }
 
+std::optional<marker_index> ui_marker_element::marker_index() const {
+    if (this->_content.has_value()) {
+        if (auto const marker_pool = this->_marker_pool.lock()) {
+            if (auto const marker = marker_pool->marker_for_id(this->_content.value().identifier)) {
+                return marker.value().index();
+            }
+        }
+    }
+    return std::nullopt;
+}
+
 void ui_marker_element::finalize() {
     this->_node->remove_from_super_node();
 }
@@ -174,15 +185,4 @@ void ui_marker_element::_update_color() {
         this->_square_node->set_color(square_color);
         this->_strings->rect_plane()->node()->set_color(this->_color->marker_text());
     }
-}
-
-std::optional<marker_index> ui_marker_element::_marker_index() const {
-    if (this->_content.has_value()) {
-        if (auto const marker_pool = this->_marker_pool.lock()) {
-            if (auto const marker = marker_pool->marker_for_id(this->_content.value().identifier)) {
-                return marker.value().index();
-            }
-        }
-    }
-    return std::nullopt;
 }
