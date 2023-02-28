@@ -51,6 +51,7 @@
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
 #include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
+#include <audio_editor_core/ae_range_selector.hpp>
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
 
@@ -125,6 +126,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       module_editor(std::make_shared<ae::module_editor>(
           window_lifetime->player.get(), this->module_pool.get(), this->marker_pool.get(),
           this->selected_module_pool.get(), this->pasteboard.get(), this->database.get(), this->editing_status.get())),
+      range_selector(std::make_shared<ae::range_selector>(window_lifetime->player.get(), this->deselector.get())),
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get(),
                                             this->selected_marker_pool.get())),
       receiver(std::make_shared<project_receiver>(

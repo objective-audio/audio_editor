@@ -51,6 +51,7 @@ class project_action_sender;
 class pinch_gesture_controller;
 class scroll_gesture_controller;
 class waveform_mesh_importer;
+class range_selector;
 class escaper;
 class project_receiver;
 class window_lifetime;
@@ -102,6 +103,7 @@ struct project_lifetime final {
     std::shared_ptr<file_module_loader> const file_module_loader;
     std::shared_ptr<import_interactor> const import_interactor;
     std::shared_ptr<module_editor> const module_editor;
+    std::shared_ptr<range_selector> const range_selector;
     std::shared_ptr<escaper> const escaper;
     std::shared_ptr<project_receiver> const receiver;
 
