@@ -107,7 +107,7 @@ ui_marker_element::ui_marker_element(
                 if (context.phase == ui::touch_tracker_phase::ended) {
                     if (auto const marker_index = this->marker_index()) {
                         if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
-                            this->_controller->toggle_marker_selection_at(marker_index.value());
+                            this->_controller->toggle_selection(marker_index.value());
                         } else {
                             this->_controller->select_marker_at(marker_index.value());
                         }
@@ -122,7 +122,7 @@ ui_marker_element::ui_marker_element(
     this->_multiple_touch
         ->observe([this](std::uintptr_t const &) {
             if (auto const marker_index = this->marker_index()) {
-                this->_controller->begin_marker_renaming_at(marker_index.value());
+                this->_controller->begin_renaming(marker_index.value());
             }
         })
         .end()

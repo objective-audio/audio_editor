@@ -31,7 +31,7 @@ void marker_element_controller::select_marker_at(marker_index const &index) {
     action_sender->send(editing_action_name::select_marker, index);
 }
 
-void marker_element_controller::toggle_marker_selection_at(marker_index const &index) {
+void marker_element_controller::toggle_selection(marker_index const &index) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
@@ -41,7 +41,7 @@ void marker_element_controller::toggle_marker_selection_at(marker_index const &i
     action_sender->send(editing_action_name::toggle_marker_selection, index);
 }
 
-void marker_element_controller::begin_marker_renaming_at(marker_index const &index) {
+void marker_element_controller::begin_renaming(marker_index const &index) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
