@@ -429,6 +429,8 @@
 		B6DEAC7B2840E76D001D7D53 /* ae_app_modal_sub_lifetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6DEAC7A2840E76D001D7D53 /* ae_app_modal_sub_lifetime.cpp */; };
 		B6DEAC7F2841D99D001D7D53 /* ae_project_setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6DEAC7D2841D99D001D7D53 /* ae_project_setup.cpp */; };
 		B6DEAC802841D99D001D7D53 /* ae_project_setup.h in Headers */ = {isa = PBXBuildFile; fileRef = B6DEAC7E2841D99D001D7D53 /* ae_project_setup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6DEE38A2976D55300FA6172 /* ae_point_range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6DEE3882976D55200FA6172 /* ae_point_range.cpp */; };
+		B6DEE38B2976D55300FA6172 /* ae_point_range.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B6DEE3892976D55300FA6172 /* ae_point_range.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6DFB39728A736AB0023C8B7 /* ae_time_nudge_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6DFB39528A736AB0023C8B7 /* ae_time_nudge_presenter.cpp */; };
 		B6DFB39828A736AB0023C8B7 /* ae_time_nudge_presenter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B6DFB39628A736AB0023C8B7 /* ae_time_nudge_presenter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6E8995C2688806E00BBFA73 /* ae_ui_playing_line_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6E8995A2688806E00BBFA73 /* ae_ui_playing_line_utils.cpp */; };
@@ -889,6 +891,8 @@
 		B6DEAC7A2840E76D001D7D53 /* ae_app_modal_sub_lifetime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app_modal_sub_lifetime.cpp; sourceTree = "<group>"; };
 		B6DEAC7D2841D99D001D7D53 /* ae_project_setup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_setup.cpp; sourceTree = "<group>"; };
 		B6DEAC7E2841D99D001D7D53 /* ae_project_setup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_setup.h; sourceTree = "<group>"; };
+		B6DEE3882976D55200FA6172 /* ae_point_range.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_point_range.cpp; sourceTree = "<group>"; };
+		B6DEE3892976D55300FA6172 /* ae_point_range.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_point_range.hpp; sourceTree = "<group>"; };
 		B6DFB39528A736AB0023C8B7 /* ae_time_nudge_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_time_nudge_presenter.cpp; sourceTree = "<group>"; };
 		B6DFB39628A736AB0023C8B7 /* ae_time_nudge_presenter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_time_nudge_presenter.hpp; sourceTree = "<group>"; };
 		B6E8995A2688806E00BBFA73 /* ae_ui_playing_line_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_ui_playing_line_utils.cpp; sourceTree = "<group>"; };
@@ -1047,6 +1051,8 @@
 				B6F4D98327B6026F00AE7D5D /* ae_edge_holder_types.h */,
 				B6F4D97727B3DE2F00AE7D5D /* ae_edge.cpp */,
 				B6F4D97827B3DE2F00AE7D5D /* ae_edge.h */,
+				B6DEE3882976D55200FA6172 /* ae_point_range.cpp */,
+				B6DEE3892976D55300FA6172 /* ae_point_range.hpp */,
 				B6966F47272EDDBE00A90733 /* ae_db_constants.h */,
 				B6BBA30828C2F7E800A20EA2 /* ae_db_module_constants.h */,
 				B6BBA30A28C2F7F900A20EA2 /* ae_db_edge_constants.h */,
@@ -2336,6 +2342,7 @@
 				B6D7DFFD28AA7A6C007961AC /* ae_marker_renaming_opener.hpp in Headers */,
 				B61262FD2782FF030019B364 /* ae_nudge_settings.h in Headers */,
 				B6966F33272CEF9100A90733 /* ae_playing_line_state.h in Headers */,
+				B6DEE38B2976D55300FA6172 /* ae_point_range.hpp in Headers */,
 				B605EA712657E5530031B177 /* ae_ui_event_handling.h in Headers */,
 				B616984328673E7C00DD87AF /* ae_action_id.h in Headers */,
 				B69E476B2827E00F002F2AFF /* ae_reverter.h in Headers */,
@@ -2448,6 +2455,7 @@
 				B69DA66027B75FA400228CAB /* ae_edge_location.cpp in Sources */,
 				B6AAB8D0282D433F007A87B5 /* ae_file_module_loader.cpp in Sources */,
 				B645E05C2920C5DF00B6711C /* ae_pasting_marker_index.cpp in Sources */,
+				B6DEE38A2976D55300FA6172 /* ae_point_range.cpp in Sources */,
 				B69E475D2827557F002F2AFF /* ae_export_interactor.cpp in Sources */,
 				B66FAF7028E1577F005A3D47 /* ae_ui_pasting_modules.mm in Sources */,
 				B655310F277D5F62004C6AC8 /* ae_recycle_pool.cpp in Sources */,
