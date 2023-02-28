@@ -11,11 +11,12 @@
 
 namespace yas::ae {
 class project_action_sender;
+class range_selector;
 
 struct marker_element_controller final {
     [[nodiscard]] static std::shared_ptr<marker_element_controller> make_shared(window_lifetime_id const &);
 
-    marker_element_controller(std::shared_ptr<project_action_sender> const &action_sender);
+    marker_element_controller(std::shared_ptr<project_action_sender> const &, std::shared_ptr<range_selector> const &);
 
     void select_marker_at(marker_index const &);
     void toggle_selection(marker_index const &);
@@ -23,6 +24,7 @@ struct marker_element_controller final {
 
    private:
     std::weak_ptr<project_action_sender> const _action_sender;
+    std::weak_ptr<range_selector> const _range_selector;
 
     marker_element_controller(marker_element_controller const &) = delete;
     marker_element_controller(marker_element_controller &&) = delete;
