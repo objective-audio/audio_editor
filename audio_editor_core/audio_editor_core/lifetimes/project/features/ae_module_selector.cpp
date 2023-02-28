@@ -36,6 +36,16 @@ void module_selector::select_module_at(module_index const &index) {
     }
 }
 
+void module_selector::select(std::vector<module_index> const &indices) {
+    this->_selected_pool->clear();
+
+    auto const inserting = to_vector<selected_module_object>(indices, [](auto const &index) {
+        return selected_module_object{index.object_id, {index.range}};
+    });
+
+    this->_selected_pool->insert_modules(inserting);
+}
+
 bool module_selector::can_toggle() const {
     return this->_editing_status->can_editing();
 }
