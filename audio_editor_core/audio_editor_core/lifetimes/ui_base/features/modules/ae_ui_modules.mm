@@ -138,9 +138,9 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                     case ui::touch_tracker_phase::ended:
                         if (this->_began_collider_idx == context.collider_idx) {
                             if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
-                                this->_controller->toggle_module_selection_at(context.collider_idx);
+                                this->_controller->toggle_selection(context.collider_idx);
                             } else {
-                                this->_controller->select_module_at(context.collider_idx);
+                                this->_controller->select(context.collider_idx);
                             }
                         }
                         this->_began_collider_idx = std::nullopt;
@@ -161,8 +161,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->add_to(this->_pool);
 
     this->_multiple_touch
-        ->observe(
-            [this](std::uintptr_t const &collider_idx) { this->_controller->begin_module_renaming_at(collider_idx); })
+        ->observe([this](std::uintptr_t const &collider_idx) { this->_controller->begin_renaming(collider_idx); })
         .end()
         ->add_to(this->_pool);
 }

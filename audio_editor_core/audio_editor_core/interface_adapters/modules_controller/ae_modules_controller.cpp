@@ -22,7 +22,7 @@ modules_controller::modules_controller(std::shared_ptr<project_action_sender> co
     : _action_sender(action_sender), _content_pool(content_pool) {
 }
 
-void modules_controller::select_module_at(std::size_t const idx) {
+void modules_controller::select(std::size_t const index) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
@@ -34,7 +34,7 @@ void modules_controller::select_module_at(std::size_t const idx) {
     }
 }
 
-void modules_controller::toggle_module_selection_at(std::size_t const idx) {
+void modules_controller::toggle_selection(std::size_t const idx) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
@@ -46,7 +46,7 @@ void modules_controller::toggle_module_selection_at(std::size_t const idx) {
     }
 }
 
-void modules_controller::begin_module_renaming_at(std::size_t const idx) {
+void modules_controller::begin_renaming(std::size_t const idx) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
