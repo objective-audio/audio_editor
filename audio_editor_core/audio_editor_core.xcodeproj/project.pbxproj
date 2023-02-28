@@ -126,6 +126,8 @@
 		B65ABF5F2834A5050096B6C7 /* ae_project_modal_lifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = B65ABF5D2834A5050096B6C7 /* ae_project_modal_lifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B65DA2EA2967061E0065B392 /* ae_ui_square_mesh_data.mm in Sources */ = {isa = PBXBuildFile; fileRef = B65DA2E82967061E0065B392 /* ae_ui_square_mesh_data.mm */; };
 		B65DA2EB2967061E0065B392 /* ae_ui_square_mesh_data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B65DA2E92967061E0065B392 /* ae_ui_square_mesh_data.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		B65DB41629AA51EB00423A80 /* ae_markers_controller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B65DB41429AA51EB00423A80 /* ae_markers_controller.cpp */; };
+		B65DB41729AA51EB00423A80 /* ae_markers_controller.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B65DB41529AA51EB00423A80 /* ae_markers_controller.hpp */; };
 		B65E31DB28E71CD50077D84B /* ae_module_index.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B65E31D928E71CD50077D84B /* ae_module_index.cpp */; };
 		B65E31DC28E71CD50077D84B /* ae_module_index.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B65E31DA28E71CD50077D84B /* ae_module_index.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6604F802646D7DF003439F1 /* ae_module_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6604F7E2646D7DF003439F1 /* ae_module_pool.cpp */; };
@@ -589,6 +591,8 @@
 		B65ABF5D2834A5050096B6C7 /* ae_project_modal_lifecycle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_modal_lifecycle.h; sourceTree = "<group>"; };
 		B65DA2E82967061E0065B392 /* ae_ui_square_mesh_data.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_square_mesh_data.mm; sourceTree = "<group>"; };
 		B65DA2E92967061E0065B392 /* ae_ui_square_mesh_data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_ui_square_mesh_data.hpp; sourceTree = "<group>"; };
+		B65DB41429AA51EB00423A80 /* ae_markers_controller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_markers_controller.cpp; sourceTree = "<group>"; };
+		B65DB41529AA51EB00423A80 /* ae_markers_controller.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_markers_controller.hpp; sourceTree = "<group>"; };
 		B65E31D928E71CD50077D84B /* ae_module_index.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_module_index.cpp; sourceTree = "<group>"; };
 		B65E31DA28E71CD50077D84B /* ae_module_index.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_module_index.hpp; sourceTree = "<group>"; };
 		B6604F7E2646D7DF003439F1 /* ae_module_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_module_pool.cpp; sourceTree = "<group>"; };
@@ -1101,6 +1105,7 @@
 				B60204D2263AAEA000CFC752 /* event_handling_presenter */,
 				B63561CE28A6496A00A7AD28 /* playing_line_presenter */,
 				B64504B5271A7322009E05D6 /* markers_presenter */,
+				B65DB41329AA51D800423A80 /* markers_controller */,
 				B6A054022923CF410087ABB5 /* marker_element_controller */,
 				B6668DCD294ED73D00CB294E /* pasting_markers_presenter */,
 				B69607A0276C9F91002B2BE0 /* module_waveforms_presenter */,
@@ -1268,6 +1273,15 @@
 				B66FBAA7286B44B200E49B7E /* ae_action_receiver_providable.cpp */,
 			);
 			path = interfaces;
+			sourceTree = "<group>";
+		};
+		B65DB41329AA51D800423A80 /* markers_controller */ = {
+			isa = PBXGroup;
+			children = (
+				B65DB41429AA51EB00423A80 /* ae_markers_controller.cpp */,
+				B65DB41529AA51EB00423A80 /* ae_markers_controller.hpp */,
+			);
+			path = markers_controller;
 			sourceTree = "<group>";
 		};
 		B6650B9A2854BDF5004BB7C9 /* window */ = {
@@ -2193,6 +2207,7 @@
 				B63D7163282244D3004235BD /* ae_time_editor_closer.h in Headers */,
 				B6604F882646DE4F003439F1 /* ae_module.h in Headers */,
 				B6693E59268814D2004C8F50 /* ae_action.h in Headers */,
+				B65DB41729AA51EB00423A80 /* ae_markers_controller.hpp in Headers */,
 				B68D822128389B4A00C2FC23 /* ae_dialog_lifetime.h in Headers */,
 				B6BBA30E28C2F84600A20EA2 /* ae_db_edge_constants.h in Headers */,
 				B68483F127C50B9400792D17 /* ae_context_menu.h in Headers */,
@@ -2552,6 +2567,7 @@
 				B6650BA52854C67A004BB7C9 /* ae_project_lifecycle.cpp in Sources */,
 				B69D8C5327CB6AD800CA30DE /* ae_time_editor_lifetime.cpp in Sources */,
 				B62D8F9B2723AEAE00779D42 /* ae_scroll_gesture_controller.cpp in Sources */,
+				B65DB41629AA51EB00423A80 /* ae_markers_controller.cpp in Sources */,
 				B6813581271F0745009CC0FC /* ae_zooming.cpp in Sources */,
 				B69E4EE0286BFF2400911280 /* ae_time_editor_receiver.cpp in Sources */,
 				B6F4D97927B3DE2F00AE7D5D /* ae_edge.cpp in Sources */,
