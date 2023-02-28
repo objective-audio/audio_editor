@@ -12,6 +12,7 @@
 #include <audio_editor_core/ae_player.h>
 #include <cpp_utils/yas_stl_utils.h>
 
+#include <audio_editor_core/ae_range_selector.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
 
 using namespace yas;
@@ -26,20 +27,23 @@ std::shared_ptr<modules_presenter> modules_presenter::make_shared(window_lifetim
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<modules_presenter>(project_lifetime->project_format, window_lifetime->player,
                                                project_lifetime->module_pool, project_lifetime->selected_module_pool,
-                                               display_space, project_lifetime->module_content_pool);
+                                               display_space, project_lifetime->module_content_pool,
+                                               project_lifetime->range_selector);
 }
 
 modules_presenter::modules_presenter(project_format const &project_format, std::shared_ptr<player> const &player,
                                      std::shared_ptr<module_pool> const &module_pool,
                                      std::shared_ptr<selected_module_pool> const &selected_pool,
                                      std::shared_ptr<display_space> const &display_space,
-                                     std::shared_ptr<module_content_pool> const &content_pool)
+                                     std::shared_ptr<module_content_pool> const &content_pool,
+                                     std::shared_ptr<range_selector> const &range_selector)
     : _project_format(project_format),
       _player(player),
       _module_pool(module_pool),
       _selected_pool(selected_pool),
       _display_space(display_space),
-      _content_pool(content_pool) {
+      _content_pool(content_pool),
+      _range_selector(range_selector) {
     auto const sample_rate = this->_project_format.sample_rate;
 
     module_pool
@@ -106,6 +110,15 @@ observing::syncable modules_presenter::observe_contents(
     std::function<void(module_content_pool_event const &)> &&handler) {
     if (auto const content_pool = this->_content_pool.lock()) {
         return content_pool->observe_event(std::move(handler));
+    } else {
+        return observing::syncable{};
+    }
+}
+
+observing::syncable modules_presenter::observe_range_selection_region(
+    std::function<void(std::optional<ui::region> const &)> &&handler) {
+    if (auto const range_selector = this->_range_selector.lock()) {
+        return range_selector->observe_region(std::move(handler));
     } else {
         return observing::syncable{};
     }
