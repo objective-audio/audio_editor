@@ -242,6 +242,9 @@ void project_receiver::receive(ae::action const &action) const {
                             case editing_action_name::select_module:
                                 this->_module_selector->select_module_at(action.module_index_value());
                                 break;
+                            case editing_action_name::select_modules:
+                                this->_module_selector->select(action.module_indices_value());
+                                break;
                             case editing_action_name::toggle_module_selection:
                                 this->_module_selector->toggle(action.module_index_value());
                                 break;
@@ -250,6 +253,9 @@ void project_receiver::receive(ae::action const &action) const {
                                 break;
                             case editing_action_name::select_marker:
                                 this->_marker_selector->select_marker_at(action.marker_index_value());
+                                break;
+                            case editing_action_name::select_markers:
+                                this->_marker_selector->select(action.marker_indices_value());
                                 break;
                             case editing_action_name::toggle_marker_selection:
                                 this->_marker_selector->toggle(action.marker_index_value());
@@ -350,6 +356,7 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_escaper->can_escape());
 
                 case editing_action_name::select_module:
+                case editing_action_name::select_modules:
                     return to_state(this->_module_selector->can_select());
                 case editing_action_name::toggle_module_selection:
                     return to_state(this->_module_selector->can_toggle());
@@ -358,6 +365,7 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                 case editing_action_name::begin_marker_renaming:
                     return to_state(this->_marker_renaming_opener->can_begin_renaming());
                 case editing_action_name::select_marker:
+                case editing_action_name::select_markers:
                     return to_state(this->_marker_selector->can_select());
                 case editing_action_name::toggle_marker_selection:
                     return to_state(this->_marker_selector->can_toggle());
