@@ -18,6 +18,8 @@ struct marker_element_controller final {
 
     marker_element_controller(std::shared_ptr<project_action_sender> const &, std::shared_ptr<range_selector> const &);
 
+    void begin_touch(ui::point const &);
+
     void select_marker_at(marker_index const &);
     void toggle_selection(marker_index const &);
     void begin_renaming(marker_index const &);
