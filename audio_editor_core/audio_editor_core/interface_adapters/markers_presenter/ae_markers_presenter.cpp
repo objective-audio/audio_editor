@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_player.h>
 
+#include <audio_editor_core/ae_range_selector.hpp>
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 
 using namespace yas;
@@ -22,20 +23,22 @@ std::shared_ptr<markers_presenter> markers_presenter::make_shared(
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<markers_presenter>(project_lifetime->project_format, window_lifetime->player,
                                                project_lifetime->marker_pool, project_lifetime->selected_marker_pool,
-                                               display_space, content_pool);
+                                               display_space, content_pool, project_lifetime->range_selector);
 }
 
 markers_presenter::markers_presenter(project_format const &project_format, std::shared_ptr<player> const &player,
                                      std::shared_ptr<marker_pool> const &marker_pool,
                                      std::shared_ptr<selected_marker_pool> const &selected_marker_pool,
                                      std::shared_ptr<display_space> const &display_space,
-                                     std::shared_ptr<marker_content_pool> const &content_pool)
+                                     std::shared_ptr<marker_content_pool> const &content_pool,
+                                     std::shared_ptr<range_selector> const &range_selector)
     : _project_format(project_format),
       _player(player),
       _marker_pool(marker_pool),
       _selected_marker_pool(selected_marker_pool),
       _display_space(display_space),
-      _content_pool(content_pool) {
+      _content_pool(content_pool),
+      _range_selector(range_selector) {
     auto const sample_rate = this->_project_format.sample_rate;
 
     marker_pool
@@ -109,6 +112,15 @@ std::vector<std::optional<marker_content>> markers_presenter::contents() const {
 observing::syncable markers_presenter::observe_contents(
     std::function<void(marker_content_pool_event const &)> &&handler) {
     return this->_content_pool->observe_event(std::move(handler));
+}
+
+observing::syncable markers_presenter::observe_range_selection_region(
+    std::function<void(std::optional<ui::region> const &)> &&handler) {
+    if (auto const range_selector = this->_range_selector.lock()) {
+        return range_selector->observe_region(std::move(handler));
+    } else {
+        return observing::syncable{};
+    }
 }
 
 void markers_presenter::update_if_needed() {
