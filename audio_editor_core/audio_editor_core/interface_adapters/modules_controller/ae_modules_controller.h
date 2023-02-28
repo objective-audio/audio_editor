@@ -9,10 +9,12 @@
 
 namespace yas::ae {
 class project_action_sender;
+class range_selector;
 
 struct modules_controller final {
     [[nodiscard]] static std::shared_ptr<modules_controller> make_shared(window_lifetime_id const &);
-    modules_controller(std::shared_ptr<project_action_sender> const &, std::shared_ptr<module_content_pool> const &);
+    modules_controller(std::shared_ptr<project_action_sender> const &, std::shared_ptr<module_content_pool> const &,
+                       std::shared_ptr<range_selector> const &);
 
     void select(std::size_t const);
     void toggle_selection(std::size_t const);
@@ -21,6 +23,7 @@ struct modules_controller final {
    private:
     std::weak_ptr<project_action_sender> const _action_sender;
     std::weak_ptr<module_content_pool> const _content_pool;
+    std::weak_ptr<range_selector> const _range_selector;
 
     modules_controller(modules_controller const &) = delete;
     modules_controller(modules_controller &&) = delete;

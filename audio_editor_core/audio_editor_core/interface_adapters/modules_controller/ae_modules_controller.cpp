@@ -9,17 +9,21 @@
 #include <audio_editor_core/ae_project_action_sender.h>
 #include <cpp_utils/yas_assertion.h>
 
+#include <audio_editor_core/ae_range_selector.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<modules_controller> modules_controller::make_shared(window_lifetime_id const &window_lifetime_id) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<modules_controller>(project_lifetime->action_sender, project_lifetime->module_content_pool);
+    return std::make_shared<modules_controller>(project_lifetime->action_sender, project_lifetime->module_content_pool,
+                                                project_lifetime->range_selector);
 }
 
 modules_controller::modules_controller(std::shared_ptr<project_action_sender> const &action_sender,
-                                       std::shared_ptr<module_content_pool> const &content_pool)
-    : _action_sender(action_sender), _content_pool(content_pool) {
+                                       std::shared_ptr<module_content_pool> const &content_pool,
+                                       std::shared_ptr<range_selector> const &range_selector)
+    : _action_sender(action_sender), _content_pool(content_pool), _range_selector(range_selector) {
 }
 
 void modules_controller::select(std::size_t const index) {
