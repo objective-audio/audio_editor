@@ -26,6 +26,15 @@ modules_controller::modules_controller(std::shared_ptr<project_action_sender> co
     : _action_sender(action_sender), _content_pool(content_pool), _range_selector(range_selector) {
 }
 
+void modules_controller::begin_touch(ui::point const &position) {
+    auto const range_selector = this->_range_selector.lock();
+    if (!range_selector) {
+        return;
+    }
+
+    range_selector->begin(position);
+}
+
 void modules_controller::select(std::size_t const index) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
