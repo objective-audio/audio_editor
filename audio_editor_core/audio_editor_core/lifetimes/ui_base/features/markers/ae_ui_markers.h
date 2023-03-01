@@ -10,6 +10,7 @@
 
 namespace yas::ae {
 class markers_presenter;
+class markers_controller;
 class ui_marker_element;
 
 struct ui_markers final {
@@ -17,12 +18,13 @@ struct ui_markers final {
                                                                  std::shared_ptr<ui::node> const &);
 
     ui_markers(window_lifetime_id const &, std::shared_ptr<markers_presenter> const &,
-               std::shared_ptr<ui::standard> const &, ui::node *);
+               std::shared_ptr<markers_controller> const &, std::shared_ptr<ui::standard> const &, ui::node *);
 
    private:
     window_lifetime_id const _window_lifetime_id;
     ui::node *const _node;
     std::shared_ptr<markers_presenter> const _presenter;
+    std::shared_ptr<markers_controller> const _controller;
 
     std::shared_ptr<ui::layout_value_guide> const _top_guide;
     std::vector<std::shared_ptr<ui_marker_element>> _elements;
