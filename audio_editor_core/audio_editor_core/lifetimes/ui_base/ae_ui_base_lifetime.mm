@@ -20,6 +20,7 @@
 #include <audio_editor_core/ae_ui_pasting_markers.hpp>
 #include <audio_editor_core/ae_ui_pasting_modules.hpp>
 #include <audio_editor_core/ae_ui_playing_line.hpp>
+#include <audio_editor_core/ae_ui_range_selection.hpp>
 #include <audio_editor_core/ae_ui_resource_lifetime.hpp>
 #include <audio_editor_core/ae_ui_time_base.hpp>
 #include <audio_editor_core/ae_ui_time_bg.hpp>
@@ -35,6 +36,7 @@ ui_base_lifetime::ui_base_lifetime(ae::window_lifetime_id const &lifetime_id)
       background(ui_background::make_shared(lifetime_id)),
       waveforms(ui_module_waveforms::make_shared(lifetime_id)),
       modules(ui_modules::make_shared(lifetime_id, this->node_hierarchy->modules_node, this->waveforms.get())),
+      range_selection(ui_range_selection::make_shared(lifetime_id, this->node_hierarchy->range_selection_node.get())),
       pasting_modules(ui_pasting_modules::make_shared(lifetime_id, this->node_hierarchy->pasting_modules_node)),
       edge(ui_edge::make_shared(lifetime_id, this->node_hierarchy->edge_node)),
       markers(ui_markers::make_shared(lifetime_id, this->node_hierarchy->markers_node)),
