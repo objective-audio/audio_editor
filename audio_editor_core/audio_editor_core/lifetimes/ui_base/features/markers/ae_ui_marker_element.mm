@@ -164,6 +164,14 @@ std::optional<marker_index> ui_marker_element::marker_index() const {
     return std::nullopt;
 }
 
+bool ui_marker_element::hit_test(ui::region const &rect) {
+    if (this->_content.has_value()) {
+        return this->_collider->hit_test(rect);
+    } else {
+        return false;
+    }
+}
+
 void ui_marker_element::finalize() {
     this->_node->remove_from_super_node();
 }

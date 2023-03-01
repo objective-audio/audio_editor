@@ -30,6 +30,7 @@ struct ui_marker_element final {
     void reset_content();
 
     [[nodiscard]] std::optional<marker_index> marker_index() const;
+    [[nodiscard]] bool hit_test(ui::region const &);
 
     void finalize();
 
