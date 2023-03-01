@@ -165,6 +165,28 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->observe([this](std::uintptr_t const &collider_idx) { this->_controller->begin_renaming(collider_idx); })
         .end()
         ->add_to(this->_pool);
+
+    this->_presenter
+        ->observe_range_selection_region([this](std::optional<ui::region> const &region) {
+            if (region.has_value()) {
+                auto const &region_value = region.value();
+                std::vector<std::size_t> hit_indices;
+
+                auto const &colliders = this->_fill_node->colliders();
+                auto each = make_fast_each(colliders.size());
+                while (yas_each_next(each)) {
+                    auto const &idx = yas_each_index(each);
+                    auto const &collider = colliders.at(idx);
+                    if (collider->hit_test(region_value)) {
+                        hit_indices.emplace_back(idx);
+                    }
+                }
+
+                this->_controller->select(hit_indices);
+            }
+        })
+        .sync()
+        ->add_to(this->_pool);
 }
 
 void ui_modules::set_scale(ui::size const &scale) {
