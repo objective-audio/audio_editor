@@ -135,7 +135,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                     case ui::touch_tracker_phase::began:
                         this->_began_collider_idx = context.collider_idx;
                         if (this->_modifiers_holder->modifiers().empty()) {
-                            this->_controller->begin_touch(context.touch_event.position);
+                            this->_controller->begin_range_selection(context.touch_event.position);
                         }
                         break;
                     case ui::touch_tracker_phase::ended:

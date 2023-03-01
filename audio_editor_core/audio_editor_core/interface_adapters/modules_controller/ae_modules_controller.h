@@ -17,7 +17,7 @@ struct modules_controller final {
     modules_controller(std::shared_ptr<project_action_sender> const &, std::shared_ptr<module_content_pool> const &,
                        std::shared_ptr<range_selector> const &);
 
-    void begin_touch(ui::point const &);
+    void begin_range_selection(ui::point const &);
 
     void select(std::vector<std::size_t> const &);
     void toggle_selection(std::size_t const);

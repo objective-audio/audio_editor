@@ -107,7 +107,7 @@ ui_marker_element::ui_marker_element(
                 if (context.phase == ui::touch_tracker_phase::began) {
                     if (auto const marker_index = this->marker_index()) {
                         if (this->_modifiers_holder->modifiers().empty()) {
-                            this->_controller->begin_touch(context.touch_event.position);
+                            this->_controller->begin_range_selection(context.touch_event.position);
                         }
                     }
                 } else if (context.phase == ui::touch_tracker_phase::ended) {

@@ -25,7 +25,7 @@ marker_element_controller::marker_element_controller(std::shared_ptr<project_act
     : _action_sender(action_sender), _range_selector(range_selector) {
 }
 
-void marker_element_controller::begin_touch(ui::point const &position) {
+void marker_element_controller::begin_range_selection(ui::point const &position) {
     auto const range_selector = this->_range_selector.lock();
     if (!range_selector) {
         return;
