@@ -18,6 +18,8 @@
 		B6097BC1272535FE008A6D57 /* ae_gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6097BC0272535FE008A6D57 /* ae_gesture.cpp */; };
 		B60AEF0C27EACE3A000D2019 /* ae_ui_modal_bg.mm in Sources */ = {isa = PBXBuildFile; fileRef = B60AEF0A27EACE3A000D2019 /* ae_ui_modal_bg.mm */; };
 		B60AEF0D27EACE3A000D2019 /* ae_ui_modal_bg.h in Headers */ = {isa = PBXBuildFile; fileRef = B60AEF0B27EACE3A000D2019 /* ae_ui_modal_bg.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B60D070929782FBB000AE05F /* ae_ui_range_selection_input.mm in Sources */ = {isa = PBXBuildFile; fileRef = B60D070729782FBB000AE05F /* ae_ui_range_selection_input.mm */; };
+		B60D070A29782FBB000AE05F /* ae_ui_range_selection_input.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B60D070829782FBB000AE05F /* ae_ui_range_selection_input.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B61262FC2782FF030019B364 /* ae_nudge_settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61262FA2782FF030019B364 /* ae_nudge_settings.cpp */; };
 		B61262FD2782FF030019B364 /* ae_nudge_settings.h in Headers */ = {isa = PBXBuildFile; fileRef = B61262FB2782FF030019B364 /* ae_nudge_settings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6137F6C27C7B23C0097A3C6 /* ae_project_lifetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6137F6A27C7B23C0097A3C6 /* ae_project_lifetime.cpp */; };
@@ -487,6 +489,8 @@
 		B6097BC0272535FE008A6D57 /* ae_gesture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_gesture.cpp; sourceTree = "<group>"; };
 		B60AEF0A27EACE3A000D2019 /* ae_ui_modal_bg.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_modal_bg.mm; sourceTree = "<group>"; };
 		B60AEF0B27EACE3A000D2019 /* ae_ui_modal_bg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_modal_bg.h; sourceTree = "<group>"; };
+		B60D070729782FBB000AE05F /* ae_ui_range_selection_input.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_range_selection_input.mm; sourceTree = "<group>"; };
+		B60D070829782FBB000AE05F /* ae_ui_range_selection_input.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_ui_range_selection_input.hpp; sourceTree = "<group>"; };
 		B61262FA2782FF030019B364 /* ae_nudge_settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_nudge_settings.cpp; sourceTree = "<group>"; };
 		B61262FB2782FF030019B364 /* ae_nudge_settings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_nudge_settings.h; sourceTree = "<group>"; };
 		B6137F6A27C7B23C0097A3C6 /* ae_project_lifetime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_lifetime.cpp; sourceTree = "<group>"; };
@@ -998,6 +1002,15 @@
 				B60AEF0B27EACE3A000D2019 /* ae_ui_modal_bg.h */,
 			);
 			path = modal_bg;
+			sourceTree = "<group>";
+		};
+		B60D070629782F9B000AE05F /* range_selection_input */ = {
+			isa = PBXGroup;
+			children = (
+				B60D070729782FBB000AE05F /* ae_ui_range_selection_input.mm */,
+				B60D070829782FBB000AE05F /* ae_ui_range_selection_input.hpp */,
+			);
+			path = range_selection_input;
 			sourceTree = "<group>";
 		};
 		B6137F6927C7B22C0097A3C6 /* project */ = {
@@ -1640,6 +1653,7 @@
 				B6668DC8294ED6DF00CB294E /* pasting_markers */,
 				B6C3A58827102CA700514B94 /* zooming */,
 				B6E1349A28A696A6009C1C4A /* modules */,
+				B60D070629782F9B000AE05F /* range_selection_input */,
 				B68D46DE2973F92300511AF9 /* range_selection */,
 				B66FAF6D28E1576B005A3D47 /* pasting_modules */,
 			);
@@ -2395,6 +2409,7 @@
 				B60AEF0D27EACE3A000D2019 /* ae_ui_modal_bg.h in Headers */,
 				B637D584289EB0B1007E30A1 /* ae_ui_resource_lifecycle.hpp in Headers */,
 				B6B563C6271BD3FD0003ED60 /* ae_common_utils.h in Headers */,
+				B60D070A29782FBB000AE05F /* ae_ui_range_selection_input.hpp in Headers */,
 				B6D7DFFD28AA7A6C007961AC /* ae_marker_renaming_opener.hpp in Headers */,
 				B61262FD2782FF030019B364 /* ae_nudge_settings.h in Headers */,
 				B6966F33272CEF9100A90733 /* ae_playing_line_state.h in Headers */,
@@ -2509,6 +2524,7 @@
 				B6F8C64A28A4F9B10020635B /* ae_ui_time_numbers.mm in Sources */,
 				B68A2CFF278BD20900071E9D /* ae_math.cpp in Sources */,
 				B69DA66027B75FA400228CAB /* ae_edge_location.cpp in Sources */,
+				B60D070929782FBB000AE05F /* ae_ui_range_selection_input.mm in Sources */,
 				B6AAB8D0282D433F007A87B5 /* ae_file_module_loader.cpp in Sources */,
 				B645E05C2920C5DF00B6711C /* ae_pasting_marker_index.cpp in Sources */,
 				B6DEE38A2976D55300FA6172 /* ae_point_range.cpp in Sources */,
