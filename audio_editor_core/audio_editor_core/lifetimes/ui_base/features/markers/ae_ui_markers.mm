@@ -58,6 +58,29 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
         ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
         .end()
         ->add_to(this->_pool);
+
+    presenter
+        ->observe_range_selection_region([this](std::optional<ui::region> const &rect) {
+            if (rect.has_value()) {
+                auto const &rect_value = rect.value();
+                std::vector<marker_index> hit_indices;
+
+                auto each = make_fast_each(this->_elements.size());
+                while (yas_each_next(each)) {
+                    auto const &idx = yas_each_index(each);
+                    auto const &element = this->_elements.at(idx);
+                    if (element->hit_test(rect_value)) {
+                        if (auto const marker_index = element->marker_index(); marker_index.has_value()) {
+                            hit_indices.emplace_back(marker_index.value());
+                        }
+                    }
+                }
+
+                this->_controller->select(hit_indices);
+            }
+        })
+        .sync()
+        ->add_to(this->_pool);
 }
 
 void ui_markers::_replace_contents(std::vector<std::optional<marker_content>> const &contents) {
