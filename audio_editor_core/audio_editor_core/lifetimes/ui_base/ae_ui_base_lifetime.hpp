@@ -34,6 +34,7 @@ class ui_time_base;
 class ui_playing_line;
 class ui_event_handling;
 class ui_range_selection;
+class ui_range_selection_input;
 
 struct ui_base_lifetime final {
     ui_base_lifetime(window_lifetime_id const &);
@@ -43,6 +44,7 @@ struct ui_base_lifetime final {
     std::shared_ptr<ui_node_hierarchy> const node_hierarchy;
 
     std::shared_ptr<ui_background> const background;
+    std::shared_ptr<ui_range_selection_input> const range_selection_input;
     std::shared_ptr<ui_module_waveforms> const waveforms;
     std::shared_ptr<ui_modules> const modules;
     std::shared_ptr<ui_range_selection> const range_selection;
