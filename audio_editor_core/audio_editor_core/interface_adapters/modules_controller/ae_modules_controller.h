@@ -19,7 +19,6 @@ struct modules_controller final {
 
     void begin_touch(ui::point const &);
 
-    void select(std::size_t const);
     void select(std::vector<std::size_t> const &);
     void toggle_selection(std::size_t const);
     void begin_renaming(std::size_t const);

@@ -16,7 +16,6 @@ struct module_selector final {
     module_selector(module_pool const *, selected_module_pool *, editing_status const *, deselector *);
 
     [[nodiscard]] bool can_select() const;
-    void select_module_at(module_index const &);
     void select(std::vector<module_index> const &);
 
     [[nodiscard]] bool can_toggle() const;

@@ -27,15 +27,6 @@ bool module_selector::can_select() const {
     return this->_editing_status->can_editing();
 }
 
-void module_selector::select_module_at(module_index const &index) {
-    if (this->_module_pool->modules().contains(index)) {
-        this->_deselector->deselect_all();
-        this->_selected_pool->insert_module(selected_module_object{index.object_id, {index.range}});
-    } else {
-        assertion_failure_if_not_test();
-    }
-}
-
 void module_selector::select(std::vector<module_index> const &indices) {
     this->_selected_pool->clear();
 

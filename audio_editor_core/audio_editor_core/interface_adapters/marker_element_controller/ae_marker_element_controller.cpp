@@ -34,16 +34,6 @@ void marker_element_controller::begin_touch(ui::point const &position) {
     range_selector->begin(position);
 }
 
-void marker_element_controller::select_marker_at(marker_index const &index) {
-    auto const action_sender = this->_action_sender.lock();
-    if (!action_sender) {
-        assertion_failure_if_not_test();
-        return;
-    }
-
-    action_sender->send(editing_action_name::select_marker, index);
-}
-
 void marker_element_controller::toggle_selection(marker_index const &index) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {

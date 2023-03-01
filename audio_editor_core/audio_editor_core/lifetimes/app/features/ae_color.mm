@@ -75,10 +75,6 @@ ui::color color::waveform() const {
     return to_color(@"waveform");
 }
 
-ui::color color::selected_module_frame() const {
-    return to_color(@"selected_module_frame");
-}
-
 ui::color color::range_selection_fill() const {
     return to_color(@"range_selection_fill");
 }
@@ -109,10 +105,6 @@ ui::color color::selected_marker_square() const {
 
 ui::color color::marker_line() const {
     return to_color(@"marker_line");
-}
-
-ui::color color::marker_selected_line() const {
-    return to_color(@"marker_selected_line");
 }
 
 ui::color color::marker_text() const {

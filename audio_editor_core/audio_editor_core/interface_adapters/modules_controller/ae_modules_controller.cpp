@@ -35,20 +35,6 @@ void modules_controller::begin_touch(ui::point const &position) {
     range_selector->begin(position);
 }
 
-void modules_controller::select(std::size_t const index) {
-    auto const action_sender = this->_action_sender.lock();
-    if (!action_sender) {
-        assertion_failure_if_not_test();
-        return;
-    }
-
-    auto module_indices = this->_module_indices({index});
-
-    if (!module_indices.empty()) {
-        action_sender->send(editing_action_name::select_module, std::move(module_indices.at(0)));
-    }
-}
-
 void modules_controller::select(std::vector<std::size_t> const &indices) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {

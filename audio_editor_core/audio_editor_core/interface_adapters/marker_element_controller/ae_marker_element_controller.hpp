@@ -20,7 +20,6 @@ struct marker_element_controller final {
 
     void begin_touch(ui::point const &);
 
-    void select_marker_at(marker_index const &);
     void toggle_selection(marker_index const &);
     void begin_renaming(marker_index const &);
 
