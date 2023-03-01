@@ -13,7 +13,7 @@ class editing_status;
 class deselector;
 
 struct module_selector final {
-    module_selector(module_pool const *, selected_module_pool *, editing_status const *, deselector *);
+    module_selector(module_pool const *, selected_module_pool *, editing_status const *);
 
     [[nodiscard]] bool can_select() const;
     void select(std::vector<module_index> const &);
@@ -25,7 +25,6 @@ struct module_selector final {
     module_pool const *const _module_pool;
     selected_module_pool *const _selected_pool;
     editing_status const *const _editing_status;
-    deselector *const _deselector;
 
     module_selector(module_selector const &) = delete;
     module_selector(module_selector &&) = delete;

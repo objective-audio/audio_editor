@@ -16,11 +16,8 @@ using namespace yas;
 using namespace yas::ae;
 
 module_selector::module_selector(module_pool const *module_pool, selected_module_pool *selected_pool,
-                                 editing_status const *editing_status, deselector *deselector)
-    : _module_pool(module_pool),
-      _selected_pool(selected_pool),
-      _editing_status(editing_status),
-      _deselector(deselector) {
+                                 editing_status const *editing_status)
+    : _module_pool(module_pool), _selected_pool(selected_pool), _editing_status(editing_status) {
 }
 
 bool module_selector::can_select() const {
