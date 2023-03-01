@@ -15,6 +15,7 @@ std::shared_ptr<ui_node_hierarchy> ui_node_hierarchy::make_shared(window_lifetim
 
 ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     : base_node(ui::node::make_shared()),
+      range_selection_input_node(ui::node::make_shared()),
       scroller_node(ui::node::make_shared()),
       pasting_modules_node(ui::node::make_shared()),
       pasting_markers_node(ui::node::make_shared()),
@@ -23,6 +24,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
       time_base_node(ui::node::make_shared()),
       zooming_node(ui::node::make_shared()),
       modules_node(ui::node::make_shared()),
+      range_selection_node(ui::node::make_shared()),
       edge_node(ui::node::make_shared()),
       markers_node(ui::node::make_shared()),
       time_bg_node(ui::node::make_shared()),
@@ -31,6 +33,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
       time_strings_node(ui::node::make_shared()) {
     root_node->add_sub_node(this->base_node);
 
+    this->base_node->add_sub_node(this->range_selection_input_node);
     this->base_node->add_sub_node(this->scroller_node);
     this->base_node->add_sub_node(this->pasting_modules_node);
     this->base_node->add_sub_node(this->pasting_markers_node);
@@ -40,6 +43,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
 
     this->scroller_node->add_sub_node(this->zooming_node);
     this->zooming_node->add_sub_node(this->modules_node);
+    this->zooming_node->add_sub_node(this->range_selection_node);
     this->scroller_node->add_sub_node(this->edge_node);
     this->scroller_node->add_sub_node(this->markers_node);
 
