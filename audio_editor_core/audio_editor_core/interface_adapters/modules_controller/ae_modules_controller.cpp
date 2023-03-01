@@ -49,6 +49,18 @@ void modules_controller::select(std::size_t const index) {
     }
 }
 
+void modules_controller::select(std::vector<std::size_t> const &indices) {
+    auto const action_sender = this->_action_sender.lock();
+    if (!action_sender) {
+        assertion_failure_if_not_test();
+        return;
+    }
+
+    auto module_indices = this->_module_indices(indices);
+
+    action_sender->send(editing_action_name::select_modules, std::move(module_indices));
+}
+
 void modules_controller::toggle_selection(std::size_t const idx) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
