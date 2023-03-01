@@ -104,12 +104,16 @@ ui_marker_element::ui_marker_element(
     this->_touch_tracker
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
-                if (context.phase == ui::touch_tracker_phase::ended) {
+                if (context.phase == ui::touch_tracker_phase::began) {
+                    if (auto const marker_index = this->marker_index()) {
+                        if (this->_modifiers_holder->modifiers().empty()) {
+                            this->_controller->begin_touch(context.touch_event.position);
+                        }
+                    }
+                } else if (context.phase == ui::touch_tracker_phase::ended) {
                     if (auto const marker_index = this->marker_index()) {
                         if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
                             this->_controller->toggle_selection(marker_index.value());
-                        } else {
-                            this->_controller->select_marker_at(marker_index.value());
                         }
                     }
                 }
