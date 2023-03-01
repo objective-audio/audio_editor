@@ -20,32 +20,12 @@ markers_controller::markers_controller(std::shared_ptr<project_action_sender> co
     : _action_sender(action_sender) {
 }
 
-void markers_controller::select_marker_at(marker_index const &index) {
+void markers_controller::select(std::vector<marker_index> const &marker_indices) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
         return;
     }
 
-    action_sender->send(editing_action_name::select_marker, index);
-}
-
-void markers_controller::toggle_marker_selection_at(marker_index const &index) {
-    auto const action_sender = this->_action_sender.lock();
-    if (!action_sender) {
-        assertion_failure_if_not_test();
-        return;
-    }
-
-    action_sender->send(editing_action_name::toggle_marker_selection, index);
-}
-
-void markers_controller::begin_marker_renaming_at(marker_index const &index) {
-    auto const action_sender = this->_action_sender.lock();
-    if (!action_sender) {
-        assertion_failure_if_not_test();
-        return;
-    }
-
-    action_sender->send(editing_action_name::begin_marker_renaming, index);
+    action_sender->send(editing_action_name::select_markers, marker_indices);
 }

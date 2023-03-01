@@ -51,7 +51,7 @@ ui::color color::playing_line_playing() const {
     return to_color(@"playing_line_playing");
 }
 
-ui::color color::playing_line_scroling() const {
+ui::color color::playing_line_scrolling() const {
     return to_color(@"playing_line_scrolling");
 }
 
@@ -63,6 +63,10 @@ ui::color color::module_bg() const {
     return to_color(@"module_bg");
 }
 
+ui::color color::selected_module_bg() const {
+    return to_color(@"selected_module_bg");
+}
+
 ui::color color::module_name() const {
     return to_color(@"module_name");
 }
@@ -71,8 +75,12 @@ ui::color color::waveform() const {
     return to_color(@"waveform");
 }
 
-ui::color color::selected_module_frame() const {
-    return to_color(@"selected_module_frame");
+ui::color color::range_selection_fill() const {
+    return to_color(@"range_selection_fill");
+}
+
+ui::color color::range_selection_frame() const {
+    return to_color(@"range_selection_frame");
 }
 
 ui::color color::pasting_module_frame() const {
@@ -91,12 +99,12 @@ ui::color color::marker_square() const {
     return to_color(@"marker_square");
 }
 
-ui::color color::marker_line() const {
-    return to_color(@"marker_line");
+ui::color color::selected_marker_square() const {
+    return to_color(@"selected_marker_square");
 }
 
-ui::color color::marker_selected_line() const {
-    return to_color(@"marker_selected_line");
+ui::color color::marker_line() const {
+    return to_color(@"marker_line");
 }
 
 ui::color color::marker_text() const {

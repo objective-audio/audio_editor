@@ -9,12 +9,13 @@
 #include <audio_editor_core/ae_player_dependency.h>
 #include <audio_editor_core/ae_playing_toggler_dependency.h>
 #include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_range_selector_dependency.h>
 #include <processing/yas_processing_ptr.h>
 
 #include <filesystem>
 
 namespace yas::ae {
-struct player final : player_for_playing_toggler {
+struct player final : player_for_playing_toggler, player_for_range_selector {
     player(std::filesystem::path const &root_path, project_id const &project_id, scrolling_for_player *);
     player(std::shared_ptr<playing::coordinator> const &, project_id const &, scrolling_for_player *);
 
@@ -32,7 +33,7 @@ struct player final : player_for_playing_toggler {
 
     [[nodiscard]] frame_index_t current_frame() const;
 
-    [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&);
+    [[nodiscard]] observing::syncable observe_is_playing(std::function<void(bool const &)> &&) override;
 
    private:
     project_id const _project_id;

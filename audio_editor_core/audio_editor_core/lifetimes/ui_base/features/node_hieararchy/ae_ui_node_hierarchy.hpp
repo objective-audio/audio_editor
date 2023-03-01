@@ -14,6 +14,7 @@ struct ui_node_hierarchy final {
 
     std::shared_ptr<ui::node> const base_node;
 
+    std::shared_ptr<ui::node> const range_selection_input_node;
     std::shared_ptr<ui::node> const scroller_node;
     std::shared_ptr<ui::node> const pasting_modules_node;
     std::shared_ptr<ui::node> const pasting_markers_node;
@@ -24,6 +25,7 @@ struct ui_node_hierarchy final {
     // scroller
     std::shared_ptr<ui::node> const zooming_node;
     std::shared_ptr<ui::node> const modules_node;
+    std::shared_ptr<ui::node> const range_selection_node;
     std::shared_ptr<ui::node> const edge_node;
     std::shared_ptr<ui::node> const markers_node;
 

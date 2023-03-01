@@ -14,14 +14,16 @@ struct color final {
 
     [[nodiscard]] ui::color playing_line_pausing() const;
     [[nodiscard]] ui::color playing_line_playing() const;
-    [[nodiscard]] ui::color playing_line_scroling() const;
+    [[nodiscard]] ui::color playing_line_scrolling() const;
 
     [[nodiscard]] ui::color module_frame() const;
     [[nodiscard]] ui::color module_bg() const;
+    [[nodiscard]] ui::color selected_module_bg() const;
     [[nodiscard]] ui::color module_name() const;
     [[nodiscard]] ui::color waveform() const;
 
-    [[nodiscard]] ui::color selected_module_frame() const;
+    [[nodiscard]] ui::color range_selection_fill() const;
+    [[nodiscard]] ui::color range_selection_frame() const;
 
     [[nodiscard]] ui::color pasting_module_frame() const;
 
@@ -29,8 +31,8 @@ struct color final {
     [[nodiscard]] ui::color edge_text() const;
 
     [[nodiscard]] ui::color marker_square() const;
+    [[nodiscard]] ui::color selected_marker_square() const;
     [[nodiscard]] ui::color marker_line() const;
-    [[nodiscard]] ui::color marker_selected_line() const;
     [[nodiscard]] ui::color marker_text() const;
 
     [[nodiscard]] ui::color pasting_marker_line() const;

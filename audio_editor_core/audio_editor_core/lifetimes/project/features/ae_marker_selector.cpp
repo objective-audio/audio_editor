@@ -27,20 +27,21 @@ bool marker_selector::can_select() const {
     return this->_editing_status->can_editing();
 }
 
-void marker_selector::select_marker_at(marker_index const &index) {
-    if (this->_marker_pool->markers().contains(index)) {
-        this->_deselector->deselect_all();
-        this->_selected_pool->insert_marker(selected_marker_object{index.object_id, selected_marker{index.frame}});
-    } else {
-        assertion_failure_if_not_test();
-    }
+void marker_selector::select(std::vector<marker_index> const &indices) {
+    this->_selected_pool->clear();
+
+    auto inserting = to_vector<selected_marker_object>(indices, [](auto const &index) {
+        return selected_marker_object{index.object_id, selected_marker{index.frame}};
+    });
+
+    this->_selected_pool->insert_markers(inserting);
 }
 
 bool marker_selector::can_toggle() const {
     return this->_editing_status->can_editing();
 }
 
-void marker_selector::toggle_marker_at(marker_index const &index) {
+void marker_selector::toggle(marker_index const &index) {
     if (this->_marker_pool->markers().contains(index)) {
         this->_selected_pool->toggle_marker(selected_marker_object{index.object_id, selected_marker{index.frame}});
     } else {

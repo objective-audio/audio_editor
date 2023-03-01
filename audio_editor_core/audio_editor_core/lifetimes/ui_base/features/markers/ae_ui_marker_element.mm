@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_ui_marker_constants.h>
 #include <audio_editor_core/ae_ui_mesh_data.h>
 #include <cpp_utils/yas_assertion.h>
-#include <audio_editor_core/ae_markers_controller.hpp>
+#include <audio_editor_core/ae_marker_element_controller.hpp>
 #include <audio_editor_core/ae_modifiers_holder.hpp>
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_ui_atlas.hpp>
@@ -23,7 +23,7 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetim
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
-    auto const controller = markers_controller::make_shared(lifetime_id);
+    auto const controller = marker_element_controller::make_shared(lifetime_id);
 
     return std::shared_ptr<ui_marker_element>(new ui_marker_element{
         project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller, resource_lifetime->standard,
@@ -33,7 +33,7 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(window_lifetim
 
 ui_marker_element::ui_marker_element(
     std::shared_ptr<marker_pool> const &marker_pool, std::shared_ptr<selected_marker_pool> const &selected_marker_pool,
-    std::shared_ptr<markers_controller> const &controller, std::shared_ptr<ui::standard> const &standard,
+    std::shared_ptr<marker_element_controller> const &controller, std::shared_ptr<ui::standard> const &standard,
     std::shared_ptr<ae::color> const &color, std::shared_ptr<ui_square_mesh_data> const &square_data,
     std::shared_ptr<ui::font_atlas> const &font_atlas, ui::node *parent_node, modifiers_holder *modifiers_holder)
     : _node(ui::node::make_shared()),
@@ -104,12 +104,16 @@ ui_marker_element::ui_marker_element(
     this->_touch_tracker
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
-                if (context.phase == ui::touch_tracker_phase::ended) {
-                    if (auto const marker_index = this->_marker_index()) {
+                if (context.phase == ui::touch_tracker_phase::began) {
+                    if (auto const marker_index = this->marker_index()) {
+                        if (this->_modifiers_holder->modifiers().empty()) {
+                            this->_controller->begin_range_selection(context.touch_event.position);
+                        }
+                    }
+                } else if (context.phase == ui::touch_tracker_phase::ended) {
+                    if (auto const marker_index = this->marker_index()) {
                         if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
-                            this->_controller->toggle_marker_selection_at(marker_index.value());
-                        } else {
-                            this->_controller->select_marker_at(marker_index.value());
+                            this->_controller->toggle_selection(marker_index.value());
                         }
                     }
                 }
@@ -121,8 +125,8 @@ ui_marker_element::ui_marker_element(
 
     this->_multiple_touch
         ->observe([this](std::uintptr_t const &) {
-            if (auto const marker_index = this->_marker_index()) {
-                this->_controller->begin_marker_renaming_at(marker_index.value());
+            if (auto const marker_index = this->marker_index()) {
+                this->_controller->begin_renaming(marker_index.value());
             }
         })
         .end()
@@ -153,6 +157,25 @@ void ui_marker_element::reset_content() {
     this->_node->set_is_enabled(false);
 }
 
+std::optional<marker_index> ui_marker_element::marker_index() const {
+    if (this->_content.has_value()) {
+        if (auto const marker_pool = this->_marker_pool.lock()) {
+            if (auto const marker = marker_pool->marker_for_id(this->_content.value().identifier)) {
+                return marker.value().index();
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+bool ui_marker_element::hit_test(ui::region const &rect) {
+    if (this->_content.has_value()) {
+        return this->_collider->hit_test(rect);
+    } else {
+        return false;
+    }
+}
+
 void ui_marker_element::finalize() {
     this->_node->remove_from_super_node();
 }
@@ -168,20 +191,10 @@ void ui_marker_element::_update_name() {
 void ui_marker_element::_update_color() {
     if (auto const &content = this->_content) {
         bool const is_selected = content.value().is_selected;
-        auto const line_color = is_selected ? this->_color->marker_selected_line() : this->_color->marker_line();
-        this->_line_node->set_color(line_color);
-        this->_square_node->set_color(this->_color->marker_square());
+        auto const square_color = is_selected ? this->_color->selected_marker_square() : this->_color->marker_square();
+
+        this->_line_node->set_color(this->_color->marker_line());
+        this->_square_node->set_color(square_color);
         this->_strings->rect_plane()->node()->set_color(this->_color->marker_text());
     }
-}
-
-std::optional<marker_index> ui_marker_element::_marker_index() const {
-    if (this->_content.has_value()) {
-        if (auto const marker_pool = this->_marker_pool.lock()) {
-            if (auto const marker = marker_pool->marker_for_id(this->_content.value().identifier)) {
-                return marker.value().index();
-            }
-        }
-    }
-    return std::nullopt;
 }

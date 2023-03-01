@@ -33,16 +33,32 @@ void selected_module_pool::toggle_module(selected_module_object const &module) {
 }
 
 void selected_module_pool::insert_module(selected_module_object const &module) {
-    auto index = module.index();
-
-    if (this->_modules.contains(index)) {
+    if (this->_modules.contains(module.index())) {
         assertion_failure_if_not_test();
         return;
     }
 
-    this->_modules.emplace(index, module);
+    this->insert_modules({module});
+}
 
-    this->_event_fetcher->push({.type = event_type::inserted, .modules = {{index, module}}});
+void selected_module_pool::insert_modules(std::vector<selected_module_object> const &modules) {
+    selected_module_map inserted;
+
+    for (auto const &module : modules) {
+        auto index = module.index();
+
+        if (this->_modules.contains(index)) {
+            continue;
+        }
+
+        std::pair<module_index, selected_module_object> pair{std::move(index), module};
+        this->_modules.emplace(pair);
+        inserted.emplace(std::move(pair));
+    }
+
+    if (!inserted.empty()) {
+        this->_event_fetcher->push({.type = event_type::inserted, .modules = std::move(inserted)});
+    }
 }
 
 void selected_module_pool::erase_module(module_index const &index) {

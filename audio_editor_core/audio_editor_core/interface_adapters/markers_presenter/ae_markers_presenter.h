@@ -13,6 +13,7 @@ class display_space;
 class player;
 class marker_pool;
 class selected_marker_pool;
+class range_selector;
 class marker_index;
 
 struct markers_presenter final {
@@ -22,10 +23,12 @@ struct markers_presenter final {
 
     markers_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,
                       std::shared_ptr<selected_marker_pool> const &, std::shared_ptr<display_space> const &,
-                      std::shared_ptr<marker_content_pool> const &);
+                      std::shared_ptr<marker_content_pool> const &, std::shared_ptr<range_selector> const &);
 
     [[nodiscard]] std::vector<std::optional<marker_content>> contents() const;
     [[nodiscard]] observing::syncable observe_contents(std::function<void(marker_content_pool_event const &)> &&);
+    [[nodiscard]] observing::syncable observe_range_selection_region(
+        std::function<void(std::optional<ui::region> const &)> &&);
 
     void update_if_needed();
 
@@ -36,6 +39,7 @@ struct markers_presenter final {
     std::weak_ptr<selected_marker_pool> const _selected_marker_pool;
     std::weak_ptr<display_space> const _display_space;
     std::shared_ptr<marker_content_pool> const _content_pool;
+    std::weak_ptr<range_selector> const _range_selector;
     observing::canceller_pool _canceller_pool;
 
     std::optional<frame_index_t> _last_frame = std::nullopt;

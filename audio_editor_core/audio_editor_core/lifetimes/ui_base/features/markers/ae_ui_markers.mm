@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_ui_layout_utils.h>
 #include <audio_editor_core/ae_ui_marker_element.h>
 #include <audio_editor_core/ae_ui_mesh_data.h>
+#include <audio_editor_core/ae_markers_controller.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -24,15 +25,19 @@ std::shared_ptr<ui_markers> ui_markers::make_shared(window_lifetime_id const &wi
 
     auto const presenter = markers_presenter::make_shared(window_lifetime_id, resource_lifetime->display_space,
                                                           project_lifetime->marker_content_pool);
-    return std::make_shared<ui_markers>(window_lifetime_id, presenter, resource_lifetime->standard, node.get());
+    auto const controller = markers_controller::make_shared(window_lifetime_id);
+    return std::make_shared<ui_markers>(window_lifetime_id, presenter, controller, resource_lifetime->standard,
+                                        node.get());
 }
 
 ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
                        std::shared_ptr<markers_presenter> const &presenter,
+                       std::shared_ptr<markers_controller> const &controller,
                        std::shared_ptr<ui::standard> const &standard, ui::node *node)
     : _window_lifetime_id(window_lifetime_id),
       _node(node),
       _presenter(presenter),
+      _controller(controller),
       _top_guide(standard->view_look()->view_layout_guide()->top()) {
     this->_presenter
         ->observe_contents([this](marker_content_pool_event const &event) {
@@ -52,6 +57,29 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
     standard->renderer()
         ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
         .end()
+        ->add_to(this->_pool);
+
+    presenter
+        ->observe_range_selection_region([this](std::optional<ui::region> const &rect) {
+            if (rect.has_value()) {
+                auto const &rect_value = rect.value();
+                std::vector<marker_index> hit_indices;
+
+                auto each = make_fast_each(this->_elements.size());
+                while (yas_each_next(each)) {
+                    auto const &idx = yas_each_index(each);
+                    auto const &element = this->_elements.at(idx);
+                    if (element->hit_test(rect_value)) {
+                        if (auto const marker_index = element->marker_index(); marker_index.has_value()) {
+                            hit_indices.emplace_back(marker_index.value());
+                        }
+                    }
+                }
+
+                this->_controller->select(hit_indices);
+            }
+        })
+        .sync()
         ->add_to(this->_pool);
 }
 

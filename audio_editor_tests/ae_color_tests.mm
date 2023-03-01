@@ -21,14 +21,16 @@ using namespace yas::ae;
 
     XCTAssertNoThrow(color->playing_line_pausing());
     XCTAssertNoThrow(color->playing_line_playing());
-    XCTAssertNoThrow(color->playing_line_scroling());
+    XCTAssertNoThrow(color->playing_line_scrolling());
 
     XCTAssertNoThrow(color->module_frame());
     XCTAssertNoThrow(color->module_bg());
+    XCTAssertNoThrow(color->selected_module_bg());
     XCTAssertNoThrow(color->module_name());
     XCTAssertNoThrow(color->waveform());
 
-    XCTAssertNoThrow(color->selected_module_frame());
+    XCTAssertNoThrow(color->range_selection_fill());
+    XCTAssertNoThrow(color->range_selection_frame());
 
     XCTAssertNoThrow(color->pasting_module_frame());
 
@@ -36,6 +38,7 @@ using namespace yas::ae;
     XCTAssertNoThrow(color->edge_text());
 
     XCTAssertNoThrow(color->marker_square());
+    XCTAssertNoThrow(color->selected_marker_square());
     XCTAssertNoThrow(color->marker_line());
     XCTAssertNoThrow(color->marker_text());
 

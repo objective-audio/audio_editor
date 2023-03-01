@@ -33,16 +33,32 @@ void selected_marker_pool::toggle_marker(selected_marker_object const &marker) {
 }
 
 void selected_marker_pool::insert_marker(selected_marker_object const &marker) {
-    auto index = marker.index();
-
-    if (this->_markers.contains(index)) {
+    if (this->_markers.contains(marker.index())) {
         assertion_failure_if_not_test();
         return;
     }
 
-    this->_markers.emplace(index, marker);
+    this->insert_markers({marker});
+}
 
-    this->_event_fetcher->push({.type = event_type::inserted, .markers = {{index, marker}}});
+void selected_marker_pool::insert_markers(std::vector<selected_marker_object> const &markers) {
+    selected_marker_map inserted;
+
+    for (auto const &marker : markers) {
+        auto index = marker.index();
+
+        if (this->_markers.contains(index)) {
+            continue;
+        }
+
+        std::pair<marker_index, selected_marker_object> pair{index, marker};
+        this->_markers.emplace(pair);
+        inserted.emplace(std::move(pair));
+    }
+
+    if (!inserted.empty()) {
+        this->_event_fetcher->push({.type = event_type::inserted, .markers = std::move(inserted)});
+    }
 }
 
 void selected_marker_pool::erase_marker(marker_index const &index) {
