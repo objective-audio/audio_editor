@@ -71,6 +71,10 @@ ui::color color::module_name() const {
     return to_color(@"module_name");
 }
 
+ui::color color::selected_module_name() const {
+    return to_color(@"selected_module_name");
+}
+
 ui::color color::waveform() const {
     return to_color(@"waveform");
 }
@@ -109,6 +113,10 @@ ui::color color::marker_line() const {
 
 ui::color color::marker_text() const {
     return to_color(@"marker_text");
+}
+
+ui::color color::selected_marker_text() const {
+    return to_color(@"selected_marker_text");
 }
 
 ui::color color::pasting_marker_line() const {
