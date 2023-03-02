@@ -89,23 +89,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
     standard->view_look()
         ->observe_appearance([this](auto const &) {
-            this->_vertex_data->write([this](std::vector<ui::vertex2d_t> &vertices) {
-                auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
-                auto const &contents = this->_presenter->contents();
-                auto const normal_bg_color = this->_color->module_bg().v;
-                auto const selected_bg_color = this->_color->selected_module_bg().v;
-
-                auto each = make_fast_each(contents.size());
-                while (yas_each_next(each)) {
-                    auto const &idx = yas_each_index(each);
-                    auto const &content = contents.at(idx);
-
-                    if (content.has_value()) {
-                        auto const &bg_color = content.value().is_selected ? selected_bg_color : normal_bg_color;
-                        vertex_rects[idx].set_color(bg_color);
-                    }
-                }
-            });
+            this->_update_bg_colors(this->_presenter->contents());
 
             this->_frame_node->set_color(this->_color->module_frame());
 
@@ -203,8 +187,6 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
     this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
-        auto const normal_bg_color = this->_color->module_bg().v;
-        auto const selected_bg_color = this->_color->selected_module_bg().v;
         auto const &colliders = this->_fill_node->colliders();
         auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
@@ -222,9 +204,6 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
                 rect.set_position(region);
                 rect.set_tex_coord(filled_tex_coords);
 
-                auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
-                rect.set_color(bg_color);
-
                 collider->set_shape(ui::shape::make_shared({.rect = region}));
                 collider->set_enabled(true);
             } else {
@@ -235,6 +214,8 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
             }
         }
     });
+
+    this->_update_bg_colors(contents);
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
@@ -253,6 +234,29 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
             strings->set_text("");
         }
     }
+}
+
+// こことは別に_update_contentsで部分的に色を更新しているので、変更する際は注意
+void ui_modules::_update_bg_colors(std::vector<std::optional<module_content>> const &contents) {
+    this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
+        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+
+        auto const normal_bg_color = this->_color->module_bg().v;
+        auto const selected_bg_color = this->_color->selected_module_bg().v;
+
+        auto each = make_fast_each(contents.size());
+        while (yas_each_next(each)) {
+            auto const &idx = yas_each_index(each);
+            auto const &content = contents.at(idx);
+
+            if (content.has_value()) {
+                auto const &value = content.value();
+
+                auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+                vertex_rects[idx].set_color(bg_color);
+            }
+        }
+    });
 }
 
 void ui_modules::_update_contents(std::size_t const count,
