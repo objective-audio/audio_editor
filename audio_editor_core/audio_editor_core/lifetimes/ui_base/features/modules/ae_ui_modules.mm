@@ -89,14 +89,9 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
     standard->view_look()
         ->observe_appearance([this](auto const &) {
-            this->_update_bg_colors(this->_presenter->contents());
-
+            auto const &contents = this->_presenter->contents();
+            this->_update_colors(contents);
             this->_frame_node->set_color(this->_color->module_frame());
-
-            auto const module_name_color = this->_color->module_name();
-            for (auto const &name : this->_names) {
-                name->rect_plane()->node()->set_color(module_name_color);
-            }
         })
         .sync()
         ->add_to(this->_pool);
@@ -215,7 +210,7 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
         }
     });
 
-    this->_update_bg_colors(contents);
+    this->_update_colors(contents);
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
@@ -237,7 +232,7 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
 }
 
 // こことは別に_update_contentsで部分的に色を更新しているので、変更する際は注意
-void ui_modules::_update_bg_colors(std::vector<std::optional<module_content>> const &contents) {
+void ui_modules::_update_colors(std::vector<std::optional<module_content>> const &contents) {
     this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
@@ -250,13 +245,26 @@ void ui_modules::_update_bg_colors(std::vector<std::optional<module_content>> co
             auto const &content = contents.at(idx);
 
             if (content.has_value()) {
-                auto const &value = content.value();
-
-                auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+                auto const &bg_color = content.value().is_selected ? selected_bg_color : normal_bg_color;
                 vertex_rects[idx].set_color(bg_color);
             }
         }
     });
+
+    auto const normal_name_color = this->_color->module_name();
+    auto const selected_name_color = this->_color->selected_module_name();
+
+    auto each = make_fast_each(contents.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto const &content = contents.at(idx);
+
+        if (content.has_value()) {
+            auto const &name = this->_names.at(idx);
+            auto const &name_color = content.value().is_selected ? selected_name_color : normal_name_color;
+            name->rect_plane()->node()->set_color(name_color);
+        }
+    }
 }
 
 void ui_modules::_update_contents(std::size_t const count,
@@ -266,7 +274,7 @@ void ui_modules::_update_contents(std::size_t const count,
     this->_set_rect_count(count);
 
     this->_vertex_data->write([&erased, &inserted, &replaced, &colliders = this->_fill_node->colliders(),
-                               &color = this->_color](std::vector<ui::vertex2d_t> &vertices) {
+                               &color = this->_color, &names = this->_names](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
 
         for (auto const &pair : erased) {
@@ -303,6 +311,9 @@ void ui_modules::_update_contents(std::size_t const count,
         }
     });
 
+    auto const normal_name_color = this->_color->module_name();
+    auto const selected_name_color = this->_color->selected_module_name();
+
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
         auto const &strings = this->_names.at(idx);
@@ -317,6 +328,8 @@ void ui_modules::_update_contents(std::size_t const count,
         auto const &node = strings->rect_plane()->node();
         node->set_is_enabled(true);
         this->_update_name_position(idx, content_value);
+        auto const &name_color = content_value.is_selected ? selected_name_color : normal_name_color;
+        this->_names.at(pair.first)->rect_plane()->node()->set_color(name_color);
         strings->set_text(this->_presenter->name_for_index(content_value.index()));
     }
 
@@ -325,6 +338,8 @@ void ui_modules::_update_contents(std::size_t const count,
         auto const &content_value = pair.second;
         auto const &strings = this->_names.at(idx);
         this->_update_name_position(idx, content_value);
+        auto const &name_color = content_value.is_selected ? selected_name_color : normal_name_color;
+        this->_names.at(pair.first)->rect_plane()->node()->set_color(name_color);
         strings->set_text(this->_presenter->name_for_index(content_value.index()));
     }
 }
@@ -380,13 +395,10 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
     frame_mesh->set_index_data(this->_frame_index_data);
 
     if (this->_names.size() < max_count) {
-        auto const module_name_color = this->_color->module_name();
-
         auto each = make_fast_each(max_count - this->_names.size());
         while (yas_each_next(each)) {
             auto strings = ui::strings::make_shared({.max_word_count = 32}, this->_name_font_atlas);
             strings->rect_plane()->node()->set_is_enabled(false);
-            strings->rect_plane()->node()->set_color(module_name_color);
             this->_names.emplace_back(std::move(strings));
         }
     }
