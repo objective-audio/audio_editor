@@ -236,6 +236,7 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
     }
 }
 
+// こことは別に_update_contentsで部分的に色を更新しているので、変更する際は注意
 void ui_modules::_update_bg_colors(std::vector<std::optional<module_content>> const &contents) {
     this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
