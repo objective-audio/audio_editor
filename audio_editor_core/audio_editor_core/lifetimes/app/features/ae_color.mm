@@ -95,11 +95,11 @@ ui::color color::edge_text() const {
     return to_color(@"edge_text");
 }
 
-ui::color color::marker_square() const {
+ui::color color::marker_bg() const {
     return to_color(@"marker_square");
 }
 
-ui::color color::selected_marker_square() const {
+ui::color color::selected_marker_bg() const {
     return to_color(@"selected_marker_square");
 }
 
