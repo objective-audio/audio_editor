@@ -79,6 +79,10 @@ ui::color color::waveform() const {
     return to_color(@"waveform");
 }
 
+ui::color color::selected_waveform() const {
+    return to_color(@"selected_waveform");
+}
+
 ui::color color::range_selection_fill() const {
     return to_color(@"range_selection_fill");
 }

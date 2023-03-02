@@ -80,12 +80,16 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
     : node(ui::node::make_shared()), _presenter(presenter), _color(color), _atlas(atlas) {
     this->_presenter
         ->observe_mesh_importer([this](waveform_mesh_importer_event const &event) {
-            if (event.index < this->_elements.size()) {
+            auto const &contents = this->_presenter->contents();
+
+            if (event.index < this->_elements.size() && event.index < contents.size()) {
+                auto const &content = contents.at(event.index);
                 auto &element = this->_elements.at(event.index);
-                if (element->node->is_enabled()) {
+                if (element->node->is_enabled() && content.has_value()) {
                     element->clear();
 
-                    auto const &waveform_color = this->_color->waveform();
+                    auto const &waveform_color =
+                        content.value().is_selected ? this->_color->selected_waveform() : this->_color->waveform();
                     auto const tex_coord = to_float2(this->_atlas->white_filled_tex_coords().origin);
 
                     auto each = make_fast_each(event.datas.size());
@@ -301,7 +305,21 @@ void ui_module_waveforms::_update_all_tex_coords(ui::uint_point const &tex_coord
 }
 
 void ui_module_waveforms::_update_all_colors(ui::color const &color) {
-    for (auto const &element : this->_elements) {
-        element->update_colors(color);
+    auto const normal_color = this->_color->waveform();
+    auto const selected_color = this->_color->selected_waveform();
+    auto const &contents = this->_presenter->contents();
+    auto const &elements = this->_elements;
+    auto const contents_size = std::min(contents.size(), this->_elements.size());
+
+    auto each = make_fast_each(contents_size);
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto const &content = contents.at(idx);
+        auto const &element = elements.at(idx);
+
+        if (content.has_value()) {
+            auto const &color = content.value().is_selected ? selected_color : normal_color;
+            element->update_colors(color);
+        }
     }
 }
