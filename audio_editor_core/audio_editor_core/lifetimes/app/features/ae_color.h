@@ -22,6 +22,7 @@ struct color final {
     [[nodiscard]] ui::color module_name() const;
     [[nodiscard]] ui::color selected_module_name() const;
     [[nodiscard]] ui::color waveform() const;
+    [[nodiscard]] ui::color selected_waveform() const;
 
     [[nodiscard]] ui::color range_selection_fill() const;
     [[nodiscard]] ui::color range_selection_frame() const;
