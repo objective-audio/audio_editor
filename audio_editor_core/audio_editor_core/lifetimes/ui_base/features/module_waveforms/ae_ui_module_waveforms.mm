@@ -128,10 +128,10 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
             switch (event.type) {
                 case module_content_pool_event_type::fetched:
                 case module_content_pool_event_type::replaced:
-                    this->set_contents(event.elements, true);
+                    this->_set_contents(event.elements, true);
                     break;
                 case module_content_pool_event_type::updated:
-                    this->update_contents(event.elements.size(), event.erased, event.inserted, event.replaced);
+                    this->_update_contents(event.elements.size(), event.erased, event.inserted, event.replaced);
                     break;
             }
         })
@@ -159,7 +159,7 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
         this->_scale = scale.width;
 
         if (prev_null) {
-            this->set_contents(this->_presenter->contents(), false);
+            this->_set_contents(this->_presenter->contents(), false);
         }
 
         if (auto const scale = this->_waveform_scale()) {
@@ -170,7 +170,7 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
     }
 }
 
-void ui_module_waveforms::set_contents(std::vector<std::optional<module_content>> const &contents,
+void ui_module_waveforms::_set_contents(std::vector<std::optional<module_content>> const &contents,
                                        bool const clear_meshes) {
     if (!this->_scale.has_value()) {
         this->_resize_elements(0);
@@ -199,7 +199,7 @@ void ui_module_waveforms::set_contents(std::vector<std::optional<module_content>
     }
 }
 
-void ui_module_waveforms::update_contents(std::size_t const count,
+void ui_module_waveforms::_update_contents(std::size_t const count,
                                           std::vector<std::pair<std::size_t, module_content>> const &erased,
                                           std::vector<std::pair<std::size_t, module_content>> const &inserted,
                                           std::vector<std::pair<std::size_t, module_content>> const &replaced) {
