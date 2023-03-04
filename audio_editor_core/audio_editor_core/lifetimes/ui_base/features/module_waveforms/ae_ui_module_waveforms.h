@@ -42,7 +42,7 @@ struct ui_module_waveforms final {
     ui_module_waveforms &operator=(ui_module_waveforms const &) = delete;
     ui_module_waveforms &operator=(ui_module_waveforms &&) = delete;
 
-    void _update_all_elements(std::vector<std::optional<module_content>> const &, bool const clear_mesh_nodes);
+    void _update_all_elements(bool const clear_mesh_nodes);
     void _update_elements(std::size_t const count, std::vector<std::pair<std::size_t, module_content>> const &erased,
                           std::vector<std::pair<std::size_t, module_content>> const &inserted,
                           std::vector<std::pair<std::size_t, module_content>> const &replaced);

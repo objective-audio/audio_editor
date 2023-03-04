@@ -128,7 +128,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
             switch (event.type) {
                 case module_content_pool_event_type::fetched:
                 case module_content_pool_event_type::replaced:
-                    this->_update_all_elements(event.elements, true);
+                    this->_update_all_elements(true);
                     break;
                 case module_content_pool_event_type::updated:
                     this->_update_elements(event.elements.size(), event.erased, event.inserted, event.replaced);
@@ -159,7 +159,7 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
         this->_scale = scale.width;
 
         if (prev_null) {
-            this->_update_all_elements(this->_presenter->contents(), false);
+            this->_update_all_elements(false);
         }
 
         if (auto const scale = this->_waveform_scale()) {
@@ -170,12 +170,13 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
     }
 }
 
-void ui_module_waveforms::_update_all_elements(std::vector<std::optional<module_content>> const &contents,
-                                               bool const clear_meshes) {
+void ui_module_waveforms::_update_all_elements(bool const clear_meshes) {
     if (!this->_scale.has_value()) {
         this->_resize_elements(0);
         return;
     }
+
+    auto const &contents = this->_presenter->contents();
 
     this->_resize_elements(contents.size());
 
