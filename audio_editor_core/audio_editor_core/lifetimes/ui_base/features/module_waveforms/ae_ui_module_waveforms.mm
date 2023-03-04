@@ -139,10 +139,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
         ->add_to(this->_pool);
 
     standard->view_look()
-        ->observe_appearance([this](auto const &) {
-            auto const &waveform_color = this->_color->waveform();
-            this->_update_all_colors(waveform_color);
-        })
+        ->observe_appearance([this](auto const &) { this->_update_all_colors(); })
         .end()
         ->add_to(this->_pool);
 
@@ -304,7 +301,7 @@ void ui_module_waveforms::_update_all_tex_coords(ui::uint_point const &tex_coord
     }
 }
 
-void ui_module_waveforms::_update_all_colors(ui::color const &color) {
+void ui_module_waveforms::_update_all_colors() {
     auto const normal_color = this->_color->waveform();
     auto const selected_color = this->_color->selected_waveform();
     auto const &contents = this->_presenter->contents();
