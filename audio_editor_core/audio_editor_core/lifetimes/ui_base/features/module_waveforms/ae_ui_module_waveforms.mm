@@ -162,9 +162,9 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
             this->_update_all_elements(false);
         }
 
-        if (auto const scale = this->_waveform_scale()) {
+        if (auto const waveform_scale = this->_waveform_scale()) {
             for (auto const &element : this->_elements) {
-                element->node->set_scale(scale.value());
+                element->node->set_scale(waveform_scale.value());
             }
         }
     }
