@@ -128,10 +128,10 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
             switch (event.type) {
                 case module_content_pool_event_type::fetched:
                 case module_content_pool_event_type::replaced:
-                    this->_set_contents(event.elements, true);
+                    this->_update_all_elements(event.elements, true);
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_contents(event.elements.size(), event.erased, event.inserted, event.replaced);
+                    this->_update_elements(event.elements.size(), event.erased, event.inserted, event.replaced);
                     break;
             }
         })
@@ -159,7 +159,7 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
         this->_scale = scale.width;
 
         if (prev_null) {
-            this->_set_contents(this->_presenter->contents(), false);
+            this->_update_all_elements(this->_presenter->contents(), false);
         }
 
         if (auto const scale = this->_waveform_scale()) {
@@ -170,8 +170,8 @@ void ui_module_waveforms::set_scale(ui::size const &scale) {
     }
 }
 
-void ui_module_waveforms::_set_contents(std::vector<std::optional<module_content>> const &contents,
-                                       bool const clear_meshes) {
+void ui_module_waveforms::_update_all_elements(std::vector<std::optional<module_content>> const &contents,
+                                               bool const clear_meshes) {
     if (!this->_scale.has_value()) {
         this->_resize_elements(0);
         return;
@@ -199,10 +199,10 @@ void ui_module_waveforms::_set_contents(std::vector<std::optional<module_content
     }
 }
 
-void ui_module_waveforms::_update_contents(std::size_t const count,
-                                          std::vector<std::pair<std::size_t, module_content>> const &erased,
-                                          std::vector<std::pair<std::size_t, module_content>> const &inserted,
-                                          std::vector<std::pair<std::size_t, module_content>> const &replaced) {
+void ui_module_waveforms::_update_elements(std::size_t const count,
+                                           std::vector<std::pair<std::size_t, module_content>> const &erased,
+                                           std::vector<std::pair<std::size_t, module_content>> const &inserted,
+                                           std::vector<std::pair<std::size_t, module_content>> const &replaced) {
     if (!this->_scale.has_value()) {
         this->_resize_elements(0);
         this->_elements.clear();
