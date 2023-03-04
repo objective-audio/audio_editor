@@ -179,6 +179,7 @@ void ui_module_waveforms::_update_all_elements(bool const clear_meshes) {
     auto const &contents = this->_presenter->contents();
 
     this->_resize_elements(contents.size());
+    this->_update_all_colors();
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
@@ -227,16 +228,22 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
         this->_presenter->cancel_import(content.identifier);
     }
 
+    auto const &contents = this->_presenter->contents();
+    auto const normal_color = this->_color->waveform();
+    auto const selected_color = this->_color->selected_waveform();
+
     each = make_fast_each(replaced.size());
     while (yas_each_next(each)) {
         auto const &pair = replaced.at(yas_each_index(each));
         auto const &idx = pair.first;
 
-        if (idx < this->_elements.size()) {
+        if (idx < this->_elements.size() && idx < contents.size()) {
             auto const &content = pair.second;
             auto &element = this->_elements.at(idx);
             element->node->set_is_enabled(true);
             element->node->set_position({.x = content.x() * content.scale, .y = 0.0f});
+            auto const &color = content.is_selected ? selected_color : normal_color;
+            element->update_colors(color);
             this->_presenter->import(idx, content);
         }
     }
@@ -252,6 +259,8 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
             element->clear();
             element->node->set_is_enabled(true);
             element->node->set_position({.x = content.x() * content.scale, .y = 0.0f});
+            auto const &color = content.is_selected ? selected_color : normal_color;
+            element->update_colors(color);
             this->_presenter->import(idx, content);
         }
     }
