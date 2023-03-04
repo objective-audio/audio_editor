@@ -22,7 +22,6 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
       playing_line_node(ui::node::make_shared()),
       modal_bg_node(ui::node::make_shared()),
       time_base_node(ui::node::make_shared()),
-      zooming_node(ui::node::make_shared()),
       modules_node(ui::node::make_shared()),
       range_selection_node(ui::node::make_shared()),
       edge_node(ui::node::make_shared()),
@@ -41,9 +40,8 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     this->base_node->add_sub_node(this->modal_bg_node);
     this->base_node->add_sub_node(this->time_base_node);
 
-    this->scroller_node->add_sub_node(this->zooming_node);
-    this->zooming_node->add_sub_node(this->modules_node);
-    this->zooming_node->add_sub_node(this->range_selection_node);
+    this->scroller_node->add_sub_node(this->modules_node);
+    this->scroller_node->add_sub_node(this->range_selection_node);
     this->scroller_node->add_sub_node(this->edge_node);
     this->scroller_node->add_sub_node(this->markers_node);
 
