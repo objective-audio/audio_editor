@@ -7,8 +7,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-display_space::display_space(ui::region const view_region)
-    : _region(ui::region::zero()), _view_region(view_region), _scale({1.0f, 1.0f}) {
+display_space::display_space() : _region(ui::region::zero()), _view_region(ui::region::zero()), _scale({1.0f, 1.0f}) {
     this->_fetcher = observing::fetcher<display_space_event>::make_shared([this] {
         return display_space_event{
             .source = display_space_event_source::fetched, .region = this->_region, .scale = this->_scale};
@@ -38,11 +37,17 @@ ui::size const &display_space::scale() const {
     return this->_scale;
 }
 
-time::range display_space::frame_range(uint32_t const sample_rate, frame_index_t const current_frame) const {
+std::optional<time::range> display_space::frame_range(uint32_t const sample_rate,
+                                                      frame_index_t const current_frame) const {
     auto const &region = this->region();
     auto const min_edge_frame = current_frame + static_cast<frame_index_t>(std::floor(region.left() * sample_rate));
     auto const max_edge_frame = current_frame + static_cast<frame_index_t>(std::ceil(region.right() * sample_rate));
-    return time::range{min_edge_frame, static_cast<proc::length_t>(max_edge_frame - min_edge_frame)};
+
+    if (min_edge_frame != max_edge_frame) {
+        return time::range{min_edge_frame, static_cast<proc::length_t>(max_edge_frame - min_edge_frame)};
+    } else {
+        return std::nullopt;
+    }
 }
 
 void display_space::_update_region_and_notify(display_space_event_source const source) {

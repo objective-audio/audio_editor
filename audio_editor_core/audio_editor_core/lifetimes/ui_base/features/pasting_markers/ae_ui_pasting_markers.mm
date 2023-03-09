@@ -18,7 +18,8 @@ static std::size_t const reserving_interval = 10;
 std::shared_ptr<ui_pasting_markers> ui_pasting_markers::make_shared(window_lifetime_id const &window_lifetime_id,
                                                                     std::shared_ptr<ui::node> const &node) {
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
-    auto const presenter = pasting_markers_presenter::make_shared(window_lifetime_id, resource_lifetime->display_space);
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
+    auto const presenter = pasting_markers_presenter::make_shared(window_lifetime_id, window_lifetime->display_space);
     return std::make_shared<ui_pasting_markers>(window_lifetime_id, presenter, resource_lifetime->standard, node.get());
 }
 

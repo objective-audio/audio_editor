@@ -1616,9 +1616,6 @@
 		B6ABBC4F289F85AB0044BA1E /* features */ = {
 			isa = PBXGroup;
 			children = (
-				B695A3882764D87E004CB28F /* ae_display_space_types.h */,
-				B666F1792759CCEA0040D306 /* ae_display_space.h */,
-				B666F17A2759CCEA0040D306 /* ae_display_space.mm */,
 				B657D4D326803C7B0048C6AD /* ae_key.h */,
 				B657D4D526806DA90048C6AD /* ae_keyboard_utils.cpp */,
 				B657D4D626806DA90048C6AD /* ae_keyboard_utils.h */,
@@ -1740,6 +1737,9 @@
 				B6B2D78E28687E1A008DF3F6 /* ae_window_receiver.h */,
 				B666CE4A26351D7900C1693D /* ae_project_path.cpp */,
 				B666CE4B26351D7900C1693D /* ae_project_path.h */,
+				B695A3882764D87E004CB28F /* ae_display_space_types.h */,
+				B666F1792759CCEA0040D306 /* ae_display_space.h */,
+				B666F17A2759CCEA0040D306 /* ae_display_space.mm */,
 			);
 			path = features;
 			sourceTree = "<group>";

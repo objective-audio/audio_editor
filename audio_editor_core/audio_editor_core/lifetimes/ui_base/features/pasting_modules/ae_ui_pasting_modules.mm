@@ -20,10 +20,11 @@ static std::size_t const reserving_interval = 100;
 std::shared_ptr<ui_pasting_modules> ui_pasting_modules::make_shared(window_lifetime_id const &window_lifetime_id,
                                                                     std::shared_ptr<ui::node> const &node) {
     auto const &app_lifetime = hierarchy::app_lifetime();
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
     auto const modules_presenter =
-        pasting_modules_presenter::make_shared(window_lifetime_id, resource_lifetime->display_space);
+        pasting_modules_presenter::make_shared(window_lifetime_id, window_lifetime->display_space);
     return std::make_shared<ui_pasting_modules>(modules_presenter, resource_lifetime->standard, node,
                                                 app_lifetime->color.get());
 }

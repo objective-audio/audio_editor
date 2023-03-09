@@ -28,7 +28,6 @@ ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &
           {.font_name = "TrebuchetMS-Bold", .font_size = 26.0f, .words = " 1234567890.:+-"}, this->texture)),
       atlas(std::make_shared<ui_atlas>(this->texture)),
       square_mesh_data(std::make_shared<ui_square_mesh_data>(this->atlas.get())),
-      display_space(std::make_shared<ae::display_space>(standard->view_look()->view_layout_guide()->region())),
       modifiers_holder(std::make_shared<ae::modifiers_holder>(standard->event_manager())),
       keyboard(std::make_shared<ae::keyboard>(standard->event_manager(), this->modifiers_holder.get())),
       base_lifecycle(std::make_shared<ae::ui_base_lifecycle>(lifetime_id)) {
