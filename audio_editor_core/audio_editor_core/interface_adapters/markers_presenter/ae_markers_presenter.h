@@ -10,6 +10,7 @@
 
 namespace yas::ae {
 class display_space;
+class display_space_range;
 class player;
 class marker_pool;
 class selected_marker_pool;
@@ -22,7 +23,8 @@ struct markers_presenter final {
 
     markers_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,
                       std::shared_ptr<selected_marker_pool> const &, std::shared_ptr<display_space> const &,
-                      std::shared_ptr<marker_content_pool> const &, std::shared_ptr<range_selector> const &);
+                      std::shared_ptr<display_space_range> const &, std::shared_ptr<marker_content_pool> const &,
+                      std::shared_ptr<range_selector> const &);
 
     [[nodiscard]] std::vector<std::optional<marker_content>> contents() const;
     [[nodiscard]] observing::syncable observe_contents(std::function<void(marker_content_pool_event const &)> &&);
@@ -37,6 +39,7 @@ struct markers_presenter final {
     std::weak_ptr<marker_pool> const _marker_pool;
     std::weak_ptr<selected_marker_pool> const _selected_marker_pool;
     std::weak_ptr<display_space> const _display_space;
+    std::weak_ptr<display_space_range> const _display_space_range;
     std::shared_ptr<marker_content_pool> const _content_pool;
     std::weak_ptr<range_selector> const _range_selector;
     observing::canceller_pool _canceller_pool;
