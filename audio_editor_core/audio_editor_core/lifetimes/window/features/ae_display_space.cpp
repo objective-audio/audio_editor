@@ -1,5 +1,5 @@
 //
-//  ae_display_space.mm
+//  ae_display_space.cpp
 //
 
 #include "ae_display_space.h"
@@ -31,6 +31,10 @@ ui::region display_space::region() const {
 
 observing::syncable display_space::observe(std::function<void(display_space_event const &)> &&handler) {
     return this->_fetcher->observe(std::move(handler));
+}
+
+ui::region const &display_space::view_region() const {
+    return this->_view_region;
 }
 
 ui::size const &display_space::scale() const {

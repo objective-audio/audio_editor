@@ -15,8 +15,7 @@ class display_space;
 class edge_holder;
 
 struct edge_presenter final {
-    [[nodiscard]] static std::shared_ptr<edge_presenter> make_shared(window_lifetime_id const &,
-                                                                     std::shared_ptr<display_space> const &);
+    [[nodiscard]] static std::shared_ptr<edge_presenter> make_shared(window_lifetime_id const &);
 
     edge_presenter(project_format const &, std::shared_ptr<edge_holder> const &,
                    std::shared_ptr<display_space> const &);

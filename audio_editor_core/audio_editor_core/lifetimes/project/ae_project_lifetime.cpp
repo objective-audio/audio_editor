@@ -47,6 +47,7 @@
 #include <audio_editor_core/ae_zooming_pair.h>
 
 #include <audio_editor_core/ae_deselector.hpp>
+#include <audio_editor_core/ae_display_space_range.hpp>
 #include <audio_editor_core/ae_escaper.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
 #include <audio_editor_core/ae_marker_selector.hpp>
@@ -127,6 +128,8 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
           window_lifetime->player.get(), this->module_pool.get(), this->marker_pool.get(),
           this->selected_module_pool.get(), this->pasteboard.get(), this->database.get(), this->editing_status.get())),
       range_selector(std::make_shared<ae::range_selector>(window_lifetime->player.get(), this->deselector.get())),
+      display_space_range(std::make_shared<ae::display_space_range>(
+          window_lifetime->project_format, window_lifetime->display_space.get(), window_lifetime->player.get())),
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get(),
                                             this->selected_marker_pool.get())),
       receiver(std::make_shared<project_receiver>(

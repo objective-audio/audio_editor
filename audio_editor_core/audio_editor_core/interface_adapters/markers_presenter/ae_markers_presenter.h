@@ -18,7 +18,6 @@ class marker_index;
 
 struct markers_presenter final {
     [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(window_lifetime_id const &,
-                                                                        std::shared_ptr<display_space> const &,
                                                                         std::shared_ptr<marker_content_pool> const &);
 
     markers_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,

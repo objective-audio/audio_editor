@@ -18,6 +18,7 @@ struct display_space final {
     [[nodiscard]] ui::region region() const;
     [[nodiscard]] observing::syncable observe(std::function<void(display_space_event const &)> &&);
 
+    [[nodiscard]] ui::region const &view_region() const;
     [[nodiscard]] ui::size const &scale() const;
 
     [[nodiscard]] std::optional<time::range> frame_range(uint32_t const sample_rate,

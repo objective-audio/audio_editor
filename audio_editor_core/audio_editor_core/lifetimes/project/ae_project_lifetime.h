@@ -55,6 +55,7 @@ class range_selector;
 class escaper;
 class project_receiver;
 class window_lifetime;
+class display_space_range;
 
 struct project_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &);
@@ -104,6 +105,7 @@ struct project_lifetime final {
     std::shared_ptr<import_interactor> const import_interactor;
     std::shared_ptr<module_editor> const module_editor;
     std::shared_ptr<range_selector> const range_selector;
+    std::shared_ptr<display_space_range> const display_space_range;
     std::shared_ptr<escaper> const escaper;
     std::shared_ptr<project_receiver> const receiver;
 
