@@ -17,13 +17,13 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<markers_presenter> markers_presenter::make_shared(
-    window_lifetime_id const &window_lifetime_id, std::shared_ptr<display_space> const &display_space,
-    std::shared_ptr<marker_content_pool> const &content_pool) {
+    window_lifetime_id const &window_lifetime_id, std::shared_ptr<marker_content_pool> const &content_pool) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<markers_presenter>(project_lifetime->project_format, window_lifetime->player,
                                                project_lifetime->marker_pool, project_lifetime->selected_marker_pool,
-                                               display_space, content_pool, project_lifetime->range_selector);
+                                               window_lifetime->display_space, content_pool,
+                                               project_lifetime->range_selector);
 }
 
 markers_presenter::markers_presenter(project_format const &project_format, std::shared_ptr<player> const &player,

@@ -20,12 +20,10 @@ static std::size_t const reserving_interval = 10;
 
 std::shared_ptr<ui_markers> ui_markers::make_shared(window_lifetime_id const &window_lifetime_id,
                                                     std::shared_ptr<ui::node> const &node) {
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
-    auto const presenter = markers_presenter::make_shared(window_lifetime_id, window_lifetime->display_space,
-                                                          project_lifetime->marker_content_pool);
+    auto const presenter = markers_presenter::make_shared(window_lifetime_id, project_lifetime->marker_content_pool);
     auto const controller = markers_controller::make_shared(window_lifetime_id);
     return std::make_shared<ui_markers>(window_lifetime_id, presenter, controller, resource_lifetime->standard,
                                         node.get());

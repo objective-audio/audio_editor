@@ -29,7 +29,7 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(window_lifetime_id const &wi
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
-    auto const modules_presenter = modules_presenter::make_shared(window_lifetime_id, window_lifetime->display_space);
+    auto const modules_presenter = modules_presenter::make_shared(window_lifetime_id);
     auto const modules_controller = modules_controller::make_shared(window_lifetime_id);
     return std::make_shared<ui_modules>(modules_presenter, modules_controller, resource_lifetime->standard, node,
                                         app_lifetime->color.get(), resource_lifetime->normal_font_atlas, waveforms,

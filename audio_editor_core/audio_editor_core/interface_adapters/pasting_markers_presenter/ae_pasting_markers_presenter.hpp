@@ -16,8 +16,7 @@ class pasteboard;
 class display_space;
 
 struct pasting_markers_presenter {
-    [[nodiscard]] static std::shared_ptr<pasting_markers_presenter> make_shared(window_lifetime_id const &,
-                                                                                std::shared_ptr<display_space> const &);
+    [[nodiscard]] static std::shared_ptr<pasting_markers_presenter> make_shared(window_lifetime_id const &);
 
     explicit pasting_markers_presenter(project_format const &, std::shared_ptr<pasteboard> const &,
                                        std::shared_ptr<display_space> const &,

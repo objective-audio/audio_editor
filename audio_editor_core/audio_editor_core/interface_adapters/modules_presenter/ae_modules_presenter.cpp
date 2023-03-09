@@ -21,13 +21,12 @@ using namespace yas::ae;
 static std::string const empty_string = "";
 static std::vector<std::optional<module_content>> const _empty_contents;
 
-std::shared_ptr<modules_presenter> modules_presenter::make_shared(window_lifetime_id const &window_lifetime_id,
-                                                                  std::shared_ptr<display_space> const &display_space) {
+std::shared_ptr<modules_presenter> modules_presenter::make_shared(window_lifetime_id const &window_lifetime_id) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
     return std::make_shared<modules_presenter>(project_lifetime->project_format, window_lifetime->player,
                                                project_lifetime->module_pool, project_lifetime->selected_module_pool,
-                                               display_space, project_lifetime->module_content_pool,
+                                               window_lifetime->display_space, project_lifetime->module_content_pool,
                                                project_lifetime->range_selector);
 }
 

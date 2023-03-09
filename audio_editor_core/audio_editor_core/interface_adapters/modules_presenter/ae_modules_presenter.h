@@ -20,8 +20,7 @@ class module_pool;
 class selected_module_pool;
 
 struct modules_presenter final {
-    [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(window_lifetime_id const &,
-                                                                        std::shared_ptr<display_space> const &);
+    [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(window_lifetime_id const &);
 
     modules_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<module_pool> const &,
                       std::shared_ptr<selected_module_pool> const &, std::shared_ptr<display_space> const &,
