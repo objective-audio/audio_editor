@@ -9,6 +9,8 @@
 #include <audio_editor_core/ae_pasteboard.h>
 #include <cpp_utils/yas_lock.h>
 
+#include <audio_editor_core/ae_display_space_range.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -18,18 +20,20 @@ std::shared_ptr<pasting_markers_presenter> pasting_markers_presenter::make_share
     window_lifetime_id const &window_lifetime_id) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    return std::make_shared<pasting_markers_presenter>(project_lifetime->project_format, project_lifetime->pasteboard,
-                                                       window_lifetime->display_space,
-                                                       project_lifetime->pasting_marker_content_pool);
+    return std::make_shared<pasting_markers_presenter>(
+        project_lifetime->project_format, project_lifetime->pasteboard, window_lifetime->display_space,
+        project_lifetime->display_space_range, project_lifetime->pasting_marker_content_pool);
 }
 
 pasting_markers_presenter::pasting_markers_presenter(project_format const &project_format,
                                                      std::shared_ptr<pasteboard> const &pasteboard,
                                                      std::shared_ptr<display_space> const &display_space,
+                                                     std::shared_ptr<display_space_range> const &display_space_range,
                                                      std::shared_ptr<pasting_marker_content_pool> const &content_pool)
     : _project_format(project_format),
       _pasteboard(pasteboard),
       _display_space(display_space),
+      _display_space_range(display_space_range),
       _content_pool(content_pool) {
     pasteboard
         ->observe_event([this](pasteboard_event const &event) {
@@ -76,9 +80,8 @@ void pasting_markers_presenter::update_if_needed() {
 }
 
 std::optional<time::range> pasting_markers_presenter::_space_range() const {
-    if (auto const display_space = this->_display_space.lock()) {
-        auto const sample_rate = this->_project_format.sample_rate;
-        return display_space->frame_range(sample_rate, 0);
+    if (auto const space_range = this->_display_space_range.lock()) {
+        return space_range->zero();
     } else {
         return std::nullopt;
     }
