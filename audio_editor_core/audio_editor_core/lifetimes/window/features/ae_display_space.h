@@ -15,12 +15,13 @@ struct display_space final {
     void set_view_region(ui::region const);
     void set_scale(ui::size const);
 
-    ui::region region() const;
-    observing::syncable observe(std::function<void(display_space_event const &)> &&);
+    [[nodiscard]] ui::region region() const;
+    [[nodiscard]] observing::syncable observe(std::function<void(display_space_event const &)> &&);
 
-    ui::size const &scale() const;
+    [[nodiscard]] ui::size const &scale() const;
 
-    std::optional<time::range> frame_range(uint32_t const sample_rate, frame_index_t const current_frame) const;
+    [[nodiscard]] std::optional<time::range> frame_range(uint32_t const sample_rate,
+                                                         frame_index_t const current_frame) const;
 
    private:
     ui::region _region;
