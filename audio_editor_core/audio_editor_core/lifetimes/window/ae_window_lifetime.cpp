@@ -4,6 +4,7 @@
 
 #include "ae_window_lifetime.h"
 
+#include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
@@ -32,6 +33,7 @@ window_lifetime::window_lifetime(window_lifetime_id const &lifetime_id, ae::proj
       project_format(project_format),
       project_directory_path(project_dir_path),
       project_path(std::make_shared<ae::project_path>(project_dir_path)),
+      display_space(std::make_shared<ae::display_space>()),
       zooming_pair(std::make_shared<ae::zooming_pair>()),
       scrolling(std::make_shared<ae::scrolling>()),
       player(std::make_shared<ae::player>(app_lifetime->system_path->playing_directory(), lifetime_id.project,

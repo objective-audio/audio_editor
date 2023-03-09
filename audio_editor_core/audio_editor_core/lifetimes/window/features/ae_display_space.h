@@ -10,7 +10,7 @@
 
 namespace yas::ae {
 struct display_space final {
-    explicit display_space(ui::region const view_region);
+    display_space();
 
     void set_view_region(ui::region const);
     void set_scale(ui::size const);
@@ -20,7 +20,7 @@ struct display_space final {
 
     ui::size const &scale() const;
 
-    time::range frame_range(uint32_t const sample_rate, frame_index_t const current_frame) const;
+    std::optional<time::range> frame_range(uint32_t const sample_rate, frame_index_t const current_frame) const;
 
    private:
     ui::region _region;

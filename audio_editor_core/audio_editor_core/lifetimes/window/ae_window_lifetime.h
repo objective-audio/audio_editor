@@ -21,6 +21,7 @@ class zooming_pair;
 class scrolling;
 class player;
 class timeline_holder;
+class display_space;
 
 struct window_lifetime final {
     [[nodiscard]] static std::shared_ptr<window_lifetime> make_shared(window_lifetime_id const &,
@@ -35,6 +36,7 @@ struct window_lifetime final {
     std::filesystem::path const project_directory_path;
 
     std::shared_ptr<project_path> const project_path;
+    std::shared_ptr<display_space> const display_space;
     std::shared_ptr<ae::zooming_pair> const zooming_pair;
     std::shared_ptr<ae::scrolling> const scrolling;
     std::shared_ptr<ae::player> const player;
