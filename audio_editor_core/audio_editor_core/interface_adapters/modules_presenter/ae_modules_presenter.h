@@ -14,6 +14,7 @@
 
 namespace yas::ae {
 class display_space;
+class display_space_range;
 class player;
 class range_selector;
 class module_pool;
@@ -24,7 +25,8 @@ struct modules_presenter final {
 
     modules_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<module_pool> const &,
                       std::shared_ptr<selected_module_pool> const &, std::shared_ptr<display_space> const &,
-                      std::shared_ptr<module_content_pool> const &, std::shared_ptr<range_selector> const &);
+                      std::shared_ptr<display_space_range> const &, std::shared_ptr<module_content_pool> const &,
+                      std::shared_ptr<range_selector> const &);
 
     [[nodiscard]] std::vector<std::optional<module_content>> const &contents() const;
     [[nodiscard]] observing::syncable observe_contents(std::function<void(module_content_pool_event const &)> &&);
@@ -41,6 +43,7 @@ struct modules_presenter final {
     std::weak_ptr<module_pool> const _module_pool;
     std::weak_ptr<selected_module_pool> const _selected_pool;
     std::weak_ptr<display_space> const _display_space;
+    std::weak_ptr<display_space_range> const _display_space_range;
     std::weak_ptr<module_content_pool> const _content_pool;
     std::weak_ptr<range_selector> const _range_selector;
     observing::canceller_pool _canceller_pool;

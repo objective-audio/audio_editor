@@ -13,13 +13,14 @@
 
 namespace yas::ae {
 class display_space;
+class display_space_range;
 class pasteboard;
 
 struct pasting_modules_presenter final {
     [[nodiscard]] static std::shared_ptr<pasting_modules_presenter> make_shared(window_lifetime_id const &);
 
     pasting_modules_presenter(project_format const &, std::shared_ptr<pasteboard> const &,
-                              std::shared_ptr<display_space> const &,
+                              std::shared_ptr<display_space> const &, std::shared_ptr<display_space_range> const &,
                               std::shared_ptr<pasting_module_content_pool> const &);
 
     [[nodiscard]] std::vector<std::optional<pasting_module_content>> const &contents() const;
@@ -32,6 +33,7 @@ struct pasting_modules_presenter final {
     project_format const _project_format;
     std::weak_ptr<pasteboard> const _pasteboard;
     std::weak_ptr<display_space> const _display_space;
+    std::weak_ptr<display_space_range> const _display_space_range;
     std::weak_ptr<pasting_module_content_pool> const _content_pool;
     observing::canceller_pool _canceller_pool;
 
