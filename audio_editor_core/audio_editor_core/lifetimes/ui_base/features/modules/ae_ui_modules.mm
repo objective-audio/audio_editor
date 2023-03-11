@@ -26,7 +26,6 @@ std::shared_ptr<ui_modules> ui_modules::make_shared(window_lifetime_id const &wi
                                                     std::shared_ptr<ui::node> const &node,
                                                     ui_module_waveforms *waveforms) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
 
     auto const modules_presenter = modules_presenter::make_shared(window_lifetime_id);

@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_player.h>
+#include <cpp_utils/yas_lock.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 #include <audio_editor_core/ae_range_selector.hpp>
@@ -151,13 +152,13 @@ std::optional<time::range> modules_presenter::_space_range() const {
 }
 
 void modules_presenter::_insert_content(module_object const &module) {
-    auto const content_pool = this->_content_pool.lock();
-    auto const display_space = this->_display_space.lock();
-    auto const selected_pool = this->_selected_pool.lock();
+    auto const locked = yas::lock(this->_content_pool, this->_display_space, this->_selected_pool);
 
-    if (!content_pool || !display_space || !selected_pool) {
+    if (!fulfilled(locked)) {
         return;
     }
+
+    auto const &[content_pool, display_space, selected_pool] = locked;
 
     auto const space_range = this->_space_range();
     if (space_range.has_value() && module.value.range.is_overlap(space_range.value())) {
@@ -177,14 +178,13 @@ void modules_presenter::_erase_content(object_id const &object_id) {
 }
 
 void modules_presenter::_replace_contents(std::vector<module_index> const &indices) {
-    auto const content_pool = this->_content_pool.lock();
-    auto const display_space = this->_display_space.lock();
-    auto const module_pool = this->_module_pool.lock();
-    auto const selected_pool = this->_selected_pool.lock();
+    auto const locked = yas::lock(this->_content_pool, this->_display_space, this->_module_pool, this->_selected_pool);
 
-    if (!content_pool || !display_space || !module_pool || !selected_pool) {
+    if (!fulfilled(locked)) {
         return;
     }
+
+    auto const &[content_pool, display_space, module_pool, selected_pool] = locked;
 
     auto const space_range = this->_space_range();
     if (space_range.has_value()) {
@@ -204,13 +204,12 @@ void modules_presenter::_replace_contents(std::vector<module_index> const &indic
 // force_replacing -> 要素が変わっていなくても強制的に更新するか
 void modules_presenter::_update_all_contents(bool const force_updating, bool const force_replacing) {
     auto const space_range = this->_space_range();
-    auto const player = this->_player.lock();
-    auto const module_pool = this->_module_pool.lock();
-    auto const display_space = this->_display_space.lock();
-    auto const content_pool = this->_content_pool.lock();
-    auto const selected_pool = this->_selected_pool.lock();
+    auto const locked =
+        yas::lock(this->_player, this->_module_pool, this->_display_space, this->_content_pool, this->_selected_pool);
 
-    if (player && module_pool && space_range.has_value() && display_space && content_pool && selected_pool) {
+    if (space_range.has_value() && fulfilled(locked)) {
+        auto const &[player, module_pool, display_space, content_pool, selected_pool] = locked;
+
         auto const current_frame = player->current_frame();
 
         if (space_range == this->_last_space_range && current_frame == this->_last_frame && !force_updating) {
@@ -222,7 +221,7 @@ void modules_presenter::_update_all_contents(bool const force_updating, bool con
 
         auto const contents = filter_map<module_content>(
             module_pool->modules(), [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale,
-                                     &selected_pool](auto const &module) {
+                                     &selected_pool = selected_pool](auto const &module) {
                 if (module.first.range.is_overlap(space_range_value)) {
                     return std::make_optional<module_content>(module.second,
                                                               selected_pool->contains(module.second.index()),

@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_pasteboard.h>
+#include <cpp_utils/yas_lock.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -85,30 +86,36 @@ std::optional<time::range> pasting_markers_presenter::_space_range() const {
 
 void pasting_markers_presenter::_update_all_contents(bool const force_updating, bool const force_replacing) {
     auto const space_range = this->_space_range();
-    auto const pasteboard = this->_pasteboard.lock();
-    auto const display_space = this->_display_space.lock();
-    auto const content_pool = this->_content_pool.lock();
 
-    if (pasteboard && space_range.has_value() && display_space && content_pool) {
-        if (space_range == this->_last_space_range && !force_updating) {
-            return;
-        }
-
-        auto const &space_range_value = space_range.value();
-        auto const scale = display_space->scale().width;
-
-        auto const contents = filter_map<pasting_marker_content>(
-            pasteboard->markers(), [&space_range_value, sample_rate = this->_project_format.sample_rate,
-                                    &scale](pasting_marker_object const &marker) {
-                if (space_range_value.is_contain(marker.value.frame)) {
-                    return std::make_optional<pasting_marker_content>(marker, sample_rate, scale);
-                } else {
-                    return std::optional<pasting_marker_content>(std::nullopt);
-                }
-            });
-
-        content_pool->update_all(contents, force_replacing);
-
-        this->_last_space_range = space_range;
+    if (!space_range.has_value()) {
+        return;
     }
+
+    if (space_range == this->_last_space_range && !force_updating) {
+        return;
+    }
+
+    auto const locked = yas::lock(this->_pasteboard, this->_display_space, this->_content_pool);
+
+    if (!fulfilled(locked)) {
+        return;
+    }
+
+    auto const &[pasteboard, display_space, content_pool] = locked;
+    auto const &space_range_value = space_range.value();
+    auto const scale = display_space->scale().width;
+
+    auto const contents = filter_map<pasting_marker_content>(
+        pasteboard->markers(), [&space_range_value, sample_rate = this->_project_format.sample_rate,
+                                &scale](pasting_marker_object const &marker) {
+            if (space_range_value.is_contain(marker.value.frame)) {
+                return std::make_optional<pasting_marker_content>(marker, sample_rate, scale);
+            } else {
+                return std::optional<pasting_marker_content>(std::nullopt);
+            }
+        });
+
+    content_pool->update_all(contents, force_replacing);
+
+    this->_last_space_range = space_range;
 }
