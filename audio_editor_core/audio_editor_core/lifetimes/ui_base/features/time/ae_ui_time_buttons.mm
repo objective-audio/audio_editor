@@ -104,8 +104,8 @@ void ui_time_buttons::_resize_buttons() {
             auto button =
                 ui::button::make_shared(ui::region{.origin = ui::point::zero(), .size = {1.0f, 1.0f}}, standard, 2);
 
-            button->set_can_begin_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
-            button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
+            button->set_can_begin_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}, true));
+            button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}, true));
 
             button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
             button->rect_plane()->node()->mesh()->set_texture(this->_atlas->texture());

@@ -56,8 +56,8 @@ ui_time_bg::ui_time_bg(std::shared_ptr<project_action_sender> const &action_send
         .sync()
         ->add_to(this->_pool);
 
-    this->_button->set_can_begin_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
-    this->_button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}));
+    this->_button->set_can_begin_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}, true));
+    this->_button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}, true));
 
     this->_button
         ->observe([this](ui::button::context const &context) {
