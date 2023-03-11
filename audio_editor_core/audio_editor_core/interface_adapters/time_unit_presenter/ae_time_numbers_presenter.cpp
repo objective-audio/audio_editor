@@ -12,6 +12,7 @@
 #include <audio_editor_core/ae_time_numbers_presenter_utils.h>
 #include <audio_editor_core/ae_timing.h>
 #include <cpp_utils/yas_fast_each.h>
+#include <cpp_utils/yas_lock.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -50,9 +51,9 @@ std::string time_numbers_presenter::time_text() const {
     if (auto const &lifetime = this->_lifetime()) {
         return time_numbers_presenter_utils::time_text(lifetime->editor->editing_components());
     } else {
-        auto const player = this->_player.lock();
-        auto const timing = this->_timing.lock();
-        if (player && timing) {
+        if (auto const locked = yas::lock(this->_player, this->_timing); fulfilled(locked)) {
+            auto const &[player, timing] = locked;
+
             return time_numbers_presenter_utils::time_text(
                 timing->components(player->current_frame()).raw_components());
         } else {
