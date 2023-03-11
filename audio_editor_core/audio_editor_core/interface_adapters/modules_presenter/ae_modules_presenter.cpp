@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_player.h>
+#include <cpp_utils/yas_lock.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 #include <audio_editor_core/ae_range_selector.hpp>
@@ -151,13 +152,13 @@ std::optional<time::range> modules_presenter::_space_range() const {
 }
 
 void modules_presenter::_insert_content(module_object const &module) {
-    auto const content_pool = this->_content_pool.lock();
-    auto const display_space = this->_display_space.lock();
-    auto const selected_pool = this->_selected_pool.lock();
+    auto const locked = yas::lock(this->_content_pool, this->_display_space, this->_selected_pool);
 
-    if (!content_pool || !display_space || !selected_pool) {
+    if (!fulfilled(locked)) {
         return;
     }
+
+    auto const &[content_pool, display_space, selected_pool] = locked;
 
     auto const space_range = this->_space_range();
     if (space_range.has_value() && module.value.range.is_overlap(space_range.value())) {
@@ -177,14 +178,13 @@ void modules_presenter::_erase_content(object_id const &object_id) {
 }
 
 void modules_presenter::_replace_contents(std::vector<module_index> const &indices) {
-    auto const content_pool = this->_content_pool.lock();
-    auto const display_space = this->_display_space.lock();
-    auto const module_pool = this->_module_pool.lock();
-    auto const selected_pool = this->_selected_pool.lock();
+    auto const locked = yas::lock(this->_content_pool, this->_display_space, this->_module_pool, this->_selected_pool);
 
-    if (!content_pool || !display_space || !module_pool || !selected_pool) {
+    if (!fulfilled(locked)) {
         return;
     }
+
+    auto const &[content_pool, display_space, module_pool, selected_pool] = locked;
 
     auto const space_range = this->_space_range();
     if (space_range.has_value()) {
