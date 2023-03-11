@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <cpp_utils/yas_lock.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -43,10 +44,10 @@ observing::syncable edge_presenter::observe_locations(std::function<void(edge_lo
 }
 
 void edge_presenter::_update_locations() {
-    auto const edge_holder = this->_edge_holder.lock();
-    auto const display_space = this->_display_space.lock();
+    auto const locked = yas::lock(this->_edge_holder, this->_display_space);
 
-    if (edge_holder && display_space) {
+    if (fulfilled(locked)) {
+        auto const &[edge_holder, display_space] = locked;
         auto const &edge = edge_holder->edge();
         auto const sample_rate = this->_project_format.sample_rate;
         auto const &scale = display_space->scale();
