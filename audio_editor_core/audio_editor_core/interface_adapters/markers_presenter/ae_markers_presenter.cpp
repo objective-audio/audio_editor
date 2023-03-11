@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_player.h>
+#include <cpp_utils/yas_lock.h>
 
 #include <audio_editor_core/ae_range_selector.hpp>
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
@@ -142,60 +143,61 @@ std::optional<time::range> markers_presenter::_space_range() const {
 
 void markers_presenter::_update_all_contents(update_type const type) {
     auto const space_range = this->_space_range();
-    auto const marker_pool = this->_marker_pool.lock();
-    auto const player = this->_player.lock();
-    auto const display_space = this->_display_space.lock();
+    auto const locked = yas::lock(this->_marker_pool, this->_player, this->_display_space);
 
-    if (marker_pool && player && space_range.has_value() && display_space) {
-        auto const scale = display_space->scale();
-        auto const current_frame = player->current_frame();
-
-        if (space_range == this->_last_space_range && current_frame == this->_last_frame &&
-            type == update_type::update_if_changed) {
-            return;
-        }
-
-        auto const &space_range_value = space_range.value();
-
-        auto const contents = filter_map<marker_content>(
-            marker_pool->markers(),
-            [this, &space_range_value, sample_rate = this->_project_format.sample_rate, &scale](auto const &pair) {
-                auto const &marker = pair.second;
-                bool const is_selected = this->_is_selected({marker.identifier, marker.value.frame});
-                if (space_range_value.is_contain(pair.second.value.frame)) {
-                    return std::make_optional<marker_content>(pair.second.identifier, pair.second.value.frame,
-                                                              sample_rate, scale.width, pair.second.value.name,
-                                                              is_selected);
-                } else {
-                    return std::optional<marker_content>(std::nullopt);
-                }
-            });
-
-        switch (type) {
-            case update_type::replace:
-                this->_content_pool->replace_all(contents);
-                break;
-            case update_type::update:
-                this->_content_pool->update_all(contents, true);
-                break;
-            case update_type::update_if_changed:
-                this->_content_pool->update_all(contents, false);
-                break;
-        }
-
-        this->_last_frame = current_frame;
-        this->_last_space_range = space_range;
+    if (!space_range.has_value() || !fulfilled(locked)) {
+        return;
     }
+
+    auto const &[marker_pool, player, display_space] = locked;
+    auto const current_frame = player->current_frame();
+
+    if (space_range == this->_last_space_range && current_frame == this->_last_frame &&
+        type == update_type::update_if_changed) {
+        return;
+    }
+
+    auto const scale = display_space->scale();
+    auto const &space_range_value = space_range.value();
+
+    auto const contents = filter_map<marker_content>(
+        marker_pool->markers(),
+        [this, &space_range_value, sample_rate = this->_project_format.sample_rate, &scale](auto const &pair) {
+            auto const &marker = pair.second;
+            bool const is_selected = this->_is_selected({marker.identifier, marker.value.frame});
+            if (space_range_value.is_contain(pair.second.value.frame)) {
+                return std::make_optional<marker_content>(pair.second.identifier, pair.second.value.frame, sample_rate,
+                                                          scale.width, pair.second.value.name, is_selected);
+            } else {
+                return std::optional<marker_content>(std::nullopt);
+            }
+        });
+
+    switch (type) {
+        case update_type::replace:
+            this->_content_pool->replace_all(contents);
+            break;
+        case update_type::update:
+            this->_content_pool->update_all(contents, true);
+            break;
+        case update_type::update_if_changed:
+            this->_content_pool->update_all(contents, false);
+            break;
+    }
+
+    this->_last_frame = current_frame;
+    this->_last_space_range = space_range;
 }
 
 void markers_presenter::_insert_content_if_in_space_range(marker_index const &index) {
-    auto const marker_pool = this->_marker_pool.lock();
-    auto const display_space = this->_display_space.lock();
     auto const space_range = this->_space_range();
+    auto const locked = yas::lock(this->_marker_pool, this->_display_space);
 
-    if (!marker_pool || !display_space || !space_range.has_value()) {
+    if (!space_range.has_value() || !fulfilled(locked)) {
         return;
     }
+
+    auto const &[marker_pool, display_space] = locked;
 
     auto const marker = marker_pool->marker_for_index(index);
     if (!marker.has_value()) {
@@ -214,13 +216,14 @@ void markers_presenter::_insert_content_if_in_space_range(marker_index const &in
 
 void markers_presenter::_replace_or_erase_content_if_in_space_range(marker_index const &inserted_index,
                                                                     marker_index const &erased_index) {
-    auto const marker_pool = this->_marker_pool.lock();
-    auto const display_space = this->_display_space.lock();
     auto const space_range = this->_space_range();
+    auto const locked = yas::lock(this->_marker_pool, this->_display_space);
 
-    if (!marker_pool || !display_space || !space_range.has_value()) {
+    if (!space_range.has_value() || !fulfilled(locked)) {
         return;
     }
+
+    auto const &[marker_pool, display_space] = locked;
 
     auto const inserted = marker_pool->marker_for_index(inserted_index);
     if (!inserted.has_value()) {
@@ -240,13 +243,14 @@ void markers_presenter::_replace_or_erase_content_if_in_space_range(marker_index
 }
 
 void markers_presenter::_replace_content_if_in_space_range(marker_index const &index) {
-    auto const marker_pool = this->_marker_pool.lock();
-    auto const display_space = this->_display_space.lock();
     auto const space_range = this->_space_range();
+    auto const locked = yas::lock(this->_marker_pool, this->_display_space);
 
-    if (!marker_pool || !display_space || !space_range.has_value()) {
+    if (!space_range.has_value() || !fulfilled(locked)) {
         return;
     }
+
+    auto const &[marker_pool, display_space] = locked;
 
     auto const marker = marker_pool->marker_for_index(index);
     if (!marker.has_value()) {
