@@ -36,10 +36,10 @@ struct ui_markers final {
     ui_markers &operator=(ui_markers const &) = delete;
     ui_markers &operator=(ui_markers &&) = delete;
 
-    void _replace(std::vector<std::optional<marker_content>> const &);
-    void _update(std::size_t const count, std::vector<std::pair<std::size_t, marker_content>> const &erased,
-                 std::vector<std::pair<std::size_t, marker_content>> const &inserted,
-                 std::vector<std::pair<std::size_t, marker_content>> const &replaced);
-    void _set_count(std::size_t const);
+    void _replace_elements(std::vector<std::optional<marker_content>> const &);
+    void _update_elements(std::size_t const count, std::vector<std::pair<std::size_t, marker_content>> const &erased,
+                          std::vector<std::pair<std::size_t, marker_content>> const &inserted,
+                          std::vector<std::pair<std::size_t, marker_content>> const &replaced);
+    void _remake_elements_if_needed(std::size_t const);
 };
 }  // namespace yas::ae

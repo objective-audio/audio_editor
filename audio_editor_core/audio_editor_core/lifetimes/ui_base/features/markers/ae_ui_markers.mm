@@ -43,10 +43,10 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
             switch (event.type) {
                 case marker_content_pool_event_type::fetched:
                 case marker_content_pool_event_type::replaced:
-                    this->_replace(event.elements);
+                    this->_replace_elements(event.elements);
                     break;
                 case marker_content_pool_event_type::updated:
-                    this->_update(event.elements.size(), event.erased, event.inserted, event.replaced);
+                    this->_update_elements(event.elements.size(), event.erased, event.inserted, event.replaced);
                     break;
             }
         })
@@ -82,8 +82,8 @@ ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
         ->add_to(this->_pool);
 }
 
-void ui_markers::_replace(std::vector<std::optional<marker_content>> const &contents) {
-    this->_set_count(contents.size());
+void ui_markers::_replace_elements(std::vector<std::optional<marker_content>> const &contents) {
+    this->_remake_elements_if_needed(contents.size());
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
@@ -99,10 +99,11 @@ void ui_markers::_replace(std::vector<std::optional<marker_content>> const &cont
     }
 }
 
-void ui_markers::_update(std::size_t const count, std::vector<std::pair<std::size_t, marker_content>> const &erased,
-                         std::vector<std::pair<std::size_t, marker_content>> const &inserted,
-                         std::vector<std::pair<std::size_t, marker_content>> const &replaced) {
-    this->_set_count(count);
+void ui_markers::_update_elements(std::size_t const count,
+                                  std::vector<std::pair<std::size_t, marker_content>> const &erased,
+                                  std::vector<std::pair<std::size_t, marker_content>> const &inserted,
+                                  std::vector<std::pair<std::size_t, marker_content>> const &replaced) {
+    this->_remake_elements_if_needed(count);
 
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
@@ -126,7 +127,7 @@ void ui_markers::_update(std::size_t const count, std::vector<std::pair<std::siz
     }
 }
 
-void ui_markers::_set_count(std::size_t const content_count) {
+void ui_markers::_remake_elements_if_needed(std::size_t const content_count) {
     auto const prev_element_count = this->_elements.size();
 
     if (prev_element_count < content_count) {
