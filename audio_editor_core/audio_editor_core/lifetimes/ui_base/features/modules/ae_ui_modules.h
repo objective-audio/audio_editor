@@ -59,11 +59,14 @@ struct ui_modules final {
     ui_modules &operator=(ui_modules const &) = delete;
     ui_modules &operator=(ui_modules &&) = delete;
 
-    void _set_contents(std::vector<std::optional<module_content>> const &);
+    /// contentsを元に全てのUI要素を作り直す
+    void _replace(std::vector<std::optional<module_content>> const &);
+    /// 全てのUI要素の色のみを更新する
     void _update_colors(std::vector<std::optional<module_content>> const &);
-    void _update_contents(std::size_t const count, std::vector<std::pair<std::size_t, module_content>> const &inserted,
-                          std::vector<std::pair<std::size_t, module_content>> const &replaced,
-                          std::vector<std::pair<std::size_t, module_content>> const &erased);
+    /// UI要素を部分的に更新する
+    void _update(std::size_t const count, std::vector<std::pair<std::size_t, module_content>> const &inserted,
+                 std::vector<std::pair<std::size_t, module_content>> const &replaced,
+                 std::vector<std::pair<std::size_t, module_content>> const &erased);
 
     void _remake_data_if_needed(std::size_t const max_count);
     void _set_rect_count(std::size_t const rect_count);
