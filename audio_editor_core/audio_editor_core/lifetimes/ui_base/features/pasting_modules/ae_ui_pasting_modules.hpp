@@ -40,11 +40,10 @@ struct ui_pasting_modules final {
     ui_pasting_modules &operator=(ui_pasting_modules const &) = delete;
     ui_pasting_modules &operator=(ui_pasting_modules &&) = delete;
 
-    void _set_contents(std::vector<std::optional<pasting_module_content>> const &);
-    void _update_contents(std::size_t const count,
-                          std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
-                          std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
-                          std::vector<std::pair<std::size_t, pasting_module_content>> const &erased);
+    void _replace(std::vector<std::optional<pasting_module_content>> const &);
+    void _update(std::size_t const count, std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
+                 std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
+                 std::vector<std::pair<std::size_t, pasting_module_content>> const &erased);
 
     void _remake_data_if_needed(std::size_t const max_count);
     void _set_rect_count(std::size_t const rect_count);
