@@ -45,10 +45,10 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
             switch (event.type) {
                 case pasting_module_content_pool_event_type::fetched:
                 case pasting_module_content_pool_event_type::replaced:
-                    this->_set_contents(event.elements);
+                    this->_replace(event.elements);
                     break;
                 case pasting_module_content_pool_event_type::updated:
-                    this->_update_contents(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    this->_update(event.elements.size(), event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -72,7 +72,7 @@ void ui_pasting_modules::set_scale(ui::size const &scale) {
     this->_frame_node->set_scale(scale);
 }
 
-void ui_pasting_modules::_set_contents(std::vector<std::optional<pasting_module_content>> const &contents) {
+void ui_pasting_modules::_replace(std::vector<std::optional<pasting_module_content>> const &contents) {
     this->_set_rect_count(contents.size());
 
     this->_vertex_data->write([&contents](std::vector<ui::vertex2d_t> &vertices) {
@@ -95,10 +95,10 @@ void ui_pasting_modules::_set_contents(std::vector<std::optional<pasting_module_
     });
 }
 
-void ui_pasting_modules::_update_contents(std::size_t const count,
-                                          std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
-                                          std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
-                                          std::vector<std::pair<std::size_t, pasting_module_content>> const &erased) {
+void ui_pasting_modules::_update(std::size_t const count,
+                                 std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
+                                 std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
+                                 std::vector<std::pair<std::size_t, pasting_module_content>> const &erased) {
     this->_set_rect_count(count);
 
     this->_vertex_data->write([&erased, &inserted](std::vector<ui::vertex2d_t> &vertices) {

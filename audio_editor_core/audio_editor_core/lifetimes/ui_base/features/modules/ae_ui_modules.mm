@@ -72,10 +72,10 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
             switch (event.type) {
                 case module_content_pool_event_type::fetched:
                 case module_content_pool_event_type::replaced:
-                    this->_set_contents(event.elements);
+                    this->_replace_data(event.elements);
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_contents(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    this->_update_data(event.elements.size(), event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -176,7 +176,7 @@ void ui_modules::set_scale(ui::size const &scale) {
     this->_update_all_name_positions();
 }
 
-void ui_modules::_set_contents(std::vector<std::optional<module_content>> const &contents) {
+void ui_modules::_replace_data(std::vector<std::optional<module_content>> const &contents) {
     this->_set_rect_count(contents.size());
 
     this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
@@ -231,7 +231,7 @@ void ui_modules::_set_contents(std::vector<std::optional<module_content>> const 
     }
 }
 
-// こことは別に_update_contentsで部分的に色を更新しているので、変更する際は注意
+// こことは別に_updateで部分的に色を更新しているので、変更する際は注意
 void ui_modules::_update_colors(std::vector<std::optional<module_content>> const &contents) {
     this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
@@ -267,10 +267,10 @@ void ui_modules::_update_colors(std::vector<std::optional<module_content>> const
     }
 }
 
-void ui_modules::_update_contents(std::size_t const count,
-                                  std::vector<std::pair<std::size_t, module_content>> const &inserted,
-                                  std::vector<std::pair<std::size_t, module_content>> const &replaced,
-                                  std::vector<std::pair<std::size_t, module_content>> const &erased) {
+void ui_modules::_update_data(std::size_t const count,
+                              std::vector<std::pair<std::size_t, module_content>> const &inserted,
+                              std::vector<std::pair<std::size_t, module_content>> const &replaced,
+                              std::vector<std::pair<std::size_t, module_content>> const &erased) {
     this->_set_rect_count(count);
 
     this->_vertex_data->write([&erased, &inserted, &replaced, &colliders = this->_fill_node->colliders(),
