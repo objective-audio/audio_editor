@@ -75,7 +75,11 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                     this->_replace_data(event.elements);
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_data(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    if (this->_remaked_count < event.elements.size()) {
+                        this->_replace_data(event.elements);
+                    } else {
+                        this->_update_data(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    }
                     break;
             }
         })
@@ -190,19 +194,19 @@ void ui_modules::_replace_data(std::vector<std::optional<module_content>> const 
             auto const &idx = yas_each_index(each);
             auto const &content = contents.at(idx);
             auto const &collider = colliders.at(idx);
+            auto &rect = vertex_rects[idx];
 
             if (content.has_value()) {
                 auto const &value = content.value();
                 ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
                                         .size = {.width = value.width(), .height = 1.0f}};
-                auto &rect = vertex_rects[idx];
                 rect.set_position(region);
                 rect.set_tex_coord(filled_tex_coords);
 
                 collider->set_shape(ui::shape::make_shared({.rect = region}));
                 collider->set_enabled(true);
             } else {
-                vertex_rects[idx].set_position(ui::region::zero());
+                rect.set_position(ui::region::zero());
 
                 collider->set_enabled(false);
                 collider->set_shape(nullptr);
@@ -231,7 +235,7 @@ void ui_modules::_replace_data(std::vector<std::optional<module_content>> const 
     }
 }
 
-// こことは別に_updateで部分的に色を更新しているので、変更する際は注意
+// こことは別に_update_dataで部分的に色を更新しているので、変更する際は注意
 void ui_modules::_update_colors(std::vector<std::optional<module_content>> const &contents) {
     this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
@@ -273,9 +277,9 @@ void ui_modules::_update_data(std::size_t const count,
                               std::vector<std::pair<std::size_t, module_content>> const &erased) {
     this->_set_rect_count(count);
 
-    this->_vertex_data->write([&erased, &inserted, &replaced, &colliders = this->_fill_node->colliders(),
-                               &color = this->_color, &names = this->_names](std::vector<ui::vertex2d_t> &vertices) {
+    this->_vertex_data->write([&erased, &inserted, &replaced, this](std::vector<ui::vertex2d_t> &vertices) {
         auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
+        auto const &colliders = this->_fill_node->colliders();
 
         for (auto const &pair : erased) {
             vertex_rects[pair.first].set_position(ui::region::zero());
@@ -285,8 +289,10 @@ void ui_modules::_update_data(std::size_t const count,
             collider->set_shape(nullptr);
         }
 
+        auto const &color = this->_color;
         auto const normal_bg_color = color->module_bg().v;
         auto const selected_bg_color = color->selected_module_bg().v;
+        auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
         for (auto const &pair : inserted) {
             auto const &value = pair.second;
@@ -295,6 +301,7 @@ void ui_modules::_update_data(std::size_t const count,
 
             auto &rect = vertex_rects[pair.first];
             rect.set_position(region);
+            rect.set_tex_coord(filled_tex_coords);
 
             auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
             rect.set_color(bg_color);
