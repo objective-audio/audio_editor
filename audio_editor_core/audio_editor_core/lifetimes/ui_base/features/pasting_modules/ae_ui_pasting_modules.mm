@@ -48,7 +48,11 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
                     this->_replace(event.elements);
                     break;
                 case pasting_module_content_pool_event_type::updated:
-                    this->_update(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    if (this->_remaked_count < event.elements.size()) {
+                        this->_replace(event.elements);
+                    } else {
+                        this->_update(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    }
                     break;
             }
         })
