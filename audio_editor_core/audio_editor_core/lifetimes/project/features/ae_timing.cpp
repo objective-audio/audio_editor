@@ -49,6 +49,10 @@ timing_components timing::components(frame_index_t const frame) const {
     return timing_utils::to_components(frame, this->_fraction_kind->value(), this->_sample_rate);
 }
 
+timing_components timing::floored_components(timing_unit_kind const unit_kind, frame_index_t const frame) const {
+    return timing_utils::to_floored_components(frame, unit_kind, this->_fraction_kind->value(), this->_sample_rate);
+}
+
 uint32_t timing::fraction_digits() const {
     return timing_utils::to_fraction_digits(this->_fraction_kind->value(), this->_sample_rate);
 }

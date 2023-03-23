@@ -50,6 +50,43 @@ timing_components timing_utils::to_components(frame_index_t const frame, timing_
                                   .fraction_unit_size = fraction_unit}};
 }
 
+timing_components timing_utils::to_floored_components(frame_index_t const frame, timing_unit_kind const unit_kind,
+                                                      timing_fraction_kind const fraction_kind,
+                                                      sample_rate_t const sample_rate) {
+    auto const source = to_components(frame, fraction_kind, sample_rate);
+
+    timing_components::args floored_args{.is_minus = source.is_minus(),
+                                         .hours = 0,
+                                         .minutes = 0,
+                                         .seconds = 0,
+                                         .fraction = 0,
+                                         .fraction_unit_size = source.fraction_unit_size()};
+
+    switch (unit_kind) {
+        case timing_unit_kind::fraction:
+            floored_args.fraction = source.value(timing_unit_kind::fraction);
+        case timing_unit_kind::seconds:
+            floored_args.seconds = source.value(timing_unit_kind::seconds);
+        case timing_unit_kind::minutes:
+            floored_args.minutes = source.value(timing_unit_kind::minutes);
+        case timing_unit_kind::hours:
+            floored_args.hours = source.value(timing_unit_kind::hours);
+    }
+
+    timing_components floored{floored_args};
+
+    if (frame >= 0 || to_frame(floored, fraction_kind, sample_rate) == frame) {
+        return floored;
+    } else {
+        // マイナスならマイナス方向に丸める（切り捨てたframeと一致しなければ、切り捨てた値をマイナス方向に一つずらす）
+        auto const offset = timing_components::offset({.is_minus = true,
+                                                       .count = 1,
+                                                       .unit_index = to_index(unit_kind),
+                                                       .fraction_unit_size = source.fraction_unit_size()});
+        return floored.adding(offset);
+    }
+}
+
 frame_index_t timing_utils::to_frame(timing_components const &components, timing_fraction_kind const kind,
                                      sample_rate_t const sample_rate) {
     frame_index_t frame = static_cast<frame_index_t>(components.value(timing_unit_kind::hours)) * 60 * 60 * sample_rate;

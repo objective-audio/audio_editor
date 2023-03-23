@@ -105,6 +105,188 @@ using namespace yas::ae;
     }
 }
 
+- (void)test_to_floored_components {
+    sample_rate_t const sample_rate = 48000;
+
+    {
+        frame_index_t const frame = 60 * 60 * sample_rate * 1 + 60 * sample_rate * 2 + sample_rate * 3 + 4;
+
+        {
+            auto const components = timing_utils::to_floored_components(frame, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::sample, sample_rate);
+            XCTAssertFalse(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 4);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(frame, timing_unit_kind::seconds,
+                                                                        timing_fraction_kind::sample, sample_rate);
+            XCTAssertFalse(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 0);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(frame, timing_unit_kind::minutes,
+                                                                        timing_fraction_kind::sample, sample_rate);
+            XCTAssertFalse(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 0);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 0);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(frame, timing_unit_kind::hours,
+                                                                        timing_fraction_kind::sample, sample_rate);
+            XCTAssertFalse(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 0);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 0);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 0);
+        }
+    }
+
+    {
+        frame_index_t const frame = 60 * 60 * sample_rate * 1 + 60 * sample_rate * 2 + sample_rate * 3 + 4;
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::sample, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 4);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame, timing_unit_kind::seconds,
+                                                                        timing_fraction_kind::sample, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 4);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 0);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame, timing_unit_kind::minutes,
+                                                                        timing_fraction_kind::sample, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 0);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 0);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame, timing_unit_kind::hours,
+                                                                        timing_fraction_kind::sample, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 0);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 0);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 0);
+        }
+    }
+
+    {
+        frame_index_t const frame =
+            60 * 60 * sample_rate * 1 + 60 * sample_rate * 2 + sample_rate * 3 + sample_rate / 1000 * 4;
+
+        {
+            auto const components = timing_utils::to_floored_components(frame, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::milisecond, sample_rate);
+            XCTAssertFalse(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 4);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::milisecond, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 4);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame + 1, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::milisecond, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 4);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame - 1, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::milisecond, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 5);
+        }
+    }
+
+    {
+        frame_index_t const frame =
+            60 * 60 * sample_rate * 1 + 60 * sample_rate * 2 + sample_rate * 3 + sample_rate / 30 * 4;
+
+        {
+            auto const components = timing_utils::to_floored_components(frame, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::frame30, sample_rate);
+            XCTAssertFalse(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 4);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::frame30, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 4);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame + 1, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::frame30, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 4);
+        }
+
+        {
+            auto const components = timing_utils::to_floored_components(-frame - 1, timing_unit_kind::fraction,
+                                                                        timing_fraction_kind::frame30, sample_rate);
+            XCTAssertTrue(components.is_minus());
+            XCTAssertEqual(components.value(timing_unit_kind::hours), 1);
+            XCTAssertEqual(components.value(timing_unit_kind::minutes), 2);
+            XCTAssertEqual(components.value(timing_unit_kind::seconds), 3);
+            XCTAssertEqual(components.value(timing_unit_kind::fraction), 5);
+        }
+    }
+}
+
 - (void)test_to_frame {
     sample_rate_t const sample_rate = 48000;
 
