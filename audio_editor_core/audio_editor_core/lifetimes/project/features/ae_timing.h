@@ -20,6 +20,7 @@ struct timing final : timing_for_nudge_settings {
     [[nodiscard]] observing::syncable observe_fraction_kind(std::function<void(timing_fraction_kind const &)> &&);
 
     [[nodiscard]] timing_components components(frame_index_t const) const override;
+    [[nodiscard]] timing_components floored_components(timing_unit_kind const, frame_index_t const) const;
     [[nodiscard]] uint32_t fraction_digits() const;
 
     [[nodiscard]] frame_index_t frame(timing_components const &) const override;
