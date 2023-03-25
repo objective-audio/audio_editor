@@ -9,16 +9,14 @@
 namespace yas::ae::test_utils {
 struct timing_stub final : timing_for_nudge_settings {
     sample_rate_t sample_rate_value = 0;
-    std::function<timing_components(frame_index_t const &)> components_handler = [](frame_index_t const &) {
-        return timing_components{{.fraction_unit_size = 30}};
-    };
-    std::function<frame_index_t(timing_components const &)> frame_handler = [](timing_components const &) { return 0; };
+    timing_fraction_kind fraction_kind_value = timing_fraction_kind::frame30;
 
-    timing_stub(sample_rate_t const sample_rate);
+    timing_stub(sample_rate_t const sample_rate, timing_fraction_kind const kind);
 
     sample_rate_t sample_rate() const override;
 
     timing_components components(frame_index_t const) const override;
+    timing_components floored_components(timing_unit_kind const, frame_index_t const) const override;
     frame_index_t frame(timing_components const &) const override;
 };
 }  // namespace yas::ae::test_utils

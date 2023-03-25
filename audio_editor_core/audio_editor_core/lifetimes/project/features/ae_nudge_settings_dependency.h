@@ -14,6 +14,7 @@ struct timing_for_nudge_settings {
     [[nodiscard]] virtual sample_rate_t sample_rate() const = 0;
 
     [[nodiscard]] virtual timing_components components(frame_index_t const) const = 0;
+    [[nodiscard]] virtual timing_components floored_components(timing_unit_kind const, frame_index_t const) const = 0;
     [[nodiscard]] virtual frame_index_t frame(timing_components const &) const = 0;
 };
 }  // namespace yas::ae

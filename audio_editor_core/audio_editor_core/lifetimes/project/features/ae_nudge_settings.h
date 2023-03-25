@@ -21,6 +21,9 @@ struct nudge_settings final {
     [[nodiscard]] frame_index_t previous_nudging_frame(frame_index_t const current_frame,
                                                        uint32_t const offset_count) const;
 
+    [[nodiscard]] frame_index_t current_grid_frame(frame_index_t const current_frame) const;
+    [[nodiscard]] frame_index_t next_grid_frame(frame_index_t const current_frame) const;
+
    private:
     timing_for_nudge_settings const *const _timing;
     observing::value::holder_ptr<std::size_t> const _unit_idx;

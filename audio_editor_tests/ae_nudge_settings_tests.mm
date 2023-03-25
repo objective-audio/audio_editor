@@ -17,14 +17,14 @@ using namespace yas::ae;
 @implementation ae_nudge_settings_tests
 
 - (void)test_initial {
-    auto const timing = std::make_shared<test_utils::timing_stub>(48000);
+    auto const timing = std::make_shared<test_utils::timing_stub>(48000, timing_fraction_kind::frame30);
     auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
     XCTAssertEqual(settings->unit_index(), 0);
 }
 
 - (void)test_rotate_next {
-    auto const timing = std::make_shared<test_utils::timing_stub>(48000);
+    auto const timing = std::make_shared<test_utils::timing_stub>(48000, timing_fraction_kind::frame30);
     auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
     XCTAssertEqual(settings->unit_index(), 0);
@@ -43,7 +43,7 @@ using namespace yas::ae;
 }
 
 - (void)test_rotate_previous {
-    auto const timing = std::make_shared<test_utils::timing_stub>(48000);
+    auto const timing = std::make_shared<test_utils::timing_stub>(48000, timing_fraction_kind::frame30);
     auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
     XCTAssertEqual(settings->unit_index(), 0);
@@ -65,19 +65,8 @@ using namespace yas::ae;
     XCTAssertEqual(settings->unit_index(), 0);
 }
 
-- (void)test_next_previous_frame {
-    ae::timing_fraction_kind const fraction_kind = ae::timing_fraction_kind::frame30;
-    sample_rate_t const sample_rate = 300;
-    auto const timing = std::make_shared<test_utils::timing_stub>(sample_rate);
-
-    timing->components_handler = [&fraction_kind, &sample_rate](frame_index_t const &frame) {
-        return timing_utils::to_components(frame, fraction_kind, sample_rate);
-    };
-
-    timing->frame_handler = [&fraction_kind, &sample_rate](timing_components const &components) {
-        return timing_utils::to_frame(components, fraction_kind, sample_rate);
-    };
-
+- (void)test_next_previous_nudging_frame {
+    auto const timing = std::make_shared<test_utils::timing_stub>(300, timing_fraction_kind::frame30);
     auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
     XCTAssertEqual(settings->next_nudging_frame(0, 1), 10);
