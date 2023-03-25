@@ -23,6 +23,7 @@ struct display_space final {
 
     [[nodiscard]] std::optional<time::range> frame_range(uint32_t const sample_rate,
                                                          frame_index_t const current_frame) const;
+    [[nodiscard]] float frames_per_one_width(uint32_t const sample_rate) const;
 
    private:
     ui::region _region;

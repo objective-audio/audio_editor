@@ -54,6 +54,10 @@ std::optional<time::range> display_space::frame_range(uint32_t const sample_rate
     }
 }
 
+float display_space::frames_per_one_width(uint32_t const sample_rate) const {
+    return (float)sample_rate / this->_scale.width;
+}
+
 void display_space::_update_region_and_notify(display_space_event_source const source) {
     ui::region const prev_region = this->_region;
 
