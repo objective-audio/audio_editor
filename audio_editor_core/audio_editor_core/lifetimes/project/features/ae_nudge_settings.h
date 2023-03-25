@@ -16,10 +16,13 @@ struct nudge_settings final {
     [[nodiscard]] std::size_t unit_index() const;
     [[nodiscard]] observing::syncable observe_unit_index(std::function<void(std::size_t const &)> &&);
 
-    [[nodiscard]] std::optional<frame_index_t> next_frame(frame_index_t const current_frame,
-                                                          uint32_t const offset_count) const;
-    [[nodiscard]] std::optional<frame_index_t> previous_frame(frame_index_t const current_frame,
-                                                              uint32_t const offset_count) const;
+    [[nodiscard]] frame_index_t next_nudging_frame(frame_index_t const current_frame,
+                                                   uint32_t const offset_count) const;
+    [[nodiscard]] frame_index_t previous_nudging_frame(frame_index_t const current_frame,
+                                                       uint32_t const offset_count) const;
+
+    [[nodiscard]] frame_index_t current_grid_frame(frame_index_t const current_frame) const;
+    [[nodiscard]] frame_index_t next_grid_frame(frame_index_t const current_frame) const;
 
    private:
     timing_for_nudge_settings const *const _timing;

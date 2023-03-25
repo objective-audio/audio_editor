@@ -11,16 +11,15 @@ namespace yas::ae {
 class zooming_presenter;
 class ui_modules;
 class ui_pasting_modules;
-class ui_markers;
-class ui_edge;
+class ui_grid;
 class display_space;
 
 struct ui_zooming final {
     [[nodiscard]] static std::shared_ptr<ui_zooming> make_shared(window_lifetime_id const &, ui_modules *,
-                                                                 ui_pasting_modules *);
+                                                                 ui_pasting_modules *, ui_grid *);
 
     ui_zooming(std::shared_ptr<ui::standard> const &, display_space *, std::shared_ptr<zooming_presenter> const &,
-               ui_modules *, ui_pasting_modules *);
+               ui_modules *, ui_pasting_modules *, ui_grid *);
 
    private:
     std::shared_ptr<zooming_presenter> const _presenter;
@@ -28,6 +27,7 @@ struct ui_zooming final {
     display_space *const _display_space;
     ui_modules *const _modules;
     ui_pasting_modules *const _pasting_modules;
+    ui_grid *const _grid;
 
     observing::canceller_pool _pool;
 

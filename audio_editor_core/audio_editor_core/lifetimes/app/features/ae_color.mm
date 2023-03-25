@@ -43,6 +43,10 @@ ui::color color::background() const {
     return to_color(@"background");
 }
 
+ui::color color::grid_line() const {
+    return to_color(@"grid_line");
+}
+
 ui::color color::playing_line_pausing() const {
     return to_color(@"playing_line_pausing");
 }

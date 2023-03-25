@@ -17,6 +17,7 @@ class project_lifetime;
 class ui_resource_lifetime;
 class ui_node_hierarchy;
 class ui_background;
+class ui_grid;
 class ui_module_waveforms;
 class ui_modules;
 class ui_pasting_modules;
@@ -45,6 +46,7 @@ struct ui_base_lifetime final {
 
     std::shared_ptr<ui_background> const background;
     std::shared_ptr<ui_range_selection_input> const range_selection_input;
+    std::shared_ptr<ui_grid> const grid;
     std::shared_ptr<ui_module_waveforms> const waveforms;
     std::shared_ptr<ui_modules> const modules;
     std::shared_ptr<ui_range_selection> const range_selection;

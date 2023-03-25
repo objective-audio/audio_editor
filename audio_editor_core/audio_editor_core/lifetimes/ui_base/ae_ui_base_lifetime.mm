@@ -16,6 +16,7 @@
 #include <audio_editor_core/ae_ui_time_buttons.h>
 #include <audio_editor_core/ae_ui_zooming.h>
 #include <audio_editor_core/ae_ui_background.hpp>
+#include <audio_editor_core/ae_ui_grid.hpp>
 #include <audio_editor_core/ae_ui_node_hierarchy.hpp>
 #include <audio_editor_core/ae_ui_pasting_markers.hpp>
 #include <audio_editor_core/ae_ui_pasting_modules.hpp>
@@ -37,6 +38,7 @@ ui_base_lifetime::ui_base_lifetime(ae::window_lifetime_id const &lifetime_id)
       background(ui_background::make_shared(lifetime_id)),
       range_selection_input(
           ui_range_selection_input::make_shared(lifetime_id, this->node_hierarchy->range_selection_input_node.get())),
+      grid(ui_grid::make_shared(lifetime_id, this->node_hierarchy->grid_node.get())),
       waveforms(ui_module_waveforms::make_shared(lifetime_id)),
       modules(ui_modules::make_shared(lifetime_id, this->node_hierarchy->modules_node, this->waveforms.get())),
       range_selection(ui_range_selection::make_shared(lifetime_id, this->node_hierarchy->range_selection_node.get())),
@@ -44,7 +46,7 @@ ui_base_lifetime::ui_base_lifetime(ae::window_lifetime_id const &lifetime_id)
       edge(ui_edge::make_shared(lifetime_id, this->node_hierarchy->edge_node)),
       markers(ui_markers::make_shared(lifetime_id, this->node_hierarchy->markers_node)),
       pasting_markers(ui_pasting_markers::make_shared(lifetime_id, this->node_hierarchy->pasting_markers_node)),
-      zooming(ui_zooming::make_shared(lifetime_id, this->modules.get(), this->pasting_modules.get())),
+      zooming(ui_zooming::make_shared(lifetime_id, this->modules.get(), this->pasting_modules.get(), this->grid.get())),
       scroller(ui_scroller::make_shared(lifetime_id, this->node_hierarchy->scroller_node.get())),
       modal_bg(ui_modal_bg::make_shared(lifetime_id, this->node_hierarchy->modal_bg_node)),
       time_base(ui_time_base::make_shared(lifetime_id, this->node_hierarchy->time_base_node)),

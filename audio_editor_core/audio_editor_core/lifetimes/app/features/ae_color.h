@@ -12,6 +12,8 @@ struct color final {
 
     [[nodiscard]] ui::color background() const;
 
+    [[nodiscard]] ui::color grid_line() const;
+
     [[nodiscard]] ui::color playing_line_pausing() const;
     [[nodiscard]] ui::color playing_line_playing() const;
     [[nodiscard]] ui::color playing_line_scrolling() const;

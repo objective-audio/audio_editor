@@ -15,6 +15,7 @@
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_file_module_loader.h>
 #include <audio_editor_core/ae_file_module_loading_state_holder.h>
+#include <audio_editor_core/ae_grid_content_pool.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_import_interactor.h>
 #include <audio_editor_core/ae_jumper.h>
@@ -49,6 +50,7 @@
 #include <audio_editor_core/ae_deselector.hpp>
 #include <audio_editor_core/ae_display_space_range.hpp>
 #include <audio_editor_core/ae_escaper.hpp>
+#include <audio_editor_core/ae_grid_updater.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
 #include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
@@ -72,12 +74,15 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       pasting_module_content_pool(pasting_module_content_pool::make_shared()),
       marker_content_pool(marker_content_pool::make_shared()),
       pasting_marker_content_pool(pasting_marker_content_pool::make_shared()),
+      grid_content_pool(grid_content_pool::make_shared()),
       action_sender(std::make_shared<ae::project_action_sender>(window_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(std::make_shared<ae::pinch_gesture_controller>(window_lifetime->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(window_lifetime->scrolling.get())),
       database(database::make_shared(window_lifetime->project_path->db_file())),
       timing(std::make_shared<ae::timing>(project_format.sample_rate)),
       nudge_settings(std::make_shared<ae::nudge_settings>(this->timing.get())),
+      grid_updater(std::make_shared<ae::grid_updater>(this->timing.get(), this->nudge_settings.get(),
+                                                      this->grid_content_pool.get())),
       module_pool(std::make_shared<ae::module_pool>(this->database.get())),
       waveforms_mesh_importer(
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->module_pool.get())),
