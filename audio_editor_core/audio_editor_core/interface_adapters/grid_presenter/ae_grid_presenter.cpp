@@ -59,7 +59,7 @@ void grid_presenter::update_contents() {
             {.begin_frame = current_range.value().frame,
              .end_frame = current_range.value().next_frame(),
              .min_interval = static_cast<length_t>(
-                 std::ceilf(display_space->frames_per_one_width(this->_project_format.sample_rate) * 8.0f))});
+                 std::ceilf(display_space->frames_per_point_width(this->_project_format.sample_rate) * 8.0f))});
     } else {
         updater->reset();
     }

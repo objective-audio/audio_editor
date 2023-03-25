@@ -4,7 +4,6 @@
 
 #include "ae_color.h"
 #import <AppKit/AppKit.h>
-#include <iostream>
 
 @interface AudioEditorCoreDummyClassForBundle : NSObject
 @end
