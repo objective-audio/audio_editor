@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_grid_content_pool.h>
 #include <audio_editor_core/ae_marker_content_pool.h>
 #include <audio_editor_core/ae_module_content_pool.h>
 #include <audio_editor_core/ae_pasting_marker_content_pool.h>
@@ -18,6 +19,7 @@ namespace yas::ae {
 class app_lifetime;
 class timing;
 class nudge_settings;
+class grid_updater;
 class module_pool;
 class selected_module_pool;
 class module_selector;
@@ -69,6 +71,7 @@ struct project_lifetime final {
     std::shared_ptr<pasting_module_content_pool> const pasting_module_content_pool;
     std::shared_ptr<marker_content_pool> const marker_content_pool;
     std::shared_ptr<pasting_marker_content_pool> const pasting_marker_content_pool;
+    std::shared_ptr<grid_content_pool> const grid_content_pool;
     std::shared_ptr<project_action_sender> const action_sender;
     std::shared_ptr<pinch_gesture_controller> const pinch_gesture_controller;
     std::shared_ptr<scroll_gesture_controller> const scroll_gesture_controller;
@@ -76,6 +79,7 @@ struct project_lifetime final {
     std::shared_ptr<database> const database;
     std::shared_ptr<timing> const timing;
     std::shared_ptr<nudge_settings> const nudge_settings;
+    std::shared_ptr<grid_updater> const grid_updater;
     std::shared_ptr<module_pool> const module_pool;
     std::shared_ptr<waveform_mesh_importer> const waveforms_mesh_importer;
     std::shared_ptr<selected_module_pool> const selected_module_pool;
