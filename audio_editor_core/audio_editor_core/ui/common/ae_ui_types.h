@@ -20,4 +20,24 @@ struct frame_index2d_rect final {
 
     void set_all(ui::index2d_t const first);
 };
+
+struct vertex2d_line final {
+    static std::size_t constexpr vector_count = 2;
+
+    ui::vertex2d_t v[vector_count];
+
+    void set_position(ui::point const first, ui::point const second);
+    void reset_position();
+    void set_color(simd::float4 const &);
+    void set_color(ui::color const &);
+    void set_tex_coord(ui::uint_point const &);
+};
+
+struct index2d_line final {
+    static std::size_t constexpr vector_count = 2;
+
+    ui::index2d_t v[vector_count];
+
+    void set_all(ui::index2d_t const first);
+};
 }  // namespace yas::ae
