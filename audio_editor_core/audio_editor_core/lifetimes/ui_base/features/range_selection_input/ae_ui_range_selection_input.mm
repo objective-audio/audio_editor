@@ -6,8 +6,6 @@
 #include <audio_editor_core/ae_ui_hierarchy.h>
 #include <audio_editor_core/ae_range_selector.hpp>
 
-#include <iostream>
-
 using namespace yas;
 using namespace yas::ae;
 
