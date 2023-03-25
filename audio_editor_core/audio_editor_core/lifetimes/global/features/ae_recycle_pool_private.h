@@ -29,7 +29,7 @@ void recycle_pool<Element>::replace_all(std::vector<Element> const &elements) {
 }
 
 template <typename Element>
-void recycle_pool<Element>::update_all(std::vector<Element> const &elements, bool const force_replacing) {
+void recycle_pool<Element>::update_all(std::vector<Element> const &elements, bool const force_element_replacing) {
     std::vector<std::pair<std::size_t, Element>> inserted;
     std::vector<std::pair<std::size_t, Element>> replaced;
 
@@ -41,7 +41,7 @@ void recycle_pool<Element>::update_all(std::vector<Element> const &elements, boo
 
         if (contains_index.has_value()) {
             auto const &idx = contains_index.value();
-            if (force_replacing || this->_elements.at(idx) != element) {
+            if (force_element_replacing || this->_elements.at(idx) != element) {
                 replaced.emplace_back(idx, element);
                 this->_elements.at(idx) = element;
             }

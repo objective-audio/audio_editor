@@ -30,7 +30,7 @@ struct recycle_pool final {
     /// 全ての要素をそのままセットして更新する
     void replace_all(std::vector<Element> const &);
     /// 元のelementsを活かしながら全ての要素を更新する
-    void update_all(std::vector<Element> const &, bool const force_replacing);
+    void update_all(std::vector<Element> const &, bool const force_element_replacing);
     /// 単独の要素を削除する
     void erase_for_id(object_id const &);
     /// 単独の要素を追加する
