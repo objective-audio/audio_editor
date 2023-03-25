@@ -54,7 +54,7 @@ std::optional<time::range> display_space::frame_range(uint32_t const sample_rate
     }
 }
 
-float display_space::frames_per_one_width(uint32_t const sample_rate) const {
+float display_space::frames_per_point_width(uint32_t const sample_rate) const {
     return (float)sample_rate / this->_scale.width;
 }
 
