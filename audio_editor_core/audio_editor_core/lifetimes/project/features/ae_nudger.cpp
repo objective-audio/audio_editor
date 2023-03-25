@@ -26,9 +26,8 @@ void nudger::nudge_previous(uint32_t const offset_count) {
 
     frame_index_t const current_frame = this->_player->current_frame();
 
-    if (auto const prev_frame = this->_settings->previous_frame(current_frame, offset_count)) {
-        this->_player->seek(prev_frame.value());
-    }
+    auto const prev_frame = this->_settings->previous_nudging_frame(current_frame, offset_count);
+    this->_player->seek(prev_frame);
 }
 
 void nudger::nudge_next(uint32_t const offset_count) {
@@ -37,7 +36,6 @@ void nudger::nudge_next(uint32_t const offset_count) {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    if (auto const next_frame = this->_settings->next_frame(current_frame, offset_count)) {
-        this->_player->seek(next_frame.value());
-    }
+    auto const next_frame = this->_settings->next_nudging_frame(current_frame, offset_count);
+    this->_player->seek(next_frame);
 }

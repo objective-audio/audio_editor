@@ -80,13 +80,13 @@ using namespace yas::ae;
 
     auto const settings = std::make_shared<ae::nudge_settings>(timing.get());
 
-    XCTAssertEqual(settings->next_frame(0, 1), 10);
-    XCTAssertEqual(settings->next_frame(0, 10), 100);
-    XCTAssertEqual(settings->next_frame(0, 30), 300);
+    XCTAssertEqual(settings->next_nudging_frame(0, 1), 10);
+    XCTAssertEqual(settings->next_nudging_frame(0, 10), 100);
+    XCTAssertEqual(settings->next_nudging_frame(0, 30), 300);
 
-    XCTAssertEqual(settings->previous_frame(0, 1), -10);
-    XCTAssertEqual(settings->previous_frame(0, 10), -100);
-    XCTAssertEqual(settings->previous_frame(0, 30), -300);
+    XCTAssertEqual(settings->previous_nudging_frame(0, 1), -10);
+    XCTAssertEqual(settings->previous_nudging_frame(0, 10), -100);
+    XCTAssertEqual(settings->previous_nudging_frame(0, 30), -300);
 }
 
 @end
