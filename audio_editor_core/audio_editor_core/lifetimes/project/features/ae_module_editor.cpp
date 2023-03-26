@@ -20,8 +20,6 @@
 #include <cpp_utils/yas_fast_each.h>
 #include <processing/yas_processing_umbrella.h>
 
-#include <audio_editor_core/ae_selected_module_pool.hpp>
-
 using namespace yas;
 using namespace yas::ae;
 
@@ -127,7 +125,7 @@ void module_editor::erase() {
         return;
     }
 
-    auto selected_modules = this->_selected_pool->modules();
+    auto selected_modules = this->_selected_pool->elements();
     this->_erase_modules(std::move(selected_modules));
 }
 
@@ -141,7 +139,7 @@ void module_editor::cut() {
     }
 
     // copyでクリアされるので先に保持しておく
-    auto selected_modules = this->_selected_pool->modules();
+    auto selected_modules = this->_selected_pool->elements();
     this->copy();
     this->_erase_modules(std::move(selected_modules));
 }
@@ -161,7 +159,7 @@ void module_editor::copy() {
 
     auto const &module_pool = this->_module_pool;
     auto const current_frame = this->_player->current_frame();
-    auto const selected_modules = this->_selected_pool->modules();
+    auto const selected_modules = this->_selected_pool->elements();
 
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
@@ -220,7 +218,7 @@ void module_editor::paste() {
 }
 
 bool module_editor::_has_target_modules() const {
-    if (!this->_selected_pool->modules().empty()) {
+    if (!this->_selected_pool->elements().empty()) {
         return true;
     } else {
         auto const current_frame = this->_player->current_frame();

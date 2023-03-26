@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_selected_module_pool_types.h>
 #include <observing/yas_observing_umbrella.h>
+
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 namespace yas::ae {
 class player;
@@ -14,7 +15,6 @@ class marker_pool;
 class pasteboard;
 class database;
 class editing_status;
-class selected_module_pool;
 
 struct module_editor final {
     module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, pasteboard *, database *,

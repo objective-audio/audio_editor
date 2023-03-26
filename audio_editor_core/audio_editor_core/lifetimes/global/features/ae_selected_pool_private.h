@@ -38,7 +38,7 @@ void selected_pool<Element, Index>::insert(Element const &element) {
         return;
     }
 
-    this->insert({element});
+    this->insert(std::vector<Element>{element});
 }
 
 template <typename Element, typename Index>

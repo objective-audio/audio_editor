@@ -12,6 +12,7 @@
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 #include <memory>
 #include <string>
 
@@ -21,7 +22,6 @@ class timing;
 class nudge_settings;
 class grid_updater;
 class module_pool;
-class selected_module_pool;
 class module_selector;
 class marker_pool;
 class selected_marker_pool;

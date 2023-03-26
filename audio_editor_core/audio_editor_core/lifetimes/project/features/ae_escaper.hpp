@@ -4,9 +4,10 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_selected_module_pool.hpp>
+
 namespace yas::ae {
 class pasteboard;
-class selected_module_pool;
 class selected_marker_pool;
 
 struct escaper final {
