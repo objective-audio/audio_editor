@@ -14,7 +14,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::ui_pasting_modules_constants {
-static std::size_t const reserving_interval = 100;
+static std::size_t const reserving_interval = 16;
 }
 
 std::shared_ptr<ui_pasting_modules> ui_pasting_modules::make_shared(window_lifetime_id const &window_lifetime_id,
