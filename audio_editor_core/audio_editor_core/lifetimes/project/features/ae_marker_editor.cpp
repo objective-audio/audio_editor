@@ -11,8 +11,6 @@
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_player.h>
 
-#include <audio_editor_core/ae_selected_marker_pool.hpp>
-
 using namespace yas;
 using namespace yas::ae;
 
@@ -57,7 +55,7 @@ void marker_editor::erase() {
         return;
     }
 
-    auto selected_markers = this->_selected_pool->markers();
+    auto selected_markers = this->_selected_pool->elements();
 
     this->_erase(std::move(selected_markers));
 }
@@ -71,7 +69,7 @@ void marker_editor::cut() {
         return;
     }
 
-    auto selected_markers = this->_selected_pool->markers();
+    auto selected_markers = this->_selected_pool->elements();
     this->copy();
     this->_erase(std::move(selected_markers));
 }
@@ -91,7 +89,7 @@ void marker_editor::copy() {
 
     auto const &marker_pool = this->_marker_pool;
     auto const current_frame = this->_player->current_frame();
-    auto const selected_modules = this->_selected_pool->markers();
+    auto const selected_modules = this->_selected_pool->elements();
 
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
@@ -150,7 +148,7 @@ void marker_editor::paste() {
 }
 
 bool marker_editor::_has_target_markers() const {
-    if (!this->_selected_pool->markers().empty()) {
+    if (!this->_selected_pool->elements().empty()) {
         return true;
     } else {
         auto const current_frame = this->_player->current_frame();

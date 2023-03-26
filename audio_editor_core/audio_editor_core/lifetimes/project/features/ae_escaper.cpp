@@ -6,8 +6,6 @@
 
 #include <audio_editor_core/ae_pasteboard.h>
 
-#include <audio_editor_core/ae_selected_marker_pool.hpp>
-
 using namespace yas;
 using namespace yas::ae;
 

@@ -13,7 +13,6 @@
 
 #include <audio_editor_core/ae_display_space_range.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
-#include <audio_editor_core/ae_selected_marker_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -79,11 +78,11 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
     selected_marker_pool
         ->observe_event([this](selected_marker_pool::event const &event) {
             switch (event.type) {
-                case selected_marker_pool::event_type::fetched:
+                case selected_pool_event_type::fetched:
                     break;
-                case selected_marker_pool::event_type::inserted:
-                case selected_marker_pool::event_type::erased:
-                    for (auto const &pair : event.markers) {
+                case selected_pool_event_type::inserted:
+                case selected_pool_event_type::erased:
+                    for (auto const &pair : event.elements) {
                         auto const &index = pair.first;
                         this->_replace_content_if_in_space_range(index);
                     }
@@ -267,7 +266,7 @@ void markers_presenter::_replace_content_if_in_space_range(marker_index const &i
 
 bool markers_presenter::_is_selected(marker_index const &index) const {
     if (auto const selected_pool = this->_selected_marker_pool.lock()) {
-        return selected_pool->markers().contains(index);
+        return selected_pool->elements().contains(index);
     }
     return false;
 }

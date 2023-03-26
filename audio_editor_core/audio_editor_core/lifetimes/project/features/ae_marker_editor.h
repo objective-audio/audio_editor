@@ -4,16 +4,13 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_selected_marker_pool_types.h>
-
-#include <memory>
+#include <audio_editor_core/ae_selected_marker_pool.hpp>
 
 namespace yas::ae {
 class player;
 class marker_pool;
 class database;
 class editing_status;
-class selected_marker_pool;
 class pasteboard;
 
 struct marker_editor final {

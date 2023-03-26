@@ -6,11 +6,10 @@
 
 #include <audio_editor_core/ae_range_selector_dependency.h>
 
+#include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
 
 namespace yas::ae {
-class selected_marker_pool;
-
 struct deselector final : deselector_for_range_selector {
     deselector(selected_module_pool *, selected_marker_pool *);
 
