@@ -15,7 +15,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::ui_grid_constants {
-static std::size_t const reserving_interval = 100;
+static std::size_t const reserving_interval = 512;
 }
 
 std::shared_ptr<ui_grid> ui_grid::make_shared(window_lifetime_id const &lifetime_id, ui::node *node) {

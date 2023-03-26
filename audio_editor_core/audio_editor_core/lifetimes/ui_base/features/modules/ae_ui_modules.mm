@@ -19,7 +19,7 @@ using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::ui_modules_constants {
-static std::size_t const reserving_interval = 100;
+static std::size_t const reserving_interval = 128;
 }
 
 std::shared_ptr<ui_modules> ui_modules::make_shared(window_lifetime_id const &window_lifetime_id,
