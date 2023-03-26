@@ -5,10 +5,10 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_index.hpp>
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 namespace yas::ae {
 class module_pool;
-class selected_module_pool;
 class editing_status;
 class deselector;
 

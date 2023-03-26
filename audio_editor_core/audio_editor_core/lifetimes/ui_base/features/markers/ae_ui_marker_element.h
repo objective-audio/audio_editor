@@ -8,9 +8,10 @@
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
+#include <audio_editor_core/ae_selected_marker_pool.hpp>
+
 namespace yas::ae {
 class marker_pool;
-class selected_marker_pool;
 class marker_element_controller;
 class modifiers_holder;
 class color;

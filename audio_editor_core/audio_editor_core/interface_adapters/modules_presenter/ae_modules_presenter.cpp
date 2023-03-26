@@ -15,7 +15,6 @@
 
 #include <audio_editor_core/ae_display_space_range.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
-#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -74,7 +73,7 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
 
     selected_pool
         ->observe_event([this, sample_rate](selected_module_pool::event const &event) {
-            using event_type = selected_module_pool::event_type;
+            using event_type = selected_pool_event_type;
 
             switch (event.type) {
                 case event_type::fetched:
@@ -83,7 +82,7 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
                 case event_type::inserted:
                 case event_type::erased: {
                     auto const indices =
-                        to_vector<module_index>(event.modules, [](auto const &pair) { return pair.first; });
+                        to_vector<module_index>(event.elements, [](auto const &pair) { return pair.first; });
                     this->_replace_contents(indices);
                 } break;
             }

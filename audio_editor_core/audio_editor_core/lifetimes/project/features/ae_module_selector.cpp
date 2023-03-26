@@ -10,7 +10,6 @@
 
 #include <audio_editor_core/ae_deselector.hpp>
 #include <audio_editor_core/ae_selected_module.hpp>
-#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -31,7 +30,7 @@ void module_selector::select(std::vector<module_index> const &indices) {
         return selected_module_object{index.object_id, {index.range}};
     });
 
-    this->_selected_pool->insert_modules(inserting);
+    this->_selected_pool->insert(inserting);
 }
 
 bool module_selector::can_toggle() const {
@@ -40,7 +39,7 @@ bool module_selector::can_toggle() const {
 
 void module_selector::toggle(module_index const &index) {
     if (this->_module_pool->modules().contains(index)) {
-        this->_selected_pool->toggle_module(selected_module_object{index.object_id, {index.range}});
+        this->_selected_pool->toggle(selected_module_object{index.object_id, {index.range}});
     } else {
         assertion_failure_if_not_test();
     }

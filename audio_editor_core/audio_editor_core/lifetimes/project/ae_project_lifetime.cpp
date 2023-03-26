@@ -55,8 +55,6 @@
 #include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
-#include <audio_editor_core/ae_selected_marker_pool.hpp>
-#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;

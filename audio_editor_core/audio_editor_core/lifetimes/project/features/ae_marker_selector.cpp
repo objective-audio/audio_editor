@@ -9,8 +9,6 @@
 #include <cpp_utils/yas_assertion.h>
 
 #include <audio_editor_core/ae_deselector.hpp>
-#include <audio_editor_core/ae_selected_marker.hpp>
-#include <audio_editor_core/ae_selected_marker_pool.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -34,7 +32,7 @@ void marker_selector::select(std::vector<marker_index> const &indices) {
         return selected_marker_object{index.object_id, selected_marker{index.frame}};
     });
 
-    this->_selected_pool->insert_markers(inserting);
+    this->_selected_pool->insert(inserting);
 }
 
 bool marker_selector::can_toggle() const {
@@ -43,7 +41,7 @@ bool marker_selector::can_toggle() const {
 
 void marker_selector::toggle(marker_index const &index) {
     if (this->_marker_pool->markers().contains(index)) {
-        this->_selected_pool->toggle_marker(selected_marker_object{index.object_id, selected_marker{index.frame}});
+        this->_selected_pool->toggle(selected_marker_object{index.object_id, selected_marker{index.frame}});
     } else {
         assertion_failure_if_not_test();
     }

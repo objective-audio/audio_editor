@@ -11,6 +11,7 @@
 #include <ui/yas_ui_types.h>
 
 #include <audio_editor_core/ae_module_index.hpp>
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 
 namespace yas::ae {
 class display_space;
@@ -18,7 +19,6 @@ class display_space_range;
 class player;
 class range_selector;
 class module_pool;
-class selected_module_pool;
 
 struct modules_presenter final {
     [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(window_lifetime_id const &);

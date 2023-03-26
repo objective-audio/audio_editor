@@ -8,12 +8,13 @@
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
+#include <audio_editor_core/ae_selected_marker_pool.hpp>
+
 namespace yas::ae {
 class display_space;
 class display_space_range;
 class player;
 class marker_pool;
-class selected_marker_pool;
 class range_selector;
 class marker_index;
 

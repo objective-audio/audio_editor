@@ -14,8 +14,6 @@
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_file_manager.h>
 
-#include <audio_editor_core/ae_selected_module_pool.hpp>
-
 using namespace yas;
 using namespace yas::ae;
 

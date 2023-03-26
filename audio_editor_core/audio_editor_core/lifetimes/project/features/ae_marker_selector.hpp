@@ -4,11 +4,10 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_marker_index.hpp>
+#include <audio_editor_core/ae_selected_marker_pool.hpp>
 
 namespace yas::ae {
 class marker_pool;
-class selected_marker_pool;
 class editing_status;
 class deselector;
 

@@ -6,13 +6,14 @@
 
 #include <observing/yas_observing_umbrella.h>
 
+#include <audio_editor_core/ae_selected_module_pool.hpp>
+
 namespace yas::ae {
 class database;
 class module_pool;
 class marker_pool;
 class pasteboard;
 class edge_holder;
-class selected_module_pool;
 class editing_status;
 class project_path;
 

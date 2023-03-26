@@ -11,7 +11,6 @@
 #include <cpp_utils/yas_assertion.h>
 #include <audio_editor_core/ae_marker_element_controller.hpp>
 #include <audio_editor_core/ae_modifiers_holder.hpp>
-#include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_ui_atlas.hpp>
 #include <audio_editor_core/ae_ui_square_mesh_data.hpp>
 
