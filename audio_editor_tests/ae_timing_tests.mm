@@ -8,6 +8,20 @@
 using namespace yas;
 using namespace yas::ae;
 
+namespace yas::ae::test_utils {
+struct app_settings_stub : app_settings_for_timing {
+    ae::timing_fraction_kind kind = timing_fraction_kind::sample;
+
+    void set_timing_fraction_kind(ae::timing_fraction_kind const kind) override {
+        this->kind = kind;
+    }
+
+    ae::timing_fraction_kind timing_fraction_kind() const override {
+        return this->kind;
+    }
+};
+}
+
 @interface ae_timing_tests : XCTestCase
 
 @end
@@ -15,14 +29,27 @@ using namespace yas::ae;
 @implementation ae_timing_tests
 
 - (void)test_sample_rate {
-    XCTAssertEqual(std::make_shared<ae::timing>(1)->sample_rate(), 1);
-    XCTAssertEqual(std::make_shared<ae::timing>(44100)->sample_rate(), 44100);
-    XCTAssertEqual(std::make_shared<ae::timing>(48000)->sample_rate(), 48000);
-    XCTAssertEqual(std::make_shared<ae::timing>(96000)->sample_rate(), 96000);
+    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
+
+    XCTAssertEqual(std::make_shared<ae::timing>(1, app_settings.get())->sample_rate(), 1);
+    XCTAssertEqual(std::make_shared<ae::timing>(44100, app_settings.get())->sample_rate(), 44100);
+    XCTAssertEqual(std::make_shared<ae::timing>(48000, app_settings.get())->sample_rate(), 48000);
+    XCTAssertEqual(std::make_shared<ae::timing>(96000, app_settings.get())->sample_rate(), 96000);
+}
+
+- (void)test_restore_kind {
+    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
+
+    app_settings->set_timing_fraction_kind(ae::timing_fraction_kind::milisecond);
+
+    auto const timing = std::make_shared<ae::timing>(1, app_settings.get());
+
+    XCTAssertEqual(timing->fraction_kind(), ae::timing_fraction_kind::milisecond);
 }
 
 - (void)test_set_fraction_kind {
-    auto const timing = std::make_shared<ae::timing>(48000);
+    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
+    auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
     std::vector<timing_fraction_kind> called;
 
@@ -50,7 +77,8 @@ using namespace yas::ae;
 }
 
 - (void)test_components_fraction_of_sample {
-    auto const timing = std::make_shared<ae::timing>(48000);
+    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
+    auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
     timing->set_fraction_kind(timing_fraction_kind::sample);
 
@@ -89,7 +117,8 @@ using namespace yas::ae;
 }
 
 - (void)test_components_fraction_of_milisecond {
-    auto const timing = std::make_shared<ae::timing>(48000);
+    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
+    auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
     timing->set_fraction_kind(timing_fraction_kind::milisecond);
 
@@ -140,7 +169,8 @@ using namespace yas::ae;
 }
 
 - (void)test_components_fraction_of_frame30 {
-    auto const timing = std::make_shared<ae::timing>(48000);
+    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
+    auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
     timing->set_fraction_kind(timing_fraction_kind::frame30);
 
@@ -191,7 +221,8 @@ using namespace yas::ae;
 }
 
 - (void)test_fraction_digits {
-    auto const timing = std::make_shared<ae::timing>(48000);
+    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
+    auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
     timing->set_fraction_kind(timing_fraction_kind::sample);
 
@@ -207,7 +238,8 @@ using namespace yas::ae;
 }
 
 - (void)test_frame {
-    auto const timing = std::make_shared<ae::timing>(10000);
+    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
+    auto const timing = std::make_shared<ae::timing>(10000, app_settings.get());
 
     timing->set_fraction_kind(timing_fraction_kind::sample);
 

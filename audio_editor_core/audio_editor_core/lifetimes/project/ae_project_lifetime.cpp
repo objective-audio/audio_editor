@@ -47,6 +47,7 @@
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <audio_editor_core/ae_zooming_pair.h>
 
+#include <audio_editor_core/ae_app_settings.hpp>
 #include <audio_editor_core/ae_deselector.hpp>
 #include <audio_editor_core/ae_display_space_range.hpp>
 #include <audio_editor_core/ae_escaper.hpp>
@@ -77,8 +78,8 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       pinch_gesture_controller(std::make_shared<ae::pinch_gesture_controller>(window_lifetime->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(window_lifetime->scrolling.get())),
       database(database::make_shared(window_lifetime->project_path->db_file())),
-      timing(std::make_shared<ae::timing>(project_format.sample_rate)),
-      nudge_settings(std::make_shared<ae::nudge_settings>(this->timing.get())),
+      timing(std::make_shared<ae::timing>(project_format.sample_rate, app_lifetime->app_settings.get())),
+      nudge_settings(std::make_shared<ae::nudge_settings>(this->timing.get(), app_lifetime->app_settings.get())),
       grid_updater(std::make_shared<ae::grid_updater>(this->timing.get(), this->nudge_settings.get(),
                                                       this->grid_content_pool.get())),
       module_pool(std::make_shared<ae::module_pool>(this->database.get())),

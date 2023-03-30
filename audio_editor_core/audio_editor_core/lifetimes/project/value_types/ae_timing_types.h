@@ -66,7 +66,11 @@ struct timing_components {
 }  // namespace yas::ae
 
 namespace yas {
+ae::timing_fraction_kind rotate_next(ae::timing_fraction_kind const);
+
 std::size_t to_index(ae::timing_unit_kind const);
+ae::timing_unit_kind rotate_next(ae::timing_unit_kind const);
+ae::timing_unit_kind rotate_previous(ae::timing_unit_kind const);
 
 std::string to_string(ae::timing_components const &);
 }  // namespace yas

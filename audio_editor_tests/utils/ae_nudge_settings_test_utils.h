@@ -19,4 +19,16 @@ struct timing_stub final : timing_for_nudge_settings {
     timing_components floored_components(timing_unit_kind const, frame_index_t const) const override;
     frame_index_t frame(timing_components const &) const override;
 };
+
+struct app_settings_stub final : app_settings_for_nudge_settings {
+    ae::timing_unit_kind kind = ae::timing_unit_kind::fraction;
+
+    void set_timing_unit_kind(ae::timing_unit_kind const kind) override {
+        this->kind = kind;
+    }
+
+    ae::timing_unit_kind timing_unit_kind() const override {
+        return this->kind;
+    }
+};
 }  // namespace yas::ae::test_utils

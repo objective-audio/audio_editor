@@ -28,10 +28,10 @@ std::optional<std::size_t> time_nudge_presenter::nudging_unit_index() const {
     }
 }
 
-observing::syncable time_nudge_presenter::observe_nudging_unit_index(
-    std::function<void(std::size_t const &)> &&handler) {
+observing::syncable time_nudge_presenter::observe_nudging_unit_kind(
+    std::function<void(timing_unit_kind const &)> &&handler) {
     if (auto const settings = this->_nudge_settings.lock()) {
-        return settings->observe_unit_index(std::move(handler));
+        return settings->observe_kind(std::move(handler));
     } else {
         return observing::syncable{};
     }

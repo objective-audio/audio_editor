@@ -40,7 +40,8 @@ ui_time_nudge::ui_time_nudge(ae::color *color, std::shared_ptr<ui::view_look> co
 
     time_numbers->observe_button_regions([this] { this->_update_nudge_position(); }).end()->add_to(this->_pool);
 
-    this->_nudge_presenter->observe_nudging_unit_index([this](std::size_t const &) { this->_update_nudge_position(); })
+    this->_nudge_presenter
+        ->observe_nudging_unit_kind([this](timing_unit_kind const &) { this->_update_nudge_position(); })
         .sync()
         ->add_to(this->_pool);
 

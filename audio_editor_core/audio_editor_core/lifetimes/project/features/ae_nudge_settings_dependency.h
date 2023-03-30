@@ -17,4 +17,11 @@ struct timing_for_nudge_settings {
     [[nodiscard]] virtual timing_components floored_components(timing_unit_kind const, frame_index_t const) const = 0;
     [[nodiscard]] virtual frame_index_t frame(timing_components const &) const = 0;
 };
+
+struct app_settings_for_nudge_settings {
+    virtual ~app_settings_for_nudge_settings() = default;
+
+    virtual void set_timing_unit_kind(timing_unit_kind const) = 0;
+    [[nodiscard]] virtual timing_unit_kind timing_unit_kind() const = 0;
+};
 }  // namespace yas::ae

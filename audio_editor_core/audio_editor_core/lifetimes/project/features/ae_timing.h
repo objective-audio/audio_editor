@@ -5,12 +5,13 @@
 #pragma once
 
 #include <audio_editor_core/ae_nudge_settings_dependency.h>
+#include <audio_editor_core/ae_timing_dependencies.h>
 #include <audio_editor_core/ae_timing_types.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct timing final : timing_for_nudge_settings {
-    timing(sample_rate_t const);
+    timing(sample_rate_t const, app_settings_for_timing *);
 
     [[nodiscard]] sample_rate_t sample_rate() const override;
 
@@ -27,11 +28,14 @@ struct timing final : timing_for_nudge_settings {
 
    private:
     sample_rate_t const _sample_rate;
+    app_settings_for_timing *const _app_settings;
     observing::value::holder_ptr<timing_fraction_kind> const _fraction_kind;
 
     timing(timing const &) = delete;
     timing(timing &&) = delete;
     timing &operator=(timing const &) = delete;
     timing &operator=(timing &&) = delete;
+
+    void _update_app_settings();
 };
 }  // namespace yas::ae

@@ -10,9 +10,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-timing::timing(sample_rate_t const sample_rate)
+timing::timing(sample_rate_t const sample_rate, app_settings_for_timing *app_settings)
     : _sample_rate(sample_rate),
-      _fraction_kind(observing::value::holder<timing_fraction_kind>::make_shared(timing_fraction_kind::sample)) {
+      _app_settings(app_settings),
+      _fraction_kind(
+          observing::value::holder<timing_fraction_kind>::make_shared(app_settings->timing_fraction_kind())) {
 }
 
 sample_rate_t timing::sample_rate() const {
@@ -24,17 +26,8 @@ void timing::set_fraction_kind(timing_fraction_kind const kind) {
 }
 
 void timing::rotate_fraction() {
-    switch (this->fraction_kind()) {
-        case timing_fraction_kind::sample:
-            this->set_fraction_kind(timing_fraction_kind::milisecond);
-            break;
-        case timing_fraction_kind::milisecond:
-            this->set_fraction_kind(timing_fraction_kind::frame30);
-            break;
-        case timing_fraction_kind::frame30:
-            this->set_fraction_kind(timing_fraction_kind::sample);
-            break;
-    }
+    this->_fraction_kind->set_value(rotate_next(this->_fraction_kind->value()));
+    this->_update_app_settings();
 }
 
 timing_fraction_kind timing::fraction_kind() const {
@@ -59,4 +52,8 @@ uint32_t timing::fraction_digits() const {
 
 frame_index_t timing::frame(timing_components const &components) const {
     return timing_utils::to_frame(components, this->_fraction_kind->value(), this->_sample_rate);
+}
+
+void timing::_update_app_settings() {
+    this->_app_settings->set_timing_fraction_kind(this->fraction_kind());
 }
