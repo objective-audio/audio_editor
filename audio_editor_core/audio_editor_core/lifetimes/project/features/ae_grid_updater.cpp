@@ -16,7 +16,7 @@ grid_updater::grid_updater(timing *timing, nudge_settings *nudge_settings, grid_
         .end()
         ->add_to(this->_pool);
 
-    nudge_settings->observe_unit_index([this](auto const &) { this->_update_if_source_is_available(); })
+    nudge_settings->observe_kind([this](auto const &) { this->_update_if_source_is_available(); })
         .end()
         ->add_to(this->_pool);
 }

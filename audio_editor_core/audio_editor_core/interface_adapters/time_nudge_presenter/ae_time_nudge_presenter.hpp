@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_timing_types.h>
 #include <audio_editor_core/ae_window_lifetime_id.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -16,7 +17,7 @@ struct time_nudge_presenter final {
     time_nudge_presenter(std::shared_ptr<nudge_settings> const &);
 
     [[nodiscard]] std::optional<std::size_t> nudging_unit_index() const;
-    [[nodiscard]] observing::syncable observe_nudging_unit_index(std::function<void(std::size_t const &)> &&);
+    [[nodiscard]] observing::syncable observe_nudging_unit_kind(std::function<void(timing_unit_kind const &)> &&);
 
    private:
     std::weak_ptr<nudge_settings> const _nudge_settings;

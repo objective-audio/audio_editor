@@ -112,8 +112,45 @@ timing_components timing_components::offset(offset_args &&args) {
     return timing_components{{args.is_minus, std::move(units)}};
 }
 
+ae::timing_fraction_kind yas::rotate_next(ae::timing_fraction_kind const kind) {
+    switch (kind) {
+        case timing_fraction_kind::sample:
+            return timing_fraction_kind::milisecond;
+        case timing_fraction_kind::milisecond:
+            return timing_fraction_kind::frame30;
+        case timing_fraction_kind::frame30:
+            return timing_fraction_kind::sample;
+    }
+}
+
 std::size_t yas::to_index(timing_unit_kind const kind) {
     return static_cast<std::underlying_type_t<timing_unit_kind>>(kind);
+}
+
+ae::timing_unit_kind yas::rotate_next(ae::timing_unit_kind const kind) {
+    switch (kind) {
+        case ae::timing_unit_kind::fraction:
+            return ae::timing_unit_kind::hours;
+        case ae::timing_unit_kind::seconds:
+            return ae::timing_unit_kind::fraction;
+        case ae::timing_unit_kind::minutes:
+            return ae::timing_unit_kind::seconds;
+        case ae::timing_unit_kind::hours:
+            return ae::timing_unit_kind::minutes;
+    }
+}
+
+ae::timing_unit_kind yas::rotate_previous(ae::timing_unit_kind const kind) {
+    switch (kind) {
+        case ae::timing_unit_kind::fraction:
+            return ae::timing_unit_kind::seconds;
+        case ae::timing_unit_kind::seconds:
+            return ae::timing_unit_kind::minutes;
+        case ae::timing_unit_kind::minutes:
+            return ae::timing_unit_kind::hours;
+        case ae::timing_unit_kind::hours:
+            return ae::timing_unit_kind::fraction;
+    }
 }
 
 std::string yas::to_string(ae::timing_components const &components) {

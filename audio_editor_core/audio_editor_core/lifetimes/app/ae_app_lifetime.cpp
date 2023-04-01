@@ -18,6 +18,7 @@
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <audio_editor_core/ae_window_opener.h>
 
+#include <audio_editor_core/ae_app_settings.hpp>
 #include <audio_editor_core/ae_ui_resource_lifecycle.hpp>
 
 using namespace yas;
@@ -30,12 +31,13 @@ std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
     auto const action_sender = std::make_shared<ae::action_sender>(hierarchy::app_lifecycle().get());
     auto const id_generator = std::make_shared<ae::id_generator>();
     auto const uuid_generator = std::make_shared<ae::uuid_generator>();
+    auto const app_settings = std::make_shared<ae::app_settings>();
     auto const window_lifecycle = std::make_shared<ae::window_lifecycle>(id_generator.get(), uuid_generator.get());
 
     return std::make_shared<app_lifetime>(
         worker, system_path, std::make_shared<app_launcher>(worker, system_path),
         std::make_shared<ae::file_importer>(worker, static_cast<uint32_t>(worker_priority::file_importing)),
-        file_info_loader, std::make_shared<ae::color>(), uuid_generator, id_generator, window_lifecycle,
+        file_info_loader, std::make_shared<ae::color>(), uuid_generator, id_generator, app_settings, window_lifecycle,
         std::make_shared<app_modal_lifecycle>(id_generator.get()), std::make_shared<ae::ui_resource_lifecycle>(),
         std::make_shared<ae::window_opener>(file_info_loader.get(), window_lifecycle.get()), action_sender);
 }
@@ -45,6 +47,7 @@ app_lifetime::app_lifetime(
     std::shared_ptr<ae::app_launcher> const &launcher, std::shared_ptr<ae::file_importer> const &file_importer,
     std::shared_ptr<ae::file_info_loader> const &file_info_loader, std::shared_ptr<ae::color> const &color,
     std::shared_ptr<ae::uuid_generator> const &uuid_generator, std::shared_ptr<ae::id_generator> const &id_generator,
+    std::shared_ptr<ae::app_settings> const &app_settings,
     std::shared_ptr<ae::window_lifecycle> const &window_lifecycle,
     std::shared_ptr<app_modal_lifecycle> const &modal_lifecycle,
     std::shared_ptr<ae::ui_resource_lifecycle> const &ui_resource_lifecycle,
@@ -57,6 +60,7 @@ app_lifetime::app_lifetime(
       color(color),
       uuid_generator(uuid_generator),
       id_generator(id_generator),
+      app_settings(app_settings),
       window_lifecycle(window_lifecycle),
       modal_lifecycle(modal_lifecycle),
       ui_resource_lifecycle(ui_resource_lifecycle),

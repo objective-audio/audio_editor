@@ -4,6 +4,7 @@
 
 #include "ae_test_utils.h"
 
+#import <Foundation/Foundation.h>
 #include <cpp_utils/yas_file_manager.h>
 #include <cpp_utils/yas_system_path_utils.h>
 
@@ -21,6 +22,11 @@ void test_utils::create_test_directory() {
 
 void test_utils::remove_contents_in_test_directory() {
     file_manager::remove_contents_in_directory(test_path());
+}
+
+void test_utils::clear_user_defaults() {
+    NSString *bundleId = NSBundle.mainBundle.bundleIdentifier;
+    [NSUserDefaults.standardUserDefaults removePersistentDomainForName:bundleId];
 }
 
 bool operator==(yas::ae::action_id const &lhs, yas::ae::action_id const &rhs) {
