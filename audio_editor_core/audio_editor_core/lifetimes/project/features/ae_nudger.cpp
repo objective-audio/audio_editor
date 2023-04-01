@@ -5,14 +5,14 @@
 #include "ae_nudger.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_nudge_settings.h>
+#include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_player.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-nudger::nudger(player *player, nudge_settings *settings) : _player(player), _settings(settings) {
+nudger::nudger(player *player, nudging *settings) : _player(player), _settings(settings) {
 }
 
 bool nudger::can_nudge() const {

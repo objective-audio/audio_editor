@@ -4,21 +4,19 @@
 
 #include "ae_grid_updater.hpp"
 
-#include <audio_editor_core/ae_nudge_settings.h>
+#include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-grid_updater::grid_updater(timing *timing, nudge_settings *nudge_settings, grid_content_pool *content_pool)
-    : _timing(timing), _nudge_settings(nudge_settings), _content_pool(content_pool) {
+grid_updater::grid_updater(timing *timing, nudging *nudging, grid_content_pool *content_pool)
+    : _timing(timing), _nudging(nudging), _content_pool(content_pool) {
     timing->observe_fraction_kind([this](auto const &) { this->_update_if_source_is_available(); })
         .end()
         ->add_to(this->_pool);
 
-    nudge_settings->observe_kind([this](auto const &) { this->_update_if_source_is_available(); })
-        .end()
-        ->add_to(this->_pool);
+    nudging->observe_kind([this](auto const &) { this->_update_if_source_is_available(); }).end()->add_to(this->_pool);
 }
 
 void grid_updater::update_if_source_changed(source const &source) {
@@ -39,10 +37,10 @@ void grid_updater::_update(source const &source) {
 
     std::vector<grid_content> result;
 
-    frame_index_t frame = this->_nudge_settings->current_grid_frame(source.begin_frame);
+    frame_index_t frame = this->_nudging->current_grid_frame(source.begin_frame);
 
     while (frame < source.end_frame) {
-        auto const next_frame = this->_nudge_settings->next_grid_frame(frame);
+        auto const next_frame = this->_nudging->next_grid_frame(frame);
         if (next_frame - frame < source.min_interval) {
             break;
         }

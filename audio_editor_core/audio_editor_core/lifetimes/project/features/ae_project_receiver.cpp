@@ -13,8 +13,8 @@
 #include <audio_editor_core/ae_marker_editor.h>
 #include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_module_renaming_opener.h>
-#include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
+#include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_reverter.h>
@@ -30,10 +30,10 @@ using namespace yas;
 using namespace yas::ae;
 
 project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id, database *database,
-                                   module_editor *module_editor, playing_toggler *toggler,
-                                   nudge_settings *nudge_settings, nudger *nudger, jumper *jumper,
-                                   edge_editor *edge_editor, time_editor_opener *time_editor_opener,
-                                   marker_editor *marker_editor, module_renaming_opener *module_renaming_opener,
+                                   module_editor *module_editor, playing_toggler *toggler, nudging *nudging,
+                                   nudger *nudger, jumper *jumper, edge_editor *edge_editor,
+                                   time_editor_opener *time_editor_opener, marker_editor *marker_editor,
+                                   module_renaming_opener *module_renaming_opener,
                                    marker_renaming_opener *marker_renaming_opener, timing *timing,
                                    import_interactor *import_interactor, export_interactor *export_interactor,
                                    reverter *reverter, module_selector *module_selector,
@@ -42,7 +42,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
       _database(database),
       _module_editor(module_editor),
       _playing_toggler(toggler),
-      _nudge_settings(nudge_settings),
+      _nudging(nudging),
       _nudger(nudger),
       _jumper(jumper),
       _edge_editor(edge_editor),
@@ -153,10 +153,10 @@ void project_receiver::receive(ae::action const &action) const {
                                 this->_nudger->nudge_next(10);
                                 break;
                             case editing_action_name::rotate_nudging_next_unit:
-                                this->_nudge_settings->rotate_next_unit();
+                                this->_nudging->rotate_next_unit();
                                 break;
                             case editing_action_name::rotate_nudging_previous_unit:
-                                this->_nudge_settings->rotate_previous_unit();
+                                this->_nudging->rotate_previous_unit();
                                 break;
                             case editing_action_name::rotate_timing_fraction:
                                 this->_timing->rotate_fraction();

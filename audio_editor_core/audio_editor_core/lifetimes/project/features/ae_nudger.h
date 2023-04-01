@@ -8,10 +8,10 @@
 
 namespace yas::ae {
 class player;
-class nudge_settings;
+class nudging;
 
 struct nudger final {
-    nudger(player *, nudge_settings *);
+    nudger(player *, nudging *);
 
     [[nodiscard]] bool can_nudge() const;
     void nudge_previous(uint32_t const offset_count);
@@ -19,7 +19,7 @@ struct nudger final {
 
    private:
     player *const _player;
-    nudge_settings const *const _settings;
+    nudging const *const _settings;
 
     nudger(nudger const &) = delete;
     nudger(nudger &&) = delete;
