@@ -1,5 +1,5 @@
 //
-//  ae_nudge_settings_dependency.h
+//  ae_nudging_dependencies.h
 //
 
 #pragma once
@@ -8,8 +8,8 @@
 #include <audio_editor_core/ae_timing_types.h>
 
 namespace yas::ae {
-struct timing_for_nudge_settings {
-    virtual ~timing_for_nudge_settings() = default;
+struct timing_for_nudging {
+    virtual ~timing_for_nudging() = default;
 
     [[nodiscard]] virtual sample_rate_t sample_rate() const = 0;
 
@@ -18,8 +18,8 @@ struct timing_for_nudge_settings {
     [[nodiscard]] virtual frame_index_t frame(timing_components const &) const = 0;
 };
 
-struct app_settings_for_nudge_settings {
-    virtual ~app_settings_for_nudge_settings() = default;
+struct app_settings_for_nudging {
+    virtual ~app_settings_for_nudging() = default;
 
     virtual void set_timing_unit_kind(timing_unit_kind const) = 0;
     [[nodiscard]] virtual timing_unit_kind timing_unit_kind() const = 0;

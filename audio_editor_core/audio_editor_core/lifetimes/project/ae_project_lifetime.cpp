@@ -24,8 +24,8 @@
 #include <audio_editor_core/ae_module_editor.h>
 #include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_module_renaming_opener.h>
-#include <audio_editor_core/ae_nudge_settings.h>
 #include <audio_editor_core/ae_nudger.h>
+#include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_pinch_gesture_controller.h>
 #include <audio_editor_core/ae_player.h>
@@ -79,9 +79,9 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(window_lifetime->scrolling.get())),
       database(database::make_shared(window_lifetime->project_path->db_file())),
       timing(std::make_shared<ae::timing>(project_format.sample_rate, app_lifetime->app_settings.get())),
-      nudge_settings(std::make_shared<ae::nudge_settings>(this->timing.get(), app_lifetime->app_settings.get())),
-      grid_updater(std::make_shared<ae::grid_updater>(this->timing.get(), this->nudge_settings.get(),
-                                                      this->grid_content_pool.get())),
+      nudging(std::make_shared<ae::nudging>(this->timing.get(), app_lifetime->app_settings.get())),
+      grid_updater(
+          std::make_shared<ae::grid_updater>(this->timing.get(), this->nudging.get(), this->grid_content_pool.get())),
       module_pool(std::make_shared<ae::module_pool>(this->database.get())),
       waveforms_mesh_importer(
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->module_pool.get())),
@@ -98,7 +98,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
                                                             this->editing_status.get(), this->deselector.get())),
       playing_toggler(std::make_shared<ae::playing_toggler>(window_lifetime->player.get())),
       modal_lifecycle(project_modal_lifecycle::make_shared(window_lifetime_id)),
-      nudger(std::make_shared<ae::nudger>(window_lifetime->player.get(), this->nudge_settings.get())),
+      nudger(std::make_shared<ae::nudger>(window_lifetime->player.get(), this->nudging.get())),
       edge_holder(std::make_shared<ae::edge_holder>(this->database.get())),
       edge_editor(std::make_shared<ae::edge_editor>(this->edge_holder.get(), window_lifetime->player.get(),
                                                     this->editing_status.get())),
@@ -138,7 +138,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
                                             this->selected_marker_pool.get())),
       receiver(std::make_shared<project_receiver>(
           window_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
-          this->nudge_settings.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
+          this->nudging.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
           this->time_editor_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
           this->marker_renaming_opener.get(), this->timing.get(), this->import_interactor.get(),
           this->export_interactor.get(), this->reverter.get(), this->module_selector.get(), this->marker_selector.get(),

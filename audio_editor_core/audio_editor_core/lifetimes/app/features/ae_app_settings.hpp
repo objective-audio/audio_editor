@@ -4,14 +4,14 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_nudge_settings_dependency.h>
+#include <audio_editor_core/ae_nudging_dependencies.h>
 #include <audio_editor_core/ae_timing_dependencies.h>
 #include <audio_editor_core/ae_timing_types.h>
 
 #include <memory>
 
 namespace yas::ae {
-struct app_settings final : app_settings_for_nudge_settings, app_settings_for_timing {
+struct app_settings final : app_settings_for_nudging, app_settings_for_timing {
     app_settings();
 
     void set_timing_fraction_kind(ae::timing_fraction_kind const) override;
