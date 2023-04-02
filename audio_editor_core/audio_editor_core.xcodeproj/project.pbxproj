@@ -1000,13 +1000,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B60204D2263AAEA000CFC752 /* event_handling_presenter */ = {
+		B60204D2263AAEA000CFC752 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B60204D3263AAEC600CFC752 /* ae_event_handling_presenter.cpp */,
 				B60204D4263AAEC600CFC752 /* ae_event_handling_presenter.h */,
 			);
-			path = event_handling_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B605EA6D2657E51B0031B177 /* ui */ = {
@@ -1148,27 +1148,6 @@
 		B634FDB7263C2C0B0096E69F /* interface_adapters */ = {
 			isa = PBXGroup;
 			children = (
-				B668BE3C262F41110021AD20 /* app_presenter */,
-				B6DEAC692840E060001D7D53 /* project_setup_presenter */,
-				B6DC2CC027B64A69000EF5F9 /* edge_presenter */,
-				B60204D2263AAEA000CFC752 /* event_handling_presenter */,
-				B63561CE28A6496A00A7AD28 /* playing_line_presenter */,
-				B64504B5271A7322009E05D6 /* markers_presenter */,
-				B65DB41329AA51D800423A80 /* markers_controller */,
-				B6A054022923CF410087ABB5 /* marker_element_controller */,
-				B6668DCD294ED73D00CB294E /* pasting_markers_presenter */,
-				B69607A0276C9F91002B2BE0 /* module_waveforms_presenter */,
-				B64504B7271A94B9009E05D6 /* modules_presenter */,
-				B6A054032923D1CB0087ABB5 /* modules_controller */,
-				B66FAF7228E15862005A3D47 /* pasting_modules_presenter */,
-				B6B1E5DA27E4B33600FA4B88 /* scroller_presenter */,
-				B6A123842789479100F31B31 /* time_unit_presenter */,
-				B6DFB39928A73D360023C8B7 /* time_nudge_presenter */,
-				B68C3E722707F1D900888A53 /* zooming_presenter */,
-				B64D080527F0222F00EB6FD5 /* module_name_presenter */,
-				B6D7E00228AB4B7A007961AC /* marker_name_presenter */,
-				B679CCCE29B4444F00745047 /* grid_presenter */,
-				B6CF42572632ED1800F9F297 /* window_presenter */,
 			);
 			path = interface_adapters;
 			sourceTree = "<group>";
@@ -1180,18 +1159,19 @@
 				B6E8995B2688806E00BBFA73 /* ae_ui_playing_line_utils.h */,
 				B63561CA28A63CA100A7AD28 /* ae_ui_playing_line.mm */,
 				B63561CB28A63CA100A7AD28 /* ae_ui_playing_line.hpp */,
+				B63561CE28A6496A00A7AD28 /* presenter */,
 			);
 			path = playing_line;
 			sourceTree = "<group>";
 		};
-		B63561CE28A6496A00A7AD28 /* playing_line_presenter */ = {
+		B63561CE28A6496A00A7AD28 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B6966F32272CEF9100A90733 /* ae_playing_line_state.h */,
 				B63561CF28A6497D00A7AD28 /* ae_playing_line_presenter.cpp */,
 				B63561D028A6497D00A7AD28 /* ae_playing_line_presenter.hpp */,
 			);
-			path = playing_line_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B637D57C289EAFD0007E30A1 /* ui_resource */ = {
@@ -1242,23 +1222,23 @@
 			path = file_export_dialog;
 			sourceTree = "<group>";
 		};
-		B64504B5271A7322009E05D6 /* markers_presenter */ = {
+		B64504B5271A7322009E05D6 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B64504B2271A7316009E05D6 /* ae_markers_presenter.cpp */,
 				B64504B1271A7316009E05D6 /* ae_markers_presenter.h */,
 			);
-			path = markers_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
-		B64504B7271A94B9009E05D6 /* modules_presenter */ = {
+		B64504B7271A94B9009E05D6 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B695726A2737E19E00E97EAE /* ae_modules_presenter_dependency.h */,
 				B64504B9271A94D2009E05D6 /* ae_modules_presenter.cpp */,
 				B64504B8271A94D2009E05D6 /* ae_modules_presenter.h */,
 			);
-			path = modules_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B6499A3B29B2D84400845430 /* grid */ = {
@@ -1266,6 +1246,7 @@
 			children = (
 				B6499A3C29B2D85A00845430 /* ae_ui_grid.mm */,
 				B6499A3D29B2D85A00845430 /* ae_ui_grid.hpp */,
+				B679CCCE29B4444F00745047 /* presenter */,
 			);
 			path = grid;
 			sourceTree = "<group>";
@@ -1334,13 +1315,15 @@
 			path = interfaces;
 			sourceTree = "<group>";
 		};
-		B65DB41329AA51D800423A80 /* markers_controller */ = {
+		B65DB41329AA51D800423A80 /* controller */ = {
 			isa = PBXGroup;
 			children = (
 				B65DB41429AA51EB00423A80 /* ae_markers_controller.cpp */,
 				B65DB41529AA51EB00423A80 /* ae_markers_controller.hpp */,
+				B6D7DFF628AA69B3007961AC /* ae_marker_element_controller.cpp */,
+				B6D7DFF728AA69B3007961AC /* ae_marker_element_controller.hpp */,
 			);
-			path = markers_controller;
+			path = controller;
 			sourceTree = "<group>";
 		};
 		B6650B9A2854BDF5004BB7C9 /* window */ = {
@@ -1362,17 +1345,18 @@
 				B6668DCA294ED6F100CB294E /* ae_ui_pasting_markers.hpp */,
 				B6DBDE1E29533F99003BD2F6 /* ae_ui_pasting_marker_element.mm */,
 				B6DBDE1F29533F99003BD2F6 /* ae_ui_pasting_marker_element.hpp */,
+				B6668DCD294ED73D00CB294E /* presenter */,
 			);
 			path = pasting_markers;
 			sourceTree = "<group>";
 		};
-		B6668DCD294ED73D00CB294E /* pasting_markers_presenter */ = {
+		B6668DCD294ED73D00CB294E /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B6668DCE294ED75000CB294E /* ae_pasting_markers_presenter.cpp */,
 				B6668DCF294ED75000CB294E /* ae_pasting_markers_presenter.hpp */,
 			);
-			path = pasting_markers_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B668BE3C262F41110021AD20 /* app_presenter */ = {
@@ -1392,26 +1376,27 @@
 			children = (
 				B66FAF6E28E1577F005A3D47 /* ae_ui_pasting_modules.mm */,
 				B66FAF6F28E1577F005A3D47 /* ae_ui_pasting_modules.hpp */,
+				B66FAF7228E15862005A3D47 /* presenter */,
 			);
 			path = pasting_modules;
 			sourceTree = "<group>";
 		};
-		B66FAF7228E15862005A3D47 /* pasting_modules_presenter */ = {
+		B66FAF7228E15862005A3D47 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B66FAF7328E1587E005A3D47 /* ae_pasting_modules_presenter.cpp */,
 				B66FAF7428E1587E005A3D47 /* ae_pasting_modules_presenter.hpp */,
 			);
-			path = pasting_modules_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
-		B679CCCE29B4444F00745047 /* grid_presenter */ = {
+		B679CCCE29B4444F00745047 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B679CCCF29B4446000745047 /* ae_grid_presenter.cpp */,
 				B679CCD029B4446000745047 /* ae_grid_presenter.hpp */,
 			);
-			path = grid_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B67E5E3C284F8EAB00B53C2B /* global */ = {
@@ -1465,13 +1450,13 @@
 			path = app;
 			sourceTree = "<group>";
 		};
-		B68C3E722707F1D900888A53 /* zooming_presenter */ = {
+		B68C3E722707F1D900888A53 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B68C3E742707F1F500888A53 /* ae_zooming_presenter.cpp */,
 				B68C3E732707F1F500888A53 /* ae_zooming_presenter.h */,
 			);
-			path = zooming_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B68D46DE2973F92300511AF9 /* range_selection */ = {
@@ -1517,6 +1502,7 @@
 			children = (
 				B605EA6F2657E5530031B177 /* ae_ui_event_handling.h */,
 				B605EA6E2657E5530031B177 /* ae_ui_event_handling.mm */,
+				B60204D2263AAEA000CFC752 /* presenter */,
 			);
 			path = event_handling;
 			sourceTree = "<group>";
@@ -1531,13 +1517,13 @@
 			path = dialog;
 			sourceTree = "<group>";
 		};
-		B69607A0276C9F91002B2BE0 /* module_waveforms_presenter */ = {
+		B69607A0276C9F91002B2BE0 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B69607A2276CA022002B2BE0 /* ae_module_waveforms_presenter.cpp */,
 				B69607A1276CA022002B2BE0 /* ae_module_waveforms_presenter.h */,
 			);
-			path = module_waveforms_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B69D8C5027CB6AC600CA30DE /* time_editor */ = {
@@ -1552,22 +1538,13 @@
 			path = time_editor;
 			sourceTree = "<group>";
 		};
-		B6A054022923CF410087ABB5 /* marker_element_controller */ = {
-			isa = PBXGroup;
-			children = (
-				B6D7DFF628AA69B3007961AC /* ae_marker_element_controller.cpp */,
-				B6D7DFF728AA69B3007961AC /* ae_marker_element_controller.hpp */,
-			);
-			path = marker_element_controller;
-			sourceTree = "<group>";
-		};
-		B6A054032923D1CB0087ABB5 /* modules_controller */ = {
+		B6A054032923D1CB0087ABB5 /* controller */ = {
 			isa = PBXGroup;
 			children = (
 				B623A50627FBF3A600CD6F8F /* ae_modules_controller.cpp */,
 				B623A50727FBF3A600CD6F8F /* ae_modules_controller.h */,
 			);
-			path = modules_controller;
+			path = controller;
 			sourceTree = "<group>";
 		};
 		B6A123832789349200F31B31 /* time */ = {
@@ -1584,11 +1561,13 @@
 				B6A12380278932B900F31B31 /* ae_ui_time_buttons.mm */,
 				B6F8C64428A4F29D0020635B /* ae_ui_time_nudge.mm */,
 				B6F8C64528A4F29D0020635B /* ae_ui_time_nudge.hpp */,
+				B6A123842789479100F31B31 /* time_numbers_presenter */,
+				B6DFB39928A73D360023C8B7 /* time_nudge_presenter */,
 			);
 			path = time;
 			sourceTree = "<group>";
 		};
-		B6A123842789479100F31B31 /* time_unit_presenter */ = {
+		B6A123842789479100F31B31 /* time_numbers_presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B6A1238C2789848B00F31B31 /* ae_time_numbers_presenter_utils.cpp */,
@@ -1596,7 +1575,7 @@
 				B6A12386278947A200F31B31 /* ae_time_numbers_presenter.cpp */,
 				B6A12385278947A200F31B31 /* ae_time_numbers_presenter.h */,
 			);
-			path = time_unit_presenter;
+			path = time_numbers_presenter;
 			sourceTree = "<group>";
 		};
 		B6A454E5289F550C0060A19E /* ui_base */ = {
@@ -1711,6 +1690,7 @@
 			children = (
 				B695A38B27658C6C004CB28F /* ae_ui_module_waveforms.h */,
 				B695A38C27658C6C004CB28F /* ae_ui_module_waveforms.mm */,
+				B69607A0276C9F91002B2BE0 /* presenter */,
 			);
 			path = module_waveforms;
 			sourceTree = "<group>";
@@ -1729,17 +1709,18 @@
 			children = (
 				B6B1E5D627E435FD00FA4B88 /* ae_ui_scroller.h */,
 				B6B1E5D527E435FD00FA4B88 /* ae_ui_scroller.mm */,
+				B6B1E5DA27E4B33600FA4B88 /* presenter */,
 			);
 			path = scroller;
 			sourceTree = "<group>";
 		};
-		B6B1E5DA27E4B33600FA4B88 /* scroller_presenter */ = {
+		B6B1E5DA27E4B33600FA4B88 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B6B1E5DB27E4B34B00FA4B88 /* ae_scroller_presenter.cpp */,
 				B6B1E5DC27E4B34B00FA4B88 /* ae_scroller_presenter.h */,
 			);
-			path = scroller_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B6B2D78628687AAA008DF3F6 /* features */ = {
@@ -1808,6 +1789,7 @@
 				B68C3E772708255300888A53 /* ae_ui_zooming_constants.h */,
 				B68C3E6E2707EE4100888A53 /* ae_ui_zooming.h */,
 				B68C3E6F2707EE4100888A53 /* ae_ui_zooming.mm */,
+				B68C3E722707F1D900888A53 /* presenter */,
 			);
 			path = zooming;
 			sourceTree = "<group>";
@@ -2051,6 +2033,8 @@
 		B6D2839A288105F900F294EC /* objc */ = {
 			isa = PBXGroup;
 			children = (
+				B668BE3C262F41110021AD20 /* app_presenter */,
+				B6DEAC692840E060001D7D53 /* project_setup_presenter */,
 				B6D283B4288111D400F294EC /* ModuleName.storyboard */,
 				B6D7E00728ABC1E3007961AC /* MarkerName.storyboard */,
 				B6D283B3288111D400F294EC /* Window.storyboard */,
@@ -2060,10 +2044,13 @@
 				B6D283A2288110BD00F294EC /* AEMetalViewController.mm */,
 				B6D283A7288110BD00F294EC /* AEModuleNameViewController.h */,
 				B6D283A8288110BE00F294EC /* AEModuleNameViewController.mm */,
+				B64D080527F0222F00EB6FD5 /* module_name_presenter */,
 				B6D7DFFE28AB4B24007961AC /* AEMarkerNameViewController.h */,
 				B6D7DFFF28AB4B24007961AC /* AEMarkerNameViewController.mm */,
+				B6D7E00228AB4B7A007961AC /* marker_name_presenter */,
 				B6D283A3288110BD00F294EC /* AEWindowController.h */,
 				B6D283A4288110BD00F294EC /* AEWindowController.mm */,
+				B6CF42572632ED1800F9F297 /* window_presenter */,
 				B6D2839C2881064000F294EC /* AEProjectFormatView.h */,
 				B6D2839D2881064000F294EC /* AEProjectFormatView.mm */,
 				B6D2839B2881064000F294EC /* ProjectFormat.xib */,
@@ -2125,11 +2112,12 @@
 				B68E852327BF4DB200074894 /* ae_ui_edge_element.mm */,
 				B6DC2CBD27B649D5000EF5F9 /* ae_ui_edge.h */,
 				B6DC2CBC27B649D5000EF5F9 /* ae_ui_edge.mm */,
+				B6DC2CC027B64A69000EF5F9 /* presenter */,
 			);
 			path = edge;
 			sourceTree = "<group>";
 		};
-		B6DC2CC027B64A69000EF5F9 /* edge_presenter */ = {
+		B6DC2CC027B64A69000EF5F9 /* presenter */ = {
 			isa = PBXGroup;
 			children = (
 				B69DA65E27B75FA400228CAB /* ae_edge_location.cpp */,
@@ -2138,7 +2126,7 @@
 				B6DC2CC127B64A87000EF5F9 /* ae_edge_presenter.cpp */,
 				B6DC2CC227B64A87000EF5F9 /* ae_edge_presenter.h */,
 			);
-			path = edge_presenter;
+			path = presenter;
 			sourceTree = "<group>";
 		};
 		B6DEAC692840E060001D7D53 /* project_setup_presenter */ = {
@@ -2174,6 +2162,8 @@
 			children = (
 				B6C3A58427102C9800514B94 /* ae_ui_modules.h */,
 				B6C3A58527102C9800514B94 /* ae_ui_modules.mm */,
+				B6A054032923D1CB0087ABB5 /* controller */,
+				B64504B7271A94B9009E05D6 /* presenter */,
 			);
 			path = modules;
 			sourceTree = "<group>";
@@ -2195,6 +2185,8 @@
 				B6F09CE527E84F1300638C6A /* ae_ui_marker_element.mm */,
 				B629D7702717101300EE379A /* ae_ui_markers.h */,
 				B629D7712717101300EE379A /* ae_ui_markers.mm */,
+				B65DB41329AA51D800423A80 /* controller */,
+				B64504B5271A7322009E05D6 /* presenter */,
 			);
 			path = markers;
 			sourceTree = "<group>";
