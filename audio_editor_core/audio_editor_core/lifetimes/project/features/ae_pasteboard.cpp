@@ -7,9 +7,6 @@
 using namespace yas;
 using namespace yas::ae;
 
-static std::vector<pasting_module_object> const _empty_modules;
-static std::vector<pasting_marker_object> const _empty_markers;
-
 pasteboard::pasteboard()
     : _event_fetcher(observing::fetcher<pasteboard_event>::make_shared([] { return pasteboard_event::fetched; })) {
 }
