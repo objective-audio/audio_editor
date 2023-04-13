@@ -21,7 +21,7 @@ ui_framed_square::ui_framed_square(ui_square_mesh_data const *square_mesh_data)
     auto const fill_mesh =
         ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_mesh_data->vertex_data(),
                               square_mesh_data->index_data(), square_mesh_data->texture());
-    this->_fill_node->set_mesh(fill_mesh);
+    this->_fill_node->set_meshes({fill_mesh});
 
     auto const line_index_data = ui::static_mesh_index_data::make_shared(frame_index2d_rect::vector_count);
 
@@ -33,7 +33,7 @@ ui_framed_square::ui_framed_square(ui_square_mesh_data const *square_mesh_data)
     auto const line_mesh =
         ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, square_mesh_data->vertex_data(),
                               line_index_data, square_mesh_data->texture());
-    this->_line_node->set_mesh(line_mesh);
+    this->_line_node->set_meshes({line_mesh});
 }
 
 void ui_framed_square::set_region(ui::region const &region) {

@@ -56,12 +56,12 @@ ui_marker_element::ui_marker_element(
     auto const line_mesh =
         ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_data->vertex_data(),
                               square_data->index_data(), square_data->texture());
-    this->_line_node->set_mesh(line_mesh);
+    this->_line_node->set_meshes({line_mesh});
 
     auto const square_mesh =
         ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_data->vertex_data(),
                               square_data->index_data(), square_data->texture());
-    this->_square_node->set_mesh(square_mesh);
+    this->_square_node->set_meshes({square_mesh});
 
     this->_node->add_sub_node(this->_line_node);
     this->_node->add_sub_node(this->_square_collider_node);

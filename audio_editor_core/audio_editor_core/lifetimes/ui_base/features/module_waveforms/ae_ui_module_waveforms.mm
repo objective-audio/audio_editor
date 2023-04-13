@@ -111,7 +111,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
                                                   event.datas.at(idx).index_data, this->_atlas->texture());
 
                         mesh_node->set_color(waveform_color);
-                        mesh_node->set_mesh(mesh);
+                        mesh_node->set_meshes({mesh});
 
                         element->add_mesh_node(mesh_node);
                     }

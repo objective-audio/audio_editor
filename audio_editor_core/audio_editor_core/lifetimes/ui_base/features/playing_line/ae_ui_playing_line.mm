@@ -30,7 +30,7 @@ ui_playing_line::ui_playing_line(ae::color *color, std::shared_ptr<playing_line_
     auto const mesh =
         ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_mesh_data->vertex_data(),
                               square_mesh_data->index_data(), square_mesh_data->texture());
-    this->_node->set_mesh(mesh);
+    this->_node->set_meshes({mesh});
 
     node->add_sub_node(this->_node);
 

@@ -12,7 +12,7 @@ using namespace yas::ae;
 ui_button::ui_button(std::shared_ptr<ui::font_atlas> const &font_atlas, std::shared_ptr<ui::standard> const &standard)
     : _button(ui::button::make_shared(ui::region::zero(), standard, 2)),
       _strings(ui::strings::make_shared({.alignment = ui::layout_alignment::mid}, font_atlas)) {
-    this->_button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
+    this->_button->rect_plane()->node()->meshes().at(0)->set_use_mesh_color(true);
 
     auto const disabled_state_idx = ui_button_utils::to_state_idx(ui_button_state::disabled);
     this->_button->rect_plane()->data()->set_rect_color(to_float4(ui::rgb_color{.v = 0.1f}, 1.0f),

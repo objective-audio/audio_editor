@@ -36,7 +36,7 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
       _frame_mesh(ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, nullptr, nullptr, nullptr)) {
     node->add_sub_node(this->_frame_node);
 
-    this->_frame_node->set_mesh(this->_frame_mesh);
+    this->_frame_node->set_meshes({this->_frame_mesh});
 
     this->_set_rect_count(0);
 
