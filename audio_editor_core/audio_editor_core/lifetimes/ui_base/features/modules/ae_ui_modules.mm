@@ -59,11 +59,11 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
     auto const fill_mesh = ui::mesh::make_shared(
         {.primitive_type = ui::primitive_type::triangle, .use_mesh_color = true}, nullptr, nullptr, atlas->texture());
-    this->_fill_node->set_mesh(fill_mesh);
+    this->_fill_node->set_meshes({fill_mesh});
 
     auto const frame_mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = false},
                                                   nullptr, nullptr, atlas->texture());
-    this->_frame_node->set_mesh(frame_mesh);
+    this->_frame_node->set_meshes({frame_mesh});
 
     this->_set_rect_count(0);
 
@@ -357,8 +357,8 @@ void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
         return;
     }
 
-    auto const &fill_mesh = this->_fill_node->mesh();
-    auto const &frame_mesh = this->_frame_node->mesh();
+    auto const &fill_mesh = this->_fill_node->meshes().at(0);
+    auto const &frame_mesh = this->_frame_node->meshes().at(0);
 
     this->_vertex_data = nullptr;
     this->_fill_index_data = nullptr;

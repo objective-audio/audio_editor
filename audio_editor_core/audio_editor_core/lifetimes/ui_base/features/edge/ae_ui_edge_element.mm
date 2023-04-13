@@ -28,7 +28,7 @@ ui_edge_element::ui_edge_element(std::string const &text, std::shared_ptr<ui::st
     auto const mesh =
         ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, args.square_mesh_data->vertex_data(),
                               args.square_mesh_data->index_data(), args.square_mesh_data->texture());
-    this->_line_node->set_mesh(mesh);
+    this->_line_node->set_meshes({mesh});
 
     this->_text->rect_plane()->node()->set_position({2.0f, 0.0f});
 

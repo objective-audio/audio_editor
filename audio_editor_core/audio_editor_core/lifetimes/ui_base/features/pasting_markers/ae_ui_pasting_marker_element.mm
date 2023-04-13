@@ -28,7 +28,7 @@ ui_pasting_marker_element::ui_pasting_marker_element(std::shared_ptr<ui::standar
     auto const line_mesh =
         ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle}, square_mesh_data->vertex_data(),
                               square_mesh_data->index_data(), square_mesh_data->texture());
-    this->_line_node->set_mesh(line_mesh);
+    this->_line_node->set_meshes({line_mesh});
 
     this->_node->add_sub_node(this->_line_node);
 

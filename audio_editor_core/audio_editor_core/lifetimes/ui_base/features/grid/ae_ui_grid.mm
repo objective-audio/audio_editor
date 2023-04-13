@@ -41,7 +41,7 @@ ui_grid::ui_grid(std::shared_ptr<grid_presenter> const &presenter, std::shared_p
     auto const lines_mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = false},
                                                   nullptr, nullptr, atlas->texture());
     lines_mesh->set_use_mesh_color(true);
-    this->_lines_node->set_mesh(lines_mesh);
+    this->_lines_node->set_meshes({lines_mesh});
 
     this->_set_line_count(0);
 
@@ -187,7 +187,7 @@ void ui_grid::_remake_data_if_needed(std::size_t const max_count) {
         return;
     }
 
-    auto const &lines_mesh = this->_lines_node->mesh();
+    auto const &lines_mesh = this->_lines_node->meshes().at(0);
 
     this->_vertex_data = nullptr;
     this->_index_data = nullptr;

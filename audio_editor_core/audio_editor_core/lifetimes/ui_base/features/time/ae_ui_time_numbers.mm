@@ -30,7 +30,7 @@ ui_time_numbers::ui_time_numbers(std::shared_ptr<time_numbers_presenter> const &
       _color(color) {
     node->add_sub_node(this->_strings->rect_plane()->node());
 
-    this->_strings->rect_plane()->node()->mesh()->set_use_mesh_color(true);
+    this->_strings->rect_plane()->node()->meshes().at(0)->set_use_mesh_color(true);
 
     presenter->observe_editing_time_text_range([this](auto const &) { this->_update_time_strings_attributes(); })
         .sync()

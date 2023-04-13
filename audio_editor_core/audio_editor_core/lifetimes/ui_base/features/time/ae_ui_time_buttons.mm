@@ -107,8 +107,9 @@ void ui_time_buttons::_resize_buttons() {
             button->set_can_begin_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}, true));
             button->set_can_indicate_tracking(ui_button_utils::is_touch_accepted({ui::touch_id::mouse_left()}, true));
 
-            button->rect_plane()->node()->mesh()->set_use_mesh_color(true);
-            button->rect_plane()->node()->mesh()->set_texture(this->_atlas->texture());
+            auto const &mesh = button->rect_plane()->node()->meshes().at(0);
+            mesh->set_use_mesh_color(true);
+            mesh->set_texture(this->_atlas->texture());
 
             auto canceller = button
                                  ->observe([this, idx](ui::button::context const &context) {

@@ -34,7 +34,7 @@ ui_time_bg::ui_time_bg(std::shared_ptr<project_action_sender> const &action_send
       _button(ui::button::make_shared(ui::region{.size = {1.0f, 1.0f}}, standard)) {
     node->add_sub_node(this->_button->rect_plane()->node());
 
-    auto const &bg_mesh = this->_button->rect_plane()->node()->mesh();
+    auto const &bg_mesh = this->_button->rect_plane()->node()->meshes().at(0);
     bg_mesh->set_use_mesh_color(true);
     bg_mesh->set_texture(atlas->texture());
 
