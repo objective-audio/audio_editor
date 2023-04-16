@@ -72,7 +72,7 @@ using namespace yas::ae;
     space->set_view_region(ui::region::zero());
     XCTAssertEqual(called.size(), 1);
 
-    auto const view_region = ui::region{.size = {.width = 1.0, .height = 1.0}};
+    auto const view_region = ui::region{.size = ui::size::one()};
     space->set_view_region(view_region);
 
     XCTAssertEqual(called.size(), 2);

@@ -45,7 +45,7 @@ struct ui_modules final {
     std::shared_ptr<ui::multiple_touch> const _multiple_touch;
     modifiers_holder *const _modifiers_holder;
 
-    ui::size _scale{.width = 1.0f, .height = 1.0f};
+    ui::size _scale = ui::size::one();
     std::size_t _remaked_count = 0;
     std::shared_ptr<ui::dynamic_mesh_vertex_data> _vertex_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _fill_index_data;

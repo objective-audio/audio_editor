@@ -27,7 +27,7 @@ struct ui_pasting_modules final {
     ae::color *const _color;
     std::shared_ptr<ui::node> const _frame_node;
 
-    ui::size _scale{.width = 1.0f, .height = 1.0f};
+    ui::size _scale = ui::size::one();
     std::size_t _remaked_count = 0;
     std::shared_ptr<ui::dynamic_mesh_vertex_data> _vertex_data;
     std::shared_ptr<ui::dynamic_mesh_index_data> _frame_index_data;
