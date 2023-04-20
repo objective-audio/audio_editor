@@ -18,6 +18,8 @@ class ui_module_waveforms;
 class modifiers_holder;
 class color;
 class ui_atlas;
+template <typename V, typename I>
+class dynamic_mesh_container;
 
 struct ui_modules final {
     [[nodiscard]] static std::shared_ptr<ui_modules> make_shared(window_lifetime_id const &,
@@ -37,8 +39,9 @@ struct ui_modules final {
     std::shared_ptr<ui::font_atlas> const _name_font_atlas;
     ui_atlas const *const _atlas;
     ui_module_waveforms *const _waveforms;
-    std::shared_ptr<ui::node> const _fill_node;
-    std::shared_ptr<ui::node> const _frame_node;
+    std::unique_ptr<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>> _vertex_datas;
+    std::unique_ptr<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>> _fill_mesh_container;
+    std::unique_ptr<dynamic_mesh_container<vertex2d_rect, frame_index2d_rect>> _frame_mesh_container;
     std::shared_ptr<ui::node> const _names_root_node;
     std::shared_ptr<ui::touch_tracker> const _touch_tracker;
     std::optional<std::size_t> _began_collider_idx;
@@ -46,10 +49,6 @@ struct ui_modules final {
     modifiers_holder *const _modifiers_holder;
 
     ui::size _scale = ui::size::one();
-    std::size_t _remaked_count = 0;
-    std::shared_ptr<ui::dynamic_mesh_vertex_data> _vertex_data;
-    std::shared_ptr<ui::dynamic_mesh_index_data> _fill_index_data;
-    std::shared_ptr<ui::dynamic_mesh_index_data> _frame_index_data;
     std::vector<std::shared_ptr<ui::strings>> _names;
 
     observing::canceller_pool _pool;
@@ -68,7 +67,6 @@ struct ui_modules final {
                       std::vector<std::pair<std::size_t, module_content>> const &replaced,
                       std::vector<std::pair<std::size_t, module_content>> const &erased);
 
-    void _remake_data_if_needed(std::size_t const max_count);
     void _set_rect_count(std::size_t const rect_count);
     void _update_all_name_positions();
     void _update_name_position(std::size_t const idx, ae::module_content const &);
