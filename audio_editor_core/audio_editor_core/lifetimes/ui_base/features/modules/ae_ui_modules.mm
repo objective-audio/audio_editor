@@ -14,12 +14,56 @@
 #include <audio_editor_core/ae_ui_module_waveforms.h>
 #include <audio_editor_core/ae_modifiers_holder.hpp>
 #include <audio_editor_core/ae_ui_atlas.hpp>
+#include <audio_editor_core/ae_ui_dynamic_mesh_container.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 namespace yas::ae::ui_modules_constants {
 static std::size_t const reserving_interval = 128;
+}
+
+namespace yas::ae::ui_modules_utils {
+std::unique_ptr<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>> make_fill_container(
+    std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>> *vertex_datas) {
+    auto make_fill_element = [vertex_datas](std::size_t const idx, std::size_t const element_count) {
+        if (vertex_datas->size() == idx) {
+            vertex_datas->emplace_back(
+                ui::dynamic_mesh_vertex_data::make_shared(element_count * vertex2d_rect::vector_count));
+        } else {
+            assert(0);
+        }
+
+        auto const &vertex_data = vertex_datas->at(idx);
+        auto const index_data =
+            ui::dynamic_mesh_index_data::make_shared(element_count * fill_index2d_rect::vector_count);
+        auto mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle, .use_mesh_color = true},
+                                          vertex_data, index_data, nullptr);
+
+        return std::unique_ptr<dynamic_mesh_content>(new dynamic_mesh_content{
+            .vertex_data = vertex_data, .index_data = std::move(index_data), .mesh = std::move(mesh)});
+    };
+
+    return std::make_unique<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>>(
+        ui_modules_constants::reserving_interval, std::move(make_fill_element));
+}
+
+std::unique_ptr<dynamic_mesh_container<vertex2d_rect, frame_index2d_rect>> make_frame_container(
+    std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>> *vertex_datas) {
+    auto make_frame_element = [vertex_datas](std::size_t const idx, std::size_t const element_count) {
+        auto const &vertex_data = vertex_datas->at(idx);
+        auto const index_data =
+            ui::dynamic_mesh_index_data::make_shared(element_count * frame_index2d_rect::vector_count);
+        auto mesh =
+            ui::mesh::make_shared({.primitive_type = ui::primitive_type::line}, vertex_data, index_data, nullptr);
+
+        return std::unique_ptr<dynamic_mesh_content>(new dynamic_mesh_content{
+            .vertex_data = vertex_data, .index_data = std::move(index_data), .mesh = std::move(mesh)});
+    };
+
+    return std::make_unique<dynamic_mesh_container<vertex2d_rect, frame_index2d_rect>>(
+        ui_modules_constants::reserving_interval, std::move(make_frame_element));
+}
 }
 
 std::shared_ptr<ui_modules> ui_modules::make_shared(window_lifetime_id const &window_lifetime_id,
@@ -46,26 +90,17 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _name_font_atlas(name_font_atlas),
       _atlas(atlas),
       _waveforms(waveforms),
-      _fill_node(ui::node::make_shared()),
-      _frame_node(ui::node::make_shared()),
+      _vertex_datas(std::make_unique<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>>()),
+      _fill_mesh_container(ui_modules_utils::make_fill_container(this->_vertex_datas.get())),
+      _frame_mesh_container(ui_modules_utils::make_frame_container(this->_vertex_datas.get())),
       _names_root_node(ui::node::make_shared()),
-      _touch_tracker(ui::touch_tracker::make_shared(standard, this->_fill_node)),
+      _touch_tracker(ui::touch_tracker::make_shared(standard, this->_fill_mesh_container->node)),
       _multiple_touch(ui::multiple_touch::make_shared()),
       _modifiers_holder(modifiers_holder) {
-    node->add_sub_node(this->_fill_node);
+    node->add_sub_node(this->_fill_mesh_container->node);
     node->add_sub_node(this->_waveforms->node);
-    node->add_sub_node(this->_frame_node);
+    node->add_sub_node(this->_frame_mesh_container->node);
     node->add_sub_node(this->_names_root_node);
-
-    auto const fill_mesh = ui::mesh::make_shared(
-        {.primitive_type = ui::primitive_type::triangle, .use_mesh_color = true}, nullptr, nullptr, atlas->texture());
-    this->_fill_node->set_meshes({fill_mesh});
-
-    auto const frame_mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::line, .use_mesh_color = false},
-                                                  nullptr, nullptr, atlas->texture());
-    this->_frame_node->set_meshes({frame_mesh});
-
-    this->_set_rect_count(0);
 
     presenter
         ->observe_contents([this](module_content_pool_event const &event) {
@@ -75,11 +110,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                     this->_replace_data(event.elements);
                     break;
                 case module_content_pool_event_type::updated:
-                    if (this->_remaked_count < event.elements.size()) {
-                        this->_replace_data(event.elements);
-                    } else {
-                        this->_update_data(event.elements.size(), event.inserted, event.replaced, event.erased);
-                    }
+                    this->_update_data(event.elements.size(), event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -95,19 +126,22 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->observe_appearance([this](auto const &) {
             auto const &contents = this->_presenter->contents();
             this->_update_colors(contents);
-            this->_frame_node->set_color(this->_color->module_frame());
+            this->_frame_mesh_container->node->set_color(this->_color->module_frame());
         })
         .sync()
         ->add_to(this->_pool);
 
     atlas
-        ->observe_white_filled_tex_coords([this](ui::uint_region const &tex_coords) {
-            this->_vertex_data->write([&tex_coords](std::vector<ui::vertex2d_t> &vertices) {
-                for (auto &vertex : vertices) {
-                    vertex.tex_coord = to_float2(tex_coords.origin);
+        ->observe_white_filled_tex_coords(
+            [vertex_datas = this->_vertex_datas.get()](ui::uint_region const &tex_coords) {
+                for (auto const &vertex_data : *vertex_datas) {
+                    vertex_data->write([&tex_coords](std::vector<ui::vertex2d_t> &vertices) {
+                        for (auto &vertex : vertices) {
+                            vertex.tex_coord = to_float2(tex_coords.origin);
+                        }
+                    });
                 }
-            });
-        })
+            })
         .sync()
         ->add_to(this->_pool);
 
@@ -155,7 +189,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                 auto const &region_value = region.value();
                 std::vector<std::size_t> hit_indices;
 
-                auto const &colliders = this->_fill_node->colliders();
+                auto const &colliders = this->_fill_mesh_container->node->colliders();
                 auto each = make_fast_each(colliders.size());
                 while (yas_each_next(each)) {
                     auto const &idx = yas_each_index(each);
@@ -174,8 +208,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
 
 void ui_modules::set_scale(ui::size const &scale) {
     this->_scale = scale;
-    this->_fill_node->set_scale(scale);
-    this->_frame_node->set_scale(scale);
+    this->_fill_mesh_container->node->set_scale(scale);
+    this->_frame_mesh_container->node->set_scale(scale);
     this->_waveforms->set_scale(scale);
     this->_update_all_name_positions();
 }
@@ -183,36 +217,42 @@ void ui_modules::set_scale(ui::size const &scale) {
 void ui_modules::_replace_data(std::vector<std::optional<module_content>> const &contents) {
     this->_set_rect_count(contents.size());
 
-    this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
-        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
-
-        auto const &colliders = this->_fill_node->colliders();
-        auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
-
-        auto each = make_fast_each(contents.size());
-        while (yas_each_next(each)) {
-            auto const &idx = yas_each_index(each);
-            auto const &content = contents.at(idx);
-            auto const &collider = colliders.at(idx);
-            auto &rect = vertex_rects[idx];
-
-            if (content.has_value()) {
-                auto const &value = content.value();
-                ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
-                                        .size = {.width = value.width(), .height = 1.0f}};
-                rect.set_position(region);
-                rect.set_tex_coord(filled_tex_coords);
-
-                collider->set_shape(ui::shape::make_shared({.rect = region}));
-                collider->set_enabled(true);
-            } else {
-                rect.set_position(ui::region::zero());
-
-                collider->set_enabled(false);
-                collider->set_shape(nullptr);
+    this->_fill_mesh_container->write_vertex_elements(
+        [this, &contents](index_range const range, vertex2d_rect *vertex_rects) {
+            if (contents.size() <= range.index) {
+                return;
             }
-        }
-    });
+
+            auto const &colliders = this->_fill_mesh_container->node->colliders();
+            auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
+
+            auto const process_length = std::min(range.length, contents.size() - range.index);
+            auto each = make_fast_each(process_length);
+            while (yas_each_next(each)) {
+                auto const &vertex_idx = yas_each_index(each);
+                auto const content_idx = range.index + vertex_idx;
+
+                auto const &content = contents.at(content_idx);
+                auto const &collider = colliders.at(content_idx);
+                auto &rect = vertex_rects[vertex_idx];
+
+                if (content.has_value()) {
+                    auto const &value = content.value();
+                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
+                                            .size = {.width = value.width(), .height = 1.0f}};
+                    rect.set_position(region);
+                    rect.set_tex_coord(filled_tex_coords);
+
+                    collider->set_shape(ui::shape::make_shared({.rect = region}));
+                    collider->set_enabled(true);
+                } else {
+                    rect.set_position(ui::region::zero());
+
+                    collider->set_enabled(false);
+                    collider->set_shape(nullptr);
+                }
+            }
+        });
 
     this->_update_colors(contents);
 
@@ -237,23 +277,28 @@ void ui_modules::_replace_data(std::vector<std::optional<module_content>> const 
 
 // こことは別に_update_dataで部分的に色を更新しているので、変更する際は注意
 void ui_modules::_update_colors(std::vector<std::optional<module_content>> const &contents) {
-    this->_vertex_data->write([&contents, this](std::vector<ui::vertex2d_t> &vertices) {
-        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
-
-        auto const normal_bg_color = this->_color->module_bg().v;
-        auto const selected_bg_color = this->_color->selected_module_bg().v;
-
-        auto each = make_fast_each(contents.size());
-        while (yas_each_next(each)) {
-            auto const &idx = yas_each_index(each);
-            auto const &content = contents.at(idx);
-
-            if (content.has_value()) {
-                auto const &bg_color = content.value().is_selected ? selected_bg_color : normal_bg_color;
-                vertex_rects[idx].set_color(bg_color);
+    this->_fill_mesh_container->write_vertex_elements(
+        [this, &contents](index_range const range, vertex2d_rect *vertex_rects) {
+            if (contents.size() <= range.index) {
+                return;
             }
-        }
-    });
+
+            auto const normal_bg_color = this->_color->module_bg().v;
+            auto const selected_bg_color = this->_color->selected_module_bg().v;
+            auto const process_length = std::min(range.length, contents.size() - range.index);
+
+            auto each = make_fast_each(process_length);
+            while (yas_each_next(each)) {
+                auto const &vertex_idx = yas_each_index(each);
+                auto const content_idx = range.index + vertex_idx;
+                auto const &content = contents.at(content_idx);
+
+                if (content.has_value()) {
+                    auto const &bg_color = content.value().is_selected ? selected_bg_color : normal_bg_color;
+                    vertex_rects[vertex_idx].set_color(bg_color);
+                }
+            }
+        });
 
     auto const normal_name_color = this->_color->module_name();
     auto const selected_name_color = this->_color->selected_module_name();
@@ -277,46 +322,58 @@ void ui_modules::_update_data(std::size_t const count,
                               std::vector<std::pair<std::size_t, module_content>> const &erased) {
     this->_set_rect_count(count);
 
-    this->_vertex_data->write([&erased, &inserted, &replaced, this](std::vector<ui::vertex2d_t> &vertices) {
-        auto *vertex_rects = (ui::vertex2d_rect *)vertices.data();
-        auto const &colliders = this->_fill_node->colliders();
+    this->_fill_mesh_container->write_vertex_elements(
+        [&erased, &inserted, &replaced, this](index_range const range, vertex2d_rect *vertex_rects) {
+            auto const &colliders = this->_fill_mesh_container->node->colliders();
 
-        for (auto const &pair : erased) {
-            vertex_rects[pair.first].set_position(ui::region::zero());
+            for (auto const &pair : erased) {
+                auto const &content_idx = pair.first;
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    vertex_rects[vertex_idx].set_position(ui::region::zero());
 
-            auto const &collider = colliders.at(pair.first);
-            collider->set_enabled(false);
-            collider->set_shape(nullptr);
-        }
+                    auto const &collider = colliders.at(content_idx);
+                    collider->set_enabled(false);
+                    collider->set_shape(nullptr);
+                }
+            }
 
-        auto const &color = this->_color;
-        auto const normal_bg_color = color->module_bg().v;
-        auto const selected_bg_color = color->selected_module_bg().v;
-        auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
+            auto const &color = this->_color;
+            auto const normal_bg_color = color->module_bg().v;
+            auto const selected_bg_color = color->selected_module_bg().v;
+            auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
-        for (auto const &pair : inserted) {
-            auto const &value = pair.second;
-            ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
-                                    .size = {.width = value.width(), .height = 1.0f}};
+            for (auto const &pair : inserted) {
+                auto const &content_idx = pair.first;
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    auto const &value = pair.second;
+                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
+                                            .size = {.width = value.width(), .height = 1.0f}};
 
-            auto &rect = vertex_rects[pair.first];
-            rect.set_position(region);
-            rect.set_tex_coord(filled_tex_coords);
+                    auto &rect = vertex_rects[vertex_idx];
+                    rect.set_position(region);
+                    rect.set_tex_coord(filled_tex_coords);
 
-            auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
-            rect.set_color(bg_color);
+                    auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+                    rect.set_color(bg_color);
 
-            auto const &collider = colliders.at(pair.first);
-            collider->set_shape(ui::shape::make_shared({.rect = region}));
-            collider->set_enabled(true);
-        }
+                    auto const &collider = colliders.at(content_idx);
+                    collider->set_shape(ui::shape::make_shared({.rect = region}));
+                    collider->set_enabled(true);
+                }
+            }
 
-        for (auto const &pair : replaced) {
-            auto const &value = pair.second;
-            auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
-            vertex_rects[pair.first].set_color(bg_color);
-        }
-    });
+            for (auto const &pair : replaced) {
+                auto const &content_idx = pair.first;
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    auto const &value = pair.second;
+                    auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+                    vertex_rects[vertex_idx].set_color(bg_color);
+                }
+            }
+        });
 
     auto const normal_name_color = this->_color->module_name();
     auto const selected_name_color = this->_color->selected_module_name();
@@ -351,105 +408,30 @@ void ui_modules::_update_data(std::size_t const count,
     }
 }
 
-void ui_modules::_remake_data_if_needed(std::size_t const max_count) {
-    if (max_count <= this->_remaked_count &&
-        (this->_vertex_data != nullptr || this->_fill_index_data != nullptr || this->_frame_index_data != nullptr)) {
-        return;
-    }
+void ui_modules::_set_rect_count(std::size_t const rect_count) {
+    this->_fill_mesh_container->set_element_count(rect_count);
+    this->_frame_mesh_container->set_element_count(rect_count);
 
-    auto const &fill_mesh = this->_fill_node->meshes().at(0);
-    auto const &frame_mesh = this->_frame_node->meshes().at(0);
+    auto const reserving_count = common_utils::reserving_count(rect_count, ui_modules_constants::reserving_interval);
 
-    this->_vertex_data = nullptr;
-    this->_fill_index_data = nullptr;
-    this->_frame_index_data = nullptr;
-    fill_mesh->set_vertex_data(nullptr);
-    fill_mesh->set_index_data(nullptr);
-    frame_mesh->set_vertex_data(nullptr);
-    frame_mesh->set_index_data(nullptr);
-    this->_fill_node->set_colliders({});
-    this->_names_root_node->remove_all_sub_nodes();
-
-    this->_vertex_data = ui::dynamic_mesh_vertex_data::make_shared(max_count * vertex2d_rect::vector_count);
-    this->_fill_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * fill_index2d_rect::vector_count);
-    this->_frame_index_data = ui::dynamic_mesh_index_data::make_shared(max_count * frame_index2d_rect::vector_count);
-
-    this->_fill_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
-        auto *index_rects = (fill_index2d_rect *)indices.data();
-
-        auto each = make_fast_each(max_count);
-        while (yas_each_next(each)) {
-            auto const &rect_idx = yas_each_index(each);
-            uint32_t const rect_head_idx = static_cast<uint32_t>(rect_idx * vertex2d_rect::vector_count);
-            index_rects[rect_idx].set_all(rect_head_idx);
-        }
-    });
-
-    this->_frame_index_data->write([&max_count](std::vector<ui::index2d_t> &indices) {
-        auto *index_rects = (frame_index2d_rect *)indices.data();
-
-        auto each = make_fast_each(max_count);
-        while (yas_each_next(each)) {
-            auto const &rect_idx = yas_each_index(each);
-            uint32_t const rect_head_idx = static_cast<uint32_t>(rect_idx * vertex2d_rect::vector_count);
-            index_rects[rect_idx].set_all(rect_head_idx);
-        }
-    });
-
-    fill_mesh->set_vertex_data(this->_vertex_data);
-    fill_mesh->set_index_data(this->_fill_index_data);
-    frame_mesh->set_vertex_data(this->_vertex_data);
-    frame_mesh->set_index_data(this->_frame_index_data);
-
-    if (this->_names.size() < max_count) {
-        auto each = make_fast_each(max_count - this->_names.size());
+    if (this->_names.size() < reserving_count) {
+        auto each = make_fast_each(reserving_count - this->_names.size());
         while (yas_each_next(each)) {
             auto strings = ui::strings::make_shared({.max_word_count = 32}, this->_name_font_atlas);
             strings->rect_plane()->node()->set_is_enabled(false);
+            this->_names_root_node->add_sub_node(strings->rect_plane()->node());
             this->_names.emplace_back(std::move(strings));
         }
     }
 
-    {
-        std::vector<std::shared_ptr<ui::collider>> colliders;
-        colliders.reserve(max_count);
-
-        auto each = make_fast_each(max_count);
+    auto const colliders_size = this->_fill_mesh_container->node->colliders().size();
+    if (colliders_size < reserving_count) {
+        auto each = make_fast_each(reserving_count - colliders_size);
         while (yas_each_next(each)) {
             auto collider = ui::collider::make_shared();
             collider->set_enabled(false);
-            colliders.emplace_back(std::move(collider));
+            this->_fill_mesh_container->node->push_back_collider(std::move(collider));
         }
-
-        this->_fill_node->set_colliders(std::move(colliders));
-    }
-
-    this->_remaked_count = max_count;
-}
-
-void ui_modules::_set_rect_count(std::size_t const rect_count) {
-    this->_remake_data_if_needed(common_utils::reserving_count(rect_count, ui_modules_constants::reserving_interval));
-
-    if (this->_vertex_data) {
-        this->_vertex_data->set_count(rect_count * vertex2d_rect::vector_count);
-    }
-
-    if (this->_fill_index_data) {
-        this->_fill_index_data->set_count(rect_count * fill_index2d_rect::vector_count);
-    }
-
-    if (this->_frame_index_data) {
-        this->_frame_index_data->set_count(rect_count * frame_index2d_rect::vector_count);
-    }
-
-    auto const &names_root_sub_nodes = this->_names_root_node->sub_nodes();
-
-    auto each = make_fast_each(names_root_sub_nodes.size(), rect_count);
-    while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &name = this->_names.at(idx);
-        auto const &name_node = name->rect_plane()->node();
-        this->_names_root_node->add_sub_node(name_node);
     }
 }
 
