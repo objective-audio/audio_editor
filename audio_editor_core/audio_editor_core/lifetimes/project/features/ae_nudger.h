@@ -19,7 +19,7 @@ struct nudger final {
 
    private:
     player *const _player;
-    nudging const *const _settings;
+    nudging const *const _nudging;
 
     nudger(nudger const &) = delete;
     nudger(nudger &&) = delete;

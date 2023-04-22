@@ -12,7 +12,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-nudger::nudger(player *player, nudging *settings) : _player(player), _settings(settings) {
+nudger::nudger(player *player, nudging *settings) : _player(player), _nudging(settings) {
 }
 
 bool nudger::can_nudge() const {
@@ -26,7 +26,7 @@ void nudger::nudge_previous(uint32_t const offset_count) {
 
     frame_index_t const current_frame = this->_player->current_frame();
 
-    auto const prev_frame = this->_settings->previous_nudging_frame(current_frame, offset_count);
+    auto const prev_frame = this->_nudging->previous_nudging_frame(current_frame, offset_count);
     this->_player->seek(prev_frame);
 }
 
@@ -36,6 +36,6 @@ void nudger::nudge_next(uint32_t const offset_count) {
     }
 
     frame_index_t const current_frame = this->_player->current_frame();
-    auto const next_frame = this->_settings->next_nudging_frame(current_frame, offset_count);
+    auto const next_frame = this->_nudging->next_nudging_frame(current_frame, offset_count);
     this->_player->seek(next_frame);
 }
