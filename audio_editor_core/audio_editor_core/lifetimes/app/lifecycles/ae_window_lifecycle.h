@@ -34,10 +34,8 @@ struct window_lifecycle final : window_lifecycle_for_app_presenter, action_recei
     id_generatable const *const _id_generator;
     uuid_generatable const *const _uuid_generator;
 
-    using window_lifetimes_t =
-        observing::map::holder<window_lifetime_id,
-                               std::pair<std::shared_ptr<window_lifetime>, observing::cancellable_ptr>>;
-    std::shared_ptr<window_lifetimes_t> const _window_lifetimes = window_lifetimes_t::make_shared();
+    using lifetimes_t = observing::map::holder<window_lifetime_id, std::shared_ptr<window_lifetime>>;
+    std::shared_ptr<lifetimes_t> const _lifetimes = lifetimes_t::make_shared();
 
     window_lifecycle(window_lifecycle const &) = delete;
     window_lifecycle(window_lifecycle &&) = delete;
