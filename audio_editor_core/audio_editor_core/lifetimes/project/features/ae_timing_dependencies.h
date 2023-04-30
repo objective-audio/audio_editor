@@ -10,5 +10,7 @@ struct app_settings_for_timing {
 
     virtual void set_timing_fraction_kind(timing_fraction_kind const) = 0;
     [[nodiscard]] virtual timing_fraction_kind timing_fraction_kind() const = 0;
+    [[nodiscard]] virtual observing::syncable observe_timing_fraction_kind(
+        std::function<void(ae::timing_fraction_kind const &)> &&) = 0;
 };
 }  // namespace yas::ae
