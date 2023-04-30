@@ -21,14 +21,19 @@ struct timing_stub final : timing_for_nudging {
 };
 
 struct app_settings_stub final : app_settings_for_nudging {
-    ae::timing_unit_kind kind = ae::timing_unit_kind::fraction;
+    observing::value::holder_ptr<ae::timing_unit_kind> const kind_holder =
+        observing::value::holder<ae::timing_unit_kind>::make_shared(ae::timing_unit_kind::fraction);
 
     void set_timing_unit_kind(ae::timing_unit_kind const kind) override {
-        this->kind = kind;
+        this->kind_holder->set_value(kind);
     }
 
     ae::timing_unit_kind timing_unit_kind() const override {
-        return this->kind;
+        return this->kind_holder->value();
+    }
+
+    observing::syncable observe_timing_unit_kind(std::function<void(ae::timing_unit_kind const &)> &&handler) override {
+        return this->kind_holder->observe(std::move(handler));
     }
 };
 }  // namespace yas::ae::test_utils
