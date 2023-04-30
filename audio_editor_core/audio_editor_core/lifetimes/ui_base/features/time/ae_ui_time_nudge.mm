@@ -19,7 +19,7 @@ std::shared_ptr<ui_time_nudge> ui_time_nudge::make_shared(window_lifetime_id con
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
     auto const unit_presenter = time_numbers_presenter::make_shared(lifetime_id);
-    auto const nudge_preseneter = time_nudge_presenter::make_shared(lifetime_id);
+    auto const nudge_preseneter = time_nudge_presenter::make_shared();
 
     return std::make_shared<ui_time_nudge>(app_lifetime->color.get(), resource_lifetime->standard->view_look(),
                                            time_numbers, unit_presenter, nudge_preseneter, node);
