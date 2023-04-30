@@ -43,41 +43,32 @@ struct app_settings_stub : app_settings_for_timing {
     XCTAssertEqual(std::make_shared<ae::timing>(96000, app_settings.get())->sample_rate(), 96000);
 }
 
-- (void)test_restore_kind {
-    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
-
-    app_settings->set_timing_fraction_kind(ae::timing_fraction_kind::milisecond);
-
-    auto const timing = std::make_shared<ae::timing>(1, app_settings.get());
-
-    XCTAssertEqual(timing->fraction_kind(), ae::timing_fraction_kind::milisecond);
-}
-
-- (void)test_set_fraction_kind {
+- (void)test_rotate_fraction_kind {
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
     auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
     std::vector<timing_fraction_kind> called;
 
     auto canceller =
-        timing->observe_fraction_kind([&called](timing_fraction_kind const &kind) { called.emplace_back(kind); })
+        app_settings
+            ->observe_timing_fraction_kind([&called](timing_fraction_kind const &kind) { called.emplace_back(kind); })
             .sync();
 
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), timing_fraction_kind::sample);
-    XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::sample);
+    XCTAssertEqual(app_settings->timing_fraction_kind(), timing_fraction_kind::sample);
 
-    timing->set_fraction_kind(timing_fraction_kind::milisecond);
+    timing->rotate_fraction();
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), timing_fraction_kind::milisecond);
-    XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::milisecond);
+    XCTAssertEqual(app_settings->timing_fraction_kind(), timing_fraction_kind::milisecond);
 
-    timing->set_fraction_kind(timing_fraction_kind::frame30);
+    timing->rotate_fraction();
 
     XCTAssertEqual(called.size(), 3);
     XCTAssertEqual(called.at(2), timing_fraction_kind::frame30);
-    XCTAssertEqual(timing->fraction_kind(), timing_fraction_kind::frame30);
+    XCTAssertEqual(app_settings->timing_fraction_kind(), timing_fraction_kind::frame30);
 
     canceller->cancel();
 }
@@ -86,7 +77,7 @@ struct app_settings_stub : app_settings_for_timing {
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
     auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
-    timing->set_fraction_kind(timing_fraction_kind::sample);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::sample);
 
     XCTAssertEqual(
         timing->components(0),
@@ -126,7 +117,7 @@ struct app_settings_stub : app_settings_for_timing {
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
     auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
-    timing->set_fraction_kind(timing_fraction_kind::milisecond);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::milisecond);
 
     XCTAssertEqual(
         timing->components(0),
@@ -178,7 +169,7 @@ struct app_settings_stub : app_settings_for_timing {
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
     auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
-    timing->set_fraction_kind(timing_fraction_kind::frame30);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::frame30);
 
     XCTAssertEqual(
         timing->components(0),
@@ -230,15 +221,15 @@ struct app_settings_stub : app_settings_for_timing {
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
     auto const timing = std::make_shared<ae::timing>(48000, app_settings.get());
 
-    timing->set_fraction_kind(timing_fraction_kind::sample);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::sample);
 
     XCTAssertEqual(timing->fraction_digits(), 5);
 
-    timing->set_fraction_kind(timing_fraction_kind::milisecond);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::milisecond);
 
     XCTAssertEqual(timing->fraction_digits(), 3);
 
-    timing->set_fraction_kind(timing_fraction_kind::frame30);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::frame30);
 
     XCTAssertEqual(timing->fraction_digits(), 2);
 }
@@ -247,7 +238,7 @@ struct app_settings_stub : app_settings_for_timing {
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
     auto const timing = std::make_shared<ae::timing>(10000, app_settings.get());
 
-    timing->set_fraction_kind(timing_fraction_kind::sample);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::sample);
 
     {
         auto const frame = timing->frame(
@@ -259,11 +250,11 @@ struct app_settings_stub : app_settings_for_timing {
     XCTAssertEqual(timing->frame(timing->components(76821058)), 76821058);
     XCTAssertEqual(timing->frame(timing->components(-76821058)), -76821058);
 
-    timing->set_fraction_kind(timing_fraction_kind::milisecond);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::milisecond);
 
     XCTAssertEqual(timing->frame(timing->components(76821058)), 76821050);
 
-    timing->set_fraction_kind(timing_fraction_kind::frame30);
+    app_settings->set_timing_fraction_kind(timing_fraction_kind::frame30);
 
     XCTAssertEqual(timing->frame(timing->components(76821058)), 76821000);
 }
