@@ -10,14 +10,20 @@ using namespace yas::ae;
 
 namespace yas::ae::test_utils {
 struct app_settings_stub : app_settings_for_timing {
-    ae::timing_fraction_kind kind = timing_fraction_kind::sample;
+    observing::value::holder_ptr<ae::timing_fraction_kind> const kind_holder =
+        observing::value::holder<ae::timing_fraction_kind>::make_shared(timing_fraction_kind::sample);
 
     void set_timing_fraction_kind(ae::timing_fraction_kind const kind) override {
-        this->kind = kind;
+        this->kind_holder->set_value(kind);
     }
 
     ae::timing_fraction_kind timing_fraction_kind() const override {
-        return this->kind;
+        return this->kind_holder->value();
+    }
+
+    observing::syncable observe_timing_fraction_kind(
+        std::function<void(ae::timing_fraction_kind const &)> &&handler) override {
+        return this->kind_holder->observe(std::move(handler));
     }
 };
 }
