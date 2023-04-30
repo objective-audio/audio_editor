@@ -45,6 +45,26 @@ using namespace yas::ae;
     XCTAssertEqual(settings->timing_fraction_kind(), timing_fraction_kind::sample);
 }
 
+- (void)test_observe_timing_fraction_kind {
+    auto const settings = std::make_shared<app_settings>();
+
+    std::vector<ae::timing_fraction_kind> kinds;
+
+    auto canceller =
+        settings->observe_timing_fraction_kind([&kinds](timing_fraction_kind const &kind) { kinds.emplace_back(kind); })
+            .sync();
+
+    XCTAssertEqual(kinds.size(), 1);
+    XCTAssertEqual(kinds.at(0), timing_fraction_kind::sample);
+
+    settings->set_timing_fraction_kind(timing_fraction_kind::milisecond);
+
+    XCTAssertEqual(kinds.size(), 2);
+    XCTAssertEqual(kinds.at(1), timing_fraction_kind::milisecond);
+
+    canceller->cancel();
+}
+
 - (void)test_timing_unit_kind {
     auto const settings = std::make_shared<app_settings>();
 
@@ -65,6 +85,25 @@ using namespace yas::ae;
     settings->set_timing_unit_kind(timing_unit_kind::fraction);
 
     XCTAssertEqual(settings->timing_unit_kind(), timing_unit_kind::fraction);
+}
+
+- (void)test_observe_timing_unit_kind {
+    auto const settings = std::make_shared<app_settings>();
+
+    std::vector<ae::timing_unit_kind> kinds;
+
+    auto canceller =
+        settings->observe_timing_unit_kind([&kinds](timing_unit_kind const &kind) { kinds.emplace_back(kind); }).sync();
+
+    XCTAssertEqual(kinds.size(), 1);
+    XCTAssertEqual(kinds.at(0), timing_unit_kind::fraction);
+
+    settings->set_timing_unit_kind(timing_unit_kind::minutes);
+
+    XCTAssertEqual(kinds.size(), 2);
+    XCTAssertEqual(kinds.at(1), timing_unit_kind::minutes);
+
+    canceller->cancel();
 }
 
 @end
