@@ -13,9 +13,10 @@
 namespace yas::ae {
 class timing;
 class nudging;
+class app_settings;
 
 struct grid_updater final {
-    grid_updater(timing *, nudging *, grid_content_pool *);
+    grid_updater(timing *, nudging *, app_settings *, grid_content_pool *);
 
     struct source {
         frame_index_t begin_frame;
@@ -34,6 +35,7 @@ struct grid_updater final {
    private:
     timing *const _timing;
     nudging *const _nudging;
+    app_settings *const _app_settings;
     grid_content_pool *const _content_pool;
 
     std::optional<source> _last_source;
