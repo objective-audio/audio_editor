@@ -15,10 +15,7 @@ struct timing final : timing_for_nudging {
 
     [[nodiscard]] sample_rate_t sample_rate() const override;
 
-    void set_fraction_kind(timing_fraction_kind const);
     void rotate_fraction();
-    [[nodiscard]] timing_fraction_kind fraction_kind() const;
-    [[nodiscard]] observing::syncable observe_fraction_kind(std::function<void(timing_fraction_kind const &)> &&);
 
     [[nodiscard]] timing_components components(frame_index_t const) const override;
     [[nodiscard]] timing_components floored_components(timing_unit_kind const, frame_index_t const) const override;
@@ -29,13 +26,10 @@ struct timing final : timing_for_nudging {
    private:
     sample_rate_t const _sample_rate;
     app_settings_for_timing *const _app_settings;
-    observing::value::holder_ptr<timing_fraction_kind> const _fraction_kind;
 
     timing(timing const &) = delete;
     timing(timing &&) = delete;
     timing &operator=(timing const &) = delete;
     timing &operator=(timing &&) = delete;
-
-    void _update_app_settings();
 };
 }  // namespace yas::ae

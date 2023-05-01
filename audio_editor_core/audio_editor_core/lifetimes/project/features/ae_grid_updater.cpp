@@ -7,16 +7,21 @@
 #include <audio_editor_core/ae_nudging.h>
 #include <audio_editor_core/ae_timing.h>
 
+#include <audio_editor_core/ae_app_settings.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
-grid_updater::grid_updater(timing *timing, nudging *nudging, grid_content_pool *content_pool)
-    : _timing(timing), _nudging(nudging), _content_pool(content_pool) {
-    timing->observe_fraction_kind([this](auto const &) { this->_update_if_source_is_available(); })
+grid_updater::grid_updater(timing *timing, nudging *nudging, app_settings *app_settings,
+                           grid_content_pool *content_pool)
+    : _timing(timing), _nudging(nudging), _app_settings(app_settings), _content_pool(content_pool) {
+    app_settings->observe_timing_fraction_kind([this](auto const &) { this->_update_if_source_is_available(); })
         .end()
         ->add_to(this->_pool);
 
-    nudging->observe_kind([this](auto const &) { this->_update_if_source_is_available(); }).end()->add_to(this->_pool);
+    app_settings->observe_timing_unit_kind([this](auto const &) { this->_update_if_source_is_available(); })
+        .end()
+        ->add_to(this->_pool);
 }
 
 void grid_updater::update_if_source_changed(source const &source) {

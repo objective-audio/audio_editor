@@ -88,11 +88,17 @@ app_settings::app_settings() {
         key::timing_unit_kind: value::timing_unit::fraction,
         key::timing_fraction_kind: value::timing_fraction::sample
     }];
+
+    this->_timing_fraction_kind_fetcher =
+        observing::fetcher<ae::timing_fraction_kind>::make_shared([this] { return this->timing_fraction_kind(); });
+    this->_timing_unit_kind_fetcher =
+        observing::fetcher<ae::timing_unit_kind>::make_shared([this] { return this->timing_unit_kind(); });
 }
 
 void app_settings::set_timing_fraction_kind(ae::timing_fraction_kind const kind) {
     NSString *value = app_settings_utils::to_value(kind);
     [NSUserDefaults.standardUserDefaults setObject:value forKey:key::timing_fraction_kind];
+    this->_timing_fraction_kind_fetcher->push();
 }
 
 ae::timing_fraction_kind app_settings::timing_fraction_kind() const {
@@ -100,12 +106,23 @@ ae::timing_fraction_kind app_settings::timing_fraction_kind() const {
     return app_settings_utils::to_fraction_kind(kind_string);
 }
 
+observing::syncable app_settings::observe_timing_fraction_kind(
+    std::function<void(ae::timing_fraction_kind const &)> &&handler) {
+    return this->_timing_fraction_kind_fetcher->observe(std::move(handler));
+}
+
 void app_settings::set_timing_unit_kind(ae::timing_unit_kind const kind) {
     NSString *value = app_settings_utils::to_value(kind);
     [NSUserDefaults.standardUserDefaults setObject:value forKey:key::timing_unit_kind];
+    this->_timing_unit_kind_fetcher->push();
 }
 
 ae::timing_unit_kind app_settings::timing_unit_kind() const {
     NSString *kind_string = [NSUserDefaults.standardUserDefaults stringForKey:key::timing_unit_kind];
     return app_settings_utils::to_unit_kind(kind_string);
+}
+
+observing::syncable app_settings::observe_timing_unit_kind(
+    std::function<void(ae::timing_unit_kind const &)> &&handler) {
+    return this->_timing_unit_kind_fetcher->observe(std::move(handler));
 }

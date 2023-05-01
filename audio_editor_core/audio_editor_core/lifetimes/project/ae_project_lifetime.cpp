@@ -80,8 +80,8 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       database(database::make_shared(window_lifetime->project_path->db_file())),
       timing(std::make_shared<ae::timing>(project_format.sample_rate, app_lifetime->app_settings.get())),
       nudging(std::make_shared<ae::nudging>(this->timing.get(), app_lifetime->app_settings.get())),
-      grid_updater(
-          std::make_shared<ae::grid_updater>(this->timing.get(), this->nudging.get(), this->grid_content_pool.get())),
+      grid_updater(std::make_shared<ae::grid_updater>(this->timing.get(), this->nudging.get(),
+                                                      app_lifetime->app_settings.get(), this->grid_content_pool.get())),
       module_pool(std::make_shared<ae::module_pool>(this->database.get())),
       waveforms_mesh_importer(
           waveform_mesh_importer::make_shared(window_lifetime->lifetime_id, this->module_pool.get())),

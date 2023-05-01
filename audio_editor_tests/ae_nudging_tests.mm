@@ -19,21 +19,12 @@ using namespace yas::ae;
 - (void)test_initial {
     auto const timing = std::make_shared<test_utils::timing_stub>(48000, timing_fraction_kind::frame30);
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
-    auto const nudging = std::make_shared<ae::nudging>(timing.get(), app_settings.get());
 
-    XCTAssertEqual(nudging->kind(), timing_unit_kind::fraction);
-    XCTAssertEqual(nudging->unit_index(), 0);
-}
-
-- (void)test_restore_kind {
-    auto const timing = std::make_shared<test_utils::timing_stub>(48000, timing_fraction_kind::frame30);
-    auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
-
-    app_settings->kind = timing_unit_kind::minutes;
+    app_settings->kind_holder->set_value(timing_unit_kind::minutes);
 
     auto const nudging = std::make_shared<ae::nudging>(timing.get(), app_settings.get());
 
-    XCTAssertEqual(nudging->kind(), timing_unit_kind::minutes);
+    XCTAssertEqual(app_settings->timing_unit_kind(), timing_unit_kind::minutes);
 }
 
 - (void)test_rotate_next {
@@ -41,19 +32,19 @@ using namespace yas::ae;
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
     auto const nudging = std::make_shared<ae::nudging>(timing.get(), app_settings.get());
 
-    XCTAssertEqual(nudging->unit_index(), 0);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::fraction);
 
     nudging->rotate_next_unit();
 
-    XCTAssertEqual(nudging->unit_index(), 3);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::hours);
 
     nudging->rotate_next_unit();
 
-    XCTAssertEqual(nudging->unit_index(), 2);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::minutes);
 
     nudging->rotate_next_unit();
 
-    XCTAssertEqual(nudging->unit_index(), 1);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::seconds);
 }
 
 - (void)test_rotate_previous {
@@ -61,23 +52,23 @@ using namespace yas::ae;
     auto const app_settings = std::make_shared<test_utils::app_settings_stub>();
     auto const nudging = std::make_shared<ae::nudging>(timing.get(), app_settings.get());
 
-    XCTAssertEqual(nudging->unit_index(), 0);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::fraction);
 
     nudging->rotate_previous_unit();
 
-    XCTAssertEqual(nudging->unit_index(), 1);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::seconds);
 
     nudging->rotate_previous_unit();
 
-    XCTAssertEqual(nudging->unit_index(), 2);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::minutes);
 
     nudging->rotate_previous_unit();
 
-    XCTAssertEqual(nudging->unit_index(), 3);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::hours);
 
     nudging->rotate_previous_unit();
 
-    XCTAssertEqual(nudging->unit_index(), 0);
+    XCTAssertEqual(app_settings->timing_unit_kind(), ae::timing_unit_kind::fraction);
 }
 
 - (void)test_next_previous_nudging_frame {

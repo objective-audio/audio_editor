@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_timing_types.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 struct timing_for_nudging {
@@ -23,5 +24,7 @@ struct app_settings_for_nudging {
 
     virtual void set_timing_unit_kind(timing_unit_kind const) = 0;
     [[nodiscard]] virtual timing_unit_kind timing_unit_kind() const = 0;
+    [[nodiscard]] virtual observing::syncable observe_timing_unit_kind(
+        std::function<void(ae::timing_unit_kind const &)> &&) = 0;
 };
 }  // namespace yas::ae

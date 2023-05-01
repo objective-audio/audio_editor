@@ -9,18 +9,18 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-class nudging;
+class app_settings;
 
 struct time_nudge_presenter final {
-    [[nodiscard]] static std::shared_ptr<time_nudge_presenter> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<time_nudge_presenter> make_shared();
 
-    time_nudge_presenter(std::shared_ptr<nudging> const &);
+    time_nudge_presenter(std::shared_ptr<app_settings> const &);
 
     [[nodiscard]] std::optional<std::size_t> nudging_unit_index() const;
     [[nodiscard]] observing::syncable observe_nudging_unit_kind(std::function<void(timing_unit_kind const &)> &&);
 
    private:
-    std::weak_ptr<nudging> const _nudging;
+    std::weak_ptr<app_settings> const _app_settings;
 
     time_nudge_presenter(time_nudge_presenter const &) = delete;
     time_nudge_presenter(time_nudge_presenter &&) = delete;
