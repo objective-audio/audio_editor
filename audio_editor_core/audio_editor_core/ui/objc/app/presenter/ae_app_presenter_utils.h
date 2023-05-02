@@ -16,4 +16,13 @@ static app_presenter_window_event_type to_presenter_event_type(window_lifecycle_
             return app_presenter_window_event_type::dispose_window_controller;
     }
 }
+
+static app_presenter_window_event_type to_presenter_event_type(settings_lifecycle_event_type const &type) {
+    switch (type) {
+        case settings_lifecycle_event_type::inserted:
+            return app_presenter_window_event_type::make_and_show_settings;
+        case settings_lifecycle_event_type::erased:
+            return app_presenter_window_event_type::dispose_settings;
+    }
+}
 }  // namespace yas::ae

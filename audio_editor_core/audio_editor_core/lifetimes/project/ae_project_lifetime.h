@@ -42,6 +42,7 @@ class time_editor_opener;
 class marker_editor;
 class module_renaming_opener;
 class marker_renaming_opener;
+class settings_opener;
 class import_interactor;
 class export_interactor;
 class timeline_updater;
@@ -101,6 +102,7 @@ struct project_lifetime final {
     std::shared_ptr<marker_editor> const marker_editor;
     std::shared_ptr<module_renaming_opener> const module_renaming_opener;
     std::shared_ptr<marker_renaming_opener> const marker_renaming_opener;
+    std::shared_ptr<settings_opener> const settings_opener;
     std::shared_ptr<export_interactor> const export_interactor;
     std::shared_ptr<timeline_updater> const timeline_updater;
     std::shared_ptr<reverter> const reverter;

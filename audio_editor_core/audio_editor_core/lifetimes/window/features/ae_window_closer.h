@@ -6,8 +6,6 @@
 
 #include <audio_editor_core/ae_window_lifetime_id.h>
 
-#include <memory>
-
 namespace yas::ae {
 class window_lifecycle;
 
@@ -19,7 +17,7 @@ struct window_closer final {
 
    private:
     window_lifetime_id const _lifetime_id;
-    window_lifecycle *_window_lifecycle;
+    window_lifecycle *_lifecycle;
 
     window_closer(window_closer const &) = delete;
     window_closer(window_closer &&) = delete;

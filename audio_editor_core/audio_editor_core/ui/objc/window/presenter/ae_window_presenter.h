@@ -22,9 +22,9 @@ struct window_presenter final {
 
     window_lifetime_id const lifetime_id;
 
-    std::string title() const;
+    [[nodiscard]] std::string title() const;
 
-    bool should_close();
+    [[nodiscard]] bool should_close();
 
     [[nodiscard]] observing::syncable observe(std::function<void(window_presenter_event const &)> &&);
 

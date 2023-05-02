@@ -11,6 +11,8 @@
 #include <audio_editor_core/ae_app_presenter.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_setup_presenter.h>
+#import <audio_editor_core/ae_window_lifetime_id+objc.h>
+#import <audio_editor_core/audio_editor_core-Swift.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
 
@@ -20,6 +22,7 @@ using namespace yas::ae;
 @interface AppDelegate ()
 
 @property (nonatomic) NSMutableSet<AEWindowController *> *windowControllers;
+@property (nonatomic) NSMutableSet<SettingsWindowController *> *settingsWindowControllers;
 
 @end
 
@@ -37,6 +40,7 @@ using namespace yas::ae;
     self->_presenter = app_presenter::make_shared();
 
     self.windowControllers = [[NSMutableSet alloc] init];
+    self.settingsWindowControllers = [[NSMutableSet alloc] init];
 
     auto *const unowned = make_unowned(self);
 
@@ -48,6 +52,12 @@ using namespace yas::ae;
                 } break;
                 case app_presenter_window_event_type::dispose_window_controller: {
                     [unowned.object disposeWindowControllerWithLifetimeID:event.lifetime_id];
+                } break;
+                case app_presenter_window_event_type::make_and_show_settings: {
+                    [unowned.object makeAndShowSettingsWithLifetimeID:event.lifetime_id];
+                } break;
+                case app_presenter_window_event_type::dispose_settings: {
+                    [unowned.object disposeSettingsWithLifetimeID:event.lifetime_id];
                 } break;
             }
         })
@@ -129,6 +139,25 @@ using namespace yas::ae;
     }
 
     self.windowControllers = copiedWindowControllers;
+}
+
+- (void)makeAndShowSettingsWithLifetimeID:(window_lifetime_id const &)lifetime_id {
+    SettingsWindowController *windowController =
+        [SettingsWindowController instantiateWithLifetimeId:[[WindowLifetimeId alloc] initWithRawValue:lifetime_id]];
+    [self.settingsWindowControllers addObject:windowController];
+    [windowController showWindow:nil];
+}
+
+- (void)disposeSettingsWithLifetimeID:(window_lifetime_id const &)lifetime_id {
+    NSMutableSet<SettingsWindowController *> *copiedWindowControllers = [self.settingsWindowControllers mutableCopy];
+
+    for (SettingsWindowController *windowController in self.settingsWindowControllers) {
+        if ([windowController.lifetimeId raw_value] == lifetime_id) {
+            [copiedWindowControllers removeObject:windowController];
+        }
+    }
+
+    self.settingsWindowControllers = copiedWindowControllers;
 }
 
 @end

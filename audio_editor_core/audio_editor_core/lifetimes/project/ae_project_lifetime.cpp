@@ -56,6 +56,7 @@
 #include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
+#include <audio_editor_core/ae_settings_opener.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -113,6 +114,8 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
           this->modal_lifecycle.get(), this->editing_status.get(), this->deselector.get())),
       marker_renaming_opener(std::make_shared<ae::marker_renaming_opener>(
           this->modal_lifecycle.get(), this->editing_status.get(), this->deselector.get())),
+      settings_opener(
+          std::make_shared<ae::settings_opener>(window_lifetime->lifetime_id, app_lifetime->settings_lifecycle.get())),
       export_interactor(std::make_shared<ae::export_interactor>(
           project_format, this->modal_lifecycle.get(), this->editing_status.get(), this->edge_holder.get(),
           window_lifetime->player.get(), this->exporter.get(), window_lifetime->timeline_holder.get())),
@@ -140,7 +143,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
           window_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
           this->nudging.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
           this->time_editor_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
-          this->marker_renaming_opener.get(), this->timing.get(), this->import_interactor.get(),
-          this->export_interactor.get(), this->reverter.get(), this->module_selector.get(), this->marker_selector.get(),
-          this->escaper.get(), this->pasteboard.get())) {
+          this->marker_renaming_opener.get(), this->settings_opener.get(), this->timing.get(),
+          this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
+          this->module_selector.get(), this->marker_selector.get(), this->escaper.get(), this->pasteboard.get())) {
 }

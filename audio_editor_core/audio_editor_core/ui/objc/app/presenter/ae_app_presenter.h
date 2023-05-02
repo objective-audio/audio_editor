@@ -16,6 +16,7 @@ struct app_presenter final {
     [[nodiscard]] static std::shared_ptr<app_presenter> make_shared();
 
     app_presenter(std::shared_ptr<window_lifecycle_for_app_presenter> const &,
+                  std::shared_ptr<settings_lifecycle_for_app_presenter> const &,
                   std::shared_ptr<app_modal_lifecycle> const &, std::shared_ptr<window_opener> const &);
 
     [[nodiscard]] bool can_open_dialog() const;
@@ -27,6 +28,7 @@ struct app_presenter final {
 
    private:
     std::weak_ptr<window_lifecycle_for_app_presenter> const _window_lifecycle;
+    std::weak_ptr<settings_lifecycle_for_app_presenter> const _settings_lifecycle;
     std::weak_ptr<app_modal_lifecycle> const _dialog_lifecycle;
     std::weak_ptr<window_opener> const _window_opener;
 
