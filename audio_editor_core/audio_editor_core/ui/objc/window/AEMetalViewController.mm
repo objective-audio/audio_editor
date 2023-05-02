@@ -223,6 +223,12 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)openSettings:(id)sender {
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(editing_action_name::open_settings);
+    }
+}
+
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -261,6 +267,8 @@ using namespace yas::ae;
         return editing_action_name::paste;
     } else if (selector == @selector(purge:)) {
         return editing_action_name::purge;
+    } else if (selector == @selector(openSettings:)) {
+        return editing_action_name::open_settings;
     }
 
     return std::nullopt;

@@ -19,6 +19,7 @@ class time_editor_opener;
 class marker_editor;
 class module_renaming_opener;
 class marker_renaming_opener;
+class settings_opener;
 class timing;
 class import_interactor;
 class export_interactor;
@@ -31,8 +32,8 @@ class pasteboard;
 struct project_receiver final : action_receivable {
     project_receiver(window_lifetime_id const &, database *, module_editor *, playing_toggler *, nudging *, nudger *,
                      jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_opener *,
-                     marker_renaming_opener *, timing *, import_interactor *, export_interactor *, reverter *,
-                     module_selector *, marker_selector *, escaper *, pasteboard *);
+                     marker_renaming_opener *, settings_opener *, timing *, import_interactor *, export_interactor *,
+                     reverter *, module_selector *, marker_selector *, escaper *, pasteboard *);
 
    private:
     window_lifetime_id const _window_lifetime_id;
@@ -47,6 +48,7 @@ struct project_receiver final : action_receivable {
     marker_editor *const _marker_editor;
     module_renaming_opener *const _module_renaming_opener;
     marker_renaming_opener *const _marker_renaming_opener;
+    settings_opener *const _settings_opener;
     timing *const _timing;
     import_interactor *const _import_interactor;
     export_interactor *const _export_interactor;

@@ -25,6 +25,7 @@
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
 #include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
+#include <audio_editor_core/ae_settings_opener.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -34,10 +35,11 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
                                    nudger *nudger, jumper *jumper, edge_editor *edge_editor,
                                    time_editor_opener *time_editor_opener, marker_editor *marker_editor,
                                    module_renaming_opener *module_renaming_opener,
-                                   marker_renaming_opener *marker_renaming_opener, timing *timing,
-                                   import_interactor *import_interactor, export_interactor *export_interactor,
-                                   reverter *reverter, module_selector *module_selector,
-                                   marker_selector *marker_selector, escaper *escaper, pasteboard *pasteboard)
+                                   marker_renaming_opener *marker_renaming_opener, settings_opener *settings_opener,
+                                   timing *timing, import_interactor *import_interactor,
+                                   export_interactor *export_interactor, reverter *reverter,
+                                   module_selector *module_selector, marker_selector *marker_selector, escaper *escaper,
+                                   pasteboard *pasteboard)
     : _window_lifetime_id(window_lifetime_id),
       _database(database),
       _module_editor(module_editor),
@@ -50,6 +52,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
       _marker_editor(marker_editor),
       _module_renaming_opener(module_renaming_opener),
       _marker_renaming_opener(marker_renaming_opener),
+      _settings_opener(settings_opener),
       _timing(timing),
       _import_interactor(import_interactor),
       _export_interactor(export_interactor),
@@ -261,6 +264,10 @@ void project_receiver::receive(ae::action const &action) const {
                             case editing_action_name::begin_time_editing:
                                 this->_time_editor_opener->begin_time_editing();
                                 break;
+
+                            case editing_action_name::open_settings:
+                                this->_settings_opener->open_settings();
+                                break;
                         }
                     });
                 } break;
@@ -369,6 +376,9 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_edge_editor->can_set_begin());
                 case editing_action_name::set_end_edge:
                     return to_state(this->_edge_editor->can_set_end());
+
+                case editing_action_name::open_settings:
+                    return to_state(this->_settings_opener->can_open_settings());
             }
         }
 
