@@ -10,12 +10,14 @@
 #include <audio_editor_core/ae_window_lifecycle.h>
 #include <cpp_utils/yas_assertion.h>
 
-#include <audio_editor_core/ae_settings_lifecycle.hpp>
+#include <audio_editor_core/ae_app_settings_lifecycle.hpp>
+#include <audio_editor_core/ae_project_settings_lifecycle.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 static std::shared_ptr<app_lifecycle> const _global_app_lifecycle = std::make_shared<app_lifecycle>();
+static std::shared_ptr<app_settings_lifetime> const _empty_app_settings_lifetime = nullptr;
 
 std::shared_ptr<app_lifecycle> const &hierarchy::app_lifecycle() {
     return _global_app_lifecycle;
@@ -34,8 +36,19 @@ std::shared_ptr<window_lifetime> const &hierarchy::window_lifetime_for_id(
     return hierarchy::app_lifetime()->window_lifecycle->lifetime_for_id(window_lifetime_id);
 }
 
-std::shared_ptr<settings_lifetime> const &hierarchy::settings_lifetime_for_id(window_lifetime_id const &lifetime_id) {
-    return hierarchy::app_lifetime()->settings_lifecycle->lifetime_for_id(lifetime_id);
+std::shared_ptr<app_settings_lifetime> const &hierarchy::app_settings_lifetime_for_id(
+    app_settings_lifetime_id const &lifetime_id) {
+    auto const &current = hierarchy::app_lifetime()->app_settings_lifecycle->current();
+    if (current && current->lifetime_id == lifetime_id) {
+        return current;
+    } else {
+        return _empty_app_settings_lifetime;
+    }
+}
+
+std::shared_ptr<project_settings_lifetime> const &hierarchy::project_settings_lifetime_for_id(
+    window_lifetime_id const &lifetime_id) {
+    return hierarchy::app_lifetime()->project_settings_lifecycle->lifetime_for_id(lifetime_id);
 }
 
 std::shared_ptr<project_lifetime> const &hierarchy::project_lifetime_for_id(

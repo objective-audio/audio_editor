@@ -16,11 +16,15 @@ struct app_presenter final {
     [[nodiscard]] static std::shared_ptr<app_presenter> make_shared();
 
     app_presenter(std::shared_ptr<window_lifecycle_for_app_presenter> const &,
-                  std::shared_ptr<settings_lifecycle_for_app_presenter> const &,
+                  std::shared_ptr<project_settings_lifecycle_for_app_presenter> const &,
+                  std::shared_ptr<app_settings_lifecycle_for_app_presenter> const &,
                   std::shared_ptr<app_modal_lifecycle> const &, std::shared_ptr<window_opener> const &);
 
     [[nodiscard]] bool can_open_dialog() const;
     void open_project_setup_dialog();
+
+    [[nodiscard]] bool can_open_app_settings() const;
+    void open_app_settings();
 
     [[nodiscard]] observing::syncable observe_window(std::function<void(app_presenter_window_event const &)> &&);
     [[nodiscard]] observing::syncable observe_dialog(
@@ -28,8 +32,9 @@ struct app_presenter final {
 
    private:
     std::weak_ptr<window_lifecycle_for_app_presenter> const _window_lifecycle;
-    std::weak_ptr<settings_lifecycle_for_app_presenter> const _settings_lifecycle;
-    std::weak_ptr<app_modal_lifecycle> const _dialog_lifecycle;
+    std::weak_ptr<project_settings_lifecycle_for_app_presenter> const _project_settings_lifecycle;
+    std::weak_ptr<app_settings_lifecycle_for_app_presenter> const _app_settings_lifecycle;
+    std::weak_ptr<app_modal_lifecycle> const _app_modal_lifecycle;
     std::weak_ptr<window_opener> const _window_opener;
 
     app_presenter(app_presenter const &) = delete;

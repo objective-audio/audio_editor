@@ -21,7 +21,8 @@ class action_sender;
 class uuid_generator;
 class id_generator;
 class app_settings;
-class settings_lifecycle;
+class project_settings_lifecycle;
+class app_settings_lifecycle;
 
 struct app_lifetime final {
     [[nodiscard]] static std::shared_ptr<app_lifetime> make_shared();
@@ -31,9 +32,9 @@ struct app_lifetime final {
                  std::shared_ptr<file_info_loader> const &, std::shared_ptr<color> const &,
                  std::shared_ptr<uuid_generator> const &, std::shared_ptr<id_generator> const &,
                  std::shared_ptr<app_settings> const &, std::shared_ptr<window_lifecycle> const &,
-                 std::shared_ptr<settings_lifecycle> const &, std::shared_ptr<app_modal_lifecycle> const &,
-                 std::shared_ptr<ui_resource_lifecycle> const &, std::shared_ptr<window_opener> const &,
-                 std::shared_ptr<action_sender> const &);
+                 std::shared_ptr<project_settings_lifecycle> const &, std::shared_ptr<app_settings_lifecycle> const &,
+                 std::shared_ptr<app_modal_lifecycle> const &, std::shared_ptr<ui_resource_lifecycle> const &,
+                 std::shared_ptr<window_opener> const &, std::shared_ptr<action_sender> const &);
 
     std::shared_ptr<worker> const worker;
     std::shared_ptr<system_path> const system_path;
@@ -46,7 +47,8 @@ struct app_lifetime final {
     std::shared_ptr<app_settings> const app_settings;
 
     std::shared_ptr<window_lifecycle> const window_lifecycle;
-    std::shared_ptr<settings_lifecycle> const settings_lifecycle;
+    std::shared_ptr<project_settings_lifecycle> const project_settings_lifecycle;
+    std::shared_ptr<app_settings_lifecycle> const app_settings_lifecycle;
     std::shared_ptr<app_modal_lifecycle> const modal_lifecycle;
     std::shared_ptr<ui_resource_lifecycle> const ui_resource_lifecycle;
 
