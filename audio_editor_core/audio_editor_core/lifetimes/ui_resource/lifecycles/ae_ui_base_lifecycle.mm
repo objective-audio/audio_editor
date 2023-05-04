@@ -9,7 +9,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-ui_base_lifecycle::ui_base_lifecycle(ae::window_lifetime_id const &lifetime_id) : window_lifetime_id(lifetime_id) {
+ui_base_lifecycle::ui_base_lifecycle(ae::project_lifetime_id const &lifetime_id) : project_lifetime_id(lifetime_id) {
 }
 
 void ui_base_lifecycle::add_lifetime() {
@@ -18,7 +18,7 @@ void ui_base_lifecycle::add_lifetime() {
         return;
     }
 
-    this->_lifetime = std::make_shared<ui_base_lifetime>(this->window_lifetime_id);
+    this->_lifetime = std::make_shared<ui_base_lifetime>(this->project_lifetime_id);
 }
 
 std::shared_ptr<ui_base_lifetime> const &ui_base_lifecycle::lifetime() const {

@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
 struct ui_node_hierarchy final {
-    [[nodiscard]] static std::shared_ptr<ui_node_hierarchy> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<ui_node_hierarchy> make_shared(project_lifetime_id const &);
     ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node);
 
     std::shared_ptr<ui::node> const base_node;

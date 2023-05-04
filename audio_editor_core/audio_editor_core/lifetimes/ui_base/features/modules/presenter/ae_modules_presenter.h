@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_module_content_pool.h>
 #include <audio_editor_core/ae_modules_presenter_dependency.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_types.h>
 
 #include <audio_editor_core/ae_module_index.hpp>
@@ -21,7 +21,7 @@ class range_selector;
 class module_pool;
 
 struct modules_presenter final {
-    [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<modules_presenter> make_shared(project_lifetime_id const &);
 
     modules_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<module_pool> const &,
                       std::shared_ptr<selected_module_pool> const &, std::shared_ptr<display_space> const &,

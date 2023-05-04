@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_ui_types.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <cpp_utils/yas_index_range.h>
 #include <ui/yas_ui_umbrella.h>
 
@@ -17,7 +17,7 @@ template <typename V, typename I>
 class dynamic_mesh_container;
 
 struct ui_pasting_modules final {
-    [[nodiscard]] static std::shared_ptr<ui_pasting_modules> make_shared(window_lifetime_id const &, ui::node *);
+    [[nodiscard]] static std::shared_ptr<ui_pasting_modules> make_shared(project_lifetime_id const &, ui::node *);
 
     ui_pasting_modules(std::shared_ptr<pasting_modules_presenter> const &, std::shared_ptr<ui::standard> const &,
                        ui::node *, ae::color *);

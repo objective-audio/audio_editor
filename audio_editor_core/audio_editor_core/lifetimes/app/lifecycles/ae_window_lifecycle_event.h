@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 namespace yas::ae {
 enum class window_lifecycle_event_type {
@@ -14,6 +14,6 @@ enum class window_lifecycle_event_type {
 
 struct window_lifecycle_event final {
     window_lifecycle_event_type type;
-    window_lifetime_id lifetime_id;
+    project_lifetime_id lifetime_id;
 };
 }  // namespace yas::ae

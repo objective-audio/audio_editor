@@ -5,7 +5,7 @@
 import SwiftUI
 
 class ProjectSettingsHostingController: NSHostingController<ProjectSettingsView<ProjectSettingsPresenter>> {
-    init(lifetimeId: WindowLifetimeId) {
+    init(lifetimeId: ProjectLifetimeId) {
         let presenter = ProjectSettingsPresenter(lifetimeId: lifetimeId)
         let rootView = ProjectSettingsView<ProjectSettingsPresenter>(presenter: presenter)
         super.init(rootView: rootView)

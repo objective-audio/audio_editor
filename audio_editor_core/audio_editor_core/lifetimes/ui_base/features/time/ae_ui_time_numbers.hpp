@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -12,7 +12,7 @@ class color;
 class time_numbers_presenter;
 
 struct ui_time_numbers final {
-    [[nodiscard]] static std::shared_ptr<ui_time_numbers> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_time_numbers> make_shared(project_lifetime_id const &,
                                                                       std::shared_ptr<ui::node> const &);
     ui_time_numbers(std::shared_ptr<time_numbers_presenter> const &, std::shared_ptr<ui::font_atlas> const &,
                     std::shared_ptr<ui::standard> const &, ae::color *, std::shared_ptr<ui::node> const &);

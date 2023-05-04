@@ -14,16 +14,16 @@ static std::shared_ptr<project_settings_lifetime> const _empty_lifetime = nullpt
 project_settings_lifecycle::project_settings_lifecycle() : _lifetimes(lifetimes_t::make_shared()) {
 }
 
-void project_settings_lifecycle::add_lifetime(window_lifetime_id const &lifetime_id) {
+void project_settings_lifecycle::add_lifetime(project_lifetime_id const &lifetime_id) {
     this->_lifetimes->insert_or_replace(lifetime_id, project_settings_lifetime::make_shared(lifetime_id));
 }
 
-void project_settings_lifecycle::remove_lifetime(window_lifetime_id const &lifetime_id) {
+void project_settings_lifecycle::remove_lifetime(project_lifetime_id const &lifetime_id) {
     this->_lifetimes->erase(lifetime_id);
 }
 
 std::shared_ptr<project_settings_lifetime> const &project_settings_lifecycle::lifetime_for_id(
-    window_lifetime_id const &lifetime_id) const {
+    project_lifetime_id const &lifetime_id) const {
     if (this->_lifetimes->contains(lifetime_id)) {
         return this->_lifetimes->at(lifetime_id);
     } else {

@@ -65,10 +65,10 @@ struct ui_module_waveforms::element {
 };
 }
 
-std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(window_lifetime_id const &window_lifetime_id) {
+std::shared_ptr<ui_module_waveforms> ui_module_waveforms::make_shared(project_lifetime_id const &project_lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
-    auto const presenter = module_waveforms_presenter::make_shared(window_lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
+    auto const presenter = module_waveforms_presenter::make_shared(project_lifetime_id);
 
     return std::make_shared<ui_module_waveforms>(resource_lifetime->standard, app_lifetime->color.get(),
                                                  resource_lifetime->atlas.get(), presenter);

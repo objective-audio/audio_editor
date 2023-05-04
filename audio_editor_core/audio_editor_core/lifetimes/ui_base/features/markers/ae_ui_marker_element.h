@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_marker_content.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
@@ -19,7 +19,7 @@ class marker_index;
 class ui_square_mesh_data;
 
 struct ui_marker_element final {
-    [[nodiscard]] static std::shared_ptr<ui_marker_element> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_marker_element> make_shared(project_lifetime_id const &,
                                                                         ui::node *parent_node);
     ui_marker_element(std::shared_ptr<marker_pool> const &, std::shared_ptr<selected_marker_pool> const &,
                       std::shared_ptr<marker_element_controller> const &, std::shared_ptr<ui::standard> const &,

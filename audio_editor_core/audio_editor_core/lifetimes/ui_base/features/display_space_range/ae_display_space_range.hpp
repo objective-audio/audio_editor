@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 namespace yas::ae {
 class display_space;

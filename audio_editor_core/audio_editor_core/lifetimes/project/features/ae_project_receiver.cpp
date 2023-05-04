@@ -30,7 +30,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id, database *database,
+project_receiver::project_receiver(project_lifetime_id const &project_lifetime_id, database *database,
                                    module_editor *module_editor, playing_toggler *toggler, nudging *nudging,
                                    nudger *nudger, jumper *jumper, edge_editor *edge_editor,
                                    time_editor_opener *time_editor_opener, marker_editor *marker_editor,
@@ -40,7 +40,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
                                    import_interactor *import_interactor, export_interactor *export_interactor,
                                    reverter *reverter, module_selector *module_selector,
                                    marker_selector *marker_selector, escaper *escaper, pasteboard *pasteboard)
-    : _window_lifetime_id(window_lifetime_id),
+    : _project_lifetime_id(project_lifetime_id),
       _database(database),
       _module_editor(module_editor),
       _playing_toggler(toggler),
@@ -64,7 +64,7 @@ project_receiver::project_receiver(window_lifetime_id const &window_lifetime_id,
 }
 
 std::optional<action_id> project_receiver::receivable_id() const {
-    return action_id{this->_window_lifetime_id};
+    return action_id{this->_project_lifetime_id};
 }
 
 std::optional<ae::action> project_receiver::to_action(ae::key const &key) const {

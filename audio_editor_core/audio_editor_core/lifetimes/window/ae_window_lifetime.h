@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <filesystem>
 #include <memory>
@@ -24,14 +24,14 @@ class timeline_holder;
 class display_space;
 
 struct window_lifetime final {
-    [[nodiscard]] static std::shared_ptr<window_lifetime> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<window_lifetime> make_shared(project_lifetime_id const &,
                                                                       project_format const &,
                                                                       std::filesystem::path const &project_dir_path);
 
-    window_lifetime(window_lifetime_id const &, project_format const &, std::filesystem::path const &project_dir_path,
+    window_lifetime(project_lifetime_id const &, project_format const &, std::filesystem::path const &project_dir_path,
                     app_lifetime const *);
 
-    window_lifetime_id const lifetime_id;
+    project_lifetime_id const lifetime_id;
     project_format const project_format;
     std::filesystem::path const project_directory_path;
 

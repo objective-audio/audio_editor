@@ -16,7 +16,7 @@ using namespace yas::ae;
 
 static std::vector<std::optional<grid_content>> const _empty_contents;
 
-std::shared_ptr<grid_presenter> grid_presenter::make_shared(window_lifetime_id const lifetime_id) {
+std::shared_ptr<grid_presenter> grid_presenter::make_shared(project_lifetime_id const lifetime_id) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
     return std::make_shared<grid_presenter>(lifetime_id, project_lifetime->project_format,
@@ -24,7 +24,7 @@ std::shared_ptr<grid_presenter> grid_presenter::make_shared(window_lifetime_id c
                                             project_lifetime->grid_updater, project_lifetime->grid_content_pool);
 }
 
-grid_presenter::grid_presenter(window_lifetime_id const lifetime_id, project_format const project_format,
+grid_presenter::grid_presenter(project_lifetime_id const lifetime_id, project_format const project_format,
                                std::shared_ptr<display_space> const &display_space,
                                std::shared_ptr<display_space_range> const &display_space_range,
                                std::shared_ptr<grid_updater> const &updater,

@@ -22,9 +22,9 @@ struct window_lifecycle final : window_lifecycle_for_app_presenter, action_recei
     window_lifecycle(id_generatable const *, uuid_generatable const *);
 
     void add_lifetime(std::filesystem::path const &project_dir_path, project_format const &);
-    void remove_lifetime(window_lifetime_id const &);
+    void remove_lifetime(project_lifetime_id const &);
 
-    [[nodiscard]] std::shared_ptr<window_lifetime> const &lifetime_for_id(window_lifetime_id const &) const;
+    [[nodiscard]] std::shared_ptr<window_lifetime> const &lifetime_for_id(project_lifetime_id const &) const;
 
     [[nodiscard]] std::size_t size() const;
 
@@ -34,7 +34,7 @@ struct window_lifecycle final : window_lifecycle_for_app_presenter, action_recei
     id_generatable const *const _id_generator;
     uuid_generatable const *const _uuid_generator;
 
-    using lifetimes_t = observing::map::holder<window_lifetime_id, std::shared_ptr<window_lifetime>>;
+    using lifetimes_t = observing::map::holder<project_lifetime_id, std::shared_ptr<window_lifetime>>;
     std::shared_ptr<lifetimes_t> const _lifetimes = lifetimes_t::make_shared();
 
     window_lifecycle(window_lifecycle const &) = delete;

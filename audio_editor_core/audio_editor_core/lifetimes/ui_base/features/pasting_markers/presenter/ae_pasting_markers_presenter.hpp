@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_pasting_marker_content_pool.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 #include <memory>
@@ -17,7 +17,7 @@ class display_space;
 class display_space_range;
 
 struct pasting_markers_presenter {
-    [[nodiscard]] static std::shared_ptr<pasting_markers_presenter> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<pasting_markers_presenter> make_shared(project_lifetime_id const &);
 
     explicit pasting_markers_presenter(project_format const &, std::shared_ptr<pasteboard> const &,
                                        std::shared_ptr<display_space> const &,

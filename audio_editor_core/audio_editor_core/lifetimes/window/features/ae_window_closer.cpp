@@ -11,7 +11,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-window_closer::window_closer(window_lifetime_id const &lifetime_id, window_lifecycle *window_lifecycle,
+window_closer::window_closer(project_lifetime_id const &lifetime_id, window_lifecycle *window_lifecycle,
                              project_settings_lifecycle *project_settings_lifecycle)
     : _lifetime_id(lifetime_id),
       _window_lifecycle(window_lifecycle),

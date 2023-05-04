@@ -15,9 +15,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_event_handling> ui_event_handling::make_shared(window_lifetime_id const &window_lifetime_id) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+std::shared_ptr<ui_event_handling> ui_event_handling::make_shared(project_lifetime_id const &project_lifetime_id) {
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
     return std::make_shared<ui_event_handling>(resource_lifetime->standard, project_lifetime->action_sender,
                                                project_lifetime->pinch_gesture_controller, resource_lifetime->keyboard,

@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
 struct ui_time_base final {
-    [[nodiscard]] static std::shared_ptr<ui_time_base> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_time_base> make_shared(project_lifetime_id const &,
                                                                    std::shared_ptr<ui::node> const &time_base_node);
     ui_time_base(std::shared_ptr<ui::node> const &time_base_node,
                  std::shared_ptr<ui::font_atlas> const &time_font_atlas, std::shared_ptr<ui::standard> const &);

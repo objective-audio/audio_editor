@@ -21,7 +21,7 @@ using namespace yas::ae;
     observing::canceller_pool _pool;
 }
 
-+ (instancetype)instantiateWithLifetimeID:(yas::ae::window_lifetime_id const &)lifetime_id {
++ (instancetype)instantiateWithLifetimeID:(yas::ae::project_lifetime_id const &)lifetime_id {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window"
                                                          bundle:[NSBundle bundleForClass:[self class]]];
     AEWindowController *windowController = [storyboard instantiateInitialController];
@@ -33,7 +33,7 @@ using namespace yas::ae;
     return windowController;
 }
 
-- (void)setupWithLifetimeID:(window_lifetime_id const &)lifetime_id {
+- (void)setupWithLifetimeID:(project_lifetime_id const &)lifetime_id {
     self->_presenter = window_presenter::make_shared(lifetime_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
 
@@ -48,13 +48,13 @@ using namespace yas::ae;
                 return;
             }
 
-            [content setupWithWindowLifetimeID:lifetime_id];
+            [content setupWithProjectLifetimeID:lifetime_id];
         })
         .sync()
         ->add_to(self->_pool);
 }
 
-- (window_lifetime_id const &)lifetime_id {
+- (project_lifetime_id const &)lifetime_id {
     return self->_presenter->lifetime_id;
 }
 

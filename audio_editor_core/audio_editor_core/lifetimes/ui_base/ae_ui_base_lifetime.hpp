@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <memory>
 
@@ -38,9 +38,9 @@ class ui_range_selection;
 class ui_range_selection_input;
 
 struct ui_base_lifetime final {
-    ui_base_lifetime(window_lifetime_id const &);
+    ui_base_lifetime(project_lifetime_id const &);
 
-    window_lifetime_id const window_lifetime_id;
+    project_lifetime_id const project_lifetime_id;
 
     std::shared_ptr<ui_node_hierarchy> const node_hierarchy;
 

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -14,7 +14,7 @@ class color;
 class range_selector;
 
 struct ui_range_selection final {
-    static std::shared_ptr<ui_range_selection> make_shared(window_lifetime_id const &, ui::node *);
+    static std::shared_ptr<ui_range_selection> make_shared(project_lifetime_id const &, ui::node *);
 
     ui_range_selection(ui::node *, ae::color *, ui::standard *, ui_square_mesh_data *,
                        std::shared_ptr<range_selector> const &);

@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_content_pool.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -17,7 +17,7 @@ class ui_atlas;
 class waveform_mesh_data;
 
 struct ui_module_waveforms final {
-    [[nodiscard]] static std::shared_ptr<ui_module_waveforms> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<ui_module_waveforms> make_shared(project_lifetime_id const &);
 
     ui_module_waveforms(std::shared_ptr<ui::standard> const &, ae::color *, ui_atlas const *,
                         std::shared_ptr<module_waveforms_presenter> const &);

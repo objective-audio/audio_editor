@@ -17,9 +17,9 @@ using namespace yas::ae;
 static std::vector<std::optional<pasting_marker_content>> const _empty_contents;
 
 std::shared_ptr<pasting_markers_presenter> pasting_markers_presenter::make_shared(
-    window_lifetime_id const &window_lifetime_id) {
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
+    project_lifetime_id const &project_lifetime_id) {
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_lifetime_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
     return std::make_shared<pasting_markers_presenter>(
         project_lifetime->project_format, project_lifetime->pasteboard, window_lifetime->display_space,
         project_lifetime->display_space_range, project_lifetime->pasting_marker_content_pool);

@@ -61,21 +61,22 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::window_lifetime_id const &window_lifetime_id) {
-    auto const window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
+std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::project_lifetime_id const &lifetime_id) {
+    auto const window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
 
     return std::make_shared<project_lifetime>(window_lifetime.get(), hierarchy::app_lifetime().get());
 }
 
 project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_lifetime const *app_lifetime)
-    : window_lifetime_id(window_lifetime->lifetime_id),
+    : project_lifetime_id(window_lifetime->lifetime_id),
       project_format(window_lifetime->project_format),
       module_content_pool(module_content_pool::make_shared()),
       pasting_module_content_pool(pasting_module_content_pool::make_shared()),
       marker_content_pool(marker_content_pool::make_shared()),
       pasting_marker_content_pool(pasting_marker_content_pool::make_shared()),
       grid_content_pool(grid_content_pool::make_shared()),
-      action_sender(std::make_shared<ae::project_action_sender>(window_lifetime_id, app_lifetime->action_sender.get())),
+      action_sender(
+          std::make_shared<ae::project_action_sender>(project_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(std::make_shared<ae::pinch_gesture_controller>(window_lifetime->zooming_pair.get())),
       scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(window_lifetime->scrolling.get())),
       database(database::make_shared(window_lifetime->project_path->db_file())),
@@ -98,7 +99,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       marker_selector(std::make_shared<ae::marker_selector>(this->marker_pool.get(), this->selected_marker_pool.get(),
                                                             this->editing_status.get(), this->deselector.get())),
       playing_toggler(std::make_shared<ae::playing_toggler>(window_lifetime->player.get())),
-      modal_lifecycle(project_modal_lifecycle::make_shared(window_lifetime_id)),
+      modal_lifecycle(project_modal_lifecycle::make_shared(project_lifetime_id)),
       nudger(std::make_shared<ae::nudger>(window_lifetime->player.get(), this->nudging.get())),
       edge_holder(std::make_shared<ae::edge_holder>(this->database.get())),
       edge_editor(std::make_shared<ae::edge_editor>(this->edge_holder.get(), window_lifetime->player.get(),
@@ -127,7 +128,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
                                               this->editing_status.get())),
       file_module_loading_state_holder(std::make_shared<ae::file_module_loading_state_holder>()),
       file_module_loader(file_module_loader::make_shared(
-          window_lifetime_id.project, window_lifetime->project_path.get(), this->project_format,
+          project_lifetime_id.project, window_lifetime->project_path.get(), this->project_format,
           this->file_module_loading_state_holder.get(), this->database.get(), this->pasteboard.get())),
       import_interactor(std::make_shared<ae::import_interactor>(this->modal_lifecycle.get(), this->editing_status.get(),
                                                                 this->file_module_loader.get())),
@@ -140,7 +141,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get(),
                                             this->selected_marker_pool.get())),
       receiver(std::make_shared<project_receiver>(
-          window_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
+          project_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
           this->nudging.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
           this->time_editor_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
           this->marker_renaming_opener.get(), this->settings_opener.get(), this->timing.get(),

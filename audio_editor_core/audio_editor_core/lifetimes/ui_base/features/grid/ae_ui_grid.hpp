@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_ui_types.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -17,7 +17,7 @@ template <typename V, typename I>
 class dynamic_mesh_container;
 
 struct ui_grid final {
-    [[nodiscard]] static std::shared_ptr<ui_grid> make_shared(window_lifetime_id const &, ui::node *);
+    [[nodiscard]] static std::shared_ptr<ui_grid> make_shared(project_lifetime_id const &, ui::node *);
     ui_grid(std::shared_ptr<grid_presenter> const &, std::shared_ptr<ui::standard> const &, ae::color *,
             ui_atlas const *, ui::node *);
 

@@ -9,7 +9,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-project_settings_closer::project_settings_closer(window_lifetime_id const &lifetime_id,
+project_settings_closer::project_settings_closer(project_lifetime_id const &lifetime_id,
                                                  project_settings_lifecycle *lifecycle)
     : _lifetime_id(lifetime_id), _lifecycle(lifecycle) {
 }

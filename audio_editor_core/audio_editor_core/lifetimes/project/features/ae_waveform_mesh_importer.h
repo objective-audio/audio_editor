@@ -5,8 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_content.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <cpp_utils/yas_task_queue.h>
 #include <observing/yas_observing_umbrella.h>
 
@@ -17,7 +17,8 @@ class module_pool;
 struct waveform_mesh_importer final : std::enable_shared_from_this<waveform_mesh_importer> {
     using event = waveform_mesh_importer_event;
 
-    [[nodiscard]] static std::shared_ptr<waveform_mesh_importer> make_shared(window_lifetime_id const &, module_pool *);
+    [[nodiscard]] static std::shared_ptr<waveform_mesh_importer> make_shared(project_lifetime_id const &,
+                                                                             module_pool *);
 
     waveform_mesh_importer(project_path const *, module_pool *);
 

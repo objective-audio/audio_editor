@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_timing_types.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {

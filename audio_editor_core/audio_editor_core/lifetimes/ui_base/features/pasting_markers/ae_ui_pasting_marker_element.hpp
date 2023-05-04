@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 #include <audio_editor_core/ae_pasting_marker_content.hpp>
@@ -14,7 +14,7 @@ class color;
 class ui_square_mesh_data;
 
 struct ui_pasting_marker_element final {
-    [[nodiscard]] static std::shared_ptr<ui_pasting_marker_element> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_pasting_marker_element> make_shared(project_lifetime_id const &,
                                                                                 ui::node *parent_node);
 
     ui_pasting_marker_element(std::shared_ptr<ui::standard> const &, ui::node *parent_node,

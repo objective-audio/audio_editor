@@ -15,9 +15,9 @@ using namespace yas;
 using namespace yas::ae;
 
 ui_resource_lifetime::ui_resource_lifetime(std::shared_ptr<ui::standard> const &standard,
-                                           ae::window_lifetime_id const &lifetime_id)
+                                           ae::project_lifetime_id const &lifetime_id)
     : standard(standard),
-      window_lifetime_id(lifetime_id),
+      project_lifetime_id(lifetime_id),
       texture(ui::texture::make_shared({.point_size = {1024, 1024}}, standard->view_look())),
       normal_font_atlas(ui::font_atlas::make_shared(
           {.font_name = "TrebuchetMS-Bold",

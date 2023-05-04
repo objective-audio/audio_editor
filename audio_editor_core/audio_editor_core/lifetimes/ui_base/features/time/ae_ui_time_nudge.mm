@@ -13,11 +13,11 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_time_nudge> ui_time_nudge::make_shared(window_lifetime_id const &lifetime_id,
+std::shared_ptr<ui_time_nudge> ui_time_nudge::make_shared(project_lifetime_id const &lifetime_id,
                                                           ui_time_numbers *time_numbers,
                                                           std::shared_ptr<ui::node> const &node) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(lifetime_id);
     auto const unit_presenter = time_numbers_presenter::make_shared(lifetime_id);
     auto const nudge_preseneter = time_nudge_presenter::make_shared();
 

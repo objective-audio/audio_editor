@@ -16,15 +16,15 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<project_modal_lifecycle> project_modal_lifecycle::make_shared(
-    window_lifetime_id const &window_lifetime_id) {
+    project_lifetime_id const &project_lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    return std::make_shared<project_modal_lifecycle>(app_lifetime->id_generator.get(), window_lifetime_id);
+    return std::make_shared<project_modal_lifecycle>(app_lifetime->id_generator.get(), project_lifetime_id);
 }
 
 project_modal_lifecycle::project_modal_lifecycle(id_generatable const *id_generator,
-                                                 window_lifetime_id const &window_lifetime_id)
+                                                 project_lifetime_id const &project_lifetime_id)
     : _id_generator(id_generator),
-      _window_lifetime_id(window_lifetime_id),
+      _project_lifetime_id(project_lifetime_id),
       _current(observing::value::holder<std::optional<project_modal_sub_lifetime>>::make_shared(std::nullopt)) {
 }
 
@@ -38,7 +38,7 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
     }
 
     this->_current->set_value(time_editor_lifetime::make_shared(
-        {.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}, components));
+        {.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id}, components));
 }
 
 void project_modal_lifecycle::remove_time_editor(project_sub_lifetime_id const &lifetime_id) {
@@ -63,7 +63,7 @@ void project_modal_lifecycle::add_module_name_sheet(module_index const &index) {
     }
 
     this->_current->set_value(std::make_shared<ae::module_name_sheet_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id},
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id},
         index));
 }
 
@@ -89,7 +89,7 @@ void project_modal_lifecycle::add_marker_name_sheet(marker_index const &index) {
     }
 
     this->_current->set_value(std::make_shared<ae::marker_name_sheet_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id},
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id},
         index));
 }
 
@@ -115,7 +115,7 @@ void project_modal_lifecycle::add_file_import_dialog() {
     }
 
     this->_current->set_value(std::make_shared<ae::file_import_dialog_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}));
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id}));
 }
 
 void project_modal_lifecycle::remove_file_import_dialog(project_sub_lifetime_id const &lifetime_id) {
@@ -140,7 +140,7 @@ void project_modal_lifecycle::add_file_export_dialog() {
     }
 
     this->_current->set_value(std::make_shared<ae::file_export_dialog_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id}));
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id}));
 }
 
 void project_modal_lifecycle::remove_file_export_dialog(project_sub_lifetime_id const &lifetime_id) {
@@ -165,7 +165,7 @@ void project_modal_lifecycle::add_context_menu(context_menu const &context_menu)
     }
 
     this->_current->set_value(std::make_shared<ae::context_menu_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_window_lifetime_id},
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id},
         context_menu));
 }
 
@@ -193,7 +193,7 @@ observing::syncable project_modal_lifecycle::observe(
 #pragma mark - action_receiver_provider
 
 std::optional<action_id> project_modal_lifecycle::receivable_id() const {
-    return action_id{this->_window_lifetime_id};
+    return action_id{this->_project_lifetime_id};
 }
 
 std::vector<action_receivable *> project_modal_lifecycle::receivers() const {

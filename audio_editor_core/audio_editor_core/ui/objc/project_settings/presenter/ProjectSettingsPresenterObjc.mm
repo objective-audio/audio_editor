@@ -4,8 +4,8 @@
 
 #import "ProjectSettingsPresenterObjc.h"
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_project_lifetime_id+objc.h>
 #include <audio_editor_core/ae_timing_types+objc.h>
-#include <audio_editor_core/ae_window_lifetime_id+objc.h>
 #include <audio_editor_core/ae_app_settings.hpp>
 
 using namespace yas;
@@ -13,11 +13,11 @@ using namespace yas::ae;
 
 namespace yas::ae {
 struct project_settings_presenter_cpp final {
-    window_lifetime_id const lifetime_id;
+    project_lifetime_id const lifetime_id;
     project_format const project_format;
     observing::canceller_pool cancellers;
 
-    project_settings_presenter_cpp(window_lifetime_id const lifetime_id, ae::project_format const &project_format)
+    project_settings_presenter_cpp(project_lifetime_id const lifetime_id, ae::project_format const &project_format)
         : lifetime_id(lifetime_id), project_format(project_format) {
     }
 };
@@ -27,7 +27,7 @@ struct project_settings_presenter_cpp final {
     std::unique_ptr<project_settings_presenter_cpp> _cpp;
 }
 
-- (instancetype)initWithWindowLifetimeId:(WindowLifetimeId *)lifetimeId {
+- (instancetype)initWithProjectLifetimeId:(ProjectLifetimeId *)lifetimeId {
     self = [super init];
     if (self) {
         auto const raw_lifetime_id = lifetimeId.raw_value;
