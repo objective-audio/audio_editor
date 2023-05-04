@@ -16,7 +16,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<waveform_mesh_importer> waveform_mesh_importer::make_shared(window_lifetime_id const &lifetime_id,
+std::shared_ptr<waveform_mesh_importer> waveform_mesh_importer::make_shared(project_lifetime_id const &lifetime_id,
                                                                             module_pool *module_pool) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
 

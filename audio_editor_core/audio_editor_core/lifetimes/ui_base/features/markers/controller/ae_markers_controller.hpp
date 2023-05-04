@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <audio_editor_core/ae_marker_index.hpp>
 
@@ -12,7 +12,7 @@ namespace yas::ae {
 class project_action_sender;
 
 struct markers_controller final {
-    [[nodiscard]] static std::shared_ptr<markers_controller> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<markers_controller> make_shared(project_lifetime_id const &);
 
     markers_controller(std::shared_ptr<project_action_sender> const &);
 

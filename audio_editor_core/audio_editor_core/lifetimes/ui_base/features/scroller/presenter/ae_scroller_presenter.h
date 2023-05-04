@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <memory>
 
@@ -14,7 +14,7 @@ class player;
 class zooming_pair;
 
 struct scroller_presenter final {
-    [[nodiscard]] static std::shared_ptr<scroller_presenter> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<scroller_presenter> make_shared(project_lifetime_id const &);
 
     scroller_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<zooming_pair> const &);
 

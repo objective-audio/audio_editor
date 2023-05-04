@@ -6,10 +6,10 @@ import AppKit
 
 @objcMembers
 public final class ProjectSettingsWindowController: NSWindowController {
-    public var lifetimeId: WindowLifetimeId { self.presenter.lifetimeId }
+    public var lifetimeId: ProjectLifetimeId { self.presenter.lifetimeId }
     private var presenter: ProjectSettingsWindowPresenter!
 
-    public static func instantiate(lifetimeId: WindowLifetimeId) -> ProjectSettingsWindowController {
+    public static func instantiate(lifetimeId: ProjectLifetimeId) -> ProjectSettingsWindowController {
         let storyboard = NSStoryboard(name: "ProjectSettingsWindow",
                                       bundle: Bundle(for: Self.self))
         guard let windowController =

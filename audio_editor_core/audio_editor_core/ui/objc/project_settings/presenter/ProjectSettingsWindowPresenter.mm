@@ -4,7 +4,7 @@
 
 #import "ProjectSettingsWindowPresenter.h"
 #include <audio_editor_core/ae_hierarchy.h>
-#import <audio_editor_core/ae_window_lifetime_id+objc.h>
+#import <audio_editor_core/ae_project_lifetime_id+objc.h>
 #include <audio_editor_core/ae_project_settings_closer.hpp>
 
 using namespace yas;
@@ -12,12 +12,12 @@ using namespace yas::ae;
 
 namespace yas::ae {
 struct project_settings_window_presenter_cpp {
-    project_settings_window_presenter_cpp(window_lifetime_id const lifetime_id,
+    project_settings_window_presenter_cpp(project_lifetime_id const lifetime_id,
                                           std::shared_ptr<project_settings_closer> const &closer)
         : lifetime_id(lifetime_id), _closer(closer) {
     }
 
-    window_lifetime_id const lifetime_id;
+    project_lifetime_id const lifetime_id;
 
     [[nodiscard]] bool should_close() {
         auto const closer = this->_closer.lock();
@@ -39,7 +39,7 @@ struct project_settings_window_presenter_cpp {
     std::unique_ptr<project_settings_window_presenter_cpp> _cpp;
 }
 
-- (instancetype)initWithLifetimeId:(WindowLifetimeId *)lifetimeId {
+- (instancetype)initWithLifetimeId:(ProjectLifetimeId *)lifetimeId {
     self = [super init];
     if (self) {
         _lifetimeId = lifetimeId;

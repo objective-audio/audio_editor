@@ -11,8 +11,8 @@
 #include <audio_editor_core/ae_app_presenter.h>
 #import <audio_editor_core/ae_app_settings_lifetime_id+objc.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#import <audio_editor_core/ae_project_lifetime_id+objc.h>
 #include <audio_editor_core/ae_project_setup_presenter.h>
-#import <audio_editor_core/ae_window_lifetime_id+objc.h>
 #import <audio_editor_core/audio_editor_core-Swift.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
@@ -51,16 +51,16 @@ using namespace yas::ae;
         ->observe_window([unowned](auto const &event) {
             switch (event.type) {
                 case app_presenter_window_event_type::make_and_show_window_controller: {
-                    [unowned.object makeAndShowWindowControllerWithLifetimeID:event.window_lifetime_id()];
+                    [unowned.object makeAndShowWindowControllerWithLifetimeID:event.project_lifetime_id()];
                 } break;
                 case app_presenter_window_event_type::dispose_window_controller: {
-                    [unowned.object disposeWindowControllerWithLifetimeID:event.window_lifetime_id()];
+                    [unowned.object disposeWindowControllerWithLifetimeID:event.project_lifetime_id()];
                 } break;
                 case app_presenter_window_event_type::make_and_show_project_settings: {
-                    [unowned.object makeAndShowProjectSettingsWithLifetimeID:event.window_lifetime_id()];
+                    [unowned.object makeAndShowProjectSettingsWithLifetimeID:event.project_lifetime_id()];
                 } break;
                 case app_presenter_window_event_type::dispose_project_settings: {
-                    [unowned.object disposeProjectSettingsWithLifetimeID:event.window_lifetime_id()];
+                    [unowned.object disposeProjectSettingsWithLifetimeID:event.project_lifetime_id()];
                 } break;
                 case app_presenter_window_event_type::make_and_show_app_settings: {
                     [unowned.object makeAndShowAppSettingsWithLifetimeID:event.app_settings_lifetime_id()];
@@ -138,13 +138,13 @@ using namespace yas::ae;
     }];
 }
 
-- (void)makeAndShowWindowControllerWithLifetimeID:(window_lifetime_id const &)lifetime_id {
+- (void)makeAndShowWindowControllerWithLifetimeID:(project_lifetime_id const &)lifetime_id {
     AEWindowController *windowController = [AEWindowController instantiateWithLifetimeID:lifetime_id];
     [self.windowControllers addObject:windowController];
     [windowController showWindow:nil];
 }
 
-- (void)disposeWindowControllerWithLifetimeID:(window_lifetime_id const &)lifetime_id {
+- (void)disposeWindowControllerWithLifetimeID:(project_lifetime_id const &)lifetime_id {
     NSMutableSet<AEWindowController *> *copiedWindowControllers = [self.windowControllers mutableCopy];
 
     for (AEWindowController *windowController in self.windowControllers) {
@@ -157,14 +157,14 @@ using namespace yas::ae;
     self.windowControllers = copiedWindowControllers;
 }
 
-- (void)makeAndShowProjectSettingsWithLifetimeID:(window_lifetime_id const &)lifetime_id {
+- (void)makeAndShowProjectSettingsWithLifetimeID:(project_lifetime_id const &)lifetime_id {
     ProjectSettingsWindowController *windowController = [ProjectSettingsWindowController
-        instantiateWithLifetimeId:[[WindowLifetimeId alloc] initWithRawValue:lifetime_id]];
+        instantiateWithLifetimeId:[[ProjectLifetimeId alloc] initWithRawValue:lifetime_id]];
     [self.projectSettingsWindowControllers addObject:windowController];
     [windowController showWindow:nil];
 }
 
-- (void)disposeProjectSettingsWithLifetimeID:(window_lifetime_id const &)lifetime_id {
+- (void)disposeProjectSettingsWithLifetimeID:(project_lifetime_id const &)lifetime_id {
     NSMutableSet<ProjectSettingsWindowController *> *copiedWindowControllers =
         [self.projectSettingsWindowControllers mutableCopy];
 

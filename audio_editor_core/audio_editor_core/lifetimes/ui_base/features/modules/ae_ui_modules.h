@@ -5,8 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_content_pool.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_ui_types.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -22,7 +22,7 @@ template <typename V, typename I>
 class dynamic_mesh_container;
 
 struct ui_modules final {
-    [[nodiscard]] static std::shared_ptr<ui_modules> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_modules> make_shared(project_lifetime_id const &,
                                                                  std::shared_ptr<ui::node> const &,
                                                                  ui_module_waveforms *);
 

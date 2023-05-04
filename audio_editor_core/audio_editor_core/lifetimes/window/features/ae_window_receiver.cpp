@@ -9,7 +9,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-window_receiver::window_receiver(window_lifetime_id const &lifetime_id) : _lifetime_id(lifetime_id) {
+window_receiver::window_receiver(project_lifetime_id const &lifetime_id) : _lifetime_id(lifetime_id) {
 }
 
 std::optional<action_id> window_receiver::receivable_id() const {

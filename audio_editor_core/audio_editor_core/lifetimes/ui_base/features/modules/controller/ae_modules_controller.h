@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_content_pool.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_types.h>
 
 namespace yas::ae {
@@ -13,7 +13,7 @@ class project_action_sender;
 class range_selector;
 
 struct modules_controller final {
-    [[nodiscard]] static std::shared_ptr<modules_controller> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<modules_controller> make_shared(project_lifetime_id const &);
     modules_controller(std::shared_ptr<project_action_sender> const &, std::shared_ptr<module_content_pool> const &,
                        std::shared_ptr<range_selector> const &);
 

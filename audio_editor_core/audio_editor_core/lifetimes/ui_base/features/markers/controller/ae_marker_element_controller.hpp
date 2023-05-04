@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_marker_content_pool.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <audio_editor_core/ae_marker_index.hpp>
 
@@ -14,7 +14,7 @@ class project_action_sender;
 class range_selector;
 
 struct marker_element_controller final {
-    [[nodiscard]] static std::shared_ptr<marker_element_controller> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<marker_element_controller> make_shared(project_lifetime_id const &);
 
     marker_element_controller(std::shared_ptr<project_action_sender> const &, std::shared_ptr<range_selector> const &);
 

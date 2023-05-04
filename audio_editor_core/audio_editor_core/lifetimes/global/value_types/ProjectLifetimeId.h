@@ -1,12 +1,12 @@
 //
-//  WindowLifetimeId.h
+//  ProjectLifetimeId.h
 //
 
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WindowLifetimeId : NSObject
+@interface ProjectLifetimeId : NSObject
 
 @end
 

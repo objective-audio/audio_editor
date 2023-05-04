@@ -12,9 +12,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_edge> ui_edge::make_shared(window_lifetime_id const &window_lifetime_id,
+std::shared_ptr<ui_edge> ui_edge::make_shared(project_lifetime_id const &project_lifetime_id,
                                               std::shared_ptr<ui::node> const &node) {
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
     ui_edge_element::args const args{.square_mesh_data = resource_lifetime->square_mesh_data};
 
@@ -23,7 +23,7 @@ std::shared_ptr<ui_edge> ui_edge::make_shared(window_lifetime_id const &window_l
     auto const end_edge =
         ui_edge_element::make_shared("END", args, resource_lifetime->standard, resource_lifetime->normal_font_atlas);
 
-    auto const presenter = edge_presenter::make_shared(window_lifetime_id);
+    auto const presenter = edge_presenter::make_shared(project_lifetime_id);
     return std::make_shared<ui_edge>(presenter, begin_edge, end_edge, node);
 }
 

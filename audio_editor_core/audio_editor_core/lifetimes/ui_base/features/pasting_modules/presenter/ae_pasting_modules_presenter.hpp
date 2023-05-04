@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_pasting_module_content_pool.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <optional>
 
@@ -17,7 +17,7 @@ class display_space_range;
 class pasteboard;
 
 struct pasting_modules_presenter final {
-    [[nodiscard]] static std::shared_ptr<pasting_modules_presenter> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<pasting_modules_presenter> make_shared(project_lifetime_id const &);
 
     pasting_modules_presenter(project_format const &, std::shared_ptr<pasteboard> const &,
                               std::shared_ptr<display_space> const &, std::shared_ptr<display_space_range> const &,

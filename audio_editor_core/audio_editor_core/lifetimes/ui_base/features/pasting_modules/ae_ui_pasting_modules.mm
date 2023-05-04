@@ -31,12 +31,12 @@ static std::unique_ptr<dynamic_mesh_content> make_element(std::size_t const idx,
 
 #pragma mark - ui_pasting_modules
 
-std::shared_ptr<ui_pasting_modules> ui_pasting_modules::make_shared(window_lifetime_id const &window_lifetime_id,
+std::shared_ptr<ui_pasting_modules> ui_pasting_modules::make_shared(project_lifetime_id const &project_lifetime_id,
                                                                     ui::node *node) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
-    auto const modules_presenter = pasting_modules_presenter::make_shared(window_lifetime_id);
+    auto const modules_presenter = pasting_modules_presenter::make_shared(project_lifetime_id);
     return std::make_shared<ui_pasting_modules>(modules_presenter, resource_lifetime->standard, node,
                                                 app_lifetime->color.get());
 }

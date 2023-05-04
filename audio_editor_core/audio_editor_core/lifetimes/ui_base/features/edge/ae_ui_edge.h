@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -15,7 +15,7 @@ class ui_edge_element;
 class ui_mesh_data;
 
 struct ui_edge final {
-    [[nodiscard]] static std::shared_ptr<ui_edge> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_edge> make_shared(project_lifetime_id const &,
                                                               std::shared_ptr<ui::node> const &);
 
     ui_edge(std::shared_ptr<edge_presenter> const &, std::shared_ptr<ui_edge_element> const &begin_edge,

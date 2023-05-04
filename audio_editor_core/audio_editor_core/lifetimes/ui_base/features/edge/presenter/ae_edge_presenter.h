@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_edge_location.h>
 #include <audio_editor_core/ae_edge_presenter_dependency.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
@@ -15,7 +15,7 @@ class display_space;
 class edge_holder;
 
 struct edge_presenter final {
-    [[nodiscard]] static std::shared_ptr<edge_presenter> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<edge_presenter> make_shared(project_lifetime_id const &);
 
     edge_presenter(project_format const &, std::shared_ptr<edge_holder> const &,
                    std::shared_ptr<display_space> const &);

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -14,7 +14,7 @@ class time_numbers_presenter;
 class time_nudge_presenter;
 
 struct ui_time_nudge final {
-    [[nodiscard]] static std::shared_ptr<ui_time_nudge> make_shared(window_lifetime_id const &, ui_time_numbers *,
+    [[nodiscard]] static std::shared_ptr<ui_time_nudge> make_shared(project_lifetime_id const &, ui_time_numbers *,
                                                                     std::shared_ptr<ui::node> const &);
     ui_time_nudge(ae::color *, std::shared_ptr<ui::view_look> const &, ui_time_numbers *,
                   std::shared_ptr<time_numbers_presenter> const &, std::shared_ptr<time_nudge_presenter> const &,

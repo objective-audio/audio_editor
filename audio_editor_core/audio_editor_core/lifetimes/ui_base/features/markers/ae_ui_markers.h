@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_marker_content_pool.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -14,14 +14,14 @@ class markers_controller;
 class ui_marker_element;
 
 struct ui_markers final {
-    [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<ui_markers> make_shared(project_lifetime_id const &,
                                                                  std::shared_ptr<ui::node> const &);
 
-    ui_markers(window_lifetime_id const &, std::shared_ptr<markers_presenter> const &,
+    ui_markers(project_lifetime_id const &, std::shared_ptr<markers_presenter> const &,
                std::shared_ptr<markers_controller> const &, std::shared_ptr<ui::standard> const &, ui::node *);
 
    private:
-    window_lifetime_id const _window_lifetime_id;
+    project_lifetime_id const _project_lifetime_id;
     ui::node *const _node;
     std::shared_ptr<markers_presenter> const _presenter;
     std::shared_ptr<markers_controller> const _controller;

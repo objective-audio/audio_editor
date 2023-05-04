@@ -29,7 +29,7 @@ using namespace yas::ae;
 @end
 
 @implementation AEMetalViewController {
-    window_lifetime_id _window_lifetime_id;
+    project_lifetime_id _project_lifetime_id;
     std::weak_ptr<ui_resource_lifetime> _resource_lifetime;
     std::shared_ptr<event_handling_presenter> _event_handling_presenter;
     std::weak_ptr<project_modal_lifecycle> _project_modal_lifecycle;
@@ -49,32 +49,33 @@ using namespace yas::ae;
 - (void)viewDidDisappear {
     [super viewDidDisappear];
 
-    hierarchy::app_lifetime()->ui_resource_lifecycle->remove_lifetime_for_window_lifetime_id(self->_window_lifetime_id);
+    hierarchy::app_lifetime()->ui_resource_lifecycle->remove_lifetime_for_project_lifetime_id(
+        self->_project_lifetime_id);
 }
 
-- (void)setupWithWindowLifetimeID:(window_lifetime_id const &)lifetime_id {
+- (void)setupWithProjectLifetimeID:(project_lifetime_id const &)lifetime_id {
     auto const &ui_resource_lifecycle = hierarchy::app_lifetime()->ui_resource_lifecycle;
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
 
-    [self setupWithWindowLifetimeID:lifetime_id
-                uiResourceLifecycle:ui_resource_lifecycle
-                   actionController:project_lifetime->action_sender
-              projectModalLifecycle:project_lifetime->modal_lifecycle];
+    [self setupWithProjectLifetimeID:lifetime_id
+                 uiResourceLifecycle:ui_resource_lifecycle
+                    actionController:project_lifetime->action_sender
+               projectModalLifecycle:project_lifetime->modal_lifecycle];
 }
 
-- (void)setupWithWindowLifetimeID:(window_lifetime_id const &)window_lifetime_id
-              uiResourceLifecycle:(std::shared_ptr<ae::ui_resource_lifecycle> const &)ui_resource_lifecycle
-                 actionController:(std::shared_ptr<project_action_sender> const &)action_sender
-            projectModalLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)project_modal_lifecycle {
-    self->_window_lifetime_id = window_lifetime_id;
+- (void)setupWithProjectLifetimeID:(project_lifetime_id const &)project_lifetime_id
+               uiResourceLifecycle:(std::shared_ptr<ae::ui_resource_lifecycle> const &)ui_resource_lifecycle
+                  actionController:(std::shared_ptr<project_action_sender> const &)action_sender
+             projectModalLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)project_modal_lifecycle {
+    self->_project_lifetime_id = project_lifetime_id;
 
     auto const metal_system = ui::metal_system::make_shared(
         objc_ptr_with_move_object(MTLCreateSystemDefaultDevice()).object(), self.metalView);
     auto const standard = ui::standard::make_shared([self view_look], metal_system);
 
-    ui_resource_lifecycle->add_lifetime(standard, self->_window_lifetime_id);
-    self->_resource_lifetime = ui_resource_lifecycle->lifetime_for_window_lifetime_id(self->_window_lifetime_id);
-    self->_event_handling_presenter = event_handling_presenter::make_shared(self->_window_lifetime_id);
+    ui_resource_lifecycle->add_lifetime(standard, self->_project_lifetime_id);
+    self->_resource_lifetime = ui_resource_lifecycle->lifetime_for_project_lifetime_id(self->_project_lifetime_id);
+    self->_event_handling_presenter = event_handling_presenter::make_shared(self->_project_lifetime_id);
 
     self->_action_sender = action_sender;
     self->_project_modal_lifecycle = project_modal_lifecycle;
@@ -136,7 +137,7 @@ using namespace yas::ae;
         .end()
         ->add_to(self->_pool);
 
-    [self.aeMetalView setupWithWindowLifetimeID:window_lifetime_id];
+    [self.aeMetalView setupWithProjectLifetimeID:project_lifetime_id];
 }
 
 - (IBAction)jumpPrevious:(NSMenuItem *)sender {

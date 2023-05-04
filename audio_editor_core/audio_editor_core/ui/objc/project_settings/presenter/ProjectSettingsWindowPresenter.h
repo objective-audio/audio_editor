@@ -6,14 +6,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class WindowLifetimeId;
+@class ProjectLifetimeId;
 
 @interface ProjectSettingsWindowPresenter : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithLifetimeId:(WindowLifetimeId *)lifetimeId;
+- (instancetype)initWithLifetimeId:(ProjectLifetimeId *)lifetimeId;
 
-@property (nonatomic, readonly) WindowLifetimeId *lifetimeId;
+@property (nonatomic, readonly) ProjectLifetimeId *lifetimeId;
 
 - (BOOL)shouldClose;
 

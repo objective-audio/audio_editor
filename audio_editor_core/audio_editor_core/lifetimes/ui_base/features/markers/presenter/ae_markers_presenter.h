@@ -6,7 +6,7 @@
 
 #include <audio_editor_core/ae_marker_content_pool.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 
@@ -19,7 +19,7 @@ class range_selector;
 class marker_index;
 
 struct markers_presenter final {
-    [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(window_lifetime_id const &,
+    [[nodiscard]] static std::shared_ptr<markers_presenter> make_shared(project_lifetime_id const &,
                                                                         std::shared_ptr<marker_content_pool> const &);
 
     markers_presenter(project_format const &, std::shared_ptr<player> const &, std::shared_ptr<marker_pool> const &,

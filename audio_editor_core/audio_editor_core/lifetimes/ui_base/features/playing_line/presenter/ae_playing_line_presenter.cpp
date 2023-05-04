@@ -11,8 +11,8 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<playing_line_presenter> playing_line_presenter::make_shared(
-    window_lifetime_id const &window_lifetime_id) {
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(window_lifetime_id);
+    project_lifetime_id const &project_lifetime_id) {
+    auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_lifetime_id);
     return std::make_shared<playing_line_presenter>(window_lifetime->player);
 }
 

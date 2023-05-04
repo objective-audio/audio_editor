@@ -5,14 +5,14 @@
 #pragma once
 
 #include <audio_editor_core/ae_module_content_pool.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_waveform_mesh_importer_types.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
 
 namespace yas::ae {
 class waveform_mesh_importer;
 
 struct module_waveforms_presenter final {
-    [[nodiscard]] static std::shared_ptr<module_waveforms_presenter> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<module_waveforms_presenter> make_shared(project_lifetime_id const &);
 
     module_waveforms_presenter(std::shared_ptr<module_content_pool> const &,
                                std::shared_ptr<waveform_mesh_importer> const &);

@@ -15,11 +15,11 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<ui_time_bg> ui_time_bg::make_shared(
-    window_lifetime_id const &lifetime_id, std::shared_ptr<ui::node> const &node,
+    project_lifetime_id const &lifetime_id, std::shared_ptr<ui::node> const &node,
     std::shared_ptr<ui::layout_region_source> const &time_strings_layout) {
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(lifetime_id);
 
     return std::make_shared<ui_time_bg>(project_lifetime->action_sender, app_lifetime->color.get(),
                                         resource_lifetime->standard, node, time_strings_layout,

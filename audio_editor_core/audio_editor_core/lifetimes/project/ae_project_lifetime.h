@@ -10,7 +10,7 @@
 #include <audio_editor_core/ae_pasting_marker_content_pool.h>
 #include <audio_editor_core/ae_pasting_module_content_pool.h>
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
@@ -61,11 +61,11 @@ class window_lifetime;
 class display_space_range;
 
 struct project_lifetime final {
-    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(project_lifetime_id const &);
 
     project_lifetime(window_lifetime const *, app_lifetime const *);
 
-    window_lifetime_id const window_lifetime_id;
+    project_lifetime_id const project_lifetime_id;
     project_format const project_format;
 
     std::shared_ptr<module_content_pool> const module_content_pool;

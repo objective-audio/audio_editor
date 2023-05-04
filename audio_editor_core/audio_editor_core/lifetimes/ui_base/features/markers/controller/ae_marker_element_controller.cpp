@@ -14,7 +14,7 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<marker_element_controller> marker_element_controller::make_shared(
-    window_lifetime_id const &lifetime_id) {
+    project_lifetime_id const &lifetime_id) {
     auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
     return std::make_shared<marker_element_controller>(project_lifetime->action_sender,
                                                        project_lifetime->range_selector);

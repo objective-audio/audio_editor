@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_window_presenter_dependency.h>
 #include <audio_editor_core/ae_window_presenter_types.h>
 #include <observing/yas_observing_umbrella.h>
@@ -15,12 +15,12 @@ class window_closer;
 class project_lifecycle;
 
 struct window_presenter final {
-    [[nodiscard]] static std::shared_ptr<window_presenter> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<window_presenter> make_shared(project_lifetime_id const &);
 
-    window_presenter(ae::window_lifetime_id const &, std::shared_ptr<project_path> const &,
+    window_presenter(ae::project_lifetime_id const &, std::shared_ptr<project_path> const &,
                      std::shared_ptr<window_closer> const &, std::shared_ptr<project_lifecycle> const &);
 
-    window_lifetime_id const lifetime_id;
+    project_lifetime_id const lifetime_id;
 
     [[nodiscard]] std::string title() const;
 

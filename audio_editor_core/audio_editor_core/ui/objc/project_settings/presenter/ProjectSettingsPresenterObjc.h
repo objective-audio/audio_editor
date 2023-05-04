@@ -9,11 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class WindowLifetimeId;
+@class ProjectLifetimeId;
 
 @interface ProjectSettingsPresenterObjc : NSObject
 
-- (instancetype)initWithWindowLifetimeId:(WindowLifetimeId *)lifetime_id;
+- (instancetype)initWithProjectLifetimeId:(ProjectLifetimeId *)lifetime_id;
 
 @property (nonatomic, readonly) NSInteger sampleRate;
 @property (nonatomic, readonly) NSInteger channelCount;

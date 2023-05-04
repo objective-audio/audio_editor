@@ -18,22 +18,22 @@ namespace yas::ae::ui_markers_constants {
 static std::size_t const reserving_interval = 16;
 }
 
-std::shared_ptr<ui_markers> ui_markers::make_shared(window_lifetime_id const &window_lifetime_id,
+std::shared_ptr<ui_markers> ui_markers::make_shared(project_lifetime_id const &project_lifetime_id,
                                                     std::shared_ptr<ui::node> const &node) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
-    auto const presenter = markers_presenter::make_shared(window_lifetime_id, project_lifetime->marker_content_pool);
-    auto const controller = markers_controller::make_shared(window_lifetime_id);
-    return std::make_shared<ui_markers>(window_lifetime_id, presenter, controller, resource_lifetime->standard,
+    auto const presenter = markers_presenter::make_shared(project_lifetime_id, project_lifetime->marker_content_pool);
+    auto const controller = markers_controller::make_shared(project_lifetime_id);
+    return std::make_shared<ui_markers>(project_lifetime_id, presenter, controller, resource_lifetime->standard,
                                         node.get());
 }
 
-ui_markers::ui_markers(window_lifetime_id const &window_lifetime_id,
+ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
                        std::shared_ptr<markers_presenter> const &presenter,
                        std::shared_ptr<markers_controller> const &controller,
                        std::shared_ptr<ui::standard> const &standard, ui::node *node)
-    : _window_lifetime_id(window_lifetime_id),
+    : _project_lifetime_id(project_lifetime_id),
       _node(node),
       _presenter(presenter),
       _controller(controller),
@@ -135,7 +135,7 @@ void ui_markers::_remake_elements_if_needed(std::size_t const content_count) {
 
         auto each = make_fast_each(content_count - prev_element_count);
         while (yas_each_next(each)) {
-            auto element = ui_marker_element::make_shared(this->_window_lifetime_id, this->_node);
+            auto element = ui_marker_element::make_shared(this->_project_lifetime_id, this->_node);
             this->_elements.emplace_back(std::move(element));
         }
     } else if (content_count < prev_element_count) {

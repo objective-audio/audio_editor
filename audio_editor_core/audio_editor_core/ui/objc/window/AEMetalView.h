@@ -2,7 +2,7 @@
 //  AEMetalView.h
 //
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #import <ui/ui.h>
 #include <string>
 
@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AEMetalView : YASUIMetalView
 
-- (void)setupWithWindowLifetimeID:(yas::ae::window_lifetime_id const &)window_lifetime_id;
+- (void)setupWithProjectLifetimeID:(yas::ae::project_lifetime_id const &)project_lifetime_id;
 
 @end
 

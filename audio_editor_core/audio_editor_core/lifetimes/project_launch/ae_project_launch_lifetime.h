@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <memory>
 
@@ -13,11 +13,11 @@ class project_launcher;
 class window_lifetime;
 
 struct project_launch_lifetime final {
-    [[nodiscard]] static std::shared_ptr<project_launch_lifetime> make_shared(window_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<project_launch_lifetime> make_shared(project_lifetime_id const &);
 
     project_launch_lifetime(window_lifetime *);
 
-    window_lifetime_id const window_lifetime_id;
+    project_lifetime_id const project_lifetime_id;
 
     std::shared_ptr<project_launcher> const launcher;
 

@@ -19,14 +19,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_time_buttons> ui_time_buttons::make_shared(window_lifetime_id const &window_lifetime_id,
+std::shared_ptr<ui_time_buttons> ui_time_buttons::make_shared(project_lifetime_id const &project_lifetime_id,
 
                                                               ui::node *node, ui_time_numbers *time_numbers) {
-    auto const presenter = time_numbers_presenter::make_shared(window_lifetime_id);
+    auto const presenter = time_numbers_presenter::make_shared(project_lifetime_id);
 
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(window_lifetime_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
     return std::make_shared<ui_time_buttons>(resource_lifetime->standard, app_lifetime->color.get(), presenter,
                                              project_lifetime->action_sender, node, time_numbers,

@@ -7,7 +7,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-action_id::action_id(window_lifetime_id const &lifetime_id)
+action_id::action_id(project_lifetime_id const &lifetime_id)
     : window(lifetime_id.instance), project(lifetime_id.project) {
 }
 

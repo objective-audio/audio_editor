@@ -13,7 +13,7 @@ class ProjectSettingsPresenter: ObservableObject {
 
     private let presenterObjc: ProjectSettingsPresenterObjc
 
-    init(lifetimeId: WindowLifetimeId) {
-        self.presenterObjc = ProjectSettingsPresenterObjc(windowLifetimeId: lifetimeId)
+    init(lifetimeId: ProjectLifetimeId) {
+        self.presenterObjc = ProjectSettingsPresenterObjc(projectLifetimeId: lifetimeId)
     }
 }

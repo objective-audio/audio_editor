@@ -4,19 +4,19 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 
 namespace yas::ae {
 class project_settings_lifecycle;
 
 struct project_settings_closer final {
-    project_settings_closer(window_lifetime_id const &, project_settings_lifecycle *);
+    project_settings_closer(project_lifetime_id const &, project_settings_lifecycle *);
 
     [[nodiscard]] bool can_close() const;
     void close_if_needed();
 
    private:
-    window_lifetime_id const _lifetime_id;
+    project_lifetime_id const _lifetime_id;
     project_settings_lifecycle *_lifecycle;
 
     project_settings_closer(project_settings_closer const &) = delete;

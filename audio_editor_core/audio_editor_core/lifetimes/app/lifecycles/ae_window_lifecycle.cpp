@@ -27,8 +27,8 @@ window_lifecycle::window_lifecycle(id_generatable const *id_generator, uuid_gene
 }
 
 void window_lifecycle::add_lifetime(std::filesystem::path const &project_dir_path, project_format const &format) {
-    window_lifetime_id const lifetime_id{.instance = this->_id_generator->generate(),
-                                         .project = {.raw_value = this->_uuid_generator->generate()}};
+    project_lifetime_id const lifetime_id{.instance = this->_id_generator->generate(),
+                                          .project = {.raw_value = this->_uuid_generator->generate()}};
     auto const lifetime = window_lifetime::make_shared(lifetime_id, format, project_dir_path);
 
     this->_lifetimes->insert_or_replace(lifetime_id, lifetime);
@@ -36,11 +36,12 @@ void window_lifecycle::add_lifetime(std::filesystem::path const &project_dir_pat
     lifetime->project_lifecycle->switch_to_project_launch();
 }
 
-void window_lifecycle::remove_lifetime(window_lifetime_id const &lifetime_id) {
+void window_lifecycle::remove_lifetime(project_lifetime_id const &lifetime_id) {
     this->_lifetimes->erase(lifetime_id);
 }
 
-std::shared_ptr<window_lifetime> const &window_lifecycle::lifetime_for_id(window_lifetime_id const &lifetime_id) const {
+std::shared_ptr<window_lifetime> const &window_lifecycle::lifetime_for_id(
+    project_lifetime_id const &lifetime_id) const {
     if (this->_lifetimes->contains(lifetime_id)) {
         return this->_lifetimes->at(lifetime_id);
     } else {

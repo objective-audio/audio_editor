@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -17,9 +17,9 @@ class ui_atlas;
 class ui_square_mesh_data;
 
 struct ui_resource_lifetime final {
-    ui_resource_lifetime(std::shared_ptr<ui::standard> const &, window_lifetime_id const &);
+    ui_resource_lifetime(std::shared_ptr<ui::standard> const &, project_lifetime_id const &);
 
-    window_lifetime_id const window_lifetime_id;
+    project_lifetime_id const project_lifetime_id;
 
     std::shared_ptr<ui::standard> const standard;
     std::shared_ptr<ui::texture> const texture;

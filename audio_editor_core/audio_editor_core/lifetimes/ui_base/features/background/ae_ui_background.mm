@@ -10,9 +10,9 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<ui_background> ui_background::make_shared(window_lifetime_id const &lifetime_id) {
+std::shared_ptr<ui_background> ui_background::make_shared(project_lifetime_id const &lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_window_lifetime_id(lifetime_id);
+    auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(lifetime_id);
 
     return std::make_shared<ui_background>(resource_lifetime->standard, app_lifetime->color.get());
 }

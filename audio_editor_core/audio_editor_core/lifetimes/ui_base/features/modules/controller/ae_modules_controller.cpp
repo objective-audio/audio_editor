@@ -14,8 +14,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<modules_controller> modules_controller::make_shared(window_lifetime_id const &window_lifetime_id) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(window_lifetime_id);
+std::shared_ptr<modules_controller> modules_controller::make_shared(project_lifetime_id const &project_lifetime_id) {
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
     return std::make_shared<modules_controller>(project_lifetime->action_sender, project_lifetime->module_content_pool,
                                                 project_lifetime->range_selector);
 }

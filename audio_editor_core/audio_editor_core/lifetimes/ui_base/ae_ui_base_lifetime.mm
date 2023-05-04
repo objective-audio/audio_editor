@@ -32,8 +32,8 @@
 using namespace yas;
 using namespace yas::ae;
 
-ui_base_lifetime::ui_base_lifetime(ae::window_lifetime_id const &lifetime_id)
-    : window_lifetime_id(lifetime_id),
+ui_base_lifetime::ui_base_lifetime(ae::project_lifetime_id const &lifetime_id)
+    : project_lifetime_id(lifetime_id),
       node_hierarchy(ui_node_hierarchy::make_shared(lifetime_id)),
       background(ui_background::make_shared(lifetime_id)),
       range_selection_input(

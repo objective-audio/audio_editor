@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_pasting_marker_content_pool.h>
-#include <audio_editor_core/ae_window_lifetime_id.h>
+#include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
@@ -13,13 +13,13 @@ class pasting_markers_presenter;
 class ui_pasting_marker_element;
 
 struct ui_pasting_markers final {
-    static std::shared_ptr<ui_pasting_markers> make_shared(window_lifetime_id const &,
+    static std::shared_ptr<ui_pasting_markers> make_shared(project_lifetime_id const &,
                                                            std::shared_ptr<ui::node> const &);
-    ui_pasting_markers(window_lifetime_id const &, std::shared_ptr<pasting_markers_presenter> const &,
+    ui_pasting_markers(project_lifetime_id const &, std::shared_ptr<pasting_markers_presenter> const &,
                        std::shared_ptr<ui::standard> const &, ui::node *);
 
    private:
-    window_lifetime_id const _window_lifetime_id;
+    project_lifetime_id const _project_lifetime_id;
     std::shared_ptr<pasting_markers_presenter> _presenter;
     ui::node *const _node;
 
