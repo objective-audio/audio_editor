@@ -19,7 +19,7 @@ std::shared_ptr<time_editor_lifetime> time_editor_lifetime::make_shared(project_
 }
 
 time_editor_lifetime::time_editor_lifetime(project_sub_lifetime_id const &lifetime_id,
-                                           project_lifetime const *project_lifetime,
+                                           project_editing_lifetime const *project_lifetime,
                                            number_components const &components)
     : lifetime_id(lifetime_id),
       editor(std::make_shared<ae::time_editor>(components)),

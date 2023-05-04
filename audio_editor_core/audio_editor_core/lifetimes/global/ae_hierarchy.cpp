@@ -50,8 +50,9 @@ std::shared_ptr<project_settings_lifetime> const &hierarchy::project_settings_li
     return hierarchy::app_lifetime()->project_settings_lifecycle->lifetime_for_id(lifetime_id);
 }
 
-std::shared_ptr<project_lifetime> const &hierarchy::project_lifetime_for_id(project_lifetime_id const &lifetime_id) {
-    return get<project_lifetime>(hierarchy::window_lifetime_for_id(lifetime_id)->project_lifecycle->current());
+std::shared_ptr<project_editing_lifetime> const &hierarchy::project_lifetime_for_id(
+    project_lifetime_id const &lifetime_id) {
+    return get<project_editing_lifetime>(hierarchy::window_lifetime_for_id(lifetime_id)->project_lifecycle->current());
 }
 
 std::shared_ptr<module_name_sheet_lifetime> const &hierarchy::module_name_sheet_lifetime_for_id(

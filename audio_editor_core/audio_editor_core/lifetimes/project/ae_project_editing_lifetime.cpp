@@ -2,7 +2,7 @@
 //  ae_project_lifetime.cpp
 //
 
-#include "ae_project_lifetime.h"
+#include "ae_project_editing_lifetime.h"
 
 #include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_database.h>
@@ -61,13 +61,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::project_lifetime_id const &lifetime_id) {
+std::shared_ptr<project_editing_lifetime> project_editing_lifetime::make_shared(
+    ae::project_lifetime_id const &lifetime_id) {
     auto const window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
 
-    return std::make_shared<project_lifetime>(window_lifetime.get(), hierarchy::app_lifetime().get());
+    return std::make_shared<project_editing_lifetime>(window_lifetime.get(), hierarchy::app_lifetime().get());
 }
 
-project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_lifetime const *app_lifetime)
+project_editing_lifetime::project_editing_lifetime(window_lifetime const *window_lifetime,
+                                                   app_lifetime const *app_lifetime)
     : project_lifetime_id(window_lifetime->lifetime_id),
       project_format(window_lifetime->project_format),
       module_content_pool(module_content_pool::make_shared()),

@@ -13,7 +13,7 @@ class strings;
 }
 
 namespace yas::ae {
-class project_lifetime;
+class project_editing_lifetime;
 class ui_resource_lifetime;
 class ui_node_hierarchy;
 class ui_background;

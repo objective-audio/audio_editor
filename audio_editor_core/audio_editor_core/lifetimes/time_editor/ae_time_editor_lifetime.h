@@ -17,13 +17,13 @@ class time_editor;
 class time_editor_responder;
 class time_editor_closer;
 class time_editor_receiver;
-class project_lifetime;
+class project_editing_lifetime;
 
 struct time_editor_lifetime final {
     [[nodiscard]] static std::shared_ptr<time_editor_lifetime> make_shared(project_sub_lifetime_id const &,
                                                                            number_components const &);
 
-    time_editor_lifetime(project_sub_lifetime_id const &, project_lifetime const *, number_components const &);
+    time_editor_lifetime(project_sub_lifetime_id const &, project_editing_lifetime const *, number_components const &);
 
     project_sub_lifetime_id const lifetime_id;
     std::shared_ptr<time_editor> const editor;
