@@ -5,7 +5,7 @@
 #include "ae_window_presenter.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_launch_lifetime.h>
+#include <audio_editor_core/ae_project_launching_lifetime.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_window_closer.h>
@@ -58,10 +58,10 @@ observing::syncable window_presenter::observe(std::function<void(window_presente
 
             switch (to_kind(current)) {
                 case kind::none:
-                case kind::launch:
+                case kind::launching:
                     break;
 
-                case kind::project:
+                case kind::editing:
                     once_called = true;
                     handler(window_presenter_event::setup_view_controller);
                     break;

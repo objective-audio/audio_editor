@@ -17,7 +17,7 @@ std::shared_ptr<T> const &yas::get(std::optional<ae::project_sub_lifetime> const
     }
 }
 
-template std::shared_ptr<project_launch_lifetime> const &yas::get(std::optional<ae::project_sub_lifetime> const &);
+template std::shared_ptr<project_launching_lifetime> const &yas::get(std::optional<ae::project_sub_lifetime> const &);
 template std::shared_ptr<project_lifetime> const &yas::get(std::optional<ae::project_sub_lifetime> const &);
 
 ae::project_sub_lifetime_kind yas::to_kind(std::optional<ae::project_sub_lifetime> const &sub_lifetime) {
@@ -25,10 +25,10 @@ ae::project_sub_lifetime_kind yas::to_kind(std::optional<ae::project_sub_lifetim
 
     if (!sub_lifetime.has_value()) {
         return kind::none;
-    } else if (std::holds_alternative<std::shared_ptr<project_launch_lifetime>>(sub_lifetime.value())) {
-        return kind::launch;
+    } else if (std::holds_alternative<std::shared_ptr<project_launching_lifetime>>(sub_lifetime.value())) {
+        return kind::launching;
     } else if (std::holds_alternative<std::shared_ptr<project_lifetime>>(sub_lifetime.value())) {
-        return kind::project;
+        return kind::editing;
     } else {
         throw std::invalid_argument("invalid sub_lifetime");
     }
