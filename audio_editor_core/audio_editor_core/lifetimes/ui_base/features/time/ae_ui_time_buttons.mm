@@ -25,11 +25,11 @@ std::shared_ptr<ui_time_buttons> ui_time_buttons::make_shared(project_lifetime_i
     auto const presenter = time_numbers_presenter::make_shared(project_lifetime_id);
 
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
     return std::make_shared<ui_time_buttons>(resource_lifetime->standard, app_lifetime->color.get(), presenter,
-                                             project_lifetime->action_sender, node, time_numbers,
+                                             project_editing_lifetime->action_sender, node, time_numbers,
                                              resource_lifetime->atlas.get());
 }
 

@@ -12,8 +12,8 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<markers_controller> markers_controller::make_shared(project_lifetime_id const &lifetime_id) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
-    return std::make_shared<markers_controller>(project_lifetime->action_sender);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id);
+    return std::make_shared<markers_controller>(project_editing_lifetime->action_sender);
 }
 
 markers_controller::markers_controller(std::shared_ptr<project_action_sender> const &action_sender)

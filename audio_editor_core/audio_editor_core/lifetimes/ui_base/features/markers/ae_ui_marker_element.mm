@@ -21,13 +21,13 @@ std::shared_ptr<ui_marker_element> ui_marker_element::make_shared(project_lifeti
                                                                   ui::node *parent_node) {
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(lifetime_id);
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id);
     auto const controller = marker_element_controller::make_shared(lifetime_id);
 
     return std::shared_ptr<ui_marker_element>(new ui_marker_element{
-        project_lifetime->marker_pool, project_lifetime->selected_marker_pool, controller, resource_lifetime->standard,
-        app_lifetime->color, resource_lifetime->square_mesh_data, resource_lifetime->normal_font_atlas, parent_node,
-        resource_lifetime->modifiers_holder.get()});
+        project_editing_lifetime->marker_pool, project_editing_lifetime->selected_marker_pool, controller,
+        resource_lifetime->standard, app_lifetime->color, resource_lifetime->square_mesh_data,
+        resource_lifetime->normal_font_atlas, parent_node, resource_lifetime->modifiers_holder.get()});
 }
 
 ui_marker_element::ui_marker_element(

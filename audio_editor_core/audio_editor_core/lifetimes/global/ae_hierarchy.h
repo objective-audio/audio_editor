@@ -26,7 +26,7 @@ struct hierarchy final {
         app_settings_lifetime_id const &);
     [[nodiscard]] static std::shared_ptr<project_settings_lifetime> const &project_settings_lifetime_for_id(
         project_lifetime_id const &);
-    [[nodiscard]] static std::shared_ptr<project_editing_lifetime> const &project_lifetime_for_id(
+    [[nodiscard]] static std::shared_ptr<project_editing_lifetime> const &project_editing_lifetime_for_id(
         project_lifetime_id const &);
     [[nodiscard]] static std::shared_ptr<module_name_sheet_lifetime> const &module_name_sheet_lifetime_for_id(
         project_sub_lifetime_id const &);
