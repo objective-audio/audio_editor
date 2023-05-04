@@ -53,7 +53,7 @@ enum class editing_action_name {
     select_markers,
     toggle_marker_selection,
     begin_time_editing,
-    open_settings,
+    open_project_settings,
     escape,
 };
 

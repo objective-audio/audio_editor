@@ -40,6 +40,7 @@ window_lifetime::window_lifetime(window_lifetime_id const &lifetime_id, ae::proj
                                           this->scrolling.get())),
       timeline_holder(std::make_shared<ae::timeline_holder>(this->project_format, this->project_path.get())),
       project_lifecycle(std::make_shared<ae::project_lifecycle>(lifetime_id)),
-      closer(std::make_shared<ae::window_closer>(lifetime_id, app_lifetime->window_lifecycle.get())),
+      closer(std::make_shared<ae::window_closer>(lifetime_id, app_lifetime->window_lifecycle.get(),
+                                                 app_lifetime->project_settings_lifecycle.get())),
       receiver(std::make_shared<ae::window_receiver>(lifetime_id)) {
 }

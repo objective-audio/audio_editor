@@ -21,7 +21,11 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
+                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                            <connections>
+                                                <action selector="openAppSettings:" target="Ady-hI-5gd" id="594-ik-ptT"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                                         <menuItem title="Services" id="NMo-om-nkz">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -361,7 +365,7 @@ DQ
                                         <menuItem title="Project Settings…" id="gcC-fs-u0A">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="openSettings:" target="Ady-hI-5gd" id="gG1-dM-bxd"/>
+                                                <action selector="openProjectSettings:" target="Ady-hI-5gd" id="gG1-dM-bxd"/>
                                             </connections>
                                         </menuItem>
                                     </items>
