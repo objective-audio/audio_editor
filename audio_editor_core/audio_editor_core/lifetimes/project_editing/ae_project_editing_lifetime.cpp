@@ -1,5 +1,5 @@
 //
-//  ae_project_lifetime.cpp
+//  ae_project_editing_lifetime.cpp
 //
 
 #include "ae_project_editing_lifetime.h"

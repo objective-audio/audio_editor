@@ -1133,7 +1133,7 @@
 			path = range_selection_input;
 			sourceTree = "<group>";
 		};
-		B6137F6927C7B22C0097A3C6 /* project */ = {
+		B6137F6927C7B22C0097A3C6 /* project_editing */ = {
 			isa = PBXGroup;
 			children = (
 				B6137F6A27C7B23C0097A3C6 /* ae_project_editing_lifetime.cpp */,
@@ -1142,7 +1142,7 @@
 				B6D2837D287F041B00F294EC /* features */,
 				B61883E6287865D9006CF5AD /* lifecycles */,
 			);
-			path = project;
+			path = project_editing;
 			sourceTree = "<group>";
 		};
 		B61883E6287865D9006CF5AD /* lifecycles */ = {
@@ -1536,7 +1536,7 @@
 				B622A40E29F524A500653534 /* project_settings */,
 				B6DEAC732840E502001D7D53 /* project_format_dialog */,
 				B61883EE2879628F006CF5AD /* project_launching */,
-				B6137F6927C7B22C0097A3C6 /* project */,
+				B6137F6927C7B22C0097A3C6 /* project_editing */,
 				B69D8C5027CB6AC600CA30DE /* time_editor */,
 				B6DC139728B7791B00355F53 /* module_name_sheet */,
 				B6DC139628B7791600355F53 /* marker_name_sheet */,
