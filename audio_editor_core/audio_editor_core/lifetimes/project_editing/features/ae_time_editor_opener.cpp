@@ -7,8 +7,8 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
+#include <audio_editor_core/ae_time_editing_lifetime.h>
 #include <audio_editor_core/ae_time_editor.h>
-#include <audio_editor_core/ae_time_editor_lifetime.h>
 #include <audio_editor_core/ae_timing.h>
 
 using namespace yas;
@@ -19,7 +19,7 @@ time_editor_opener::time_editor_opener(player const *player, timing const *timin
 }
 
 bool time_editor_opener::can_begin_time_editing() const {
-    return this->_lifecycle->time_editor_lifetime() == nullptr;
+    return this->_lifecycle->time_editing_lifetime() == nullptr;
 }
 
 void time_editor_opener::begin_time_editing() {

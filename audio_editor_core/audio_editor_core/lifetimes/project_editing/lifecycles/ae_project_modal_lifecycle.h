@@ -21,7 +21,7 @@ struct project_modal_lifecycle final : action_receiver_providable {
 
     void add_time_editor(number_components const &);
     void remove_time_editor(project_sub_lifetime_id const &);
-    std::shared_ptr<time_editor_lifetime> const &time_editor_lifetime() const;
+    std::shared_ptr<time_editing_lifetime> const &time_editing_lifetime() const;
 
     void add_module_name_sheet(module_index const &);
     void remove_module_name_sheet(project_sub_lifetime_id const &);

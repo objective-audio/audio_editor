@@ -37,12 +37,12 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
         throw std::runtime_error("current is not null.");
     }
 
-    this->_current->set_value(time_editor_lifetime::make_shared(
+    this->_current->set_value(time_editing_lifetime::make_shared(
         {.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id}, components));
 }
 
 void project_modal_lifecycle::remove_time_editor(project_sub_lifetime_id const &lifetime_id) {
-    auto const &lifetime = this->time_editor_lifetime();
+    auto const &lifetime = this->time_editing_lifetime();
 
     if (lifetime == nullptr) {
         throw std::runtime_error("time_editor is null.");
@@ -53,8 +53,8 @@ void project_modal_lifecycle::remove_time_editor(project_sub_lifetime_id const &
     this->_current->set_value(std::nullopt);
 }
 
-std::shared_ptr<time_editor_lifetime> const &project_modal_lifecycle::time_editor_lifetime() const {
-    return get<ae::time_editor_lifetime>(this->_current->value());
+std::shared_ptr<time_editing_lifetime> const &project_modal_lifecycle::time_editing_lifetime() const {
+    return get<ae::time_editing_lifetime>(this->_current->value());
 }
 
 void project_modal_lifecycle::add_module_name_sheet(module_index const &index) {
@@ -197,7 +197,7 @@ std::optional<action_id> project_modal_lifecycle::receivable_id() const {
 }
 
 std::vector<action_receivable *> project_modal_lifecycle::receivers() const {
-    if (auto const &lifetime = get<ae::time_editor_lifetime>(this->current())) {
+    if (auto const &lifetime = get<ae::time_editing_lifetime>(this->current())) {
         return {lifetime->receiver.get()};
     } else {
         return {};
