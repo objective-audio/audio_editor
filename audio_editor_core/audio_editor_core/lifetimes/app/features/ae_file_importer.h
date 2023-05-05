@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_importer_types.h>
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_project_guid.h>
 #include <cpp_utils/yas_worker.h>
 
 namespace yas::ae {
@@ -15,7 +15,7 @@ struct file_importer final {
     file_importer(workable_ptr const &, uint32_t const);
 
     void import(file_importing_context &&);
-    void cancel(project_id const &);
+    void cancel(project_guid const &);
 
    private:
     workable_ptr _worker;

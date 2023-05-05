@@ -19,7 +19,7 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<file_module_loader> file_module_loader::make_shared(project_id const &project_id,
+std::shared_ptr<file_module_loader> file_module_loader::make_shared(project_guid const &project_id,
                                                                     project_path const *project_path,
                                                                     project_format const &project_format,
                                                                     file_module_loading_state_holder *state_holder,
@@ -31,7 +31,7 @@ std::shared_ptr<file_module_loader> file_module_loader::make_shared(project_id c
 }
 
 file_module_loader::file_module_loader(std::shared_ptr<uuid_generatable> const &uuid_generator,
-                                       project_id const &project_id, project_path const *project_path,
+                                       project_guid const &project_id, project_path const *project_path,
                                        project_format const &project_format, file_importer *file_importer,
                                        file_info_loader const *file_info_loader,
                                        file_module_loading_state_holder *state_holder, database *database,

@@ -1,5 +1,5 @@
 //
-//  ae_window_receiver.h
+//  ae_project_receiver.h
 //
 
 #pragma once
@@ -10,8 +10,8 @@
 #include <memory>
 
 namespace yas::ae {
-struct window_receiver final : action_receivable {
-    window_receiver(project_lifetime_id const &);
+struct project_receiver final : action_receivable {
+    project_receiver(project_lifetime_id const &);
 
     [[nodiscard]] std::optional<action_id> receivable_id() const override;
     [[nodiscard]] std::optional<ae::action> to_action(ae::key const &) const override;
@@ -21,9 +21,9 @@ struct window_receiver final : action_receivable {
    private:
     project_lifetime_id const _lifetime_id;
 
-    window_receiver(window_receiver const &) = delete;
-    window_receiver(window_receiver &&) = delete;
-    window_receiver &operator=(window_receiver const &) = delete;
-    window_receiver &operator=(window_receiver &&) = delete;
+    project_receiver(project_receiver const &) = delete;
+    project_receiver(project_receiver &&) = delete;
+    project_receiver &operator=(project_receiver const &) = delete;
+    project_receiver &operator=(project_receiver &&) = delete;
 };
 }  // namespace yas::ae

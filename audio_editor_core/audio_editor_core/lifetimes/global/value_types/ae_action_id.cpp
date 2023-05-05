@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 action_id::action_id(project_lifetime_id const &lifetime_id)
-    : window(lifetime_id.instance), project(lifetime_id.project) {
+    : project_instance(lifetime_id.instance), project_guid(lifetime_id.guid) {
 }
 
 bool yas::is_match(std::optional<ae::action_id> const &lhs, std::optional<ae::action_id> const &rhs) {
@@ -16,15 +16,15 @@ bool yas::is_match(std::optional<ae::action_id> const &lhs, std::optional<ae::ac
         return true;
     }
 
-    auto const &lhs_window_id = lhs.value().window;
-    auto const &rhs_window_id = rhs.value().window;
-    if (lhs_window_id.has_value() && rhs_window_id.has_value() && lhs_window_id != rhs_window_id) {
+    auto const &lhs_instance_id = lhs.value().project_instance;
+    auto const &rhs_instance_id = rhs.value().project_instance;
+    if (lhs_instance_id.has_value() && rhs_instance_id.has_value() && lhs_instance_id != rhs_instance_id) {
         return false;
     }
 
-    auto const &lhs_project_id = lhs.value().project;
-    auto const &rhs_project_id = rhs.value().project;
-    if (lhs_project_id.has_value() && rhs_project_id.has_value() && lhs_project_id != rhs_project_id) {
+    auto const &lhs_guid = lhs.value().project_guid;
+    auto const &rhs_guid = rhs.value().project_guid;
+    if (lhs_guid.has_value() && rhs_guid.has_value() && lhs_guid != rhs_guid) {
         return false;
     }
 

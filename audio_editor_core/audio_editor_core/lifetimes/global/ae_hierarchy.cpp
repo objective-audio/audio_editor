@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_app_modal_lifecycle.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
-#include <audio_editor_core/ae_window_lifecycle.h>
+#include <audio_editor_core/ae_project_sub_lifecycle.h>
 #include <cpp_utils/yas_assertion.h>
 
 #include <audio_editor_core/ae_app_settings_lifecycle.hpp>
@@ -31,8 +31,8 @@ std::shared_ptr<project_setup_dialog_lifetime> const &hierarchy::project_setup_d
     return hierarchy::app_lifetime()->modal_lifecycle->project_setup_dialog_lifetime();
 }
 
-std::shared_ptr<window_lifetime> const &hierarchy::window_lifetime_for_id(project_lifetime_id const &lifetime_id) {
-    return hierarchy::app_lifetime()->window_lifecycle->lifetime_for_id(lifetime_id);
+std::shared_ptr<project_lifetime> const &hierarchy::project_lifetime_for_id(project_lifetime_id const &lifetime_id) {
+    return hierarchy::app_lifetime()->project_lifecycle->lifetime_for_id(lifetime_id);
 }
 
 std::shared_ptr<app_settings_lifetime> const &hierarchy::app_settings_lifetime_for_id(
@@ -52,17 +52,18 @@ std::shared_ptr<project_settings_lifetime> const &hierarchy::project_settings_li
 
 std::shared_ptr<project_editing_lifetime> const &hierarchy::project_editing_lifetime_for_id(
     project_lifetime_id const &lifetime_id) {
-    return get<project_editing_lifetime>(hierarchy::window_lifetime_for_id(lifetime_id)->project_lifecycle->current());
+    return get<project_editing_lifetime>(
+        hierarchy::project_lifetime_for_id(lifetime_id)->project_sub_lifecycle->current());
 }
 
 std::shared_ptr<module_name_sheet_lifetime> const &hierarchy::module_name_sheet_lifetime_for_id(
     project_sub_lifetime_id const &lifetime_id) {
-    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.window);
+    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.project);
     return lifetime->modal_lifecycle->module_name_sheet_lifetime();
 }
 
 std::shared_ptr<marker_name_sheet_lifetime> const &hierarchy::marker_name_sheet_lifetime_for_id(
     project_sub_lifetime_id const &lifetime_id) {
-    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.window);
+    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.project);
     return lifetime->modal_lifecycle->marker_name_sheet_lifetime();
 }

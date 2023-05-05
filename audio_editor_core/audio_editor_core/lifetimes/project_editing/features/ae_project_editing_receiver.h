@@ -1,5 +1,5 @@
 //
-//  ae_project_receiver.h
+//  ae_project_editing_receiver.h
 //
 
 #pragma once
@@ -29,11 +29,12 @@ class marker_selector;
 class escaper;
 class pasteboard;
 
-struct project_receiver final : action_receivable {
-    project_receiver(project_lifetime_id const &, database *, module_editor *, playing_toggler *, nudging *, nudger *,
-                     jumper *, edge_editor *, time_editing_opener *, marker_editor *, module_renaming_opener *,
-                     marker_renaming_opener *, project_settings_opener *, timing *, import_interactor *,
-                     export_interactor *, reverter *, module_selector *, marker_selector *, escaper *, pasteboard *);
+struct project_editing_receiver final : action_receivable {
+    project_editing_receiver(project_lifetime_id const &, database *, module_editor *, playing_toggler *, nudging *,
+                             nudger *, jumper *, edge_editor *, time_editing_opener *, marker_editor *,
+                             module_renaming_opener *, marker_renaming_opener *, project_settings_opener *, timing *,
+                             import_interactor *, export_interactor *, reverter *, module_selector *, marker_selector *,
+                             escaper *, pasteboard *);
 
    private:
     project_lifetime_id const _project_lifetime_id;
@@ -58,10 +59,10 @@ struct project_receiver final : action_receivable {
     escaper *const _escaper;
     pasteboard *const _pasteboard;
 
-    project_receiver(project_receiver const &) = delete;
-    project_receiver(project_receiver &&) = delete;
-    project_receiver &operator=(project_receiver const &) = delete;
-    project_receiver &operator=(project_receiver &&) = delete;
+    project_editing_receiver(project_editing_receiver const &) = delete;
+    project_editing_receiver(project_editing_receiver &&) = delete;
+    project_editing_receiver &operator=(project_editing_receiver const &) = delete;
+    project_editing_receiver &operator=(project_editing_receiver &&) = delete;
 
     std::optional<action_id> receivable_id() const override;
     std::optional<ae::action> to_action(ae::key const &) const override;

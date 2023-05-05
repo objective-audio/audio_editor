@@ -12,7 +12,7 @@ using namespace yas::ae;
 
 std::shared_ptr<marker_name_editor> marker_name_editor::make_shared(project_sub_lifetime_id const &lifetime_id,
                                                                     marker_index const &index) {
-    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.window);
+    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.project);
     return std::make_shared<marker_name_editor>(index, lifetime->marker_pool.get());
 }
 

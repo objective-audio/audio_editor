@@ -17,10 +17,10 @@ using namespace yas::ae;
 std::shared_ptr<ui_zooming> ui_zooming::make_shared(project_lifetime_id const &project_lifetime_id, ui_modules *modules,
                                                     ui_pasting_modules *pasting_modules, ui_grid *grid) {
     auto const presenter = zooming_presenter::make_shared(project_lifetime_id);
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_lifetime_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
-    return std::make_shared<ui_zooming>(resource_lifetime->standard, window_lifetime->display_space.get(), presenter,
+    return std::make_shared<ui_zooming>(resource_lifetime->standard, project_lifetime->display_space.get(), presenter,
                                         modules, pasting_modules, grid);
 }
 

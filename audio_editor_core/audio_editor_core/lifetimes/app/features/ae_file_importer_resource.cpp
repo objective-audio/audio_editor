@@ -14,7 +14,7 @@ void file_importer_resource::push_context_on_main(file_importing_context &&conte
     this->_contexts.emplace_back(std::move(context));
 }
 
-void file_importer_resource::cancel_on_main(project_id const &project_id) {
+void file_importer_resource::cancel_on_main(project_guid const &project_id) {
     std::lock_guard<std::mutex> lock(this->_mutex);
     std::erase_if(this->_contexts,
                   [&project_id](file_importing_context const &context) { return context.project_id == project_id; });

@@ -23,11 +23,11 @@ static std::string const empty_string = "";
 static std::vector<std::optional<module_content>> const _empty_contents;
 
 std::shared_ptr<modules_presenter> modules_presenter::make_shared(project_lifetime_id const &project_lifetime_id) {
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_lifetime_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
     auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     return std::make_shared<modules_presenter>(
-        project_editing_lifetime->project_format, window_lifetime->player, project_editing_lifetime->module_pool,
-        project_editing_lifetime->selected_module_pool, window_lifetime->display_space,
+        project_editing_lifetime->project_format, project_lifetime->player, project_editing_lifetime->module_pool,
+        project_editing_lifetime->selected_module_pool, project_lifetime->display_space,
         project_editing_lifetime->display_space_range, project_editing_lifetime->module_content_pool,
         project_editing_lifetime->range_selector);
 }

@@ -4,14 +4,8 @@
 
 #pragma once
 
-#include <cpp_utils/yas_identifier.h>
+#include <audio_editor_core/ae_app_sub_lifetime_id.h>
 
 namespace yas::ae {
-struct app_settings_lifetime_id final {
-    identifier instance;
-
-    bool operator==(app_settings_lifetime_id const &) const;
-    bool operator!=(app_settings_lifetime_id const &) const;
-    bool operator<(app_settings_lifetime_id const &) const;
-};
-}  // namespace yas::ae
+using app_settings_lifetime_id = app_sub_lifetime_id;
+}

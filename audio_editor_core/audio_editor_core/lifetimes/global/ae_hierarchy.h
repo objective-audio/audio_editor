@@ -7,8 +7,8 @@
 #include <audio_editor_core/ae_app_lifecycle.h>
 #include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_project_editing_lifetime.h>
+#include <audio_editor_core/ae_project_lifetime.h>
 #include <audio_editor_core/ae_project_setup_dialog_lifetime.h>
-#include <audio_editor_core/ae_window_lifetime.h>
 
 #include <audio_editor_core/ae_app_settings_lifetime.hpp>
 #include <audio_editor_core/ae_marker_name_sheet_lifetime.hpp>
@@ -21,7 +21,7 @@ struct hierarchy final {
 
     [[nodiscard]] static std::shared_ptr<app_lifetime> const &app_lifetime();
     [[nodiscard]] static std::shared_ptr<project_setup_dialog_lifetime> const &project_setup_dialog_lifetime();
-    [[nodiscard]] static std::shared_ptr<window_lifetime> const &window_lifetime_for_id(project_lifetime_id const &);
+    [[nodiscard]] static std::shared_ptr<project_lifetime> const &project_lifetime_for_id(project_lifetime_id const &);
     [[nodiscard]] static std::shared_ptr<app_settings_lifetime> const &app_settings_lifetime_for_id(
         app_settings_lifetime_id const &);
     [[nodiscard]] static std::shared_ptr<project_settings_lifetime> const &project_settings_lifetime_for_id(
