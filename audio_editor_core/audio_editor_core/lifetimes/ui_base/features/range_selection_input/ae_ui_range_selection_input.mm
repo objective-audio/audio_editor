@@ -11,10 +11,10 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_range_selection_input> ui_range_selection_input::make_shared(
     project_lifetime_id const &project_lifetime_id, ui::node *node) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
     return std::make_shared<ui_range_selection_input>(resource_lifetime->standard, node,
-                                                      project_lifetime->range_selector);
+                                                      project_editing_lifetime->range_selector);
 }
 
 ui_range_selection_input::ui_range_selection_input(std::shared_ptr<ui::standard> const &standard, ui::node *node,

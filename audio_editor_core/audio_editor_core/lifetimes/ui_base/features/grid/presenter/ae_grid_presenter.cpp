@@ -18,10 +18,11 @@ static std::vector<std::optional<grid_content>> const _empty_contents;
 
 std::shared_ptr<grid_presenter> grid_presenter::make_shared(project_lifetime_id const lifetime_id) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
-    return std::make_shared<grid_presenter>(lifetime_id, project_lifetime->project_format,
-                                            window_lifetime->display_space, project_lifetime->display_space_range,
-                                            project_lifetime->grid_updater, project_lifetime->grid_content_pool);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id);
+    return std::make_shared<grid_presenter>(
+        lifetime_id, project_editing_lifetime->project_format, window_lifetime->display_space,
+        project_editing_lifetime->display_space_range, project_editing_lifetime->grid_updater,
+        project_editing_lifetime->grid_content_pool);
 }
 
 grid_presenter::grid_presenter(project_lifetime_id const lifetime_id, project_format const project_format,

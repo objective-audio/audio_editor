@@ -7,8 +7,8 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
+#include <audio_editor_core/ae_time_editing_lifetime.h>
 #include <audio_editor_core/ae_time_editor.h>
-#include <audio_editor_core/ae_time_editor_lifetime.h>
 #include <audio_editor_core/ae_time_numbers_presenter_utils.h>
 #include <audio_editor_core/ae_timing.h>
 #include <cpp_utils/yas_fast_each.h>
@@ -20,9 +20,9 @@ using namespace yas::ae;
 std::shared_ptr<time_numbers_presenter> time_numbers_presenter::make_shared(
     project_lifetime_id const &project_lifetime_id) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_lifetime_id);
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
-    return std::make_shared<time_numbers_presenter>(project_lifetime->timing, window_lifetime->player,
-                                                    project_lifetime->modal_lifecycle);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
+    return std::make_shared<time_numbers_presenter>(project_editing_lifetime->timing, window_lifetime->player,
+                                                    project_editing_lifetime->modal_lifecycle);
 }
 
 time_numbers_presenter::time_numbers_presenter(std::shared_ptr<timing> const &timing,
@@ -35,7 +35,7 @@ time_numbers_presenter::time_numbers_presenter(std::shared_ptr<timing> const &ti
     project_modal_lifecycle
         ->observe([this, cancellable = observing::cancellable_ptr{nullptr}](
                       std::optional<project_modal_sub_lifetime> const &sub_lifetime) mutable {
-            if (auto const &lifetime = get<time_editor_lifetime>(sub_lifetime)) {
+            if (auto const &lifetime = get<time_editing_lifetime>(sub_lifetime)) {
                 cancellable =
                     lifetime->editor->observe_unit_index([this](auto const &) { this->_range_fetcher->push(); }).sync();
             } else {
@@ -104,11 +104,11 @@ observing::syncable time_numbers_presenter::observe_editing_time_text_range(
     return this->_range_fetcher->observe(std::move(handler));
 }
 
-std::shared_ptr<time_editor_lifetime> const &time_numbers_presenter::_lifetime() const {
+std::shared_ptr<time_editing_lifetime> const &time_numbers_presenter::_lifetime() const {
     if (auto const lifecycle = this->_project_modal_lifecycle.lock()) {
-        return lifecycle->time_editor_lifetime();
+        return lifecycle->time_editing_lifetime();
     }
 
-    static std::shared_ptr<time_editor_lifetime> const null_lifetime;
+    static std::shared_ptr<time_editing_lifetime> const null_lifetime;
     return null_lifetime;
 }

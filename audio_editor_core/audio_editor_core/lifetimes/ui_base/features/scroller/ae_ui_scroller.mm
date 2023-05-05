@@ -17,11 +17,11 @@ using namespace yas::ae;
 
 std::shared_ptr<ui_scroller> ui_scroller::make_shared(project_lifetime_id const &project_lifetime_id, ui::node *node) {
     auto const presenter = scroller_presenter::make_shared(project_lifetime_id);
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
     return std::make_shared<ui_scroller>(resource_lifetime->standard, node, presenter,
-                                         project_lifetime->scroll_gesture_controller);
+                                         project_editing_lifetime->scroll_gesture_controller);
 }
 
 ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard, ui::node *node,

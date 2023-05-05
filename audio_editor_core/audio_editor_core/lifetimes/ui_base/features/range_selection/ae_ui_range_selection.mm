@@ -15,11 +15,11 @@ using namespace yas::ae;
 std::shared_ptr<ui_range_selection> ui_range_selection::make_shared(project_lifetime_id const &project_lifetime_id,
                                                                     ui::node *node) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
     return std::make_shared<ui_range_selection>(node, app_lifetime->color.get(), resource_lifetime->standard.get(),
                                                 resource_lifetime->square_mesh_data.get(),
-                                                project_lifetime->range_selector);
+                                                project_editing_lifetime->range_selector);
 }
 
 ui_range_selection::ui_range_selection(ui::node *node, ae::color *color, ui::standard *standard,

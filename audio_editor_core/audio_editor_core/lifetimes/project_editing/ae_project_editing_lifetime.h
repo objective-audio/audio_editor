@@ -1,5 +1,5 @@
 //
-//  ae_project_lifetime.h
+//  ae_project_editing_lifetime.h
 //
 
 #pragma once
@@ -38,7 +38,7 @@ class nudger;
 class edge_holder;
 class edge_editor;
 class jumper;
-class time_editor_opener;
+class time_editing_opener;
 class marker_editor;
 class module_renaming_opener;
 class marker_renaming_opener;
@@ -60,10 +60,10 @@ class project_receiver;
 class window_lifetime;
 class display_space_range;
 
-struct project_lifetime final {
-    [[nodiscard]] static std::shared_ptr<project_lifetime> make_shared(project_lifetime_id const &);
+struct project_editing_lifetime final {
+    [[nodiscard]] static std::shared_ptr<project_editing_lifetime> make_shared(project_lifetime_id const &);
 
-    project_lifetime(window_lifetime const *, app_lifetime const *);
+    project_editing_lifetime(window_lifetime const *, app_lifetime const *);
 
     project_lifetime_id const project_lifetime_id;
     project_format const project_format;
@@ -98,7 +98,7 @@ struct project_lifetime final {
     std::shared_ptr<edge_holder> const edge_holder;
     std::shared_ptr<edge_editor> const edge_editor;
     std::shared_ptr<jumper> const jumper;
-    std::shared_ptr<time_editor_opener> const time_editor_opener;
+    std::shared_ptr<time_editing_opener> const time_editing_opener;
     std::shared_ptr<marker_editor> const marker_editor;
     std::shared_ptr<module_renaming_opener> const module_renaming_opener;
     std::shared_ptr<marker_renaming_opener> const marker_renaming_opener;
@@ -116,9 +116,9 @@ struct project_lifetime final {
     std::shared_ptr<project_receiver> const receiver;
 
    private:
-    project_lifetime(project_lifetime const &) = delete;
-    project_lifetime(project_lifetime &&) = delete;
-    project_lifetime &operator=(project_lifetime const &) = delete;
-    project_lifetime &operator=(project_lifetime &&) = delete;
+    project_editing_lifetime(project_editing_lifetime const &) = delete;
+    project_editing_lifetime(project_editing_lifetime &&) = delete;
+    project_editing_lifetime &operator=(project_editing_lifetime const &) = delete;
+    project_editing_lifetime &operator=(project_editing_lifetime &&) = delete;
 };
 }  // namespace yas::ae

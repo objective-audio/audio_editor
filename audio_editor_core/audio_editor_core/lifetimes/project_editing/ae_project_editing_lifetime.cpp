@@ -1,8 +1,8 @@
 //
-//  ae_project_lifetime.cpp
+//  ae_project_editing_lifetime.cpp
 //
 
-#include "ae_project_lifetime.h"
+#include "ae_project_editing_lifetime.h"
 
 #include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_database.h>
@@ -39,7 +39,7 @@
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
 #include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_path.h>
-#include <audio_editor_core/ae_time_editor_opener.h>
+#include <audio_editor_core/ae_time_editing_opener.h>
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_timeline_updater.h>
 #include <audio_editor_core/ae_timing.h>
@@ -61,13 +61,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<project_lifetime> project_lifetime::make_shared(ae::project_lifetime_id const &lifetime_id) {
+std::shared_ptr<project_editing_lifetime> project_editing_lifetime::make_shared(
+    ae::project_lifetime_id const &lifetime_id) {
     auto const window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
 
-    return std::make_shared<project_lifetime>(window_lifetime.get(), hierarchy::app_lifetime().get());
+    return std::make_shared<project_editing_lifetime>(window_lifetime.get(), hierarchy::app_lifetime().get());
 }
 
-project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_lifetime const *app_lifetime)
+project_editing_lifetime::project_editing_lifetime(window_lifetime const *window_lifetime,
+                                                   app_lifetime const *app_lifetime)
     : project_lifetime_id(window_lifetime->lifetime_id),
       project_format(window_lifetime->project_format),
       module_content_pool(module_content_pool::make_shared()),
@@ -106,8 +108,8 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
                                                     this->editing_status.get())),
       jumper(std::make_shared<ae::jumper>(window_lifetime->player.get(), this->module_pool.get(),
                                           this->marker_pool.get(), this->edge_holder.get())),
-      time_editor_opener(std::make_shared<ae::time_editor_opener>(window_lifetime->player.get(), this->timing.get(),
-                                                                  this->modal_lifecycle.get())),
+      time_editing_opener(std::make_shared<ae::time_editing_opener>(window_lifetime->player.get(), this->timing.get(),
+                                                                    this->modal_lifecycle.get())),
       marker_editor(std::make_shared<ae::marker_editor>(window_lifetime->player.get(), this->marker_pool.get(),
                                                         this->database.get(), this->editing_status.get(),
                                                         this->selected_marker_pool.get(), this->pasteboard.get())),
@@ -143,7 +145,7 @@ project_lifetime::project_lifetime(window_lifetime const *window_lifetime, app_l
       receiver(std::make_shared<project_receiver>(
           project_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
           this->nudging.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
-          this->time_editor_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
+          this->time_editing_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
           this->marker_renaming_opener.get(), this->settings_opener.get(), this->timing.get(),
           this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
           this->module_selector.get(), this->marker_selector.get(), this->escaper.get(), this->pasteboard.get())) {

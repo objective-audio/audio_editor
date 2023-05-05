@@ -55,12 +55,12 @@ using namespace yas::ae;
 
 - (void)setupWithProjectLifetimeID:(project_lifetime_id const &)lifetime_id {
     auto const &ui_resource_lifecycle = hierarchy::app_lifetime()->ui_resource_lifecycle;
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id);
 
     [self setupWithProjectLifetimeID:lifetime_id
                  uiResourceLifecycle:ui_resource_lifecycle
-                    actionController:project_lifetime->action_sender
-               projectModalLifecycle:project_lifetime->modal_lifecycle];
+                    actionController:project_editing_lifetime->action_sender
+               projectModalLifecycle:project_editing_lifetime->modal_lifecycle];
 }
 
 - (void)setupWithProjectLifetimeID:(project_lifetime_id const &)project_lifetime_id
@@ -130,7 +130,7 @@ using namespace yas::ae;
                 } break;
 
                 case kind::context_menu:
-                case kind::time_editor:
+                case kind::time_editing:
                     break;
             }
         })

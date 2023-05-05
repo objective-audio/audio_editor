@@ -15,10 +15,10 @@ using namespace yas::ae;
 static std::string const empty_string = "";
 
 std::shared_ptr<module_name_presenter> module_name_presenter::make_shared(project_sub_lifetime_id const &lifetime_id) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id.window);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.window);
     auto const &sheet_lifetime = hierarchy::module_name_sheet_lifetime_for_id(lifetime_id);
     return std::make_shared<module_name_presenter>(lifetime_id, sheet_lifetime->editor,
-                                                   project_lifetime->modal_lifecycle);
+                                                   project_editing_lifetime->modal_lifecycle);
 }
 
 module_name_presenter::module_name_presenter(project_sub_lifetime_id const &lifetime_id,

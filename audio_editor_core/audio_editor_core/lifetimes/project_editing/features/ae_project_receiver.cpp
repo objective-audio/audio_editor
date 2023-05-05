@@ -18,7 +18,7 @@
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_playing_toggler.h>
 #include <audio_editor_core/ae_reverter.h>
-#include <audio_editor_core/ae_time_editor_opener.h>
+#include <audio_editor_core/ae_time_editing_opener.h>
 #include <audio_editor_core/ae_timing.h>
 
 #include <audio_editor_core/ae_escaper.hpp>
@@ -33,7 +33,7 @@ using namespace yas::ae;
 project_receiver::project_receiver(project_lifetime_id const &project_lifetime_id, database *database,
                                    module_editor *module_editor, playing_toggler *toggler, nudging *nudging,
                                    nudger *nudger, jumper *jumper, edge_editor *edge_editor,
-                                   time_editor_opener *time_editor_opener, marker_editor *marker_editor,
+                                   time_editing_opener *time_editing_opener, marker_editor *marker_editor,
                                    module_renaming_opener *module_renaming_opener,
                                    marker_renaming_opener *marker_renaming_opener,
                                    project_settings_opener *settings_opener, timing *timing,
@@ -48,7 +48,7 @@ project_receiver::project_receiver(project_lifetime_id const &project_lifetime_i
       _nudger(nudger),
       _jumper(jumper),
       _edge_editor(edge_editor),
-      _time_editor_opener(time_editor_opener),
+      _time_editing_opener(time_editing_opener),
       _marker_editor(marker_editor),
       _module_renaming_opener(module_renaming_opener),
       _marker_renaming_opener(marker_renaming_opener),
@@ -262,7 +262,7 @@ void project_receiver::receive(ae::action const &action) const {
                                 break;
 
                             case editing_action_name::begin_time_editing:
-                                this->_time_editor_opener->begin_time_editing();
+                                this->_time_editing_opener->begin_time_editing();
                                 break;
 
                             case editing_action_name::open_project_settings:
@@ -370,7 +370,7 @@ action_receivable_state project_receiver::receivable_state(ae::action const &act
                     return to_state(this->_marker_selector->can_toggle());
 
                 case editing_action_name::begin_time_editing:
-                    return to_state(this->_time_editor_opener->can_begin_time_editing());
+                    return to_state(this->_time_editing_opener->can_begin_time_editing());
 
                 case editing_action_name::set_begin_edge:
                     return to_state(this->_edge_editor->can_set_begin());

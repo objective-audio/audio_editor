@@ -11,7 +11,7 @@
 namespace yas::ae {
 class timing;
 class player;
-class time_editor_lifetime;
+class time_editing_lifetime;
 class project_modal_lifecycle;
 
 struct time_numbers_presenter final {
@@ -41,6 +41,6 @@ struct time_numbers_presenter final {
     time_numbers_presenter &operator=(time_numbers_presenter const &) = delete;
     time_numbers_presenter &operator=(time_numbers_presenter &&) = delete;
 
-    std::shared_ptr<time_editor_lifetime> const &_lifetime() const;
+    std::shared_ptr<time_editing_lifetime> const &_lifetime() const;
 };
 }  // namespace yas::ae

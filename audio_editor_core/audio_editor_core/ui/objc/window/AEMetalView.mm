@@ -26,10 +26,10 @@ using namespace yas::ae;
 }
 
 - (void)setupWithProjectLifetimeID:(project_lifetime_id const &)project_lifetime_id {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
-    auto const &lifecycle = project_lifetime->modal_lifecycle;
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
+    auto const &lifecycle = project_editing_lifetime->modal_lifecycle;
 
-    [self setupWithLifecycle:lifecycle actionController:project_lifetime->action_sender];
+    [self setupWithLifecycle:lifecycle actionController:project_editing_lifetime->action_sender];
 }
 
 - (void)setupWithLifecycle:(std::shared_ptr<project_modal_lifecycle> const &)lifecycle
@@ -51,7 +51,7 @@ using namespace yas::ae;
                 } break;
 
                 case kind::none:
-                case kind::time_editor:
+                case kind::time_editing:
                 case kind::file_import_dialog:
                 case kind::file_export_dialog:
                 case kind::dialog:

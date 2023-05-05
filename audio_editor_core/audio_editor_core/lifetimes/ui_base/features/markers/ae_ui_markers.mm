@@ -20,10 +20,11 @@ static std::size_t const reserving_interval = 16;
 
 std::shared_ptr<ui_markers> ui_markers::make_shared(project_lifetime_id const &project_lifetime_id,
                                                     std::shared_ptr<ui::node> const &node) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
 
-    auto const presenter = markers_presenter::make_shared(project_lifetime_id, project_lifetime->marker_content_pool);
+    auto const presenter =
+        markers_presenter::make_shared(project_lifetime_id, project_editing_lifetime->marker_content_pool);
     auto const controller = markers_controller::make_shared(project_lifetime_id);
     return std::make_shared<ui_markers>(project_lifetime_id, presenter, controller, resource_lifetime->standard,
                                         node.get());

@@ -15,7 +15,7 @@ class nudging;
 class nudger;
 class jumper;
 class edge_editor;
-class time_editor_opener;
+class time_editing_opener;
 class marker_editor;
 class module_renaming_opener;
 class marker_renaming_opener;
@@ -31,7 +31,7 @@ class pasteboard;
 
 struct project_receiver final : action_receivable {
     project_receiver(project_lifetime_id const &, database *, module_editor *, playing_toggler *, nudging *, nudger *,
-                     jumper *, edge_editor *, time_editor_opener *, marker_editor *, module_renaming_opener *,
+                     jumper *, edge_editor *, time_editing_opener *, marker_editor *, module_renaming_opener *,
                      marker_renaming_opener *, project_settings_opener *, timing *, import_interactor *,
                      export_interactor *, reverter *, module_selector *, marker_selector *, escaper *, pasteboard *);
 
@@ -44,7 +44,7 @@ struct project_receiver final : action_receivable {
     nudger *const _nudger;
     jumper *const _jumper;
     edge_editor *const _edge_editor;
-    time_editor_opener *const _time_editor_opener;
+    time_editing_opener *const _time_editing_opener;
     marker_editor *const _marker_editor;
     module_renaming_opener *const _module_renaming_opener;
     marker_renaming_opener *const _marker_renaming_opener;

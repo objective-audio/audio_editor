@@ -4,9 +4,9 @@
 
 #include "ae_project_lifecycle.h"
 
-#include <audio_editor_core/ae_project_launch_lifetime.h>
+#include <audio_editor_core/ae_project_editing_lifetime.h>
 #include <audio_editor_core/ae_project_launcher.h>
-#include <audio_editor_core/ae_project_lifetime.h>
+#include <audio_editor_core/ae_project_launching_lifetime.h>
 #include <audio_editor_core/ae_project_modal_lifecycle.h>
 #include <audio_editor_core/ae_project_receiver.h>
 
@@ -23,7 +23,7 @@ std::optional<project_sub_lifetime> const &project_lifecycle::current() const {
 }
 
 void project_lifecycle::switch_to_project_launch() {
-    auto const lifetime = project_launch_lifetime::make_shared(this->project_lifetime_id);
+    auto const lifetime = project_launching_lifetime::make_shared(this->project_lifetime_id);
 
     this->_current->set_value(lifetime);
 
@@ -31,7 +31,7 @@ void project_lifecycle::switch_to_project_launch() {
 }
 
 void project_lifecycle::switch_to_project() {
-    auto const lifetime = project_lifetime::make_shared(this->project_lifetime_id);
+    auto const lifetime = project_editing_lifetime::make_shared(this->project_lifetime_id);
 
     this->_current->set_value(lifetime);
 }
@@ -51,11 +51,11 @@ std::vector<action_receivable *> project_lifecycle::receivers() const {
     using kind = project_sub_lifetime_kind;
 
     switch (to_kind(this->current())) {
-        case kind::project: {
-            auto const &lifetime = get<project_lifetime>(this->current());
+        case kind::editing: {
+            auto const &lifetime = get<project_editing_lifetime>(this->current());
             return {lifetime->receiver.get()};
         }
-        case kind::launch:
+        case kind::launching:
         case kind::none:
             return {};
     }
@@ -63,11 +63,11 @@ std::vector<action_receivable *> project_lifecycle::receivers() const {
 
 std::vector<action_receiver_providable *> project_lifecycle::sub_providers() const {
     switch (to_kind(this->current())) {
-        case project_sub_lifetime_kind::project: {
-            auto const &lifetime = get<project_lifetime>(this->current());
+        case project_sub_lifetime_kind::editing: {
+            auto const &lifetime = get<project_editing_lifetime>(this->current());
             return {lifetime->modal_lifecycle.get()};
         }
-        case project_sub_lifetime_kind::launch:
+        case project_sub_lifetime_kind::launching:
         case project_sub_lifetime_kind::none:
             return {};
     }

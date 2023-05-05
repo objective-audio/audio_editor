@@ -4,7 +4,7 @@
 
 #include "ae_ui_base_lifetime.hpp"
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_project_lifetime.h>
+#include <audio_editor_core/ae_project_editing_lifetime.h>
 #include <audio_editor_core/ae_ui_edge.h>
 #include <audio_editor_core/ae_ui_event_handling.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>

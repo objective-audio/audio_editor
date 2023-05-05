@@ -13,9 +13,9 @@ using namespace yas::ae;
 
 std::shared_ptr<module_waveforms_presenter> module_waveforms_presenter::make_shared(
     project_lifetime_id const &lifetime_id) {
-    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
-    return std::make_shared<module_waveforms_presenter>(project_lifetime->module_content_pool,
-                                                        project_lifetime->waveforms_mesh_importer);
+    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id);
+    return std::make_shared<module_waveforms_presenter>(lifetime->module_content_pool,
+                                                        lifetime->waveforms_mesh_importer);
 }
 
 module_waveforms_presenter::module_waveforms_presenter(std::shared_ptr<module_content_pool> const &content_pool,

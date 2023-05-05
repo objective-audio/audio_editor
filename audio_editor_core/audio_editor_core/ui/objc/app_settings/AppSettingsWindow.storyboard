@@ -23,9 +23,25 @@
                             <outlet property="delegate" destination="FLZ-De-aGU" id="cIq-k4-QQo"/>
                         </connections>
                     </window>
+                    <connections>
+                        <segue destination="TxX-iO-TUP" kind="relationship" relationship="window.shadowedContentViewController" id="WrU-ex-ici"/>
+                    </connections>
                 </windowController>
             </objects>
-            <point key="canvasLocation" x="187" y="-196"/>
+            <point key="canvasLocation" x="126" y="-217"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="ZeR-Bu-0FR">
+            <objects>
+                <viewController id="TxX-iO-TUP" sceneMemberID="viewController">
+                    <view key="view" id="eSr-xQ-OMf">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="AF3-nQ-RKm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="111" y="272"/>
         </scene>
     </scenes>
 </document>

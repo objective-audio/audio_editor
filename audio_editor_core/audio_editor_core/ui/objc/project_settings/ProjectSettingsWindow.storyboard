@@ -22,10 +22,26 @@
                             <outlet property="delegate" destination="qDC-Nz-Fg5" id="kUV-K3-9TM"/>
                         </connections>
                     </window>
+                    <connections>
+                        <segue destination="Huz-CM-kbR" kind="relationship" relationship="window.shadowedContentViewController" id="4HY-Zc-NLS"/>
+                    </connections>
                 </windowController>
                 <customObject id="GC2-bk-qCg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="198" y="-191"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="UpQ-it-RlE">
+            <objects>
+                <viewController id="Huz-CM-kbR" sceneMemberID="viewController">
+                    <view key="view" id="Gjf-p6-hEJ">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="8Gv-rH-wJy" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="163" y="272"/>
         </scene>
     </scenes>
 </document>

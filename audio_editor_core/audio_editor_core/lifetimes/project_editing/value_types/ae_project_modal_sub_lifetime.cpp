@@ -17,7 +17,7 @@ std::shared_ptr<T> const &yas::get(std::optional<ae::project_modal_sub_lifetime>
     }
 }
 
-template std::shared_ptr<time_editor_lifetime> const &yas::get(std::optional<ae::project_modal_sub_lifetime> const &);
+template std::shared_ptr<time_editing_lifetime> const &yas::get(std::optional<ae::project_modal_sub_lifetime> const &);
 template std::shared_ptr<module_name_sheet_lifetime> const &yas::get(
     std::optional<ae::project_modal_sub_lifetime> const &);
 template std::shared_ptr<marker_name_sheet_lifetime> const &yas::get(
@@ -34,8 +34,8 @@ ae::project_modal_sub_lifetime_kind yas::to_kind(std::optional<ae::project_modal
 
     if (!sub_lifetime.has_value()) {
         return kind::none;
-    } else if (std::holds_alternative<std::shared_ptr<time_editor_lifetime>>(sub_lifetime.value())) {
-        return kind::time_editor;
+    } else if (std::holds_alternative<std::shared_ptr<time_editing_lifetime>>(sub_lifetime.value())) {
+        return kind::time_editing;
     } else if (std::holds_alternative<std::shared_ptr<module_name_sheet_lifetime>>(sub_lifetime.value())) {
         return kind::module_name_sheet;
     } else if (std::holds_alternative<std::shared_ptr<marker_name_sheet_lifetime>>(sub_lifetime.value())) {

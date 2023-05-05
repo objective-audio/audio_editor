@@ -9,7 +9,6 @@
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
-class project_editor_responder;
 class player;
 class timeline_holder;
 class project_lifecycle;
