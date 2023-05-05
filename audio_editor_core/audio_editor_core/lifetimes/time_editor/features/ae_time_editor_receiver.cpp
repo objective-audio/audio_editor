@@ -6,15 +6,15 @@
 
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_database.h>
+#include <audio_editor_core/ae_time_editing_closer.h>
 #include <audio_editor_core/ae_time_editor.h>
-#include <audio_editor_core/ae_time_editor_closer.h>
 
 using namespace yas;
 using namespace yas::ae;
 
 time_editor_receiver::time_editor_receiver(project_sub_lifetime_id const &lifetime_id,
                                            std::shared_ptr<database> const &database, time_editor *editor,
-                                           time_editor_closer *closer)
+                                           time_editing_closer *closer)
     : _lifetime_id(lifetime_id), _database(database), _editor(editor), _closer(closer) {
 }
 

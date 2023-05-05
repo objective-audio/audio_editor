@@ -10,18 +10,18 @@
 namespace yas::ae {
 class database;
 class time_editor;
-class time_editor_closer;
+class time_editing_closer;
 class time_editor_responder;
 
 struct time_editor_receiver : action_receivable {
     time_editor_receiver(project_sub_lifetime_id const &, std::shared_ptr<database> const &, time_editor *,
-                         time_editor_closer *);
+                         time_editing_closer *);
 
    private:
     project_sub_lifetime_id const _lifetime_id;
     std::weak_ptr<database> const _database;
     time_editor *const _editor;
-    time_editor_closer *const _closer;
+    time_editing_closer *const _closer;
 
     time_editor_receiver(time_editor_receiver const &) = delete;
     time_editor_receiver(time_editor_receiver &&) = delete;

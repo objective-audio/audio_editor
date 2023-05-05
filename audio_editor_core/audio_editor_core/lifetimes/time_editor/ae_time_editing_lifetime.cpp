@@ -5,8 +5,8 @@
 #include "ae_time_editing_lifetime.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_time_editing_closer.h>
 #include <audio_editor_core/ae_time_editor.h>
-#include <audio_editor_core/ae_time_editor_closer.h>
 #include <audio_editor_core/ae_time_editor_receiver.h>
 
 using namespace yas;
@@ -23,7 +23,7 @@ time_editing_lifetime::time_editing_lifetime(project_sub_lifetime_id const &life
                                              number_components const &components)
     : lifetime_id(lifetime_id),
       editor(std::make_shared<ae::time_editor>(components)),
-      closer(time_editor_closer::make_shared(lifetime_id, lifetime_id.instance, this->editor.get())),
+      closer(time_editing_closer::make_shared(lifetime_id, lifetime_id.instance, this->editor.get())),
       receiver(std::make_shared<time_editor_receiver>(lifetime_id, project_editing_lifetime->database,
                                                       this->editor.get(), this->closer.get())) {
 }

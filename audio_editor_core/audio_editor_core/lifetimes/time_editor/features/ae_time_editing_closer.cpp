@@ -1,8 +1,8 @@
 //
-//  ae_time_editor_closer.cpp
+//  ae_time_editing_closer.cpp
 //
 
-#include "ae_time_editor_closer.h"
+#include "ae_time_editing_closer.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
@@ -14,21 +14,21 @@
 using namespace yas;
 using namespace yas::ae;
 
-std::shared_ptr<time_editor_closer> time_editor_closer::make_shared(project_sub_lifetime_id const &lifetime_id,
-                                                                    identifier const lifetime_instance_id,
-                                                                    time_editor *editor) {
+std::shared_ptr<time_editing_closer> time_editing_closer::make_shared(project_sub_lifetime_id const &lifetime_id,
+                                                                      identifier const lifetime_instance_id,
+                                                                      time_editor *editor) {
     auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id.window);
     auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.window);
-    return std::make_shared<time_editor_closer>(lifetime_id, editor, project_editing_lifetime->modal_lifecycle.get(),
-                                                project_editing_lifetime->timing.get(), window_lifetime->player.get());
+    return std::make_shared<time_editing_closer>(lifetime_id, editor, project_editing_lifetime->modal_lifecycle.get(),
+                                                 project_editing_lifetime->timing.get(), window_lifetime->player.get());
 }
 
-time_editor_closer::time_editor_closer(project_sub_lifetime_id const &lifetime_id, time_editor *editor,
-                                       project_modal_lifecycle *lifecycle, timing *timing, player *player)
+time_editing_closer::time_editing_closer(project_sub_lifetime_id const &lifetime_id, time_editor *editor,
+                                         project_modal_lifecycle *lifecycle, timing *timing, player *player)
     : _lifetime_id(lifetime_id), _dependencies({editor, lifecycle, timing, player}) {
 }
 
-void time_editor_closer::finish() {
+void time_editing_closer::finish() {
     if (!this->can_finish()) {
         assertion_failure_if_not_test();
         return;
@@ -53,7 +53,7 @@ void time_editor_closer::finish() {
     this->_finalize();
 }
 
-void time_editor_closer::cancel() {
+void time_editing_closer::cancel() {
     if (!this->can_cancel()) {
         assertion_failure_if_not_test();
         return;
@@ -62,7 +62,7 @@ void time_editor_closer::cancel() {
     this->_finalize();
 }
 
-void time_editor_closer::_finalize() {
+void time_editing_closer::_finalize() {
     if (!this->_dependencies.has_value()) {
         assertion_failure_if_not_test();
         return;
@@ -76,10 +76,10 @@ void time_editor_closer::_finalize() {
     lifecycle->remove_time_editor(this->_lifetime_id);
 }
 
-bool time_editor_closer::can_finish() {
+bool time_editing_closer::can_finish() {
     return this->_dependencies.has_value();
 }
 
-bool time_editor_closer::can_cancel() {
+bool time_editing_closer::can_cancel() {
     return this->_dependencies.has_value();
 }
