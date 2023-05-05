@@ -1,8 +1,8 @@
 //
-//  ae_time_editor_opener.cpp
+//  ae_time_editing_opener.cpp
 //
 
-#include "ae_time_editor_opener.h"
+#include "ae_time_editing_opener.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_player.h>
@@ -14,15 +14,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-time_editor_opener::time_editor_opener(player const *player, timing const *timing, project_modal_lifecycle *lifecycle)
+time_editing_opener::time_editing_opener(player const *player, timing const *timing, project_modal_lifecycle *lifecycle)
     : _player(player), _timing(timing), _lifecycle(lifecycle) {
 }
 
-bool time_editor_opener::can_begin_time_editing() const {
+bool time_editing_opener::can_begin_time_editing() const {
     return this->_lifecycle->time_editing_lifetime() == nullptr;
 }
 
-void time_editor_opener::begin_time_editing() {
+void time_editing_opener::begin_time_editing() {
     if (!this->can_begin_time_editing()) {
         return;
     }
