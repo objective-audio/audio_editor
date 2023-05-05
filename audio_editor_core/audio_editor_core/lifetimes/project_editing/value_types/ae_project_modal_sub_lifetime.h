@@ -24,7 +24,7 @@ using project_modal_sub_lifetime =
 
 enum class project_modal_sub_lifetime_kind {
     none,
-    time_editor,
+    time_editing,
     module_name_sheet,
     marker_name_sheet,
     file_import_dialog,

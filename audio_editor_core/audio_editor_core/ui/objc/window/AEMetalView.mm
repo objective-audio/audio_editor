@@ -51,7 +51,7 @@ using namespace yas::ae;
                 } break;
 
                 case kind::none:
-                case kind::time_editor:
+                case kind::time_editing:
                 case kind::file_import_dialog:
                 case kind::file_export_dialog:
                 case kind::dialog:

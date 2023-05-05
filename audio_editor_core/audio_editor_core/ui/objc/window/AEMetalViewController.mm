@@ -130,7 +130,7 @@ using namespace yas::ae;
                 } break;
 
                 case kind::context_menu:
-                case kind::time_editor:
+                case kind::time_editing:
                     break;
             }
         })
