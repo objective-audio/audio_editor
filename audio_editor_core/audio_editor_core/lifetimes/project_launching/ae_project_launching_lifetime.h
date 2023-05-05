@@ -10,12 +10,12 @@
 
 namespace yas::ae {
 class project_launcher;
-class window_lifetime;
+class project_lifetime;
 
 struct project_launching_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_launching_lifetime> make_shared(project_lifetime_id const &);
 
-    project_launching_lifetime(window_lifetime *);
+    project_launching_lifetime(project_lifetime *);
 
     project_lifetime_id const project_lifetime_id;
 

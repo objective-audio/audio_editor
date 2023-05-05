@@ -15,7 +15,7 @@ static std::string const empty_string = "";
 
 std::shared_ptr<module_name_editor> module_name_editor::make_shared(project_sub_lifetime_id const &lifetime_id,
                                                                     module_index const &index) {
-    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.window);
+    auto const &lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.project);
     return std::make_shared<module_name_editor>(index, lifetime->module_pool.get(), lifetime->database.get());
 }
 

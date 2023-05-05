@@ -56,14 +56,14 @@ class scroll_gesture_controller;
 class waveform_mesh_importer;
 class range_selector;
 class escaper;
-class project_receiver;
-class window_lifetime;
+class project_editing_receiver;
+class project_lifetime;
 class display_space_range;
 
 struct project_editing_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_editing_lifetime> make_shared(project_lifetime_id const &);
 
-    project_editing_lifetime(window_lifetime const *, app_lifetime const *);
+    project_editing_lifetime(project_lifetime const *, app_lifetime const *);
 
     project_lifetime_id const project_lifetime_id;
     project_format const project_format;
@@ -113,7 +113,7 @@ struct project_editing_lifetime final {
     std::shared_ptr<range_selector> const range_selector;
     std::shared_ptr<display_space_range> const display_space_range;
     std::shared_ptr<escaper> const escaper;
-    std::shared_ptr<project_receiver> const receiver;
+    std::shared_ptr<project_editing_receiver> const receiver;
 
    private:
     project_editing_lifetime(project_editing_lifetime const &) = delete;

@@ -5,14 +5,14 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_project_guid.h>
 
 #include <filesystem>
 #include <functional>
 
 namespace yas::ae {
 struct file_importing_context final {
-    project_id project_id;
+    project_guid project_id;
     std::filesystem::path src_path;
     std::filesystem::path dst_path;
     project_format project_format;

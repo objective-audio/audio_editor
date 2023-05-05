@@ -30,7 +30,7 @@ void test_utils::clear_user_defaults() {
 }
 
 bool operator==(yas::ae::action_id const &lhs, yas::ae::action_id const &rhs) {
-    return lhs.window == rhs.window && lhs.project == rhs.project;
+    return lhs.project_instance == rhs.project_instance && lhs.project_guid == rhs.project_guid;
 }
 
 bool operator==(std::optional<yas::ae::action_id> const &lhs, std::optional<yas::ae::action_id> const &rhs) {

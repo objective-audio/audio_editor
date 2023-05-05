@@ -7,7 +7,7 @@
 #include <audio_editor_core/ae_action_id.h>
 #include <audio_editor_core/ae_app_launcher.h>
 #include <audio_editor_core/ae_app_lifetime.h>
-#include <audio_editor_core/ae_window_lifecycle.h>
+#include <audio_editor_core/ae_project_lifecycle.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
@@ -40,5 +40,5 @@ std::vector<action_receivable *> app_lifecycle::receivers() const {
 }
 
 std::vector<action_receiver_providable *> app_lifecycle::sub_providers() const {
-    return {this->_lifetime->window_lifecycle.get()};
+    return {this->_lifetime->project_lifecycle.get()};
 }

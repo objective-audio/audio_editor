@@ -5,7 +5,7 @@
 #import "AppDelegate.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #import <audio_editor_core/AEProjectFormatView.h>
-#import <audio_editor_core/AEWindowController.h>
+#import <audio_editor_core/ProjectWindowController.h>
 #include <audio_editor_core/ae_app_lifetime.h>
 #include <audio_editor_core/ae_app_modal_sub_lifetime.h>
 #include <audio_editor_core/ae_app_presenter.h>
@@ -22,7 +22,7 @@ using namespace yas::ae;
 
 @interface AppDelegate ()
 
-@property (nonatomic) NSMutableSet<AEWindowController *> *windowControllers;
+@property (nonatomic) NSMutableSet<ProjectWindowController *> *projectWindowControllers;
 @property (nonatomic) NSMutableSet<ProjectSettingsWindowController *> *projectSettingsWindowControllers;
 @property (nonatomic) NSMutableSet<AppSettingsWindowController *> *appSettingsWindowControllers;
 
@@ -41,7 +41,7 @@ using namespace yas::ae;
     hierarchy::app_lifecycle()->add();
     self->_presenter = app_presenter::make_shared();
 
-    self.windowControllers = [[NSMutableSet alloc] init];
+    self.projectWindowControllers = [[NSMutableSet alloc] init];
     self.projectSettingsWindowControllers = [[NSMutableSet alloc] init];
     self.appSettingsWindowControllers = [[NSMutableSet alloc] init];
 
@@ -139,22 +139,22 @@ using namespace yas::ae;
 }
 
 - (void)makeAndShowWindowControllerWithLifetimeID:(project_lifetime_id const &)lifetime_id {
-    AEWindowController *windowController = [AEWindowController instantiateWithLifetimeID:lifetime_id];
-    [self.windowControllers addObject:windowController];
+    ProjectWindowController *windowController = [ProjectWindowController instantiateWithLifetimeID:lifetime_id];
+    [self.projectWindowControllers addObject:windowController];
     [windowController showWindow:nil];
 }
 
 - (void)disposeWindowControllerWithLifetimeID:(project_lifetime_id const &)lifetime_id {
-    NSMutableSet<AEWindowController *> *copiedWindowControllers = [self.windowControllers mutableCopy];
+    NSMutableSet<ProjectWindowController *> *copiedWindowControllers = [self.projectWindowControllers mutableCopy];
 
-    for (AEWindowController *windowController in self.windowControllers) {
+    for (ProjectWindowController *windowController in self.projectWindowControllers) {
         if (windowController.lifetime_id == lifetime_id) {
             [windowController close];
             [copiedWindowControllers removeObject:windowController];
         }
     }
 
-    self.windowControllers = copiedWindowControllers;
+    self.projectWindowControllers = copiedWindowControllers;
 }
 
 - (void)makeAndShowProjectSettingsWithLifetimeID:(project_lifetime_id const &)lifetime_id {

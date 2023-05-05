@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 bool project_lifetime_id::operator==(project_lifetime_id const &rhs) const {
-    return this->instance == rhs.instance && this->project == rhs.project;
+    return this->instance == rhs.instance && this->guid == rhs.guid;
 }
 
 bool project_lifetime_id::operator!=(project_lifetime_id const &rhs) const {
@@ -21,6 +21,6 @@ bool project_lifetime_id::operator<(project_lifetime_id const &rhs) const {
     } else if (rhs.instance < this->instance) {
         return false;
     } else {
-        return this->project < rhs.project;
+        return this->guid < rhs.guid;
     }
 }

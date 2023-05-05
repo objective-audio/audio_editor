@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_importer_types.h>
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_project_guid.h>
 
 #include <deque>
 #include <mutex>
@@ -17,7 +17,7 @@ struct file_importer_resource final {
     file_importer_resource() = default;
 
     void push_context_on_main(file_importing_context &&);
-    void cancel_on_main(project_id const &project_id);
+    void cancel_on_main(project_guid const &project_id);
 
     [[nodiscard]] std::optional<file_importing_context> pull_context_on_task();
     [[nodiscard]] std::vector<std::string> pull_cancel_ids();

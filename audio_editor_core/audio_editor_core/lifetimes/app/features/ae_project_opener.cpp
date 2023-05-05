@@ -1,23 +1,23 @@
 //
-//  ae_window_opener.cpp
+//  ae_project_opener.cpp
 //
 
-#include "ae_window_opener.h"
+#include "ae_project_opener.h"
 
 #include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_window_lifecycle.h>
+#include <audio_editor_core/ae_project_lifecycle.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_file_manager.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-window_opener::window_opener(file_info_loader const *file_info_loader, window_lifecycle *lifecycle)
-    : _file_info_loader(file_info_loader), _window_lifecycle(lifecycle) {
+project_opener::project_opener(file_info_loader const *file_info_loader, project_lifecycle *lifecycle)
+    : _file_info_loader(file_info_loader), _project_lifecycle(lifecycle) {
 }
 
-void window_opener::open(project_format const &format, std::filesystem::path const &project_path) {
+void project_opener::open(project_format const &format, std::filesystem::path const &project_path) {
     auto const exists = file_manager::content_exists(project_path);
     if (exists.is_success()) {
         switch (exists.value()) {
@@ -32,5 +32,5 @@ void window_opener::open(project_format const &format, std::filesystem::path con
         return;
     }
 
-    this->_window_lifecycle->add_lifetime(project_path, format);
+    this->_project_lifecycle->add_lifetime(project_path, format);
 }

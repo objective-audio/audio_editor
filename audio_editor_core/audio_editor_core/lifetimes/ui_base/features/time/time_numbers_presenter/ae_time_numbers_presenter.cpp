@@ -19,9 +19,9 @@ using namespace yas::ae;
 
 std::shared_ptr<time_numbers_presenter> time_numbers_presenter::make_shared(
     project_lifetime_id const &project_lifetime_id) {
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_lifetime_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
     auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
-    return std::make_shared<time_numbers_presenter>(project_editing_lifetime->timing, window_lifetime->player,
+    return std::make_shared<time_numbers_presenter>(project_editing_lifetime->timing, project_lifetime->player,
                                                     project_editing_lifetime->modal_lifecycle);
 }
 

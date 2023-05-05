@@ -38,7 +38,7 @@ void project_modal_lifecycle::add_time_editor(number_components const &component
     }
 
     this->_current->set_value(time_editing_lifetime::make_shared(
-        {.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id}, components));
+        {.instance = this->_id_generator->generate(), .project = this->_project_lifetime_id}, components));
 }
 
 void project_modal_lifecycle::remove_time_editor(project_sub_lifetime_id const &lifetime_id) {
@@ -63,7 +63,7 @@ void project_modal_lifecycle::add_module_name_sheet(module_index const &index) {
     }
 
     this->_current->set_value(std::make_shared<ae::module_name_sheet_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id},
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .project = this->_project_lifetime_id},
         index));
 }
 
@@ -89,7 +89,7 @@ void project_modal_lifecycle::add_marker_name_sheet(marker_index const &index) {
     }
 
     this->_current->set_value(std::make_shared<ae::marker_name_sheet_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id},
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .project = this->_project_lifetime_id},
         index));
 }
 
@@ -115,7 +115,7 @@ void project_modal_lifecycle::add_file_import_dialog() {
     }
 
     this->_current->set_value(std::make_shared<ae::file_import_dialog_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id}));
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .project = this->_project_lifetime_id}));
 }
 
 void project_modal_lifecycle::remove_file_import_dialog(project_sub_lifetime_id const &lifetime_id) {
@@ -140,7 +140,7 @@ void project_modal_lifecycle::add_file_export_dialog() {
     }
 
     this->_current->set_value(std::make_shared<ae::file_export_dialog_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id}));
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .project = this->_project_lifetime_id}));
 }
 
 void project_modal_lifecycle::remove_file_export_dialog(project_sub_lifetime_id const &lifetime_id) {
@@ -165,7 +165,7 @@ void project_modal_lifecycle::add_context_menu(context_menu const &context_menu)
     }
 
     this->_current->set_value(std::make_shared<ae::context_menu_lifetime>(
-        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .window = this->_project_lifetime_id},
+        project_sub_lifetime_id{.instance = this->_id_generator->generate(), .project = this->_project_lifetime_id},
         context_menu));
 }
 

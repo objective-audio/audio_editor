@@ -13,8 +13,8 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<zooming_presenter> zooming_presenter::make_shared(project_lifetime_id const &project_lifetime_id) {
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_lifetime_id);
-    return std::make_shared<zooming_presenter>(window_lifetime->zooming_pair);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
+    return std::make_shared<zooming_presenter>(project_lifetime->zooming_pair);
 }
 
 zooming_presenter::zooming_presenter(std::shared_ptr<zooming_pair> const &zooming_pair) : _zooming_pair(zooming_pair) {

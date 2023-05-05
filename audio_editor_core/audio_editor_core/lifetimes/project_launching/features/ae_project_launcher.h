@@ -5,16 +5,16 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_window_presenter_dependency.h>
+#include <audio_editor_core/ae_project_presenter_dependency.h>
 #include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 class player;
 class timeline_holder;
-class project_lifecycle;
+class project_sub_lifecycle;
 
 struct project_launcher final : std::enable_shared_from_this<project_launcher> {
-    project_launcher(project_format const &, player *, timeline_holder const *, project_lifecycle *);
+    project_launcher(project_format const &, player *, timeline_holder const *, project_sub_lifecycle *);
 
     void launch();
 
@@ -23,7 +23,7 @@ struct project_launcher final : std::enable_shared_from_this<project_launcher> {
 
     player *const _player;
     timeline_holder const *const _timeline_holder;
-    project_lifecycle *const _project_lifecycle;
+    project_sub_lifecycle *const _project_sub_lifecycle;
 
     observing::canceller_pool _pool;
 

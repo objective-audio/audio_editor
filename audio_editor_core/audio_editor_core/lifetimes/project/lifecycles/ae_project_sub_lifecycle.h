@@ -1,5 +1,5 @@
 //
-//  ae_project_lifecycle.h
+//  ae_project_sub_lifecycle.h
 //
 
 #pragma once
@@ -12,8 +12,8 @@
 #include <memory>
 
 namespace yas::ae {
-struct project_lifecycle final : action_receiver_providable {
-    project_lifecycle(project_lifetime_id const &);
+struct project_sub_lifecycle final : action_receiver_providable {
+    project_sub_lifecycle(project_lifetime_id const &);
 
     ae::project_lifetime_id const project_lifetime_id;
 
@@ -27,10 +27,10 @@ struct project_lifecycle final : action_receiver_providable {
    private:
     observing::value::holder_ptr<std::optional<project_sub_lifetime>> const _current;
 
-    project_lifecycle(project_lifecycle const &) = delete;
-    project_lifecycle(project_lifecycle &&) = delete;
-    project_lifecycle &operator=(project_lifecycle const &) = delete;
-    project_lifecycle &operator=(project_lifecycle &&) = delete;
+    project_sub_lifecycle(project_sub_lifecycle const &) = delete;
+    project_sub_lifecycle(project_sub_lifecycle &&) = delete;
+    project_sub_lifecycle &operator=(project_sub_lifecycle const &) = delete;
+    project_sub_lifecycle &operator=(project_sub_lifecycle &&) = delete;
 
 #pragma mark - action_receiver_provider
 

@@ -15,14 +15,14 @@ using namespace yas::ae;
 std::shared_ptr<project_settings_lifetime> project_settings_lifetime::make_shared(
     project_lifetime_id const &lifetime_id) {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(lifetime_id);
-    return std::make_shared<project_settings_lifetime>(lifetime_id, app_lifetime.get(), window_lifetime.get());
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(lifetime_id);
+    return std::make_shared<project_settings_lifetime>(lifetime_id, app_lifetime.get(), project_lifetime.get());
 }
 
 project_settings_lifetime::project_settings_lifetime(project_lifetime_id const &lifetime_id,
                                                      app_lifetime const *app_lifetime,
-                                                     window_lifetime const *window_lifetime)
+                                                     project_lifetime const *project_lifetime)
     : lifetime_id(lifetime_id),
-      project_format(window_lifetime->project_format),
+      project_format(project_lifetime->project_format),
       closer(std::make_shared<project_settings_closer>(lifetime_id, app_lifetime->project_settings_lifecycle.get())) {
 }

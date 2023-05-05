@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_project_guid.h>
 #include <cpp_utils/yas_identifier.h>
 
 namespace yas::ae {
 struct project_lifetime_id final {
     identifier instance;
-    project_id project;
+    project_guid guid;
 
     bool operator==(project_lifetime_id const &) const;
     bool operator!=(project_lifetime_id const &) const;

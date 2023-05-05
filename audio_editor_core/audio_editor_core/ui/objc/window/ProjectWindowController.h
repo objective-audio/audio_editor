@@ -1,5 +1,5 @@
 //
-//  AEWindowController.h
+//  ProjectWindowController.h
 //
 
 #import <Cocoa/Cocoa.h>
@@ -7,7 +7,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AEWindowController : NSWindowController
+@interface ProjectWindowController : NSWindowController
 
 + (instancetype)instantiateWithLifetimeID:(yas::ae::project_lifetime_id const &)lifetime_id;
 

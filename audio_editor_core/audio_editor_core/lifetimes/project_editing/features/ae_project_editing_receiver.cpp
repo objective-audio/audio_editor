@@ -1,8 +1,8 @@
 //
-//  ae_project_receiver.cpp
+//  ae_project_editing_receiver.cpp
 //
 
-#include "ae_project_receiver.h"
+#include "ae_project_editing_receiver.h"
 
 #include <audio_editor_core/ae_action.h>
 #include <audio_editor_core/ae_database.h>
@@ -30,16 +30,14 @@
 using namespace yas;
 using namespace yas::ae;
 
-project_receiver::project_receiver(project_lifetime_id const &project_lifetime_id, database *database,
-                                   module_editor *module_editor, playing_toggler *toggler, nudging *nudging,
-                                   nudger *nudger, jumper *jumper, edge_editor *edge_editor,
-                                   time_editing_opener *time_editing_opener, marker_editor *marker_editor,
-                                   module_renaming_opener *module_renaming_opener,
-                                   marker_renaming_opener *marker_renaming_opener,
-                                   project_settings_opener *settings_opener, timing *timing,
-                                   import_interactor *import_interactor, export_interactor *export_interactor,
-                                   reverter *reverter, module_selector *module_selector,
-                                   marker_selector *marker_selector, escaper *escaper, pasteboard *pasteboard)
+project_editing_receiver::project_editing_receiver(
+    project_lifetime_id const &project_lifetime_id, database *database, module_editor *module_editor,
+    playing_toggler *toggler, nudging *nudging, nudger *nudger, jumper *jumper, edge_editor *edge_editor,
+    time_editing_opener *time_editing_opener, marker_editor *marker_editor,
+    module_renaming_opener *module_renaming_opener, marker_renaming_opener *marker_renaming_opener,
+    project_settings_opener *settings_opener, timing *timing, import_interactor *import_interactor,
+    export_interactor *export_interactor, reverter *reverter, module_selector *module_selector,
+    marker_selector *marker_selector, escaper *escaper, pasteboard *pasteboard)
     : _project_lifetime_id(project_lifetime_id),
       _database(database),
       _module_editor(module_editor),
@@ -63,11 +61,11 @@ project_receiver::project_receiver(project_lifetime_id const &project_lifetime_i
       _pasteboard(pasteboard) {
 }
 
-std::optional<action_id> project_receiver::receivable_id() const {
+std::optional<action_id> project_editing_receiver::receivable_id() const {
     return action_id{this->_project_lifetime_id};
 }
 
-std::optional<ae::action> project_receiver::to_action(ae::key const &key) const {
+std::optional<ae::action> project_editing_receiver::to_action(ae::key const &key) const {
     switch (key) {
         case key::space:
             return action{editing_action_name::toggle_play};
@@ -133,7 +131,7 @@ std::optional<ae::action> project_receiver::to_action(ae::key const &key) const 
     }
 }
 
-void project_receiver::receive(ae::action const &action) const {
+void project_editing_receiver::receive(ae::action const &action) const {
     switch (this->receivable_state(action)) {
         case action_receivable_state::accepting: {
             switch (to_kind(action.name)) {
@@ -283,7 +281,7 @@ void project_receiver::receive(ae::action const &action) const {
     }
 }
 
-action_receivable_state project_receiver::receivable_state(ae::action const &action) const {
+action_receivable_state project_editing_receiver::receivable_state(ae::action const &action) const {
     switch (to_kind(action.name)) {
         case action_name_kind::editing: {
             static auto const to_state = [](bool const &flag) {

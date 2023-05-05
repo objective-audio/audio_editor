@@ -10,11 +10,11 @@
 namespace yas::ae {
 class project_settings_closer;
 class app_lifetime;
-class window_lifetime;
+class project_lifetime;
 
 struct project_settings_lifetime final {
     static std::shared_ptr<project_settings_lifetime> make_shared(project_lifetime_id const &);
-    project_settings_lifetime(project_lifetime_id const &, app_lifetime const *, window_lifetime const *);
+    project_settings_lifetime(project_lifetime_id const &, app_lifetime const *, project_lifetime const *);
 
     project_lifetime_id const lifetime_id;
 

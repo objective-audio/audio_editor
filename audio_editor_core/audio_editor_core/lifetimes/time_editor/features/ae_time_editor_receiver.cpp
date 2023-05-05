@@ -19,7 +19,7 @@ time_editor_receiver::time_editor_receiver(project_sub_lifetime_id const &lifeti
 }
 
 std::optional<action_id> time_editor_receiver::receivable_id() const {
-    return action_id{this->_lifetime_id.window};
+    return action_id{this->_lifetime_id.project};
 }
 
 std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key) const {

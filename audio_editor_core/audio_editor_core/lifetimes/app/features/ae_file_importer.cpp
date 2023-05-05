@@ -122,6 +122,6 @@ void file_importer::import(file_importing_context &&context) {
     this->_resource->push_context_on_main(std::move(context));
 }
 
-void file_importer::cancel(project_id const &cancel_id) {
+void file_importer::cancel(project_guid const &cancel_id) {
     this->_resource->cancel_on_main(cancel_id);
 }

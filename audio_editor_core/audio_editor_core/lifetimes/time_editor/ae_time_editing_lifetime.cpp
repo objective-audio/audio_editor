@@ -14,7 +14,7 @@ using namespace yas::ae;
 
 std::shared_ptr<time_editing_lifetime> time_editing_lifetime::make_shared(project_sub_lifetime_id const &lifetime_id,
                                                                           number_components const &components) {
-    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.window);
+    auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id.project);
     return std::make_shared<time_editing_lifetime>(lifetime_id, project_editing_lifetime.get(), components);
 }
 

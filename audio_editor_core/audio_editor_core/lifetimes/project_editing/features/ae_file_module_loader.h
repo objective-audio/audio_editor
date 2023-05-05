@@ -5,7 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_format.h>
-#include <audio_editor_core/ae_project_id.h>
+#include <audio_editor_core/ae_project_guid.h>
 
 #include <filesystem>
 #include <memory>
@@ -20,12 +20,12 @@ class uuid_generatable;
 class pasteboard;
 
 struct file_module_loader final : std::enable_shared_from_this<file_module_loader> {
-    [[nodiscard]] static std::shared_ptr<file_module_loader> make_shared(project_id const &, project_path const *,
+    [[nodiscard]] static std::shared_ptr<file_module_loader> make_shared(project_guid const &, project_path const *,
                                                                          project_format const &,
                                                                          file_module_loading_state_holder *, database *,
                                                                          pasteboard *);
 
-    file_module_loader(std::shared_ptr<uuid_generatable> const &, project_id const &, project_path const *,
+    file_module_loader(std::shared_ptr<uuid_generatable> const &, project_guid const &, project_path const *,
                        project_format const &, file_importer *, file_info_loader const *,
                        file_module_loading_state_holder *, database *, pasteboard *);
 
@@ -33,7 +33,7 @@ struct file_module_loader final : std::enable_shared_from_this<file_module_loade
 
    private:
     std::shared_ptr<uuid_generatable> const _uuid_generator;
-    project_id const _project_id;
+    project_guid const _project_id;
     project_path const *const _project_path;
     project_format const _project_format;
     file_importer *const _file_importer;

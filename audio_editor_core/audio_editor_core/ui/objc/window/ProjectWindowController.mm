@@ -1,10 +1,10 @@
 //
-//  AEWindowController.mm
+//  ProjectWindowController.mm
 //
 
-#import "AEWindowController.h"
+#import "ProjectWindowController.h"
 #import <audio_editor_core/AEMetalViewController.h>
-#include <audio_editor_core/ae_window_presenter.h>
+#include <audio_editor_core/ae_project_presenter.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
@@ -12,21 +12,21 @@
 using namespace yas;
 using namespace yas::ae;
 
-@interface AEWindowController ()
+@interface ProjectWindowController ()
 
 @end
 
-@implementation AEWindowController {
-    std::shared_ptr<window_presenter> _presenter;
+@implementation ProjectWindowController {
+    std::shared_ptr<project_presenter> _presenter;
     observing::canceller_pool _pool;
 }
 
 + (instancetype)instantiateWithLifetimeID:(yas::ae::project_lifetime_id const &)lifetime_id {
     NSStoryboard *storyboard = [NSStoryboard storyboardWithName:@"Window"
                                                          bundle:[NSBundle bundleForClass:[self class]]];
-    AEWindowController *windowController = [storyboard instantiateInitialController];
+    ProjectWindowController *windowController = [storyboard instantiateInitialController];
 
-    NSAssert([windowController isKindOfClass:[AEWindowController class]], @"");
+    NSAssert([windowController isKindOfClass:[ProjectWindowController class]], @"");
 
     [windowController setupWithLifetimeID:lifetime_id];
 
@@ -34,13 +34,13 @@ using namespace yas::ae;
 }
 
 - (void)setupWithLifetimeID:(project_lifetime_id const &)lifetime_id {
-    self->_presenter = window_presenter::make_shared(lifetime_id);
+    self->_presenter = project_presenter::make_shared(lifetime_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
 
     auto unowned = make_unowned(self);
 
     self->_presenter
-        ->observe([unowned, lifetime_id](const window_presenter_event &event) {
+        ->observe([unowned, lifetime_id](project_presenter_event const &event) {
             AEMetalViewController *content = (AEMetalViewController *)unowned.object.contentViewController;
 
             if (![content isKindOfClass:[AEMetalViewController class]]) {

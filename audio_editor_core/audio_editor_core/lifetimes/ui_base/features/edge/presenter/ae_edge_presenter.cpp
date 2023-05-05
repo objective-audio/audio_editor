@@ -14,11 +14,11 @@ using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<edge_presenter> edge_presenter::make_shared(project_lifetime_id const &project_lifetime_id) {
-    auto const &window_lifetime = hierarchy::window_lifetime_for_id(project_lifetime_id);
+    auto const &project_lifetime = hierarchy::project_lifetime_for_id(project_lifetime_id);
     auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     return std::shared_ptr<edge_presenter>(new edge_presenter{project_editing_lifetime->project_format,
                                                               project_editing_lifetime->edge_holder,
-                                                              window_lifetime->display_space});
+                                                              project_lifetime->display_space});
 }
 
 edge_presenter::edge_presenter(project_format const &project_format, std::shared_ptr<edge_holder> const &edge_holder,
