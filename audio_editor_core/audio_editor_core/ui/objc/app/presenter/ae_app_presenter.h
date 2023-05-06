@@ -31,8 +31,7 @@ struct app_presenter final {
     void open_app_settings();
 
     [[nodiscard]] observing::syncable observe_window(std::function<void(app_presenter_window_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_dialog(
-        std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&);
+    [[nodiscard]] observing::syncable observe_dialog(std::function<void(app_presenter_dialog_kind const &)> &&);
 
    private:
     std::weak_ptr<project_lifecycle> const _project_lifecycle;

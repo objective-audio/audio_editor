@@ -33,4 +33,6 @@ struct app_presenter_window_event final {
         return std::get<ae::app_settings_lifetime_id>(value);
     }
 };
+
+using app_presenter_dialog_kind = app_modal_sub_lifetime_kind;
 }  // namespace yas::ae

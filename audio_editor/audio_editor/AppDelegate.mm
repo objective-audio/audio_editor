@@ -38,12 +38,13 @@ using namespace yas::ae;
         return;
     }
 
-    hierarchy::app_lifecycle()->add();
-    self->_presenter = app_presenter::make_shared();
-
     self.projectWindowControllers = [[NSMutableSet alloc] init];
     self.projectSettingsWindowControllers = [[NSMutableSet alloc] init];
     self.appSettingsWindowControllers = [[NSMutableSet alloc] init];
+
+    hierarchy::app_lifecycle()->add();
+
+    self->_presenter = app_presenter::make_shared();
 
     auto *const unowned = make_unowned(self);
 
@@ -74,15 +75,15 @@ using namespace yas::ae;
         ->add_to(self->_pool);
 
     self->_presenter
-        ->observe_dialog([unowned](std::optional<app_modal_sub_lifetime> const &sub_lifetime) {
-            using kind = app_modal_sub_lifetime_kind;
+        ->observe_dialog([unowned](app_presenter_dialog_kind const &kind) {
+            using dialog_kind = app_presenter_dialog_kind;
 
-            switch (to_kind(sub_lifetime)) {
-                case kind::none:
+            switch (kind) {
+                case dialog_kind::none:
                     // panelは強制的に閉じれないので何もしない
                     break;
 
-                case kind::project_setup_dialog:
+                case dialog_kind::project_setup_dialog:
                     [unowned.object openProjectSetupDialog];
                     break;
             }
