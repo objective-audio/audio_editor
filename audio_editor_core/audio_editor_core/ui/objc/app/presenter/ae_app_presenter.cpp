@@ -9,7 +9,6 @@
 #include <audio_editor_core/ae_app_presenter_utils.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
-#include <audio_editor_core/ae_project_opener.h>
 
 #include <audio_editor_core/ae_app_settings_lifecycle.hpp>
 #include <audio_editor_core/ae_app_settings_opener.hpp>
@@ -22,20 +21,18 @@ std::shared_ptr<app_presenter> app_presenter::make_shared() {
     auto const &app_lifetime = hierarchy::app_lifetime();
     return std::make_shared<app_presenter>(app_lifetime->project_lifecycle, app_lifetime->project_settings_lifecycle,
                                            app_lifetime->app_settings_lifecycle, app_lifetime->modal_lifecycle,
-                                           app_lifetime->project_opener, app_lifetime->app_settings_opener);
+                                           app_lifetime->app_settings_opener);
 }
 
 app_presenter::app_presenter(std::shared_ptr<project_lifecycle> const &project_lifecycle,
                              std::shared_ptr<project_settings_lifecycle> const &project_settings_lifecycle,
                              std::shared_ptr<app_settings_lifecycle> const &app_settings_lifecycle,
                              std::shared_ptr<app_modal_lifecycle> const &app_modal_lifecycle,
-                             std::shared_ptr<project_opener> const &opener,
                              std::shared_ptr<app_settings_opener> const &app_settings_opener)
     : _project_lifecycle(project_lifecycle),
       _project_settings_lifecycle(project_settings_lifecycle),
       _app_settings_lifecycle(app_settings_lifecycle),
       _app_modal_lifecycle(app_modal_lifecycle),
-      _project_opener(opener),
       _app_settings_opener(app_settings_opener) {
 }
 
