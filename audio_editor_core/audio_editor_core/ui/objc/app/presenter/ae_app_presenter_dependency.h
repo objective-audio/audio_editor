@@ -25,13 +25,4 @@ struct project_settings_lifecycle_for_app_presenter {
     [[nodiscard]] virtual observing::syncable observe_event(
         std::function<void(project_settings_lifecycle_event const &)> &&) = 0;
 };
-
-struct app_settings_lifecycle_for_app_presenter {
-    virtual ~app_settings_lifecycle_for_app_presenter() = default;
-
-    virtual void add_lifetime() = 0;
-    [[nodiscard]] virtual bool has_current() const = 0;
-    [[nodiscard]] virtual observing::syncable observe_event(
-        std::function<void(app_settings_lifecycle_event const &)> &&) = 0;
-};
 }  // namespace yas::ae

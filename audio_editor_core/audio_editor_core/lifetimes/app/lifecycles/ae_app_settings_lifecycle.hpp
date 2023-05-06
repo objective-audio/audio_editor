@@ -12,17 +12,16 @@
 namespace yas::ae {
 class app_settings_lifetime;
 
-struct app_settings_lifecycle final : app_settings_lifecycle_for_app_presenter {
+struct app_settings_lifecycle final {
     app_settings_lifecycle();
 
-    void add_lifetime() override;
+    void add_lifetime();
     void remove_lifetime(app_settings_lifetime_id const &);
 
     [[nodiscard]] std::shared_ptr<app_settings_lifetime> const &current() const;
-    [[nodiscard]] bool has_current() const override;
+    [[nodiscard]] bool has_current() const;
 
-    [[nodiscard]] observing::syncable observe_event(
-        std::function<void(app_settings_lifecycle_event const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_event(std::function<void(app_settings_lifecycle_event const &)> &&);
 
    private:
     observing::value::holder_ptr<std::shared_ptr<app_settings_lifetime>> const _current;
