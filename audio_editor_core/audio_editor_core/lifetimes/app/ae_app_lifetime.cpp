@@ -22,6 +22,7 @@
 #include <audio_editor_core/ae_app_settings_lifecycle.hpp>
 #include <audio_editor_core/ae_app_settings_opener.hpp>
 #include <audio_editor_core/ae_project_settings_lifecycle.hpp>
+#include <audio_editor_core/ae_project_setup_dialog_opener.hpp>
 #include <audio_editor_core/ae_ui_resource_lifecycle.hpp>
 
 using namespace yas;
@@ -38,15 +39,17 @@ std::shared_ptr<app_lifetime> app_lifetime::make_shared() {
     auto const project_lifecycle = std::make_shared<ae::project_lifecycle>(id_generator.get(), uuid_generator.get());
     auto const project_settings_lifecycle = std::make_shared<ae::project_settings_lifecycle>();
     auto const app_settings_lifecycle = std::make_shared<ae::app_settings_lifecycle>();
+    auto const app_modal_lifecycle = std::make_shared<ae::app_modal_lifecycle>(id_generator.get());
 
     return std::make_shared<app_lifetime>(
         worker, system_path, std::make_shared<app_launcher>(worker, system_path),
         std::make_shared<ae::file_importer>(worker, static_cast<uint32_t>(worker_priority::file_importing)),
         file_info_loader, std::make_shared<ae::color>(), uuid_generator, id_generator, app_settings, project_lifecycle,
-        project_settings_lifecycle, app_settings_lifecycle, std::make_shared<app_modal_lifecycle>(id_generator.get()),
+        project_settings_lifecycle, app_settings_lifecycle, app_modal_lifecycle,
         std::make_shared<ae::ui_resource_lifecycle>(),
         std::make_shared<ae::project_opener>(file_info_loader.get(), project_lifecycle.get()),
-        std::make_shared<ae::app_settings_opener>(app_settings_lifecycle.get()), action_sender);
+        std::make_shared<ae::app_settings_opener>(app_settings_lifecycle.get()),
+        std::make_shared<ae::project_setup_dialog_opener>(app_modal_lifecycle.get()), action_sender);
 }
 
 app_lifetime::app_lifetime(
@@ -62,6 +65,7 @@ app_lifetime::app_lifetime(
     std::shared_ptr<ae::ui_resource_lifecycle> const &ui_resource_lifecycle,
     std::shared_ptr<ae::project_opener> const &project_opener,
     std::shared_ptr<ae::app_settings_opener> const &app_settings_opener,
+    std::shared_ptr<ae::project_setup_dialog_opener> const &project_setup_dialog_opener,
     std::shared_ptr<ae::action_sender> const &action_sender)
     : worker(worker),
       system_path(system_path),
@@ -75,9 +79,10 @@ app_lifetime::app_lifetime(
       project_lifecycle(project_lifecycle),
       project_settings_lifecycle(project_settings_lifecycle),
       app_settings_lifecycle(app_settings_lifecycle),
-      app_settings_opener(app_settings_opener),
       modal_lifecycle(modal_lifecycle),
       ui_resource_lifecycle(ui_resource_lifecycle),
       project_opener(project_opener),
+      app_settings_opener(app_settings_opener),
+      project_setup_dialog_opener(project_setup_dialog_opener),
       action_sender(action_sender) {
 }

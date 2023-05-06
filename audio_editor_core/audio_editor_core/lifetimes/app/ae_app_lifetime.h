@@ -24,6 +24,7 @@ class app_settings;
 class project_settings_lifecycle;
 class app_settings_lifecycle;
 class app_settings_opener;
+class project_setup_dialog_opener;
 
 struct app_lifetime final {
     [[nodiscard]] static std::shared_ptr<app_lifetime> make_shared();
@@ -36,7 +37,7 @@ struct app_lifetime final {
                  std::shared_ptr<project_settings_lifecycle> const &, std::shared_ptr<app_settings_lifecycle> const &,
                  std::shared_ptr<app_modal_lifecycle> const &, std::shared_ptr<ui_resource_lifecycle> const &,
                  std::shared_ptr<project_opener> const &, std::shared_ptr<app_settings_opener> const &,
-                 std::shared_ptr<action_sender> const &);
+                 std::shared_ptr<project_setup_dialog_opener> const &, std::shared_ptr<action_sender> const &);
 
     std::shared_ptr<worker> const worker;
     std::shared_ptr<system_path> const system_path;
@@ -56,6 +57,7 @@ struct app_lifetime final {
 
     std::shared_ptr<project_opener> const project_opener;
     std::shared_ptr<app_settings_opener> const app_settings_opener;
+    std::shared_ptr<project_setup_dialog_opener> const project_setup_dialog_opener;
 
     std::shared_ptr<action_sender> const action_sender;
 
