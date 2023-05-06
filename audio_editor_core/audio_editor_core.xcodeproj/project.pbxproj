@@ -202,6 +202,8 @@
 		B675F93F2765CBB2002FE285 /* ae_waveform_mesh_importer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */; };
 		B677A7E92A05D7DE008D1FE3 /* ae_app_settings_opener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B677A7E72A05D7DE008D1FE3 /* ae_app_settings_opener.cpp */; };
 		B677A7EA2A05D7DE008D1FE3 /* ae_app_settings_opener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B677A7E82A05D7DE008D1FE3 /* ae_app_settings_opener.hpp */; };
+		B677A7ED2A05E138008D1FE3 /* ae_project_setup_dialog_opener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B677A7EB2A05E138008D1FE3 /* ae_project_setup_dialog_opener.cpp */; };
+		B677A7EE2A05E138008D1FE3 /* ae_project_setup_dialog_opener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B677A7EC2A05E138008D1FE3 /* ae_project_setup_dialog_opener.hpp */; };
 		B679CCD129B4446000745047 /* ae_grid_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B679CCCF29B4446000745047 /* ae_grid_presenter.cpp */; };
 		B679CCD229B4446000745047 /* ae_grid_presenter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B679CCD029B4446000745047 /* ae_grid_presenter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B67DFBA629053DC5008DC8C7 /* ae_escaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67DFBA429053DC5008DC8C7 /* ae_escaper.cpp */; };
@@ -734,6 +736,8 @@
 		B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_waveform_mesh_importer.mm; sourceTree = "<group>"; };
 		B677A7E72A05D7DE008D1FE3 /* ae_app_settings_opener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app_settings_opener.cpp; sourceTree = "<group>"; };
 		B677A7E82A05D7DE008D1FE3 /* ae_app_settings_opener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_app_settings_opener.hpp; sourceTree = "<group>"; };
+		B677A7EB2A05E138008D1FE3 /* ae_project_setup_dialog_opener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_setup_dialog_opener.cpp; sourceTree = "<group>"; };
+		B677A7EC2A05E138008D1FE3 /* ae_project_setup_dialog_opener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_project_setup_dialog_opener.hpp; sourceTree = "<group>"; };
 		B679CCCF29B4446000745047 /* ae_grid_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_grid_presenter.cpp; sourceTree = "<group>"; };
 		B679CCD029B4446000745047 /* ae_grid_presenter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_grid_presenter.hpp; sourceTree = "<group>"; };
 		B67DFBA429053DC5008DC8C7 /* ae_escaper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_escaper.cpp; sourceTree = "<group>"; };
@@ -2033,6 +2037,8 @@
 				B6288E9D29D5417400BBA440 /* ae_app_settings.hpp */,
 				B677A7E72A05D7DE008D1FE3 /* ae_app_settings_opener.cpp */,
 				B677A7E82A05D7DE008D1FE3 /* ae_app_settings_opener.hpp */,
+				B677A7EB2A05E138008D1FE3 /* ae_project_setup_dialog_opener.cpp */,
+				B677A7EC2A05E138008D1FE3 /* ae_project_setup_dialog_opener.hpp */,
 			);
 			path = features;
 			sourceTree = "<group>";
@@ -2691,6 +2697,7 @@
 				B61883ED28791041006CF5AD /* ae_id_generator.h in Headers */,
 				B64504BA271A94D2009E05D6 /* ae_modules_presenter.h in Headers */,
 				B6F3832D29F4E31200A8E143 /* ae_project_settings_opener.hpp in Headers */,
+				B677A7EE2A05E138008D1FE3 /* ae_project_setup_dialog_opener.hpp in Headers */,
 				B640AD4928B8773600ADCEAB /* ae_file_import_dialog_lifetime.hpp in Headers */,
 				B6D6DBFE28F8445800DC915C /* ae_selected_module_pool.hpp in Headers */,
 				B68E852627BF4DB200074894 /* ae_ui_edge_element.h in Headers */,
@@ -3078,6 +3085,7 @@
 				B6047AE92875AC3000BC91F6 /* ae_project_lifetime_id.cpp in Sources */,
 				B6966F46272EDB2F00A90733 /* ae_db_module.cpp in Sources */,
 				B66F5D6727AE2EA900441616 /* ae_color.mm in Sources */,
+				B677A7ED2A05E138008D1FE3 /* ae_project_setup_dialog_opener.cpp in Sources */,
 				B6668DCB294ED6F100CB294E /* ae_ui_pasting_markers.mm in Sources */,
 				B692946D28B64AA500764235 /* ae_marker_name_editor.cpp in Sources */,
 				B6B36D3829F7F872000843E1 /* ProjectSettingsView.swift in Sources */,

@@ -9,47 +9,47 @@
 #include <audio_editor_core/ae_app_presenter_utils.h>
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
-#include <audio_editor_core/ae_project_opener.h>
 
 #include <audio_editor_core/ae_app_settings_lifecycle.hpp>
 #include <audio_editor_core/ae_app_settings_opener.hpp>
 #include <audio_editor_core/ae_project_settings_lifecycle.hpp>
+#include <audio_editor_core/ae_project_setup_dialog_opener.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 std::shared_ptr<app_presenter> app_presenter::make_shared() {
     auto const &app_lifetime = hierarchy::app_lifetime();
-    return std::make_shared<app_presenter>(app_lifetime->project_lifecycle, app_lifetime->project_settings_lifecycle,
-                                           app_lifetime->app_settings_lifecycle, app_lifetime->modal_lifecycle,
-                                           app_lifetime->project_opener, app_lifetime->app_settings_opener);
+    return std::make_shared<app_presenter>(
+        app_lifetime->project_lifecycle, app_lifetime->project_settings_lifecycle, app_lifetime->app_settings_lifecycle,
+        app_lifetime->modal_lifecycle, app_lifetime->app_settings_opener, app_lifetime->project_setup_dialog_opener);
 }
 
-app_presenter::app_presenter(
-    std::shared_ptr<project_lifecycle_for_app_presenter> const &project_lifecycle,
-    std::shared_ptr<project_settings_lifecycle_for_app_presenter> const &project_settings_lifecycle,
-    std::shared_ptr<app_settings_lifecycle> const &app_settings_lifecycle,
-    std::shared_ptr<app_modal_lifecycle> const &app_modal_lifecycle, std::shared_ptr<project_opener> const &opener,
-    std::shared_ptr<app_settings_opener> const &app_settings_opener)
+app_presenter::app_presenter(std::shared_ptr<project_lifecycle> const &project_lifecycle,
+                             std::shared_ptr<project_settings_lifecycle> const &project_settings_lifecycle,
+                             std::shared_ptr<app_settings_lifecycle> const &app_settings_lifecycle,
+                             std::shared_ptr<app_modal_lifecycle> const &app_modal_lifecycle,
+                             std::shared_ptr<app_settings_opener> const &app_settings_opener,
+                             std::shared_ptr<project_setup_dialog_opener> const &project_setup_dialog_opener)
     : _project_lifecycle(project_lifecycle),
       _project_settings_lifecycle(project_settings_lifecycle),
       _app_settings_lifecycle(app_settings_lifecycle),
       _app_modal_lifecycle(app_modal_lifecycle),
-      _project_opener(opener),
-      _app_settings_opener(app_settings_opener) {
+      _app_settings_opener(app_settings_opener),
+      _project_setup_dialog_opener(project_setup_dialog_opener) {
 }
 
 bool app_presenter::can_open_dialog() const {
-    if (auto const lifecycle = this->_app_modal_lifecycle.lock()) {
-        return !lifecycle->current().has_value();
+    if (auto const opener = this->_project_setup_dialog_opener.lock()) {
+        return opener->can_open();
     } else {
         return false;
     }
 }
 
 void app_presenter::open_project_setup_dialog() {
-    if (auto const lifecycle = this->_app_modal_lifecycle.lock()) {
-        lifecycle->add_project_setup_dialog();
+    if (auto const opener = this->_project_setup_dialog_opener.lock()) {
+        opener->open();
     }
 }
 

@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_app_presenter_event.h>
 #include <audio_editor_core/ae_app_settings_lifecycle_event.h>
 #include <audio_editor_core/ae_project_lifecycle_event.h>
+#include <audio_editor_core/ae_project_settings_lifecycle_event.h>
 
 namespace yas::ae {
 static app_presenter_window_event_type to_presenter_event_type(project_lifecycle_event_type const &type) {

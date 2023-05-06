@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_action_receiver_providable.h>
 #include <audio_editor_core/ae_app_presenter_dependency.h>
 #include <audio_editor_core/ae_project_lifecycle_event.h>
+#include <observing/yas_observing_umbrella.h>
 
 #include <filesystem>
 
@@ -18,7 +19,7 @@ class uuid_generatable;
 class file_info_loader;
 class project_format;
 
-struct project_lifecycle final : project_lifecycle_for_app_presenter, action_receiver_providable {
+struct project_lifecycle final : action_receiver_providable {
     project_lifecycle(id_generatable const *, uuid_generatable const *);
 
     void add_lifetime(std::filesystem::path const &project_dir_path, project_format const &);
@@ -28,7 +29,7 @@ struct project_lifecycle final : project_lifecycle_for_app_presenter, action_rec
 
     [[nodiscard]] std::size_t size() const;
 
-    [[nodiscard]] observing::syncable observe_event(std::function<void(project_lifecycle_event const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_event(std::function<void(project_lifecycle_event const &)> &&);
 
    private:
     id_generatable const *const _id_generator;
