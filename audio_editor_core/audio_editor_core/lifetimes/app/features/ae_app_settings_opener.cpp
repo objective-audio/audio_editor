@@ -14,7 +14,7 @@ app_settings_opener::app_settings_opener(app_settings_lifecycle *app_settings_li
 }
 
 bool app_settings_opener::can_open() const {
-    return this->_app_settings_lifecycle->has_current();
+    return !this->_app_settings_lifecycle->has_current();
 }
 
 void app_settings_opener::open() {
