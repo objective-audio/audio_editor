@@ -25,12 +25,12 @@ std::shared_ptr<app_presenter> app_presenter::make_shared() {
                                            app_lifetime->project_opener, app_lifetime->app_settings_opener);
 }
 
-app_presenter::app_presenter(
-    std::shared_ptr<project_lifecycle_for_app_presenter> const &project_lifecycle,
-    std::shared_ptr<project_settings_lifecycle_for_app_presenter> const &project_settings_lifecycle,
-    std::shared_ptr<app_settings_lifecycle> const &app_settings_lifecycle,
-    std::shared_ptr<app_modal_lifecycle> const &app_modal_lifecycle, std::shared_ptr<project_opener> const &opener,
-    std::shared_ptr<app_settings_opener> const &app_settings_opener)
+app_presenter::app_presenter(std::shared_ptr<project_lifecycle> const &project_lifecycle,
+                             std::shared_ptr<project_settings_lifecycle> const &project_settings_lifecycle,
+                             std::shared_ptr<app_settings_lifecycle> const &app_settings_lifecycle,
+                             std::shared_ptr<app_modal_lifecycle> const &app_modal_lifecycle,
+                             std::shared_ptr<project_opener> const &opener,
+                             std::shared_ptr<app_settings_opener> const &app_settings_opener)
     : _project_lifecycle(project_lifecycle),
       _project_settings_lifecycle(project_settings_lifecycle),
       _app_settings_lifecycle(app_settings_lifecycle),

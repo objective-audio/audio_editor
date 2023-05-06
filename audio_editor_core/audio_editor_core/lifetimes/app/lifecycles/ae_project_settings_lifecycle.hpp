@@ -7,11 +7,12 @@
 #include <audio_editor_core/ae_app_presenter_dependency.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_project_settings_lifecycle_event.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
 class project_settings_lifetime;
 
-struct project_settings_lifecycle final : project_settings_lifecycle_for_app_presenter {
+struct project_settings_lifecycle final {
     project_settings_lifecycle();
 
     void add_lifetime(project_lifetime_id const &);
@@ -19,8 +20,7 @@ struct project_settings_lifecycle final : project_settings_lifecycle_for_app_pre
 
     [[nodiscard]] std::shared_ptr<project_settings_lifetime> const &lifetime_for_id(project_lifetime_id const &) const;
 
-    [[nodiscard]] observing::syncable observe_event(
-        std::function<void(project_settings_lifecycle_event const &)> &&) override;
+    [[nodiscard]] observing::syncable observe_event(std::function<void(project_settings_lifecycle_event const &)> &&);
 
    private:
     using lifetimes_t = observing::map::holder<project_lifetime_id, std::shared_ptr<project_settings_lifetime>>;

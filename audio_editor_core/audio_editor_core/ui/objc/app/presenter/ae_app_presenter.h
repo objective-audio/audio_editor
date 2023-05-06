@@ -7,8 +7,11 @@
 #include <audio_editor_core/ae_app_modal_sub_lifetime.h>
 #include <audio_editor_core/ae_app_presenter_dependency.h>
 #include <audio_editor_core/ae_app_presenter_event.h>
+#include <observing/yas_observing_umbrella.h>
 
 namespace yas::ae {
+class project_lifecycle;
+class project_settings_lifecycle;
 class project_opener;
 class app_modal_lifecycle;
 class app_settings_lifecycle;
@@ -17,8 +20,7 @@ class app_settings_opener;
 struct app_presenter final {
     [[nodiscard]] static std::shared_ptr<app_presenter> make_shared();
 
-    app_presenter(std::shared_ptr<project_lifecycle_for_app_presenter> const &,
-                  std::shared_ptr<project_settings_lifecycle_for_app_presenter> const &,
+    app_presenter(std::shared_ptr<project_lifecycle> const &, std::shared_ptr<project_settings_lifecycle> const &,
                   std::shared_ptr<app_settings_lifecycle> const &, std::shared_ptr<app_modal_lifecycle> const &,
                   std::shared_ptr<project_opener> const &, std::shared_ptr<app_settings_opener> const &);
 
@@ -33,8 +35,8 @@ struct app_presenter final {
         std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&);
 
    private:
-    std::weak_ptr<project_lifecycle_for_app_presenter> const _project_lifecycle;
-    std::weak_ptr<project_settings_lifecycle_for_app_presenter> const _project_settings_lifecycle;
+    std::weak_ptr<project_lifecycle> const _project_lifecycle;
+    std::weak_ptr<project_settings_lifecycle> const _project_settings_lifecycle;
     std::weak_ptr<app_settings_lifecycle> const _app_settings_lifecycle;
     std::weak_ptr<app_modal_lifecycle> const _app_modal_lifecycle;
     std::weak_ptr<project_opener> const _project_opener;
