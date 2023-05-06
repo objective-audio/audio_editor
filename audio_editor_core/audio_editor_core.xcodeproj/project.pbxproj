@@ -200,6 +200,8 @@
 		B66FBAA8286B44B200E49B7E /* ae_action_receiver_providable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B66FBAA7286B44B200E49B7E /* ae_action_receiver_providable.cpp */; };
 		B675F93E2765CBB2002FE285 /* ae_waveform_mesh_importer.h in Headers */ = {isa = PBXBuildFile; fileRef = B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B675F93F2765CBB2002FE285 /* ae_waveform_mesh_importer.mm in Sources */ = {isa = PBXBuildFile; fileRef = B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */; };
+		B677A7E92A05D7DE008D1FE3 /* ae_app_settings_opener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B677A7E72A05D7DE008D1FE3 /* ae_app_settings_opener.cpp */; };
+		B677A7EA2A05D7DE008D1FE3 /* ae_app_settings_opener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B677A7E82A05D7DE008D1FE3 /* ae_app_settings_opener.hpp */; };
 		B679CCD129B4446000745047 /* ae_grid_presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B679CCCF29B4446000745047 /* ae_grid_presenter.cpp */; };
 		B679CCD229B4446000745047 /* ae_grid_presenter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B679CCD029B4446000745047 /* ae_grid_presenter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B67DFBA629053DC5008DC8C7 /* ae_escaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B67DFBA429053DC5008DC8C7 /* ae_escaper.cpp */; };
@@ -730,6 +732,8 @@
 		B66FBAA7286B44B200E49B7E /* ae_action_receiver_providable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_action_receiver_providable.cpp; sourceTree = "<group>"; };
 		B675F93C2765CBB2002FE285 /* ae_waveform_mesh_importer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_waveform_mesh_importer.h; sourceTree = "<group>"; };
 		B675F93D2765CBB2002FE285 /* ae_waveform_mesh_importer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_waveform_mesh_importer.mm; sourceTree = "<group>"; };
+		B677A7E72A05D7DE008D1FE3 /* ae_app_settings_opener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_app_settings_opener.cpp; sourceTree = "<group>"; };
+		B677A7E82A05D7DE008D1FE3 /* ae_app_settings_opener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_app_settings_opener.hpp; sourceTree = "<group>"; };
 		B679CCCF29B4446000745047 /* ae_grid_presenter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_grid_presenter.cpp; sourceTree = "<group>"; };
 		B679CCD029B4446000745047 /* ae_grid_presenter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_grid_presenter.hpp; sourceTree = "<group>"; };
 		B67DFBA429053DC5008DC8C7 /* ae_escaper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_escaper.cpp; sourceTree = "<group>"; };
@@ -2027,6 +2031,8 @@
 				B666CDE72634125E00C1693D /* ae_system_path.h */,
 				B6288E9C29D5417400BBA440 /* ae_app_settings.mm */,
 				B6288E9D29D5417400BBA440 /* ae_app_settings.hpp */,
+				B677A7E72A05D7DE008D1FE3 /* ae_app_settings_opener.cpp */,
+				B677A7E82A05D7DE008D1FE3 /* ae_app_settings_opener.hpp */,
 			);
 			path = features;
 			sourceTree = "<group>";
@@ -2670,6 +2676,7 @@
 				B6DEAC6D2840E070001D7D53 /* ae_project_setup_presenter.h in Headers */,
 				B6D2CBCC29FCF5FD00218960 /* ae_project_lifetime_id+objc.h in Headers */,
 				B6D283AE288110BE00F294EC /* AEMetalView.h in Headers */,
+				B677A7EA2A05D7DE008D1FE3 /* ae_app_settings_opener.hpp in Headers */,
 				B6DC2CC627B654AA000EF5F9 /* ae_edge_presenter_dependency.h in Headers */,
 				B64504AE2719C4D9009E05D6 /* ae_module_content.h in Headers */,
 				B661269A28549A5E00E66214 /* ae_project_sub_lifetime.h in Headers */,
@@ -3046,6 +3053,7 @@
 				B666CE4C26351D7900C1693D /* ae_project_path.cpp in Sources */,
 				B6F3832C29F4E31200A8E143 /* ae_project_settings_opener.cpp in Sources */,
 				B63D28542838CA87009C07A8 /* ae_context_menu_lifetime.cpp in Sources */,
+				B677A7E92A05D7DE008D1FE3 /* ae_app_settings_opener.cpp in Sources */,
 				B6612699285498E900E66214 /* ae_project_sub_lifetime.cpp in Sources */,
 				B64D407129BD9B7F000EFA1D /* ae_grid_content.cpp in Sources */,
 				B61759712823C30700AC880B /* ae_timeline_holder.cpp in Sources */,
