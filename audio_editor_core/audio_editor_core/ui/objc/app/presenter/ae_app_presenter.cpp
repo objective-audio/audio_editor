@@ -100,10 +100,10 @@ observing::syncable app_presenter::observe_window(std::function<void(app_present
     return result;
 }
 
-observing::syncable app_presenter::observe_dialog(
-    std::function<void(std::optional<app_modal_sub_lifetime> const &)> &&handler) {
+observing::syncable app_presenter::observe_dialog(std::function<void(app_presenter_dialog_kind const &)> &&handler) {
     if (auto const lifecycle = this->_app_modal_lifecycle.lock()) {
-        return lifecycle->observe(std::move(handler));
+        return lifecycle->observe(
+            [handler = std::move(handler)](auto const &sub_lifetime) { handler(to_kind(sub_lifetime)); });
     } else {
         return observing::syncable{};
     }
