@@ -15,13 +15,14 @@ class project_settings_lifecycle;
 class app_modal_lifecycle;
 class app_settings_lifecycle;
 class app_settings_opener;
+class project_setup_dialog_opener;
 
 struct app_presenter final {
     [[nodiscard]] static std::shared_ptr<app_presenter> make_shared();
 
     app_presenter(std::shared_ptr<project_lifecycle> const &, std::shared_ptr<project_settings_lifecycle> const &,
                   std::shared_ptr<app_settings_lifecycle> const &, std::shared_ptr<app_modal_lifecycle> const &,
-                  std::shared_ptr<app_settings_opener> const &);
+                  std::shared_ptr<app_settings_opener> const &, std::shared_ptr<project_setup_dialog_opener> const &);
 
     [[nodiscard]] bool can_open_dialog() const;
     void open_project_setup_dialog();
@@ -39,6 +40,7 @@ struct app_presenter final {
     std::weak_ptr<app_settings_lifecycle> const _app_settings_lifecycle;
     std::weak_ptr<app_modal_lifecycle> const _app_modal_lifecycle;
     std::weak_ptr<app_settings_opener> const _app_settings_opener;
+    std::weak_ptr<project_setup_dialog_opener> const _project_setup_dialog_opener;
 
     app_presenter(app_presenter const &) = delete;
     app_presenter(app_presenter &&) = delete;
