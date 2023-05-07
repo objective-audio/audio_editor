@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <audio_editor_core/ae_project_opener_event.h>
+#include <observing/yas_observing_umbrella.h>
+
 #include <filesystem>
 #include <memory>
 
@@ -17,9 +20,13 @@ struct project_opener final {
 
     void open(project_format const &, std::filesystem::path const &project_path);
 
+    [[nodiscard]] observing::endable observe_event(std::function<void(project_opener_event const &)> &&);
+
    private:
     file_info_loader const *const _file_info_loader;
     project_lifecycle *const _project_lifecycle;
+
+    observing::notifier_ptr<project_opener_event> const _event_notifier;
 
     project_opener(project_opener const &) = delete;
     project_opener(project_opener &&) = delete;
