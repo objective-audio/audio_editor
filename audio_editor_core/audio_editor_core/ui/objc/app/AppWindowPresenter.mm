@@ -11,6 +11,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_project_lifecycle.h>
 #import <audio_editor_core/ae_project_lifetime_id+objc.h>
+#include <audio_editor_core/ae_project_opener.h>
 #include <audio_editor_core/ae_project_setup_presenter.h>
 #import <audio_editor_core/audio_editor_core-Swift.h>
 #include <cpp_utils/yas_cf_utils.h>
@@ -27,6 +28,7 @@ namespace yas::ae {
 struct app_window_presenter_cpp final {
     std::weak_ptr<app_settings_opener> const app_settings_opener;
     std::weak_ptr<project_setup_dialog_opener> const project_setup_dialog_opener;
+    std::weak_ptr<project_opener> const project_opener;
 
     std::weak_ptr<project_lifecycle> const project_lifecycle;
     std::weak_ptr<project_settings_lifecycle> const project_settings_lifecycle;
@@ -37,12 +39,14 @@ struct app_window_presenter_cpp final {
 
     app_window_presenter_cpp(std::shared_ptr<ae::app_settings_opener> const &app_settings_opener,
                              std::shared_ptr<ae::project_setup_dialog_opener> const &project_setup_dialog_opener,
+                             std::shared_ptr<ae::project_opener> const &project_opener,
                              std::shared_ptr<ae::project_lifecycle> const &project_lifecycle,
                              std::shared_ptr<ae::project_settings_lifecycle> const &project_settings_lifecycle,
                              std::shared_ptr<ae::app_settings_lifecycle> const &app_settings_lifecycle,
                              std::shared_ptr<ae::app_modal_lifecycle> const &app_modal_lifecycle)
         : app_settings_opener(app_settings_opener),
           project_setup_dialog_opener(project_setup_dialog_opener),
+          project_opener(project_opener),
           project_lifecycle(project_lifecycle),
           project_settings_lifecycle(project_settings_lifecycle),
           app_settings_lifecycle(app_settings_lifecycle),
@@ -71,16 +75,28 @@ struct app_window_presenter_cpp final {
         self.appSettingsControllers = [[NSMutableSet alloc] init];
 
         auto const &app_lifetime = hierarchy::app_lifetime();
+        auto const &project_opener = app_lifetime->project_opener;
         auto const &project_lifecycle = app_lifetime->project_lifecycle;
         auto const &project_settings_lifecycle = app_lifetime->project_settings_lifecycle;
         auto const &app_settings_lifecycle = app_lifetime->app_settings_lifecycle;
         auto const &modal_lifecycle = app_lifetime->modal_lifecycle;
 
         _cpp = std::make_unique<app_window_presenter_cpp>(
-            app_lifetime->app_settings_opener, app_lifetime->project_setup_dialog_opener, project_lifecycle,
-            project_settings_lifecycle, app_settings_lifecycle, modal_lifecycle);
+            app_lifetime->app_settings_opener, app_lifetime->project_setup_dialog_opener, project_opener,
+            project_lifecycle, project_settings_lifecycle, app_settings_lifecycle, modal_lifecycle);
 
         auto *const unowned = make_unowned(self);
+
+        project_opener
+            ->observe_event([unowned](project_opener_event const &event) {
+                switch (event.kind) {
+                    case project_opener_event_kind::show_opened:
+                        [unowned.object showProjectWithLifetimeID:event.lifetime_id];
+                        break;
+                }
+            })
+            .end()
+            ->add_to(self->_cpp->cancellers);
 
         project_lifecycle
             ->observe_event([unowned](project_lifecycle_event const &event) {
@@ -202,6 +218,15 @@ struct app_window_presenter_cpp final {
     ProjectWindowController *windowController = [ProjectWindowController instantiateWithLifetimeID:lifetime_id];
     [self.projectControllers addObject:windowController];
     [windowController showWindow:nil];
+}
+
+- (void)showProjectWithLifetimeID:(project_lifetime_id const &)lifetime_id {
+    for (ProjectWindowController *windowController in self.projectControllers) {
+        if (windowController.lifetime_id == lifetime_id) {
+            [windowController showWindow:nil];
+            return;
+        }
+    }
 }
 
 - (void)disposeProjectWithLifetimeID:(project_lifetime_id const &)lifetime_id {
