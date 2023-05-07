@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_app_presenter_dependency.h>
 #include <audio_editor_core/ae_app_settings_lifecycle_event.h>
 #include <observing/yas_observing_umbrella.h>
 
