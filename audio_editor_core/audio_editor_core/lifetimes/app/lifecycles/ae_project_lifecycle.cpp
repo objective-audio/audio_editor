@@ -12,6 +12,7 @@
 #include <audio_editor_core/ae_project_guid.h>
 #include <audio_editor_core/ae_project_launcher.h>
 #include <audio_editor_core/ae_project_lifetime.h>
+#include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_project_receiver.h>
 #include <audio_editor_core/ae_project_sub_lifecycle.h>
 #include <audio_editor_core/ae_uuid_generator.h>
@@ -47,6 +48,15 @@ std::shared_ptr<project_lifetime> const &project_lifecycle::lifetime_for_id(
     } else {
         return _empty_lifetime;
     }
+}
+
+std::shared_ptr<project_lifetime> const &project_lifecycle::lifetime_for_path(std::filesystem::path const &path) const {
+    for (auto const &pair : this->_lifetimes->elements()) {
+        if (pair.second->project_path->root_directory() == path) {
+            return pair.second;
+        }
+    }
+    return _empty_lifetime;
 }
 
 std::size_t project_lifecycle::size() const {
