@@ -25,6 +25,7 @@ struct project_lifecycle final : action_receiver_providable {
     void remove_lifetime(project_lifetime_id const &);
 
     [[nodiscard]] std::shared_ptr<project_lifetime> const &lifetime_for_id(project_lifetime_id const &) const;
+    [[nodiscard]] std::shared_ptr<project_lifetime> const &lifetime_for_path(std::filesystem::path const &) const;
 
     [[nodiscard]] std::size_t size() const;
 
