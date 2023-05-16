@@ -7,7 +7,8 @@
 #include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_project_presenter_dependency.h>
 #include <audio_editor_core/ae_project_presenter_types.h>
-#include <observing/yas_observing_umbrella.h>
+
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 class project_path;

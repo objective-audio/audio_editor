@@ -4,9 +4,8 @@
 
 #pragma once
 
-#include <observing/yas_observing_umbrella.h>
-
 #include <audio_editor_core/ae_selected_module_pool.hpp>
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 class database;

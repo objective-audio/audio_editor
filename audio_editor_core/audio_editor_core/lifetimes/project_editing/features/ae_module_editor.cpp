@@ -18,7 +18,8 @@
 #include <audio_editor_core/ae_time_editor.h>
 #include <audio_editor_core/ae_timeline_holder_utils.h>
 #include <cpp_utils/yas_fast_each.h>
-#include <processing/yas_processing_umbrella.h>
+
+#include <processing/yas_processing_umbrella.hpp>
 
 using namespace yas;
 using namespace yas::ae;

@@ -5,7 +5,8 @@
 #include "ae_db_utils.h"
 
 #include <audio_editor_core/ae_db_constants.h>
-#include <db/yas_db_umbrella.h>
+
+#include <db/yas_db_umbrella.hpp>
 
 using namespace yas;
 using namespace yas::ae;

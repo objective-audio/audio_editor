@@ -5,7 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_module.h>
-#include <processing/yas_processing_umbrella.h>
+
+#include <processing/yas_processing_umbrella.hpp>
 
 namespace yas::ae {
 class project_path;

@@ -6,7 +6,8 @@
 
 #include <audio_editor_core/ae_project_lifetime_id.h>
 #include <cpp_utils/yas_index_range.h>
-#include <observing/yas_observing_umbrella.h>
+
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 class timing;

@@ -5,7 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_common_types.h>
-#include <observing/yas_observing_umbrella.h>
+
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 enum class recycle_pool_event_type {

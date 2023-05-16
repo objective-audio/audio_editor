@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <audio/yas_audio_umbrella.h>
-#include <playing/yas_playing_umbrella.h>
+#include <audio/yas_audio_umbrella.hpp>
+#include <playing/yas_playing_umbrella.hpp>
 
 namespace yas::ae {
 enum class exporting_error {

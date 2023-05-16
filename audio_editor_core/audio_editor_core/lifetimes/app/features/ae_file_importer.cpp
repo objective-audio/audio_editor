@@ -4,11 +4,11 @@
 
 #include "ae_file_importer.h"
 
-#include <audio/yas_audio_umbrella.h>
 #include <audio_editor_core/ae_file_importer_resource.h>
 #include <cpp_utils/yas_file_manager.h>
 #include <cpp_utils/yas_thread.h>
 
+#include <audio/yas_audio_umbrella.hpp>
 #include <thread>
 
 using namespace yas;
