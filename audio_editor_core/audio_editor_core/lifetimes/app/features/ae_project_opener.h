@@ -5,10 +5,10 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_opener_event.h>
-#include <observing/yas_observing_umbrella.h>
 
 #include <filesystem>
 #include <memory>
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 class file_info_loader;

@@ -7,9 +7,9 @@
 #include <audio_editor_core/ae_action_receiver_providable.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_project_sub_lifetime.h>
-#include <observing/yas_observing_umbrella.h>
 
 #include <memory>
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 struct project_sub_lifecycle final : action_receiver_providable {

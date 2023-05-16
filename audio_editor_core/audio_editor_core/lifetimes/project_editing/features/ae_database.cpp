@@ -9,7 +9,8 @@
 #include <audio_editor_core/ae_db_utils.h>
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_thread.h>
-#include <db/yas_db_umbrella.h>
+
+#include <db/yas_db_umbrella.hpp>
 
 using namespace yas;
 using namespace yas::ae;

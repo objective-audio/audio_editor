@@ -5,9 +5,9 @@
 #pragma once
 
 #include <audio_editor_core/ae_app_settings_lifecycle_event.h>
-#include <observing/yas_observing_umbrella.h>
 
 #include <audio_editor_core/ae_app_settings_lifetime_id.hpp>
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 class app_settings_lifetime;

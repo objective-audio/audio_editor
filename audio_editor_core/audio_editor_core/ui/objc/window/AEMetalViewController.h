@@ -3,7 +3,7 @@
 //
 
 #include <audio_editor_core/ae_project_lifetime_id.h>
-#import <ui/ui.h>
+#import <ui/yas_ui_umbrella.h>
 #include <string>
 
 NS_ASSUME_NONNULL_BEGIN

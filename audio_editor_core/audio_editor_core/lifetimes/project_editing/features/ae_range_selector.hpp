@@ -5,9 +5,9 @@
 #pragma once
 
 #include <audio_editor_core/ae_range_selector_dependency.h>
-#include <observing/yas_observing_umbrella.h>
 
 #include <audio_editor_core/ae_point_range.hpp>
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 struct range_selector final {

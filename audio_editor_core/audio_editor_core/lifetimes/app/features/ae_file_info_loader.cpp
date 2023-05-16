@@ -4,7 +4,7 @@
 
 #include "ae_file_info_loader.h"
 
-#include <audio/yas_audio_umbrella.h>
+#include <audio/yas_audio_umbrella.hpp>
 
 using namespace yas;
 using namespace yas::ae;

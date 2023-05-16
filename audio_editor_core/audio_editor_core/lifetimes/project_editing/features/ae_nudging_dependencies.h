@@ -6,7 +6,8 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_timing_types.h>
-#include <observing/yas_observing_umbrella.h>
+
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 struct timing_for_nudging {

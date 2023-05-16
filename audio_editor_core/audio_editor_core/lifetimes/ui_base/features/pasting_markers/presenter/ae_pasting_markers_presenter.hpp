@@ -7,9 +7,9 @@
 #include <audio_editor_core/ae_pasting_marker_content_pool.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
-#include <observing/yas_observing_umbrella.h>
 
 #include <memory>
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 class pasteboard;

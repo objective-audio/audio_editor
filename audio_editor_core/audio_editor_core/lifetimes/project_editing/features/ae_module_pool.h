@@ -8,8 +8,8 @@
 #include <audio_editor_core/ae_jumper_dependency.h>
 #include <audio_editor_core/ae_module_pool_dependencies.h>
 #include <audio_editor_core/ae_module_pool_types.h>
-#include <observing/yas_observing_umbrella.h>
 
+#include <observing/yas_observing_umbrella.hpp>
 #include <set>
 
 namespace yas::ae {

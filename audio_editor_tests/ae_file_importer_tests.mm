@@ -3,8 +3,8 @@
 //
 
 #import <XCTest/XCTest.h>
-#include <audio/yas_audio_umbrella.h>
 #import <audio_editor_core/ae_file_importer.h>
+#include <audio/yas_audio_umbrella.hpp>
 #include "ae_test_utils.h"
 
 using namespace yas;

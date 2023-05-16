@@ -6,7 +6,8 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_display_space_types.h>
-#include <observing/yas_observing_umbrella.h>
+
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 struct display_space final {

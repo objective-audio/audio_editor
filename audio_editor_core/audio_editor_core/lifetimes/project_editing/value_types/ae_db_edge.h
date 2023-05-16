@@ -5,7 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_edge.h>
-#include <db/yas_db_umbrella.h>
+
+#include <db/yas_db_umbrella.hpp>
 
 namespace yas::ae {
 struct db_edge final {

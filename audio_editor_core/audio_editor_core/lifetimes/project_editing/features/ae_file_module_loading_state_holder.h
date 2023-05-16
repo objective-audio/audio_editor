@@ -5,7 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_file_module_loading_state.h>
-#include <observing/yas_observing_umbrella.h>
+
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 struct file_module_loading_state_holder final {

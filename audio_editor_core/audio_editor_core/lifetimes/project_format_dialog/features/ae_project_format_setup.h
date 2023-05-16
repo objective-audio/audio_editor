@@ -5,9 +5,9 @@
 #pragma once
 
 #include <audio_editor_core/ae_project_format.h>
-#include <observing/yas_observing_umbrella.h>
 
 #include <array>
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 struct project_format_setup {

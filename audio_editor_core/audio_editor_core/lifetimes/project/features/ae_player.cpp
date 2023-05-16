@@ -4,9 +4,10 @@
 
 #include "ae_player.h"
 
-#include <audio/yas_audio_umbrella.h>
 #include <audio_editor_core/ae_scrolling_types.h>
-#include <playing/yas_playing_umbrella.h>
+
+#include <audio/yas_audio_umbrella.hpp>
+#include <playing/yas_playing_umbrella.hpp>
 
 using namespace yas;
 using namespace yas::ae;

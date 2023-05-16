@@ -6,7 +6,8 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_module.h>
-#include <db/yas_db_umbrella.h>
+
+#include <db/yas_db_umbrella.hpp>
 
 namespace yas::ae {
 class module_object;

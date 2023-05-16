@@ -8,7 +8,8 @@
 #include <audio_editor_core/ae_edge_presenter_dependency.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
-#include <observing/yas_observing_umbrella.h>
+
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 class display_space;

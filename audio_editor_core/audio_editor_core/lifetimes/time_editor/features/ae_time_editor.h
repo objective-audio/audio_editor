@@ -7,7 +7,8 @@
 #include <audio_editor_core/ae_number_components.h>
 #include <audio_editor_core/ae_time_editor_types.h>
 #include <cpp_utils/yas_identifier.h>
-#include <observing/yas_observing_umbrella.h>
+
+#include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
 struct time_editor final {
