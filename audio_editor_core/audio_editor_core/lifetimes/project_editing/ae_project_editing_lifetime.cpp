@@ -17,6 +17,7 @@
 #include <audio_editor_core/ae_file_module_loading_state_holder.h>
 #include <audio_editor_core/ae_grid_content_pool.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_horizontal_scrolling.h>
 #include <audio_editor_core/ae_import_interactor.h>
 #include <audio_editor_core/ae_jumper.h>
 #include <audio_editor_core/ae_marker_editor.h>
@@ -38,7 +39,6 @@
 #include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_reverter.h>
 #include <audio_editor_core/ae_scroll_gesture_controller.h>
-#include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_path.h>
 #include <audio_editor_core/ae_time_editing_opener.h>
 #include <audio_editor_core/ae_timeline_holder.h>
@@ -80,7 +80,9 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
       action_sender(
           std::make_shared<ae::project_action_sender>(project_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(std::make_shared<ae::pinch_gesture_controller>(project_lifetime->zooming_pair.get())),
-      scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(project_lifetime->scrolling.get())),
+      scroll_gesture_controller(std::make_shared<ae::scroll_gesture_controller>(
+          project_lifetime->horizontal_scrolling.get(), project_lifetime->vertical_scrolling.get(),
+          project_lifetime->zooming_pair.get())),
       database(database::make_shared(project_lifetime->project_path->db_file())),
       timing(std::make_shared<ae::timing>(project_format.sample_rate, app_lifetime->app_settings.get())),
       nudging(std::make_shared<ae::nudging>(this->timing.get(), app_lifetime->app_settings.get())),

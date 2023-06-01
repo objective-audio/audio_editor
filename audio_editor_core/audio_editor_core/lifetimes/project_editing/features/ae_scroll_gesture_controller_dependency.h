@@ -5,8 +5,8 @@
 #pragma once
 
 namespace yas::ae {
-struct scrolling_for_gesture_controller {
-    virtual ~scrolling_for_gesture_controller() = default;
+struct horizontal_scrolling_for_gesture_controller {
+    virtual ~horizontal_scrolling_for_gesture_controller() = default;
 
     virtual void begin() = 0;
     virtual void set_delta_time(double const) = 0;

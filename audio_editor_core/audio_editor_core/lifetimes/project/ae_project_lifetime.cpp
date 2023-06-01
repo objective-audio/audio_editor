@@ -6,15 +6,17 @@
 
 #include <audio_editor_core/ae_display_space.h>
 #include <audio_editor_core/ae_hierarchy.h>
+#include <audio_editor_core/ae_horizontal_scrolling.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_project_closer.h>
 #include <audio_editor_core/ae_project_path.h>
 #include <audio_editor_core/ae_project_receiver.h>
 #include <audio_editor_core/ae_project_sub_lifecycle.h>
-#include <audio_editor_core/ae_scrolling.h>
 #include <audio_editor_core/ae_system_path.h>
 #include <audio_editor_core/ae_timeline_holder.h>
 #include <audio_editor_core/ae_zooming_pair.h>
+
+#include <audio_editor_core/ae_vertical_scrolling.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -35,9 +37,10 @@ project_lifetime::project_lifetime(project_lifetime_id const &lifetime_id, ae::p
       project_path(std::make_shared<ae::project_path>(project_dir_path)),
       display_space(std::make_shared<ae::display_space>()),
       zooming_pair(std::make_shared<ae::zooming_pair>()),
-      scrolling(std::make_shared<ae::scrolling>()),
+      horizontal_scrolling(std::make_shared<ae::horizontal_scrolling>()),
+      vertical_scrolling(std::make_shared<ae::vertical_scrolling>()),
       player(std::make_shared<ae::player>(app_lifetime->system_path->playing_directory(), lifetime_id.guid,
-                                          this->scrolling.get())),
+                                          this->horizontal_scrolling.get())),
       timeline_holder(std::make_shared<ae::timeline_holder>(this->project_format, this->project_path.get())),
       project_sub_lifecycle(std::make_shared<ae::project_sub_lifecycle>(lifetime_id)),
       closer(std::make_shared<ae::project_closer>(lifetime_id, app_lifetime->project_lifecycle.get(),

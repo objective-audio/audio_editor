@@ -7,6 +7,8 @@
 #include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_umbrella.h>
 
+#include <audio_editor_core/ae_ui_scroller_nodes.hpp>
+
 namespace yas::ae {
 struct ui_node_hierarchy final {
     [[nodiscard]] static std::shared_ptr<ui_node_hierarchy> make_shared(project_lifetime_id const &);
@@ -15,7 +17,7 @@ struct ui_node_hierarchy final {
     std::shared_ptr<ui::node> const base_node;
 
     std::shared_ptr<ui::node> const range_selection_input_node;
-    std::shared_ptr<ui::node> const scroller_node;
+    ui_scroller_nodes const scroller_nodes;
     std::shared_ptr<ui::node> const pasting_modules_node;
     std::shared_ptr<ui::node> const pasting_markers_node;
     std::shared_ptr<ui::node> const playing_line_node;

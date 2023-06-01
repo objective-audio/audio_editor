@@ -16,7 +16,8 @@ std::shared_ptr<ui_node_hierarchy> ui_node_hierarchy::make_shared(project_lifeti
 ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     : base_node(ui::node::make_shared()),
       range_selection_input_node(ui::node::make_shared()),
-      scroller_node(ui::node::make_shared()),
+      scroller_nodes(
+          {.back = ui::node::make_shared(), .modules = ui::node::make_shared(), .front = ui::node::make_shared()}),
       pasting_modules_node(ui::node::make_shared()),
       pasting_markers_node(ui::node::make_shared()),
       playing_line_node(ui::node::make_shared()),
@@ -34,18 +35,20 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     root_node->add_sub_node(this->base_node);
 
     this->base_node->add_sub_node(this->range_selection_input_node);
-    this->base_node->add_sub_node(this->scroller_node);
+    this->base_node->add_sub_node(this->scroller_nodes.back);
+    this->base_node->add_sub_node(this->scroller_nodes.modules);
+    this->base_node->add_sub_node(this->scroller_nodes.front);
     this->base_node->add_sub_node(this->pasting_modules_node);
     this->base_node->add_sub_node(this->pasting_markers_node);
     this->base_node->add_sub_node(this->playing_line_node);
     this->base_node->add_sub_node(this->modal_bg_node);
     this->base_node->add_sub_node(this->time_base_node);
 
-    this->scroller_node->add_sub_node(this->grid_node);
-    this->scroller_node->add_sub_node(this->modules_node);
-    this->scroller_node->add_sub_node(this->range_selection_node);
-    this->scroller_node->add_sub_node(this->edge_node);
-    this->scroller_node->add_sub_node(this->markers_node);
+    this->scroller_nodes.back->add_sub_node(this->grid_node);
+    this->scroller_nodes.modules->add_sub_node(this->modules_node);
+    this->scroller_nodes.modules->add_sub_node(this->range_selection_node);
+    this->scroller_nodes.front->add_sub_node(this->edge_node);
+    this->scroller_nodes.front->add_sub_node(this->markers_node);
 
     this->time_base_node->add_sub_node(this->time_bg_node);
     this->time_base_node->add_sub_node(this->time_buttons_node);
