@@ -47,7 +47,7 @@ ui_zooming::ui_zooming(std::shared_ptr<ui::standard> const &standard, display_sp
 void ui_zooming::_update_scale() {
     auto const zooming_scale = this->_presenter->zooming_scale();
     float const width = zooming_scale.horizontal * ui_zooming_constants::standard_width_per_sec;
-    float const height = std::ceil(zooming_scale.vertical * ui_zooming_constants::standard_height);
+    float const height = std::ceil(zooming_scale.vertical * ui_zooming_constants::standard_height_per_track);
 
     ui::size const scale{width, height};
     this->_display_space->set_scale(scale);

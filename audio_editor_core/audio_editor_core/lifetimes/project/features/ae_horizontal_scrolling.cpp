@@ -1,16 +1,16 @@
 //
-//  ae_scrolling.cpp
+//  ae_horizontal_scrolling.cpp
 //
 
-#include "ae_scrolling.h"
+#include "ae_horizontal_scrolling.h"
 
 using namespace yas;
 using namespace yas::ae;
 
-scrolling::scrolling() : _notifier(observing::notifier<scrolling_event>::make_shared()) {
+horizontal_scrolling::horizontal_scrolling() : _notifier(observing::notifier<scrolling_event>::make_shared()) {
 }
 
-void scrolling::begin() {
+void horizontal_scrolling::begin() {
     if (this->_is_enabled) {
         this->end();
 
@@ -19,24 +19,24 @@ void scrolling::begin() {
     }
 }
 
-void scrolling::set_delta_time(double const value) {
+void horizontal_scrolling::set_delta_time(double const value) {
     if (this->_is_enabled && this->_is_began) {
         this->_notifier->notify({.state = scrolling_state::changed, .delta_time = value});
     }
 }
 
-void scrolling::end() {
+void horizontal_scrolling::end() {
     if (this->_is_began) {
         this->_is_began = false;
         this->_notifier->notify({.state = scrolling_state::ended, .delta_time = 0.0});
     }
 }
 
-bool scrolling::is_began() const {
+bool horizontal_scrolling::is_began() const {
     return this->_is_began;
 }
 
-void scrolling::set_is_enabled(bool const is_enabled) {
+void horizontal_scrolling::set_is_enabled(bool const is_enabled) {
     if (this->_is_enabled != is_enabled) {
         this->_is_enabled = is_enabled;
 
@@ -46,10 +46,10 @@ void scrolling::set_is_enabled(bool const is_enabled) {
     }
 }
 
-bool scrolling::is_enabled() const {
+bool horizontal_scrolling::is_enabled() const {
     return this->_is_enabled;
 }
 
-observing::endable scrolling::observe(std::function<void(scrolling_event const &)> &&handler) {
+observing::endable horizontal_scrolling::observe(std::function<void(scrolling_event const &)> &&handler) {
     return this->_notifier->observe(std::move(handler));
 }

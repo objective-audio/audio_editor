@@ -47,7 +47,7 @@ ui_base_lifetime::ui_base_lifetime(ae::project_lifetime_id const &lifetime_id)
       markers(ui_markers::make_shared(lifetime_id, this->node_hierarchy->markers_node)),
       pasting_markers(ui_pasting_markers::make_shared(lifetime_id, this->node_hierarchy->pasting_markers_node)),
       zooming(ui_zooming::make_shared(lifetime_id, this->modules.get(), this->pasting_modules.get(), this->grid.get())),
-      scroller(ui_scroller::make_shared(lifetime_id, this->node_hierarchy->scroller_node.get())),
+      scroller(ui_scroller::make_shared(lifetime_id, this->node_hierarchy->scroller_nodes)),
       modal_bg(ui_modal_bg::make_shared(lifetime_id, this->node_hierarchy->modal_bg_node)),
       time_base(ui_time_base::make_shared(lifetime_id, this->node_hierarchy->time_base_node)),
       time_numbers(ui_time_numbers::make_shared(lifetime_id, this->node_hierarchy->time_strings_node)),

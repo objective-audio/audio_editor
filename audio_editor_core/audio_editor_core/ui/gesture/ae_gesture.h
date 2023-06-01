@@ -20,7 +20,8 @@ struct pinch_gesture final {
 
 struct scroll_gesture final {
     gesture_state state;
-    double delta_time;
+    double delta_x;
+    double delta_y;
 };
 }  // namespace yas::ae
 

@@ -1,5 +1,5 @@
 //
-//  ae_scrolling.h
+//  ae_horizontal_scrolling.h
 //
 
 #pragma once
@@ -9,8 +9,8 @@
 #include <audio_editor_core/ae_scrolling_types.h>
 
 namespace yas::ae {
-struct scrolling final : scrolling_for_player, scrolling_for_gesture_controller {
-    scrolling();
+struct horizontal_scrolling final : scrolling_for_player, horizontal_scrolling_for_gesture_controller {
+    horizontal_scrolling();
 
     void begin() override;
     void set_delta_time(double const) override;
@@ -28,9 +28,9 @@ struct scrolling final : scrolling_for_player, scrolling_for_gesture_controller 
     bool _is_enabled = true;
     bool _is_began = false;
 
-    scrolling(scrolling const &) = delete;
-    scrolling(scrolling &&) = delete;
-    scrolling &operator=(scrolling const &) = delete;
-    scrolling &operator=(scrolling &&) = delete;
+    horizontal_scrolling(horizontal_scrolling const &) = delete;
+    horizontal_scrolling(horizontal_scrolling &&) = delete;
+    horizontal_scrolling &operator=(horizontal_scrolling const &) = delete;
+    horizontal_scrolling &operator=(horizontal_scrolling &&) = delete;
 };
 }  // namespace yas::ae

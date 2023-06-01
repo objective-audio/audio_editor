@@ -1,28 +1,28 @@
 //
-//  ae_scrolling_tests.mm
+//  ae_horizontal_scrolling_tests.mm
 //
 
 #import <XCTest/XCTest.h>
-#include <audio_editor_core/ae_scrolling.h>
+#include <audio_editor_core/ae_horizontal_scrolling.h>
 
 using namespace yas;
 using namespace yas::ae;
 
-@interface ae_scrolling_tests : XCTestCase
+@interface ae_horizontal_scrolling_tests : XCTestCase
 
 @end
 
-@implementation ae_scrolling_tests
+@implementation ae_horizontal_scrolling_tests
 
 - (void)test_initial {
-    auto const scrolling = std::make_shared<ae::scrolling>();
+    auto const scrolling = std::make_shared<ae::horizontal_scrolling>();
 
     XCTAssertFalse(scrolling->is_began());
     XCTAssertTrue(scrolling->is_enabled());
 }
 
 - (void)test_observe {
-    auto const scrolling = std::make_shared<ae::scrolling>();
+    auto const scrolling = std::make_shared<ae::horizontal_scrolling>();
 
     std::vector<scrolling_event> called;
 
@@ -62,7 +62,7 @@ using namespace yas::ae;
 }
 
 - (void)test_is_enabled {
-    auto const scrolling = std::make_shared<ae::scrolling>();
+    auto const scrolling = std::make_shared<ae::horizontal_scrolling>();
 
     std::vector<scrolling_event> called;
 
