@@ -136,9 +136,9 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
           this->file_module_loading_state_holder.get(), this->database.get(), this->pasteboard.get())),
       import_interactor(std::make_shared<ae::import_interactor>(this->modal_lifecycle.get(), this->editing_status.get(),
                                                                 this->file_module_loader.get())),
-      module_editor(std::make_shared<ae::module_editor>(
-          project_lifetime->player.get(), this->module_pool.get(), this->marker_pool.get(),
-          this->selected_module_pool.get(), this->pasteboard.get(), this->database.get(), this->editing_status.get())),
+      module_editor(std::make_shared<ae::module_editor>(project_lifetime->player.get(), this->module_pool.get(),
+                                                        this->marker_pool.get(), this->selected_module_pool.get(),
+                                                        this->pasteboard.get(), this->editing_status.get())),
       range_selector(std::make_shared<ae::range_selector>(project_lifetime->player.get(), this->deselector.get())),
       display_space_range(std::make_shared<ae::display_space_range>(
           project_lifetime->project_format, project_lifetime->display_space.get(), project_lifetime->player.get())),

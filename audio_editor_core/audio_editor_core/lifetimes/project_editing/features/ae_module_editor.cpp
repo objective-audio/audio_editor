@@ -4,7 +4,6 @@
 
 #include "ae_module_editor.h"
 
-#include <audio_editor_core/ae_database.h>
 #include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
 #include <audio_editor_core/ae_file_info_loader.h>
@@ -25,14 +24,13 @@ using namespace yas;
 using namespace yas::ae;
 
 module_editor::module_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
-                             selected_module_pool *selected_pool, pasteboard *pasteboard, database *database,
+                             selected_module_pool *selected_pool, pasteboard *pasteboard,
                              editing_status const *editing_status)
     : _player(player),
       _module_pool(module_pool),
       _marker_pool(marker_pool),
       _selected_pool(selected_pool),
       _pasteboard(pasteboard),
-      _database(database),
       _editing_status(editing_status) {
 }
 

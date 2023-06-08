@@ -16,8 +16,7 @@ class database;
 class editing_status;
 
 struct module_editor final {
-    module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, pasteboard *, database *,
-                  editing_status const *);
+    module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, pasteboard *, editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -42,7 +41,6 @@ struct module_editor final {
     marker_pool *const _marker_pool;
     selected_module_pool *const _selected_pool;
     pasteboard *const _pasteboard;
-    database *const _database;
     editing_status const *const _editing_status;
 
     observing::canceller_pool _pool;
