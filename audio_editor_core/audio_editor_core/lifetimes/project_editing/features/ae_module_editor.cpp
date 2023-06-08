@@ -211,7 +211,7 @@ void module_editor::paste() {
 
     for (auto const &module : modules) {
         auto const &module_value = module.value;
-        this->_module_pool->overwrite_module({module_value.name, module_value.range.offset(current_frame),
+        this->_module_pool->overwrite_module({module_value.name, module_value.range.offset(current_frame), 0,
                                               module_value.file_frame, module_value.file_name});
     }
 }

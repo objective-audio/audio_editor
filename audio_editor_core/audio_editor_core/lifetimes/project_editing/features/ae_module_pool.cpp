@@ -197,7 +197,7 @@ void module_pool::overwrite_module(module const &params) {
         auto const cropped_ranges = overlapped_module.value.range.cropped(params.range);
         for (auto const &cropped_range : cropped_ranges) {
             frame_index_t const file_frame_offset = cropped_range.frame - overlapped_module.value.range.frame;
-            this->insert_module_and_notify({overlapped_module.value.name, cropped_range,
+            this->insert_module_and_notify({overlapped_module.value.name, cropped_range, overlapped_module.value.track,
                                             overlapped_module.value.file_frame + file_frame_offset,
                                             overlapped_module.value.file_name});
         }
