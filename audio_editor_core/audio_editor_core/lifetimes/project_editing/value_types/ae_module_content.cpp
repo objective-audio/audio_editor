@@ -65,17 +65,18 @@ bool module_content::mesh_element::operator!=(mesh_element const &rhs) const {
 
 module_content::module_content(module_object const &module, bool const is_selected, uint32_t const sample_rate,
                                time::range const &space_range, float const scale)
-    : module_content(module.identifier, module.value.range, is_selected, sample_rate,
+    : module_content(module.identifier, module.value.range, module.value.track, is_selected, sample_rate,
                      module_content_utils::make_mesh_elements(module.value.range, sample_rate, space_range, scale),
                      scale) {
 }
 
-module_content::module_content(object_id const &identifier, time::range const &range, bool const is_selected,
-                               uint32_t const sample_rate,
+module_content::module_content(object_id const &identifier, time::range const &range, track_index_t const track,
+                               bool const is_selected, uint32_t const sample_rate,
                                std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale)
     : identifier(identifier),
       sample_rate(sample_rate),
       range(range),
+      track(track),
       is_selected(is_selected),
       mesh_elements(mesh_elements),
       scale(scale) {
@@ -113,7 +114,7 @@ std::optional<float> module_content::element_offset_x(std::size_t const idx) con
 
 bool module_content::operator==(module_content const &rhs) const {
     return this->identifier == rhs.identifier && this->sample_rate == rhs.sample_rate && this->range == rhs.range &&
-           this->is_selected == rhs.is_selected && this->scale == rhs.scale &&
+           this->track == rhs.track && this->is_selected == rhs.is_selected && this->scale == rhs.scale &&
            equal(this->mesh_elements, rhs.mesh_elements);
 }
 
