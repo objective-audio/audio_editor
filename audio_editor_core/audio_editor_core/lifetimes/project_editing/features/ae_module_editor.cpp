@@ -169,7 +169,8 @@ void module_editor::copy() {
             if (auto const module = module_pool->module_at(pair.first)) {
                 auto const &value = module.value().value;
                 pasting_modules.emplace_back(pasting_module_object{
-                    identifier{}, {value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}});
+                    identifier{},
+                    {value.name, value.file_frame, value.range.offset(-current_frame), value.track, value.file_name}});
             }
         }
 
@@ -178,7 +179,8 @@ void module_editor::copy() {
         if (auto const module = module_pool->module_at(current_frame)) {
             auto const &value = module.value().value;
             this->_pasteboard->set_modules(
-                {{identifier{}, {value.name, value.file_frame, value.range.offset(-current_frame), value.file_name}}});
+                {{identifier{},
+                  {value.name, value.file_frame, value.range.offset(-current_frame), value.track, value.file_name}}});
         }
     }
 }

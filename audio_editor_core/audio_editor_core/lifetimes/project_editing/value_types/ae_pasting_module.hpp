@@ -12,10 +12,11 @@ struct pasting_module final {
     std::string name;
     frame_index_t file_frame;
     time::range range;
+    track_index_t track;
     std::string file_name;
 
     pasting_module(std::string const &name, frame_index_t const file_frame, time::range const &range,
-                   std::string const &file_name);
+                   track_index_t const track, std::string const &file_name);
 };
 
 struct pasting_module_object final {

@@ -16,14 +16,14 @@ using namespace yas::ae;
 @implementation ae_pasting_module_tests
 
 - (void)test_to_string {
-    pasting_module const module{"test-name-3", 100, {200, 300}, "test-file-name-3"};
+    pasting_module const module{"test-name-3", 100, {200, 300}, 400, "test-file-name-3"};
 
     XCTAssertEqual(to_string(module),
-                   "{name:test-name-3, file_frame:100, range:{200, 300}, file_name:test-file-name-3}");
+                   "{name:test-name-3, file_frame:100, range:{200, 300}, track:400, file_name:test-file-name-3}");
 }
 
 - (void)test_ostream {
-    pasting_module const value{"test-name-4", 1000, {2000, 3000}, "test-file-name-4"};
+    pasting_module const value{"test-name-4", 1000, {2000, 3000}, 4000, "test-file-name-4"};
 
     std::ostringstream stream;
     stream << value;

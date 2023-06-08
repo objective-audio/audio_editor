@@ -76,7 +76,7 @@ void file_module_loader::load(std::filesystem::path const &src_path) {
                  loader->_pasteboard->clear();
                  loader->_pasteboard->set_modules({pasting_module_object{
                      identifier{},
-                     pasting_module{src_file_name, 0, time::range{0, file_info.value().length}, dst_file_name}}});
+                     pasting_module{src_file_name, 0, time::range{0, file_info.value().length}, 0, dst_file_name}}});
              }
 
              loader->_state_holder->set_state(file_module_loading_state::waiting);
