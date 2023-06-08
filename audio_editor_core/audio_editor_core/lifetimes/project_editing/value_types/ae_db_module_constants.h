@@ -16,6 +16,7 @@ namespace module_name {
         static std::string const range_frame = "range_frame";
         static std::string const range_length = "range_length";
         static std::string const file_name = "file_name";
+        static std::string const track = "track";
     }  // namespace attribute
 }  // namespace module_name
 }  // namespace yas::ae::db_constants

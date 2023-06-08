@@ -21,6 +21,7 @@ db_module db_module::create(db::manager_ptr const &manager, ae::module const &pa
     object->set_attribute_value(module_name::attribute::range_frame, db::value{params.range.frame});
     object->set_attribute_value(module_name::attribute::range_length, db::value{params.range.length});
     object->set_attribute_value(module_name::attribute::file_name, db::value{params.file_name});
+    object->set_attribute_value(module_name::attribute::track, db::value{0});
     return db_module{std::move(object)};
 }
 
@@ -34,14 +35,16 @@ std::optional<module_object> db_module::object() const {
     auto const &range_frame_value = this->_object->attribute_value(module_name::attribute::range_frame);
     auto const &range_length_value = this->_object->attribute_value(module_name::attribute::range_length);
     auto const &file_name_value = this->_object->attribute_value(module_name::attribute::file_name);
+    auto const &track_value = this->_object->attribute_value(module_name::attribute::track);
 
-    if (name_value && file_frame_value && range_frame_value && range_length_value && file_name_value) {
+    if (name_value && file_frame_value && range_frame_value && range_length_value && file_name_value && track_value) {
         if (auto const range_length = static_cast<proc::length_t>(range_length_value.get<db::integer>());
             range_length > 0) {
             auto name = name_value.get<db::text>();
             auto const file_frame = file_frame_value.get<db::integer>();
             auto const range_frame = range_frame_value.get<db::integer>();
             auto const file_name = file_name_value.get<db::text>();
+            auto const track = track_value.get<db::integer>();
             return ae::module_object{this->_object->object_id(),
                                      {std::move(name), time::range{range_frame, range_length}, file_frame, file_name}};
         }

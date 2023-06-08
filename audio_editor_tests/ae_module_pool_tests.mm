@@ -21,6 +21,7 @@ struct database_mock : database_for_module_pool {
         object->set_attribute_value(db_constants::module_name::attribute::range_length, db::value{params.range.length});
         object->set_attribute_value(db_constants::module_name::attribute::file_frame, db::value{params.file_frame});
         object->set_attribute_value(db_constants::module_name::attribute::file_name, db::value{params.file_name});
+        object->set_attribute_value(db_constants::module_name::attribute::track, db::value{0});
         return db_module{object};
     }
 

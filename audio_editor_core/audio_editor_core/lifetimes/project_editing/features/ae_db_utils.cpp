@@ -13,7 +13,7 @@ using namespace yas::ae;
 using namespace yas::ae::db_constants;
 
 db::model database_utils::make_model() {
-    yas::version version{"0.0.4"};
+    yas::version version{"0.0.5"};
 
     db::entity_args module_entity{.name = module_name::entity,
                                   .attributes = {{.name = module_name::attribute::name,
@@ -33,6 +33,10 @@ db::model database_utils::make_model() {
                                                   .default_value = db::value{0},
                                                   .not_null = true},
                                                  {.name = module_name::attribute::range_length,
+                                                  .type = db::attribute_type::integer,
+                                                  .default_value = db::value{0},
+                                                  .not_null = true},
+                                                 {.name = module_name::attribute::track,
                                                   .type = db::attribute_type::integer,
                                                   .default_value = db::value{0},
                                                   .not_null = true}},
