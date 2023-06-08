@@ -11,8 +11,9 @@
 namespace yas::ae {
 struct selected_module final {
     time::range range;
+    track_index_t track;
 
-    selected_module(time::range const &range);
+    selected_module(time::range const &, track_index_t const);
 };
 
 struct selected_module_object final {

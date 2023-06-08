@@ -27,7 +27,7 @@ void module_selector::select(std::vector<module_index> const &indices) {
     this->_selected_pool->clear();
 
     auto const inserting = to_vector<selected_module_object>(indices, [](auto const &index) {
-        return selected_module_object{index.object_id, {index.range}};
+        return selected_module_object{index.object_id, {index.range, 0}};
     });
 
     this->_selected_pool->insert(inserting);
@@ -39,7 +39,7 @@ bool module_selector::can_toggle() const {
 
 void module_selector::toggle(module_index const &index) {
     if (this->_module_pool->modules().contains(index)) {
-        this->_selected_pool->toggle(selected_module_object{index.object_id, {index.range}});
+        this->_selected_pool->toggle(selected_module_object{index.object_id, {index.range, 0}});
     } else {
         assertion_failure_if_not_test();
     }
