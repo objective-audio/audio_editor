@@ -83,7 +83,7 @@ module_content::module_content(object_id const &identifier, time::range const &r
 }
 
 module_index module_content::index() const {
-    return {this->identifier, this->range};
+    return {this->identifier, this->range, this->track};
 }
 
 float module_content::x() const {

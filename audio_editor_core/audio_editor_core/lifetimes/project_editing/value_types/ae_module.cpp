@@ -47,7 +47,7 @@ module module::offset(frame_index_t const offset) const {
 }
 
 module_index module_object::index() const {
-    return {this->identifier, this->value.range};
+    return {this->identifier, this->value.range, this->value.track};
 }
 
 std::string yas::to_string(ae::module const &module) {

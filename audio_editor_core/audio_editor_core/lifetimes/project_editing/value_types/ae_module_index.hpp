@@ -10,8 +10,9 @@ namespace yas::ae {
 struct module_index final {
     object_id object_id;
     time::range range;
+    track_index_t track;
 
-    module_index(ae::object_id const &, time::range const &);
+    module_index(ae::object_id const &, time::range const &, track_index_t const track);
 
     bool operator==(module_index const &) const;
     bool operator!=(module_index const &) const;

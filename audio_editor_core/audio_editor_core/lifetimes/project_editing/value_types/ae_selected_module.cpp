@@ -15,7 +15,7 @@ selected_module_object::selected_module_object(object_id const &identifier, sele
 }
 
 module_index selected_module_object::index() const {
-    return {this->identifier, this->value.range};
+    return {this->identifier, this->value.range, this->value.track};
 }
 
 std::string yas::to_string(ae::selected_module const &module) {
