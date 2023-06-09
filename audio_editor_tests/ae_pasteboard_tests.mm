@@ -31,8 +31,8 @@ using namespace yas::ae;
     identifier const module_id_0;
     identifier const module_id_1;
 
-    pasteboard->set_modules({{module_id_0, {"test-name-1", 1, {2, 3}, "test-file-name-1"}},
-                             {module_id_1, {"test-name-2", 4, {5, 6}, "test-file-name-2"}}});
+    pasteboard->set_modules({{module_id_0, {"test-name-1", 1, {2, 3}, 10, "test-file-name-1"}},
+                             {module_id_1, {"test-name-2", 4, {5, 6}, 11, "test-file-name-2"}}});
 
     XCTAssertEqual(called.size(), 2);
     XCTAssertEqual(called.at(1), pasteboard_event::modules_replaced);
@@ -43,11 +43,13 @@ using namespace yas::ae;
     XCTAssertEqual(modules.at(0).value.name, "test-name-1");
     XCTAssertEqual(modules.at(0).value.file_frame, 1);
     XCTAssertEqual(modules.at(0).value.range, time::range(2, 3));
+    XCTAssertEqual(modules.at(0).value.track, 10);
     XCTAssertEqual(modules.at(0).value.file_name, "test-file-name-1");
     XCTAssertEqual(modules.at(1).identifier, module_id_1);
     XCTAssertEqual(modules.at(1).value.name, "test-name-2");
     XCTAssertEqual(modules.at(1).value.file_frame, 4);
     XCTAssertEqual(modules.at(1).value.range, time::range(5, 6));
+    XCTAssertEqual(modules.at(1).value.track, 11);
     XCTAssertEqual(modules.at(1).value.file_name, "test-file-name-2");
 
     pasteboard->clear();

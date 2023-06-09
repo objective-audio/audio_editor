@@ -26,11 +26,13 @@ struct module_content final {
 
     module_content(module_object const &, bool const is_selected, uint32_t const sample_rate,
                    time::range const &space_range, float const scale);
-    module_content(object_id const &, time::range const &, bool const is_selected, uint32_t const sample_rate,
-                   std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale);
+    module_content(object_id const &, time::range const &, track_index_t const track, bool const is_selected,
+                   uint32_t const sample_rate, std::vector<std::optional<mesh_element>> const &mesh_elements,
+                   float const scale);
 
     object_id identifier;  // moduleと同じID
     time::range range;     // track内の位置
+    track_index_t track;
     bool is_selected;
     uint32_t sample_rate;
     std::vector<std::optional<mesh_element>> mesh_elements;

@@ -11,10 +11,12 @@ namespace yas::ae {
 struct module final {
     std::string name;
     time::range range;
+    track_index_t track;
     frame_index_t file_frame;
     std::string file_name;
 
-    module(std::string const &name, time::range const &, frame_index_t const file_frame, std::string const &file_name);
+    module(std::string const &name, time::range const &, track_index_t const track, frame_index_t const file_frame,
+           std::string const &file_name);
 
     [[nodiscard]] std::optional<module> head_dropped(frame_index_t const) const;
     [[nodiscard]] std::optional<module> tail_dropped(frame_index_t const) const;

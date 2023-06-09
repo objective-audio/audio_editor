@@ -15,29 +15,54 @@ using namespace yas::ae;
 @implementation ae_module_index_tests
 
 - (void)test_equal {
-    auto const object_id_1 = db::make_temporary_id();
-    auto const object_id_2 = db::make_temporary_id();
+    auto const [object_id_1, object_id_2] = [self make_object_ids];
+    time::range const range_1{0, 1};
+    time::range const range_2{1, 1};
+    track_index_t const track_1 = 1;
+    track_index_t const track_2 = 2;
 
-    module_index const index1_1{object_id_1, time::range{0, 1}};
-    module_index const index2_1{object_id_2, time::range{0, 1}};
-    module_index const index1_2{object_id_1, time::range{0, 2}};
+    module_index const index_id1_r1_t1{object_id_1, range_1, track_1};
+    module_index const index_id2_r1_t1{object_id_2, range_1, track_1};
+    module_index const index_id1_r2_t1{object_id_1, range_2, track_1};
+    module_index const index_id1_r1_t2{object_id_1, range_1, track_2};
 
-    XCTAssertTrue(index1_1 == index1_2);
-    XCTAssertFalse(index1_1 != index1_2);
-    XCTAssertFalse(index1_1 == index2_1);
-    XCTAssertTrue(index1_1 != index2_1);
+    // object_id以外は判定には使われないので等しい
+    XCTAssertTrue(index_id1_r1_t1 == index_id1_r2_t1);
+    XCTAssertTrue(index_id1_r1_t1 == index_id1_r1_t2);
+    XCTAssertFalse(index_id1_r1_t1 != index_id1_r2_t1);
+    XCTAssertFalse(index_id1_r1_t1 != index_id1_r1_t2);
+    // object_idだけが違っていたら等しくない
+    XCTAssertFalse(index_id1_r1_t1 == index_id2_r1_t1);
+    XCTAssertTrue(index_id1_r1_t1 != index_id2_r1_t1);
 }
 
 - (void)test_less_than {
+    auto const [object_id_1, object_id_2] = [self make_object_ids];
+    time::range const range_1{0, 1};
+    time::range const range_2{1, 1};
+    track_index_t const track_1 = 1;
+    track_index_t const track_2 = 2;
+
+    module_index const index_id1_r1_t1{object_id_1, range_1, track_1};
+    module_index const index_id2_r1_t1{object_id_2, range_1, track_1};
+    module_index const index_id1_r2_t1{object_id_1, range_2, track_1};
+    module_index const index_id1_r1_t2{object_id_1, range_1, track_2};
+
+    XCTAssertTrue(index_id1_r1_t1 < index_id2_r1_t1);
+    XCTAssertTrue(index_id1_r1_t1 < index_id1_r2_t1);
+    XCTAssertTrue(index_id1_r1_t1 < index_id1_r1_t2);
+    XCTAssertTrue(index_id1_r1_t2 < index_id1_r2_t1);
+}
+
+- (std::pair<db::object_id, db::object_id>)make_object_ids {
     auto const object_id_1 = db::make_temporary_id();
     auto const object_id_2 = db::make_temporary_id();
 
-    module_index const index1_1{object_id_1, time::range{0, 1}};
-    module_index const index2_1{object_id_2, time::range{0, 1}};
-    module_index const index1_2{object_id_1, time::range{0, 2}};
-
-    XCTAssertTrue(index1_1 < index1_2);
-    XCTAssertEqual(index1_1 < index2_1, object_id_1.identifier() < object_id_2.identifier());
+    if (object_id_1.identifier() < object_id_2.identifier()) {
+        return std::make_pair(object_id_1, object_id_2);
+    } else {
+        return std::make_pair(object_id_2, object_id_1);
+    }
 }
 
 @end
