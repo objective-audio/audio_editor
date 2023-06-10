@@ -25,8 +25,8 @@ using namespace yas::ae;
     bool const is_selected_2 = true;
     uint32_t const sample_rate_1 = 1;
     uint32_t const sample_rate_2 = 2;
-    float const scale_1 = 1.0f;
-    float const scale_2 = 2.0f;
+    ui::size const scale_1{.width = 1.0f, .height = 1.0f};
+    ui::size const scale_2{.width = 2.0f, .height = 2.0f};
 
     auto make_mesh_elements = [](length_t const length) {
         return std::vector<std::optional<module_content::mesh_element>>{{{.range = {1, length}}}};

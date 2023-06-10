@@ -16,12 +16,13 @@ using mesh_element = module_content::mesh_element;
 
 static std::vector<std::optional<mesh_element>> make_mesh_elements(time::range const &module_range,
                                                                    uint32_t const sample_rate,
-                                                                   time::range const &space_range, float const scale) {
+                                                                   time::range const &space_range,
+                                                                   ui::size const scale) {
     std::vector<std::optional<mesh_element>> mesh_elements;
 
     uint32_t const mesh_width_interval = module_content::mesh_element::max_length;
     double const width = static_cast<double>(module_range.length) / static_cast<double>(sample_rate);
-    double const total_mesh_width = width * scale;
+    double const total_mesh_width = width * scale.width;
     uint32_t const floored_mesh_width = static_cast<uint32_t>(std::floor(total_mesh_width));
     uint32_t const ceiled_mesh_width = static_cast<uint32_t>(std::ceil(total_mesh_width));
     bool const has_fraction = floored_mesh_width != ceiled_mesh_width;
@@ -64,7 +65,7 @@ bool module_content::mesh_element::operator!=(mesh_element const &rhs) const {
 }
 
 module_content::module_content(module_object const &module, bool const is_selected, uint32_t const sample_rate,
-                               time::range const &space_range, float const scale)
+                               time::range const &space_range, ui::size const scale)
     : module_content(module.identifier, module.value.range, module.value.track, is_selected, sample_rate,
                      module_content_utils::make_mesh_elements(module.value.range, sample_rate, space_range, scale),
                      scale) {
@@ -72,7 +73,7 @@ module_content::module_content(module_object const &module, bool const is_select
 
 module_content::module_content(object_id const &identifier, time::range const &range, track_index_t const track,
                                bool const is_selected, uint32_t const sample_rate,
-                               std::vector<std::optional<mesh_element>> const &mesh_elements, float const scale)
+                               std::vector<std::optional<mesh_element>> const &mesh_elements, ui::size const scale)
     : identifier(identifier),
       sample_rate(sample_rate),
       range(range),
@@ -90,8 +91,24 @@ float module_content::x() const {
     return static_cast<double>(this->range.frame) / static_cast<double>(this->sample_rate);
 }
 
+float module_content::top_y() const {
+    return static_cast<double>(this->track) + 0.5;
+}
+
+float module_content::middle_y() const {
+    return static_cast<double>(this->track);
+}
+
+float module_content::bottom_y() const {
+    return static_cast<double>(this->track) - 0.5;
+}
+
 float module_content::width() const {
     return static_cast<double>(this->range.length) / static_cast<double>(this->sample_rate);
+}
+
+float module_content::height() const {
+    return 1.0f;
 }
 
 uint32_t module_content::total_rect_count() const {
