@@ -57,6 +57,8 @@
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_project_settings_opener.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
+#include <audio_editor_core/ae_track_selector.hpp>
+#include <audio_editor_core/ae_vertical_scrolling.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -98,6 +100,7 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
       exporter(std::make_shared<ae::exporter>()),
       editing_status(std::make_shared<ae::editing_status>(this->exporter.get())),
       deselector(std::make_shared<ae::deselector>(this->selected_module_pool.get(), this->selected_marker_pool.get())),
+      track_selector(std::make_shared<ae::track_selector>(project_lifetime->vertical_scrolling.get())),
       module_selector(std::make_shared<ae::module_selector>(this->module_pool.get(), this->selected_module_pool.get(),
                                                             this->editing_status.get())),
       marker_selector(std::make_shared<ae::marker_selector>(this->marker_pool.get(), this->selected_marker_pool.get(),

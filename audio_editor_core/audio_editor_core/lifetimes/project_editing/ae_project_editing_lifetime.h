@@ -59,6 +59,7 @@ class escaper;
 class project_editing_receiver;
 class project_lifetime;
 class display_space_range;
+class track_selector;
 
 struct project_editing_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_editing_lifetime> make_shared(project_lifetime_id const &);
@@ -90,6 +91,7 @@ struct project_editing_lifetime final {
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<editing_status> const editing_status;
     std::shared_ptr<deselector> const deselector;
+    std::shared_ptr<track_selector> const track_selector;
     std::shared_ptr<module_selector> const module_selector;
     std::shared_ptr<marker_selector> const marker_selector;
     std::shared_ptr<playing_toggler> const playing_toggler;
