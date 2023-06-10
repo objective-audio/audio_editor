@@ -238,8 +238,8 @@ void ui_modules::_replace_data(std::vector<std::optional<module_content>> const 
 
                 if (content.has_value()) {
                     auto const &value = content.value();
-                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
-                                            .size = {.width = value.width(), .height = 1.0f}};
+                    ui::region const region{.origin = {.x = value.x(), .y = value.bottom_y()},
+                                            .size = {.width = value.width(), .height = value.height()}};
                     rect.set_position(region);
                     rect.set_tex_coord(filled_tex_coords);
 
@@ -348,8 +348,8 @@ void ui_modules::_update_data(std::size_t const count,
                 if (range.contains(content_idx)) {
                     auto const vertex_idx = content_idx - range.index;
                     auto const &value = pair.second;
-                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
-                                            .size = {.width = value.width(), .height = 1.0f}};
+                    ui::region const region{.origin = {.x = value.x(), .y = value.bottom_y()},
+                                            .size = {.width = value.width(), .height = value.height()}};
 
                     auto &rect = vertex_rects[vertex_idx];
                     rect.set_position(region);
@@ -453,8 +453,8 @@ void ui_modules::_update_name_position(std::size_t const idx, ae::module_content
     auto const &strings = this->_names.at(idx);
     auto const &node = strings->rect_plane()->node();
 
-    node->set_position({.x = content.x() * this->_scale.width, .y = this->_scale.height * 0.5f});
+    node->set_position({.x = content.x() * this->_scale.width, .y = content.top_y() * this->_scale.height});
     strings->preferred_layout_guide()->set_region(
         {.origin = {.x = 0.0f, .y = -this->_scale.height},
-         .size = {.width = content.width() * this->_scale.width, .height = this->_scale.height}});
+         .size = {.width = content.width() * this->_scale.width, .height = content.height() * this->_scale.height}});
 }

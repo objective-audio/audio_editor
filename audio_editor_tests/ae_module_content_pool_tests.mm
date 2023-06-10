@@ -9,11 +9,12 @@ using namespace yas;
 using namespace yas::ae;
 
 static time::range const dummy_range{0, 1};
+static ui::size const dummy_scale = ui::size::zero();
 
 namespace yas::ae::test_utils::module_content_pool {
 static module_content make_module_content(db::object_id const &object_id, time::range const range = dummy_range,
                                           sample_rate_t const sample_rate = 0) {
-    return {object_id, range, 0, false, sample_rate, {}, 0.0f};
+    return {object_id, range, 0, false, sample_rate, {}, dummy_scale};
 };
 }
 

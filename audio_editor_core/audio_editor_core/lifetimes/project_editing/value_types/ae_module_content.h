@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <cpp_utils/yas_identifier.h>
+#include <ui/yas_ui_types.h>
 
 #include <audio_editor_core/ae_module_index.hpp>
 
@@ -25,10 +26,10 @@ struct module_content final {
     };
 
     module_content(module_object const &, bool const is_selected, uint32_t const sample_rate,
-                   time::range const &space_range, float const scale);
+                   time::range const &space_range, ui::size const scale);
     module_content(object_id const &, time::range const &, track_index_t const track, bool const is_selected,
                    uint32_t const sample_rate, std::vector<std::optional<mesh_element>> const &mesh_elements,
-                   float const scale);
+                   ui::size const scale);
 
     object_id identifier;  // moduleと同じID
     time::range range;     // track内の位置
@@ -36,12 +37,16 @@ struct module_content final {
     bool is_selected;
     uint32_t sample_rate;
     std::vector<std::optional<mesh_element>> mesh_elements;
-    float scale;
+    ui::size scale;
 
     [[nodiscard]] module_index index() const;
 
     [[nodiscard]] float x() const;
+    [[nodiscard]] float top_y() const;
+    [[nodiscard]] float middle_y() const;
+    [[nodiscard]] float bottom_y() const;
     [[nodiscard]] float width() const;
+    [[nodiscard]] float height() const;
     [[nodiscard]] uint32_t total_rect_count() const;
 
     [[nodiscard]] std::optional<float> element_offset_x(std::size_t const) const;

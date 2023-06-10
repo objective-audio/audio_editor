@@ -53,7 +53,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_content const 
             auto const file_result = audio::file::make_opened({.file_path = path});
             if (file_result) {
                 auto const &scale = content.scale;
-                double const rect_width = 1.0 / scale;
+                double const rect_width = 1.0 / scale.width;
 
                 struct dynamic_data final {
                     std::shared_ptr<ui::dynamic_mesh_vertex_data> vertex_data;
@@ -137,11 +137,12 @@ void waveform_mesh_importer::import(std::size_t const idx, module_content const 
                         auto *vertex_rects_data = (ui::vertex2d_rect *)vec.data();
                         // moduleの終わりのはみ出る部分を調整したい
                         if ((vertex_rect_idx * ui::vertex2d_rect::vector_count) < vec.size()) {
-                            vertex_rects_data[vertex_rect_idx].set_position(
-                                ui::region{.origin = {.x = mesh_element_head_x_value +
-                                                           static_cast<float>(vertex_rect_idx * rect_width),
-                                                      .y = min},
-                                           .size = {.width = static_cast<float>(rect_width), .height = max - min}});
+                            // 縦は最大値から最小値を1.0としたいので0.5倍する
+                            vertex_rects_data[vertex_rect_idx].set_position(ui::region{
+                                .origin = {.x = mesh_element_head_x_value +
+                                                static_cast<float>(vertex_rect_idx * rect_width),
+                                           .y = min * 0.5f},
+                                .size = {.width = static_cast<float>(rect_width), .height = (max - min) * 0.5f}});
                         } else {
                             assert(0);
                         }

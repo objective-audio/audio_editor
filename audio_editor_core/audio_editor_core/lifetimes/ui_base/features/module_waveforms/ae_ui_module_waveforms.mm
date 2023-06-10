@@ -151,7 +151,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
 }
 
 void ui_module_waveforms::set_scale(ui::size const &scale) {
-    this->node->set_scale({.width = 1.0f, .height = scale.height * 0.5f});
+    this->node->set_scale({.width = 1.0f, .height = scale.height});
 
     if (this->_scale != scale.width) {
         bool const prev_null = !this->_scale.has_value();
@@ -192,8 +192,10 @@ void ui_module_waveforms::_replace_elements(bool const clear_meshes) {
         }
 
         if (content.has_value()) {
+            auto const &content_value = content.value();
             element->node->set_is_enabled(true);
-            element->node->set_position({.x = content.value().x() * content.value().scale, .y = 0.0f});
+            element->node->set_position(
+                {.x = content_value.x() * content_value.scale.width, .y = content_value.middle_y()});
             this->_presenter->import(idx, content.value());
         } else {
             element->node->set_is_enabled(false);
@@ -241,7 +243,7 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
             auto const &content = pair.second;
             auto &element = this->_elements.at(idx);
             element->node->set_is_enabled(true);
-            element->node->set_position({.x = content.x() * content.scale, .y = 0.0f});
+            element->node->set_position({.x = content.x() * content.scale.width, .y = content.middle_y()});
             auto const &color = content.is_selected ? selected_color : normal_color;
             element->update_colors(color);
             this->_presenter->import(idx, content);
@@ -258,7 +260,7 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
             auto &element = this->_elements.at(idx);
             element->clear();
             element->node->set_is_enabled(true);
-            element->node->set_position({.x = content.x() * content.scale, .y = 0.0f});
+            element->node->set_position({.x = content.x() * content.scale.width, .y = content.middle_y()});
             auto const &color = content.is_selected ? selected_color : normal_color;
             element->update_colors(color);
             this->_presenter->import(idx, content);

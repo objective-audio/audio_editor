@@ -162,7 +162,7 @@ void modules_presenter::_insert_content(module_object const &module) {
     auto const space_range = this->_space_range();
     if (space_range.has_value() && module.value.range.is_overlap(space_range.value())) {
         content_pool->insert({module, selected_pool->contains(module.index()), this->_project_format.sample_rate,
-                              space_range.value(), display_space->scale().width});
+                              space_range.value(), display_space->scale()});
     }
 }
 
@@ -192,7 +192,7 @@ void modules_presenter::_replace_contents(std::vector<module_index> const &indic
                 if (auto const module = module_pool->module_at(index)) {
                     content_pool->replace({module.value(), selected_pool->contains(index),
                                            this->_project_format.sample_rate, space_range.value(),
-                                           display_space->scale().width});
+                                           display_space->scale()});
                 }
             }
         }
@@ -216,7 +216,7 @@ void modules_presenter::_update_all_contents(bool const force_updating, bool con
         }
 
         auto const &space_range_value = space_range.value();
-        auto const scale = display_space->scale().width;
+        auto const scale = display_space->scale();
 
         auto const contents = filter_map<module_content>(
             module_pool->modules(), [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale,
