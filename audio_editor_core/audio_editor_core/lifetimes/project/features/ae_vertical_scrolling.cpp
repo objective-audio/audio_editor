@@ -7,11 +7,15 @@
 using namespace yas;
 using namespace yas::ae;
 
-vertical_scrolling::vertical_scrolling() : _track(0.0) {
+vertical_scrolling::vertical_scrolling() : _track(observing::value::holder<double>::make_shared(0.0)) {
 }
 
 double vertical_scrolling::track() const {
-    return this->_track;
+    return this->_track->value();
+}
+
+observing::syncable vertical_scrolling::observe_track(std::function<void(double const &)> &&handler) {
+    return this->_track->observe(std::move(handler));
 }
 
 void vertical_scrolling::begin() {
@@ -22,7 +26,7 @@ void vertical_scrolling::begin() {
 
 void vertical_scrolling::set_delta_track(double const delta_track) {
     if (this->_is_began) {
-        this->_track += delta_track;
+        this->_track->set_value(this->_track->value() + delta_track);
     }
 }
 

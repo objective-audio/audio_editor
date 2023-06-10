@@ -9,6 +9,7 @@ struct vertical_scrolling final {
     vertical_scrolling();
 
     [[nodiscard]] double track() const;
+    [[nodiscard]] observing::syncable observe_track(std::function<void(double const &)> &&);
 
     void begin();
     void set_delta_track(double const);
@@ -16,7 +17,7 @@ struct vertical_scrolling final {
     [[nodiscard]] bool is_began() const;
 
    private:
-    double _track;
+    observing::value::holder_ptr<double> const _track;
 
     bool _is_began = false;
 
