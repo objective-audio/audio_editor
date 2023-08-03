@@ -18,18 +18,20 @@
 #include <audio_editor_core/ae_timeline_holder_utils.h>
 #include <cpp_utils/yas_fast_each.h>
 
+#include <audio_editor_core/ae_track_selector.hpp>
 #include <processing/yas_processing_umbrella.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 module_editor::module_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
-                             selected_module_pool *selected_pool, pasteboard *pasteboard,
-                             editing_status const *editing_status)
+                             selected_module_pool *selected_pool, track_selector const *track_selector,
+                             pasteboard *pasteboard, editing_status const *editing_status)
     : _player(player),
       _module_pool(module_pool),
       _marker_pool(marker_pool),
       _selected_pool(selected_pool),
+      _track_selector(track_selector),
       _pasteboard(pasteboard),
       _editing_status(editing_status) {
 }
@@ -41,7 +43,7 @@ bool module_editor::can_split() const {
 
     auto const &module_pool = this->_module_pool;
     auto const current_frame = this->_player->current_frame();
-    return module_pool->splittable_module_at(current_frame).has_value();
+    return !module_pool->splittable_modules_at({this->_track_selector->current()}, current_frame).empty();
 }
 
 void module_editor::split() {
@@ -52,7 +54,7 @@ void module_editor::split() {
     this->_selected_pool->clear();
 
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->split_at(current_frame);
+    this->_module_pool->split_at({this->_track_selector->current()}, current_frame);
 }
 
 void module_editor::drop_head() {
@@ -61,7 +63,7 @@ void module_editor::drop_head() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->drop_head_at(current_frame);
+    this->_module_pool->drop_head_at({this->_track_selector->current()}, current_frame);
 }
 
 void module_editor::drop_tail() {
@@ -72,43 +74,7 @@ void module_editor::drop_tail() {
     this->_selected_pool->clear();
 
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->drop_tail_at(current_frame);
-}
-
-void module_editor::drop_head_and_offset() {
-    if (!this->can_split()) {
-        return;
-    }
-
-    this->_selected_pool->clear();
-
-    auto const current_frame = this->_player->current_frame();
-    auto const seek_frame = this->_module_pool->module_at(current_frame).value().value.range.frame;
-
-    auto const module_range = this->_module_pool->module_at(current_frame)->value.range;
-    this->_module_pool->drop_head_and_offset_at(current_frame);
-    auto const dropping_length = current_frame - module_range.frame;
-    this->_marker_pool->erase({module_range.frame, static_cast<proc::length_t>(dropping_length)});
-    auto const offset = -dropping_length;
-    this->_marker_pool->move_offset_from(current_frame, offset);
-
-    this->_player->seek(seek_frame);
-}
-
-void module_editor::drop_tail_and_offset() {
-    if (!this->can_split()) {
-        return;
-    }
-
-    this->_selected_pool->clear();
-
-    auto const current_frame = this->_player->current_frame();
-    auto const module_range = this->_module_pool->module_at(current_frame)->value.range;
-    this->_module_pool->drop_tail_and_offset_at(current_frame);
-    auto const dropping_length = module_range.next_frame() - current_frame;
-    this->_marker_pool->erase({current_frame, static_cast<proc::length_t>(dropping_length)});
-    auto const offset = -dropping_length;
-    this->_marker_pool->move_offset_from(module_range.next_frame(), offset);
+    this->_module_pool->drop_tail_at({this->_track_selector->current()}, current_frame);
 }
 
 bool module_editor::can_erase() const {
@@ -159,6 +125,7 @@ void module_editor::copy() {
     auto const &module_pool = this->_module_pool;
     auto const current_frame = this->_player->current_frame();
     auto const selected_modules = this->_selected_pool->elements();
+    track_index_t const current_track = this->_track_selector->current();
 
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
@@ -168,19 +135,21 @@ void module_editor::copy() {
         for (auto const &pair : selected_modules) {
             if (auto const module = module_pool->module_at(pair.first)) {
                 auto const &value = module.value().value;
-                pasting_modules.emplace_back(pasting_module_object{
-                    identifier{},
-                    {value.name, value.file_frame, value.range.offset(-current_frame), value.track, value.file_name}});
+                pasting_modules.emplace_back(
+                    pasting_module_object{identifier{},
+                                          {value.name, value.file_frame, value.range.offset(-current_frame),
+                                           value.track - current_track, value.file_name}});
             }
         }
 
         this->_pasteboard->set_modules(pasting_modules);
     } else {
-        if (auto const module = module_pool->module_at(current_frame)) {
-            auto const &value = module.value().value;
-            this->_pasteboard->set_modules(
-                {{identifier{},
-                  {value.name, value.file_frame, value.range.offset(-current_frame), value.track, value.file_name}}});
+        auto const modules = module_pool->modules_at({current_track}, current_frame);
+        for (auto const &pair : modules) {
+            auto const &value = pair.second.value;
+            this->_pasteboard->set_modules({{identifier{},
+                                             {value.name, value.file_frame, value.range.offset(-current_frame),
+                                              value.track - current_track, value.file_name}}});
         }
     }
 }
@@ -210,11 +179,13 @@ void module_editor::paste() {
     }
 
     auto const current_frame = this->_player->current_frame();
+    track_index_t const current_track = this->_track_selector->current();
 
     for (auto const &module : modules) {
         auto const &module_value = module.value;
-        this->_module_pool->overwrite_module({module_value.name, module_value.range.offset(current_frame), 0,
-                                              module_value.file_frame, module_value.file_name});
+        this->_module_pool->overwrite_module({module_value.name, module_value.range.offset(current_frame),
+                                              module_value.track + current_track, module_value.file_frame,
+                                              module_value.file_name});
     }
 }
 
@@ -223,7 +194,7 @@ bool module_editor::_has_target_modules() const {
         return true;
     } else {
         auto const current_frame = this->_player->current_frame();
-        return this->_module_pool->module_at(current_frame).has_value();
+        return !this->_module_pool->modules_at({this->_track_selector->current()}, current_frame).empty();
     }
 }
 
@@ -236,6 +207,6 @@ void module_editor::_erase_modules(selected_module_map &&selected_modules) {
         }
     } else {
         auto const current_frame = this->_player->current_frame();
-        this->_module_pool->erase_at(current_frame);
+        this->_module_pool->erase_at({this->_track_selector->current()}, current_frame);
     }
 }

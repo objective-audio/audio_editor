@@ -11,19 +11,19 @@ namespace yas::ae {
 class player;
 class module_pool;
 class marker_pool;
+class track_selector;
 class pasteboard;
 class database;
 class editing_status;
 
 struct module_editor final {
-    module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, pasteboard *, editing_status const *);
+    module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, track_selector const *, pasteboard *,
+                  editing_status const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
     void drop_head();
     void drop_tail();
-    void drop_head_and_offset();
-    void drop_tail_and_offset();
 
     [[nodiscard]] bool can_erase() const;
     void erase();
@@ -40,6 +40,7 @@ struct module_editor final {
     module_pool *const _module_pool;
     marker_pool *const _marker_pool;
     selected_module_pool *const _selected_pool;
+    track_selector const *const _track_selector;
     pasteboard *const _pasteboard;
     editing_status const *const _editing_status;
 

@@ -25,7 +25,7 @@ void scroll_gesture_controller::handle_gesture(scroll_gesture const &gesture) {
     auto const scale = this->_zooming_pair->scale();
     auto const width_per_sec = ui_zooming_constants::standard_width_per_sec * scale.horizontal;
     auto const delta_time = -gesture.delta_x / width_per_sec;
-    auto const height_per_track = ui_zooming_constants::standard_height_per_track;
+    auto const height_per_track = std::ceil(ui_zooming_constants::standard_height_per_track * scale.vertical);
     auto const delta_track = gesture.delta_y / height_per_track;
 
     switch (gesture.state) {

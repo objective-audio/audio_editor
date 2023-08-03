@@ -42,7 +42,7 @@ ui::point scroller_presenter::modules_position() const {
         double const seconds = static_cast<double>(player->current_frame()) / sample_rate;
 
         float const x = -seconds * ui_zooming_constants::standard_width_per_sec * scale.horizontal;
-        float const y = -track * ui_zooming_constants::standard_height_per_track;
+        float const y = -track * std::ceil(ui_zooming_constants::standard_height_per_track);
         return ui::point{.x = x, .y = y};
     }
 
@@ -64,10 +64,12 @@ float scroller_presenter::x() const {
 }
 
 float scroller_presenter::y() const {
-    if (auto const vertical_scrolling = this->_vertical_scrolling.lock()) {
-        double const track = vertical_scrolling->track();
+    if (auto const locked = yas::lock(this->_vertical_scrolling, this->_zooming_pair); fulfilled(locked)) {
+        auto const &[scrolling, zooming_pair] = locked;
+        double const track = scrolling->track();
+        auto const scale = zooming_pair->scale();
 
-        return -track * ui_zooming_constants::standard_height_per_track;
+        return -track * std::ceil(ui_zooming_constants::standard_height_per_track * scale.vertical);
     } else {
         return 0.0f;
     }

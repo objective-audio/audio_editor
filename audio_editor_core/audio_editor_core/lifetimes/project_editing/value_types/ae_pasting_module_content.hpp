@@ -14,16 +14,19 @@ class pasting_module_object;
 
 struct pasting_module_content final {
     identifier identifier;
+    track_index_t track;
     time::range range;
     uint32_t sample_rate;
     float scale;
 
     pasting_module_content(pasting_module_object const &, uint32_t const sample_rate, float const scale);
-    pasting_module_content(yas::identifier const &, time::range const &, uint32_t const sample_rate, float const scale);
+    pasting_module_content(yas::identifier const &, track_index_t const, time::range const &,
+                           uint32_t const sample_rate, float const scale);
 
     [[nodiscard]] pasting_module_index index() const;
 
     [[nodiscard]] float x() const;
+    [[nodiscard]] float y() const;
     [[nodiscard]] float width() const;
 
     bool operator==(pasting_module_content const &rhs) const;

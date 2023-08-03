@@ -146,17 +146,9 @@ std::optional<frame_index_t> jumper::_next_jumpable_frame() const {
 }
 
 std::optional<frame_index_t> jumper::_first_edge() const {
-    if (auto const module = this->_module_pool->first_module()) {
-        return module.value().value.range.frame;
-    } else {
-        return std::nullopt;
-    }
+    return this->_module_pool->first_frame();
 }
 
 std::optional<frame_index_t> jumper::_last_edge() const {
-    if (auto const module = this->_module_pool->last_module()) {
-        return module.value().value.range.next_frame();
-    } else {
-        return std::nullopt;
-    }
+    return this->_module_pool->last_next_frame();
 }

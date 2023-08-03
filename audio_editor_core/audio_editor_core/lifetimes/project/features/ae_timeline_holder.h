@@ -18,14 +18,13 @@ struct timeline_holder final {
 
     void replace(module_pool_module_map_t const &);
     void insert(module const &);
-    void erase(time::range const &);
+    void erase(track_index_t const, time::range const &);
 
    private:
     project_format const _project_format;
     project_path const *const _project_path;
 
     proc::timeline_ptr const _timeline;
-    proc::track_ptr _track;
 
     timeline_holder(timeline_holder const &) = delete;
     timeline_holder(timeline_holder &&) = delete;

@@ -46,9 +46,11 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
     : _presenter(presenter),
       _node(node),
       _color(color),
+      _scale_node(ui::node::make_shared()),
       _mesh_container(std::make_unique<dynamic_mesh_container<vertex2d_rect, frame_index2d_rect>>(
           ui_pasting_modules_constants::reserving_interval, ui_pasting_modules_utils::make_element)) {
-    node->add_sub_node(this->_mesh_container->node);
+    node->add_sub_node(this->_scale_node);
+    this->_scale_node->add_sub_node(this->_mesh_container->node);
 
     presenter
         ->observe_contents([this](pasting_module_content_pool_event const &event) {
@@ -58,7 +60,7 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
                     this->_replace(event.elements);
                     break;
                 case pasting_module_content_pool_event_type::updated:
-                    this->_update(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    this->_update_mesh(event.elements.size(), event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -66,7 +68,10 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
         ->add_to(this->_pool);
 
     standard->renderer()
-        ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
+        ->observe_will_render([this](auto const &) {
+            this->_presenter->update_if_needed();
+            this->_update_y_offset();
+        })
         .end()
         ->add_to(this->_pool);
 
@@ -78,7 +83,7 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
 }
 
 void ui_pasting_modules::set_scale(ui::size const &scale) {
-    this->_mesh_container->node->set_scale(scale);
+    this->_scale_node->set_scale(scale);
 }
 
 void ui_pasting_modules::_replace(std::vector<std::optional<pasting_module_content>> const &contents) {
@@ -99,7 +104,7 @@ void ui_pasting_modules::_replace(std::vector<std::optional<pasting_module_conte
 
             if (content.has_value()) {
                 auto const &value = content.value();
-                ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
+                ui::region const region{.origin = {.x = value.x(), .y = -0.5f + value.y()},
                                         .size = {.width = value.width(), .height = 1.0f}};
                 vertex_rects[vertex_idx].set_position(region);
             } else {
@@ -109,10 +114,10 @@ void ui_pasting_modules::_replace(std::vector<std::optional<pasting_module_conte
     });
 }
 
-void ui_pasting_modules::_update(std::size_t const count,
-                                 std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
-                                 std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
-                                 std::vector<std::pair<std::size_t, pasting_module_content>> const &erased) {
+void ui_pasting_modules::_update_mesh(std::size_t const count,
+                                      std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
+                                      std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
+                                      std::vector<std::pair<std::size_t, pasting_module_content>> const &erased) {
     this->_mesh_container->set_element_count(count);
 
     this->_mesh_container->write_vertex_elements(
@@ -130,11 +135,16 @@ void ui_pasting_modules::_update(std::size_t const count,
                 if (range.contains(content_idx)) {
                     auto const vertex_idx = content_idx - range.index;
                     auto const &value = pair.second;
-                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f},
+                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f + value.y()},
                                             .size = {.width = value.width(), .height = 1.0f}};
 
                     vertex_rects[vertex_idx].set_position(region);
                 }
             }
         });
+}
+
+void ui_pasting_modules::_update_y_offset() {
+    this->_mesh_container->node->set_position(
+        ui::point{.x = 0.0f, .y = static_cast<float>(this->_presenter->y_offset())});
 }

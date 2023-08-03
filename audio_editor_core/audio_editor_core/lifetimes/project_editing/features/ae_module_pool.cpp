@@ -74,127 +74,76 @@ std::optional<module_object> module_pool::module_at(module_index const &index) c
     }
 }
 
-std::optional<module_object> module_pool::module_at(frame_index_t const frame) const {
-    return module_pool_utils::module(this->_modules, frame);
+module_pool_module_map_t module_pool::modules_at(std::set<track_index_t> const &tracks,
+                                                 frame_index_t const frame) const {
+    return module_pool_utils::modules(this->_modules, tracks, frame);
 }
 
-std::optional<module_object> module_pool::previous_module_at(frame_index_t const frame) const {
-    return module_pool_utils::previous_module(this->_modules, frame);
+module_pool_module_map_t module_pool::splittable_modules_at(std::set<track_index_t> const &tracks,
+                                                            frame_index_t const frame) const {
+    return module_pool_utils::splittable_modules(this->_modules, tracks, frame);
 }
 
-std::optional<module_object> module_pool::next_module_at(frame_index_t const frame) const {
-    return module_pool_utils::next_module(this->_modules, frame);
+std::optional<frame_index_t> module_pool::first_frame() const {
+    return module_pool_utils::first_frame(this->_modules);
 }
 
-std::optional<module_object> module_pool::splittable_module_at(frame_index_t const frame) const {
-    return module_pool_utils::splittable_module(this->_modules, frame);
-}
-
-std::optional<module_object> module_pool::first_module() const {
-    return module_pool_utils::first_module(this->_modules);
-}
-
-std::optional<module_object> module_pool::last_module() const {
-    return module_pool_utils::last_module(this->_modules);
+std::optional<frame_index_t> module_pool::last_next_frame() const {
+    return module_pool_utils::last_next_frame(this->_modules);
 }
 
 std::optional<frame_index_t> module_pool::next_jumpable_frame(frame_index_t const frame) const {
-    if (auto const &module = this->module_at(frame); module.has_value()) {
-        return module->value.range.next_frame();
-    }
-
-    if (auto const &module = this->next_module_at(frame); module.has_value()) {
-        return module->value.range.frame;
-    }
-
-    return std::nullopt;
+    return module_pool_utils::next_jumpable_frame(this->_modules, frame);
 }
 
 std::optional<frame_index_t> module_pool::previous_jumpable_frame(frame_index_t const frame) const {
-    if (auto const &module = this->module_at(frame); module.has_value()) {
-        if (module->value.range.frame < frame) {
-            return module->value.range.frame;
+    return module_pool_utils::previous_jumpable_frame(this->_modules, frame);
+}
+
+void module_pool::split_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
+    if (auto const modules = this->splittable_modules_at(tracks, frame); !modules.empty()) {
+        for (auto const &pair : modules) {
+            auto const &module_obj = pair.second;
+            this->erase_module_and_notify(module_obj.index());
+            this->insert_module_and_notify(module_obj.value.tail_dropped(frame).value());
+            this->insert_module_and_notify(module_obj.value.head_dropped(frame).value());
         }
     }
+}
 
-    if (auto const &module = this->previous_module_at(frame)) {
-        if (module->value.range.next_frame() == frame) {
-            return module->value.range.frame;
-        } else {
-            return module->value.range.next_frame();
+void module_pool::erase_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
+    if (auto const modules = this->modules_at(tracks, frame); !modules.empty()) {
+        for (auto const &pair : modules) {
+            this->erase_module_and_notify(pair.second.index());
         }
     }
-
-    return std::nullopt;
 }
 
-void module_pool::split_at(frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
-        auto const &module = module_opt.value().value;
-        this->erase_module_and_notify(module_opt.value().index());
-        this->insert_module_and_notify(module.tail_dropped(frame).value());
-        this->insert_module_and_notify(module.head_dropped(frame).value());
+void module_pool::drop_head_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
+    if (auto const modules = this->splittable_modules_at(tracks, frame); !modules.empty()) {
+        for (auto const &pair : modules) {
+            auto const &module_obj = pair.second;
+            this->erase_module_and_notify(module_obj.index());
+            this->insert_module_and_notify(module_obj.value.head_dropped(frame).value());
+        }
     }
 }
 
-void module_pool::erase_at(frame_index_t const frame) {
-    if (auto const module_opt = this->module_at(frame); module_opt.has_value()) {
-        this->erase_module_and_notify(module_opt.value().index());
+void module_pool::drop_tail_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
+    if (auto const modules = this->splittable_modules_at(tracks, frame); !modules.empty()) {
+        for (auto const &pair : modules) {
+            auto const &module_obj = pair.second;
+            this->erase_module_and_notify(module_obj.index());
+            this->insert_module_and_notify(module_obj.value.tail_dropped(frame).value());
+        }
     }
 }
 
-void module_pool::erase_and_offset_at(frame_index_t const frame) {
-    if (auto const module_opt = this->module_at(frame); module_opt.has_value()) {
-        auto const &module = module_opt.value().value;
-        frame_index_t const offset = -int64_t(module.range.length);
-
-        this->erase_module_and_notify(module_opt.value().index());
-        this->_move_modules_after(frame, offset);
-    }
-}
-
-void module_pool::drop_head_at(frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
-        this->erase_module_and_notify(module_opt.value().index());
-        this->insert_module_and_notify(module_opt.value().value.head_dropped(frame).value());
-    }
-}
-
-void module_pool::drop_tail_at(frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
-        this->erase_module_and_notify(module_opt.value().index());
-        this->insert_module_and_notify(module_opt.value().value.tail_dropped(frame).value());
-    }
-}
-
-void module_pool::drop_head_and_offset_at(frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
-        auto const &module = module_opt.value().value;
-        frame_index_t const offset = module.range.frame - frame;
-
-        this->erase_module_and_notify(module_opt.value().index());
-        this->insert_module_and_notify(module.head_dropped(frame).value());
-        this->_move_modules_after(frame, offset);
-    }
-}
-
-void module_pool::drop_tail_and_offset_at(frame_index_t const frame) {
-    if (auto const module_opt = this->splittable_module_at(frame); module_opt.has_value()) {
-        auto const &module = module_opt.value().value;
-        frame_index_t const offset = frame - module.range.next_frame();
-
-        this->erase_module_and_notify(module_opt.value().index());
-        this->insert_module_and_notify(module.tail_dropped(frame).value());
-
-        this->_move_modules_after(frame, offset);
-    }
-}
-
-void module_pool::overwrite_module(module const &params) {
-    auto const overlapped_modules = module_pool_utils::overlapped_modules(this->_modules, params.range);
+void module_pool::overwrite_module(module const &module) {
+    auto const overlapped_modules = module_pool_utils::overlapped_modules(this->_modules, module.track, module.range);
     for (auto const &overlapped_module : overlapped_modules) {
         this->erase_module_and_notify(overlapped_module.index());
-        auto const cropped_ranges = overlapped_module.value.range.cropped(params.range);
+        auto const cropped_ranges = overlapped_module.value.range.cropped(module.range);
         for (auto const &cropped_range : cropped_ranges) {
             frame_index_t const file_frame_offset = cropped_range.frame - overlapped_module.value.range.frame;
             this->insert_module_and_notify({overlapped_module.value.name, cropped_range, overlapped_module.value.track,
@@ -203,44 +152,7 @@ void module_pool::overwrite_module(module const &params) {
         }
     }
 
-    this->insert_module_and_notify(params);
-}
-
-void module_pool::move_modules(std::set<module_index> const &indices, frame_index_t const offset) {
-    std::vector<module> movings;
-    for (auto const &index : indices) {
-        if (this->_modules.contains(index)) {
-            auto const &module = this->_modules.at(index);
-            movings.emplace_back(module.value.offset(offset));
-            this->erase_module_and_notify(index);
-        } else {
-            assertion_failure_if_not_test();
-        }
-    }
-
-    for (auto const &params : movings) {
-        this->overwrite_module(params);
-    }
-}
-
-void module_pool::split_and_insert_module_and_offset(module const &params) {
-    this->split_at(params.range.frame);
-
-    this->_move_modules_after(params.range.frame, params.range.length);
-    this->insert_module_and_notify(params);
-}
-
-void module_pool::_move_modules_after(frame_index_t const frame, frame_index_t const offset) {
-    auto const copied_modules = this->_modules;
-    for (auto const &pair : copied_modules) {
-        auto const &index = pair.first;
-        if (frame <= index.range.frame) {
-            // TODO 同じidのまま移動させたい？
-            auto const &moving_module = pair.second.value;
-            this->erase_module_and_notify(index);
-            this->insert_module_and_notify(moving_module.offset(offset));
-        }
-    }
+    this->insert_module_and_notify(module);
 }
 
 observing::syncable module_pool::observe_event(std::function<void(module_pool_event const &)> &&handler) {
