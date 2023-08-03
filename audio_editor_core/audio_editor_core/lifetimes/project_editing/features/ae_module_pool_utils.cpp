@@ -23,70 +23,134 @@ std::optional<time::range> module_pool_utils::total_range(module_pool_module_map
     return result;
 }
 
-std::optional<module_object> module_pool_utils::module(module_pool_module_map_t const &modules,
-                                                       frame_index_t const frame) {
+module_pool_module_map_t module_pool_utils::modules(module_pool_module_map_t const &modules,
+                                                    std::set<track_index_t> const &tracks, frame_index_t const frame) {
+    module_pool_module_map_t result;
+
+    bool const is_empty = tracks.empty();
+
     for (auto const &pair : modules) {
-        if (pair.first.range.is_contain(frame)) {
-            return pair.second;
+        // 格納されている順番的にmoduleのframeの方が大きくなったら被らないはずなので打ち切る
+        if (frame < pair.first.range.frame) {
+            break;
+        }
+
+        if ((is_empty || tracks.contains(pair.first.track)) && pair.first.range.is_contain(frame)) {
+            result.emplace(pair);
         }
     }
-    return std::nullopt;
+
+    return result;
 }
 
-std::optional<module_object> module_pool_utils::first_module(module_pool_module_map_t const &modules) {
+std::optional<frame_index_t> module_pool_utils::first_frame(module_pool_module_map_t const &modules) {
     auto const iterator = modules.cbegin();
     if (iterator != modules.cend()) {
-        return iterator->second;
+        return iterator->first.range.frame;
     }
     return std::nullopt;
 }
 
-std::optional<module_object> module_pool_utils::last_module(module_pool_module_map_t const &modules) {
-    auto const iterator = modules.crbegin();
-    if (iterator != modules.crend()) {
-        return iterator->second;
-    }
-    return std::nullopt;
-}
+std::optional<frame_index_t> module_pool_utils::last_next_frame(module_pool_module_map_t const &modules) {
+    std::optional<frame_index_t> result;
 
-std::optional<module_object> module_pool_utils::previous_module(module_pool_module_map_t const &modules,
-                                                                frame_index_t const frame) {
-    auto it = modules.rbegin();
-
-    while (it != modules.rend()) {
-        auto const &pair = *it;
-        if (pair.first.range.next_frame() <= frame) {
-            return pair.second;
+    for (auto const &pair : modules) {
+        if (result.has_value()) {
+            result = std::max(result.value(), pair.first.range.next_frame());
+        } else {
+            result = pair.first.range.next_frame();
         }
-        ++it;
     }
 
-    return std::nullopt;
+    return result;
 }
 
-std::optional<module_object> module_pool_utils::next_module(module_pool_module_map_t const &modules,
-                                                            frame_index_t const frame) {
+std::optional<frame_index_t> module_pool_utils::previous_jumpable_frame(module_pool_module_map_t const &modules,
+                                                                        frame_index_t const frame) {
+    std::optional<frame_index_t> result;
+
+    for (auto const &pair : modules) {
+        auto const &module_frame = pair.first.range.frame;
+
+        if (frame <= module_frame) {
+            break;
+        }
+
+        std::optional<frame_index_t> current_frame;
+
+        auto const module_next_frame = pair.first.range.next_frame();
+
+        if (module_next_frame < frame) {
+            current_frame = module_next_frame;
+        } else if (module_frame < frame) {
+            current_frame = module_frame;
+        } else {
+            continue;
+        }
+
+        if (result.has_value()) {
+            result = std::max(result.value(), current_frame.value());
+        } else {
+            result = current_frame;
+        }
+    }
+
+    return result;
+}
+
+std::optional<frame_index_t> module_pool_utils::next_jumpable_frame(module_pool_module_map_t const &modules,
+                                                                    frame_index_t const frame) {
+    std::optional<frame_index_t> result;
+
+    for (auto const &pair : modules) {
+        auto const &module_frame = pair.first.range.frame;
+        auto const module_next_frame = pair.first.range.next_frame();
+
+        std::optional<frame_index_t> current_frame;
+
+        if (frame < module_frame) {
+            current_frame = module_frame;
+        } else if (frame < module_next_frame) {
+            current_frame = module_next_frame;
+        }
+
+        if (result.has_value()) {
+            result = std::min(result.value(), current_frame.value());
+        } else {
+            result = current_frame;
+        }
+
+        if (frame <= module_frame) {
+            break;
+        }
+    }
+
+    return result;
+}
+
+module_pool_module_map_t module_pool_utils::splittable_modules(module_pool_module_map_t const &modules,
+                                                               std::set<track_index_t> const &tracks,
+                                                               frame_index_t const frame) {
+    module_pool_module_map_t result;
+
+    bool const is_empty = tracks.empty();
+
     for (auto const &pair : modules) {
         if (frame < pair.first.range.frame) {
-            return pair.second;
+            break;
+        }
+
+        if ((is_empty || tracks.contains(pair.first.track)) &&
+            module_utils::can_split_time_range(pair.second.value.range, frame)) {
+            result.emplace(pair);
         }
     }
 
-    return std::nullopt;
-}
-
-std::optional<module_object> module_pool_utils::splittable_module(module_pool_module_map_t const &modules,
-                                                                  frame_index_t const frame) {
-    for (auto const &pair : modules) {
-        if (module_utils::can_split_time_range(pair.second.value.range, frame)) {
-            return pair.second;
-        }
-    }
-    return std::nullopt;
+    return result;
 }
 
 std::vector<module_object> module_pool_utils::overlapped_modules(module_pool_module_map_t const &modules,
-                                                                 time::range const &range) {
+                                                                 track_index_t const track, time::range const &range) {
     auto const next_frame = range.next_frame();
 
     std::vector<module_object> result;
@@ -95,7 +159,7 @@ std::vector<module_object> module_pool_utils::overlapped_modules(module_pool_mod
         if (next_frame <= module_range.frame) {
             break;
         }
-        if (module_range.is_overlap(range)) {
+        if (pair.first.track == track && module_range.is_overlap(range)) {
             result.emplace_back(pair.second);
         }
     }

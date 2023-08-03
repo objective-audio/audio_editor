@@ -29,6 +29,7 @@ struct ui_pasting_modules final {
     ui::node *const _node;
     ae::color *const _color;
 
+    std::shared_ptr<ui::node> const _scale_node;
     std::unique_ptr<dynamic_mesh_container<vertex2d_rect, frame_index2d_rect>> const _mesh_container;
 
     observing::canceller_pool _pool;
@@ -39,8 +40,10 @@ struct ui_pasting_modules final {
     ui_pasting_modules &operator=(ui_pasting_modules &&) = delete;
 
     void _replace(std::vector<std::optional<pasting_module_content>> const &);
-    void _update(std::size_t const count, std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
-                 std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
-                 std::vector<std::pair<std::size_t, pasting_module_content>> const &erased);
+    void _update_mesh(std::size_t const count,
+                      std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
+                      std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
+                      std::vector<std::pair<std::size_t, pasting_module_content>> const &erased);
+    void _update_y_offset();
 };
 }  // namespace yas::ae

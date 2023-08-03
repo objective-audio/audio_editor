@@ -10,6 +10,8 @@
 #include <cpp_utils/yas_lock.h>
 
 #include <audio_editor_core/ae_display_space_range.hpp>
+#include <audio_editor_core/ae_track_selector.hpp>
+#include <audio_editor_core/ae_vertical_scrolling.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -22,19 +24,24 @@ std::shared_ptr<pasting_modules_presenter> pasting_modules_presenter::make_share
     auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     return std::make_shared<pasting_modules_presenter>(
         project_editing_lifetime->project_format, project_editing_lifetime->pasteboard, project_lifetime->display_space,
-        project_editing_lifetime->display_space_range, project_editing_lifetime->pasting_module_content_pool);
+        project_editing_lifetime->display_space_range, project_editing_lifetime->pasting_module_content_pool,
+        project_editing_lifetime->track_selector, project_lifetime->vertical_scrolling);
 }
 
 pasting_modules_presenter::pasting_modules_presenter(project_format const &project_format,
                                                      std::shared_ptr<pasteboard> const &pasteboard,
                                                      std::shared_ptr<display_space> const &display_space,
                                                      std::shared_ptr<display_space_range> const &display_space_range,
-                                                     std::shared_ptr<pasting_module_content_pool> const &content_pool)
+                                                     std::shared_ptr<pasting_module_content_pool> const &content_pool,
+                                                     std::shared_ptr<track_selector> const &track_selector,
+                                                     std::shared_ptr<vertical_scrolling> const &scrolling)
     : _project_format(project_format),
       _pasteboard(pasteboard),
       _display_space(display_space),
       _display_space_range(display_space_range),
-      _content_pool(content_pool) {
+      _content_pool(content_pool),
+      _track_selector(track_selector),
+      _scrolling(scrolling) {
     pasteboard
         ->observe_event([this](pasteboard_event const &event) {
             switch (event) {
@@ -71,6 +78,15 @@ observing::syncable pasting_modules_presenter::observe_contents(
         return content_pool->observe_event(std::move(handler));
     } else {
         return observing::syncable{};
+    }
+}
+
+double pasting_modules_presenter::y_offset() const {
+    if (auto const locked = yas::lock(this->_track_selector, this->_scrolling); fulfilled(locked)) {
+        auto const &[track_selector, scrolling] = locked;
+        return track_selector->current() - static_cast<double>(scrolling->track());
+    } else {
+        return 0;
     }
 }
 

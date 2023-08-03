@@ -26,8 +26,8 @@ timeline_updater::timeline_updater(module_pool *module_pool, timeline_holder *ti
                     this->_timeline_holder->insert(module);
                 } break;
                 case module_pool_event_type::erased: {
-                    auto const &range = event.module.value().value.range;
-                    this->_timeline_holder->erase(range);
+                    auto const &module = event.module.value().value;
+                    this->_timeline_holder->erase(module.track, module.range);
                 } break;
                 case module_pool_event_type::detail_updated:
                     break;

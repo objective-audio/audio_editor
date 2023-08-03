@@ -135,7 +135,7 @@ void waveform_mesh_importer::import(std::size_t const idx, module_content const 
                     auto const write_handler = [&max, &min, &vertex_rect_idx, &rect_width,
                                                 &mesh_element_head_x_value](std::vector<ui::vertex2d_t> &vec) {
                         auto *vertex_rects_data = (ui::vertex2d_rect *)vec.data();
-                        // moduleの終わりのはみ出る部分を調整したい
+                        // TODO: moduleの終わりのはみ出る部分を調整したい
                         if ((vertex_rect_idx * ui::vertex2d_rect::vector_count) < vec.size()) {
                             // 縦は最大値から最小値を1.0としたいので0.5倍する
                             vertex_rects_data[vertex_rect_idx].set_position(ui::region{

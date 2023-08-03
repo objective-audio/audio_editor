@@ -68,10 +68,19 @@ using namespace yas::ae::module_pool_test_utils;
     XCTAssertEqual(module_pool->modules().size(), 3);
     XCTAssertEqual(module_pool->module_at(module3_index.value()).value().index(), module3_index.value());
 
+    module const module_params_4{"", {0, 4}, 1, 0, ""};
+
+    auto const module4_index = module_pool->insert_module_and_notify(module_params_4);
+
+    XCTAssertEqual(module_pool->modules().size(), 4);
+    XCTAssertEqual(module_pool->module_at(module4_index.value()).value().index(), module4_index.value());
+
     auto iterator = module_pool->modules().begin();
     XCTAssertEqual(iterator->first, module3_index);
     ++iterator;
     XCTAssertEqual(iterator->first, module1_index);
+    ++iterator;
+    XCTAssertEqual(iterator->first, module4_index);
     ++iterator;
     XCTAssertEqual(iterator->first, module2_index);
 }
@@ -81,16 +90,19 @@ using namespace yas::ae::module_pool_test_utils;
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 4}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_1", {5, 3}, 0, 5, ""}};
+    module_object const module2{db::make_temporary_id(), {"module_2", {5, 3}, 0, 5, ""}};
+    module_object const module3{db::make_temporary_id(), {"module_3", {0, 4}, 1, 0, ""}};
 
-    module_pool->revert_modules_and_notify({module1, module2});
+    module_pool->revert_modules_and_notify({module1, module2, module3});
 
-    XCTAssertEqual(module_pool->modules().size(), 2);
+    XCTAssertEqual(module_pool->modules().size(), 3);
 
     module_pool->erase_module_and_notify(module1.index());
 
-    XCTAssertEqual(module_pool->modules().size(), 1);
-    XCTAssertEqual(module_pool->modules().count(module2.index()), 1);
+    XCTAssertEqual(module_pool->modules().size(), 2);
+    XCTAssertFalse(module_pool->modules().contains(module1.index()));
+    XCTAssertTrue(module_pool->modules().contains(module2.index()));
+    XCTAssertTrue(module_pool->modules().contains(module3.index()));
 }
 
 - (void)test_observe_event {
@@ -146,37 +158,91 @@ using namespace yas::ae::module_pool_test_utils;
     canceller->cancel();
 }
 
-- (void)test_module_at_frame {
+- (void)test_modules_at_tracks_and_frame {
     auto const database = std::make_shared<database_mock>();
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
-    module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 0, 1, ""}};
-    module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 0, 4, ""}};
+    module_object const module_t0_0_1{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}};
+    module_object const module_t0_1_2{db::make_temporary_id(), {"module_2", {1, 2}, 0, 0, ""}};
+    module_object const module_t1_0_2{db::make_temporary_id(), {"module_1", {0, 2}, 1, 0, ""}};
+    module_object const module_t1_2_2{db::make_temporary_id(), {"module_1", {2, 2}, 1, 0, ""}};
+    module_object const module_t2_1_2{db::make_temporary_id(), {"module_1", {1, 2}, 2, 0, ""}};
 
-    module_pool->revert_modules_and_notify({module1, module2, module3});
+    module_pool->revert_modules_and_notify({module_t0_0_1, module_t0_1_2, module_t1_0_2, module_t2_1_2, module_t1_2_2});
 
-    XCTAssertEqual(module_pool->module_at(-1), std::nullopt);
-    XCTAssertEqual(module_pool->module_at(0).value().value.name, "module_1");
-    XCTAssertEqual(module_pool->module_at(0).value().value.range, (time::range{0, 1}));
-    XCTAssertEqual(module_pool->module_at(0).value().value.file_frame, 0);
-    XCTAssertEqual(module_pool->module_at(1).value().value.name, "module_2");
-    XCTAssertEqual(module_pool->module_at(1).value().value.range, (time::range{1, 2}));
-    XCTAssertEqual(module_pool->module_at(1).value().value.file_frame, 1);
-    XCTAssertEqual(module_pool->module_at(2).value().value.name, "module_2");
-    XCTAssertEqual(module_pool->module_at(2).value().value.range, (time::range{1, 2}));
-    XCTAssertEqual(module_pool->module_at(2).value().value.file_frame, 1);
-    XCTAssertEqual(module_pool->module_at(3), std::nullopt);
-    XCTAssertEqual(module_pool->module_at(4).value().value.name, "module_3");
-    XCTAssertEqual(module_pool->module_at(4).value().value.range, (time::range{4, 3}));
-    XCTAssertEqual(module_pool->module_at(4).value().value.file_frame, 4);
-    XCTAssertEqual(module_pool->module_at(5).value().value.name, "module_3");
-    XCTAssertEqual(module_pool->module_at(5).value().value.range, (time::range{4, 3}));
-    XCTAssertEqual(module_pool->module_at(5).value().value.file_frame, 4);
-    XCTAssertEqual(module_pool->module_at(6).value().value.name, "module_3");
-    XCTAssertEqual(module_pool->module_at(6).value().value.range, (time::range{4, 3}));
-    XCTAssertEqual(module_pool->module_at(6).value().value.file_frame, 4);
-    XCTAssertEqual(module_pool->module_at(7), std::nullopt);
+    {
+        auto const modules = module_pool->modules_at({}, -1);
+        XCTAssertEqual(modules.size(), 0);
+    }
+
+    {
+        auto const modules = module_pool->modules_at({}, 0);
+        XCTAssertEqual(modules.size(), 2);
+        XCTAssertTrue(modules.contains(module_t0_0_1.index()));
+        XCTAssertTrue(modules.contains(module_t1_0_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->modules_at({}, 1);
+        XCTAssertEqual(modules.size(), 3);
+        XCTAssertTrue(modules.contains(module_t0_1_2.index()));
+        XCTAssertTrue(modules.contains(module_t1_0_2.index()));
+        XCTAssertTrue(modules.contains(module_t2_1_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->modules_at({-1}, 1);
+        XCTAssertEqual(modules.size(), 0);
+    }
+
+    {
+        auto const modules = module_pool->modules_at({0}, 1);
+        XCTAssertEqual(modules.size(), 1);
+        XCTAssertTrue(modules.contains(module_t0_1_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->modules_at({1}, 1);
+        XCTAssertEqual(modules.size(), 1);
+        XCTAssertTrue(modules.contains(module_t1_0_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->modules_at({0, 1}, 1);
+        XCTAssertEqual(modules.size(), 2);
+        XCTAssertTrue(modules.contains(module_t0_1_2.index()));
+        XCTAssertTrue(modules.contains(module_t1_0_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->modules_at({2}, 1);
+        XCTAssertEqual(modules.size(), 1);
+        XCTAssertTrue(modules.contains(module_t2_1_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->modules_at({3}, 1);
+        XCTAssertEqual(modules.size(), 0);
+    }
+
+    {
+        auto const modules = module_pool->modules_at({}, 2);
+        XCTAssertEqual(modules.size(), 3);
+        XCTAssertTrue(modules.contains(module_t0_1_2.index()));
+        XCTAssertTrue(modules.contains(module_t1_2_2.index()));
+        XCTAssertTrue(modules.contains(module_t2_1_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->modules_at({}, 3);
+        XCTAssertEqual(modules.size(), 1);
+        XCTAssertTrue(modules.contains(module_t1_2_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->modules_at({}, 4);
+        XCTAssertEqual(modules.size(), 0);
+    }
 }
 
 - (void)test_module_at_index {
@@ -184,7 +250,7 @@ using namespace yas::ae::module_pool_test_utils;
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 0, 1, ""}};
+    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, 1, ""}};
     module_object const other_module{db::make_temporary_id(), {"other_module", {100, 100}, 0, 100, ""}};
 
     module_pool->revert_modules_and_notify({module1, module2});
@@ -197,170 +263,237 @@ using namespace yas::ae::module_pool_test_utils;
     XCTAssertEqual(stored_module2.value().value.name, "module_2");
 }
 
-- (void)test_previous_module_at {
+- (void)test_previous_jumpable_frame_at {
     auto const database = std::make_shared<database_mock>();
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 0, 1, ""}};
-    module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 0, 4, ""}};
+    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, 1, ""}};
+    module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 2, 4, ""}};
 
     module_pool->revert_modules_and_notify({module1, module2, module3});
 
-    XCTAssertEqual(module_pool->previous_module_at(-1), std::nullopt);
-    XCTAssertEqual(module_pool->previous_module_at(0), std::nullopt);
-    XCTAssertEqual(module_pool->previous_module_at(1).value().value.name, "module_1");
-    XCTAssertEqual(module_pool->previous_module_at(1).value().value.range, (time::range{0, 1}));
-    XCTAssertEqual(module_pool->previous_module_at(1).value().value.file_frame, 0);
-    XCTAssertEqual(module_pool->previous_module_at(2).value().value.name, "module_1");
-    XCTAssertEqual(module_pool->previous_module_at(2).value().value.range, (time::range{0, 1}));
-    XCTAssertEqual(module_pool->previous_module_at(2).value().value.file_frame, 0);
-    XCTAssertEqual(module_pool->previous_module_at(3).value().value.name, "module_2");
-    XCTAssertEqual(module_pool->previous_module_at(3).value().value.range, (time::range{1, 2}));
-    XCTAssertEqual(module_pool->previous_module_at(3).value().value.file_frame, 1);
-    XCTAssertEqual(module_pool->previous_module_at(4).value().value.name, "module_2");
-    XCTAssertEqual(module_pool->previous_module_at(4).value().value.range, (time::range{1, 2}));
-    XCTAssertEqual(module_pool->previous_module_at(4).value().value.file_frame, 1);
-    XCTAssertEqual(module_pool->previous_module_at(5).value().value.name, "module_2");
-    XCTAssertEqual(module_pool->previous_module_at(5).value().value.range, (time::range{1, 2}));
-    XCTAssertEqual(module_pool->previous_module_at(5).value().value.file_frame, 1);
-    XCTAssertEqual(module_pool->previous_module_at(6).value().value.name, "module_2");
-    XCTAssertEqual(module_pool->previous_module_at(6).value().value.range, (time::range{1, 2}));
-    XCTAssertEqual(module_pool->previous_module_at(6).value().value.file_frame, 1);
-    XCTAssertEqual(module_pool->previous_module_at(7).value().value.name, "module_3");
-    XCTAssertEqual(module_pool->previous_module_at(7).value().value.range, (time::range{4, 3}));
-    XCTAssertEqual(module_pool->previous_module_at(7).value().value.file_frame, 4);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(-1), std::nullopt);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(0), std::nullopt);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(1), 0);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(2), 1);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(3), 1);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(4), 3);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(5), 4);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(6), 4);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(7), 4);
+    XCTAssertEqual(module_pool->previous_jumpable_frame(8), 7);
 }
 
-- (void)test_next_module_at {
+- (void)test_next_jumpable_frame_at {
     auto const database = std::make_shared<database_mock>();
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
     module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 0, 1, ""}};
-    module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 0, 4, ""}};
+    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 1, 1, ""}};
+    module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 2, 4, ""}};
 
     module_pool->revert_modules_and_notify({module1, module2, module3});
 
-    XCTAssertEqual(module_pool->next_module_at(-1).value().value.name, "module_1");
-    XCTAssertEqual(module_pool->next_module_at(-1).value().value.range, (time::range{0, 1}));
-    XCTAssertEqual(module_pool->next_module_at(-1).value().value.file_frame, 0);
-    XCTAssertEqual(module_pool->next_module_at(0).value().value.name, "module_2");
-    XCTAssertEqual(module_pool->next_module_at(0).value().value.range, (time::range{1, 2}));
-    XCTAssertEqual(module_pool->next_module_at(0).value().value.file_frame, 1);
-    XCTAssertEqual(module_pool->next_module_at(1).value().value.name, "module_3");
-    XCTAssertEqual(module_pool->next_module_at(1).value().value.range, (time::range{4, 3}));
-    XCTAssertEqual(module_pool->next_module_at(1).value().value.file_frame, 4);
-    XCTAssertEqual(module_pool->next_module_at(2).value().value.name, "module_3");
-    XCTAssertEqual(module_pool->next_module_at(2).value().value.range, (time::range{4, 3}));
-    XCTAssertEqual(module_pool->next_module_at(2).value().value.file_frame, 4);
-    XCTAssertEqual(module_pool->next_module_at(3).value().value.name, "module_3");
-    XCTAssertEqual(module_pool->next_module_at(3).value().value.range, (time::range{4, 3}));
-    XCTAssertEqual(module_pool->next_module_at(3).value().value.file_frame, 4);
-    XCTAssertEqual(module_pool->next_module_at(4), std::nullopt);
-    XCTAssertEqual(module_pool->next_module_at(5), std::nullopt);
-    XCTAssertEqual(module_pool->next_module_at(6), std::nullopt);
-    XCTAssertEqual(module_pool->next_module_at(7), std::nullopt);
+    XCTAssertEqual(module_pool->next_jumpable_frame(-1), 0);
+    XCTAssertEqual(module_pool->next_jumpable_frame(0), 1);
+    XCTAssertEqual(module_pool->next_jumpable_frame(1), 3);
+    XCTAssertEqual(module_pool->next_jumpable_frame(2), 3);
+    XCTAssertEqual(module_pool->next_jumpable_frame(3), 4);
+    XCTAssertEqual(module_pool->next_jumpable_frame(4), 7);
+    XCTAssertEqual(module_pool->next_jumpable_frame(5), 7);
+    XCTAssertEqual(module_pool->next_jumpable_frame(6), 7);
+    XCTAssertFalse(module_pool->next_jumpable_frame(7).has_value());
 }
 
-- (void)test_splittable_module_at {
+- (void)test_splittable_modules_at {
     auto const database = std::make_shared<database_mock>();
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
-    module_object const module1{db::make_temporary_id(), {"", {0, 1}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"", {1, 2}, 0, 1, ""}};
-    module_object const module3{db::make_temporary_id(), {"", {3, 3}, 0, 3, ""}};
-    module_object const module4{db::make_temporary_id(), {"", {7, 2}, 0, 7, ""}};
+    module_object const module_t0_0_2{db::make_temporary_id(), {"", {0, 3}, 0, 0, ""}};
+    module_object const module_t1_1_2{db::make_temporary_id(), {"", {1, 3}, 1, 0, ""}};
+    module_object const module_t2_2_2{db::make_temporary_id(), {"", {2, 3}, 2, 0, ""}};
 
-    module_pool->revert_modules_and_notify({module1, module2, module3, module4});
-
-    XCTAssertFalse(module_pool->splittable_module_at(-1));
-    XCTAssertFalse(module_pool->splittable_module_at(0));
-    XCTAssertFalse(module_pool->splittable_module_at(1));
-    XCTAssertTrue(module_pool->splittable_module_at(2));
-    XCTAssertFalse(module_pool->splittable_module_at(3));
-    XCTAssertTrue(module_pool->splittable_module_at(4));
-    XCTAssertTrue(module_pool->splittable_module_at(5));
-    XCTAssertFalse(module_pool->splittable_module_at(6));
-    XCTAssertFalse(module_pool->splittable_module_at(7));
-    XCTAssertTrue(module_pool->splittable_module_at(8));
-    XCTAssertFalse(module_pool->splittable_module_at(9));
-}
-
-- (void)test_split_at {
-    auto const database = std::make_shared<database_mock>();
-    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
-
-    module_object const src_module{db::make_temporary_id(), {"split_module_name", {0, 8}, 0, 0, ""}};
-
-    module_pool->revert_modules_and_notify({src_module});
-
-    module_pool->split_at(-1);
-    module_pool->split_at(0);
-    module_pool->split_at(8);
-    module_pool->split_at(9);
-
-    XCTAssertEqual(module_pool->modules().size(), 1);
+    module_pool->revert_modules_and_notify({module_t0_0_2, module_t1_1_2, module_t2_2_2});
 
     {
-        module_pool->split_at(1);
-
-        XCTAssertEqual(module_pool->modules().size(), 2);
-
-        auto iterator = module_pool->modules().begin();
-
-        XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
-        XCTAssertEqual(iterator->second.value.name, "split_module_name");
-        XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
-        XCTAssertEqual(iterator->second.value.file_frame, 0);
-
-        ++iterator;
-
-        XCTAssertEqual(iterator->first.range, (time::range{1, 7}));
-        XCTAssertEqual(iterator->second.value.name, "split_module_name");
-        XCTAssertEqual(iterator->second.value.range, (time::range{1, 7}));
-        XCTAssertEqual(iterator->second.value.file_frame, 1);
+        auto const modules = module_pool->splittable_modules_at({}, -1);
+        XCTAssertEqual(modules.size(), 0);
     }
 
     {
-        module_pool->split_at(3);
+        auto const modules = module_pool->splittable_modules_at({}, 0);
+        XCTAssertEqual(modules.size(), 0);
+    }
+
+    {
+        auto const modules = module_pool->splittable_modules_at({}, 1);
+        XCTAssertEqual(modules.size(), 1);
+        XCTAssertTrue(modules.contains(module_t0_0_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->splittable_modules_at({}, 2);
+        XCTAssertEqual(modules.size(), 2);
+        XCTAssertTrue(modules.contains(module_t0_0_2.index()));
+        XCTAssertTrue(modules.contains(module_t1_1_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->splittable_modules_at({}, 3);
+        XCTAssertEqual(modules.size(), 2);
+        XCTAssertTrue(modules.contains(module_t1_1_2.index()));
+        XCTAssertTrue(modules.contains(module_t2_2_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->splittable_modules_at({}, 4);
+        XCTAssertEqual(modules.size(), 1);
+        XCTAssertTrue(modules.contains(module_t2_2_2.index()));
+    }
+
+    {
+        auto const modules = module_pool->splittable_modules_at({}, 5);
+        XCTAssertEqual(modules.size(), 0);
+    }
+}
+
+- (void)test_split_by_all_tracks {
+    auto const database = std::make_shared<database_mock>();
+    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
+
+    module_object const src_module_a{db::make_temporary_id(), {"split_module_name_a", {0, 8}, 0, 0, ""}};
+    module_object const src_module_b{db::make_temporary_id(), {"split_module_name_b", {2, 3}, 1, 0, ""}};
+
+    module_pool->revert_modules_and_notify({src_module_a, src_module_b});
+
+    module_pool->split_at({}, -1);
+    module_pool->split_at({}, 0);
+    module_pool->split_at({}, 8);
+    module_pool->split_at({}, 9);
+
+    XCTAssertEqual(module_pool->modules().size(), 2);
+
+    {
+        module_pool->split_at({}, 1);
 
         XCTAssertEqual(module_pool->modules().size(), 3);
 
         auto iterator = module_pool->modules().begin();
 
         XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
-        XCTAssertEqual(iterator->second.value.name, "split_module_name");
+        XCTAssertEqual(iterator->second.value.name, "split_module_name_a");
         XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
         XCTAssertEqual(iterator->second.value.file_frame, 0);
+        XCTAssertEqual(iterator->second.value.track, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{1, 7}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name_a");
+        XCTAssertEqual(iterator->second.value.range, (time::range{1, 7}));
+        XCTAssertEqual(iterator->second.value.file_frame, 1);
+        XCTAssertEqual(iterator->second.value.track, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{2, 3}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{2, 3}));
+        XCTAssertEqual(iterator->second.value.file_frame, 0);
+        XCTAssertEqual(iterator->second.value.track, 1);
+    }
+
+    {
+        module_pool->split_at({}, 3);
+
+        XCTAssertEqual(module_pool->modules().size(), 5);
+
+        auto iterator = module_pool->modules().begin();
+
+        XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name_a");
+        XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
+        XCTAssertEqual(iterator->second.value.file_frame, 0);
+        XCTAssertEqual(iterator->second.value.track, 0);
 
         ++iterator;
 
         XCTAssertEqual(iterator->first.range, (time::range{1, 2}));
-        XCTAssertEqual(iterator->second.value.name, "split_module_name");
+        XCTAssertEqual(iterator->second.value.name, "split_module_name_a");
         XCTAssertEqual(iterator->second.value.range, (time::range{1, 2}));
         XCTAssertEqual(iterator->second.value.file_frame, 1);
+        XCTAssertEqual(iterator->second.value.track, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{2, 1}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{2, 1}));
+        XCTAssertEqual(iterator->second.value.file_frame, 0);
+        XCTAssertEqual(iterator->second.value.track, 1);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{3, 2}));
+        XCTAssertEqual(iterator->second.value.name, "split_module_name_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{3, 2}));
+        XCTAssertEqual(iterator->second.value.file_frame, 1);
+        XCTAssertEqual(iterator->second.value.track, 1);
 
         ++iterator;
 
         XCTAssertEqual(iterator->first.range, (time::range{3, 5}));
-        XCTAssertEqual(iterator->second.value.name, "split_module_name");
+        XCTAssertEqual(iterator->second.value.name, "split_module_name_a");
         XCTAssertEqual(iterator->second.value.range, (time::range{3, 5}));
         XCTAssertEqual(iterator->second.value.file_frame, 3);
+        XCTAssertEqual(iterator->second.value.track, 0);
     }
 }
 
-- (void)test_erase_at {
+- (void)test_split_by_single_track {
+    auto const database = std::make_shared<database_mock>();
+    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
+
+    module_object const src_module_a{db::make_temporary_id(), {"split_module_name_a", {0, 2}, 0, 0, ""}};
+    module_object const src_module_b{db::make_temporary_id(), {"split_module_name_b", {0, 3}, 1, 0, ""}};
+
+    module_pool->revert_modules_and_notify({src_module_a, src_module_b});
+
+    XCTAssertEqual(module_pool->modules().size(), 2);
+
+    module_pool->split_at({1}, 1);
+
+    XCTAssertEqual(module_pool->modules().size(), 3);
+
+    auto iterator = module_pool->modules().begin();
+
+    XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
+    XCTAssertEqual(iterator->first.track, 1);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{0, 2}));
+    XCTAssertEqual(iterator->first.track, 0);
+
+    ++iterator;
+
+    XCTAssertEqual(iterator->first.range, (time::range{1, 2}));
+    XCTAssertEqual(iterator->first.track, 1);
+}
+
+- (void)test_erase_by_all_tracks {
     auto const database = std::make_shared<database_mock>();
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
     module_pool->revert_modules_and_notify({{db::make_temporary_id(), {"module_1", {0, 2}, 0, 0, ""}},
                                             {db::make_temporary_id(), {"module_2", {2, 2}, 0, 2, ""}},
-                                            {db::make_temporary_id(), {"module_3", {4, 2}, 0, 4, ""}}});
+                                            {db::make_temporary_id(), {"module_3", {4, 2}, 0, 4, ""}},
+                                            {db::make_temporary_id(), {"module_4", {3, 1}, 1, 0, ""}}});
 
-    XCTAssertEqual(module_pool->modules().size(), 3);
+    XCTAssertEqual(module_pool->modules().size(), 4);
 
-    module_pool->erase_at(3);
+    module_pool->erase_at({}, 3);
 
     XCTAssertEqual(module_pool->modules().size(), 2);
 
@@ -379,163 +512,233 @@ using namespace yas::ae::module_pool_test_utils;
     XCTAssertEqual(iterator->second.value.file_frame, 4);
 }
 
-- (void)test_erase_and_offset_at {
+- (void)test_erase_by_single_track {
     auto const database = std::make_shared<database_mock>();
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
-    module_pool->revert_modules_and_notify({{db::make_temporary_id(), {"module_1", {0, 2}, 0, 0, ""}},
-                                            {db::make_temporary_id(), {"module_2", {2, 2}, 0, 2, ""}},
-                                            {db::make_temporary_id(), {"module_3", {4, 2}, 0, 4, ""}}});
+    module_pool->revert_modules_and_notify({{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}},
+                                            {db::make_temporary_id(), {"module_2", {1, 1}, 0, 0, ""}},
+                                            {db::make_temporary_id(), {"module_3", {0, 1}, 1, 0, ""}}});
 
     XCTAssertEqual(module_pool->modules().size(), 3);
 
-    module_pool->erase_and_offset_at(3);
+    module_pool->erase_at({0}, 0);
 
     XCTAssertEqual(module_pool->modules().size(), 2);
 
     auto iterator = module_pool->modules().begin();
 
-    XCTAssertEqual(iterator->first.range, (time::range{0, 2}));
-    XCTAssertEqual(iterator->second.value.name, "module_1");
-    XCTAssertEqual(iterator->second.value.range, (time::range{0, 2}));
-    XCTAssertEqual(iterator->second.value.file_frame, 0);
-
-    ++iterator;
-
-    XCTAssertEqual(iterator->first.range, (time::range{2, 2}));
-    XCTAssertEqual(iterator->second.value.name, "module_3");
-    XCTAssertEqual(iterator->second.value.range, (time::range{2, 2}));
-    XCTAssertEqual(iterator->second.value.file_frame, 4);
-}
-
-- (void)test_drop_head_at {
-    auto const database = std::make_shared<database_mock>();
-    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
-
-    module_object const src_module{db::make_temporary_id(), {"drop_head_module", {10, 4}, 0, 100, ""}};
-
-    module_pool->revert_modules_and_notify({src_module});
-
-    module_pool->drop_head_at(9);
-    module_pool->drop_head_at(10);
-    module_pool->drop_head_at(14);
-    module_pool->drop_head_at(15);
-
-    XCTAssertEqual(module_pool->modules().size(), 1);
-    XCTAssertEqual(module_pool->modules().begin()->first.range, (time::range{10, 4}));
-
-    module_pool->drop_head_at(11);
-
-    auto iterator = module_pool->modules().begin();
-
-    XCTAssertEqual(module_pool->modules().size(), 1);
-    XCTAssertEqual(iterator->first.range, (time::range{11, 3}));
-    XCTAssertEqual(iterator->second.value.name, "drop_head_module");
-    XCTAssertEqual(iterator->second.value.range, (time::range{11, 3}));
-    XCTAssertEqual(iterator->second.value.file_frame, 101);
-}
-
-- (void)test_drop_tail_at {
-    auto const database = std::make_shared<database_mock>();
-    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
-
-    module_object const src_module{db::make_temporary_id(), {"drop_tail_module", {10, 4}, 0, 100, ""}};
-
-    module_pool->revert_modules_and_notify({src_module});
-
-    module_pool->drop_tail_at(9);
-    module_pool->drop_tail_at(10);
-    module_pool->drop_tail_at(14);
-    module_pool->drop_tail_at(15);
-
-    XCTAssertEqual(module_pool->modules().size(), 1);
-    XCTAssertEqual(module_pool->modules().begin()->first.range, (time::range{10, 4}));
-
-    module_pool->drop_tail_at(13);
-
-    auto iterator = module_pool->modules().begin();
-
-    XCTAssertEqual(module_pool->modules().size(), 1);
-    XCTAssertEqual(iterator->first.range, (time::range{10, 3}));
-    XCTAssertEqual(iterator->second.value.name, "drop_tail_module");
-    XCTAssertEqual(iterator->second.value.range, (time::range{10, 3}));
-    XCTAssertEqual(iterator->second.value.file_frame, 100);
-}
-/*
-- (void)test_drop_head_and_offset_at {
-    auto const database = std::make_shared<database_mock>();
-    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
-
-    module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 0, 1, ""}};
-    module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 0, 4, ""}};
-
-    module_pool->revert_modules_and_notify({module1, module2, module3});
-
-    module_pool->drop_head_and_offset_at(2);
-
-    auto const &modules = module_pool->modules();
-    XCTAssertEqual(modules.size(), 3);
-
-    auto iterator = module_pool->modules().begin();
-
     XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
-    XCTAssertEqual(iterator->second.value.name, "module_1");
-    XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 0);
+    XCTAssertEqual(iterator->second.value.name, "module_3");
 
     ++iterator;
 
     XCTAssertEqual(iterator->first.range, (time::range{1, 1}));
     XCTAssertEqual(iterator->second.value.name, "module_2");
-    XCTAssertEqual(iterator->second.value.range, (time::range{1, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 2);
-
-    ++iterator;
-
-    XCTAssertEqual(iterator->first.range, (time::range{3, 3}));
-    XCTAssertEqual(iterator->second.value.name, "module_3");
-    XCTAssertEqual(iterator->second.value.range, (time::range{3, 3}));
-    XCTAssertEqual(iterator->second.value.file_frame, 4);
 }
 
-- (void)test_drop_tail_and_offset {
+- (void)test_drop_head_by_all_tracks {
     auto const database = std::make_shared<database_mock>();
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
 
-    module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_2", {1, 2}, 0, 1, ""}};
-    module_object const module3{db::make_temporary_id(), {"module_3", {4, 3}, 0, 4, ""}};
+    module_object const src_module_a{db::make_temporary_id(), {"drop_head_module_a", {10, 4}, 0, 100, ""}};
+    module_object const src_module_b{db::make_temporary_id(), {"drop_head_module_b", {11, 3}, 1, 200, ""}};
 
-    module_pool->revert_modules_and_notify({module1, module2, module3});
+    module_pool->revert_modules_and_notify({src_module_a, src_module_b});
 
-    module_pool->drop_tail_and_offset_at(2);
+    module_pool->drop_head_at({}, 9);
+    module_pool->drop_head_at({}, 10);
+    module_pool->drop_head_at({}, 14);
+    module_pool->drop_head_at({}, 15);
 
-    auto const &modules = module_pool->modules();
-    XCTAssertEqual(modules.size(), 3);
+    XCTAssertEqual(module_pool->modules().size(), 2);
 
-    auto iterator = modules.begin();
+    {
+        auto iterator = module_pool->modules().begin();
+        XCTAssertEqual(iterator->first.range, (time::range{10, 4}));
+        ++iterator;
+        XCTAssertEqual(iterator->first.range, (time::range{11, 3}));
+    }
 
-    XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
-    XCTAssertEqual(iterator->second.value.name, "module_1");
-    XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 0);
+    module_pool->drop_head_at({}, 11);
 
-    ++iterator;
+    XCTAssertEqual(module_pool->modules().size(), 2);
 
-    XCTAssertEqual(iterator->first.range, (time::range{1, 1}));
-    XCTAssertEqual(iterator->second.value.name, "module_2");
-    XCTAssertEqual(iterator->second.value.range, (time::range{1, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 1);
+    {
+        auto iterator = module_pool->modules().begin();
 
-    ++iterator;
+        XCTAssertEqual(iterator->first.range, (time::range{11, 3}));
+        XCTAssertEqual(iterator->second.value.name, "drop_head_module_a");
+        XCTAssertEqual(iterator->second.value.range, (time::range{11, 3}));
+        XCTAssertEqual(iterator->second.value.file_frame, 101);
+        XCTAssertEqual(iterator->second.value.track, 0);
 
-    XCTAssertEqual(iterator->first.range, (time::range{3, 3}));
-    XCTAssertEqual(iterator->second.value.name, "module_3");
-    XCTAssertEqual(iterator->second.value.range, (time::range{3, 3}));
-    XCTAssertEqual(iterator->second.value.file_frame, 4);
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{11, 3}));
+        XCTAssertEqual(iterator->second.value.name, "drop_head_module_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{11, 3}));
+        XCTAssertEqual(iterator->second.value.file_frame, 200);
+        XCTAssertEqual(iterator->second.value.track, 1);
+    }
+
+    module_pool->drop_head_at({}, 12);
+
+    XCTAssertEqual(module_pool->modules().size(), 2);
+
+    {
+        auto iterator = module_pool->modules().begin();
+
+        XCTAssertEqual(iterator->first.range, (time::range{12, 2}));
+        XCTAssertEqual(iterator->second.value.name, "drop_head_module_a");
+        XCTAssertEqual(iterator->second.value.range, (time::range{12, 2}));
+        XCTAssertEqual(iterator->second.value.file_frame, 102);
+        XCTAssertEqual(iterator->second.value.track, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{12, 2}));
+        XCTAssertEqual(iterator->second.value.name, "drop_head_module_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{12, 2}));
+        XCTAssertEqual(iterator->second.value.file_frame, 201);
+        XCTAssertEqual(iterator->second.value.track, 1);
+    }
 }
- */
+
+- (void)test_drop_head_by_single_track {
+    auto const database = std::make_shared<database_mock>();
+    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
+
+    module_object const src_module_a{db::make_temporary_id(), {"drop_head_module_a", {0, 2}, 0, 100, ""}};
+    module_object const src_module_b{db::make_temporary_id(), {"drop_head_module_b", {0, 3}, 1, 200, ""}};
+
+    module_pool->revert_modules_and_notify({src_module_a, src_module_b});
+
+    module_pool->drop_head_at({0}, 1);
+
+    XCTAssertEqual(module_pool->modules().size(), 2);
+
+    {
+        auto iterator = module_pool->modules().begin();
+
+        XCTAssertEqual(iterator->first.range, (time::range{0, 3}));
+        XCTAssertEqual(iterator->second.value.name, "drop_head_module_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{0, 3}));
+        XCTAssertEqual(iterator->second.value.file_frame, 200);
+        XCTAssertEqual(iterator->second.value.track, 1);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{1, 1}));
+        XCTAssertEqual(iterator->second.value.name, "drop_head_module_a");
+        XCTAssertEqual(iterator->second.value.range, (time::range{1, 1}));
+        XCTAssertEqual(iterator->second.value.file_frame, 101);
+        XCTAssertEqual(iterator->second.value.track, 0);
+    }
+}
+
+- (void)test_drop_tail_by_all_tracks {
+    auto const database = std::make_shared<database_mock>();
+    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
+
+    module_object const src_module_a{db::make_temporary_id(), {"drop_tail_module_a", {10, 3}, 0, 100, ""}};
+    module_object const src_module_b{db::make_temporary_id(), {"drop_tail_module_b", {10, 4}, 1, 200, ""}};
+
+    module_pool->revert_modules_and_notify({src_module_a, src_module_b});
+
+    module_pool->drop_tail_at({}, 9);
+    module_pool->drop_tail_at({}, 10);
+    module_pool->drop_tail_at({}, 14);
+    module_pool->drop_tail_at({}, 15);
+
+    XCTAssertEqual(module_pool->modules().size(), 2);
+
+    {
+        auto iterator = module_pool->modules().begin();
+        XCTAssertEqual(iterator->first.range, (time::range{10, 3}));
+        XCTAssertEqual(iterator->second.value.track, 0);
+        ++iterator;
+        XCTAssertEqual(iterator->first.range, (time::range{10, 4}));
+        XCTAssertEqual(iterator->second.value.track, 1);
+    }
+
+    module_pool->drop_tail_at({}, 13);
+
+    XCTAssertEqual(module_pool->modules().size(), 2);
+
+    {
+        auto iterator = module_pool->modules().begin();
+
+        XCTAssertEqual(iterator->first.range, (time::range{10, 3}));
+        XCTAssertEqual(iterator->second.value.name, "drop_tail_module_a");
+        XCTAssertEqual(iterator->second.value.range, (time::range{10, 3}));
+        XCTAssertEqual(iterator->second.value.file_frame, 100);
+        XCTAssertEqual(iterator->second.value.track, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{10, 3}));
+        XCTAssertEqual(iterator->second.value.name, "drop_tail_module_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{10, 3}));
+        XCTAssertEqual(iterator->second.value.file_frame, 200);
+        XCTAssertEqual(iterator->second.value.track, 1);
+    }
+
+    module_pool->drop_tail_at({}, 12);
+
+    XCTAssertEqual(module_pool->modules().size(), 2);
+
+    {
+        auto iterator = module_pool->modules().begin();
+
+        XCTAssertEqual(iterator->first.range, (time::range{10, 2}));
+        XCTAssertEqual(iterator->second.value.name, "drop_tail_module_a");
+        XCTAssertEqual(iterator->second.value.range, (time::range{10, 2}));
+        XCTAssertEqual(iterator->second.value.file_frame, 100);
+        XCTAssertEqual(iterator->second.value.track, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{10, 2}));
+        XCTAssertEqual(iterator->second.value.name, "drop_tail_module_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{10, 2}));
+        XCTAssertEqual(iterator->second.value.file_frame, 200);
+        XCTAssertEqual(iterator->second.value.track, 1);
+    }
+}
+
+- (void)test_drop_tail_by_single_track {
+    auto const database = std::make_shared<database_mock>();
+    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
+
+    module_object const src_module_a{db::make_temporary_id(), {"drop_tail_module_a", {0, 3}, 0, 100, ""}};
+    module_object const src_module_b{db::make_temporary_id(), {"drop_tail_module_b", {1, 2}, 1, 200, ""}};
+
+    module_pool->revert_modules_and_notify({src_module_a, src_module_b});
+
+    module_pool->drop_tail_at({0}, 2);
+
+    XCTAssertEqual(module_pool->modules().size(), 2);
+
+    {
+        auto iterator = module_pool->modules().begin();
+
+        XCTAssertEqual(iterator->first.range, (time::range{0, 2}));
+        XCTAssertEqual(iterator->second.value.name, "drop_tail_module_a");
+        XCTAssertEqual(iterator->second.value.range, (time::range{0, 2}));
+        XCTAssertEqual(iterator->second.value.file_frame, 100);
+        XCTAssertEqual(iterator->second.value.track, 0);
+
+        ++iterator;
+
+        XCTAssertEqual(iterator->first.range, (time::range{1, 2}));
+        XCTAssertEqual(iterator->second.value.name, "drop_tail_module_b");
+        XCTAssertEqual(iterator->second.value.range, (time::range{1, 2}));
+        XCTAssertEqual(iterator->second.value.file_frame, 200);
+        XCTAssertEqual(iterator->second.value.track, 1);
+    }
+}
+
 - (void)test_overwrite_module_middle_cropped {
     auto const database = std::make_shared<database_mock>();
     auto const module_pool = std::make_shared<ae::module_pool>(database.get());
@@ -605,114 +808,6 @@ using namespace yas::ae::module_pool_test_utils;
     XCTAssertEqual(iterator->second.value.name, "base_2");
     XCTAssertEqual(iterator->second.value.range, (time::range{104, 2}));
     XCTAssertEqual(iterator->second.value.file_frame, 4);
-}
-
-- (void)test_move_one_module {
-    auto const database = std::make_shared<database_mock>();
-    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
-
-    module_object const module1{db::make_temporary_id(), {"move_module", {0, 1}, 0, 0, ""}};
-
-    module_pool->revert_modules_and_notify({module1});
-
-    {
-        module_pool->move_modules({module1.index()}, 1);
-
-        XCTAssertEqual(module_pool->modules().size(), 1);
-
-        auto iterator = module_pool->modules().begin();
-
-        XCTAssertEqual(iterator->first.range, (time::range{1, 1}));
-        XCTAssertEqual(iterator->second.value.name, "move_module");
-        XCTAssertEqual(iterator->second.value.range, (time::range{1, 1}));
-        XCTAssertEqual(iterator->second.value.file_frame, 0);
-    }
-
-    {
-        module_pool->move_modules({module_pool->first_module()->index()}, -2);
-
-        XCTAssertEqual(module_pool->modules().size(), 1);
-
-        auto iterator = module_pool->modules().begin();
-
-        XCTAssertEqual(iterator->first.range, (time::range{-1, 1}));
-        XCTAssertEqual(iterator->second.value.name, "move_module");
-        XCTAssertEqual(iterator->second.value.range, (time::range{-1, 1}));
-        XCTAssertEqual(iterator->second.value.file_frame, 0);
-    }
-}
-
-- (void)test_move_many_modules {
-    auto const database = std::make_shared<database_mock>();
-    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
-
-    module_object const module1{db::make_temporary_id(), {"module_1", {0, 1}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_2", {1, 1}, 0, 1, ""}};
-    module_object const module3{db::make_temporary_id(), {"module_3", {2, 1}, 0, 2, ""}};
-
-    module_pool->revert_modules_and_notify({module1, module2, module3});
-
-    module_pool->move_modules({module2.index(), module3.index()}, 1);
-
-    XCTAssertEqual(module_pool->modules().size(), 3);
-
-    auto iterator = module_pool->modules().begin();
-
-    XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
-    XCTAssertEqual(iterator->second.value.name, "module_1");
-    XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 0);
-
-    ++iterator;
-
-    XCTAssertEqual(iterator->first.range, (time::range{2, 1}));
-    XCTAssertEqual(iterator->second.value.name, "module_2");
-    XCTAssertEqual(iterator->second.value.range, (time::range{2, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 1);
-
-    ++iterator;
-
-    XCTAssertEqual(iterator->first.range, (time::range{3, 1}));
-    XCTAssertEqual(iterator->second.value.name, "module_3");
-    XCTAssertEqual(iterator->second.value.range, (time::range{3, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 2);
-}
-
-- (void)test_move_cropped {
-    auto const database = std::make_shared<database_mock>();
-    auto const module_pool = std::make_shared<ae::module_pool>(database.get());
-
-    module_object const module1{db::make_temporary_id(), {"module_1", {0, 4}, 0, 0, ""}};
-    module_object const module2{db::make_temporary_id(), {"module_2", {4, 2}, 0, 4, ""}};
-
-    module_pool->revert_modules_and_notify({module1, module2});
-
-    XCTAssertEqual(module_pool->modules().size(), 2);
-
-    module_pool->move_modules({module2.index()}, -3);
-
-    XCTAssertEqual(module_pool->modules().size(), 3);
-
-    auto iterator = module_pool->modules().begin();
-
-    XCTAssertEqual(iterator->first.range, (time::range{0, 1}));
-    XCTAssertEqual(iterator->second.value.name, "module_1");
-    XCTAssertEqual(iterator->second.value.range, (time::range{0, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 0);
-
-    ++iterator;
-
-    XCTAssertEqual(iterator->first.range, (time::range{1, 2}));
-    XCTAssertEqual(iterator->second.value.name, "module_2");
-    XCTAssertEqual(iterator->second.value.range, (time::range{1, 2}));
-    XCTAssertEqual(iterator->second.value.file_frame, 4);
-
-    ++iterator;
-
-    XCTAssertEqual(iterator->first.range, (time::range{3, 1}));
-    XCTAssertEqual(iterator->second.value.name, "module_1");
-    XCTAssertEqual(iterator->second.value.range, (time::range{3, 1}));
-    XCTAssertEqual(iterator->second.value.file_frame, 3);
 }
 
 @end
