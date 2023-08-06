@@ -45,11 +45,10 @@ ui_zooming::ui_zooming(std::shared_ptr<ui::standard> const &standard, display_sp
 }
 
 void ui_zooming::_update_scale() {
-    auto const zooming_scale = this->_presenter->zooming_scale();
-    float const width = zooming_scale.horizontal * ui_zooming_constants::standard_width_per_sec;
-    float const height = std::ceil(zooming_scale.vertical * ui_zooming_constants::standard_height_per_track);
+    auto const zooming_size = to_zooming_size(this->_presenter->zooming_scale());
 
-    ui::size const scale{width, height};
+    ui::size const scale{static_cast<float>(zooming_size.width_per_sec),
+                         static_cast<float>(zooming_size.height_per_track)};
     this->_display_space->set_scale(scale);
     this->_modules->set_scale(scale);
     this->_pasting_modules->set_scale(scale);

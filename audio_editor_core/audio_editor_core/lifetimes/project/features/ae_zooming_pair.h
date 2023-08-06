@@ -5,7 +5,8 @@
 #pragma once
 
 #include <audio_editor_core/ae_zooming.h>
-#include <audio_editor_core/ae_zooming_types.h>
+
+#include <audio_editor_core/ae_zooming_types.hpp>
 
 namespace yas::ae {
 struct zooming_pair final {

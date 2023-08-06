@@ -22,11 +22,9 @@ scroll_gesture_controller::scroll_gesture_controller(horizontal_scrolling_for_ge
 }
 
 void scroll_gesture_controller::handle_gesture(scroll_gesture const &gesture) {
-    auto const scale = this->_zooming_pair->scale();
-    auto const width_per_sec = ui_zooming_constants::standard_width_per_sec * scale.horizontal;
-    auto const delta_time = -gesture.delta_x / width_per_sec;
-    auto const height_per_track = std::ceil(ui_zooming_constants::standard_height_per_track * scale.vertical);
-    auto const delta_track = gesture.delta_y / height_per_track;
+    auto const zooming_size = to_zooming_size(this->_zooming_pair->scale());
+    auto const delta_time = -gesture.delta_x / zooming_size.width_per_sec;
+    auto const delta_track = gesture.delta_y / zooming_size.height_per_track;
 
     switch (gesture.state) {
         case gesture_state::began:
