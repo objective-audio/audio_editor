@@ -6,8 +6,8 @@
 
 #include <audio_editor_core/ae_file_info.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
-#include <audio_editor_core/ae_zooming_types.h>
 
+#include <audio_editor_core/ae_zooming_types.hpp>
 #include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {

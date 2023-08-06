@@ -6,9 +6,9 @@
 
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
-#include <audio_editor_core/ae_zooming_types.h>
 #include <ui/yas_ui_types.h>
 
+#include <audio_editor_core/ae_zooming_types.hpp>
 #include <memory>
 
 namespace yas::ae {
