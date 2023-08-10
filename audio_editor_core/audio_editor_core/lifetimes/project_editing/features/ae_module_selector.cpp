@@ -25,8 +25,6 @@ bool module_selector::can_select() const {
 }
 
 void module_selector::select(std::vector<module_index> const &indices) {
-    this->_selected_pool->clear();
-
     auto const inserting = to_vector<selected_module_object>(indices, [](auto const &index) {
         return selected_module_object{index.object_id, {index.range, index.track}};
     });

@@ -23,7 +23,6 @@ range_selector::range_selector(player_for_range_selector *player, deselector_for
 
 void range_selector::begin(ui::point const &position) {
     if (!this->_player->is_playing()) {
-        this->_deselector->deselect_all();
         this->_range->set_value(point_range{.first = position, .second = position});
     }
 }
