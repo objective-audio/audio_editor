@@ -148,16 +148,21 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
     this->_touch_tracker
         ->observe([this](ui::touch_tracker::context const &context) {
             if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
+                auto const &modifiers = this->_modifiers_holder->modifiers();
+
                 switch (context.phase) {
                     case ui::touch_tracker_phase::began:
                         this->_began_collider_idx = context.collider_idx;
-                        if (this->_modifiers_holder->modifiers().empty()) {
+                        if (modifiers.empty()) {
+                            this->_controller->deselect_all();
+                            this->_controller->begin_range_selection(context.touch_event.position);
+                        } else if (modifiers.size() == 1 && modifiers.contains(ae::modifier::shift)) {
                             this->_controller->begin_range_selection(context.touch_event.position);
                         }
                         break;
                     case ui::touch_tracker_phase::ended:
                         if (this->_began_collider_idx == context.collider_idx) {
-                            if (this->_modifiers_holder->modifiers().contains(ae::modifier::command)) {
+                            if (modifiers.contains(ae::modifier::command)) {
                                 this->_controller->toggle_selection(context.collider_idx);
                             }
                         }

@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_project_action_sender.h>
 #include <cpp_utils/yas_assertion.h>
 
+#include <audio_editor_core/ae_deselector.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
 
 using namespace yas;
@@ -16,24 +17,31 @@ using namespace yas::ae;
 
 std::shared_ptr<modules_controller> modules_controller::make_shared(project_lifetime_id const &project_lifetime_id) {
     auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
-    return std::make_shared<modules_controller>(project_editing_lifetime->action_sender,
-                                                project_editing_lifetime->module_content_pool,
-                                                project_editing_lifetime->range_selector);
+    return std::make_shared<modules_controller>(
+        project_editing_lifetime->action_sender, project_editing_lifetime->module_content_pool,
+        project_editing_lifetime->range_selector, project_editing_lifetime->deselector);
 }
 
 modules_controller::modules_controller(std::shared_ptr<project_action_sender> const &action_sender,
                                        std::shared_ptr<module_content_pool> const &content_pool,
-                                       std::shared_ptr<range_selector> const &range_selector)
-    : _action_sender(action_sender), _content_pool(content_pool), _range_selector(range_selector) {
+                                       std::shared_ptr<range_selector> const &range_selector,
+                                       std::shared_ptr<deselector> const &deselector)
+    : _action_sender(action_sender),
+      _content_pool(content_pool),
+      _range_selector(range_selector),
+      _deselector(deselector) {
+}
+
+void modules_controller::deselect_all() {
+    if (auto const deselector = this->_deselector.lock()) {
+        deselector->deselect_all();
+    }
 }
 
 void modules_controller::begin_range_selection(ui::point const &position) {
-    auto const range_selector = this->_range_selector.lock();
-    if (!range_selector) {
-        return;
+    if (auto const range_selector = this->_range_selector.lock()) {
+        range_selector->begin(position);
     }
-
-    range_selector->begin(position);
 }
 
 void modules_controller::select(std::vector<std::size_t> const &indices) {

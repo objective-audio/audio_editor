@@ -26,8 +26,6 @@ bool marker_selector::can_select() const {
 }
 
 void marker_selector::select(std::vector<marker_index> const &indices) {
-    this->_selected_pool->clear();
-
     auto inserting = to_vector<selected_marker_object>(indices, [](auto const &index) {
         return selected_marker_object{index.object_id, selected_marker{index.frame}};
     });
