@@ -41,12 +41,7 @@ struct module_content final {
 
     [[nodiscard]] module_index index() const;
 
-    [[nodiscard]] float x() const;
-    [[nodiscard]] float top_y() const;
-    [[nodiscard]] float middle_y() const;
-    [[nodiscard]] float bottom_y() const;
-    [[nodiscard]] float width() const;
-    [[nodiscard]] float height() const;
+    [[nodiscard]] ui::region region() const;
     [[nodiscard]] uint32_t total_rect_count() const;
 
     [[nodiscard]] std::optional<float> element_offset_x(std::size_t const) const;
