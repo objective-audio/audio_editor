@@ -243,8 +243,7 @@ void ui_modules::_replace_data(std::vector<std::optional<module_content>> const 
 
                 if (content.has_value()) {
                     auto const &value = content.value();
-                    ui::region const region{.origin = {.x = value.x(), .y = value.bottom_y()},
-                                            .size = {.width = value.width(), .height = value.height()}};
+                    auto const region = value.region();
                     rect.set_position(region);
                     rect.set_tex_coord(filled_tex_coords);
 
@@ -353,8 +352,7 @@ void ui_modules::_update_data(std::size_t const count,
                 if (range.contains(content_idx)) {
                     auto const vertex_idx = content_idx - range.index;
                     auto const &value = pair.second;
-                    ui::region const region{.origin = {.x = value.x(), .y = value.bottom_y()},
-                                            .size = {.width = value.width(), .height = value.height()}};
+                    auto const region = value.region();
 
                     auto &rect = vertex_rects[vertex_idx];
                     rect.set_position(region);
@@ -456,10 +454,10 @@ void ui_modules::_update_all_name_positions() {
 
 void ui_modules::_update_name_position(std::size_t const idx, ae::module_content const &content) {
     auto const &strings = this->_names.at(idx);
-    auto const &node = strings->rect_plane()->node();
+    auto const region = content.region();
 
-    node->set_position({.x = content.x() * this->_scale.width, .y = content.top_y() * this->_scale.height});
     strings->preferred_layout_guide()->set_region(
-        {.origin = {.x = 0.0f, .y = -this->_scale.height},
-         .size = {.width = content.width() * this->_scale.width, .height = content.height() * this->_scale.height}});
+        {.origin = {.x = region.origin.x * this->_scale.width, .y = region.bottom() * this->_scale.height},
+         .size = {.width = region.size.width * this->_scale.width,
+                  .height = region.size.height * this->_scale.height}});
 }

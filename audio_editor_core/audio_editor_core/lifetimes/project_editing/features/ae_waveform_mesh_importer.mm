@@ -213,8 +213,9 @@ void waveform_mesh_importer::import(std::size_t const idx, module_content const 
                 datas.emplace_back(waveform_mesh_data{mesh_vertex_data, mesh_index_data});
 
                 mesh_vertex_data->write([&content](std::vector<ui::vertex2d_t> &vector) {
+                    auto const region = content.region();
                     vector[0].position = {0.0f, 0.0f};
-                    vector[1].position = {content.width(), 0.0f};
+                    vector[1].position = {region.size.width, region.size.height};
                 });
 
                 mesh_index_data->write_once([](std::vector<ui::index2d_t> &vector) {

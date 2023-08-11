@@ -193,9 +193,9 @@ void ui_module_waveforms::_replace_elements(bool const clear_meshes) {
 
         if (content.has_value()) {
             auto const &content_value = content.value();
+            auto const region = content_value.region();
             element->node->set_is_enabled(true);
-            element->node->set_position(
-                {.x = content_value.x() * content_value.scale.width, .y = content_value.middle_y()});
+            element->node->set_position({.x = region.origin.x * content_value.scale.width, .y = region.center().y});
             this->_presenter->import(idx, content.value());
         } else {
             element->node->set_is_enabled(false);
@@ -241,9 +241,10 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
 
         if (idx < this->_elements.size() && idx < contents.size()) {
             auto const &content = pair.second;
+            auto const region = content.region();
             auto &element = this->_elements.at(idx);
             element->node->set_is_enabled(true);
-            element->node->set_position({.x = content.x() * content.scale.width, .y = content.middle_y()});
+            element->node->set_position({.x = region.origin.x * content.scale.width, .y = region.center().y});
             auto const &color = content.is_selected ? selected_color : normal_color;
             element->update_colors(color);
             this->_presenter->import(idx, content);
@@ -257,10 +258,11 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
 
         if (idx < this->_elements.size()) {
             auto const &content = pair.second;
+            auto const region = content.region();
             auto &element = this->_elements.at(idx);
             element->clear();
             element->node->set_is_enabled(true);
-            element->node->set_position({.x = content.x() * content.scale.width, .y = content.middle_y()});
+            element->node->set_position({.x = region.origin.x * content.scale.width, .y = region.center().y});
             auto const &color = content.is_selected ? selected_color : normal_color;
             element->update_colors(color);
             this->_presenter->import(idx, content);

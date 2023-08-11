@@ -87,28 +87,13 @@ module_index module_content::index() const {
     return {this->identifier, this->range, this->track};
 }
 
-float module_content::x() const {
-    return static_cast<double>(this->range.frame) / static_cast<double>(this->sample_rate);
-}
-
-float module_content::top_y() const {
-    return static_cast<double>(this->track) + 0.5;
-}
-
-float module_content::middle_y() const {
-    return static_cast<double>(this->track);
-}
-
-float module_content::bottom_y() const {
-    return static_cast<double>(this->track) - 0.5;
-}
-
-float module_content::width() const {
-    return static_cast<double>(this->range.length) / static_cast<double>(this->sample_rate);
-}
-
-float module_content::height() const {
-    return 1.0f;
+ui::region module_content::region() const {
+    double const sample_rate = static_cast<double>(this->sample_rate);
+    float const x = static_cast<double>(this->range.frame) / sample_rate;
+    float const width = static_cast<double>(this->range.length) / sample_rate;
+    double const height = 0.8;
+    float const y = static_cast<double>(this->track) - height * 0.5f;
+    return ui::region{.origin = {.x = x, .y = y}, .size = {.width = width, .height = static_cast<float>(height)}};
 }
 
 uint32_t module_content::total_rect_count() const {
