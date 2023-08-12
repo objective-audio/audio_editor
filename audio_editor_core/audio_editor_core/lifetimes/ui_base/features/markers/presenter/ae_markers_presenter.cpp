@@ -11,7 +11,7 @@
 #include <audio_editor_core/ae_player.h>
 #include <cpp_utils/yas_lock.h>
 
-#include <audio_editor_core/ae_display_space_range.hpp>
+#include <audio_editor_core/ae_display_space_time_range.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
 
 using namespace yas;
@@ -24,14 +24,14 @@ std::shared_ptr<markers_presenter> markers_presenter::make_shared(
     return std::make_shared<markers_presenter>(
         project_editing_lifetime->project_format, project_lifetime->player, project_editing_lifetime->marker_pool,
         project_editing_lifetime->selected_marker_pool, project_lifetime->display_space,
-        project_editing_lifetime->display_space_range, content_pool, project_editing_lifetime->range_selector);
+        project_editing_lifetime->display_space_time_range, content_pool, project_editing_lifetime->range_selector);
 }
 
 markers_presenter::markers_presenter(project_format const &project_format, std::shared_ptr<player> const &player,
                                      std::shared_ptr<marker_pool> const &marker_pool,
                                      std::shared_ptr<selected_marker_pool> const &selected_marker_pool,
                                      std::shared_ptr<display_space> const &display_space,
-                                     std::shared_ptr<display_space_range> const &display_space_range,
+                                     std::shared_ptr<display_space_time_range> const &display_space_time_range,
                                      std::shared_ptr<marker_content_pool> const &content_pool,
                                      std::shared_ptr<range_selector> const &range_selector)
     : _project_format(project_format),
@@ -39,7 +39,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
       _marker_pool(marker_pool),
       _selected_marker_pool(selected_marker_pool),
       _display_space(display_space),
-      _display_space_range(display_space_range),
+      _display_space_time_range(display_space_time_range),
       _content_pool(content_pool),
       _range_selector(range_selector) {
     auto const sample_rate = this->_project_format.sample_rate;
@@ -131,7 +131,7 @@ void markers_presenter::update_if_needed() {
 }
 
 std::optional<time::range> markers_presenter::_space_range() const {
-    if (auto const space_range = this->_display_space_range.lock()) {
+    if (auto const space_range = this->_display_space_time_range.lock()) {
         return space_range->current();
     } else {
         return std::nullopt;

@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_common_types.h>
 #include <cpp_utils/yas_identifier.h>
+#include <ui/yas_ui_types.h>
 
 #include <audio_editor_core/ae_pasting_module_index.hpp>
 
@@ -25,9 +26,7 @@ struct pasting_module_content final {
 
     [[nodiscard]] pasting_module_index index() const;
 
-    [[nodiscard]] float x() const;
-    [[nodiscard]] float y() const;
-    [[nodiscard]] float width() const;
+    [[nodiscard]] ui::region region() const;
 
     bool operator==(pasting_module_content const &rhs) const;
     bool operator!=(pasting_module_content const &rhs) const;

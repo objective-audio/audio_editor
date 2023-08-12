@@ -10,7 +10,6 @@
 #include <cpp_utils/yas_lock.h>
 
 #include <audio_editor_core/ae_display_space_range.hpp>
-#include <audio_editor_core/ae_track_selector.hpp>
 #include <audio_editor_core/ae_vertical_scrolling.hpp>
 
 using namespace yas;
@@ -25,7 +24,7 @@ std::shared_ptr<pasting_modules_presenter> pasting_modules_presenter::make_share
     return std::make_shared<pasting_modules_presenter>(
         project_editing_lifetime->project_format, project_editing_lifetime->pasteboard, project_lifetime->display_space,
         project_editing_lifetime->display_space_range, project_editing_lifetime->pasting_module_content_pool,
-        project_editing_lifetime->track_selector, project_lifetime->vertical_scrolling);
+        project_lifetime->vertical_scrolling);
 }
 
 pasting_modules_presenter::pasting_modules_presenter(project_format const &project_format,
@@ -33,14 +32,12 @@ pasting_modules_presenter::pasting_modules_presenter(project_format const &proje
                                                      std::shared_ptr<display_space> const &display_space,
                                                      std::shared_ptr<display_space_range> const &display_space_range,
                                                      std::shared_ptr<pasting_module_content_pool> const &content_pool,
-                                                     std::shared_ptr<track_selector> const &track_selector,
                                                      std::shared_ptr<vertical_scrolling> const &scrolling)
     : _project_format(project_format),
       _pasteboard(pasteboard),
       _display_space(display_space),
       _display_space_range(display_space_range),
       _content_pool(content_pool),
-      _track_selector(track_selector),
       _scrolling(scrolling) {
     pasteboard
         ->observe_event([this](pasteboard_event const &event) {
@@ -82,9 +79,8 @@ observing::syncable pasting_modules_presenter::observe_contents(
 }
 
 double pasting_modules_presenter::y_offset() const {
-    if (auto const locked = yas::lock(this->_track_selector, this->_scrolling); fulfilled(locked)) {
-        auto const &[track_selector, scrolling] = locked;
-        return track_selector->current() - static_cast<double>(scrolling->track());
+    if (auto const scrolling = this->_scrolling.lock()) {
+        return -scrolling->position_offset();
     } else {
         return 0;
     }
@@ -94,44 +90,47 @@ void pasting_modules_presenter::update_if_needed() {
     this->_update_all_contents(false, false);
 }
 
-std::optional<time::range> pasting_modules_presenter::_space_range() const {
-    if (auto const space_range = this->_display_space_range.lock()) {
-        return space_range->zero();
-    } else {
-        return std::nullopt;
+std::optional<ae::space_range> pasting_modules_presenter::_space_range() const {
+    if (auto const display_space_range = this->_display_space_range.lock()) {
+        auto const space_range = display_space_range->zero();
+        if (space_range.has_value()) {
+            return space_range.value();
+        }
     }
+    return std::nullopt;
 }
 
 void pasting_modules_presenter::_update_all_contents(bool const force_updating, bool const force_replacing) {
     auto const space_range = this->_space_range();
 
-    if (space_range.has_value()) {
-        if (space_range == this->_last_space_range && !force_updating) {
-            return;
-        }
-
-        auto const locked = yas::lock(this->_pasteboard, this->_display_space, this->_content_pool);
-
-        if (!fulfilled(locked)) {
-            return;
-        }
-
-        auto const &[pasteboard, display_space, content_pool] = locked;
-        auto const &space_range_value = space_range.value();
-        auto const scale = display_space->scale().width;
-
-        auto const contents = filter_map<pasting_module_content>(
-            pasteboard->modules(), [&space_range_value, sample_rate = this->_project_format.sample_rate,
-                                    &scale](pasting_module_object const &module) {
-                if (module.value.range.is_overlap(space_range_value)) {
-                    return std::make_optional<pasting_module_content>(module, sample_rate, scale);
-                } else {
-                    return std::optional<pasting_module_content>(std::nullopt);
-                }
-            });
-
-        content_pool->update_all(contents, force_replacing);
-
-        this->_last_space_range = space_range;
+    if (!space_range.has_value()) {
+        return;
     }
+
+    if (space_range == this->_last_space_range && !force_updating) {
+        return;
+    }
+
+    auto const locked = yas::lock(this->_pasteboard, this->_display_space, this->_content_pool);
+
+    if (!fulfilled(locked)) {
+        return;
+    }
+
+    auto const &[pasteboard, display_space, content_pool] = locked;
+    auto const scale = display_space->scale().width;
+
+    auto const contents = filter_map<pasting_module_content>(
+        pasteboard->modules(),
+        [&space_range, sample_rate = this->_project_format.sample_rate, &scale](pasting_module_object const &module) {
+            if (module.index().is_overlap(space_range.value())) {
+                return std::make_optional<pasting_module_content>(module, sample_rate, scale);
+            } else {
+                return std::optional<pasting_module_content>(std::nullopt);
+            }
+        });
+
+    content_pool->update_all(contents, force_replacing);
+
+    this->_last_space_range = space_range;
 }

@@ -58,6 +58,8 @@ class range_selector;
 class escaper;
 class project_editing_receiver;
 class project_lifetime;
+class display_space_time_range;
+class display_space_track_range;
 class display_space_range;
 class track_selector;
 
@@ -113,6 +115,8 @@ struct project_editing_lifetime final {
     std::shared_ptr<import_interactor> const import_interactor;
     std::shared_ptr<module_editor> const module_editor;
     std::shared_ptr<range_selector> const range_selector;
+    std::shared_ptr<display_space_time_range> const display_space_time_range;
+    std::shared_ptr<display_space_track_range> const display_space_track_range;
     std::shared_ptr<display_space_range> const display_space_range;
     std::shared_ptr<escaper> const escaper;
     std::shared_ptr<project_editing_receiver> const receiver;

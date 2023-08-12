@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_common_types.h>
 #include <audio_editor_core/ae_display_space_types.h>
 
+#include <audio_editor_core/ae_track_range.hpp>
 #include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
@@ -25,6 +26,8 @@ struct display_space final {
     [[nodiscard]] std::optional<time::range> frame_range(uint32_t const sample_rate,
                                                          frame_index_t const current_frame) const;
     [[nodiscard]] float frames_per_point_width(uint32_t const sample_rate) const;
+
+    [[nodiscard]] std::optional<track_range> track_range(double const track_offset) const;
 
    private:
     ui::region _region;

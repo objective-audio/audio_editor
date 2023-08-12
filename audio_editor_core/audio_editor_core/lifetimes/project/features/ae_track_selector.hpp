@@ -15,7 +15,7 @@ struct track_selector final {
     [[nodiscard]] observing::syncable observe_current(std::function<void(track_index_t const &)> &&);
 
    private:
-    scrolling_for_track_selector *scrolling;
+    scrolling_for_track_selector *_scrolling;
 
     observing::value::holder_ptr<track_index_t> const _current;
     observing::canceller_pool _cancellers;

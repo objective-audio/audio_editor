@@ -142,12 +142,14 @@ void modules_presenter::update_if_needed() {
     this->_update_all_contents(false, false);
 }
 
-std::optional<time::range> modules_presenter::_space_range() const {
-    if (auto const space_range = this->_display_space_range.lock()) {
-        return space_range->current();
-    } else {
-        return std::nullopt;
+std::optional<ae::space_range> modules_presenter::_space_range() const {
+    if (auto const display_space_range = this->_display_space_range.lock()) {
+        auto const space_range = display_space_range->current();
+        if (space_range.has_value()) {
+            return space_range.value();
+        }
     }
+    return std::nullopt;
 }
 
 void modules_presenter::_insert_content(module_object const &module) {
@@ -160,9 +162,10 @@ void modules_presenter::_insert_content(module_object const &module) {
     auto const &[content_pool, display_space, selected_pool] = locked;
 
     auto const space_range = this->_space_range();
-    if (space_range.has_value() && module.value.range.is_overlap(space_range.value())) {
+
+    if (space_range.has_value() && module.index().is_overlap(space_range.value())) {
         content_pool->insert({module, selected_pool->contains(module.index()), this->_project_format.sample_rate,
-                              space_range.value(), display_space->scale()});
+                              space_range.value().time_range, display_space->scale()});
     }
 }
 
@@ -186,12 +189,13 @@ void modules_presenter::_replace_contents(std::vector<module_index> const &indic
     auto const &[content_pool, display_space, module_pool, selected_pool] = locked;
 
     auto const space_range = this->_space_range();
+
     if (space_range.has_value()) {
         for (auto const &index : indices) {
-            if (index.range.is_overlap(space_range.value())) {
+            if (index.is_overlap(space_range.value())) {
                 if (auto const module = module_pool->module_at(index)) {
                     content_pool->replace({module.value(), selected_pool->contains(index),
-                                           this->_project_format.sample_rate, space_range.value(),
+                                           this->_project_format.sample_rate, space_range.value().time_range,
                                            display_space->scale()});
                 }
             }
@@ -215,16 +219,15 @@ void modules_presenter::_update_all_contents(bool const force_updating, bool con
             return;
         }
 
-        auto const &space_range_value = space_range.value();
         auto const scale = display_space->scale();
 
         auto const contents = filter_map<module_content>(
-            module_pool->modules(), [&space_range_value, sample_rate = this->_project_format.sample_rate, &scale,
+            module_pool->modules(), [&space_range, sample_rate = this->_project_format.sample_rate, &scale,
                                      &selected_pool = selected_pool](auto const &module) {
-                if (module.first.range.is_overlap(space_range_value)) {
+                if (module.first.is_overlap(space_range.value())) {
                     return std::make_optional<module_content>(module.second,
                                                               selected_pool->contains(module.second.index()),
-                                                              sample_rate, space_range_value, scale);
+                                                              sample_rate, space_range.value().time_range, scale);
                 } else {
                     return std::optional<module_content>(std::nullopt);
                 }

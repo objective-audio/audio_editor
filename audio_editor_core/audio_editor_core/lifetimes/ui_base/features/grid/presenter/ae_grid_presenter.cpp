@@ -8,7 +8,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <cpp_utils/yas_lock.h>
 
-#include <audio_editor_core/ae_display_space_range.hpp>
+#include <audio_editor_core/ae_display_space_time_range.hpp>
 #include <audio_editor_core/ae_grid_updater.hpp>
 
 using namespace yas;
@@ -21,18 +21,18 @@ std::shared_ptr<grid_presenter> grid_presenter::make_shared(project_lifetime_id 
     auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(lifetime_id);
     return std::make_shared<grid_presenter>(
         lifetime_id, project_editing_lifetime->project_format, project_lifetime->display_space,
-        project_editing_lifetime->display_space_range, project_editing_lifetime->grid_updater,
+        project_editing_lifetime->display_space_time_range, project_editing_lifetime->grid_updater,
         project_editing_lifetime->grid_content_pool);
 }
 
 grid_presenter::grid_presenter(project_lifetime_id const lifetime_id, project_format const project_format,
                                std::shared_ptr<display_space> const &display_space,
-                               std::shared_ptr<display_space_range> const &display_space_range,
+                               std::shared_ptr<display_space_time_range> const &display_space_time_range,
                                std::shared_ptr<grid_updater> const &updater,
                                std::shared_ptr<grid_content_pool> const &content_pool)
     : _project_format(project_format),
       _display_space(display_space),
-      _display_space_range(display_space_range),
+      _display_space_time_range(display_space_time_range),
       _updater(updater),
       _content_pool(content_pool) {
 }
@@ -46,7 +46,7 @@ std::vector<std::optional<grid_content>> const &grid_presenter::contents() const
 }
 
 void grid_presenter::update_contents() {
-    auto const locked = yas::lock(this->_display_space_range, this->_display_space, this->_updater);
+    auto const locked = yas::lock(this->_display_space_time_range, this->_display_space, this->_updater);
     if (!fulfilled(locked)) {
         return;
     }

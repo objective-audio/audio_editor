@@ -9,7 +9,7 @@
 #include <audio_editor_core/ae_pasteboard.h>
 #include <cpp_utils/yas_lock.h>
 
-#include <audio_editor_core/ae_display_space_range.hpp>
+#include <audio_editor_core/ae_display_space_time_range.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -22,18 +22,18 @@ std::shared_ptr<pasting_markers_presenter> pasting_markers_presenter::make_share
     auto const &project_editing_lifetime = hierarchy::project_editing_lifetime_for_id(project_lifetime_id);
     return std::make_shared<pasting_markers_presenter>(
         project_editing_lifetime->project_format, project_editing_lifetime->pasteboard, project_lifetime->display_space,
-        project_editing_lifetime->display_space_range, project_editing_lifetime->pasting_marker_content_pool);
+        project_editing_lifetime->display_space_time_range, project_editing_lifetime->pasting_marker_content_pool);
 }
 
-pasting_markers_presenter::pasting_markers_presenter(project_format const &project_format,
-                                                     std::shared_ptr<pasteboard> const &pasteboard,
-                                                     std::shared_ptr<display_space> const &display_space,
-                                                     std::shared_ptr<display_space_range> const &display_space_range,
-                                                     std::shared_ptr<pasting_marker_content_pool> const &content_pool)
+pasting_markers_presenter::pasting_markers_presenter(
+    project_format const &project_format, std::shared_ptr<pasteboard> const &pasteboard,
+    std::shared_ptr<display_space> const &display_space,
+    std::shared_ptr<display_space_time_range> const &display_space_time_range,
+    std::shared_ptr<pasting_marker_content_pool> const &content_pool)
     : _project_format(project_format),
       _pasteboard(pasteboard),
       _display_space(display_space),
-      _display_space_range(display_space_range),
+      _display_space_time_range(display_space_time_range),
       _content_pool(content_pool) {
     pasteboard
         ->observe_event([this](pasteboard_event const &event) {
@@ -80,7 +80,7 @@ void pasting_markers_presenter::update_if_needed() {
 }
 
 std::optional<time::range> pasting_markers_presenter::_space_range() const {
-    if (auto const space_range = this->_display_space_range.lock()) {
+    if (auto const space_range = this->_display_space_time_range.lock()) {
         return space_range->zero();
     } else {
         return std::nullopt;

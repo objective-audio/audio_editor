@@ -20,19 +20,16 @@ pasting_module_content::pasting_module_content(yas::identifier const &identifier
 }
 
 pasting_module_index pasting_module_content::index() const {
-    return {this->identifier, this->range};
+    return {this->identifier, this->range, this->track};
 }
 
-float pasting_module_content::x() const {
-    return static_cast<double>(this->range.frame) / static_cast<double>(this->sample_rate);
-}
-
-float pasting_module_content::y() const {
-    return this->track;
-}
-
-float pasting_module_content::width() const {
-    return static_cast<double>(this->range.length) / static_cast<double>(this->sample_rate);
+ui::region pasting_module_content::region() const {
+    double const sample_rate = static_cast<double>(this->sample_rate);
+    float const x = static_cast<double>(this->range.frame) / sample_rate;
+    float const width = static_cast<double>(this->range.length) / sample_rate;
+    double const height = 0.8;
+    float const y = static_cast<double>(this->track) - height * 0.5f;
+    return ui::region{.origin = {.x = x, .y = y}, .size = {.width = width, .height = static_cast<float>(height)}};
 }
 
 bool pasting_module_content::operator==(pasting_module_content const &rhs) const {

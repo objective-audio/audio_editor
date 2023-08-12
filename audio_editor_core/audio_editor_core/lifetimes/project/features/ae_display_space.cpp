@@ -58,6 +58,16 @@ float display_space::frames_per_point_width(uint32_t const sample_rate) const {
     return (float)sample_rate / this->_scale.width;
 }
 
+std::optional<track_range> display_space::track_range(double const track_offset) const {
+    auto const &region = this->region();
+    double const half_height = region.size.height * 0.5;
+    double const min = track_offset - half_height + 0.5;
+    double const max = track_offset + half_height + 0.5;
+    auto const floored_min = static_cast<track_index_t>(std::floor(min));
+    auto const floored_max = static_cast<track_index_t>(std::floor(max));
+    return ae::track_range{.min = floored_min, .max = floored_max};
+}
+
 void display_space::_update_region_and_notify(display_space_event_source const source) {
     ui::region const prev_region = this->_region;
 
