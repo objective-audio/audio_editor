@@ -32,17 +32,17 @@ void scroll_gesture_controller::handle_gesture(scroll_gesture const &gesture) {
             this->_vertical_scrolling->begin();
 
             this->_horizontal_scrolling->set_delta_time(delta_time);
-            this->_vertical_scrolling->set_delta_track(delta_track);
+            this->_vertical_scrolling->set_delta_position(delta_track);
             break;
 
         case gesture_state::changed:
             this->_horizontal_scrolling->set_delta_time(delta_time);
-            this->_vertical_scrolling->set_delta_track(delta_track);
+            this->_vertical_scrolling->set_delta_position(delta_track);
             break;
 
         case gesture_state::ended:
             this->_horizontal_scrolling->set_delta_time(delta_time);
-            this->_vertical_scrolling->set_delta_track(delta_track);
+            this->_vertical_scrolling->set_delta_position(delta_track);
 
             this->_horizontal_scrolling->end();
             this->_vertical_scrolling->end();

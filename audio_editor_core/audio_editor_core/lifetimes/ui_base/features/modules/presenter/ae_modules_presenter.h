@@ -12,6 +12,8 @@
 
 #include <audio_editor_core/ae_module_index.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
+#include <audio_editor_core/ae_space_range.hpp>
+#include <audio_editor_core/ae_track_range.hpp>
 
 namespace yas::ae {
 class display_space;
@@ -49,14 +51,14 @@ struct modules_presenter final {
     observing::canceller_pool _canceller_pool;
 
     std::optional<frame_index_t> _last_frame = std::nullopt;
-    std::optional<time::range> _last_space_range = std::nullopt;
+    std::optional<space_range> _last_space_range = std::nullopt;
 
     modules_presenter(modules_presenter const &) = delete;
     modules_presenter(modules_presenter &&) = delete;
     modules_presenter &operator=(modules_presenter const &) = delete;
     modules_presenter &operator=(modules_presenter &&) = delete;
 
-    std::optional<time::range> _space_range() const;
+    [[nodiscard]] std::optional<ae::space_range> _space_range() const;
     void _insert_content(module_object const &);
     void _erase_content(object_id const &);
     void _replace_contents(std::vector<module_index> const &);

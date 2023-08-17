@@ -4,6 +4,8 @@
 
 #include "ae_module_index.hpp"
 
+#include <audio_editor_core/ae_space_range.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
@@ -29,4 +31,8 @@ bool module_index::operator<(module_index const &rhs) const {
     }
 
     return this->object_id.identifier() < rhs.object_id.identifier();
+}
+
+bool module_index::is_overlap(space_range const &space_range) const {
+    return this->range.is_overlap(space_range.time_range) && space_range.track_range.contains(this->track);
 }

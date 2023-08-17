@@ -103,9 +103,7 @@ void ui_pasting_modules::_replace(std::vector<std::optional<pasting_module_conte
             auto const &content = contents.at(content_idx);
 
             if (content.has_value()) {
-                auto const &value = content.value();
-                ui::region const region{.origin = {.x = value.x(), .y = -0.5f + value.y()},
-                                        .size = {.width = value.width(), .height = 1.0f}};
+                auto const region = content.value().region();
                 vertex_rects[vertex_idx].set_position(region);
             } else {
                 vertex_rects[vertex_idx].set_position(ui::region::zero());
@@ -134,10 +132,7 @@ void ui_pasting_modules::_update_mesh(std::size_t const count,
                 auto const &content_idx = pair.first;
                 if (range.contains(content_idx)) {
                     auto const vertex_idx = content_idx - range.index;
-                    auto const &value = pair.second;
-                    ui::region const region{.origin = {.x = value.x(), .y = -0.5f + value.y()},
-                                            .size = {.width = value.width(), .height = 1.0f}};
-
+                    auto const &region = pair.second.region();
                     vertex_rects[vertex_idx].set_position(region);
                 }
             }

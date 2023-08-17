@@ -10,14 +10,14 @@
 
 namespace yas::ae {
 class display_space;
-class display_space_range;
+class display_space_time_range;
 class grid_updater;
 class grid_content;
 
 struct grid_presenter final {
     [[nodiscard]] static std::shared_ptr<grid_presenter> make_shared(project_lifetime_id const);
     grid_presenter(project_lifetime_id const, project_format const, std::shared_ptr<display_space> const &,
-                   std::shared_ptr<display_space_range> const &, std::shared_ptr<grid_updater> const &,
+                   std::shared_ptr<display_space_time_range> const &, std::shared_ptr<grid_updater> const &,
                    std::shared_ptr<grid_content_pool> const &);
 
     [[nodiscard]] std::vector<std::optional<grid_content>> const &contents() const;
@@ -28,7 +28,7 @@ struct grid_presenter final {
    private:
     project_format const _project_format;
     std::weak_ptr<display_space> const _display_space;
-    std::weak_ptr<display_space_range> const _display_space_range;
+    std::weak_ptr<display_space_time_range> const _display_space_time_range;
     std::weak_ptr<grid_updater> const _updater;
     std::weak_ptr<grid_content_pool> const _content_pool;
 

@@ -7,6 +7,8 @@
 #include <audio_editor_core/ae_common_types.h>
 
 namespace yas::ae {
+class space_range;
+
 struct module_index final {
     object_id object_id;
     time::range range;
@@ -17,5 +19,7 @@ struct module_index final {
     bool operator==(module_index const &) const;
     bool operator!=(module_index const &) const;
     bool operator<(module_index const &) const;
+
+    [[nodiscard]] bool is_overlap(space_range const &) const;
 };
 }  // namespace yas::ae

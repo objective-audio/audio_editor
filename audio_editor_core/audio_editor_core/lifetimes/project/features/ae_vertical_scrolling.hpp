@@ -12,16 +12,19 @@ namespace yas::ae {
 struct vertical_scrolling final : scrolling_for_track_selector {
     vertical_scrolling();
 
-    [[nodiscard]] double track() const;
-    [[nodiscard]] observing::syncable observe_track(std::function<void(double const &)> &&) override;
+    [[nodiscard]] double track_position() const;
+    [[nodiscard]] track_index_t track() const override;
+    [[nodiscard]] double position_offset() const;
+    [[nodiscard]] observing::syncable observe_track_position(std::function<void(double const &)> &&);
+    [[nodiscard]] observing::syncable observe_track(std::function<void(track_index_t const &)> &&) override;
 
     void begin();
-    void set_delta_track(double const);
+    void set_delta_position(double const);
     void end();
     [[nodiscard]] bool is_began() const;
 
    private:
-    observing::value::holder_ptr<double> const _track;
+    observing::value::holder_ptr<double> const _position;
 
     bool _is_began = false;
 

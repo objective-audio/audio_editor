@@ -50,6 +50,8 @@
 #include <audio_editor_core/ae_app_settings.hpp>
 #include <audio_editor_core/ae_deselector.hpp>
 #include <audio_editor_core/ae_display_space_range.hpp>
+#include <audio_editor_core/ae_display_space_time_range.hpp>
+#include <audio_editor_core/ae_display_space_track_range.hpp>
 #include <audio_editor_core/ae_escaper.hpp>
 #include <audio_editor_core/ae_grid_updater.hpp>
 #include <audio_editor_core/ae_marker_renaming_opener.hpp>
@@ -144,8 +146,12 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
                                                         this->track_selector.get(), this->pasteboard.get(),
                                                         this->editing_status.get())),
       range_selector(std::make_shared<ae::range_selector>(project_lifetime->player.get(), this->deselector.get())),
-      display_space_range(std::make_shared<ae::display_space_range>(
+      display_space_time_range(std::make_shared<ae::display_space_time_range>(
           project_lifetime->project_format, project_lifetime->display_space.get(), project_lifetime->player.get())),
+      display_space_track_range(std::make_shared<ae::display_space_track_range>(
+          project_lifetime->display_space.get(), project_lifetime->vertical_scrolling.get())),
+      display_space_range(std::make_shared<ae::display_space_range>(this->display_space_time_range.get(),
+                                                                    this->display_space_track_range.get())),
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get(),
                                             this->selected_marker_pool.get())),
       receiver(std::make_shared<project_editing_receiver>(

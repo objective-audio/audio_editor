@@ -17,7 +17,7 @@ pasting_module_object::pasting_module_object(yas::identifier const &identifier, 
 }
 
 pasting_module_index pasting_module_object::index() const {
-    return {this->identifier, this->value.range};
+    return {this->identifier, this->value.range, this->value.track};
 }
 
 std::string yas::to_string(ae::pasting_module const &module) {
