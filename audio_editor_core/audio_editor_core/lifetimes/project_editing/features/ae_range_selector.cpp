@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::ae;
 
 range_selector::range_selector(player_for_range_selector *player, deselector_for_range_selector *deselector)
-    : _range(observing::value::holder<std::optional<point_range>>::make_shared(std::nullopt)),
+    : _selection(observing::value::holder<range_selection>::make_shared({.phase = range_selection_phase::ended})),
       _player(player),
       _deselector(deselector) {
     this->_player
@@ -23,35 +23,38 @@ range_selector::range_selector(player_for_range_selector *player, deselector_for
 
 void range_selector::begin(ui::point const &position) {
     if (!this->_player->is_playing()) {
-        this->_range->set_value(point_range{.first = position, .second = position});
+        this->_selection->set_value(
+            {.phase = range_selection_phase::began, .range = point_range{.first = position, .second = position}});
     }
 }
 
 void range_selector::move(ui::point const &position) {
-    if (this->_range->value().has_value() && !this->_player->is_playing()) {
-        this->_range->set_value(this->_range->value().value().second_updated(position));
+    auto const &range = this->_selection->value().range;
+    if (range.has_value() && !this->_player->is_playing()) {
+        this->_selection->set_value(
+            {.phase = range_selection_phase::moved, .range = range.value().second_updated(position)});
     }
 }
 
 void range_selector::end() {
-    this->_range->set_value(std::nullopt);
+    this->_selection->set_value({.phase = range_selection_phase::ended});
 }
 
-std::optional<ui::region> range_selector::region() const {
-    if (!this->_range->value().has_value()) {
-        return std::nullopt;
-    }
-
-    return this->_range->value().value().region();
+range_selection const &range_selector::selection() const {
+    return this->_selection->value();
 }
 
 observing::syncable range_selector::observe_region(
     std::function<void(std::optional<ui::region> const &)> &&handler) const {
-    return this->_range->observe([handler = std::move(handler)](std::optional<point_range> const &range) {
-        if (range.has_value()) {
-            handler(range.value().region());
+    return this->_selection->observe([handler = std::move(handler)](range_selection const &selection) {
+        if (selection.range.has_value()) {
+            handler(selection.range.value().region());
         } else {
             handler(std::nullopt);
         }
     });
+}
+
+observing::syncable range_selector::observe(std::function<void(range_selection const &)> &&handler) const {
+    return this->_selection->observe(std::move(handler));
 }

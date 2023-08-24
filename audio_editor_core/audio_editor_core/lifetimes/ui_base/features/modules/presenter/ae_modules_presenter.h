@@ -11,6 +11,7 @@
 #include <ui/yas_ui_types.h>
 
 #include <audio_editor_core/ae_module_index.hpp>
+#include <audio_editor_core/ae_range_selection.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
 #include <audio_editor_core/ae_space_range.hpp>
 #include <audio_editor_core/ae_track_range.hpp>
@@ -32,8 +33,7 @@ struct modules_presenter final {
 
     [[nodiscard]] std::vector<std::optional<module_content>> const &contents() const;
     [[nodiscard]] observing::syncable observe_contents(std::function<void(module_content_pool_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_range_selection_region(
-        std::function<void(std::optional<ui::region> const &)> &&);
+    [[nodiscard]] observing::syncable observe_range(std::function<void(range_selection const &)> &&);
 
     std::string name_for_index(module_index const &);
 

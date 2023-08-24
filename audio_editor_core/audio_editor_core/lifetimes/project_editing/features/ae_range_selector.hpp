@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_range_selector_dependency.h>
 
 #include <audio_editor_core/ae_point_range.hpp>
+#include <audio_editor_core/ae_range_selection.hpp>
 #include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
@@ -17,11 +18,12 @@ struct range_selector final {
     void move(ui::point const &);
     void end();
 
-    [[nodiscard]] std::optional<ui::region> region() const;
+    [[nodiscard]] range_selection const &selection() const;
     [[nodiscard]] observing::syncable observe_region(std::function<void(std::optional<ui::region> const &)> &&) const;
+    [[nodiscard]] observing::syncable observe(std::function<void(range_selection const &)> &&) const;
 
    private:
-    observing::value::holder_ptr<std::optional<point_range>> const _range;
+    observing::value::holder_ptr<range_selection> const _selection;
     player_for_range_selector *_player;
     deselector_for_range_selector *_deselector;
 

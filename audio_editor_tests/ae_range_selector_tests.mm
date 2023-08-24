@@ -41,63 +41,74 @@ struct deselector_stub : deselector_for_range_selector {
 
 @implementation ae_range_selector_tests
 
-- (void)test_region {
+- (void)test_selection {
     auto const player = std::make_shared<test_utils::player_stub>();
     auto const deselector = std::make_shared<test_utils::deselector_stub>();
 
-    std::vector<std::optional<ui::region>> received;
+    std::vector<range_selection> received;
 
     range_selector selector{player.get(), deselector.get()};
 
     auto canceller =
-        selector.observe_region([&received](std::optional<ui::region> const &region) { received.emplace_back(region); })
-            .sync();
+        selector.observe([&received](range_selection const &selection) { received.emplace_back(selection); }).sync();
 
-    XCTAssertFalse(selector.region().has_value());
+    XCTAssertEqual(selector.selection().phase, range_selection_phase::ended);
+    XCTAssertFalse(selector.selection().range.has_value());
     XCTAssertEqual(received.size(), 1);
-    XCTAssertFalse(received.at(0).has_value());
+    XCTAssertEqual(received.at(0).phase, range_selection_phase::ended);
+    XCTAssertFalse(received.at(0).range.has_value());
 
     selector.begin({.x = 1.0f, .y = 2.0f});
 
     {
         ui::region const expected{.origin = {.x = 1.0f, .y = 2.0f}, .size = ui::size::zero()};
-        XCTAssertTrue(selector.region().value() == expected);
+        XCTAssertEqual(selector.selection().phase, range_selection_phase::began);
+        XCTAssertTrue(selector.selection().range.value().region() == expected);
         XCTAssertEqual(received.size(), 2);
-        XCTAssertTrue(received.at(1).value() == expected);
+        XCTAssertEqual(received.at(1).phase, range_selection_phase::began);
+        XCTAssertTrue(received.at(1).range.value().region() == expected);
     }
 
     selector.move({.x = 2.0f, .y = 4.0f});
 
     {
         ui::region const expected{.origin = {.x = 1.0f, .y = 2.0f}, .size = {.width = 1.0f, .height = 2.0f}};
-        XCTAssertTrue(selector.region().value() == expected);
+        XCTAssertEqual(selector.selection().phase, range_selection_phase::moved);
+        XCTAssertTrue(selector.selection().range.value().region() == expected);
         XCTAssertEqual(received.size(), 3);
-        XCTAssertTrue(received.at(2).value() == expected);
+        XCTAssertEqual(received.at(2).phase, range_selection_phase::moved);
+        XCTAssertTrue(received.at(2).range.value().region() == expected);
     }
 
     selector.move({.x = 0.0f, .y = 0.0f});
 
     {
         ui::region const expected{.origin = {.x = 0.0f, .y = 0.0f}, .size = {.width = 1.0f, .height = 2.0f}};
-        XCTAssertTrue(selector.region().value() == expected);
+        XCTAssertEqual(selector.selection().phase, range_selection_phase::moved);
+        XCTAssertTrue(selector.selection().range.value().region() == expected);
         XCTAssertEqual(received.size(), 4);
-        XCTAssertTrue(received.at(3).value() == expected);
+        XCTAssertEqual(received.at(3).phase, range_selection_phase::moved);
+        XCTAssertTrue(received.at(3).range.value().region() == expected);
     }
 
     selector.move({.x = -1.0f, .y = -2.0f});
 
     {
         ui::region const expected{.origin = {.x = -1.0f, .y = -2.0f}, .size = {.width = 2.0f, .height = 4.0f}};
-        XCTAssertTrue(selector.region().value() == expected);
+        XCTAssertEqual(selector.selection().phase, range_selection_phase::moved);
+        XCTAssertTrue(selector.selection().range.value().region() == expected);
         XCTAssertEqual(received.size(), 5);
-        XCTAssertTrue(received.at(4).value() == expected);
+        XCTAssertEqual(received.at(4).phase, range_selection_phase::moved);
+        XCTAssertTrue(received.at(4).range.value().region() == expected);
     }
 
     selector.end();
 
-    XCTAssertFalse(selector.region().has_value());
+    XCTAssertEqual(selector.selection().phase, range_selection_phase::ended);
+    XCTAssertFalse(selector.selection().range.has_value());
     XCTAssertEqual(received.size(), 6);
-    XCTAssertFalse(received.at(5).has_value());
+    XCTAssertEqual(received.at(5).phase, range_selection_phase::ended);
+    XCTAssertFalse(received.at(5).range.has_value());
 
     canceller->cancel();
 }
@@ -110,7 +121,8 @@ struct deselector_stub : deselector_for_range_selector {
 
     selector.move({.x = 2.0f, .y = 4.0f});
 
-    XCTAssertFalse(selector.region().has_value());
+    XCTAssertEqual(selector.selection().phase, range_selection_phase::ended);
+    XCTAssertFalse(selector.selection().range.has_value());
 }
 
 - (void)test_cannot_begin_if_playing {
@@ -121,11 +133,13 @@ struct deselector_stub : deselector_for_range_selector {
 
     range_selector selector{player.get(), deselector.get()};
 
-    XCTAssertFalse(selector.region().has_value());
+    XCTAssertEqual(selector.selection().phase, range_selection_phase::ended);
+    XCTAssertFalse(selector.selection().range.has_value());
 
     selector.begin({.x = 1.0f, .y = 2.0f});
 
-    XCTAssertFalse(selector.region().has_value());
+    XCTAssertEqual(selector.selection().phase, range_selection_phase::ended);
+    XCTAssertFalse(selector.selection().range.has_value());
 }
 
 - (void)test_end_when_played {
@@ -136,11 +150,13 @@ struct deselector_stub : deselector_for_range_selector {
 
     selector.begin({.x = 1.0f, .y = 2.0f});
 
-    XCTAssertTrue(selector.region().has_value());
+    XCTAssertEqual(selector.selection().phase, range_selection_phase::began);
+    XCTAssertTrue(selector.selection().range.has_value());
 
     player->set_is_playing(true);
 
-    XCTAssertFalse(selector.region().has_value());
+    XCTAssertEqual(selector.selection().phase, range_selection_phase::ended);
+    XCTAssertFalse(selector.selection().range.has_value());
 }
 
 @end

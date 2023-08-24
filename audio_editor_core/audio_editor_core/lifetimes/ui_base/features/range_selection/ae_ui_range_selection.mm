@@ -32,11 +32,13 @@ ui_range_selection::ui_range_selection(ui::node *node, ae::color *color, ui::sta
     node->add_sub_node(this->_framed_square->node);
 
     range_selector
-        ->observe_region([this](const std::optional<ui::region> &region) {
-            this->_framed_square->node->set_is_enabled(region.has_value());
+        ->observe([this](range_selection const &selection) {
+            auto const &range = selection.range;
 
-            if (region.has_value()) {
-                auto const insets = region.value().insets();
+            this->_framed_square->node->set_is_enabled(range.has_value());
+
+            if (range.has_value()) {
+                auto const insets = range.value().region().insets();
                 auto const min = this->_framed_square->node->convert_position({.x = insets.left, .y = insets.bottom});
                 auto const max = this->_framed_square->node->convert_position({.x = insets.right, .y = insets.top});
                 this->_framed_square->set_region(
