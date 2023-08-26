@@ -117,10 +117,9 @@ observing::syncable markers_presenter::observe_contents(
     return this->_content_pool->observe_event(std::move(handler));
 }
 
-observing::syncable markers_presenter::observe_range_selection_region(
-    std::function<void(std::optional<ui::region> const &)> &&handler) {
+observing::syncable markers_presenter::observe_range(std::function<void(range_selection const &)> &&handler) {
     if (auto const range_selector = this->_range_selector.lock()) {
-        return range_selector->observe_region(std::move(handler));
+        return range_selector->observe(std::move(handler));
     } else {
         return observing::syncable{};
     }

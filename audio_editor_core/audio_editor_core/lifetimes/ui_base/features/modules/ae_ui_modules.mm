@@ -189,22 +189,31 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->add_to(this->_pool);
 
     this->_presenter
-        ->observe_range_selection_region([this](std::optional<ui::region> const &region) {
-            if (region.has_value()) {
-                auto const &region_value = region.value();
-                std::vector<std::size_t> hit_indices;
+        ->observe_range([this](range_selection const &selection) {
+            switch (selection.phase) {
+                case range_selection_phase::began:
+                    [[fallthrough]];
+                case range_selection_phase::moved: {
+                    auto const &range = selection.range;
+                    if (range.has_value()) {
+                        auto const region_value = range.value().region();
+                        std::vector<std::size_t> hit_indices;
 
-                auto const &colliders = this->_fill_mesh_container->node->colliders();
-                auto each = make_fast_each(colliders.size());
-                while (yas_each_next(each)) {
-                    auto const &idx = yas_each_index(each);
-                    auto const &collider = colliders.at(idx);
-                    if (collider->hit_test(region_value)) {
-                        hit_indices.emplace_back(idx);
+                        auto const &colliders = this->_fill_mesh_container->node->colliders();
+                        auto each = make_fast_each(colliders.size());
+                        while (yas_each_next(each)) {
+                            auto const &idx = yas_each_index(each);
+                            auto const &collider = colliders.at(idx);
+                            if (collider->hit_test(region_value)) {
+                                hit_indices.emplace_back(idx);
+                            }
+                        }
+
+                        this->_controller->select(hit_indices);
                     }
-                }
-
-                this->_controller->select(hit_indices);
+                } break;
+                case range_selection_phase::ended:
+                    break;
             }
         })
         .sync()

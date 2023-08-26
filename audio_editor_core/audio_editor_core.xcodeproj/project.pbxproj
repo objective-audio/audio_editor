@@ -59,6 +59,8 @@
 		B62D8FA02723CB6A00779D42 /* ae_horizontal_scrolling.h in Headers */ = {isa = PBXBuildFile; fileRef = B62D8F9E2723CB6A00779D42 /* ae_horizontal_scrolling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B62D8FA12723CB6A00779D42 /* ae_horizontal_scrolling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62D8F9F2723CB6A00779D42 /* ae_horizontal_scrolling.cpp */; };
 		B62D8FA32723CE3E00779D42 /* ae_scrolling_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B62D8FA22723CDE600779D42 /* ae_scrolling_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B62E16162A9765A60054D56B /* ae_range_selection.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B62E16152A9765A60054D56B /* ae_range_selection.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		B62E16182A9768E00054D56B /* ae_range_selection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62E16172A9768E00054D56B /* ae_range_selection.cpp */; };
 		B62EF82727C9EE5300A27948 /* ae_file_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62EF82627C9EE5300A27948 /* ae_file_info.cpp */; };
 		B62EF82E27C9F85600A27948 /* ae_hierarchy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B62EF82C27C9F85600A27948 /* ae_hierarchy.cpp */; };
 		B62EF82F27C9F85600A27948 /* ae_hierarchy.h in Headers */ = {isa = PBXBuildFile; fileRef = B62EF82D27C9F85600A27948 /* ae_hierarchy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -606,6 +608,8 @@
 		B62D8F9E2723CB6A00779D42 /* ae_horizontal_scrolling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_horizontal_scrolling.h; sourceTree = "<group>"; };
 		B62D8F9F2723CB6A00779D42 /* ae_horizontal_scrolling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_horizontal_scrolling.cpp; sourceTree = "<group>"; };
 		B62D8FA22723CDE600779D42 /* ae_scrolling_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_scrolling_types.h; sourceTree = "<group>"; };
+		B62E16152A9765A60054D56B /* ae_range_selection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_range_selection.hpp; sourceTree = "<group>"; };
+		B62E16172A9768E00054D56B /* ae_range_selection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_range_selection.cpp; sourceTree = "<group>"; };
 		B62EF82627C9EE5300A27948 /* ae_file_info.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_info.cpp; sourceTree = "<group>"; };
 		B62EF82C27C9F85600A27948 /* ae_hierarchy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_hierarchy.cpp; sourceTree = "<group>"; };
 		B62EF82D27C9F85600A27948 /* ae_hierarchy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_hierarchy.h; sourceTree = "<group>"; };
@@ -1251,6 +1255,8 @@
 				B6BE6B982733BECD0097C99D /* ae_db_marker.h */,
 				B6966F44272EDB2F00A90733 /* ae_db_module.cpp */,
 				B6966F43272EDB2F00A90733 /* ae_db_module.h */,
+				B62E16152A9765A60054D56B /* ae_range_selection.hpp */,
+				B62E16172A9768E00054D56B /* ae_range_selection.cpp */,
 			);
 			path = value_types;
 			sourceTree = "<group>";
@@ -2810,6 +2816,7 @@
 				B605EA712657E5530031B177 /* ae_ui_event_handling.h in Headers */,
 				B616984328673E7C00DD87AF /* ae_action_id.h in Headers */,
 				B69E476B2827E00F002F2AFF /* ae_reverter.h in Headers */,
+				B62E16162A9765A60054D56B /* ae_range_selection.hpp in Headers */,
 				B6668DD1294ED75000CB294E /* ae_pasting_markers_presenter.hpp in Headers */,
 				B69E4EE1286BFF2400911280 /* ae_time_editor_receiver.h in Headers */,
 				B66FAF7128E1577F005A3D47 /* ae_ui_pasting_modules.hpp in Headers */,
@@ -3074,6 +3081,7 @@
 				B675F93F2765CBB2002FE285 /* ae_waveform_mesh_importer.mm in Sources */,
 				B6F133BC29B777D400E91090 /* ae_display_space_time_range.cpp in Sources */,
 				B69E11072A014A52006A4915 /* AppSettingsWindowPresenter.mm in Sources */,
+				B62E16182A9768E00054D56B /* ae_range_selection.cpp in Sources */,
 				B6B563C7271BD3FD0003ED60 /* ae_common_utils.cpp in Sources */,
 				B6355E2D2906C937000BB735 /* ae_modifier_utils.cpp in Sources */,
 				B6AA242129FA53310023DAF4 /* ProjectSettingsPresenterObjc.mm in Sources */,

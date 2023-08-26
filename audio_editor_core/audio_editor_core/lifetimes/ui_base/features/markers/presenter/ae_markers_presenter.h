@@ -8,6 +8,7 @@
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
 
+#include <audio_editor_core/ae_range_selection.hpp>
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 
 namespace yas::ae {
@@ -29,8 +30,7 @@ struct markers_presenter final {
 
     [[nodiscard]] std::vector<std::optional<marker_content>> contents() const;
     [[nodiscard]] observing::syncable observe_contents(std::function<void(marker_content_pool_event const &)> &&);
-    [[nodiscard]] observing::syncable observe_range_selection_region(
-        std::function<void(std::optional<ui::region> const &)> &&);
+    [[nodiscard]] observing::syncable observe_range(std::function<void(range_selection const &)> &&);
 
     void update_if_needed();
 
