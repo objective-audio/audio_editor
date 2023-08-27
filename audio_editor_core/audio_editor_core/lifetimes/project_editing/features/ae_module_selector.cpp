@@ -28,11 +28,12 @@ void module_selector::begin_selection() {
     this->_selected_pool->begin_toggling();
 }
 
+#warning todo setで受け取る
 void module_selector::select(std::vector<module_index> const &indices) {
-    selected_module_pool::element_map toggling;
+    selected_module_set toggling;
 
     for (auto const &index : indices) {
-        toggling.emplace(index, selected_module_object{index.object_id, {index.range, index.track}});
+        toggling.emplace(index);
     }
 
     this->_selected_pool->toggle(std::move(toggling));

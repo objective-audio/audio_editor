@@ -234,7 +234,7 @@ void markers_presenter::_replace_or_erase_content_if_in_space_range(marker_index
     }
 }
 
-void markers_presenter::_replace_contents_if_in_space_range(selected_marker_pool::element_map const &changed) {
+void markers_presenter::_replace_contents_if_in_space_range(selected_marker_set const &changed) {
     auto const space_range = this->_space_range();
     auto const locked = yas::lock(this->_marker_pool, this->_display_space);
 
@@ -244,8 +244,8 @@ void markers_presenter::_replace_contents_if_in_space_range(selected_marker_pool
 
     auto const &[marker_pool, display_space] = locked;
 
-    for (auto const &pair : changed) {
-        auto const marker = marker_pool->marker_for_index(pair.first);
+    for (auto const &index : changed) {
+        auto const marker = marker_pool->marker_for_index(index);
         if (!marker.has_value()) {
             continue;
         }

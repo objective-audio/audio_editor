@@ -132,8 +132,8 @@ void module_editor::copy() {
 
         std::vector<pasting_module_object> pasting_modules;
 
-        for (auto const &pair : selected_modules) {
-            if (auto const module = module_pool->module_at(pair.first)) {
+        for (auto const &index : selected_modules) {
+            if (auto const module = module_pool->module_at(index)) {
                 auto const &value = module.value().value;
                 pasting_modules.emplace_back(
                     pasting_module_object{identifier{},
@@ -198,12 +198,12 @@ bool module_editor::_has_target_modules() const {
     }
 }
 
-void module_editor::_erase_modules(selected_module_map &&selected_modules) {
+void module_editor::_erase_modules(selected_module_set &&selected_modules) {
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
 
-        for (auto const &pair : selected_modules) {
-            this->_module_pool->erase_module_and_notify(pair.first);
+        for (auto const &index : selected_modules) {
+            this->_module_pool->erase_module_and_notify(index);
         }
     } else {
         auto const current_frame = this->_player->current_frame();

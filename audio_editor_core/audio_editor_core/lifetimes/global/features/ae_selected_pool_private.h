@@ -5,57 +5,57 @@
 #pragma once
 
 namespace yas::ae {
-template <typename Element, typename Index>
-selected_pool<Element, Index>::selected_pool() {
+template <typename Element>
+selected_pool<Element>::selected_pool() {
     this->_event_fetcher =
         observing::fetcher<event>::make_shared([this] { return event{.type = selected_pool_event_type::fetched}; });
 }
 
-template <typename Element, typename Index>
-typename selected_pool<Element, Index>::element_map const &selected_pool<Element, Index>::elements() const {
+template <typename Element>
+typename selected_pool<Element>::element_set const &selected_pool<Element>::elements() const {
     return this->_elements;
 }
 
-template <typename Element, typename Index>
-bool selected_pool<Element, Index>::contains(Index const &index) const {
-    return this->_elements.contains(index);
+template <typename Element>
+bool selected_pool<Element>::contains(Element const &element) const {
+    return this->_elements.contains(element);
 }
 
-template <typename Element, typename Index>
-void selected_pool<Element, Index>::begin_toggling() {
-    this->_toggled = element_map{};
+template <typename Element>
+void selected_pool<Element>::begin_toggling() {
+    this->_toggled = element_set{};
 }
 
-template <typename Element, typename Index>
-void selected_pool<Element, Index>::toggle(element_map &&toggled) {
+template <typename Element>
+void selected_pool<Element>::toggle(element_set &&toggled) {
     if (this->_toggled.has_value()) {
         auto const &previous = this->_toggled.value();
 
-        element_map changed;
+        element_set changed;
 
         // 前回から追加された要素
-        for (auto const &pair : toggled) {
-            if (previous.contains(pair.first)) {
+        for (auto const &element : toggled) {
+            if (previous.contains(element)) {
                 continue;
             }
 
-            changed.emplace(pair);
+            changed.emplace(element);
         }
 
         // 前回から削除された要素
-        for (auto const &pair : previous) {
-            if (toggled.contains(pair.first)) {
+        for (auto const &element : previous) {
+            if (toggled.contains(element)) {
                 continue;
             }
 
-            changed.emplace(pair);
+            changed.emplace(element);
         }
 
-        for (auto const &pair : changed) {
-            if (this->_elements.contains(pair.first)) {
-                this->_elements.erase(pair.first);
+        for (auto const &index : changed) {
+            if (this->_elements.contains(index)) {
+                this->_elements.erase(index);
             } else {
-                this->_elements.emplace(pair);
+                this->_elements.emplace(index);
             }
         }
 
@@ -67,20 +67,20 @@ void selected_pool<Element, Index>::toggle(element_map &&toggled) {
     }
 }
 
-template <typename Element, typename Index>
-void selected_pool<Element, Index>::end_toggling() {
+template <typename Element>
+void selected_pool<Element>::end_toggling() {
     if (this->_toggled.has_value()) {
         this->_toggled.reset();
     }
 }
 
-template <typename Element, typename Index>
-bool selected_pool<Element, Index>::can_clear() const {
+template <typename Element>
+bool selected_pool<Element>::can_clear() const {
     return !this->_elements.empty();
 }
 
-template <typename Element, typename Index>
-void selected_pool<Element, Index>::clear() {
+template <typename Element>
+void selected_pool<Element>::clear() {
     if (!this->can_clear()) {
         return;
     }
@@ -93,8 +93,8 @@ void selected_pool<Element, Index>::clear() {
     this->_event_fetcher->push({.type = selected_pool_event_type::toggled, .toggled = std::move(erased)});
 }
 
-template <typename Element, typename Index>
-observing::syncable selected_pool<Element, Index>::observe_event(std::function<void(event const &)> &&handler) {
+template <typename Element>
+observing::syncable selected_pool<Element>::observe_event(std::function<void(event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
 }
 }  // namespace yas::ae

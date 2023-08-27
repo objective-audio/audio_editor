@@ -61,7 +61,7 @@ struct modules_presenter final {
     [[nodiscard]] std::optional<ae::space_range> _space_range() const;
     void _insert_content(module_object const &);
     void _erase_content(object_id const &);
-    void _replace_contents(selected_module_pool::element_map const &);
+    void _replace_contents(selected_module_set const &);
     void _update_all_contents(bool const force_updating, bool const force_replacing);
 };
 }  // namespace yas::ae

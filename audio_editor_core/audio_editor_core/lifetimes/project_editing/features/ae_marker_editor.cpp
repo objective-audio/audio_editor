@@ -96,8 +96,8 @@ void marker_editor::copy() {
 
         std::vector<pasting_marker_object> pasting_markers;
 
-        for (auto const &pair : selected_modules) {
-            if (auto const marker = marker_pool->marker_for_index(pair.first)) {
+        for (auto const &index : selected_modules) {
+            if (auto const marker = marker_pool->marker_for_index(index)) {
                 auto const &value = marker.value().value;
                 pasting_markers.emplace_back(
                     pasting_marker_object{identifier{}, {value.frame - current_frame, value.name}});
@@ -156,12 +156,12 @@ bool marker_editor::_has_target_markers() const {
     }
 }
 
-void marker_editor::_erase(selected_marker_map &&selected_markers) {
+void marker_editor::_erase(selected_marker_set &&selected_markers) {
     if (!selected_markers.empty()) {
         this->_selected_pool->clear();
 
-        for (auto const &pair : selected_markers) {
-            this->_marker_pool->erase(pair.first);
+        for (auto const &index : selected_markers) {
+            this->_marker_pool->erase(index);
         }
     } else {
         auto const current_frame = this->_player->current_frame();

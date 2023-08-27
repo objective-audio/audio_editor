@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <map>
 #include <observing/yas_observing_umbrella.hpp>
+#include <set>
 
 namespace yas::ae {
 enum class selected_pool_event_type {
@@ -13,23 +13,23 @@ enum class selected_pool_event_type {
     toggled,
 };
 
-template <typename Element, typename Index>
+template <typename Element>
 struct selected_pool final {
-    using element_map = std::map<Index, Element>;
+    using element_set = std::set<Element>;
 
     struct event final {
         selected_pool_event_type type;
-        element_map toggled;
+        element_set toggled;
     };
 
     selected_pool();
 
-    [[nodiscard]] element_map const &elements() const;
+    [[nodiscard]] element_set const &elements() const;
 
-    [[nodiscard]] bool contains(Index const &) const;
+    [[nodiscard]] bool contains(Element const &) const;
 
     void begin_toggling();
-    void toggle(element_map &&);
+    void toggle(element_set &&);
     void end_toggling();
 
     [[nodiscard]] bool can_clear() const;
@@ -38,8 +38,8 @@ struct selected_pool final {
     [[nodiscard]] observing::syncable observe_event(std::function<void(event const &)> &&);
 
    private:
-    element_map _elements;
-    std::optional<element_map> _toggled;
+    element_set _elements;
+    std::optional<element_set> _toggled;
 
     observing::fetcher_ptr<event> _event_fetcher;
 

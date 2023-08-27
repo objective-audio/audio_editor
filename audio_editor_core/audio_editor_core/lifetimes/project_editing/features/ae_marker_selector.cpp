@@ -30,10 +30,10 @@ void marker_selector::begin_selection() {
 }
 
 void marker_selector::select(std::vector<marker_index> const &indices) {
-    selected_marker_pool::element_map inserting;
+    selected_marker_set inserting;
 
     for (auto const &index : indices) {
-        inserting.emplace(index, selected_marker_object{index.object_id, selected_marker{index.frame}});
+        inserting.emplace(index);
     }
 
     this->_selected_pool->toggle(std::move(inserting));
