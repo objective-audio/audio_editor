@@ -15,7 +15,9 @@ struct marker_selector final {
     marker_selector(marker_pool const *, selected_marker_pool *, editing_status const *, deselector *);
 
     [[nodiscard]] bool can_select() const;
+    void begin_selection();
     void select(std::vector<marker_index> const &);
+    void end_selection();
 
     [[nodiscard]] bool can_toggle() const;
     void toggle(marker_index const &);

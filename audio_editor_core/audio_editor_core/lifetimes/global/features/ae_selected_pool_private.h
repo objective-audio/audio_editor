@@ -22,57 +22,56 @@ bool selected_pool<Element, Index>::contains(Index const &index) const {
 }
 
 template <typename Element, typename Index>
-void selected_pool<Element, Index>::toggle(Element const &element) {
-    auto const index = element.index();
-
-    if (this->_elements.contains(index)) {
-        this->erase(index);
-    } else {
-        this->insert(element);
-    }
+void selected_pool<Element, Index>::begin_toggling() {
+    this->_toggled = element_map{};
 }
 
 template <typename Element, typename Index>
-void selected_pool<Element, Index>::insert(Element const &element) {
-    if (this->_elements.contains(element.index())) {
-        return;
-    }
+void selected_pool<Element, Index>::toggle(element_map &&toggled) {
+    if (this->_toggled.has_value()) {
+        auto const &previous = this->_toggled.value();
 
-    this->insert(std::vector<Element>{element});
-}
+        element_map changed;
 
-template <typename Element, typename Index>
-void selected_pool<Element, Index>::insert(std::vector<Element> const &elements) {
-    element_map inserted;
+        // 前回から追加された要素
+        for (auto const &pair : toggled) {
+            if (previous.contains(pair.first)) {
+                continue;
+            }
 
-    for (auto const &element : elements) {
-        auto index = element.index();
-
-        if (this->_elements.contains(index)) {
-            continue;
+            changed.emplace(pair);
         }
 
-        std::pair<Index, Element> pair{std::move(index), element};
-        this->_elements.emplace(pair);
-        inserted.emplace(std::move(pair));
-    }
+        // 前回から削除された要素
+        for (auto const &pair : previous) {
+            if (toggled.contains(pair.first)) {
+                continue;
+            }
 
-    if (!inserted.empty()) {
-        this->_event_fetcher->push({.type = selected_pool_event_type::inserted, .elements = std::move(inserted)});
+            changed.emplace(pair);
+        }
+
+        for (auto const &pair : changed) {
+            if (this->_elements.contains(pair.first)) {
+                this->_elements.erase(pair.first);
+            } else {
+                this->_elements.emplace(pair);
+            }
+        }
+
+        this->_toggled = std::move(toggled);
+
+        if (!changed.empty()) {
+            this->_event_fetcher->push({.type = selected_pool_event_type::toggled, .toggled = std::move(changed)});
+        }
     }
 }
 
 template <typename Element, typename Index>
-void selected_pool<Element, Index>::erase(Index const &index) {
-    if (!this->_elements.contains(index)) {
-        return;
+void selected_pool<Element, Index>::end_toggling() {
+    if (this->_toggled.has_value()) {
+        this->_toggled.reset();
     }
-
-    auto const erasing = this->_elements.at(index);
-
-    this->_elements.erase(index);
-
-    this->_event_fetcher->push({.type = selected_pool_event_type::erased, .elements = {{index, erasing}}});
 }
 
 template <typename Element, typename Index>
@@ -89,8 +88,9 @@ void selected_pool<Element, Index>::clear() {
     auto erased = std::move(this->_elements);
 
     this->_elements.clear();
+    this->_toggled.reset();
 
-    this->_event_fetcher->push({.type = selected_pool_event_type::erased, .elements = std::move(erased)});
+    this->_event_fetcher->push({.type = selected_pool_event_type::toggled, .toggled = std::move(erased)});
 }
 
 template <typename Element, typename Index>

@@ -44,6 +44,16 @@ void modules_controller::begin_range_selection(ui::point const &position) {
     }
 }
 
+void modules_controller::begin_selection() {
+    auto const action_sender = this->_action_sender.lock();
+    if (!action_sender) {
+        assertion_failure_if_not_test();
+        return;
+    }
+
+    action_sender->send(editing_action_name::begin_modules_selection);
+}
+
 void modules_controller::select(std::vector<std::size_t> const &indices) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
@@ -54,6 +64,16 @@ void modules_controller::select(std::vector<std::size_t> const &indices) {
     auto module_indices = this->_module_indices(indices);
 
     action_sender->send(editing_action_name::select_modules, std::move(module_indices));
+}
+
+void modules_controller::end_selection() {
+    auto const action_sender = this->_action_sender.lock();
+    if (!action_sender) {
+        assertion_failure_if_not_test();
+        return;
+    }
+
+    action_sender->send(editing_action_name::end_modules_selection);
 }
 
 void modules_controller::toggle_selection(std::size_t const idx) {
