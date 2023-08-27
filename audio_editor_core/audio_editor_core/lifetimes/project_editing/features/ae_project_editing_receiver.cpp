@@ -240,8 +240,14 @@ void project_editing_receiver::receive(ae::action const &action) const {
                             case editing_action_name::escape:
                                 this->_escaper->espace();
                                 break;
+                            case editing_action_name::begin_modules_selection:
+                                this->_module_selector->begin_selection();
+                                break;
                             case editing_action_name::select_modules:
                                 this->_module_selector->select(action.module_indices_value());
+                                break;
+                            case editing_action_name::end_modules_selection:
+                                this->_module_selector->end_selection();
                                 break;
                             case editing_action_name::toggle_module_selection:
                                 this->_module_selector->toggle(action.module_index_value());
@@ -249,8 +255,14 @@ void project_editing_receiver::receive(ae::action const &action) const {
                             case editing_action_name::begin_module_renaming:
                                 this->_module_renaming_opener->begin_module_renaming(action.module_index_value());
                                 break;
+                            case editing_action_name::begin_markers_selection:
+                                this->_marker_selector->begin_selection();
+                                break;
                             case editing_action_name::select_markers:
                                 this->_marker_selector->select(action.marker_indices_value());
+                                break;
+                            case editing_action_name::end_markers_selection:
+                                this->_marker_selector->end_selection();
                                 break;
                             case editing_action_name::toggle_marker_selection:
                                 this->_marker_selector->toggle(action.marker_index_value());
@@ -354,7 +366,11 @@ action_receivable_state project_editing_receiver::receivable_state(ae::action co
                 case editing_action_name::escape:
                     return to_state(this->_escaper->can_escape());
 
+                case editing_action_name::begin_modules_selection:
+                    return to_state(this->_module_selector->can_select());
                 case editing_action_name::select_modules:
+                    return to_state(this->_module_selector->can_select());
+                case editing_action_name::end_modules_selection:
                     return to_state(this->_module_selector->can_select());
                 case editing_action_name::toggle_module_selection:
                     return to_state(this->_module_selector->can_toggle());
@@ -362,7 +378,11 @@ action_receivable_state project_editing_receiver::receivable_state(ae::action co
                     return to_state(this->_module_renaming_opener->can_begin_module_renaming());
                 case editing_action_name::begin_marker_renaming:
                     return to_state(this->_marker_renaming_opener->can_begin_renaming());
+                case editing_action_name::begin_markers_selection:
+                    return to_state(this->_marker_selector->can_select());
                 case editing_action_name::select_markers:
+                    return to_state(this->_marker_selector->can_select());
+                case editing_action_name::end_markers_selection:
                     return to_state(this->_marker_selector->can_select());
                 case editing_action_name::toggle_marker_selection:
                     return to_state(this->_marker_selector->can_toggle());

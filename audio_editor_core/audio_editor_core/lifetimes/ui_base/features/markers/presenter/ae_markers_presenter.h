@@ -65,7 +65,7 @@ struct markers_presenter final {
     void _insert_content_if_in_space_range(marker_index const &);
     void _replace_or_erase_content_if_in_space_range(marker_index const &inserted_index,
                                                      marker_index const &erased_index);
-    void _replace_content_if_in_space_range(marker_index const &);
+    void _replace_contents_if_in_space_range(selected_marker_pool::element_map const &changed);
 
     bool _is_selected(marker_index const &) const;
 };

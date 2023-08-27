@@ -65,7 +65,9 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
                     this->_insert_content(event.module.value());
                 } break;
                 case module_pool_event_type::detail_updated: {
-                    this->_replace_contents({event.module.value().index()});
+                    auto const &index = event.module.value().index();
+                    selected_module_object object{index.object_id, {index.range, index.track}};
+                    this->_replace_contents({{index, std::move(object)}});
                 } break;
             }
         })
@@ -74,17 +76,12 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
 
     selected_pool
         ->observe_event([this, sample_rate](selected_module_pool::event const &event) {
-            using event_type = selected_pool_event_type;
-
             switch (event.type) {
-                case event_type::fetched:
+                case selected_pool_event_type::fetched:
                     this->_update_all_contents(true, false);
                     break;
-                case event_type::inserted:
-                case event_type::erased: {
-                    auto const indices =
-                        to_vector<module_index>(event.elements, [](auto const &pair) { return pair.first; });
-                    this->_replace_contents(indices);
+                case selected_pool_event_type::toggled: {
+                    this->_replace_contents(event.toggled);
                 } break;
             }
         })
@@ -178,7 +175,7 @@ void modules_presenter::_erase_content(object_id const &object_id) {
     content_pool->erase_for_id(object_id);
 }
 
-void modules_presenter::_replace_contents(std::vector<module_index> const &indices) {
+void modules_presenter::_replace_contents(selected_module_pool::element_map const &changed) {
     auto const locked = yas::lock(this->_content_pool, this->_display_space, this->_module_pool, this->_selected_pool);
 
     if (!fulfilled(locked)) {
@@ -190,7 +187,8 @@ void modules_presenter::_replace_contents(std::vector<module_index> const &indic
     auto const space_range = this->_space_range();
 
     if (space_range.has_value()) {
-        for (auto const &index : indices) {
+        for (auto const &pair : changed) {
+            auto const &index = pair.first;
             if (index.is_overlap(space_range.value())) {
                 if (auto const module = module_pool->module_at(index)) {
                     content_pool->replace({module.value(), selected_pool->contains(index),

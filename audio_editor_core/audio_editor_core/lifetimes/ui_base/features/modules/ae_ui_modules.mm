@@ -192,7 +192,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
         ->observe_range([this](range_selection const &selection) {
             switch (selection.phase) {
                 case range_selection_phase::began:
-                    [[fallthrough]];
+                    this->_controller->begin_selection();
                 case range_selection_phase::moved: {
                     auto const &range = selection.range;
                     if (range.has_value()) {
@@ -213,6 +213,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                     }
                 } break;
                 case range_selection_phase::ended:
+                    this->_controller->end_selection();
                     break;
             }
         })

@@ -21,7 +21,9 @@ struct modules_controller final {
     void deselect_all();
     void begin_range_selection(ui::point const &);
 
+    void begin_selection();
     void select(std::vector<std::size_t> const &);
+    void end_selection();
     void toggle_selection(std::size_t const);
     void begin_renaming(std::size_t const);
 

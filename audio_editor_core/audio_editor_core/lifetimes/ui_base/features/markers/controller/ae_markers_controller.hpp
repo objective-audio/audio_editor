@@ -16,7 +16,9 @@ struct markers_controller final {
 
     markers_controller(std::shared_ptr<project_action_sender> const &);
 
+    void begin_selection();
     void select(std::vector<marker_index> const &);
+    void end_selection();
 
    private:
     std::weak_ptr<project_action_sender> const _action_sender;

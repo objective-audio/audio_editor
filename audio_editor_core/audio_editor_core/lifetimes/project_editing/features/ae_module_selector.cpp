@@ -24,12 +24,22 @@ bool module_selector::can_select() const {
     return this->_editing_status->can_editing();
 }
 
-void module_selector::select(std::vector<module_index> const &indices) {
-    auto const inserting = to_vector<selected_module_object>(indices, [](auto const &index) {
-        return selected_module_object{index.object_id, {index.range, index.track}};
-    });
+void module_selector::begin_selection() {
+    this->_selected_pool->begin_toggling();
+}
 
-    this->_selected_pool->insert(inserting);
+void module_selector::select(std::vector<module_index> const &indices) {
+    selected_module_pool::element_map toggling;
+
+    for (auto const &index : indices) {
+        toggling.emplace(index, selected_module_object{index.object_id, {index.range, index.track}});
+    }
+
+    this->_selected_pool->toggle(std::move(toggling));
+}
+
+void module_selector::end_selection() {
+    this->_selected_pool->end_toggling();
 }
 
 bool module_selector::can_toggle() const {
@@ -38,7 +48,9 @@ bool module_selector::can_toggle() const {
 
 void module_selector::toggle(module_index const &index) {
     if (this->_module_pool->modules().contains(index)) {
-        this->_selected_pool->toggle(selected_module_object{index.object_id, {index.range, index.track}});
+        this->begin_selection();
+        this->select({index});
+        this->end_selection();
     } else {
         assertion_failure_if_not_test();
     }

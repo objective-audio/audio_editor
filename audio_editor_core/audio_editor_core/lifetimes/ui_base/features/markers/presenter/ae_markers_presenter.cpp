@@ -80,12 +80,8 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
             switch (event.type) {
                 case selected_pool_event_type::fetched:
                     break;
-                case selected_pool_event_type::inserted:
-                case selected_pool_event_type::erased:
-                    for (auto const &pair : event.elements) {
-                        auto const &index = pair.first;
-                        this->_replace_content_if_in_space_range(index);
-                    }
+                case selected_pool_event_type::toggled:
+                    this->_replace_contents_if_in_space_range(event.toggled);
                     break;
             }
         })
@@ -238,7 +234,7 @@ void markers_presenter::_replace_or_erase_content_if_in_space_range(marker_index
     }
 }
 
-void markers_presenter::_replace_content_if_in_space_range(marker_index const &index) {
+void markers_presenter::_replace_contents_if_in_space_range(selected_marker_pool::element_map const &changed) {
     auto const space_range = this->_space_range();
     auto const locked = yas::lock(this->_marker_pool, this->_display_space);
 
@@ -248,18 +244,20 @@ void markers_presenter::_replace_content_if_in_space_range(marker_index const &i
 
     auto const &[marker_pool, display_space] = locked;
 
-    auto const marker = marker_pool->marker_for_index(index);
-    if (!marker.has_value()) {
-        return;
-    }
+    for (auto const &pair : changed) {
+        auto const marker = marker_pool->marker_for_index(pair.first);
+        if (!marker.has_value()) {
+            continue;
+        }
 
-    auto const &marker_value = marker.value();
+        auto const &marker_value = marker.value();
 
-    if (space_range.value().is_contain(marker_value.value.frame)) {
-        bool const is_selected = this->_is_selected({marker_value.identifier, marker_value.value.frame});
-        this->_content_pool->replace({marker_value.identifier, marker_value.value.frame,
-                                      this->_project_format.sample_rate, display_space->scale().width,
-                                      marker_value.value.name, is_selected});
+        if (space_range.value().is_contain(marker_value.value.frame)) {
+            bool const is_selected = this->_is_selected({marker_value.identifier, marker_value.value.frame});
+            this->_content_pool->replace({marker_value.identifier, marker_value.value.frame,
+                                          this->_project_format.sample_rate, display_space->scale().width,
+                                          marker_value.value.name, is_selected});
+        }
     }
 }
 

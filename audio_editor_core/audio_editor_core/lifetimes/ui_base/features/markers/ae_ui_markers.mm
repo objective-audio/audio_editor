@@ -63,7 +63,7 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
         ->observe_range([this](range_selection const &selection) {
             switch (selection.phase) {
                 case range_selection_phase::began:
-                    [[fallthrough]];
+                    this->_controller->begin_selection();
                 case range_selection_phase::moved: {
                     auto const &range = selection.range;
                     if (range.has_value()) {
@@ -85,6 +85,7 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
                     }
                 } break;
                 case range_selection_phase::ended:
+                    this->_controller->end_selection();
                     break;
             }
         })

@@ -10,8 +10,7 @@
 namespace yas::ae {
 enum class selected_pool_event_type {
     fetched,
-    inserted,
-    erased,
+    toggled,
 };
 
 template <typename Element, typename Index>
@@ -20,7 +19,7 @@ struct selected_pool final {
 
     struct event final {
         selected_pool_event_type type;
-        element_map elements;  // inserted, erased
+        element_map toggled;
     };
 
     selected_pool();
@@ -29,10 +28,9 @@ struct selected_pool final {
 
     [[nodiscard]] bool contains(Index const &) const;
 
-    void toggle(Element const &);
-    void insert(Element const &);
-    void insert(std::vector<Element> const &);
-    void erase(Index const &);
+    void begin_toggling();
+    void toggle(element_map &&);
+    void end_toggling();
 
     [[nodiscard]] bool can_clear() const;
     void clear();
@@ -41,6 +39,7 @@ struct selected_pool final {
 
    private:
     element_map _elements;
+    std::optional<element_map> _toggled;
 
     observing::fetcher_ptr<event> _event_fetcher;
 

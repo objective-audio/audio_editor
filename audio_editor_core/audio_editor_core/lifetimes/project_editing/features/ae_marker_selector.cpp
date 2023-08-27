@@ -25,12 +25,22 @@ bool marker_selector::can_select() const {
     return this->_editing_status->can_editing();
 }
 
-void marker_selector::select(std::vector<marker_index> const &indices) {
-    auto inserting = to_vector<selected_marker_object>(indices, [](auto const &index) {
-        return selected_marker_object{index.object_id, selected_marker{index.frame}};
-    });
+void marker_selector::begin_selection() {
+    this->_selected_pool->begin_toggling();
+}
 
-    this->_selected_pool->insert(inserting);
+void marker_selector::select(std::vector<marker_index> const &indices) {
+    selected_marker_pool::element_map inserting;
+
+    for (auto const &index : indices) {
+        inserting.emplace(index, selected_marker_object{index.object_id, selected_marker{index.frame}});
+    }
+
+    this->_selected_pool->toggle(std::move(inserting));
+}
+
+void marker_selector::end_selection() {
+    this->_selected_pool->end_toggling();
 }
 
 bool marker_selector::can_toggle() const {
@@ -39,7 +49,9 @@ bool marker_selector::can_toggle() const {
 
 void marker_selector::toggle(marker_index const &index) {
     if (this->_marker_pool->markers().contains(index)) {
-        this->_selected_pool->toggle(selected_marker_object{index.object_id, selected_marker{index.frame}});
+        this->begin_selection();
+        this->select({index});
+        this->end_selection();
     } else {
         assertion_failure_if_not_test();
     }
