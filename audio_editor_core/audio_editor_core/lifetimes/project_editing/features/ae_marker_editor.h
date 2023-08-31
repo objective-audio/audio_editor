@@ -44,6 +44,6 @@ struct marker_editor final {
     marker_editor &operator=(marker_editor &&) = delete;
 
     bool _has_target_markers() const;
-    void _erase(selected_marker_map &&);
+    void _erase(selected_marker_set &&);
 };
 }  // namespace yas::ae

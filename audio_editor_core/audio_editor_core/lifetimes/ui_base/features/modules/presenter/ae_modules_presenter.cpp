@@ -65,9 +65,7 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
                     this->_insert_content(event.module.value());
                 } break;
                 case module_pool_event_type::detail_updated: {
-                    auto const &index = event.module.value().index();
-                    selected_module_object object{index.object_id, {index.range, index.track}};
-                    this->_replace_contents({{index, std::move(object)}});
+                    this->_replace_contents({event.module.value().index()});
                 } break;
             }
         })
@@ -175,7 +173,7 @@ void modules_presenter::_erase_content(object_id const &object_id) {
     content_pool->erase_for_id(object_id);
 }
 
-void modules_presenter::_replace_contents(selected_module_pool::element_map const &changed) {
+void modules_presenter::_replace_contents(selected_module_set const &changed) {
     auto const locked = yas::lock(this->_content_pool, this->_display_space, this->_module_pool, this->_selected_pool);
 
     if (!fulfilled(locked)) {
@@ -187,8 +185,7 @@ void modules_presenter::_replace_contents(selected_module_pool::element_map cons
     auto const space_range = this->_space_range();
 
     if (space_range.has_value()) {
-        for (auto const &pair : changed) {
-            auto const &index = pair.first;
+        for (auto const &index : changed) {
             if (index.is_overlap(space_range.value())) {
                 if (auto const module = module_pool->module_at(index)) {
                     content_pool->replace({module.value(), selected_pool->contains(index),

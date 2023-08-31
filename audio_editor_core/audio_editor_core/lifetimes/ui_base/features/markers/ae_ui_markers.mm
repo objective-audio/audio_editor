@@ -68,7 +68,7 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
                     auto const &range = selection.range;
                     if (range.has_value()) {
                         auto const rect_value = range.value().region();
-                        std::vector<marker_index> hit_indices;
+                        std::set<marker_index> hit_indices;
 
                         auto each = make_fast_each(this->_elements.size());
                         while (yas_each_next(each)) {
@@ -76,7 +76,7 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
                             auto const &element = this->_elements.at(idx);
                             if (element->hit_test(rect_value)) {
                                 if (auto const marker_index = element->marker_index(); marker_index.has_value()) {
-                                    hit_indices.emplace_back(marker_index.value());
+                                    hit_indices.emplace(marker_index.value());
                                 }
                             }
                         }

@@ -52,6 +52,6 @@ struct module_editor final {
     module_editor &operator=(module_editor &&) = delete;
 
     bool _has_target_modules() const;
-    void _erase_modules(selected_module_map &&);
+    void _erase_modules(selected_module_set &&);
 };
 }  // namespace yas::ae

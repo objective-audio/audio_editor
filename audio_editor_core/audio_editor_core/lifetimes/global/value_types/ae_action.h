@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_marker_index.hpp>
 #include <audio_editor_core/ae_module_index.hpp>
 #include <optional>
+#include <set>
 #include <string>
 #include <variant>
 
@@ -82,8 +83,8 @@ enum class action_name_kind {
     time_editing,
 };
 
-using action_value = std::variant<int64_t, std::string, time::range, module_index, std::vector<module_index>,
-                                  marker_index, std::vector<marker_index>>;
+using action_value = std::variant<int64_t, std::string, time::range, module_index, std::set<module_index>, marker_index,
+                                  std::set<marker_index>>;
 
 struct action {
     action_name name;
@@ -95,9 +96,9 @@ struct action {
     [[nodiscard]] std::string const &string_value() const;
     [[nodiscard]] time::range const &range_value() const;
     [[nodiscard]] module_index const &module_index_value() const;
-    [[nodiscard]] std::vector<module_index> const &module_indices_value() const;
+    [[nodiscard]] std::set<module_index> const &module_index_set_value() const;
     [[nodiscard]] marker_index const &marker_index_value() const;
-    [[nodiscard]] std::vector<marker_index> const &marker_indices_value() const;
+    [[nodiscard]] std::set<marker_index> const &marker_index_set_value() const;
     // ae_test_utilsにテスト用としてoperator==が定義されている
 };
 }  // namespace yas::ae

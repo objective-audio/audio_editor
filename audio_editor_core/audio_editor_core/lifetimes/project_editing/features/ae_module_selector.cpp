@@ -28,14 +28,8 @@ void module_selector::begin_selection() {
     this->_selected_pool->begin_toggling();
 }
 
-void module_selector::select(std::vector<module_index> const &indices) {
-    selected_module_pool::element_map toggling;
-
-    for (auto const &index : indices) {
-        toggling.emplace(index, selected_module_object{index.object_id, {index.range, index.track}});
-    }
-
-    this->_selected_pool->toggle(std::move(toggling));
+void module_selector::select(std::set<module_index> const &indices) {
+    this->_selected_pool->toggle(indices);
 }
 
 void module_selector::end_selection() {

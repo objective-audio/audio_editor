@@ -8,6 +8,8 @@
 #include <audio_editor_core/ae_project_lifetime_id.h>
 #include <ui/yas_ui_types.h>
 
+#include <set>
+
 namespace yas::ae {
 class project_action_sender;
 class range_selector;
@@ -39,6 +41,6 @@ struct modules_controller final {
     modules_controller &operator=(modules_controller &&) = delete;
 
     [[nodiscard]] std::optional<module_index> _module_index(std::size_t const) const;
-    [[nodiscard]] std::vector<module_index> _module_indices(std::vector<std::size_t> const &) const;
+    [[nodiscard]] std::set<module_index> _module_indices(std::vector<std::size_t> const &) const;
 };
 }  // namespace yas::ae

@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_project_lifetime_id.h>
 
 #include <audio_editor_core/ae_marker_index.hpp>
+#include <set>
 
 namespace yas::ae {
 class project_action_sender;
@@ -17,7 +18,7 @@ struct markers_controller final {
     markers_controller(std::shared_ptr<project_action_sender> const &);
 
     void begin_selection();
-    void select(std::vector<marker_index> const &);
+    void select(std::set<marker_index> const &);
     void end_selection();
 
    private:
