@@ -30,7 +30,7 @@ void markers_controller::begin_selection() {
     action_sender->send(editing_action_name::begin_markers_selection);
 }
 
-void markers_controller::select(std::vector<marker_index> const &marker_indices) {
+void markers_controller::select(std::set<marker_index> const &marker_indices) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();

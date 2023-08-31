@@ -105,18 +105,18 @@ std::optional<module_index> modules_controller::_module_index(std::size_t const 
     if (module_indices.empty()) {
         return std::nullopt;
     } else {
-        return module_indices.at(0);
+        return *module_indices.begin();
     }
 }
 
-std::vector<module_index> modules_controller::_module_indices(std::vector<std::size_t> const &indices) const {
+std::set<module_index> modules_controller::_module_indices(std::vector<std::size_t> const &indices) const {
     auto const content_pool = this->_content_pool.lock();
     if (!content_pool) {
         assertion_failure_if_not_test();
         return {};
     }
 
-    std::vector<module_index> result;
+    std::set<module_index> result;
 
     auto const &contents = content_pool->elements();
 
@@ -124,7 +124,7 @@ std::vector<module_index> modules_controller::_module_indices(std::vector<std::s
         if (idx < contents.size()) {
             auto const &content = contents.at(idx);
             if (content.has_value()) {
-                result.emplace_back(content.value().index());
+                result.emplace(content.value().index());
             }
         }
     }

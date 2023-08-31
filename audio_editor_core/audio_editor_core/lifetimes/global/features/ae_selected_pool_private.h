@@ -27,7 +27,7 @@ void selected_pool<Element>::begin_toggling() {
 }
 
 template <typename Element>
-void selected_pool<Element>::toggle(element_set &&toggled) {
+void selected_pool<Element>::toggle(element_set const &toggled) {
     if (this->_toggled.has_value()) {
         auto const &previous = this->_toggled.value();
 
@@ -59,7 +59,7 @@ void selected_pool<Element>::toggle(element_set &&toggled) {
             }
         }
 
-        this->_toggled = std::move(toggled);
+        this->_toggled = toggled;
 
         if (!changed.empty()) {
             this->_event_fetcher->push({.type = selected_pool_event_type::toggled, .toggled = std::move(changed)});

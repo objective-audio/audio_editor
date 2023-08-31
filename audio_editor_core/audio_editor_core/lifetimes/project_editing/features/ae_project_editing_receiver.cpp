@@ -244,7 +244,7 @@ void project_editing_receiver::receive(ae::action const &action) const {
                                 this->_module_selector->begin_selection();
                                 break;
                             case editing_action_name::select_modules:
-                                this->_module_selector->select(action.module_indices_value());
+                                this->_module_selector->select(action.module_index_set_value());
                                 break;
                             case editing_action_name::end_modules_selection:
                                 this->_module_selector->end_selection();
@@ -259,7 +259,7 @@ void project_editing_receiver::receive(ae::action const &action) const {
                                 this->_marker_selector->begin_selection();
                                 break;
                             case editing_action_name::select_markers:
-                                this->_marker_selector->select(action.marker_indices_value());
+                                this->_marker_selector->select(action.marker_index_set_value());
                                 break;
                             case editing_action_name::end_markers_selection:
                                 this->_marker_selector->end_selection();

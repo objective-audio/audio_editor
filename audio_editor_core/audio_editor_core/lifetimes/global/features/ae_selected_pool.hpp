@@ -29,7 +29,7 @@ struct selected_pool final {
     [[nodiscard]] bool contains(Element const &) const;
 
     void begin_toggling();
-    void toggle(element_set &&);
+    void toggle(element_set const &);
     void end_toggling();
 
     [[nodiscard]] bool can_clear() const;

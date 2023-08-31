@@ -29,15 +29,8 @@ void marker_selector::begin_selection() {
     this->_selected_pool->begin_toggling();
 }
 
-#warning todo setで受け取る
-void marker_selector::select(std::vector<marker_index> const &indices) {
-    selected_marker_set inserting;
-
-    for (auto const &index : indices) {
-        inserting.emplace(index);
-    }
-
-    this->_selected_pool->toggle(std::move(inserting));
+void marker_selector::select(std::set<marker_index> const &indices) {
+    this->_selected_pool->toggle(indices);
 }
 
 void marker_selector::end_selection() {

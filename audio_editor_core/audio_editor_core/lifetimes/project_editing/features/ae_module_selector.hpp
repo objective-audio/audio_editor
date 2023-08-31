@@ -17,7 +17,7 @@ struct module_selector final {
 
     [[nodiscard]] bool can_select() const;
     void begin_selection();
-    void select(std::vector<module_index> const &);
+    void select(std::set<module_index> const &);
     void end_selection();
 
     [[nodiscard]] bool can_toggle() const;
