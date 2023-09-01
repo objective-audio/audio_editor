@@ -9,16 +9,19 @@
 #include <cpp_utils/yas_assertion.h>
 
 #include <audio_editor_core/ae_deselector.hpp>
+#include <audio_editor_core/ae_selector_enabler.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 marker_selector::marker_selector(marker_pool const *marker_pool, selected_marker_pool *selected_pool,
-                                 editing_status const *editing_status, deselector *deselector)
+                                 editing_status const *editing_status, deselector *deselector,
+                                 selector_enabler const *enabler)
     : _marker_pool(marker_pool),
       _selected_pool(selected_pool),
       _editing_status(editing_status),
-      _deselector(deselector) {
+      _deselector(deselector),
+      _enabler(enabler) {
 }
 
 bool marker_selector::can_select() const {
@@ -30,7 +33,9 @@ void marker_selector::begin_selection() {
 }
 
 void marker_selector::select(std::set<marker_index> const &indices) {
-    this->_selected_pool->toggle(indices);
+    if (this->_enabler->is_enabled(selector_kind::marker)) {
+        this->_selected_pool->toggle(indices);
+    }
 }
 
 void marker_selector::end_selection() {

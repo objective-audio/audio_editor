@@ -59,6 +59,7 @@
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_project_settings_opener.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
+#include <audio_editor_core/ae_selector_enabler.hpp>
 #include <audio_editor_core/ae_track_selector.hpp>
 #include <audio_editor_core/ae_vertical_scrolling.hpp>
 
@@ -102,11 +103,14 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
       exporter(std::make_shared<ae::exporter>()),
       editing_status(std::make_shared<ae::editing_status>(this->exporter.get())),
       deselector(std::make_shared<ae::deselector>(this->selected_module_pool.get(), this->selected_marker_pool.get())),
+      selector_enabler(
+          std::make_shared<ae::selector_enabler>(this->selected_module_pool.get(), this->selected_marker_pool.get())),
       track_selector(std::make_shared<ae::track_selector>(project_lifetime->vertical_scrolling.get())),
       module_selector(std::make_shared<ae::module_selector>(this->module_pool.get(), this->selected_module_pool.get(),
-                                                            this->editing_status.get())),
+                                                            this->editing_status.get(), this->selector_enabler.get())),
       marker_selector(std::make_shared<ae::marker_selector>(this->marker_pool.get(), this->selected_marker_pool.get(),
-                                                            this->editing_status.get(), this->deselector.get())),
+                                                            this->editing_status.get(), this->deselector.get(),
+                                                            this->selector_enabler.get())),
       playing_toggler(std::make_shared<ae::playing_toggler>(project_lifetime->player.get())),
       modal_lifecycle(project_modal_lifecycle::make_shared(project_lifetime_id)),
       nudger(std::make_shared<ae::nudger>(project_lifetime->player.get(), this->nudging.get())),
@@ -117,9 +121,9 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
                                           this->marker_pool.get(), this->edge_holder.get())),
       time_editing_opener(std::make_shared<ae::time_editing_opener>(project_lifetime->player.get(), this->timing.get(),
                                                                     this->modal_lifecycle.get())),
-      marker_editor(std::make_shared<ae::marker_editor>(project_lifetime->player.get(), this->marker_pool.get(),
-                                                        this->database.get(), this->editing_status.get(),
-                                                        this->selected_marker_pool.get(), this->pasteboard.get())),
+      marker_editor(std::make_shared<ae::marker_editor>(
+          project_lifetime->player.get(), this->marker_pool.get(), this->database.get(), this->editing_status.get(),
+          this->selected_marker_pool.get(), this->pasteboard.get(), this->selector_enabler.get())),
       module_renaming_opener(std::make_shared<ae::module_renaming_opener>(
           this->modal_lifecycle.get(), this->editing_status.get(), this->deselector.get())),
       marker_renaming_opener(std::make_shared<ae::marker_renaming_opener>(
@@ -144,7 +148,7 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
       module_editor(std::make_shared<ae::module_editor>(project_lifetime->player.get(), this->module_pool.get(),
                                                         this->marker_pool.get(), this->selected_module_pool.get(),
                                                         this->track_selector.get(), this->pasteboard.get(),
-                                                        this->editing_status.get())),
+                                                        this->editing_status.get(), this->selector_enabler.get())),
       range_selector(std::make_shared<ae::range_selector>(project_lifetime->player.get(), this->deselector.get())),
       display_space_time_range(std::make_shared<ae::display_space_time_range>(
           project_lifetime->project_format, project_lifetime->display_space.get(), project_lifetime->player.get())),

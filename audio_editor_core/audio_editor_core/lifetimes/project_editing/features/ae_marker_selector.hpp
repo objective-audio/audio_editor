@@ -10,9 +10,11 @@ namespace yas::ae {
 class marker_pool;
 class editing_status;
 class deselector;
+class selector_enabler;
 
 struct marker_selector final {
-    marker_selector(marker_pool const *, selected_marker_pool *, editing_status const *, deselector *);
+    marker_selector(marker_pool const *, selected_marker_pool *, editing_status const *, deselector *,
+                    selector_enabler const *);
 
     [[nodiscard]] bool can_select() const;
     void begin_selection();
@@ -27,6 +29,7 @@ struct marker_selector final {
     selected_marker_pool *const _selected_pool;
     editing_status const *const _editing_status;
     deselector *const _deselector;
+    selector_enabler const *const _enabler;
 
     marker_selector(marker_selector const &) = delete;
     marker_selector(marker_selector &&) = delete;
