@@ -11,9 +11,10 @@ namespace yas::ae {
 class module_pool;
 class editing_status;
 class deselector;
+class selector_enabler;
 
 struct module_selector final {
-    module_selector(module_pool const *, selected_module_pool *, editing_status const *);
+    module_selector(module_pool const *, selected_module_pool *, editing_status const *, selector_enabler const *);
 
     [[nodiscard]] bool can_select() const;
     void begin_selection();
@@ -27,6 +28,7 @@ struct module_selector final {
     module_pool const *const _module_pool;
     selected_module_pool *const _selected_pool;
     editing_status const *const _editing_status;
+    selector_enabler const *const _enabler;
 
     module_selector(module_selector const &) = delete;
     module_selector(module_selector &&) = delete;

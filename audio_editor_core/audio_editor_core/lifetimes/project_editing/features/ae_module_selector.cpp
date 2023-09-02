@@ -10,14 +10,15 @@
 
 #include <audio_editor_core/ae_deselector.hpp>
 #include <audio_editor_core/ae_selected_module.hpp>
+#include <audio_editor_core/ae_selector_enabler.hpp>
 #include <audio_editor_core/ae_track_selector.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 module_selector::module_selector(module_pool const *module_pool, selected_module_pool *selected_pool,
-                                 editing_status const *editing_status)
-    : _module_pool(module_pool), _selected_pool(selected_pool), _editing_status(editing_status) {
+                                 editing_status const *editing_status, selector_enabler const *enabler)
+    : _module_pool(module_pool), _selected_pool(selected_pool), _editing_status(editing_status), _enabler(enabler) {
 }
 
 bool module_selector::can_select() const {
@@ -29,7 +30,9 @@ void module_selector::begin_selection() {
 }
 
 void module_selector::select(std::set<module_index> const &indices) {
-    this->_selected_pool->toggle(indices);
+    if (this->_enabler->is_enabled(selector_kind::module)) {
+        this->_selected_pool->toggle(indices);
+    }
 }
 
 void module_selector::end_selection() {

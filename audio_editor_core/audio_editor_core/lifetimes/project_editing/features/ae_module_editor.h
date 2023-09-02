@@ -15,10 +15,11 @@ class track_selector;
 class pasteboard;
 class database;
 class editing_status;
+class selector_enabler;
 
 struct module_editor final {
     module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, track_selector const *, pasteboard *,
-                  editing_status const *);
+                  editing_status const *, selector_enabler const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -43,6 +44,7 @@ struct module_editor final {
     track_selector const *const _track_selector;
     pasteboard *const _pasteboard;
     editing_status const *const _editing_status;
+    selector_enabler const *const _selector_enabler;
 
     observing::canceller_pool _pool;
 

@@ -12,10 +12,11 @@ class marker_pool;
 class database;
 class editing_status;
 class pasteboard;
+class selector_enabler;
 
 struct marker_editor final {
     marker_editor(player const *, marker_pool *, database *, editing_status const *, selected_marker_pool *,
-                  pasteboard *);
+                  pasteboard *, selector_enabler const *);
 
     [[nodiscard]] bool can_insert() const;
     void insert();
@@ -37,6 +38,7 @@ struct marker_editor final {
     editing_status const *const _editing_status;
     selected_marker_pool *const _selected_pool;
     pasteboard *const _pasteboard;
+    selector_enabler const *_selector_enabler;
 
     marker_editor(marker_editor const &) = delete;
     marker_editor(marker_editor &&) = delete;

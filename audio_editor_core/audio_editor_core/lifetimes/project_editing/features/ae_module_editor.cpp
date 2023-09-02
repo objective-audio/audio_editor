@@ -18,6 +18,7 @@
 #include <audio_editor_core/ae_timeline_holder_utils.h>
 #include <cpp_utils/yas_fast_each.h>
 
+#include <audio_editor_core/ae_selector_enabler.hpp>
 #include <audio_editor_core/ae_track_selector.hpp>
 #include <processing/yas_processing_umbrella.hpp>
 
@@ -26,14 +27,16 @@ using namespace yas::ae;
 
 module_editor::module_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
                              selected_module_pool *selected_pool, track_selector const *track_selector,
-                             pasteboard *pasteboard, editing_status const *editing_status)
+                             pasteboard *pasteboard, editing_status const *editing_status,
+                             selector_enabler const *selector_enabler)
     : _player(player),
       _module_pool(module_pool),
       _marker_pool(marker_pool),
       _selected_pool(selected_pool),
       _track_selector(track_selector),
       _pasteboard(pasteboard),
-      _editing_status(editing_status) {
+      _editing_status(editing_status),
+      _selector_enabler(selector_enabler) {
 }
 
 bool module_editor::can_split() const {
@@ -143,7 +146,7 @@ void module_editor::copy() {
         }
 
         this->_pasteboard->set_modules(pasting_modules);
-    } else {
+    } else if (!this->_selector_enabler->is_any_enabled()) {
         auto const modules = module_pool->modules_at({current_track}, current_frame);
         for (auto const &pair : modules) {
             auto const &value = pair.second.value;

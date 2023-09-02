@@ -11,18 +11,21 @@
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_player.h>
 
+#include <audio_editor_core/ae_selector_enabler.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
 marker_editor::marker_editor(player const *player, marker_pool *marker_pool, database *database,
                              editing_status const *editing_status, selected_marker_pool *selected_pool,
-                             pasteboard *pasteboard)
+                             pasteboard *pasteboard, selector_enabler const *selector_enabler)
     : _player(player),
       _marker_pool(marker_pool),
       _database(database),
       _editing_status(editing_status),
       _selected_pool(selected_pool),
-      _pasteboard(pasteboard) {
+      _pasteboard(pasteboard),
+      _selector_enabler(selector_enabler) {
 }
 
 bool marker_editor::can_insert() const {
@@ -89,14 +92,14 @@ void marker_editor::copy() {
 
     auto const &marker_pool = this->_marker_pool;
     auto const current_frame = this->_player->current_frame();
-    auto const selected_modules = this->_selected_pool->elements();
+    auto const selected_markers = this->_selected_pool->elements();
 
-    if (!selected_modules.empty()) {
+    if (!selected_markers.empty()) {
         this->_selected_pool->clear();
 
         std::vector<pasting_marker_object> pasting_markers;
 
-        for (auto const &index : selected_modules) {
+        for (auto const &index : selected_markers) {
             if (auto const marker = marker_pool->marker_for_index(index)) {
                 auto const &value = marker.value().value;
                 pasting_markers.emplace_back(
