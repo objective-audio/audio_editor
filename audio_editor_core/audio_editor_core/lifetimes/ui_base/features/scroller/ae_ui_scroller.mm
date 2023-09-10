@@ -32,16 +32,20 @@ ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard, ui_scrol
       _scroll_gesture_controller(scroll_gesture_controller),
       _back_node(scroller_nodes.back.get()),
       _modules_node(scroller_nodes.modules.get()),
-      _front_node(scroller_nodes.front.get()) {
+      _front_y_fixed_node(scroller_nodes.front_y_fixed.get()),
+      _front_x_fixed_node(scroller_nodes.front_x_fixed.get()) {
     standard->renderer()
         ->observe_will_render([this](auto const &) {
             float const x = this->_presenter->x();
             float const y = this->_presenter->y();
             this->_modules_node->set_position(ui::point{x, y});
 
-            ui::point const v_fixed_position{x, 0.0f};
-            this->_back_node->set_position(v_fixed_position);
-            this->_front_node->set_position(v_fixed_position);
+            ui::point const y_fixed_position{x, 0.0f};
+            this->_back_node->set_position(y_fixed_position);
+            this->_front_y_fixed_node->set_position(y_fixed_position);
+
+            ui::point const x_fixed_position{0.0f, y};
+            this->_front_x_fixed_node->set_position(x_fixed_position);
         })
         .end()
         ->add_to(this->_pool);

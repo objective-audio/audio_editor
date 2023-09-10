@@ -34,13 +34,16 @@ struct color final {
     [[nodiscard]] ui::color edge_line() const;
     [[nodiscard]] ui::color edge_text() const;
 
-    [[nodiscard]] ui::color marker_bg() const;
-    [[nodiscard]] ui::color selected_marker_bg() const;
+    [[nodiscard]] ui::color marker_square() const;
+    [[nodiscard]] ui::color selected_marker_square() const;
     [[nodiscard]] ui::color marker_line() const;
     [[nodiscard]] ui::color marker_text() const;
     [[nodiscard]] ui::color selected_marker_text() const;
 
     [[nodiscard]] ui::color pasting_marker_line() const;
+
+    [[nodiscard]] ui::color track_square() const;
+    [[nodiscard]] ui::color selected_track_square() const;
 
     [[nodiscard]] ui::color modal_bg() const;
 

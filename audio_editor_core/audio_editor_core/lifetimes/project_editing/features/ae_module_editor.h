@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_selected_module_pool.hpp>
+#include <audio_editor_core/ae_vertical_scrolling.hpp>
 #include <observing/yas_observing_umbrella.hpp>
 
 namespace yas::ae {
@@ -16,10 +17,11 @@ class pasteboard;
 class database;
 class editing_status;
 class selector_enabler;
+class vertical_scrolling;
 
 struct module_editor final {
-    module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, track_selector const *, pasteboard *,
-                  editing_status const *, selector_enabler const *);
+    module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, vertical_scrolling const *,
+                  track_selector const *, pasteboard *, editing_status const *, selector_enabler const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -41,6 +43,7 @@ struct module_editor final {
     module_pool *const _module_pool;
     marker_pool *const _marker_pool;
     selected_module_pool *const _selected_pool;
+    vertical_scrolling const *_vertical_scrolling;
     track_selector const *const _track_selector;
     pasteboard *const _pasteboard;
     editing_status const *const _editing_status;

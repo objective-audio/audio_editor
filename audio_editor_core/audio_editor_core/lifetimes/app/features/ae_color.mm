@@ -106,11 +106,11 @@ ui::color color::edge_text() const {
     return to_color(@"edge_text");
 }
 
-ui::color color::marker_bg() const {
+ui::color color::marker_square() const {
     return to_color(@"marker_square");
 }
 
-ui::color color::selected_marker_bg() const {
+ui::color color::selected_marker_square() const {
     return to_color(@"selected_marker_square");
 }
 
@@ -128,6 +128,14 @@ ui::color color::selected_marker_text() const {
 
 ui::color color::pasting_marker_line() const {
     return to_color(@"pasting_marker_line");
+}
+
+ui::color color::track_square() const {
+    return to_color(@"track_square");
+}
+
+ui::color color::selected_track_square() const {
+    return to_color(@"selected_track_square");
 }
 
 ui::color color::modal_bg() const {

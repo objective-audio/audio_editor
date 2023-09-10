@@ -34,11 +34,7 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
                        std::shared_ptr<markers_presenter> const &presenter,
                        std::shared_ptr<markers_controller> const &controller,
                        std::shared_ptr<ui::standard> const &standard, ui::node *node)
-    : _project_lifetime_id(project_lifetime_id),
-      _node(node),
-      _presenter(presenter),
-      _controller(controller),
-      _top_guide(standard->view_look()->view_layout_guide()->top()) {
+    : _project_lifetime_id(project_lifetime_id), _node(node), _presenter(presenter), _controller(controller) {
     this->_presenter
         ->observe_contents([this](marker_content_pool_event const &event) {
             switch (event.type) {

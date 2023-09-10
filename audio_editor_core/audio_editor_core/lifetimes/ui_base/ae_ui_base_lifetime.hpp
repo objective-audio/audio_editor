@@ -24,6 +24,7 @@ class ui_pasting_modules;
 class ui_edge;
 class ui_markers;
 class ui_pasting_markers;
+class ui_tracks;
 class ui_zooming;
 class ui_scroller;
 class ui_modal_bg;
@@ -54,6 +55,7 @@ struct ui_base_lifetime final {
     std::shared_ptr<ui_edge> const edge;
     std::shared_ptr<ui_markers> const markers;
     std::shared_ptr<ui_pasting_markers> const pasting_markers;
+    std::shared_ptr<ui_tracks> const tracks;
     std::shared_ptr<ui_zooming> const zooming;
     std::shared_ptr<ui_scroller> const scroller;
 

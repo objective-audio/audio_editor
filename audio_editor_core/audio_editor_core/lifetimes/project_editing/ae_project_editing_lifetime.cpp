@@ -59,6 +59,7 @@
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_project_settings_opener.hpp>
 #include <audio_editor_core/ae_range_selector.hpp>
+#include <audio_editor_core/ae_selected_track_pool.hpp>
 #include <audio_editor_core/ae_selector_enabler.hpp>
 #include <audio_editor_core/ae_track_selector.hpp>
 #include <audio_editor_core/ae_vertical_scrolling.hpp>
@@ -82,6 +83,7 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
       marker_content_pool(marker_content_pool::make_shared()),
       pasting_marker_content_pool(pasting_marker_content_pool::make_shared()),
       grid_content_pool(grid_content_pool::make_shared()),
+      track_content_pool(track_content_pool::make_shared()),
       action_sender(
           std::make_shared<ae::project_action_sender>(project_lifetime_id, app_lifetime->action_sender.get())),
       pinch_gesture_controller(std::make_shared<ae::pinch_gesture_controller>(project_lifetime->zooming_pair.get())),
@@ -99,6 +101,7 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
       selected_module_pool(std::make_shared<ae::selected_module_pool>()),
       marker_pool(std::make_shared<ae::marker_pool>(this->database.get())),
       selected_marker_pool(std::make_shared<ae::selected_marker_pool>()),
+      selected_track_pool(std::make_shared<ae::selected_track_pool>()),
       pasteboard(std::make_shared<ae::pasteboard>()),
       exporter(std::make_shared<ae::exporter>()),
       editing_status(std::make_shared<ae::editing_status>(this->exporter.get())),
@@ -145,10 +148,10 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
           this->file_module_loading_state_holder.get(), this->database.get(), this->pasteboard.get())),
       import_interactor(std::make_shared<ae::import_interactor>(this->modal_lifecycle.get(), this->editing_status.get(),
                                                                 this->file_module_loader.get())),
-      module_editor(std::make_shared<ae::module_editor>(project_lifetime->player.get(), this->module_pool.get(),
-                                                        this->marker_pool.get(), this->selected_module_pool.get(),
-                                                        this->track_selector.get(), this->pasteboard.get(),
-                                                        this->editing_status.get(), this->selector_enabler.get())),
+      module_editor(std::make_shared<ae::module_editor>(
+          project_lifetime->player.get(), this->module_pool.get(), this->marker_pool.get(),
+          this->selected_module_pool.get(), project_lifetime->vertical_scrolling.get(), this->track_selector.get(),
+          this->pasteboard.get(), this->editing_status.get(), this->selector_enabler.get())),
       range_selector(std::make_shared<ae::range_selector>(project_lifetime->player.get(), this->deselector.get())),
       display_space_time_range(std::make_shared<ae::display_space_time_range>(
           project_lifetime->project_format, project_lifetime->display_space.get(), project_lifetime->player.get())),

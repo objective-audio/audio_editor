@@ -20,19 +20,21 @@
 
 #include <audio_editor_core/ae_selector_enabler.hpp>
 #include <audio_editor_core/ae_track_selector.hpp>
+#include <audio_editor_core/ae_vertical_scrolling.hpp>
 #include <processing/yas_processing_umbrella.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
 module_editor::module_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
-                             selected_module_pool *selected_pool, track_selector const *track_selector,
-                             pasteboard *pasteboard, editing_status const *editing_status,
-                             selector_enabler const *selector_enabler)
+                             selected_module_pool *selected_pool, vertical_scrolling const *vertical_scrolling,
+                             track_selector const *track_selector, pasteboard *pasteboard,
+                             editing_status const *editing_status, selector_enabler const *selector_enabler)
     : _player(player),
       _module_pool(module_pool),
       _marker_pool(marker_pool),
       _selected_pool(selected_pool),
+      _vertical_scrolling(vertical_scrolling),
       _track_selector(track_selector),
       _pasteboard(pasteboard),
       _editing_status(editing_status),
@@ -46,7 +48,7 @@ bool module_editor::can_split() const {
 
     auto const &module_pool = this->_module_pool;
     auto const current_frame = this->_player->current_frame();
-    return !module_pool->splittable_modules_at({this->_track_selector->current()}, current_frame).empty();
+    return !module_pool->splittable_modules_at({this->_vertical_scrolling->track()}, current_frame).empty();
 }
 
 void module_editor::split() {
@@ -57,7 +59,7 @@ void module_editor::split() {
     this->_selected_pool->clear();
 
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->split_at({this->_track_selector->current()}, current_frame);
+    this->_module_pool->split_at({this->_vertical_scrolling->track()}, current_frame);
 }
 
 void module_editor::drop_head() {
@@ -66,7 +68,7 @@ void module_editor::drop_head() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->drop_head_at({this->_track_selector->current()}, current_frame);
+    this->_module_pool->drop_head_at({this->_vertical_scrolling->track()}, current_frame);
 }
 
 void module_editor::drop_tail() {
@@ -77,7 +79,7 @@ void module_editor::drop_tail() {
     this->_selected_pool->clear();
 
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->drop_tail_at({this->_track_selector->current()}, current_frame);
+    this->_module_pool->drop_tail_at({this->_vertical_scrolling->track()}, current_frame);
 }
 
 bool module_editor::can_erase() const {
@@ -128,7 +130,7 @@ void module_editor::copy() {
     auto const &module_pool = this->_module_pool;
     auto const current_frame = this->_player->current_frame();
     auto const selected_modules = this->_selected_pool->elements();
-    track_index_t const current_track = this->_track_selector->current();
+    track_index_t const current_track = this->_vertical_scrolling->track();
 
     if (!selected_modules.empty()) {
         this->_selected_pool->clear();
@@ -182,7 +184,7 @@ void module_editor::paste() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    track_index_t const current_track = this->_track_selector->current();
+    track_index_t const current_track = this->_vertical_scrolling->track();
 
     for (auto const &module : modules) {
         auto const &module_value = module.value;
@@ -197,7 +199,7 @@ bool module_editor::_has_target_modules() const {
         return true;
     } else {
         auto const current_frame = this->_player->current_frame();
-        return !this->_module_pool->modules_at({this->_track_selector->current()}, current_frame).empty();
+        return !this->_module_pool->modules_at({this->_vertical_scrolling->track()}, current_frame).empty();
     }
 }
 
@@ -210,6 +212,6 @@ void module_editor::_erase_modules(selected_module_set &&selected_modules) {
         }
     } else {
         auto const current_frame = this->_player->current_frame();
-        this->_module_pool->erase_at({this->_track_selector->current()}, current_frame);
+        this->_module_pool->erase_at({this->_vertical_scrolling->track()}, current_frame);
     }
 }

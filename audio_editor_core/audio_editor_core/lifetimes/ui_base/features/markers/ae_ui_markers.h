@@ -26,7 +26,6 @@ struct ui_markers final {
     std::shared_ptr<markers_presenter> const _presenter;
     std::shared_ptr<markers_controller> const _controller;
 
-    std::shared_ptr<ui::layout_value_guide> const _top_guide;
     std::vector<std::shared_ptr<ui_marker_element>> _elements;
 
     observing::canceller_pool _pool;

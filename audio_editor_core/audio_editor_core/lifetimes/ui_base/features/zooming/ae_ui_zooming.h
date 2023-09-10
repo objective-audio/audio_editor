@@ -12,14 +12,15 @@ class zooming_presenter;
 class ui_modules;
 class ui_pasting_modules;
 class ui_grid;
+class ui_tracks;
 class display_space;
 
 struct ui_zooming final {
     [[nodiscard]] static std::shared_ptr<ui_zooming> make_shared(project_lifetime_id const &, ui_modules *,
-                                                                 ui_pasting_modules *, ui_grid *);
+                                                                 ui_pasting_modules *, ui_grid *, ui_tracks *);
 
     ui_zooming(std::shared_ptr<ui::standard> const &, display_space *, std::shared_ptr<zooming_presenter> const &,
-               ui_modules *, ui_pasting_modules *, ui_grid *);
+               ui_modules *, ui_pasting_modules *, ui_grid *, ui_tracks *);
 
    private:
     std::shared_ptr<zooming_presenter> const _presenter;
@@ -28,6 +29,7 @@ struct ui_zooming final {
     ui_modules *const _modules;
     ui_pasting_modules *const _pasting_modules;
     ui_grid *const _grid;
+    ui_tracks *const _tracks;
 
     observing::canceller_pool _pool;
 
