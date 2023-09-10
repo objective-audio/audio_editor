@@ -57,6 +57,10 @@ enum class editing_action_name {
     select_markers,
     end_markers_selection,
     toggle_marker_selection,
+    begin_tracks_selection,
+    end_tracks_selection,
+    select_tracks,
+    toggle_track_selection,
     begin_time_editing,
     open_project_settings,
     escape,
@@ -84,7 +88,7 @@ enum class action_name_kind {
 };
 
 using action_value = std::variant<int64_t, std::string, time::range, module_index, std::set<module_index>, marker_index,
-                                  std::set<marker_index>>;
+                                  std::set<marker_index>, std::set<track_index_t>>;
 
 struct action {
     action_name name;
@@ -99,6 +103,8 @@ struct action {
     [[nodiscard]] std::set<module_index> const &module_index_set_value() const;
     [[nodiscard]] marker_index const &marker_index_value() const;
     [[nodiscard]] std::set<marker_index> const &marker_index_set_value() const;
+    [[nodiscard]] track_index_t const &track_index_value() const;
+    [[nodiscard]] std::set<track_index_t> const &track_index_set_value() const;
     // ae_test_utilsにテスト用としてoperator==が定義されている
 };
 }  // namespace yas::ae

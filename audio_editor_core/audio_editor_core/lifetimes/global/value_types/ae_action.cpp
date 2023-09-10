@@ -38,6 +38,14 @@ std::set<marker_index> const &action::marker_index_set_value() const {
     return std::get<std::set<marker_index>>(this->value.value());
 }
 
+track_index_t const &action::track_index_value() const {
+    return std::get<track_index_t>(this->value.value());
+}
+
+std::set<track_index_t> const &action::track_index_set_value() const {
+    return std::get<std::set<track_index_t>>(this->value.value());
+}
+
 ae::action_name_kind yas::to_kind(ae::action_name const &scope) {
     using kind = ae::action_name_kind;
 

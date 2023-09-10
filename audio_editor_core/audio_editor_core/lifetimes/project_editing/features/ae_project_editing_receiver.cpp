@@ -26,6 +26,7 @@
 #include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_project_settings_opener.hpp>
+#include <audio_editor_core/ae_track_selector.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -37,7 +38,7 @@ project_editing_receiver::project_editing_receiver(
     module_renaming_opener *module_renaming_opener, marker_renaming_opener *marker_renaming_opener,
     project_settings_opener *settings_opener, timing *timing, import_interactor *import_interactor,
     export_interactor *export_interactor, reverter *reverter, module_selector *module_selector,
-    marker_selector *marker_selector, escaper *escaper, pasteboard *pasteboard)
+    marker_selector *marker_selector, track_selector *track_selector, escaper *escaper, pasteboard *pasteboard)
     : _project_lifetime_id(project_lifetime_id),
       _database(database),
       _module_editor(module_editor),
@@ -57,6 +58,7 @@ project_editing_receiver::project_editing_receiver(
       _reverter(reverter),
       _module_selector(module_selector),
       _marker_selector(marker_selector),
+      _track_selector(track_selector),
       _escaper(escaper),
       _pasteboard(pasteboard) {
 }
@@ -270,6 +272,18 @@ void project_editing_receiver::receive(ae::action const &action) const {
                             case editing_action_name::begin_marker_renaming:
                                 this->_marker_renaming_opener->begin_renaming(action.marker_index_value());
                                 break;
+                            case editing_action_name::begin_tracks_selection:
+                                this->_track_selector->begin_selection();
+                                break;
+                            case editing_action_name::select_tracks:
+                                this->_track_selector->select(action.track_index_set_value());
+                                break;
+                            case editing_action_name::end_tracks_selection:
+                                this->_track_selector->end_selection();
+                                break;
+                            case editing_action_name::toggle_track_selection:
+                                this->_track_selector->toggle(action.track_index_value());
+                                break;
 
                             case editing_action_name::begin_time_editing:
                                 this->_time_editing_opener->begin_time_editing();
@@ -386,6 +400,14 @@ action_receivable_state project_editing_receiver::receivable_state(ae::action co
                     return to_state(this->_marker_selector->can_select());
                 case editing_action_name::toggle_marker_selection:
                     return to_state(this->_marker_selector->can_toggle());
+                case editing_action_name::begin_tracks_selection:
+                    return to_state(this->_track_selector->can_select());
+                case editing_action_name::select_tracks:
+                    return to_state(this->_track_selector->can_select());
+                case editing_action_name::end_tracks_selection:
+                    return to_state(this->_track_selector->can_select());
+                case editing_action_name::toggle_track_selection:
+                    return to_state(this->_track_selector->can_toggle());
 
                 case editing_action_name::begin_time_editing:
                     return to_state(this->_time_editing_opener->can_begin_time_editing());

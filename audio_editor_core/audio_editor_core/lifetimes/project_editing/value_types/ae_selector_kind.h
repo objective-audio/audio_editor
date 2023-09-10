@@ -8,5 +8,6 @@ namespace yas::ae {
 enum selector_kind {
     module,
     marker,
+    track,
 };
 }

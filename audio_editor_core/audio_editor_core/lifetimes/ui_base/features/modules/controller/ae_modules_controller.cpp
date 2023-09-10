@@ -5,7 +5,6 @@
 #include "ae_modules_controller.h"
 
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_json_utils.h>
 #include <audio_editor_core/ae_project_action_sender.h>
 #include <cpp_utils/yas_assertion.h>
 
@@ -76,27 +75,27 @@ void modules_controller::end_selection() {
     action_sender->send(editing_action_name::end_modules_selection);
 }
 
-void modules_controller::toggle_selection(std::size_t const idx) {
+void modules_controller::toggle_selection(std::size_t const content_idx) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
         return;
     }
 
-    if (auto index = this->_module_index(idx)) {
+    if (auto index = this->_module_index(content_idx)) {
         action_sender->send(editing_action_name::toggle_module_selection, std::move(index.value()));
     }
 }
 
-void modules_controller::begin_renaming(std::size_t const idx) {
+void modules_controller::begin_renaming(std::size_t const content_idx) {
     auto const action_sender = this->_action_sender.lock();
     if (!action_sender) {
         assertion_failure_if_not_test();
         return;
     }
 
-    if (auto index = this->_module_index(idx)) {
-        action_sender->send(editing_action_name::begin_module_renaming, std::move(index.value()));
+    if (auto module_index = this->_module_index(content_idx)) {
+        action_sender->send(editing_action_name::begin_module_renaming, std::move(module_index.value()));
     }
 }
 
@@ -109,25 +108,25 @@ std::optional<module_index> modules_controller::_module_index(std::size_t const 
     }
 }
 
-std::set<module_index> modules_controller::_module_indices(std::vector<std::size_t> const &indices) const {
+std::set<module_index> modules_controller::_module_indices(std::vector<std::size_t> const &content_indices) const {
     auto const content_pool = this->_content_pool.lock();
     if (!content_pool) {
         assertion_failure_if_not_test();
         return {};
     }
 
-    std::set<module_index> result;
+    std::set<module_index> module_indices;
 
     auto const &contents = content_pool->elements();
 
-    for (auto const &idx : indices) {
+    for (auto const &idx : content_indices) {
         if (idx < contents.size()) {
             auto const &content = contents.at(idx);
             if (content.has_value()) {
-                result.emplace(content.value().index());
+                module_indices.emplace(content.value().index());
             }
         }
     }
 
-    return result;
+    return module_indices;
 }

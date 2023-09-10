@@ -105,10 +105,12 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
       pasteboard(std::make_shared<ae::pasteboard>()),
       exporter(std::make_shared<ae::exporter>()),
       editing_status(std::make_shared<ae::editing_status>(this->exporter.get())),
-      deselector(std::make_shared<ae::deselector>(this->selected_module_pool.get(), this->selected_marker_pool.get())),
-      selector_enabler(
-          std::make_shared<ae::selector_enabler>(this->selected_module_pool.get(), this->selected_marker_pool.get())),
-      track_selector(std::make_shared<ae::track_selector>(project_lifetime->vertical_scrolling.get())),
+      deselector(std::make_shared<ae::deselector>(this->selected_module_pool.get(), this->selected_marker_pool.get(),
+                                                  this->selected_track_pool.get())),
+      selector_enabler(std::make_shared<ae::selector_enabler>(
+          this->selected_module_pool.get(), this->selected_marker_pool.get(), this->selected_track_pool.get())),
+      track_selector(std::make_shared<ae::track_selector>(this->selected_track_pool.get(), this->editing_status.get(),
+                                                          this->deselector.get(), this->selector_enabler.get())),
       module_selector(std::make_shared<ae::module_selector>(this->module_pool.get(), this->selected_module_pool.get(),
                                                             this->editing_status.get(), this->selector_enabler.get())),
       marker_selector(std::make_shared<ae::marker_selector>(this->marker_pool.get(), this->selected_marker_pool.get(),
@@ -167,5 +169,6 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
           this->time_editing_opener.get(), this->marker_editor.get(), this->module_renaming_opener.get(),
           this->marker_renaming_opener.get(), this->settings_opener.get(), this->timing.get(),
           this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
-          this->module_selector.get(), this->marker_selector.get(), this->escaper.get(), this->pasteboard.get())) {
+          this->module_selector.get(), this->marker_selector.get(), this->track_selector.get(), this->escaper.get(),
+          this->pasteboard.get())) {
 }
