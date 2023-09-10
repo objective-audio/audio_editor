@@ -26,6 +26,7 @@ class export_interactor;
 class reverter;
 class module_selector;
 class marker_selector;
+class track_selector;
 class escaper;
 class pasteboard;
 
@@ -34,7 +35,7 @@ struct project_editing_receiver final : action_receivable {
                              nudger *, jumper *, edge_editor *, time_editing_opener *, marker_editor *,
                              module_renaming_opener *, marker_renaming_opener *, project_settings_opener *, timing *,
                              import_interactor *, export_interactor *, reverter *, module_selector *, marker_selector *,
-                             escaper *, pasteboard *);
+                             track_selector *, escaper *, pasteboard *);
 
    private:
     project_lifetime_id const _project_lifetime_id;
@@ -56,6 +57,7 @@ struct project_editing_receiver final : action_receivable {
     reverter *const _reverter;
     module_selector *const _module_selector;
     marker_selector *const _marker_selector;
+    track_selector *const _track_selector;
     escaper *const _escaper;
     pasteboard *const _pasteboard;
 

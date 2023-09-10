@@ -4,21 +4,29 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_common_types.h>
-#include <audio_editor_core/ae_track_selector_dependencies.h>
+#include <audio_editor_core/ae_selected_track_pool.hpp>
 
 namespace yas::ae {
-struct track_selector final {
-    track_selector(scrolling_for_track_selector *);
+class editing_status;
+class deselector;
+class selector_enabler;
 
-    [[nodiscard]] track_index_t current() const;
-    [[nodiscard]] observing::syncable observe_current(std::function<void(track_index_t const &)> &&);
+struct track_selector final {
+    track_selector(selected_track_pool *, editing_status const *, deselector *, selector_enabler const *);
+
+    [[nodiscard]] bool can_select() const;
+    void begin_selection();
+    void select(std::set<track_index_t> const &);
+    void end_selection();
+
+    [[nodiscard]] bool can_toggle() const;
+    void toggle(track_index_t const &);
 
    private:
-    scrolling_for_track_selector *_scrolling;
-
-    observing::value::holder_ptr<track_index_t> const _current;
-    observing::canceller_pool _cancellers;
+    selected_track_pool *_selected_pool;
+    editing_status const *const _editing_status;
+    deselector *const _deselector;
+    selector_enabler const *const _enabler;
 
     track_selector(track_selector const &) = delete;
     track_selector(track_selector &&) = delete;

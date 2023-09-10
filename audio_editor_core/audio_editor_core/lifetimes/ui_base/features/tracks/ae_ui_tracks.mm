@@ -5,6 +5,7 @@
 #include "ae_ui_tracks.hpp"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_modifiers_holder.hpp>
 #include <audio_editor_core/ae_tracks_controller.hpp>
 #include <audio_editor_core/ae_tracks_presenter.hpp>
 #include <audio_editor_core/ae_ui_atlas.hpp>
@@ -25,23 +26,27 @@ std::shared_ptr<ui_tracks> ui_tracks::make_shared(project_lifetime_id const &pro
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
     return std::make_shared<ui_tracks>(project_lifetime_id, node, presenter, controller, resource_lifetime->standard,
-                                       app_lifetime->color.get(), resource_lifetime->atlas.get());
+                                       app_lifetime->color.get(), resource_lifetime->modifiers_holder.get(),
+                                       resource_lifetime->atlas.get());
 }
 
 ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *node,
                      std::shared_ptr<tracks_presenter> const &presenter,
                      std::shared_ptr<tracks_controller> const &controller,
-                     std::shared_ptr<ui::standard> const &standard, ae::color *color, ui_atlas const *atlas)
+                     std::shared_ptr<ui::standard> const &standard, ae::color *color,
+                     modifiers_holder *modifiers_holder, ui_atlas const *atlas)
     : _project_lifetime_id(project_lifetime_id),
       _node(node),
       _presenter(presenter),
       _controller(controller),
       _color(color),
+      _modifiers_holder(modifiers_holder),
       _atlas(atlas),
       _left_guide(standard->view_look()->view_layout_guide()->left()),
       _vertex_datas(std::make_unique<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>>()),
       _fill_mesh_container(
-          ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_tracks_constants::reserving_interval)) {
+          ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_tracks_constants::reserving_interval)),
+      _touch_tracker(ui::touch_tracker::make_shared(standard, this->_fill_mesh_container->node)) {
     node->add_sub_node(this->_fill_mesh_container->node);
 
     presenter
@@ -75,6 +80,74 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
                     });
                 }
             })
+        .sync()
+        ->add_to(this->_pool);
+
+    this->_touch_tracker
+        ->observe([this](ui::touch_tracker::context const &context) {
+            if (context.touch_event.touch_id == ui::touch_id::mouse_left()) {
+                auto const &modifiers = this->_modifiers_holder->modifiers();
+
+                switch (context.phase) {
+                    case ui::touch_tracker_phase::began:
+                        this->_began_collider_idx = context.collider_idx;
+                        if (modifiers.empty()) {
+                            this->_controller->deselect_all();
+                            this->_controller->begin_range_selection(context.touch_event.position);
+                        } else if (modifiers.size() == 1 && modifiers.contains(ae::modifier::shift)) {
+                            this->_controller->begin_range_selection(context.touch_event.position);
+                        }
+                        break;
+                    case ui::touch_tracker_phase::ended:
+                        if (this->_began_collider_idx == context.collider_idx) {
+                            if (modifiers.contains(ae::modifier::command)) {
+                                this->_controller->toggle_selection(context.collider_idx);
+                            }
+                        }
+                        this->_began_collider_idx = std::nullopt;
+                        break;
+                    case ui::touch_tracker_phase::canceled:
+                    case ui::touch_tracker_phase::leaved:
+                        this->_began_collider_idx = std::nullopt;
+                        break;
+                    case ui::touch_tracker_phase::moved:
+                    case ui::touch_tracker_phase::entered:
+                        break;
+                }
+            }
+        })
+        .end()
+        ->add_to(this->_pool);
+
+    this->_presenter
+        ->observe_range([this](range_selection const &selection) {
+            switch (selection.phase) {
+                case range_selection_phase::began:
+                    this->_controller->begin_selection();
+                case range_selection_phase::moved: {
+                    auto const &range = selection.range;
+                    if (range.has_value()) {
+                        auto const region_value = range.value().region();
+                        std::vector<std::size_t> hit_indices;
+
+                        auto const &colliders = this->_fill_mesh_container->node->colliders();
+                        auto each = make_fast_each(colliders.size());
+                        while (yas_each_next(each)) {
+                            auto const &idx = yas_each_index(each);
+                            auto const &collider = colliders.at(idx);
+                            if (collider->hit_test(region_value)) {
+                                hit_indices.emplace_back(idx);
+                            }
+                        }
+
+                        this->_controller->select(hit_indices);
+                    }
+                } break;
+                case range_selection_phase::ended:
+                    this->_controller->end_selection();
+                    break;
+            }
+        })
         .sync()
         ->add_to(this->_pool);
 

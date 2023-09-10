@@ -16,13 +16,14 @@ class tracks_presenter;
 class tracks_controller;
 class color;
 class ui_atlas;
+class modifiers_holder;
 
 struct ui_tracks {
     [[nodiscard]] static std::shared_ptr<ui_tracks> make_shared(project_lifetime_id const &, ui::node *);
 
     ui_tracks(project_lifetime_id const &, ui::node *, std::shared_ptr<tracks_presenter> const &,
               std::shared_ptr<tracks_controller> const &, std::shared_ptr<ui::standard> const &, ae::color *,
-              ui_atlas const *);
+              modifiers_holder *, ui_atlas const *);
 
     void set_scale(ui::size const &);
 
@@ -33,10 +34,12 @@ struct ui_tracks {
     std::shared_ptr<tracks_controller> const _controller;
     ae::color *const _color;
     ui_atlas const *const _atlas;
-
     std::shared_ptr<ui::layout_value_guide> const _left_guide;
     std::unique_ptr<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>> _vertex_datas;
     std::unique_ptr<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>> _fill_mesh_container;
+    std::shared_ptr<ui::touch_tracker> const _touch_tracker;
+    std::optional<std::size_t> _began_collider_idx;
+    modifiers_holder *const _modifiers_holder;
 
     ui::size _scale = ui::size::one();
 

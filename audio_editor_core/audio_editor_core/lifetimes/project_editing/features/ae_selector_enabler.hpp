@@ -8,11 +8,12 @@
 
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
+#include <audio_editor_core/ae_selected_track_pool.hpp>
 #include <optional>
 
 namespace yas::ae {
 struct selector_enabler {
-    selector_enabler(selected_module_pool const *, selected_marker_pool const *);
+    selector_enabler(selected_module_pool const *, selected_marker_pool const *, selected_track_pool const *);
 
     bool is_enabled(selector_kind const) const;
     bool is_any_enabled() const;
@@ -20,6 +21,7 @@ struct selector_enabler {
    private:
     selected_module_pool const *const _module_pool;
     selected_marker_pool const *const _marker_pool;
+    selected_track_pool const *const _track_pool;
 
     selector_enabler(selector_enabler const &) = delete;
     selector_enabler(selector_enabler &&) = delete;
