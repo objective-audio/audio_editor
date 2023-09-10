@@ -11,9 +11,11 @@
 #include <audio_editor_core/ae_pasting_module_content_pool.h>
 #include <audio_editor_core/ae_project_format.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
+#include <audio_editor_core/ae_track_content_pool.h>
 
 #include <audio_editor_core/ae_selected_marker_pool.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
+#include <audio_editor_core/ae_selected_track_pool.hpp>
 #include <memory>
 #include <string>
 
@@ -77,6 +79,7 @@ struct project_editing_lifetime final {
     std::shared_ptr<marker_content_pool> const marker_content_pool;
     std::shared_ptr<pasting_marker_content_pool> const pasting_marker_content_pool;
     std::shared_ptr<grid_content_pool> const grid_content_pool;
+    std::shared_ptr<track_content_pool> const track_content_pool;
     std::shared_ptr<project_action_sender> const action_sender;
     std::shared_ptr<pinch_gesture_controller> const pinch_gesture_controller;
     std::shared_ptr<scroll_gesture_controller> const scroll_gesture_controller;
@@ -90,6 +93,7 @@ struct project_editing_lifetime final {
     std::shared_ptr<selected_module_pool> const selected_module_pool;
     std::shared_ptr<marker_pool> const marker_pool;
     std::shared_ptr<selected_marker_pool> const selected_marker_pool;
+    std::shared_ptr<selected_track_pool> const selected_track_pool;
     std::shared_ptr<pasteboard> const pasteboard;
     std::shared_ptr<exporter> const exporter;
     std::shared_ptr<editing_status> const editing_status;

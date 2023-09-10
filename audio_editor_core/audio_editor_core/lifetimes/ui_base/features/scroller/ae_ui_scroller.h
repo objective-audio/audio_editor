@@ -29,7 +29,8 @@ struct ui_scroller final {
     std::shared_ptr<scroll_gesture_controller> const _scroll_gesture_controller;
     ui::node *const _back_node;
     ui::node *const _modules_node;
-    ui::node *const _front_node;
+    ui::node *const _front_y_fixed_node;
+    ui::node *const _front_x_fixed_node;
 
     observing::canceller_pool _pool;
 
