@@ -37,10 +37,16 @@ using namespace yas::ae;
     XCTAssertNoThrow(color->edge_line());
     XCTAssertNoThrow(color->edge_text());
 
-    XCTAssertNoThrow(color->marker_bg());
-    XCTAssertNoThrow(color->selected_marker_bg());
+    XCTAssertNoThrow(color->marker_square());
+    XCTAssertNoThrow(color->selected_marker_square());
     XCTAssertNoThrow(color->marker_line());
     XCTAssertNoThrow(color->marker_text());
+    XCTAssertNoThrow(color->selected_marker_text());
+
+    XCTAssertNoThrow(color->pasting_marker_line());
+
+    XCTAssertNoThrow(color->track_square());
+    XCTAssertNoThrow(color->selected_track_square());
 
     XCTAssertNoThrow(color->modal_bg());
 
