@@ -64,7 +64,7 @@ void database::remove_module(object_id const &object_id) {
 void database::update_module(object_id const &object_id, module const &module) {
     auto const identifier = object_id.identifier();
     if (this->_modules.contains(identifier)) {
-        auto &db_module = this->_modules.at(identifier);
+        auto db_module = this->_modules.at(identifier);
         db_module.set_name(module.name);
         db_module.set_range(module.range);
         this->_modules.erase(identifier);
@@ -92,7 +92,7 @@ void database::remove_marker(object_id const &object_id) {
 void database::update_marker(object_id const &object_id, marker_object const &marker) {
     auto const identifier = object_id.identifier();
     if (this->_markers.contains(identifier)) {
-        auto &db_marker = this->_markers.at(identifier);
+        auto db_marker = this->_markers.at(identifier);
         db_marker.set_object(marker);
         this->_markers.erase(identifier);
         this->_markers.emplace(identifier, db_marker);
