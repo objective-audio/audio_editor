@@ -42,6 +42,9 @@ struct color final {
 
     [[nodiscard]] ui::color pasting_marker_line() const;
 
+    [[nodiscard]] ui::color track_square() const;
+    [[nodiscard]] ui::color selected_track_square() const;
+
     [[nodiscard]] ui::color modal_bg() const;
 
     [[nodiscard]] ui::color time_text() const;

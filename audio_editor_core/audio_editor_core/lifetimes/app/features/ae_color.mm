@@ -130,6 +130,14 @@ ui::color color::pasting_marker_line() const {
     return to_color(@"pasting_marker_line");
 }
 
+ui::color color::track_square() const {
+    return to_color(@"track_square");
+}
+
+ui::color color::selected_track_square() const {
+    return to_color(@"selected_track_square");
+}
+
 ui::color color::modal_bg() const {
     return to_color(@"modal_bg");
 }
