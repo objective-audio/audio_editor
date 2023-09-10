@@ -10,7 +10,6 @@
 #include <ui/yas_ui_umbrella.h>
 
 namespace yas::ae {
-class module_content;
 class modules_presenter;
 class modules_controller;
 class display_space;
