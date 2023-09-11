@@ -27,13 +27,15 @@ using namespace yas;
 using namespace yas::ae;
 
 module_editor::module_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
-                             selected_module_pool *selected_pool, vertical_scrolling const *vertical_scrolling,
-                             track_selector const *track_selector, pasteboard *pasteboard,
-                             editing_status const *editing_status, selector_enabler const *selector_enabler)
+                             selected_module_pool *selected_module_pool, selected_track_pool *selected_track_pool,
+                             vertical_scrolling const *vertical_scrolling, track_selector const *track_selector,
+                             pasteboard *pasteboard, editing_status const *editing_status,
+                             selector_enabler const *selector_enabler)
     : _player(player),
       _module_pool(module_pool),
       _marker_pool(marker_pool),
-      _selected_module_pool(selected_pool),
+      _selected_module_pool(selected_module_pool),
+      _selected_track_pool(selected_track_pool),
       _vertical_scrolling(vertical_scrolling),
       _track_selector(track_selector),
       _pasteboard(pasteboard),
