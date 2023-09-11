@@ -42,7 +42,7 @@ struct module_editor final {
     player *const _player;
     module_pool *const _module_pool;
     marker_pool *const _marker_pool;
-    selected_module_pool *const _selected_pool;
+    selected_module_pool *const _selected_module_pool;
     vertical_scrolling const *_vertical_scrolling;
     track_selector const *const _track_selector;
     pasteboard *const _pasteboard;

@@ -33,7 +33,7 @@ module_editor::module_editor(player *player, module_pool *module_pool, marker_po
     : _player(player),
       _module_pool(module_pool),
       _marker_pool(marker_pool),
-      _selected_pool(selected_pool),
+      _selected_module_pool(selected_pool),
       _vertical_scrolling(vertical_scrolling),
       _track_selector(track_selector),
       _pasteboard(pasteboard),
@@ -56,7 +56,7 @@ void module_editor::split() {
         return;
     }
 
-    this->_selected_pool->clear();
+    this->_selected_module_pool->clear();
 
     auto const current_frame = this->_player->current_frame();
     this->_module_pool->split_at({this->_vertical_scrolling->track()}, current_frame);
@@ -76,7 +76,7 @@ void module_editor::drop_tail() {
         return;
     }
 
-    this->_selected_pool->clear();
+    this->_selected_module_pool->clear();
 
     auto const current_frame = this->_player->current_frame();
     this->_module_pool->drop_tail_at({this->_vertical_scrolling->track()}, current_frame);
@@ -95,7 +95,7 @@ void module_editor::erase() {
         return;
     }
 
-    auto selected_modules = this->_selected_pool->elements();
+    auto selected_modules = this->_selected_module_pool->elements();
     this->_erase_modules(std::move(selected_modules));
 }
 
@@ -109,7 +109,7 @@ void module_editor::cut() {
     }
 
     // copyでクリアされるので先に保持しておく
-    auto selected_modules = this->_selected_pool->elements();
+    auto selected_modules = this->_selected_module_pool->elements();
     this->copy();
     this->_erase_modules(std::move(selected_modules));
 }
@@ -129,11 +129,11 @@ void module_editor::copy() {
 
     auto const &module_pool = this->_module_pool;
     auto const current_frame = this->_player->current_frame();
-    auto const selected_modules = this->_selected_pool->elements();
+    auto const selected_modules = this->_selected_module_pool->elements();
     track_index_t const current_track = this->_vertical_scrolling->track();
 
     if (!selected_modules.empty()) {
-        this->_selected_pool->clear();
+        this->_selected_module_pool->clear();
 
         std::vector<pasting_module_object> pasting_modules;
 
@@ -176,7 +176,7 @@ void module_editor::paste() {
         return;
     }
 
-    this->_selected_pool->clear();
+    this->_selected_module_pool->clear();
 
     auto const &modules = this->_pasteboard->modules();
     if (modules.empty()) {
@@ -195,7 +195,7 @@ void module_editor::paste() {
 }
 
 bool module_editor::_has_target_modules() const {
-    if (!this->_selected_pool->elements().empty()) {
+    if (!this->_selected_module_pool->elements().empty()) {
         return true;
     } else {
         auto const current_frame = this->_player->current_frame();
@@ -205,7 +205,7 @@ bool module_editor::_has_target_modules() const {
 
 void module_editor::_erase_modules(selected_module_set &&selected_modules) {
     if (!selected_modules.empty()) {
-        this->_selected_pool->clear();
+        this->_selected_module_pool->clear();
 
         for (auto const &index : selected_modules) {
             this->_module_pool->erase_module_and_notify(index);
