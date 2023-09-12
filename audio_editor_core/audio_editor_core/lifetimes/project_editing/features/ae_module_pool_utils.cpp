@@ -43,6 +43,26 @@ module_pool_module_map_t module_pool_utils::modules(module_pool_module_map_t con
     return result;
 }
 
+bool module_pool_utils::has_modules(module_pool_module_map_t const &modules, std::set<track_index_t> const &tracks,
+                                    frame_index_t const frame) {
+    if (tracks.empty()) {
+        return false;
+    }
+
+    for (auto const &pair : modules) {
+        // 格納されている順番的にmoduleのframeの方が大きくなったら被らないはずなので打ち切る
+        if (frame < pair.first.range.frame) {
+            break;
+        }
+
+        if (tracks.contains(pair.first.track) && pair.first.range.is_contain(frame)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 std::optional<frame_index_t> module_pool_utils::first_frame(module_pool_module_map_t const &modules) {
     auto const iterator = modules.cbegin();
     if (iterator != modules.cend()) {

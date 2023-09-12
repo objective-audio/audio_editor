@@ -26,6 +26,7 @@ struct module_pool final : jumpable_on_jumper {
     [[nodiscard]] std::optional<time::range> total_range() const;
     [[nodiscard]] std::optional<module_object> module_at(module_index const &) const;
     [[nodiscard]] module_pool_module_map_t modules_at(std::set<track_index_t> const &, frame_index_t const) const;
+    [[nodiscard]] bool has_modules_at(std::set<track_index_t> const &, frame_index_t const) const;
     [[nodiscard]] module_pool_module_map_t splittable_modules_at(std::set<track_index_t> const &,
                                                                  frame_index_t const) const;
     [[nodiscard]] std::optional<frame_index_t> first_frame() const;

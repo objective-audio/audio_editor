@@ -79,6 +79,10 @@ module_pool_module_map_t module_pool::modules_at(std::set<track_index_t> const &
     return module_pool_utils::modules(this->_modules, tracks, frame);
 }
 
+bool module_pool::has_modules_at(std::set<track_index_t> const &tracks, frame_index_t const frame) const {
+    return module_pool_utils::has_modules(this->_modules, tracks, frame);
+}
+
 module_pool_module_map_t module_pool::splittable_modules_at(std::set<track_index_t> const &tracks,
                                                             frame_index_t const frame) const {
     return module_pool_utils::splittable_modules(this->_modules, tracks, frame);
