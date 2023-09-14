@@ -19,7 +19,6 @@ struct range_selector final {
     void end();
 
     [[nodiscard]] range_selection const &selection() const;
-    [[nodiscard]] observing::syncable observe_region(std::function<void(std::optional<ui::region> const &)> &&) const;
     [[nodiscard]] observing::syncable observe(std::function<void(range_selection const &)> &&) const;
 
    private:

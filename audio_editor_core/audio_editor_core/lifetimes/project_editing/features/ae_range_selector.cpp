@@ -44,17 +44,6 @@ range_selection const &range_selector::selection() const {
     return this->_selection->value();
 }
 
-observing::syncable range_selector::observe_region(
-    std::function<void(std::optional<ui::region> const &)> &&handler) const {
-    return this->_selection->observe([handler = std::move(handler)](range_selection const &selection) {
-        if (selection.range.has_value()) {
-            handler(selection.range.value().region());
-        } else {
-            handler(std::nullopt);
-        }
-    });
-}
-
 observing::syncable range_selector::observe(std::function<void(range_selection const &)> &&handler) const {
     return this->_selection->observe(std::move(handler));
 }
