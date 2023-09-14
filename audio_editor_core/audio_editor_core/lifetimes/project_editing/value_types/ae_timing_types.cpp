@@ -6,6 +6,8 @@
 #include <audio_editor_core/ae_timing_types.h>
 #include <cpp_utils/yas_fast_each.h>
 
+#include <cassert>
+
 using namespace yas;
 using namespace yas::ae;
 
