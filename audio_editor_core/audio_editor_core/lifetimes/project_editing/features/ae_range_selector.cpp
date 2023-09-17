@@ -44,6 +44,7 @@ range_selection const &range_selector::selection() const {
     return this->_selection->value();
 }
 
-observing::syncable range_selector::observe(std::function<void(range_selection const &)> &&handler) const {
-    return this->_selection->observe(std::move(handler));
+observing::syncable range_selector::observe(range_selection_order const order,
+                                            std::function<void(range_selection const &)> &&handler) const {
+    return this->_selection->observe(static_cast<std::size_t>(order), std::move(handler));
 }
