@@ -88,6 +88,10 @@ module_pool_module_map_t module_pool::splittable_modules_at(std::set<track_index
     return module_pool_utils::splittable_modules(this->_modules, tracks, frame);
 }
 
+bool module_pool::has_splittable_modules_at(std::set<track_index_t> const &tracks, frame_index_t const frame) const {
+    return module_pool_utils::has_splittable_modules(this->_modules, tracks, frame);
+}
+
 std::optional<frame_index_t> module_pool::first_frame() const {
     return module_pool_utils::first_frame(this->_modules);
 }

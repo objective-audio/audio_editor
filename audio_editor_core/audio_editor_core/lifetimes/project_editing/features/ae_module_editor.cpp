@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_module_pool.h>
+#include <audio_editor_core/ae_module_pool_utils.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_time_editing_closer.h>
@@ -48,9 +49,7 @@ bool module_editor::can_split() const {
         return false;
     }
 
-    auto const &module_pool = this->_module_pool;
-    auto const current_frame = this->_player->current_frame();
-    return !module_pool->splittable_modules_at({this->_vertical_scrolling->track()}, current_frame).empty();
+    return this->_has_splittable_modules();
 }
 
 void module_editor::split() {
@@ -210,6 +209,27 @@ bool module_editor::_has_target_modules() const {
     // トラック選択中か未選択なら、選択中または全てのトラックの再生位置にモジュールが存在すればtrue
     auto const current_frame = this->_player->current_frame();
     return this->_module_pool->has_modules_at(this->_selected_track_pool->elements(), current_frame);
+}
+
+bool module_editor::_has_splittable_modules() const {
+    auto const current_frame = this->_player->current_frame();
+
+    if (auto const kind = this->_selector_enabler->current_kind(); kind.has_value()) {
+        switch (kind.value()) {
+            case selector_kind::module:
+                // 選択されたモジュールが分割対象となる
+                return module_pool_utils::has_splittable_modules(this->_selected_module_pool->elements(), {},
+                                                                 current_frame);
+            case selector_kind::marker:
+                // マーカー選択中はモジュールを分割対象としない
+                return false;
+            case selector_kind::track:
+                break;
+        }
+    }
+
+    auto const &module_pool = this->_module_pool;
+    return module_pool->has_splittable_modules_at(this->_selected_track_pool->elements(), current_frame);
 }
 
 void module_editor::_erase_modules(selected_module_set &&selected_modules) {

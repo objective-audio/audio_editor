@@ -169,6 +169,42 @@ module_pool_module_map_t module_pool_utils::splittable_modules(module_pool_modul
     return result;
 }
 
+bool module_pool_utils::has_splittable_modules(module_pool_module_map_t const &modules,
+                                               std::set<track_index_t> const &tracks, frame_index_t const frame) {
+    bool const is_tracks_empty = tracks.empty();
+
+    for (auto const &pair : modules) {
+        if (frame < pair.first.range.frame) {
+            break;
+        }
+
+        if ((is_tracks_empty || tracks.contains(pair.first.track)) &&
+            module_utils::can_split_time_range(pair.first.range, frame)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool module_pool_utils::has_splittable_modules(std::set<module_index> const &module_indices,
+                                               std::set<track_index_t> const &tracks, frame_index_t const frame) {
+    bool const is_tracks_empty = tracks.empty();
+
+    for (auto const &module_index : module_indices) {
+        if (frame < module_index.range.frame) {
+            break;
+        }
+
+        if ((is_tracks_empty || tracks.contains(module_index.track)) &&
+            module_utils::can_split_time_range(module_index.range, frame)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 std::vector<module_object> module_pool_utils::overlapped_modules(module_pool_module_map_t const &modules,
                                                                  track_index_t const track, time::range const &range) {
     auto const next_frame = range.next_frame();
