@@ -49,8 +49,10 @@ struct deselector_stub : deselector_for_range_selector {
 
     range_selector selector{player.get(), deselector.get()};
 
-    auto canceller =
-        selector.observe([&received](range_selection const &selection) { received.emplace_back(selection); }).sync();
+    auto canceller = selector
+                         .observe(range_selection_order::base,
+                                  [&received](range_selection const &selection) { received.emplace_back(selection); })
+                         .sync();
 
     XCTAssertEqual(selector.selection().phase, range_selection_phase::ended);
     XCTAssertFalse(selector.selection().range.has_value());

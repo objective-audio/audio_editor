@@ -5,6 +5,7 @@
 #pragma once
 
 #include <audio_editor_core/ae_range_selector_dependency.h>
+#include <audio_editor_core/ae_range_selector_types.h>
 
 #include <audio_editor_core/ae_point_range.hpp>
 #include <audio_editor_core/ae_range_selection.hpp>
@@ -19,8 +20,8 @@ struct range_selector final {
     void end();
 
     [[nodiscard]] range_selection const &selection() const;
-    [[nodiscard]] observing::syncable observe_region(std::function<void(std::optional<ui::region> const &)> &&) const;
-    [[nodiscard]] observing::syncable observe(std::function<void(range_selection const &)> &&) const;
+    [[nodiscard]] observing::syncable observe(range_selection_order const,
+                                              std::function<void(range_selection const &)> &&) const;
 
    private:
     observing::value::holder_ptr<range_selection> const _selection;

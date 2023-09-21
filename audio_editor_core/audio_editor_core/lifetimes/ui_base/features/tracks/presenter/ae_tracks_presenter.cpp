@@ -78,7 +78,7 @@ observing::syncable tracks_presenter::observe_contents(
 
 observing::syncable tracks_presenter::observe_range(std::function<void(range_selection const &)> &&handler) {
     if (auto const range_selector = this->_range_selector.lock()) {
-        return range_selector->observe(std::move(handler));
+        return range_selector->observe(range_selection_order::tracks, std::move(handler));
     } else {
         return observing::syncable{};
     }
