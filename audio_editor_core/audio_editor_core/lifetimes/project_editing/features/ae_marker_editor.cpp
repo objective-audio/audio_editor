@@ -108,13 +108,6 @@ void marker_editor::copy() {
         }
 
         this->_pasteboard->set_markers(pasting_markers);
-    } else {
-        auto const pasting_markers = to_vector<pasting_marker_object>(
-            marker_pool->markers_for_frame(current_frame), [current_frame](marker_object const &object) {
-                return pasting_marker_object{identifier{}, {object.value.frame - current_frame, object.value.name}};
-            });
-
-        this->_pasteboard->set_markers(pasting_markers);
     }
 }
 
@@ -151,12 +144,7 @@ void marker_editor::paste() {
 }
 
 bool marker_editor::_has_target_markers() const {
-    if (!this->_selected_pool->elements().empty()) {
-        return true;
-    } else {
-        auto const current_frame = this->_player->current_frame();
-        return this->_marker_pool->marker_exists_for_frame(current_frame);
-    }
+    return !this->_selected_pool->elements().empty();
 }
 
 void marker_editor::_erase(selected_marker_set &&selected_markers) {
