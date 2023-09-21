@@ -172,6 +172,6 @@ action_receivable_state time_editor_receiver::receivable_state(ae::action const 
         }
 
         case action_name_kind::editing:
-            return action_receivable_state::fallthrough;
+            return action_receivable_state::blocking;
     }
 }
