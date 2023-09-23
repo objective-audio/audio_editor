@@ -126,33 +126,40 @@ void module_editor::copy() {
 
     auto const &module_pool = this->_module_pool;
     auto const current_frame = this->_player->current_frame();
-    auto const selected_modules = this->_selected_module_pool->elements();
     track_index_t const current_track = this->_vertical_scrolling->track();
 
-    if (!selected_modules.empty()) {
-        this->_selected_module_pool->clear();
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+            auto const selected_modules = this->_selected_module_pool->elements();
 
-        std::vector<pasting_module_object> pasting_modules;
+            this->_selected_module_pool->clear();
 
-        for (auto const &index : selected_modules) {
-            if (auto const module = module_pool->module_at(index)) {
-                auto const &value = module.value().value;
-                pasting_modules.emplace_back(
-                    pasting_module_object{identifier{},
-                                          {value.name, value.file_frame, value.range.offset(-current_frame),
-                                           value.track - current_track, value.file_name}});
+            std::vector<pasting_module_object> pasting_modules;
+
+            for (auto const &index : selected_modules) {
+                if (auto const module = module_pool->module_at(index)) {
+                    auto const &value = module.value().value;
+                    pasting_modules.emplace_back(
+                        pasting_module_object{identifier{},
+                                              {value.name, value.file_frame, value.range.offset(-current_frame),
+                                               value.track - current_track, value.file_name}});
+                }
             }
-        }
 
-        this->_pasteboard->set_modules(pasting_modules);
-    } else if (!this->_selector_enabler->is_any_enabled()) {
-        auto const modules = module_pool->modules_at({current_track}, current_frame);
-        for (auto const &pair : modules) {
-            auto const &value = pair.second.value;
-            this->_pasteboard->set_modules({{identifier{},
-                                             {value.name, value.file_frame, value.range.offset(-current_frame),
-                                              value.track - current_track, value.file_name}}});
-        }
+            this->_pasteboard->set_modules(pasting_modules);
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールをコピー対象にしない
+            break;
+        case target_kind::tracks: {
+            auto const modules = module_pool->modules_at(this->_selected_track_pool->elements(), current_frame);
+            for (auto const &pair : modules) {
+                auto const &value = pair.second.value;
+                this->_pasteboard->set_modules({{identifier{},
+                                                 {value.name, value.file_frame, value.range.offset(-current_frame),
+                                                  value.track - current_track, value.file_name}}});
+            }
+        } break;
     }
 }
 
