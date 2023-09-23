@@ -243,14 +243,20 @@ bool module_editor::_has_splittable_modules() const {
 }
 
 void module_editor::_erase_modules(selected_module_set &&selected_modules) {
-    if (!selected_modules.empty()) {
-        this->_selected_module_pool->clear();
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+            this->_selected_module_pool->clear();
 
-        for (auto const &index : selected_modules) {
-            this->_module_pool->erase_module_and_notify(index);
-        }
-    } else {
-        auto const current_frame = this->_player->current_frame();
-        this->_module_pool->erase_at({this->_vertical_scrolling->track()}, current_frame);
+            for (auto const &index : selected_modules) {
+                this->_module_pool->erase_module_and_notify(index);
+            }
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを削除対象にしない
+            return;
+        case target_kind::tracks: {
+            auto const current_frame = this->_player->current_frame();
+            this->_module_pool->erase_at(this->_selected_track_pool->elements(), current_frame);
+        } break;
     }
 }
