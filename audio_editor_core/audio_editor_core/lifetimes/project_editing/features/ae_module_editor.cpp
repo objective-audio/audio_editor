@@ -191,6 +191,22 @@ void module_editor::paste() {
     }
 }
 
+/// 編集対象の種類。無選択ならtrackにフォールバックする
+module_editor::target_kind module_editor::_target_kind() const {
+    if (auto const kind = this->_selector_enabler->current_kind(); kind.has_value()) {
+        switch (kind.value()) {
+            case selector_kind::module:
+                return target_kind::modules;
+            case selector_kind::marker:
+                return target_kind::markers;
+            case selector_kind::track:
+                return target_kind::tracks;
+        }
+    } else {
+        return target_kind::tracks;
+    }
+}
+
 /// 編集対象となるモジュールが存在するかを返す
 bool module_editor::_has_target_modules() const {
     if (auto const kind = this->_selector_enabler->current_kind(); kind.has_value()) {

@@ -19,6 +19,7 @@ class database;
 class editing_status;
 class selector_enabler;
 class vertical_scrolling;
+enum class selector_kind;
 
 struct module_editor final {
     module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, selected_track_pool *,
@@ -41,6 +42,12 @@ struct module_editor final {
     void paste();
 
    private:
+    enum class target_kind {
+        modules,
+        markers,
+        tracks,
+    };
+
     player *const _player;
     module_pool *const _module_pool;
     marker_pool *const _marker_pool;
@@ -59,6 +66,7 @@ struct module_editor final {
     module_editor &operator=(module_editor const &) = delete;
     module_editor &operator=(module_editor &&) = delete;
 
+    [[nodiscard]] target_kind _target_kind() const;
     [[nodiscard]] bool _has_target_modules() const;
     [[nodiscard]] bool _has_splittable_modules() const;
     void _erase_modules(selected_module_set &&);
