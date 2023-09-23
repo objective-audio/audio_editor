@@ -213,7 +213,7 @@ bool module_editor::_has_target_modules() const {
 
     // トラック選択中か未選択なら、選択中または全てのトラックの再生位置にモジュールが存在すればtrue
     auto const current_frame = this->_player->current_frame();
-    return !this->_module_pool->modules_at(this->_selected_track_pool->elements(), current_frame).empty();
+    return this->_module_pool->has_modules_at(this->_selected_track_pool->elements(), current_frame);
 }
 
 void module_editor::_erase_modules(selected_module_set &&selected_modules) {
