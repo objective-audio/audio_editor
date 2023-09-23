@@ -27,7 +27,7 @@ module_pool_module_map_t module_pool_utils::modules(module_pool_module_map_t con
                                                     std::set<track_index_t> const &tracks, frame_index_t const frame) {
     module_pool_module_map_t result;
 
-    bool const is_empty = tracks.empty();
+    bool const is_tracks_empty = tracks.empty();
 
     for (auto const &pair : modules) {
         // 格納されている順番的にmoduleのframeの方が大きくなったら被らないはずなので打ち切る
@@ -35,7 +35,7 @@ module_pool_module_map_t module_pool_utils::modules(module_pool_module_map_t con
             break;
         }
 
-        if ((is_empty || tracks.contains(pair.first.track)) && pair.first.range.is_contain(frame)) {
+        if ((is_tracks_empty || tracks.contains(pair.first.track)) && pair.first.range.is_contain(frame)) {
             result.emplace(pair);
         }
     }
@@ -153,15 +153,15 @@ module_pool_module_map_t module_pool_utils::splittable_modules(module_pool_modul
                                                                frame_index_t const frame) {
     module_pool_module_map_t result;
 
-    bool const is_empty = tracks.empty();
+    bool const is_tracks_empty = tracks.empty();
 
     for (auto const &pair : modules) {
         if (frame < pair.first.range.frame) {
             break;
         }
 
-        if ((is_empty || tracks.contains(pair.first.track)) &&
-            module_utils::can_split_time_range(pair.second.value.range, frame)) {
+        if ((is_tracks_empty || tracks.contains(pair.first.track)) &&
+            module_utils::can_split_time_range(pair.first.range, frame)) {
             result.emplace(pair);
         }
     }
