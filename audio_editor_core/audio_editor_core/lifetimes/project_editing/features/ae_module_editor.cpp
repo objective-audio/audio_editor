@@ -196,13 +196,24 @@ void module_editor::paste() {
     }
 }
 
+/// 編集対象となるモジュールが存在するかを返す
 bool module_editor::_has_target_modules() const {
-    if (!this->_selected_module_pool->elements().empty()) {
-        return true;
-    } else {
-        auto const current_frame = this->_player->current_frame();
-        return !this->_module_pool->modules_at({this->_vertical_scrolling->track()}, current_frame).empty();
+    if (auto const kind = this->_selector_enabler->current_kind(); kind.has_value()) {
+        switch (kind.value()) {
+            case selector_kind::module:
+                // 選択されたモジュールが編集対象となる
+                return true;
+            case selector_kind::marker:
+                // マーカー選択中はモジュールを編集対象としない
+                return false;
+            case selector_kind::track:
+                break;
+        }
     }
+
+    // トラック選択中か未選択なら、選択中または全てのトラックの再生位置にモジュールが存在すればtrue
+    auto const current_frame = this->_player->current_frame();
+    return !this->_module_pool->modules_at(this->_selected_track_pool->elements(), current_frame).empty();
 }
 
 void module_editor::_erase_modules(selected_module_set &&selected_modules) {
