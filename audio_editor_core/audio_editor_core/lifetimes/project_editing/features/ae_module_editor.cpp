@@ -85,11 +85,7 @@ void module_editor::drop_tail() {
 }
 
 bool module_editor::can_erase() const {
-    if (!this->_editing_status->can_editing()) {
-        return false;
-    }
-
-    return this->_has_target_modules();
+    return this->can_copy();
 }
 
 void module_editor::erase() {
