@@ -59,7 +59,7 @@ struct module_editor final {
     module_editor &operator=(module_editor const &) = delete;
     module_editor &operator=(module_editor &&) = delete;
 
-    bool _has_target_modules() const;
+    [[nodiscard]] bool _has_target_modules() const;
     void _erase_modules(selected_module_set &&);
 };
 }  // namespace yas::ae
