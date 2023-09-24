@@ -24,6 +24,8 @@ namespace yas::ae::module_pool_utils {
 
 [[nodiscard]] module_pool_module_map_t splittable_modules(module_pool_module_map_t const &,
                                                           std::set<track_index_t> const &, frame_index_t const);
+[[nodiscard]] module_pool_module_map_t splittable_modules(module_pool_module_map_t const &,
+                                                          std::set<module_index> const &, frame_index_t const);
 [[nodiscard]] bool has_splittable_modules(module_pool_module_map_t const &, std::set<track_index_t> const &,
                                           frame_index_t const);
 [[nodiscard]] bool has_splittable_modules(std::set<module_index> const &, std::set<track_index_t> const &,

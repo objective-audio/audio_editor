@@ -57,10 +57,21 @@ void module_editor::split() {
         return;
     }
 
-    this->_selected_module_pool->clear();
-
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->split_at({this->_vertical_scrolling->track()}, current_frame);
+
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+            auto const selected_modules = this->_selected_module_pool->elements();
+            this->_selected_module_pool->clear();
+            this->_module_pool->split(selected_modules, current_frame);
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを分割対象としない
+            return;
+        case target_kind::tracks: {
+            this->_module_pool->split_at(this->_selected_track_pool->elements(), current_frame);
+        } break;
+    }
 }
 
 void module_editor::drop_head() {
@@ -68,8 +79,19 @@ void module_editor::drop_head() {
         return;
     }
 
-    auto const current_frame = this->_player->current_frame();
-    this->_module_pool->drop_head_at({this->_vertical_scrolling->track()}, current_frame);
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+//            this->_selected_module_pool->clear();
+#warning todo
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを分割対象としない
+            return;
+        case target_kind::tracks: {
+            auto const current_frame = this->_player->current_frame();
+            this->_module_pool->drop_head_at(this->_selected_track_pool->elements(), current_frame);
+        } break;
+    }
 }
 
 void module_editor::drop_tail() {
@@ -77,10 +99,19 @@ void module_editor::drop_tail() {
         return;
     }
 
-    this->_selected_module_pool->clear();
-
-    auto const current_frame = this->_player->current_frame();
-    this->_module_pool->drop_tail_at({this->_vertical_scrolling->track()}, current_frame);
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+//            this->_selected_module_pool->clear();
+#warning todo
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを分割対象としない
+            return;
+        case target_kind::tracks: {
+            auto const current_frame = this->_player->current_frame();
+            this->_module_pool->drop_tail_at(this->_selected_track_pool->elements(), current_frame);
+        } break;
+    }
 }
 
 bool module_editor::can_erase() const {

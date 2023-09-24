@@ -169,6 +169,24 @@ module_pool_module_map_t module_pool_utils::splittable_modules(module_pool_modul
     return result;
 }
 
+module_pool_module_map_t module_pool_utils::splittable_modules(module_pool_module_map_t const &modules,
+                                                               std::set<module_index> const &selected_module_indices,
+                                                               frame_index_t const frame) {
+    module_pool_module_map_t result;
+
+    for (auto const &module_index : selected_module_indices) {
+        if (frame < module_index.range.frame) {
+            break;
+        }
+
+        if (module_utils::can_split_time_range(module_index.range, frame) && modules.contains(module_index)) {
+            result.emplace(module_index, modules.at(module_index));
+        }
+    }
+
+    return result;
+}
+
 bool module_pool_utils::has_splittable_modules(module_pool_module_map_t const &modules,
                                                std::set<track_index_t> const &tracks, frame_index_t const frame) {
     bool const is_tracks_empty = tracks.empty();

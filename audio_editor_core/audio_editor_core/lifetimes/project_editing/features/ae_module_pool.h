@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_module_pool_dependencies.h>
 #include <audio_editor_core/ae_module_pool_types.h>
 
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 #include <observing/yas_observing_umbrella.hpp>
 #include <set>
 
@@ -36,6 +37,7 @@ struct module_pool final : jumpable_on_jumper {
     [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;
 
     void split_at(std::set<track_index_t> const &, frame_index_t const);
+    void split(selected_module_set const &, frame_index_t const);
     void erase_at(std::set<track_index_t> const &, frame_index_t const);
     void drop_head_at(std::set<track_index_t> const &, frame_index_t const);
     void drop_tail_at(std::set<track_index_t> const &, frame_index_t const);
@@ -55,6 +57,6 @@ struct module_pool final : jumpable_on_jumper {
     module_pool &operator=(module_pool const &) = delete;
     module_pool &operator=(module_pool &&) = delete;
 
-    void _move_modules_after(frame_index_t const frame, frame_index_t const offset);
+    void _split_modules(module_pool_module_map_t const &, frame_index_t const);
 };
 }  // namespace yas::ae
