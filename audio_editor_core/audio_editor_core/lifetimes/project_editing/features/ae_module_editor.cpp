@@ -101,16 +101,18 @@ void module_editor::drop_tail() {
         return;
     }
 
+    auto const current_frame = this->_player->current_frame();
+
     switch (this->_target_kind()) {
         case target_kind::modules: {
-//            this->_selected_module_pool->clear();
-#warning todo
+            auto const selected_modules = this->_selected_module_pool->elements();
+            this->_selected_module_pool->clear();
+            this->_module_pool->drop_tail(selected_modules, current_frame);
         } break;
         case target_kind::markers:
             // マーカー選択中はモジュールを分割対象としない
             return;
         case target_kind::tracks: {
-            auto const current_frame = this->_player->current_frame();
             this->_module_pool->drop_tail_at(this->_selected_track_pool->elements(), current_frame);
         } break;
     }

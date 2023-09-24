@@ -42,6 +42,7 @@ struct module_pool final : jumpable_on_jumper {
     void drop_head_at(std::set<track_index_t> const &, frame_index_t const);
     void drop_head(selected_module_set const &, frame_index_t const);
     void drop_tail_at(std::set<track_index_t> const &, frame_index_t const);
+    void drop_tail(selected_module_set const &, frame_index_t const);
     void overwrite_module(module const &);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(module_pool_event const &)> &&);
@@ -60,5 +61,6 @@ struct module_pool final : jumpable_on_jumper {
 
     void _split_modules(module_pool_module_map_t const &, frame_index_t const);
     void _drop_head_modules(module_pool_module_map_t const &, frame_index_t const);
+    void _drop_tail_modules(module_pool_module_map_t const &, frame_index_t const);
 };
 }  // namespace yas::ae
