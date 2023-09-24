@@ -291,6 +291,7 @@ bool module_editor::_has_splittable_modules() const {
     }
 }
 
+/// cutするときにcopyした時点でクリアされてしまっているのでtarget_kindやselected_modulesを引数で渡す
 void module_editor::_erase_modules(target_kind const target_kind, selected_module_set &&selected_modules) {
     switch (target_kind) {
         case target_kind::modules: {
