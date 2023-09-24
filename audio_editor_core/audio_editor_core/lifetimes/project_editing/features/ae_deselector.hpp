@@ -14,6 +14,7 @@ namespace yas::ae {
 struct deselector final : deselector_for_range_selector {
     deselector(selected_module_pool *, selected_marker_pool *, selected_track_pool *);
 
+    [[nodiscard]] bool can_deselect() const;
     void deselect_all();
 
    private:
