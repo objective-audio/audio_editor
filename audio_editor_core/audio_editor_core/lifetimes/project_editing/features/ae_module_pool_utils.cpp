@@ -45,9 +45,7 @@ module_pool_module_map_t module_pool_utils::modules(module_pool_module_map_t con
 
 bool module_pool_utils::has_modules(module_pool_module_map_t const &modules, std::set<track_index_t> const &tracks,
                                     frame_index_t const frame) {
-    if (tracks.empty()) {
-        return false;
-    }
+    bool const is_tracks_empty = tracks.empty();
 
     for (auto const &pair : modules) {
         // 格納されている順番的にmoduleのframeの方が大きくなったら被らないはずなので打ち切る
@@ -55,7 +53,7 @@ bool module_pool_utils::has_modules(module_pool_module_map_t const &modules, std
             break;
         }
 
-        if (tracks.contains(pair.first.track) && pair.first.range.is_contain(frame)) {
+        if ((is_tracks_empty || tracks.contains(pair.first.track)) && pair.first.range.is_contain(frame)) {
             return true;
         }
     }
