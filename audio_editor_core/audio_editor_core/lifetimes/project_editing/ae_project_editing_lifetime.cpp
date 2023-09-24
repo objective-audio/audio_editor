@@ -162,8 +162,7 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
           project_lifetime->display_space.get(), project_lifetime->vertical_scrolling.get())),
       display_space_range(std::make_shared<ae::display_space_range>(this->display_space_time_range.get(),
                                                                     this->display_space_track_range.get())),
-      escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->selected_module_pool.get(),
-                                            this->selected_marker_pool.get())),
+      escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->deselector.get())),
       receiver(std::make_shared<project_editing_receiver>(
           project_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
           this->nudging.get(), this->nudger.get(), this->jumper.get(), this->edge_editor.get(),
