@@ -69,6 +69,6 @@ struct module_editor final {
     [[nodiscard]] target_kind _target_kind() const;
     [[nodiscard]] bool _has_target_modules() const;
     [[nodiscard]] bool _has_splittable_modules() const;
-    void _erase_modules(selected_module_set &&);
+    void _erase_modules(target_kind const, selected_module_set &&);
 };
 }  // namespace yas::ae

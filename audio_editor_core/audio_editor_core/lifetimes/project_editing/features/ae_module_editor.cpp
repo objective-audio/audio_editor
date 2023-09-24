@@ -128,7 +128,7 @@ void module_editor::erase() {
     }
 
     auto selected_modules = this->_selected_module_pool->elements();
-    this->_erase_modules(std::move(selected_modules));
+    this->_erase_modules(this->_target_kind(), std::move(selected_modules));
 }
 
 bool module_editor::can_cut() const {
@@ -141,9 +141,10 @@ void module_editor::cut() {
     }
 
     // copyでクリアされるので先に保持しておく
+    auto const target_kind = this->_target_kind();
     auto selected_modules = this->_selected_module_pool->elements();
     this->copy();
-    this->_erase_modules(std::move(selected_modules));
+    this->_erase_modules(target_kind, std::move(selected_modules));
 }
 
 bool module_editor::can_copy() const {
@@ -290,8 +291,8 @@ bool module_editor::_has_splittable_modules() const {
     }
 }
 
-void module_editor::_erase_modules(selected_module_set &&selected_modules) {
-    switch (this->_target_kind()) {
+void module_editor::_erase_modules(target_kind const target_kind, selected_module_set &&selected_modules) {
+    switch (target_kind) {
         case target_kind::modules: {
             this->_selected_module_pool->clear();
 
