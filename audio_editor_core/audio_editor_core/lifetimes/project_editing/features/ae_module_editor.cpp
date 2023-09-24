@@ -188,12 +188,18 @@ void module_editor::copy() {
             break;
         case target_kind::tracks: {
             auto const modules = module_pool->modules_at(this->_selected_track_pool->elements(), current_frame);
+
+            std::vector<pasting_module_object> pasting_modules;
+
             for (auto const &pair : modules) {
                 auto const &value = pair.second.value;
-                this->_pasteboard->set_modules({{identifier{},
-                                                 {value.name, value.file_frame, value.range.offset(-current_frame),
-                                                  value.track - current_track, value.file_name}}});
+                pasting_modules.emplace_back(
+                    pasting_module_object{identifier{},
+                                          {value.name, value.file_frame, value.range.offset(-current_frame),
+                                           value.track - current_track, value.file_name}});
             }
+
+            this->_pasteboard->set_modules(pasting_modules);
         } break;
     }
 }
