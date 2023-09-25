@@ -11,7 +11,6 @@
 
 #include <audio_editor_core/ae_selected_module_pool.hpp>
 #include <observing/yas_observing_umbrella.hpp>
-#include <set>
 
 namespace yas::ae {
 struct module_pool final : jumpable_on_jumper {

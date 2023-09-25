@@ -4,40 +4,27 @@
 
 #include "ae_module_editor.h"
 
-#include <audio_editor_core/ae_edge_holder.h>
 #include <audio_editor_core/ae_editing_status.h>
-#include <audio_editor_core/ae_file_info_loader.h>
 #include <audio_editor_core/ae_hierarchy.h>
-#include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_module_pool.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_player.h>
-#include <audio_editor_core/ae_time_editing_closer.h>
-#include <audio_editor_core/ae_time_editing_lifetime.h>
-#include <audio_editor_core/ae_time_editor.h>
-#include <audio_editor_core/ae_timeline_holder_utils.h>
-#include <cpp_utils/yas_fast_each.h>
 
 #include <audio_editor_core/ae_selector_enabler.hpp>
-#include <audio_editor_core/ae_track_selector.hpp>
 #include <audio_editor_core/ae_vertical_scrolling.hpp>
-#include <processing/yas_processing_umbrella.hpp>
 
 using namespace yas;
 using namespace yas::ae;
 
-module_editor::module_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
-                             selected_module_pool *selected_module_pool, selected_track_pool *selected_track_pool,
-                             vertical_scrolling const *vertical_scrolling, track_selector const *track_selector,
+module_editor::module_editor(player *player, module_pool *module_pool, selected_module_pool *selected_module_pool,
+                             selected_track_pool *selected_track_pool, vertical_scrolling const *vertical_scrolling,
                              pasteboard *pasteboard, editing_status const *editing_status,
                              selector_enabler const *selector_enabler)
     : _player(player),
       _module_pool(module_pool),
-      _marker_pool(marker_pool),
       _selected_module_pool(selected_module_pool),
       _selected_track_pool(selected_track_pool),
       _vertical_scrolling(vertical_scrolling),
-      _track_selector(track_selector),
       _pasteboard(pasteboard),
       _editing_status(editing_status),
       _selector_enabler(selector_enabler) {
