@@ -12,19 +12,14 @@
 namespace yas::ae {
 class player;
 class module_pool;
-class marker_pool;
-class track_selector;
 class pasteboard;
-class database;
 class editing_status;
 class selector_enabler;
 class vertical_scrolling;
-enum class selector_kind;
 
 struct module_editor final {
-    module_editor(player *, module_pool *, marker_pool *, selected_module_pool *, selected_track_pool *,
-                  vertical_scrolling const *, track_selector const *, pasteboard *, editing_status const *,
-                  selector_enabler const *);
+    module_editor(player *, module_pool *, selected_module_pool *, selected_track_pool *, vertical_scrolling const *,
+                  pasteboard *, editing_status const *, selector_enabler const *);
 
     [[nodiscard]] bool can_split() const;
     void split();
@@ -50,16 +45,12 @@ struct module_editor final {
 
     player *const _player;
     module_pool *const _module_pool;
-    marker_pool *const _marker_pool;
     selected_module_pool *const _selected_module_pool;
     selected_track_pool *_selected_track_pool;
     vertical_scrolling const *_vertical_scrolling;
-    track_selector const *const _track_selector;
     pasteboard *const _pasteboard;
     editing_status const *const _editing_status;
     selector_enabler const *const _selector_enabler;
-
-    observing::canceller_pool _pool;
 
     module_editor(module_editor const &) = delete;
     module_editor(module_editor &&) = delete;

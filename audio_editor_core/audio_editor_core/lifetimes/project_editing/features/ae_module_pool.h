@@ -11,7 +11,6 @@
 
 #include <audio_editor_core/ae_selected_module_pool.hpp>
 #include <observing/yas_observing_umbrella.hpp>
-#include <set>
 
 namespace yas::ae {
 struct module_pool final : jumpable_on_jumper {
@@ -31,6 +30,7 @@ struct module_pool final : jumpable_on_jumper {
     [[nodiscard]] module_pool_module_map_t splittable_modules_at(std::set<track_index_t> const &,
                                                                  frame_index_t const) const;
     [[nodiscard]] bool has_splittable_modules_at(std::set<track_index_t> const &, frame_index_t const) const;
+    [[nodiscard]] bool has_splittable_modules(std::set<module_index> const &, frame_index_t const) const;
     [[nodiscard]] std::optional<frame_index_t> first_frame() const;
     [[nodiscard]] std::optional<frame_index_t> last_next_frame() const;
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
