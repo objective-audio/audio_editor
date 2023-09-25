@@ -9,17 +9,17 @@
 
 namespace yas::ae {
 class pasteboard;
+class deselector;
 
 struct escaper final {
-    escaper(pasteboard *, selected_module_pool *, selected_marker_pool *);
+    escaper(pasteboard *, deselector *);
 
     [[nodiscard]] bool can_escape() const;
     void espace();
 
    private:
     pasteboard *const _pasteboard;
-    selected_module_pool *const _selected_module_pool;
-    selected_marker_pool *const _selected_marker_pool;
+    deselector *const _deselector;
 
     escaper(escaper const &) = delete;
     escaper(escaper &&) = delete;

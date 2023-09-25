@@ -9,6 +9,7 @@
 #include <audio_editor_core/ae_module_pool_dependencies.h>
 #include <audio_editor_core/ae_module_pool_types.h>
 
+#include <audio_editor_core/ae_selected_module_pool.hpp>
 #include <observing/yas_observing_umbrella.hpp>
 #include <set>
 
@@ -26,17 +27,22 @@ struct module_pool final : jumpable_on_jumper {
     [[nodiscard]] std::optional<time::range> total_range() const;
     [[nodiscard]] std::optional<module_object> module_at(module_index const &) const;
     [[nodiscard]] module_pool_module_map_t modules_at(std::set<track_index_t> const &, frame_index_t const) const;
+    [[nodiscard]] bool has_modules_at(std::set<track_index_t> const &, frame_index_t const) const;
     [[nodiscard]] module_pool_module_map_t splittable_modules_at(std::set<track_index_t> const &,
                                                                  frame_index_t const) const;
+    [[nodiscard]] bool has_splittable_modules_at(std::set<track_index_t> const &, frame_index_t const) const;
     [[nodiscard]] std::optional<frame_index_t> first_frame() const;
     [[nodiscard]] std::optional<frame_index_t> last_next_frame() const;
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
     [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;
 
     void split_at(std::set<track_index_t> const &, frame_index_t const);
+    void split(selected_module_set const &, frame_index_t const);
     void erase_at(std::set<track_index_t> const &, frame_index_t const);
     void drop_head_at(std::set<track_index_t> const &, frame_index_t const);
+    void drop_head(selected_module_set const &, frame_index_t const);
     void drop_tail_at(std::set<track_index_t> const &, frame_index_t const);
+    void drop_tail(selected_module_set const &, frame_index_t const);
     void overwrite_module(module const &);
 
     [[nodiscard]] observing::syncable observe_event(std::function<void(module_pool_event const &)> &&);
@@ -53,6 +59,8 @@ struct module_pool final : jumpable_on_jumper {
     module_pool &operator=(module_pool const &) = delete;
     module_pool &operator=(module_pool &&) = delete;
 
-    void _move_modules_after(frame_index_t const frame, frame_index_t const offset);
+    void _split_modules(module_pool_module_map_t const &, frame_index_t const);
+    void _drop_head_modules(module_pool_module_map_t const &, frame_index_t const);
+    void _drop_tail_modules(module_pool_module_map_t const &, frame_index_t const);
 };
 }  // namespace yas::ae

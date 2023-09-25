@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_module_pool.h>
+#include <audio_editor_core/ae_module_pool_utils.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_time_editing_closer.h>
@@ -27,13 +28,15 @@ using namespace yas;
 using namespace yas::ae;
 
 module_editor::module_editor(player *player, module_pool *module_pool, marker_pool *marker_pool,
-                             selected_module_pool *selected_pool, vertical_scrolling const *vertical_scrolling,
-                             track_selector const *track_selector, pasteboard *pasteboard,
-                             editing_status const *editing_status, selector_enabler const *selector_enabler)
+                             selected_module_pool *selected_module_pool, selected_track_pool *selected_track_pool,
+                             vertical_scrolling const *vertical_scrolling, track_selector const *track_selector,
+                             pasteboard *pasteboard, editing_status const *editing_status,
+                             selector_enabler const *selector_enabler)
     : _player(player),
       _module_pool(module_pool),
       _marker_pool(marker_pool),
-      _selected_pool(selected_pool),
+      _selected_module_pool(selected_module_pool),
+      _selected_track_pool(selected_track_pool),
       _vertical_scrolling(vertical_scrolling),
       _track_selector(track_selector),
       _pasteboard(pasteboard),
@@ -46,9 +49,7 @@ bool module_editor::can_split() const {
         return false;
     }
 
-    auto const &module_pool = this->_module_pool;
-    auto const current_frame = this->_player->current_frame();
-    return !module_pool->splittable_modules_at({this->_vertical_scrolling->track()}, current_frame).empty();
+    return this->_has_splittable_modules();
 }
 
 void module_editor::split() {
@@ -56,10 +57,21 @@ void module_editor::split() {
         return;
     }
 
-    this->_selected_pool->clear();
-
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->split_at({this->_vertical_scrolling->track()}, current_frame);
+
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+            auto const selected_modules = this->_selected_module_pool->elements();
+            this->_selected_module_pool->clear();
+            this->_module_pool->split(selected_modules, current_frame);
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを分割対象としない
+            return;
+        case target_kind::tracks: {
+            this->_module_pool->split_at(this->_selected_track_pool->elements(), current_frame);
+        } break;
+    }
 }
 
 void module_editor::drop_head() {
@@ -68,7 +80,20 @@ void module_editor::drop_head() {
     }
 
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->drop_head_at({this->_vertical_scrolling->track()}, current_frame);
+
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+            auto const selected_modules = this->_selected_module_pool->elements();
+            this->_selected_module_pool->clear();
+            this->_module_pool->drop_head(selected_modules, current_frame);
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを分割対象としない
+            return;
+        case target_kind::tracks: {
+            this->_module_pool->drop_head_at(this->_selected_track_pool->elements(), current_frame);
+        } break;
+    }
 }
 
 void module_editor::drop_tail() {
@@ -76,18 +101,25 @@ void module_editor::drop_tail() {
         return;
     }
 
-    this->_selected_pool->clear();
-
     auto const current_frame = this->_player->current_frame();
-    this->_module_pool->drop_tail_at({this->_vertical_scrolling->track()}, current_frame);
+
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+            auto const selected_modules = this->_selected_module_pool->elements();
+            this->_selected_module_pool->clear();
+            this->_module_pool->drop_tail(selected_modules, current_frame);
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを分割対象としない
+            return;
+        case target_kind::tracks: {
+            this->_module_pool->drop_tail_at(this->_selected_track_pool->elements(), current_frame);
+        } break;
+    }
 }
 
 bool module_editor::can_erase() const {
-    if (!this->_editing_status->can_editing()) {
-        return false;
-    }
-
-    return this->_has_target_modules();
+    return this->can_copy();
 }
 
 void module_editor::erase() {
@@ -95,8 +127,8 @@ void module_editor::erase() {
         return;
     }
 
-    auto selected_modules = this->_selected_pool->elements();
-    this->_erase_modules(std::move(selected_modules));
+    auto selected_modules = this->_selected_module_pool->elements();
+    this->_erase_modules(this->_target_kind(), std::move(selected_modules));
 }
 
 bool module_editor::can_cut() const {
@@ -109,9 +141,10 @@ void module_editor::cut() {
     }
 
     // copyでクリアされるので先に保持しておく
-    auto selected_modules = this->_selected_pool->elements();
+    auto const target_kind = this->_target_kind();
+    auto selected_modules = this->_selected_module_pool->elements();
     this->copy();
-    this->_erase_modules(std::move(selected_modules));
+    this->_erase_modules(target_kind, std::move(selected_modules));
 }
 
 bool module_editor::can_copy() const {
@@ -129,33 +162,46 @@ void module_editor::copy() {
 
     auto const &module_pool = this->_module_pool;
     auto const current_frame = this->_player->current_frame();
-    auto const selected_modules = this->_selected_pool->elements();
     track_index_t const current_track = this->_vertical_scrolling->track();
 
-    if (!selected_modules.empty()) {
-        this->_selected_pool->clear();
+    switch (this->_target_kind()) {
+        case target_kind::modules: {
+            auto const selected_modules = this->_selected_module_pool->elements();
 
-        std::vector<pasting_module_object> pasting_modules;
+            this->_selected_module_pool->clear();
 
-        for (auto const &index : selected_modules) {
-            if (auto const module = module_pool->module_at(index)) {
-                auto const &value = module.value().value;
+            std::vector<pasting_module_object> pasting_modules;
+
+            for (auto const &index : selected_modules) {
+                if (auto const module = module_pool->module_at(index)) {
+                    auto const &value = module.value().value;
+                    pasting_modules.emplace_back(
+                        pasting_module_object{identifier{},
+                                              {value.name, value.file_frame, value.range.offset(-current_frame),
+                                               value.track - current_track, value.file_name}});
+                }
+            }
+
+            this->_pasteboard->set_modules(pasting_modules);
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールをコピー対象にしない
+            break;
+        case target_kind::tracks: {
+            auto const modules = module_pool->modules_at(this->_selected_track_pool->elements(), current_frame);
+
+            std::vector<pasting_module_object> pasting_modules;
+
+            for (auto const &pair : modules) {
+                auto const &value = pair.second.value;
                 pasting_modules.emplace_back(
                     pasting_module_object{identifier{},
                                           {value.name, value.file_frame, value.range.offset(-current_frame),
                                            value.track - current_track, value.file_name}});
             }
-        }
 
-        this->_pasteboard->set_modules(pasting_modules);
-    } else if (!this->_selector_enabler->is_any_enabled()) {
-        auto const modules = module_pool->modules_at({current_track}, current_frame);
-        for (auto const &pair : modules) {
-            auto const &value = pair.second.value;
-            this->_pasteboard->set_modules({{identifier{},
-                                             {value.name, value.file_frame, value.range.offset(-current_frame),
-                                              value.track - current_track, value.file_name}}});
-        }
+            this->_pasteboard->set_modules(pasting_modules);
+        } break;
     }
 }
 
@@ -176,7 +222,7 @@ void module_editor::paste() {
         return;
     }
 
-    this->_selected_pool->clear();
+    this->_selected_module_pool->clear();
 
     auto const &modules = this->_pasteboard->modules();
     if (modules.empty()) {
@@ -194,24 +240,73 @@ void module_editor::paste() {
     }
 }
 
-bool module_editor::_has_target_modules() const {
-    if (!this->_selected_pool->elements().empty()) {
-        return true;
+/// 編集対象の種類。無選択ならtrackにフォールバックする
+module_editor::target_kind module_editor::_target_kind() const {
+    if (auto const kind = this->_selector_enabler->current_kind(); kind.has_value()) {
+        switch (kind.value()) {
+            case selector_kind::module:
+                return target_kind::modules;
+            case selector_kind::marker:
+                return target_kind::markers;
+            case selector_kind::track:
+                return target_kind::tracks;
+        }
     } else {
-        auto const current_frame = this->_player->current_frame();
-        return !this->_module_pool->modules_at({this->_vertical_scrolling->track()}, current_frame).empty();
+        return target_kind::tracks;
     }
 }
 
-void module_editor::_erase_modules(selected_module_set &&selected_modules) {
-    if (!selected_modules.empty()) {
-        this->_selected_pool->clear();
-
-        for (auto const &index : selected_modules) {
-            this->_module_pool->erase_module_and_notify(index);
+/// 編集対象となるモジュールが存在するかを返す
+bool module_editor::_has_target_modules() const {
+    switch (this->_target_kind()) {
+        case target_kind::modules:
+            // 選択されたモジュールが編集対象となる
+            return true;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを編集対象としない
+            return false;
+        case target_kind::tracks: {
+            // トラックが編集対象なら、選択中または全てのトラックの再生位置にモジュールが存在すればtrue
+            auto const current_frame = this->_player->current_frame();
+            return this->_module_pool->has_modules_at(this->_selected_track_pool->elements(), current_frame);
         }
-    } else {
-        auto const current_frame = this->_player->current_frame();
-        this->_module_pool->erase_at({this->_vertical_scrolling->track()}, current_frame);
+    }
+}
+
+bool module_editor::_has_splittable_modules() const {
+    auto const current_frame = this->_player->current_frame();
+
+    switch (this->_target_kind()) {
+        case target_kind::modules:
+            // 選択されたモジュールが分割対象となる
+            return module_pool_utils::has_splittable_modules(this->_selected_module_pool->elements(), {},
+                                                             current_frame);
+        case target_kind::markers:
+            // マーカー選択中はモジュールを分割対象としない
+            return false;
+        case target_kind::tracks: {
+            auto const &module_pool = this->_module_pool;
+            return module_pool->has_splittable_modules_at(this->_selected_track_pool->elements(), current_frame);
+        }
+    }
+}
+
+/// cutするときにcopyした時点でクリアされてしまっているのでtarget_kindやselected_modulesを引数で渡す
+void module_editor::_erase_modules(target_kind const target_kind, selected_module_set &&selected_modules) {
+    switch (target_kind) {
+        case target_kind::modules: {
+            this->_selected_module_pool->clear();
+
+            for (auto const &index : selected_modules) {
+                this->_module_pool->erase_module_and_notify(index);
+            }
+        } break;
+        case target_kind::markers:
+            // マーカー選択中はモジュールを削除対象にしない
+            return;
+        case target_kind::tracks: {
+            auto const current_frame = this->_player->current_frame();
+            this->_module_pool->erase_at(this->_selected_track_pool->elements(), current_frame);
+        } break;
     }
 }

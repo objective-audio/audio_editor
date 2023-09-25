@@ -6,23 +6,19 @@
 
 #include <audio_editor_core/ae_pasteboard.h>
 
+#include <audio_editor_core/ae_deselector.hpp>
+
 using namespace yas;
 using namespace yas::ae;
 
-escaper::escaper(pasteboard *pasteboard, selected_module_pool *selected_module_pool,
-                 selected_marker_pool *selected_marker_pool)
-    : _pasteboard(pasteboard),
-      _selected_module_pool(selected_module_pool),
-      _selected_marker_pool(selected_marker_pool) {
+escaper::escaper(pasteboard *pasteboard, deselector *deselector) : _pasteboard(pasteboard), _deselector(deselector) {
 }
 
 bool escaper::can_escape() const {
-    return this->_pasteboard->can_clear() || this->_selected_module_pool->can_clear() ||
-           this->_selected_marker_pool->can_clear();
+    return this->_pasteboard->can_clear() || this->_deselector->can_deselect();
 }
 
 void escaper::espace() {
     this->_pasteboard->clear();
-    this->_selected_module_pool->clear();
-    this->_selected_marker_pool->clear();
+    this->_deselector->deselect_all();
 }

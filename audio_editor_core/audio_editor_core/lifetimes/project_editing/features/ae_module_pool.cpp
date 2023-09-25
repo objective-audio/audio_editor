@@ -79,9 +79,17 @@ module_pool_module_map_t module_pool::modules_at(std::set<track_index_t> const &
     return module_pool_utils::modules(this->_modules, tracks, frame);
 }
 
+bool module_pool::has_modules_at(std::set<track_index_t> const &tracks, frame_index_t const frame) const {
+    return module_pool_utils::has_modules(this->_modules, tracks, frame);
+}
+
 module_pool_module_map_t module_pool::splittable_modules_at(std::set<track_index_t> const &tracks,
                                                             frame_index_t const frame) const {
     return module_pool_utils::splittable_modules(this->_modules, tracks, frame);
+}
+
+bool module_pool::has_splittable_modules_at(std::set<track_index_t> const &tracks, frame_index_t const frame) const {
+    return module_pool_utils::has_splittable_modules(this->_modules, tracks, frame);
 }
 
 std::optional<frame_index_t> module_pool::first_frame() const {
@@ -101,14 +109,13 @@ std::optional<frame_index_t> module_pool::previous_jumpable_frame(frame_index_t 
 }
 
 void module_pool::split_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
-    if (auto const modules = this->splittable_modules_at(tracks, frame); !modules.empty()) {
-        for (auto const &pair : modules) {
-            auto const &module_obj = pair.second;
-            this->erase_module_and_notify(module_obj.index());
-            this->insert_module_and_notify(module_obj.value.tail_dropped(frame).value());
-            this->insert_module_and_notify(module_obj.value.head_dropped(frame).value());
-        }
-    }
+    auto const modules = this->splittable_modules_at(tracks, frame);
+    this->_split_modules(modules, frame);
+}
+
+void module_pool::split(selected_module_set const &module_indices, frame_index_t const frame) {
+    auto const modules = module_pool_utils::splittable_modules(this->_modules, module_indices, frame);
+    this->_split_modules(modules, frame);
 }
 
 void module_pool::erase_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
@@ -120,23 +127,23 @@ void module_pool::erase_at(std::set<track_index_t> const &tracks, frame_index_t 
 }
 
 void module_pool::drop_head_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
-    if (auto const modules = this->splittable_modules_at(tracks, frame); !modules.empty()) {
-        for (auto const &pair : modules) {
-            auto const &module_obj = pair.second;
-            this->erase_module_and_notify(module_obj.index());
-            this->insert_module_and_notify(module_obj.value.head_dropped(frame).value());
-        }
-    }
+    auto const modules = this->splittable_modules_at(tracks, frame);
+    this->_drop_head_modules(modules, frame);
+}
+
+void module_pool::drop_head(selected_module_set const &module_indices, frame_index_t const frame) {
+    auto const modules = module_pool_utils::splittable_modules(this->_modules, module_indices, frame);
+    this->_drop_head_modules(modules, frame);
 }
 
 void module_pool::drop_tail_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
-    if (auto const modules = this->splittable_modules_at(tracks, frame); !modules.empty()) {
-        for (auto const &pair : modules) {
-            auto const &module_obj = pair.second;
-            this->erase_module_and_notify(module_obj.index());
-            this->insert_module_and_notify(module_obj.value.tail_dropped(frame).value());
-        }
-    }
+    auto const modules = this->splittable_modules_at(tracks, frame);
+    this->_drop_tail_modules(modules, frame);
+}
+
+void module_pool::drop_tail(selected_module_set const &module_indices, frame_index_t const frame) {
+    auto const modules = module_pool_utils::splittable_modules(this->_modules, module_indices, frame);
+    this->_drop_tail_modules(modules, frame);
 }
 
 void module_pool::overwrite_module(module const &module) {
@@ -157,4 +164,29 @@ void module_pool::overwrite_module(module const &module) {
 
 observing::syncable module_pool::observe_event(std::function<void(module_pool_event const &)> &&handler) {
     return this->_event_fetcher->observe(std::move(handler));
+}
+
+void module_pool::_split_modules(module_pool_module_map_t const &modules, frame_index_t const frame) {
+    for (auto const &pair : modules) {
+        auto const &module_obj = pair.second;
+        this->erase_module_and_notify(module_obj.index());
+        this->insert_module_and_notify(module_obj.value.tail_dropped(frame).value());
+        this->insert_module_and_notify(module_obj.value.head_dropped(frame).value());
+    }
+}
+
+void module_pool::_drop_head_modules(module_pool_module_map_t const &modules, frame_index_t const frame) {
+    for (auto const &pair : modules) {
+        auto const &module_obj = pair.second;
+        this->erase_module_and_notify(module_obj.index());
+        this->insert_module_and_notify(module_obj.value.head_dropped(frame).value());
+    }
+}
+
+void module_pool::_drop_tail_modules(module_pool_module_map_t const &modules, frame_index_t const frame) {
+    for (auto const &pair : modules) {
+        auto const &module_obj = pair.second;
+        this->erase_module_and_notify(module_obj.index());
+        this->insert_module_and_notify(module_obj.value.tail_dropped(frame).value());
+    }
 }

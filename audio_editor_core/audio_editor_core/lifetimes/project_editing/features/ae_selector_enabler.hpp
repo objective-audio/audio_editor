@@ -17,6 +17,7 @@ struct selector_enabler {
 
     bool is_enabled(selector_kind const) const;
     bool is_any_enabled() const;
+    std::optional<selector_kind> const current_kind() const;
 
    private:
     selected_module_pool const *const _module_pool;
@@ -27,7 +28,5 @@ struct selector_enabler {
     selector_enabler(selector_enabler &&) = delete;
     selector_enabler &operator=(selector_enabler const &) = delete;
     selector_enabler &operator=(selector_enabler &&) = delete;
-
-    std::optional<selector_kind> _current_kind() const;
 };
 }  // namespace yas::ae

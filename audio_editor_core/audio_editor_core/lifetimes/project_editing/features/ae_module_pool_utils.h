@@ -13,6 +13,7 @@ namespace yas::ae::module_pool_utils {
 [[nodiscard]] std::optional<time::range> total_range(module_pool_module_map_t const &);
 [[nodiscard]] module_pool_module_map_t modules(module_pool_module_map_t const &, std::set<track_index_t> const &,
                                                frame_index_t const);
+[[nodiscard]] bool has_modules(module_pool_module_map_t const &, std::set<track_index_t> const &, frame_index_t const);
 
 [[nodiscard]] std::optional<frame_index_t> first_frame(module_pool_module_map_t const &);
 [[nodiscard]] std::optional<frame_index_t> last_next_frame(module_pool_module_map_t const &);
@@ -23,6 +24,12 @@ namespace yas::ae::module_pool_utils {
 
 [[nodiscard]] module_pool_module_map_t splittable_modules(module_pool_module_map_t const &,
                                                           std::set<track_index_t> const &, frame_index_t const);
+[[nodiscard]] module_pool_module_map_t splittable_modules(module_pool_module_map_t const &,
+                                                          std::set<module_index> const &, frame_index_t const);
+[[nodiscard]] bool has_splittable_modules(module_pool_module_map_t const &, std::set<track_index_t> const &,
+                                          frame_index_t const);
+[[nodiscard]] bool has_splittable_modules(std::set<module_index> const &, std::set<track_index_t> const &,
+                                          frame_index_t const);
 
 [[nodiscard]] std::vector<module_object> overlapped_modules(module_pool_module_map_t const &, track_index_t const,
                                                             time::range const &);

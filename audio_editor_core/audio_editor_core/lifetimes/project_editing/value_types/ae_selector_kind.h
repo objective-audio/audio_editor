@@ -5,7 +5,7 @@
 #pragma once
 
 namespace yas::ae {
-enum selector_kind {
+enum class selector_kind {
     module,
     marker,
     track,
