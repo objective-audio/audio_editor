@@ -10,7 +10,6 @@
 #include <audio_editor_core/ae_hierarchy.h>
 #include <audio_editor_core/ae_marker_pool.h>
 #include <audio_editor_core/ae_module_pool.h>
-#include <audio_editor_core/ae_module_pool_utils.h>
 #include <audio_editor_core/ae_pasteboard.h>
 #include <audio_editor_core/ae_player.h>
 #include <audio_editor_core/ae_time_editing_closer.h>
@@ -279,14 +278,12 @@ bool module_editor::_has_splittable_modules() const {
     switch (this->_target_kind()) {
         case target_kind::modules:
             // 選択されたモジュールが分割対象となる
-            return module_pool_utils::has_splittable_modules(this->_selected_module_pool->elements(), {},
-                                                             current_frame);
+            return this->_module_pool->has_splittable_modules(this->_selected_module_pool->elements(), current_frame);
         case target_kind::markers:
             // マーカー選択中はモジュールを分割対象としない
             return false;
         case target_kind::tracks: {
-            auto const &module_pool = this->_module_pool;
-            return module_pool->has_splittable_modules_at(this->_selected_track_pool->elements(), current_frame);
+            return this->_module_pool->has_splittable_modules_at(this->_selected_track_pool->elements(), current_frame);
         }
     }
 }

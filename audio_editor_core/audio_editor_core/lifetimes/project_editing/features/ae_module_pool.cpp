@@ -92,6 +92,11 @@ bool module_pool::has_splittable_modules_at(std::set<track_index_t> const &track
     return module_pool_utils::has_splittable_modules(this->_modules, tracks, frame);
 }
 
+bool module_pool::has_splittable_modules(std::set<module_index> const &module_indices,
+                                         frame_index_t const frame) const {
+    return module_pool_utils::has_splittable_modules(module_indices, {}, frame);
+}
+
 std::optional<frame_index_t> module_pool::first_frame() const {
     return module_pool_utils::first_frame(this->_modules);
 }
