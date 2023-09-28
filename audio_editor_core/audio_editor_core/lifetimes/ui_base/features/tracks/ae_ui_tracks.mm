@@ -184,7 +184,7 @@ void ui_tracks::_replace_data(std::vector<std::optional<track_content>> const &c
             if (content.has_value()) {
                 auto const &value = content.value();
                 ui::region const region{
-                    .origin = {.x = 0.0f, .y = value.track() - 0.5f},
+                    .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height * 0.5f)},
                     .size = {.width = ui_tracks_constants::square_width, .height = ui_tracks_constants::square_height}};
                 rect.set_position(region);
                 rect.set_tex_coord(filled_tex_coords);
@@ -260,7 +260,7 @@ void ui_tracks::_update_data(std::size_t const count,
                 auto const vertex_idx = content_idx - range.index;
                 auto const &value = pair.second;
                 ui::region const region{
-                    .origin = {.x = 0.0f, .y = value.track() - 0.5f},
+                    .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height * 0.5f)},
                     .size = {.width = ui_tracks_constants::square_width, .height = ui_tracks_constants::square_height}};
 
                 auto &rect = vertex_rects[vertex_idx];
