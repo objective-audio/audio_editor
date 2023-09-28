@@ -35,7 +35,7 @@ ui_pasting_markers::ui_pasting_markers(project_lifetime_id const &project_lifeti
                     this->_replace(event.elements);
                     break;
                 case pasting_marker_content_pool_event_type::updated:
-                    this->_update(event.elements.size(), event.erased, event.inserted, event.replaced);
+                    this->_update(event.elements.size(), event.inserted_indices, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -65,11 +65,12 @@ void ui_pasting_markers::_replace(std::vector<std::optional<pasting_marker_conte
     }
 }
 
-void ui_pasting_markers::_update(std::size_t const count,
-                                 std::vector<std::pair<std::size_t, pasting_marker_content>> const &erased,
-                                 std::vector<std::pair<std::size_t, pasting_marker_content>> const &inserted,
-                                 std::vector<std::pair<std::size_t, pasting_marker_content>> const &replaced) {
+void ui_pasting_markers::_update(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+                                 std::set<std::size_t> const &replaced_indices,
+                                 std::map<std::size_t, pasting_marker_content> const &erased) {
     this->_set_count(count);
+
+    auto const &contents = this->_presenter->contents();
 
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
@@ -78,16 +79,14 @@ void ui_pasting_markers::_update(std::size_t const count,
         }
     }
 
-    for (auto const &pair : inserted) {
-        auto const &idx = pair.first;
-        auto const &content = pair.second;
+    for (auto const &idx : inserted_indices) {
+        auto const &content = contents.at(idx).value();
         auto const &element = this->_elements.at(idx);
         element->set_content(content);
     }
 
-    for (auto const &pair : replaced) {
-        auto const &idx = pair.first;
-        auto const &content = pair.second;
+    for (auto const &idx : replaced_indices) {
+        auto const &content = contents.at(idx).value();
         auto const &element = this->_elements.at(idx);
         element->update_content(content);
     }

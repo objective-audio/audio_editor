@@ -62,9 +62,9 @@ struct ui_modules final {
     /// 全てのUI要素の色のみを更新する
     void _update_colors(std::vector<std::optional<module_content>> const &);
     /// UI要素を部分的に更新する
-    void _update_data(std::size_t const count, std::vector<std::pair<std::size_t, module_content>> const &inserted,
-                      std::vector<std::pair<std::size_t, module_content>> const &replaced,
-                      std::vector<std::pair<std::size_t, module_content>> const &erased);
+    void _update_data(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+                      std::set<std::size_t> const &replaced_indices,
+                      std::map<std::size_t, module_content> const &erased);
 
     void _set_rect_count(std::size_t const rect_count);
     void _update_all_name_positions();

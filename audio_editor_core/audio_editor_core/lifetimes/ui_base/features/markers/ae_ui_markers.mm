@@ -43,7 +43,8 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
                     this->_replace_elements(event.elements);
                     break;
                 case marker_content_pool_event_type::updated:
-                    this->_update_elements(event.elements.size(), event.erased, event.inserted, event.replaced);
+                    this->_update_elements(event.elements.size(), event.erased, event.inserted_indices,
+                                           event.replaced_indices);
                     break;
             }
         })
@@ -106,11 +107,12 @@ void ui_markers::_replace_elements(std::vector<std::optional<marker_content>> co
     }
 }
 
-void ui_markers::_update_elements(std::size_t const count,
-                                  std::vector<std::pair<std::size_t, marker_content>> const &erased,
-                                  std::vector<std::pair<std::size_t, marker_content>> const &inserted,
-                                  std::vector<std::pair<std::size_t, marker_content>> const &replaced) {
+void ui_markers::_update_elements(std::size_t const count, std::map<std::size_t, marker_content> const &erased,
+                                  std::set<std::size_t> const &inserted_indices,
+                                  std::set<std::size_t> const &replaced_indices) {
     this->_remake_elements_if_needed(count);
+
+    auto const &contents = this->_presenter->contents();
 
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
@@ -119,16 +121,14 @@ void ui_markers::_update_elements(std::size_t const count,
         }
     }
 
-    for (auto const &pair : inserted) {
-        auto const &idx = pair.first;
-        auto const &content = pair.second;
+    for (auto const &idx : inserted_indices) {
+        auto const &content = contents.at(idx).value();
         auto const &element = this->_elements.at(idx);
         element->set_content(content);
     }
 
-    for (auto const &pair : replaced) {
-        auto const &idx = pair.first;
-        auto const &content = pair.second;
+    for (auto const &idx : replaced_indices) {
+        auto const &content = contents.at(idx).value();
         auto const &element = this->_elements.at(idx);
         element->update_content(content);
     }

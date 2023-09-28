@@ -57,7 +57,8 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
                     this->_replace_data(event.elements);
                     break;
                 case track_content_pool_event_type::updated:
-                    this->_update_data(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    this->_update_data(event.elements.size(), event.inserted_indices, event.replaced_indices,
+                                       event.erased);
                     break;
             }
         })
@@ -227,13 +228,14 @@ void ui_tracks::_update_colors(std::vector<std::optional<track_content>> const &
     });
 }
 
-void ui_tracks::_update_data(std::size_t const count,
-                             std::vector<std::pair<std::size_t, track_content>> const &inserted,
-                             std::vector<std::pair<std::size_t, track_content>> const &replaced,
-                             std::vector<std::pair<std::size_t, track_content>> const &erased) {
+void ui_tracks::_update_data(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+                             std::set<std::size_t> const &replaced_indices,
+                             std::map<std::size_t, track_content> const &erased) {
     this->_set_rect_count(count);
 
-    this->_fill_mesh_container->write_vertex_elements([&erased, &inserted, &replaced, this](
+    auto const &contents = this->_presenter->contents();
+
+    this->_fill_mesh_container->write_vertex_elements([&contents, &erased, &inserted_indices, &replaced_indices, this](
                                                           index_range const range, vertex2d_rect *vertex_rects) {
         auto const &colliders = this->_fill_mesh_container->node->colliders();
 
@@ -254,11 +256,10 @@ void ui_tracks::_update_data(std::size_t const count,
         auto const selected_square_color = color->selected_track_square().v;
         auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
-        for (auto const &pair : inserted) {
-            auto const &content_idx = pair.first;
+        for (auto const &content_idx : inserted_indices) {
             if (range.contains(content_idx)) {
                 auto const vertex_idx = content_idx - range.index;
-                auto const &value = pair.second;
+                auto const &value = contents.at(content_idx).value();
                 ui::region const region{
                     .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height * 0.5f)},
                     .size = {.width = ui_tracks_constants::square_width, .height = ui_tracks_constants::square_height}};
@@ -276,11 +277,10 @@ void ui_tracks::_update_data(std::size_t const count,
             }
         }
 
-        for (auto const &pair : replaced) {
-            auto const &content_idx = pair.first;
+        for (auto const &content_idx : replaced_indices) {
             if (range.contains(content_idx)) {
                 auto const vertex_idx = content_idx - range.index;
-                auto const &value = pair.second;
+                auto const &value = contents.at(content_idx).value();
                 auto const &square_color = value.is_selected ? selected_square_color : normal_square_color;
                 vertex_rects[vertex_idx].set_color(square_color);
             }

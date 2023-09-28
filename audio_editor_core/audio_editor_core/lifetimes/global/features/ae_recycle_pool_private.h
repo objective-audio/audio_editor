@@ -32,6 +32,9 @@ template <typename Element>
 void recycle_pool<Element>::update_all(std::vector<Element> const &elements, bool const force_element_replacing) {
     std::vector<std::pair<std::size_t, Element>> inserted;
     std::vector<std::pair<std::size_t, Element>> replaced;
+    std::vector<Element> inserted_elements;
+    std::set<std::size_t> inserted_indices;
+    std::set<std::size_t> replaced_indices;
 
     // 元のelementsに無いものをinsertedに保持。indexはまだ
     for (auto const &element : elements) {
@@ -43,14 +46,16 @@ void recycle_pool<Element>::update_all(std::vector<Element> const &elements, boo
             auto const &idx = contains_index.value();
             if (force_element_replacing || this->_elements.at(idx) != element) {
                 replaced.emplace_back(idx, element);
+                replaced_indices.emplace(idx);
                 this->_elements.at(idx) = element;
             }
         } else {
             inserted.emplace_back(0, element);
+            inserted_elements.emplace_back(element);
         }
     }
 
-    std::vector<std::pair<std::size_t, Element>> erased;
+    std::map<std::size_t, Element> erased;
     std::vector<std::size_t> null_indices;
 
     // 引数のelementsに無いものを削除してerasedに保持。空のindexをnull_indicesに保持
@@ -65,7 +70,7 @@ void recycle_pool<Element>::update_all(std::vector<Element> const &elements, boo
             });
 
             if (!contains) {
-                erased.emplace_back(idx, prev.value());
+                erased.emplace(idx, prev.value());
                 this->_elements.at(idx) = std::nullopt;
                 null_indices.emplace_back(idx);
             }
@@ -75,27 +80,29 @@ void recycle_pool<Element>::update_all(std::vector<Element> const &elements, boo
     }
 
     // 空のindexから順にinsertedのものを挿入
-    each = make_fast_each(inserted.size());
+    each = make_fast_each(inserted_elements.size());
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
-        auto const &element_pair = inserted.at(idx);
+        auto const &element = inserted_elements.at(idx);
 
         if (idx < null_indices.size()) {
             auto const inserted_idx = null_indices.at(idx);
-            this->_elements.at(inserted_idx) = element_pair.second;
-            inserted.at(idx) = std::make_pair(inserted_idx, element_pair.second);
+            this->_elements.at(inserted_idx) = element;
+            inserted.at(idx) = std::make_pair(inserted_idx, element);
+            inserted_indices.emplace(inserted_idx);
         } else {
-            this->_elements.emplace_back(element_pair.second);
-            inserted.at(idx) = std::make_pair(this->_elements.size() - 1, element_pair.second);
+            this->_elements.emplace_back(element);
+            inserted.at(idx) = std::make_pair(this->_elements.size() - 1, element);
+            inserted_indices.emplace(this->_elements.size() - 1);
         }
     }
 
     // 変更があれば通知
-    if (!inserted.empty() || !replaced.empty() || !erased.empty()) {
+    if (!inserted_indices.empty() || !replaced_indices.empty() || !erased.empty()) {
         this->_fetcher->push({.type = recycle_pool_event_type::updated,
                               .elements = this->_elements,
-                              .inserted = std::move(inserted),
-                              .replaced = std::move(replaced),
+                              .inserted_indices = std::move(inserted_indices),
+                              .replaced_indices = std::move(replaced_indices),
                               .erased = std::move(erased)});
     }
 }
@@ -107,12 +114,12 @@ void recycle_pool<Element>::erase_for_id(object_id const &erase_id) {
         auto const &idx = yas_each_index(each);
         auto const &element = this->_elements.at(idx);
         if (element.has_value() && element.value().identifier == erase_id) {
-            std::vector<std::pair<std::size_t, Element>> erased{{idx, element.value()}};
+            std::pair<std::size_t, Element> erased{idx, element.value()};
 
             this->_elements.at(idx) = std::nullopt;
 
             this->_fetcher->push(
-                {.type = recycle_pool_event_type::updated, .elements = this->_elements, .erased = std::move(erased)});
+                {.type = recycle_pool_event_type::updated, .elements = this->_elements, .erased = {std::move(erased)}});
             break;
         }
     }
@@ -120,7 +127,7 @@ void recycle_pool<Element>::erase_for_id(object_id const &erase_id) {
 
 template <typename Element>
 void recycle_pool<Element>::insert(Element const &element) {
-    std::vector<std::pair<std::size_t, Element>> inserted;
+    std::set<std::size_t> inserted_indices;
 
     auto each = make_fast_each(this->_elements.size());
     while (yas_each_next(each)) {
@@ -131,24 +138,25 @@ void recycle_pool<Element>::insert(Element const &element) {
                 return;
             }
         } else {
-            inserted.emplace_back(idx, element);
+            inserted_indices.emplace(idx);
             this->_elements.at(idx) = element;
             break;
         }
     }
 
-    if (inserted.empty()) {
+    if (inserted_indices.empty()) {
         this->_elements.emplace_back(element);
-        inserted.emplace_back(this->_elements.size() - 1, element);
+        inserted_indices.emplace(this->_elements.size() - 1);
     }
 
-    this->_fetcher->push(
-        {.type = recycle_pool_event_type::updated, .elements = this->_elements, .inserted = std::move(inserted)});
+    this->_fetcher->push({.type = recycle_pool_event_type::updated,
+                          .elements = this->_elements,
+                          .inserted_indices = std::move(inserted_indices)});
 }
 
 template <typename Element>
 void recycle_pool<Element>::replace(Element const &element) {
-    std::vector<std::pair<std::size_t, Element>> replaced;
+    std::set<std::size_t> replaced_indices;
 
     auto each = make_fast_each(this->_elements.size());
     while (yas_each_next(each)) {
@@ -156,19 +164,20 @@ void recycle_pool<Element>::replace(Element const &element) {
         auto const &overwriting = this->_elements.at(idx);
         if (overwriting.has_value()) {
             if (overwriting.value().identifier == element.identifier) {
-                replaced.emplace_back(idx, element);
+                replaced_indices.emplace(idx);
                 this->_elements.at(idx) = element;
                 break;
             }
         }
     }
 
-    if (replaced.empty()) {
+    if (replaced_indices.empty()) {
         return;
     }
 
-    this->_fetcher->push(
-        {.type = recycle_pool_event_type::updated, .elements = this->_elements, .replaced = std::move(replaced)});
+    this->_fetcher->push({.type = recycle_pool_event_type::updated,
+                          .elements = this->_elements,
+                          .replaced_indices = std::move(replaced_indices)});
 }
 
 template <typename Element>
