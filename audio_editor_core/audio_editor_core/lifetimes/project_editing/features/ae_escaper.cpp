@@ -19,6 +19,9 @@ bool escaper::can_escape() const {
 }
 
 void escaper::espace() {
-    this->_pasteboard->clear();
-    this->_deselector->deselect_all();
+    if (this->_pasteboard->can_clear()) {
+        this->_pasteboard->clear();
+    } else if (this->_deselector->can_deselect()) {
+        this->_deselector->deselect_all();
+    }
 }
