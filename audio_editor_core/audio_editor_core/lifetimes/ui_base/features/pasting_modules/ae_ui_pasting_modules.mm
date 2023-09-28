@@ -57,11 +57,10 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
             switch (event.type) {
                 case pasting_module_content_pool_event_type::fetched:
                 case pasting_module_content_pool_event_type::replaced:
-                    this->_replace(event.elements);
+                    this->_replace();
                     break;
                 case pasting_module_content_pool_event_type::updated:
-                    this->_update_mesh(event.elements.size(), event.inserted_indices, event.replaced_indices,
-                                       event.erased);
+                    this->_update_mesh(event.inserted_indices, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -87,7 +86,9 @@ void ui_pasting_modules::set_scale(ui::size const &scale) {
     this->_scale_node->set_scale(scale);
 }
 
-void ui_pasting_modules::_replace(std::vector<std::optional<pasting_module_content>> const &contents) {
+void ui_pasting_modules::_replace() {
+    auto const &contents = this->_presenter->contents();
+
     this->_mesh_container->set_element_count(contents.size());
 
     this->_mesh_container->write_vertex_elements([&contents](index_range const range, ui::vertex2d_rect *vertex_rects) {
@@ -113,12 +114,12 @@ void ui_pasting_modules::_replace(std::vector<std::optional<pasting_module_conte
     });
 }
 
-void ui_pasting_modules::_update_mesh(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+void ui_pasting_modules::_update_mesh(std::set<std::size_t> const &inserted_indices,
                                       std::set<std::size_t> const &replaced_indices,
                                       std::map<std::size_t, pasting_module_content> const &erased) {
-    this->_mesh_container->set_element_count(count);
-
     auto const &contents = this->_presenter->contents();
+
+    this->_mesh_container->set_element_count(contents.size());
 
     this->_mesh_container->write_vertex_elements(
         [&contents, &erased, &inserted_indices](index_range const range, ui::vertex2d_rect *vertex_rects) {
