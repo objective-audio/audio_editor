@@ -131,8 +131,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
                     this->_replace_elements(true);
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_elements(event.elements.size(), event.erased, event.inserted_indices,
-                                           event.replaced_indices);
+                    this->_update_elements(event.inserted_indices, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -204,18 +203,18 @@ void ui_module_waveforms::_replace_elements(bool const clear_meshes) {
     }
 }
 
-void ui_module_waveforms::_update_elements(std::size_t const count, std::map<std::size_t, module_content> const &erased,
-                                           std::set<std::size_t> const &inserted_indices,
-                                           std::set<std::size_t> const &replaced_indices) {
+void ui_module_waveforms::_update_elements(std::set<std::size_t> const &inserted_indices,
+                                           std::set<std::size_t> const &replaced_indices,
+                                           std::map<std::size_t, module_content> const &erased) {
     if (!this->_scale.has_value()) {
         this->_resize_elements(0);
         this->_elements.clear();
         return;
     }
 
-    this->_resize_elements(count);
-
     auto const &contents = this->_presenter->contents();
+
+    this->_resize_elements(contents.size());
 
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
