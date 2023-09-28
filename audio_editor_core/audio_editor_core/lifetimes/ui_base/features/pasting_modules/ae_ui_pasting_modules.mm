@@ -60,7 +60,8 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
                     this->_replace(event.elements);
                     break;
                 case pasting_module_content_pool_event_type::updated:
-                    this->_update_mesh(event.elements.size(), event.inserted, event.replaced, event.erased);
+                    this->_update_mesh(event.elements.size(), event.inserted_indices, event.replaced_indices,
+                                       event.erased);
                     break;
             }
         })
@@ -112,14 +113,15 @@ void ui_pasting_modules::_replace(std::vector<std::optional<pasting_module_conte
     });
 }
 
-void ui_pasting_modules::_update_mesh(std::size_t const count,
-                                      std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
-                                      std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
-                                      std::vector<std::pair<std::size_t, pasting_module_content>> const &erased) {
+void ui_pasting_modules::_update_mesh(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+                                      std::set<std::size_t> const &replaced_indices,
+                                      std::map<std::size_t, pasting_module_content> const &erased) {
     this->_mesh_container->set_element_count(count);
 
+    auto const &contents = this->_presenter->contents();
+
     this->_mesh_container->write_vertex_elements(
-        [&erased, &inserted](index_range const range, ui::vertex2d_rect *vertex_rects) {
+        [&contents, &erased, &inserted_indices](index_range const range, ui::vertex2d_rect *vertex_rects) {
             for (auto const &pair : erased) {
                 auto const &content_idx = pair.first;
                 if (range.contains(content_idx)) {
@@ -128,11 +130,11 @@ void ui_pasting_modules::_update_mesh(std::size_t const count,
                 }
             }
 
-            for (auto const &pair : inserted) {
-                auto const &content_idx = pair.first;
+            for (auto const &content_idx : inserted_indices) {
                 if (range.contains(content_idx)) {
                     auto const vertex_idx = content_idx - range.index;
-                    auto const &region = pair.second.region();
+                    auto const &content = contents.at(content_idx).value();
+                    auto const &region = content.region();
                     vertex_rects[vertex_idx].set_position(region);
                 }
             }

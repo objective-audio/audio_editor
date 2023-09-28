@@ -6,7 +6,9 @@
 
 #include <audio_editor_core/ae_common_types.h>
 
+#include <map>
 #include <observing/yas_observing_umbrella.hpp>
+#include <set>
 
 namespace yas::ae {
 enum class recycle_pool_event_type {
@@ -18,10 +20,10 @@ enum class recycle_pool_event_type {
 template <typename Element>
 struct recycle_pool_event final {
     recycle_pool_event_type type;
-    std::vector<std::optional<Element>> const &elements;    // fetched, replaced, updated
-    std::vector<std::pair<std::size_t, Element>> inserted;  // updated
-    std::vector<std::pair<std::size_t, Element>> replaced;  // updated
-    std::vector<std::pair<std::size_t, Element>> erased;    // updated
+    std::vector<std::optional<Element>> const &elements;  // fetched, replaced, updated
+    std::set<std::size_t> inserted_indices;               // updated
+    std::set<std::size_t> replaced_indices;               // updated
+    std::map<std::size_t, Element> erased;                // updated
 };
 
 template <typename Element>

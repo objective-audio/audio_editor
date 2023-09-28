@@ -33,9 +33,9 @@ struct ui_pasting_markers final {
     ui_pasting_markers &operator=(ui_pasting_markers &&) = delete;
 
     void _replace(std::vector<std::optional<pasting_marker_content>> const &);
-    void _update(std::size_t const count, std::vector<std::pair<std::size_t, pasting_marker_content>> const &erased,
-                 std::vector<std::pair<std::size_t, pasting_marker_content>> const &inserted,
-                 std::vector<std::pair<std::size_t, pasting_marker_content>> const &replaced);
+    void _update(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+                 std::set<std::size_t> const &replaced_indices,
+                 std::map<std::size_t, pasting_marker_content> const &erased);
     void _set_count(std::size_t const);
 };
 }  // namespace yas::ae

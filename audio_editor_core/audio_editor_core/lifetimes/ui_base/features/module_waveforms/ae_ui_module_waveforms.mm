@@ -131,7 +131,8 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
                     this->_replace_elements(true);
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_elements(event.elements.size(), event.erased, event.inserted, event.replaced);
+                    this->_update_elements(event.elements.size(), event.erased, event.inserted_indices,
+                                           event.replaced_indices);
                     break;
             }
         })
@@ -203,10 +204,9 @@ void ui_module_waveforms::_replace_elements(bool const clear_meshes) {
     }
 }
 
-void ui_module_waveforms::_update_elements(std::size_t const count,
-                                           std::vector<std::pair<std::size_t, module_content>> const &erased,
-                                           std::vector<std::pair<std::size_t, module_content>> const &inserted,
-                                           std::vector<std::pair<std::size_t, module_content>> const &replaced) {
+void ui_module_waveforms::_update_elements(std::size_t const count, std::map<std::size_t, module_content> const &erased,
+                                           std::set<std::size_t> const &inserted_indices,
+                                           std::set<std::size_t> const &replaced_indices) {
     if (!this->_scale.has_value()) {
         this->_resize_elements(0);
         this->_elements.clear();
@@ -215,9 +215,9 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
 
     this->_resize_elements(count);
 
-    auto each = make_fast_each(erased.size());
-    while (yas_each_next(each)) {
-        auto const &pair = erased.at(yas_each_index(each));
+    auto const &contents = this->_presenter->contents();
+
+    for (auto const &pair : erased) {
         auto const &idx = pair.first;
         auto const &content = pair.second;
 
@@ -230,17 +230,12 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
         this->_presenter->cancel_import(content.identifier);
     }
 
-    auto const &contents = this->_presenter->contents();
     auto const normal_color = this->_color->waveform();
     auto const selected_color = this->_color->selected_waveform();
 
-    each = make_fast_each(replaced.size());
-    while (yas_each_next(each)) {
-        auto const &pair = replaced.at(yas_each_index(each));
-        auto const &idx = pair.first;
-
+    for (auto const &idx : replaced_indices) {
         if (idx < this->_elements.size() && idx < contents.size()) {
-            auto const &content = pair.second;
+            auto const &content = contents.at(idx).value();
             auto const region = content.region();
             auto &element = this->_elements.at(idx);
             element->node->set_is_enabled(true);
@@ -251,13 +246,9 @@ void ui_module_waveforms::_update_elements(std::size_t const count,
         }
     }
 
-    each = make_fast_each(inserted.size());
-    while (yas_each_next(each)) {
-        auto const &pair = inserted.at(yas_each_index(each));
-        auto const &idx = pair.first;
-
+    for (auto const &idx : inserted_indices) {
         if (idx < this->_elements.size()) {
-            auto const &content = pair.second;
+            auto const &content = contents.at(idx).value();
             auto const region = content.region();
             auto &element = this->_elements.at(idx);
             element->clear();

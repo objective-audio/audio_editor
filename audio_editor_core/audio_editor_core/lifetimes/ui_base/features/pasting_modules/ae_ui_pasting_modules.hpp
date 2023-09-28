@@ -9,6 +9,8 @@
 #include <cpp_utils/yas_index_range.h>
 #include <ui/yas_ui_umbrella.h>
 
+#include <set>
+
 namespace yas::ae {
 class pasting_module_content;
 class pasting_modules_presenter;
@@ -40,10 +42,9 @@ struct ui_pasting_modules final {
     ui_pasting_modules &operator=(ui_pasting_modules &&) = delete;
 
     void _replace(std::vector<std::optional<pasting_module_content>> const &);
-    void _update_mesh(std::size_t const count,
-                      std::vector<std::pair<std::size_t, pasting_module_content>> const &inserted,
-                      std::vector<std::pair<std::size_t, pasting_module_content>> const &replaced,
-                      std::vector<std::pair<std::size_t, pasting_module_content>> const &erased);
+    void _update_mesh(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+                      std::set<std::size_t> const &replaced_indices,
+                      std::map<std::size_t, pasting_module_content> const &erased);
     void _update_y_offset();
 };
 }  // namespace yas::ae

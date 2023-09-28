@@ -8,6 +8,8 @@
 #include <audio_editor_core/ae_ui_types.h>
 #include <ui/yas_ui_umbrella.h>
 
+#include <set>
+
 namespace yas::ae {
 class grid_presenter;
 class color;
@@ -42,9 +44,8 @@ struct ui_grid final {
 
     void _update_lines_scale();
     void _replace_data(std::vector<std::optional<grid_content>> const &);
-    void _update_data(std::size_t const count, std::vector<std::pair<std::size_t, grid_content>> const &inserted,
-                      std::vector<std::pair<std::size_t, grid_content>> const &replaced,
-                      std::vector<std::pair<std::size_t, grid_content>> const &erased);
+    void _update_data(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+                      std::set<std::size_t> const &replaced_indices, std::map<std::size_t, grid_content> const &erased);
     void _update_colors();
     void _update_tex_coords(ui::uint_region const &tex_coords);
 };
