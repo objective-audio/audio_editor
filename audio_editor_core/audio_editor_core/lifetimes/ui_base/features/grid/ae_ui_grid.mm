@@ -56,11 +56,10 @@ ui_grid::ui_grid(std::shared_ptr<grid_presenter> const &presenter, std::shared_p
             switch (event.type) {
                 case module_content_pool_event_type::fetched:
                 case module_content_pool_event_type::replaced:
-                    this->_replace_data(event.elements);
+                    this->_replace_data();
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_data(event.elements.size(), event.inserted_indices, event.replaced_indices,
-                                       event.erased);
+                    this->_update_data(event.inserted_indices, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -103,7 +102,9 @@ void ui_grid::_update_lines_scale() {
     this->_mesh_container->node->set_scale({.width = this->_scale.width, .height = height});
 }
 
-void ui_grid::_replace_data(std::vector<std::optional<grid_content>> const &contents) {
+void ui_grid::_replace_data() {
+    auto const &contents = this->_presenter->contents();
+
     this->_mesh_container->set_element_count(contents.size());
 
     this->_mesh_container->write_vertex_elements(
@@ -136,12 +137,11 @@ void ui_grid::_replace_data(std::vector<std::optional<grid_content>> const &cont
         });
 }
 
-void ui_grid::_update_data(std::size_t const count, std::set<std::size_t> const &inserted_indices,
-                           std::set<std::size_t> const &replaced_indices,
+void ui_grid::_update_data(std::set<std::size_t> const &inserted_indices, std::set<std::size_t> const &replaced_indices,
                            std::map<std::size_t, grid_content> const &erased) {
-    this->_mesh_container->set_element_count(count);
-
     auto const &contents = this->_presenter->contents();
+
+    this->_mesh_container->set_element_count(contents.size());
 
     this->_mesh_container->write_vertex_elements([&contents, &erased, &inserted_indices, &replaced_indices, this](
                                                      index_range const range, vertex2d_line *vertex_lines) {

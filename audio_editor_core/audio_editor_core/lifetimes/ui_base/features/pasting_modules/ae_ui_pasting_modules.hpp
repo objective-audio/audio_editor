@@ -41,9 +41,8 @@ struct ui_pasting_modules final {
     ui_pasting_modules &operator=(ui_pasting_modules const &) = delete;
     ui_pasting_modules &operator=(ui_pasting_modules &&) = delete;
 
-    void _replace(std::vector<std::optional<pasting_module_content>> const &);
-    void _update_mesh(std::size_t const count, std::set<std::size_t> const &inserted_indices,
-                      std::set<std::size_t> const &replaced_indices,
+    void _replace();
+    void _update_mesh(std::set<std::size_t> const &inserted_indices, std::set<std::size_t> const &replaced_indices,
                       std::map<std::size_t, pasting_module_content> const &erased);
     void _update_y_offset();
 };

@@ -32,10 +32,10 @@ ui_pasting_markers::ui_pasting_markers(project_lifetime_id const &project_lifeti
             switch (event.type) {
                 case pasting_marker_content_pool_event_type::fetched:
                 case pasting_marker_content_pool_event_type::replaced:
-                    this->_replace(event.elements);
+                    this->_replace();
                     break;
                 case pasting_marker_content_pool_event_type::updated:
-                    this->_update(event.elements.size(), event.inserted_indices, event.replaced_indices, event.erased);
+                    this->_update(event.inserted_indices, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -48,7 +48,9 @@ ui_pasting_markers::ui_pasting_markers(project_lifetime_id const &project_lifeti
         ->add_to(this->_pool);
 }
 
-void ui_pasting_markers::_replace(std::vector<std::optional<pasting_marker_content>> const &contents) {
+void ui_pasting_markers::_replace() {
+    auto const &contents = this->_presenter->contents();
+
     this->_set_count(contents.size());
 
     auto each = make_fast_each(contents.size());
@@ -65,12 +67,13 @@ void ui_pasting_markers::_replace(std::vector<std::optional<pasting_marker_conte
     }
 }
 
-void ui_pasting_markers::_update(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+void ui_pasting_markers::_update(std::set<std::size_t> const &inserted_indices,
                                  std::set<std::size_t> const &replaced_indices,
                                  std::map<std::size_t, pasting_marker_content> const &erased) {
-    this->_set_count(count);
-
     auto const &contents = this->_presenter->contents();
+    auto const count = contents.size();
+
+    this->_set_count(count);
 
     for (auto const &pair : erased) {
         auto const &idx = pair.first;
