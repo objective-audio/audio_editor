@@ -54,11 +54,10 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
             switch (event.type) {
                 case track_content_pool_event_type::fetched:
                 case track_content_pool_event_type::replaced:
-                    this->_replace_data(event.elements);
+                    this->_replace_data();
                     break;
                 case track_content_pool_event_type::updated:
-                    this->_update_data(event.elements.size(), event.inserted_indices, event.replaced_indices,
-                                       event.erased);
+                    this->_update_data(event.inserted_indices, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -68,6 +67,11 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
     standard->renderer()
         ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
         .end()
+        ->add_to(this->_pool);
+
+    standard->view_look()
+        ->observe_appearance([this](auto const &) { this->_update_colors(); })
+        .sync()
         ->add_to(this->_pool);
 
     atlas
@@ -160,7 +164,9 @@ void ui_tracks::set_scale(ui::size const &scale) {
     this->_fill_mesh_container->node->set_scale({.width = 1.0f, .height = scale.height});
 }
 
-void ui_tracks::_replace_data(std::vector<std::optional<track_content>> const &contents) {
+void ui_tracks::_replace_data() {
+    auto const &contents = this->_presenter->contents();
+
     this->_set_rect_count(contents.size());
 
     this->_fill_mesh_container->write_vertex_elements([this, &contents](index_range const range,
@@ -200,10 +206,14 @@ void ui_tracks::_replace_data(std::vector<std::optional<track_content>> const &c
             }
         }
     });
+
+    this->_update_colors();
 }
 
 // こことは別に_update_dataで部分的に色を更新しているので、変更する際は注意
-void ui_tracks::_update_colors(std::vector<std::optional<track_content>> const &contents) {
+void ui_tracks::_update_colors() {
+    auto const &contents = this->_presenter->contents();
+
     this->_fill_mesh_container->write_vertex_elements([this, &contents](index_range const range,
                                                                         vertex2d_rect *vertex_rects) {
         if (contents.size() <= range.index) {
@@ -228,12 +238,12 @@ void ui_tracks::_update_colors(std::vector<std::optional<track_content>> const &
     });
 }
 
-void ui_tracks::_update_data(std::size_t const count, std::set<std::size_t> const &inserted_indices,
+void ui_tracks::_update_data(std::set<std::size_t> const &inserted_indices,
                              std::set<std::size_t> const &replaced_indices,
                              std::map<std::size_t, track_content> const &erased) {
-    this->_set_rect_count(count);
-
     auto const &contents = this->_presenter->contents();
+
+    this->_set_rect_count(contents.size());
 
     this->_fill_mesh_container->write_vertex_elements([&contents, &erased, &inserted_indices, &replaced_indices, this](
                                                           index_range const range, vertex2d_rect *vertex_rects) {
