@@ -131,7 +131,7 @@ ui_module_waveforms::ui_module_waveforms(std::shared_ptr<ui::standard> const &st
                     this->_replace_elements(true);
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_elements(event.inserted_indices, event.replaced_indices, event.erased);
+                    this->_update_elements(event.inserted, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -203,7 +203,7 @@ void ui_module_waveforms::_replace_elements(bool const clear_meshes) {
     }
 }
 
-void ui_module_waveforms::_update_elements(std::set<std::size_t> const &inserted_indices,
+void ui_module_waveforms::_update_elements(std::set<std::size_t> const &inserted,
                                            std::set<std::size_t> const &replaced_indices,
                                            std::map<std::size_t, module_content> const &erased) {
     if (!this->_scale.has_value()) {
@@ -245,7 +245,7 @@ void ui_module_waveforms::_update_elements(std::set<std::size_t> const &inserted
         }
     }
 
-    for (auto const &idx : inserted_indices) {
+    for (auto const &idx : inserted) {
         if (idx < this->_elements.size()) {
             auto const &content = contents.at(idx).value();
             auto const region = content.region();

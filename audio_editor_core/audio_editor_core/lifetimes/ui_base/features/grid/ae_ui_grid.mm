@@ -59,7 +59,7 @@ ui_grid::ui_grid(std::shared_ptr<grid_presenter> const &presenter, std::shared_p
                     this->_replace_data();
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_data(event.inserted_indices, event.replaced_indices, event.erased);
+                    this->_update_data(event.inserted, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -137,13 +137,13 @@ void ui_grid::_replace_data() {
         });
 }
 
-void ui_grid::_update_data(std::set<std::size_t> const &inserted_indices, std::set<std::size_t> const &replaced_indices,
+void ui_grid::_update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced_indices,
                            std::map<std::size_t, grid_content> const &erased) {
     auto const &contents = this->_presenter->contents();
 
     this->_mesh_container->set_element_count(contents.size());
 
-    this->_mesh_container->write_vertex_elements([&contents, &erased, &inserted_indices, &replaced_indices, this](
+    this->_mesh_container->write_vertex_elements([&contents, &erased, &inserted, &replaced_indices, this](
                                                      index_range const range, vertex2d_line *vertex_lines) {
         auto const &tex_coords = this->_atlas->white_filled_tex_coords();
         auto const color = this->_color->grid_line();
@@ -156,7 +156,7 @@ void ui_grid::_update_data(std::set<std::size_t> const &inserted_indices, std::s
             }
         }
 
-        for (auto const &content_idx : inserted_indices) {
+        for (auto const &content_idx : inserted) {
             if (range.contains(content_idx)) {
                 auto const vertex_idx = content_idx - range.index;
                 auto const &value = contents.at(content_idx).value();

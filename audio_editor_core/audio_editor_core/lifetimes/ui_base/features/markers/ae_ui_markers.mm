@@ -43,7 +43,7 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
                     this->_replace_elements();
                     break;
                 case marker_content_pool_event_type::updated:
-                    this->_update_elements(event.erased, event.inserted_indices, event.replaced_indices);
+                    this->_update_elements(event.erased, event.inserted, event.replaced_indices);
                     break;
             }
         })
@@ -109,7 +109,7 @@ void ui_markers::_replace_elements() {
 }
 
 void ui_markers::_update_elements(std::map<std::size_t, marker_content> const &erased,
-                                  std::set<std::size_t> const &inserted_indices,
+                                  std::set<std::size_t> const &inserted,
                                   std::set<std::size_t> const &replaced_indices) {
     auto const &contents = this->_presenter->contents();
     auto const count = contents.size();
@@ -123,7 +123,7 @@ void ui_markers::_update_elements(std::map<std::size_t, marker_content> const &e
         }
     }
 
-    for (auto const &idx : inserted_indices) {
+    for (auto const &idx : inserted) {
         auto const &content = contents.at(idx).value();
         auto const &element = this->_elements.at(idx);
         element->set_content(content);

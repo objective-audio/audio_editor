@@ -109,9 +109,9 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 1);
         XCTAssertEqual(called.at(0).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(0).inserted_indices.size(), 2);
-        XCTAssertTrue(called.at(0).inserted_indices.contains(0));
-        XCTAssertTrue(called.at(0).inserted_indices.contains(1));
+        XCTAssertEqual(called.at(0).inserted.size(), 2);
+        XCTAssertTrue(called.at(0).inserted.contains(0));
+        XCTAssertTrue(called.at(0).inserted.contains(1));
         XCTAssertEqual(called.at(0).erased.size(), 0);
         XCTAssertEqual(called.at(0).replaced_indices.size(), 0);
     }
@@ -131,8 +131,8 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 1);
         XCTAssertEqual(called.at(0).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(0).inserted_indices.size(), 1);
-        XCTAssertTrue(called.at(0).inserted_indices.contains(2));
+        XCTAssertEqual(called.at(0).inserted.size(), 1);
+        XCTAssertTrue(called.at(0).inserted.contains(2));
         XCTAssertEqual(called.at(0).erased.size(), 0);
         XCTAssertEqual(called.at(0).replaced_indices.size(), 0);
     }
@@ -152,7 +152,7 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 1);
         XCTAssertEqual(called.at(0).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(0).inserted_indices.size(), 0);
+        XCTAssertEqual(called.at(0).inserted.size(), 0);
         XCTAssertEqual(called.at(0).erased.size(), 1);
         XCTAssertEqual(called.at(0).erased.at(0).identifier, id_0);
         XCTAssertEqual(called.at(0).replaced_indices.size(), 0);
@@ -175,9 +175,9 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 1);
         XCTAssertEqual(called.at(0).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(0).inserted_indices.size(), 2);
-        XCTAssertTrue(called.at(0).inserted_indices.contains(0));
-        XCTAssertTrue(called.at(0).inserted_indices.contains(3));
+        XCTAssertEqual(called.at(0).inserted.size(), 2);
+        XCTAssertTrue(called.at(0).inserted.contains(0));
+        XCTAssertTrue(called.at(0).inserted.contains(3));
         XCTAssertEqual(called.at(0).erased.size(), 0);
         XCTAssertEqual(called.at(0).replaced_indices.size(), 0);
     }
@@ -200,8 +200,8 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 1);
         XCTAssertEqual(called.at(0).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(0).inserted_indices.size(), 1);
-        XCTAssertTrue(called.at(0).inserted_indices.contains(0));
+        XCTAssertEqual(called.at(0).inserted.size(), 1);
+        XCTAssertTrue(called.at(0).inserted.contains(0));
         XCTAssertEqual(called.at(0).erased.size(), 2);
         XCTAssertEqual(called.at(0).erased.at(0).identifier, id_3);
         XCTAssertEqual(called.at(0).erased.at(1).identifier, id_2);
@@ -226,8 +226,8 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 1);
         XCTAssertEqual(called.at(0).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(0).inserted_indices.size(), 1);
-        XCTAssertTrue(called.at(0).inserted_indices.contains(1));
+        XCTAssertEqual(called.at(0).inserted.size(), 1);
+        XCTAssertTrue(called.at(0).inserted.contains(1));
         XCTAssertEqual(called.at(0).erased.size(), 1);
         XCTAssertEqual(called.at(0).erased.at(3).identifier, id_4);
         XCTAssertEqual(called.at(0).replaced_indices.size(), 2);
@@ -265,7 +265,7 @@ using namespace yas::ae::test_utils::module_content_pool;
         XCTAssertEqual(contents.at(2).value().identifier, id_2);
         XCTAssertEqual(called.size(), 2);
         XCTAssertEqual(called.at(1).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(1).inserted_indices.size(), 0);
+        XCTAssertEqual(called.at(1).inserted.size(), 0);
         XCTAssertEqual(called.at(1).erased.size(), 1);
         XCTAssertEqual(called.at(1).erased.at(1).identifier, id_1);
         XCTAssertEqual(called.at(1).replaced_indices.size(), 0);
@@ -306,8 +306,8 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 2);
         XCTAssertEqual(called.at(1).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(1).inserted_indices.size(), 1);
-        XCTAssertTrue(called.at(1).inserted_indices.contains(0));
+        XCTAssertEqual(called.at(1).inserted.size(), 1);
+        XCTAssertTrue(called.at(1).inserted.contains(0));
         XCTAssertEqual(called.at(1).erased.size(), 0);
         XCTAssertEqual(called.at(1).replaced_indices.size(), 0);
     }
@@ -330,8 +330,8 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 3);
         XCTAssertEqual(called.at(2).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(2).inserted_indices.size(), 1);
-        XCTAssertTrue(called.at(2).inserted_indices.contains(1));
+        XCTAssertEqual(called.at(2).inserted.size(), 1);
+        XCTAssertTrue(called.at(2).inserted.contains(1));
         XCTAssertEqual(called.at(2).erased.size(), 0);
         XCTAssertEqual(called.at(2).replaced_indices.size(), 0);
     }
@@ -345,7 +345,7 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 4);
         XCTAssertEqual(called.at(3).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(3).inserted_indices.size(), 0);
+        XCTAssertEqual(called.at(3).inserted.size(), 0);
         XCTAssertEqual(called.at(3).erased.size(), 1);
         XCTAssertEqual(called.at(3).replaced_indices.size(), 0);
     }
@@ -360,8 +360,8 @@ using namespace yas::ae::test_utils::module_content_pool;
 
         XCTAssertEqual(called.size(), 5);
         XCTAssertEqual(called.at(4).type, module_content_pool_event_type::updated);
-        XCTAssertEqual(called.at(4).inserted_indices.size(), 1);
-        XCTAssertTrue(called.at(4).inserted_indices.contains(0));
+        XCTAssertEqual(called.at(4).inserted.size(), 1);
+        XCTAssertTrue(called.at(4).inserted.contains(0));
         XCTAssertEqual(called.at(4).erased.size(), 0);
         XCTAssertEqual(called.at(4).replaced_indices.size(), 0);
     }
@@ -397,7 +397,7 @@ using namespace yas::ae::test_utils::module_content_pool;
         XCTAssertEqual(called.at(1).type, module_content_pool_event_type::updated);
         XCTAssertEqual(called.at(1).replaced_indices.size(), 1);
         XCTAssertTrue(called.at(1).replaced_indices.contains(1));
-        XCTAssertEqual(called.at(1).inserted_indices.size(), 0);
+        XCTAssertEqual(called.at(1).inserted.size(), 0);
         XCTAssertEqual(called.at(1).erased.size(), 0);
     }
 

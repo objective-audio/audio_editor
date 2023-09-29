@@ -35,7 +35,7 @@ ui_pasting_markers::ui_pasting_markers(project_lifetime_id const &project_lifeti
                     this->_replace();
                     break;
                 case pasting_marker_content_pool_event_type::updated:
-                    this->_update(event.inserted_indices, event.replaced_indices, event.erased);
+                    this->_update(event.inserted, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -67,7 +67,7 @@ void ui_pasting_markers::_replace() {
     }
 }
 
-void ui_pasting_markers::_update(std::set<std::size_t> const &inserted_indices,
+void ui_pasting_markers::_update(std::set<std::size_t> const &inserted,
                                  std::set<std::size_t> const &replaced_indices,
                                  std::map<std::size_t, pasting_marker_content> const &erased) {
     auto const &contents = this->_presenter->contents();
@@ -82,7 +82,7 @@ void ui_pasting_markers::_update(std::set<std::size_t> const &inserted_indices,
         }
     }
 
-    for (auto const &idx : inserted_indices) {
+    for (auto const &idx : inserted) {
         auto const &content = contents.at(idx).value();
         auto const &element = this->_elements.at(idx);
         element->set_content(content);

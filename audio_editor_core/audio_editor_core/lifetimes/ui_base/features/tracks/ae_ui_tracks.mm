@@ -57,7 +57,7 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
                     this->_replace_data();
                     break;
                 case track_content_pool_event_type::updated:
-                    this->_update_data(event.inserted_indices, event.replaced_indices, event.erased);
+                    this->_update_data(event.inserted, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -238,14 +238,14 @@ void ui_tracks::_update_colors() {
     });
 }
 
-void ui_tracks::_update_data(std::set<std::size_t> const &inserted_indices,
+void ui_tracks::_update_data(std::set<std::size_t> const &inserted,
                              std::set<std::size_t> const &replaced_indices,
                              std::map<std::size_t, track_content> const &erased) {
     auto const &contents = this->_presenter->contents();
 
     this->_set_rect_count(contents.size());
 
-    this->_fill_mesh_container->write_vertex_elements([&contents, &erased, &inserted_indices, &replaced_indices, this](
+    this->_fill_mesh_container->write_vertex_elements([&contents, &erased, &inserted, &replaced_indices, this](
                                                           index_range const range, vertex2d_rect *vertex_rects) {
         auto const &colliders = this->_fill_mesh_container->node->colliders();
 
@@ -266,7 +266,7 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted_indices,
         auto const selected_square_color = color->selected_track_square().v;
         auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
-        for (auto const &content_idx : inserted_indices) {
+        for (auto const &content_idx : inserted) {
             if (range.contains(content_idx)) {
                 auto const vertex_idx = content_idx - range.index;
                 auto const &value = contents.at(content_idx).value();

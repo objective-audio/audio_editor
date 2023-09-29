@@ -43,7 +43,7 @@ struct ui_module_waveforms final {
     ui_module_waveforms &operator=(ui_module_waveforms &&) = delete;
 
     void _replace_elements(bool const clear_mesh_nodes);
-    void _update_elements(std::set<std::size_t> const &inserted_indices, std::set<std::size_t> const &replaced_indices,
+    void _update_elements(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced_indices,
                           std::map<std::size_t, module_content> const &erased);
     void _resize_elements(std::size_t const);
     std::optional<ui::size> _waveform_scale() const;

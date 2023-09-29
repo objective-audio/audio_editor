@@ -60,7 +60,7 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
                     this->_replace();
                     break;
                 case pasting_module_content_pool_event_type::updated:
-                    this->_update_mesh(event.inserted_indices, event.replaced_indices, event.erased);
+                    this->_update_mesh(event.inserted, event.replaced_indices, event.erased);
                     break;
             }
         })
@@ -114,7 +114,7 @@ void ui_pasting_modules::_replace() {
     });
 }
 
-void ui_pasting_modules::_update_mesh(std::set<std::size_t> const &inserted_indices,
+void ui_pasting_modules::_update_mesh(std::set<std::size_t> const &inserted,
                                       std::set<std::size_t> const &replaced_indices,
                                       std::map<std::size_t, pasting_module_content> const &erased) {
     auto const &contents = this->_presenter->contents();
@@ -122,7 +122,7 @@ void ui_pasting_modules::_update_mesh(std::set<std::size_t> const &inserted_indi
     this->_mesh_container->set_element_count(contents.size());
 
     this->_mesh_container->write_vertex_elements(
-        [&contents, &erased, &inserted_indices](index_range const range, ui::vertex2d_rect *vertex_rects) {
+        [&contents, &erased, &inserted](index_range const range, ui::vertex2d_rect *vertex_rects) {
             for (auto const &pair : erased) {
                 auto const &content_idx = pair.first;
                 if (range.contains(content_idx)) {
@@ -131,7 +131,7 @@ void ui_pasting_modules::_update_mesh(std::set<std::size_t> const &inserted_indi
                 }
             }
 
-            for (auto const &content_idx : inserted_indices) {
+            for (auto const &content_idx : inserted) {
                 if (range.contains(content_idx)) {
                     auto const vertex_idx = content_idx - range.index;
                     auto const &content = contents.at(content_idx).value();
