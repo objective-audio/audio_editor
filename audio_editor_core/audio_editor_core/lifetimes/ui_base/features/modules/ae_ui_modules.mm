@@ -70,7 +70,7 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
                     this->_replace_data();
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_data(event.inserted, event.replaced_indices, event.erased);
+                    this->_update_data(event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -293,62 +293,61 @@ void ui_modules::_update_colors() {
     }
 }
 
-void ui_modules::_update_data(std::set<std::size_t> const &inserted,
-                              std::set<std::size_t> const &replaced_indices,
+void ui_modules::_update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                               std::map<std::size_t, module_content> const &erased) {
     auto const &contents = this->_presenter->contents();
 
     this->_set_rect_count(contents.size());
 
-    this->_fill_mesh_container->write_vertex_elements([&contents, &erased, &inserted, &replaced_indices, this](
-                                                          index_range const range, vertex2d_rect *vertex_rects) {
-        auto const &colliders = this->_fill_mesh_container->node->colliders();
+    this->_fill_mesh_container->write_vertex_elements(
+        [&contents, &erased, &inserted, &replaced, this](index_range const range, vertex2d_rect *vertex_rects) {
+            auto const &colliders = this->_fill_mesh_container->node->colliders();
 
-        for (auto const &pair : erased) {
-            auto const &content_idx = pair.first;
-            if (range.contains(content_idx)) {
-                auto const vertex_idx = content_idx - range.index;
-                vertex_rects[vertex_idx].set_position(ui::region::zero());
+            for (auto const &pair : erased) {
+                auto const &content_idx = pair.first;
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    vertex_rects[vertex_idx].set_position(ui::region::zero());
 
-                auto const &collider = colliders.at(content_idx);
-                collider->set_enabled(false);
-                collider->set_shape(nullptr);
+                    auto const &collider = colliders.at(content_idx);
+                    collider->set_enabled(false);
+                    collider->set_shape(nullptr);
+                }
             }
-        }
 
-        auto const &color = this->_color;
-        auto const normal_bg_color = color->module_bg().v;
-        auto const selected_bg_color = color->selected_module_bg().v;
-        auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
+            auto const &color = this->_color;
+            auto const normal_bg_color = color->module_bg().v;
+            auto const selected_bg_color = color->selected_module_bg().v;
+            auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
-        for (auto const &content_idx : inserted) {
-            if (range.contains(content_idx)) {
-                auto const vertex_idx = content_idx - range.index;
-                auto const &value = contents.at(content_idx).value();
-                auto const region = value.region();
+            for (auto const &content_idx : inserted) {
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    auto const &value = contents.at(content_idx).value();
+                    auto const region = value.region();
 
-                auto &rect = vertex_rects[vertex_idx];
-                rect.set_position(region);
-                rect.set_tex_coord(filled_tex_coords);
+                    auto &rect = vertex_rects[vertex_idx];
+                    rect.set_position(region);
+                    rect.set_tex_coord(filled_tex_coords);
 
-                auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
-                rect.set_color(bg_color);
+                    auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+                    rect.set_color(bg_color);
 
-                auto const &collider = colliders.at(content_idx);
-                collider->set_shape(ui::shape::make_shared({.rect = region}));
-                collider->set_enabled(true);
+                    auto const &collider = colliders.at(content_idx);
+                    collider->set_shape(ui::shape::make_shared({.rect = region}));
+                    collider->set_enabled(true);
+                }
             }
-        }
 
-        for (auto const &content_idx : replaced_indices) {
-            if (range.contains(content_idx)) {
-                auto const vertex_idx = content_idx - range.index;
-                auto const &value = contents.at(content_idx).value();
-                auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
-                vertex_rects[vertex_idx].set_color(bg_color);
+            for (auto const &content_idx : replaced) {
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    auto const &value = contents.at(content_idx).value();
+                    auto const &bg_color = value.is_selected ? selected_bg_color : normal_bg_color;
+                    vertex_rects[vertex_idx].set_color(bg_color);
+                }
             }
-        }
-    });
+        });
 
     auto const normal_name_color = this->_color->module_name();
     auto const selected_name_color = this->_color->selected_module_name();
@@ -371,7 +370,7 @@ void ui_modules::_update_data(std::set<std::size_t> const &inserted,
         strings->set_text(this->_presenter->name_for_index(content_value.index()));
     }
 
-    for (auto const &idx : replaced_indices) {
+    for (auto const &idx : replaced) {
         auto const &content_value = contents.at(idx).value();
         auto const &strings = this->_names.at(idx);
         this->_update_name_position(idx, content_value);

@@ -36,8 +36,8 @@ struct ui_markers final {
     ui_markers &operator=(ui_markers &&) = delete;
 
     void _replace_elements();
-    void _update_elements(std::map<std::size_t, marker_content> const &erased,
-                          std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced_indices);
+    void _update_elements(std::map<std::size_t, marker_content> const &erased, std::set<std::size_t> const &inserted,
+                          std::set<std::size_t> const &replaced);
     void _remake_elements_if_needed(std::size_t const);
 };
 }  // namespace yas::ae

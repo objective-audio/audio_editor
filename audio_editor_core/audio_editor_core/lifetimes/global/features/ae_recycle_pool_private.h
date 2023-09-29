@@ -102,7 +102,7 @@ void recycle_pool<Element>::update_all(std::vector<Element> const &elements, boo
         this->_fetcher->push({.type = recycle_pool_event_type::updated,
                               .elements = this->_elements,
                               .inserted = std::move(inserted_indices),
-                              .replaced_indices = std::move(replaced_indices),
+                              .replaced = std::move(replaced_indices),
                               .erased = std::move(erased)});
     }
 }
@@ -177,7 +177,7 @@ void recycle_pool<Element>::replace(Element const &element) {
 
     this->_fetcher->push({.type = recycle_pool_event_type::updated,
                           .elements = this->_elements,
-                          .replaced_indices = std::move(replaced_indices)});
+                          .replaced = std::move(replaced_indices)});
 }
 
 template <typename Element>

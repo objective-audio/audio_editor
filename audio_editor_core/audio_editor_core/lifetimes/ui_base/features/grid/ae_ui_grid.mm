@@ -59,7 +59,7 @@ ui_grid::ui_grid(std::shared_ptr<grid_presenter> const &presenter, std::shared_p
                     this->_replace_data();
                     break;
                 case module_content_pool_event_type::updated:
-                    this->_update_data(event.inserted, event.replaced_indices, event.erased);
+                    this->_update_data(event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -137,40 +137,40 @@ void ui_grid::_replace_data() {
         });
 }
 
-void ui_grid::_update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced_indices,
+void ui_grid::_update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                            std::map<std::size_t, grid_content> const &erased) {
     auto const &contents = this->_presenter->contents();
 
     this->_mesh_container->set_element_count(contents.size());
 
-    this->_mesh_container->write_vertex_elements([&contents, &erased, &inserted, &replaced_indices, this](
-                                                     index_range const range, vertex2d_line *vertex_lines) {
-        auto const &tex_coords = this->_atlas->white_filled_tex_coords();
-        auto const color = this->_color->grid_line();
+    this->_mesh_container->write_vertex_elements(
+        [&contents, &erased, &inserted, &replaced, this](index_range const range, vertex2d_line *vertex_lines) {
+            auto const &tex_coords = this->_atlas->white_filled_tex_coords();
+            auto const color = this->_color->grid_line();
 
-        for (auto const &pair : erased) {
-            auto const &content_idx = pair.first;
-            if (range.contains(content_idx)) {
-                auto const vertex_idx = content_idx - range.index;
-                vertex_lines[vertex_idx].reset_position();
+            for (auto const &pair : erased) {
+                auto const &content_idx = pair.first;
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    vertex_lines[vertex_idx].reset_position();
+                }
             }
-        }
 
-        for (auto const &content_idx : inserted) {
-            if (range.contains(content_idx)) {
-                auto const vertex_idx = content_idx - range.index;
-                auto const &value = contents.at(content_idx).value();
-                auto const x = value.x();
+            for (auto const &content_idx : inserted) {
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    auto const &value = contents.at(content_idx).value();
+                    auto const x = value.x();
 
-                auto &line = vertex_lines[vertex_idx];
-                line.set_position(ui::point{x, -0.5f}, ui::point{x, 1.0f});
-                line.set_color(color);
-                line.set_tex_coord(tex_coords.origin);
+                    auto &line = vertex_lines[vertex_idx];
+                    line.set_position(ui::point{x, -0.5f}, ui::point{x, 1.0f});
+                    line.set_color(color);
+                    line.set_tex_coord(tex_coords.origin);
+                }
             }
-        }
 
-        assert(replaced_indices.empty());
-    });
+            assert(replaced.empty());
+        });
 }
 
 // こことは別に_update_dataで部分的に色を更新しているので、変更する際は注意

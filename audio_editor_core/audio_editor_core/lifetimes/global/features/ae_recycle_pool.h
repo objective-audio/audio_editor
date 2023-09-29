@@ -22,7 +22,7 @@ struct recycle_pool_event final {
     recycle_pool_event_type type;
     std::vector<std::optional<Element>> const &elements;  // fetched, replaced, updated
     std::set<std::size_t> inserted;                       // updated
-    std::set<std::size_t> replaced_indices;               // updated
+    std::set<std::size_t> replaced;                       // updated
     std::map<std::size_t, Element> erased;                // updated
 };
 

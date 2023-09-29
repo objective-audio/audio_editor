@@ -55,7 +55,7 @@ struct ui_tracks {
     /// 全てのUI要素の色のみを更新する
     void _update_colors();
     /// UI要素を部分的に更新する
-    void _update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced_indices,
+    void _update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                       std::map<std::size_t, track_content> const &erased);
     void _set_rect_count(std::size_t const rect_count);
 };

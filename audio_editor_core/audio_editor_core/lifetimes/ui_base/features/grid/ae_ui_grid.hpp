@@ -44,7 +44,7 @@ struct ui_grid final {
 
     void _update_lines_scale();
     void _replace_data();
-    void _update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced_indices,
+    void _update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                       std::map<std::size_t, grid_content> const &erased);
     void _update_colors();
     void _update_tex_coords(ui::uint_region const &tex_coords);

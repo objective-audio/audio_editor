@@ -60,7 +60,7 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
                     this->_replace();
                     break;
                 case pasting_module_content_pool_event_type::updated:
-                    this->_update_mesh(event.inserted, event.replaced_indices, event.erased);
+                    this->_update_mesh(event.inserted, event.replaced, event.erased);
                     break;
             }
         })
@@ -114,8 +114,7 @@ void ui_pasting_modules::_replace() {
     });
 }
 
-void ui_pasting_modules::_update_mesh(std::set<std::size_t> const &inserted,
-                                      std::set<std::size_t> const &replaced_indices,
+void ui_pasting_modules::_update_mesh(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                                       std::map<std::size_t, pasting_module_content> const &erased) {
     auto const &contents = this->_presenter->contents();
 
