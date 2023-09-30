@@ -40,6 +40,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     root_node->add_sub_node(this->base_node);
 
     this->base_node->add_sub_node(this->range_selection_input_node);
+    this->base_node->add_sub_node(this->scroller_nodes.back_x_fixed);
     this->base_node->add_sub_node(this->scroller_nodes.back_y_fixed);
     this->base_node->add_sub_node(this->scroller_nodes.modules);
     this->base_node->add_sub_node(this->scroller_nodes.front_y_fixed);
@@ -50,6 +51,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     this->base_node->add_sub_node(this->modal_bg_node);
     this->base_node->add_sub_node(this->time_base_node);
 
+    this->scroller_nodes.back_x_fixed->add_sub_node(this->tracks_bg_node);
     this->scroller_nodes.back_y_fixed->add_sub_node(this->grid_node);
     this->scroller_nodes.modules->add_sub_node(this->modules_node);
     this->scroller_nodes.modules->add_sub_node(this->range_selection_node);

@@ -46,7 +46,7 @@ ui_scroller::ui_scroller(std::shared_ptr<ui::standard> const &standard, ui_scrol
             this->_front_y_fixed_node->set_position(y_fixed_position);
 
             ui::point const x_fixed_position{0.0f, y};
-            this->_back_x_fixed_node->set_position(y_fixed_position);
+            this->_back_x_fixed_node->set_position(x_fixed_position);
             this->_front_x_fixed_node->set_position(x_fixed_position);
         })
         .end()
