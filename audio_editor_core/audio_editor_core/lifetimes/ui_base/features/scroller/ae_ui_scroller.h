@@ -27,7 +27,7 @@ struct ui_scroller final {
    private:
     std::shared_ptr<scroller_presenter> const _presenter;
     std::shared_ptr<scroll_gesture_controller> const _scroll_gesture_controller;
-    ui::node *const _back_node;
+    ui::node *const _back_y_fixed_node;
     ui::node *const _modules_node;
     ui::node *const _front_y_fixed_node;
     ui::node *const _front_x_fixed_node;
