@@ -67,6 +67,6 @@ struct ui_modules final {
 
     void _set_rect_count(std::size_t const rect_count);
     void _update_all_name_positions();
-    void _update_name_position(std::size_t const idx, ae::module_content const &);
+    void _update_name_position(std::size_t const content_idx, ae::module_content const &);
 };
 }  // namespace yas::ae
