@@ -16,7 +16,8 @@ std::shared_ptr<ui_node_hierarchy> ui_node_hierarchy::make_shared(project_lifeti
 ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     : base_node(ui::node::make_shared()),
       range_selection_input_node(ui::node::make_shared()),
-      scroller_nodes({.back_y_fixed = ui::node::make_shared(),
+      scroller_nodes({.back_x_fixed = ui::node::make_shared(),
+                      .back_y_fixed = ui::node::make_shared(),
                       .modules = ui::node::make_shared(),
                       .front_y_fixed = ui::node::make_shared(),
                       .front_x_fixed = ui::node::make_shared()}),
@@ -25,6 +26,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
       playing_line_node(ui::node::make_shared()),
       modal_bg_node(ui::node::make_shared()),
       time_base_node(ui::node::make_shared()),
+      tracks_bg_node(ui::node::make_shared()),
       grid_node(ui::node::make_shared()),
       modules_node(ui::node::make_shared()),
       range_selection_node(ui::node::make_shared()),
