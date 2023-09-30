@@ -233,15 +233,15 @@ void ui_modules::_replace_data() {
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &content = contents.at(idx);
-        auto const &strings = this->_names.at(idx);
+        auto const &content_idx = yas_each_index(each);
+        auto const &content = contents.at(content_idx);
+        auto const &strings = this->_names.at(content_idx);
         auto const &node = strings->rect_plane()->node();
 
         if (content.has_value()) {
             auto const &content_value = content.value();
             node->set_is_enabled(true);
-            this->_update_name_position(idx, content.value());
+            this->_update_name_position(content_idx, content.value());
             strings->set_text(this->_presenter->name_for_index(content_value.index()));
         } else {
             node->set_is_enabled(false);
@@ -282,11 +282,11 @@ void ui_modules::_update_colors() {
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &content = contents.at(idx);
+        auto const &content_idx = yas_each_index(each);
+        auto const &content = contents.at(content_idx);
 
         if (content.has_value()) {
-            auto const &name = this->_names.at(idx);
+            auto const &name = this->_names.at(content_idx);
             auto const &name_color = content.value().is_selected ? selected_name_color : normal_name_color;
             name->rect_plane()->node()->set_color(name_color);
         }
@@ -353,29 +353,29 @@ void ui_modules::_update_data(std::set<std::size_t> const &inserted, std::set<st
     auto const selected_name_color = this->_color->selected_module_name();
 
     for (auto const &pair : erased) {
-        auto const &idx = pair.first;
-        auto const &strings = this->_names.at(idx);
+        auto const &content_idx = pair.first;
+        auto const &strings = this->_names.at(content_idx);
         auto const &node = strings->rect_plane()->node();
         node->set_is_enabled(false);
     }
 
-    for (auto const &idx : inserted) {
-        auto const &content_value = contents.at(idx).value();
-        auto const &strings = this->_names.at(idx);
+    for (auto const &content_idx : inserted) {
+        auto const &content_value = contents.at(content_idx).value();
+        auto const &strings = this->_names.at(content_idx);
         auto const &node = strings->rect_plane()->node();
         node->set_is_enabled(true);
-        this->_update_name_position(idx, content_value);
+        this->_update_name_position(content_idx, content_value);
         auto const &name_color = content_value.is_selected ? selected_name_color : normal_name_color;
-        this->_names.at(idx)->rect_plane()->node()->set_color(name_color);
+        this->_names.at(content_idx)->rect_plane()->node()->set_color(name_color);
         strings->set_text(this->_presenter->name_for_index(content_value.index()));
     }
 
-    for (auto const &idx : replaced) {
-        auto const &content_value = contents.at(idx).value();
-        auto const &strings = this->_names.at(idx);
-        this->_update_name_position(idx, content_value);
+    for (auto const &content_idx : replaced) {
+        auto const &content_value = contents.at(content_idx).value();
+        auto const &strings = this->_names.at(content_idx);
+        this->_update_name_position(content_idx, content_value);
         auto const &name_color = content_value.is_selected ? selected_name_color : normal_name_color;
-        this->_names.at(idx)->rect_plane()->node()->set_color(name_color);
+        this->_names.at(content_idx)->rect_plane()->node()->set_color(name_color);
         strings->set_text(this->_presenter->name_for_index(content_value.index()));
     }
 }
@@ -412,17 +412,17 @@ void ui_modules::_update_all_name_positions() {
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &content = contents.at(idx);
+        auto const &content_idx = yas_each_index(each);
+        auto const &content = contents.at(content_idx);
 
         if (content.has_value()) {
-            this->_update_name_position(idx, content.value());
+            this->_update_name_position(content_idx, content.value());
         }
     }
 }
 
-void ui_modules::_update_name_position(std::size_t const idx, ae::module_content const &content) {
-    auto const &strings = this->_names.at(idx);
+void ui_modules::_update_name_position(std::size_t const content_idx, ae::module_content const &content) {
+    auto const &strings = this->_names.at(content_idx);
     auto const region = content.region();
 
     strings->preferred_layout_guide()->set_region(

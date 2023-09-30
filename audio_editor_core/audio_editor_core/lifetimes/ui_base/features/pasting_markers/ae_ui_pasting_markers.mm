@@ -55,9 +55,9 @@ void ui_pasting_markers::_replace() {
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &content = contents.at(idx);
-        auto const &element = this->_elements.at(idx);
+        auto const &content_idx = yas_each_index(each);
+        auto const &content = contents.at(content_idx);
+        auto const &element = this->_elements.at(content_idx);
         if (content.has_value()) {
             auto const &content_value = content.value();
             element->set_content(content_value);
@@ -75,21 +75,21 @@ void ui_pasting_markers::_update(std::set<std::size_t> const &inserted, std::set
     this->_set_count(count);
 
     for (auto const &pair : erased) {
-        auto const &idx = pair.first;
-        if (idx < count) {
-            this->_elements.at(idx)->reset_content();
+        auto const &content_idx = pair.first;
+        if (content_idx < count) {
+            this->_elements.at(content_idx)->reset_content();
         }
     }
 
-    for (auto const &idx : inserted) {
-        auto const &content = contents.at(idx).value();
-        auto const &element = this->_elements.at(idx);
+    for (auto const &content_idx : inserted) {
+        auto const &content = contents.at(content_idx).value();
+        auto const &element = this->_elements.at(content_idx);
         element->set_content(content);
     }
 
-    for (auto const &idx : replaced) {
-        auto const &content = contents.at(idx).value();
-        auto const &element = this->_elements.at(idx);
+    for (auto const &content_idx : replaced) {
+        auto const &content = contents.at(content_idx).value();
+        auto const &element = this->_elements.at(content_idx);
         element->update_content(content);
     }
 }

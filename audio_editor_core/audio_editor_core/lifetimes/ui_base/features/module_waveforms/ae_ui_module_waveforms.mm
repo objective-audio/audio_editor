@@ -183,9 +183,9 @@ void ui_module_waveforms::_replace_elements(bool const clear_meshes) {
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &content = contents.at(idx);
-        auto &element = this->_elements.at(idx);
+        auto const &content_idx = yas_each_index(each);
+        auto const &content = contents.at(content_idx);
+        auto &element = this->_elements.at(content_idx);
 
         if (clear_meshes) {
             element->clear();
@@ -196,7 +196,7 @@ void ui_module_waveforms::_replace_elements(bool const clear_meshes) {
             auto const region = content_value.region();
             element->node->set_is_enabled(true);
             element->node->set_position({.x = region.origin.x * content_value.scale.width, .y = region.center().y});
-            this->_presenter->import(idx, content.value());
+            this->_presenter->import(content_idx, content.value());
         } else {
             element->node->set_is_enabled(false);
         }
@@ -216,11 +216,11 @@ void ui_module_waveforms::_update_elements(std::set<std::size_t> const &inserted
     this->_resize_elements(contents.size());
 
     for (auto const &pair : erased) {
-        auto const &idx = pair.first;
+        auto const &content_idx = pair.first;
         auto const &content = pair.second;
 
-        if (idx < this->_elements.size()) {
-            auto &element = this->_elements.at(idx);
+        if (content_idx < this->_elements.size()) {
+            auto &element = this->_elements.at(content_idx);
             element->clear();
             element->node->set_is_enabled(false);
         }
@@ -231,30 +231,30 @@ void ui_module_waveforms::_update_elements(std::set<std::size_t> const &inserted
     auto const normal_color = this->_color->waveform();
     auto const selected_color = this->_color->selected_waveform();
 
-    for (auto const &idx : replaced) {
-        if (idx < this->_elements.size() && idx < contents.size()) {
-            auto const &content = contents.at(idx).value();
+    for (auto const &content_idx : replaced) {
+        if (content_idx < this->_elements.size() && content_idx < contents.size()) {
+            auto const &content = contents.at(content_idx).value();
             auto const region = content.region();
-            auto &element = this->_elements.at(idx);
+            auto &element = this->_elements.at(content_idx);
             element->node->set_is_enabled(true);
             element->node->set_position({.x = region.origin.x * content.scale.width, .y = region.center().y});
             auto const &color = content.is_selected ? selected_color : normal_color;
             element->update_colors(color);
-            this->_presenter->import(idx, content);
+            this->_presenter->import(content_idx, content);
         }
     }
 
-    for (auto const &idx : inserted) {
-        if (idx < this->_elements.size()) {
-            auto const &content = contents.at(idx).value();
+    for (auto const &content_idx : inserted) {
+        if (content_idx < this->_elements.size()) {
+            auto const &content = contents.at(content_idx).value();
             auto const region = content.region();
-            auto &element = this->_elements.at(idx);
+            auto &element = this->_elements.at(content_idx);
             element->clear();
             element->node->set_is_enabled(true);
             element->node->set_position({.x = region.origin.x * content.scale.width, .y = region.center().y});
             auto const &color = content.is_selected ? selected_color : normal_color;
             element->update_colors(color);
-            this->_presenter->import(idx, content);
+            this->_presenter->import(content_idx, content);
         }
     }
 }
@@ -313,9 +313,9 @@ void ui_module_waveforms::_update_all_colors() {
 
     auto each = make_fast_each(contents_size);
     while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const &content = contents.at(idx);
-        auto const &element = elements.at(idx);
+        auto const &content_idx = yas_each_index(each);
+        auto const &content = contents.at(content_idx);
+        auto const &element = elements.at(content_idx);
 
         if (content.has_value()) {
             auto const &color = content.value().is_selected ? selected_color : normal_color;
