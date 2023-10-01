@@ -47,6 +47,8 @@ using namespace yas::ae;
 
     XCTAssertNoThrow(color->track_square());
     XCTAssertNoThrow(color->selected_track_square());
+    XCTAssertNoThrow(color->track_bg());
+    XCTAssertNoThrow(color->selected_track_bg());
 
     XCTAssertNoThrow(color->modal_bg());
 
