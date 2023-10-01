@@ -31,7 +31,7 @@ struct ui_node_hierarchy final {
     std::shared_ptr<ui::node> const range_selection_node;
     std::shared_ptr<ui::node> const edge_node;
     std::shared_ptr<ui::node> const markers_node;
-    std::shared_ptr<ui::node> const tracks_node;
+    std::shared_ptr<ui::node> const tracks_front_node;
 
     // time
     std::shared_ptr<ui::node> const time_bg_node;

@@ -32,7 +32,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
       range_selection_node(ui::node::make_shared()),
       edge_node(ui::node::make_shared()),
       markers_node(ui::node::make_shared()),
-      tracks_node(ui::node::make_shared()),
+      tracks_front_node(ui::node::make_shared()),
       time_bg_node(ui::node::make_shared()),
       time_buttons_node(ui::node::make_shared()),
       time_nudge_node(ui::node::make_shared()),
@@ -55,7 +55,7 @@ ui_node_hierarchy::ui_node_hierarchy(std::shared_ptr<ui::node> const &root_node)
     this->scroller_nodes.modules->add_sub_node(this->range_selection_node);
     this->scroller_nodes.front_y_fixed->add_sub_node(this->edge_node);
     this->scroller_nodes.front_y_fixed->add_sub_node(this->markers_node);
-    this->scroller_nodes.front_x_fixed->add_sub_node(this->tracks_node);
+    this->scroller_nodes.front_x_fixed->add_sub_node(this->tracks_front_node);
 
     this->time_base_node->add_sub_node(this->time_bg_node);
     this->time_base_node->add_sub_node(this->time_buttons_node);
