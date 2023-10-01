@@ -44,6 +44,8 @@ struct color final {
 
     [[nodiscard]] ui::color track_square() const;
     [[nodiscard]] ui::color selected_track_square() const;
+    [[nodiscard]] ui::color track_bg() const;
+    [[nodiscard]] ui::color selected_track_bg() const;
 
     [[nodiscard]] ui::color modal_bg() const;
 

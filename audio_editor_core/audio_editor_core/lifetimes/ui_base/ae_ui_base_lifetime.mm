@@ -29,6 +29,7 @@
 #include <audio_editor_core/ae_ui_time_nudge.hpp>
 #include <audio_editor_core/ae_ui_time_numbers.hpp>
 #include <audio_editor_core/ae_ui_tracks.hpp>
+#include <audio_editor_core/ae_ui_tracks_bg.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -47,9 +48,10 @@ ui_base_lifetime::ui_base_lifetime(ae::project_lifetime_id const &lifetime_id)
       edge(ui_edge::make_shared(lifetime_id, this->node_hierarchy->edge_node)),
       markers(ui_markers::make_shared(lifetime_id, this->node_hierarchy->markers_node)),
       pasting_markers(ui_pasting_markers::make_shared(lifetime_id, this->node_hierarchy->pasting_markers_node)),
-      tracks(ui_tracks::make_shared(lifetime_id, this->node_hierarchy->tracks_node.get())),
+      tracks(ui_tracks::make_shared(lifetime_id, this->node_hierarchy->tracks_front_node.get())),
+      tracks_bg(ui_tracks_bg::make_shared(lifetime_id, this->node_hierarchy->tracks_bg_node.get())),
       zooming(ui_zooming::make_shared(lifetime_id, this->modules.get(), this->pasting_modules.get(), this->grid.get(),
-                                      this->tracks.get())),
+                                      this->tracks.get(), this->tracks_bg.get())),
       scroller(ui_scroller::make_shared(lifetime_id, this->node_hierarchy->scroller_nodes)),
       modal_bg(ui_modal_bg::make_shared(lifetime_id, this->node_hierarchy->modal_bg_node)),
       time_base(ui_time_base::make_shared(lifetime_id, this->node_hierarchy->time_base_node)),
