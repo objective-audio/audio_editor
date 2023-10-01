@@ -169,5 +169,5 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
           this->marker_renaming_opener.get(), this->settings_opener.get(), this->timing.get(),
           this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
           this->module_selector.get(), this->marker_selector.get(), this->track_selector.get(), this->escaper.get(),
-          this->pasteboard.get())) {
+          this->pasteboard.get(), project_lifetime->vertical_scrolling.get())) {
 }

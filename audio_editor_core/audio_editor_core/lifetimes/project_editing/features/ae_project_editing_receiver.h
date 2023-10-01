@@ -29,13 +29,14 @@ class marker_selector;
 class track_selector;
 class escaper;
 class pasteboard;
+class vertical_scrolling;
 
 struct project_editing_receiver final : action_receivable {
     project_editing_receiver(project_lifetime_id const &, database *, module_editor *, playing_toggler *, nudging *,
                              nudger *, jumper *, edge_editor *, time_editing_opener *, marker_editor *,
                              module_renaming_opener *, marker_renaming_opener *, project_settings_opener *, timing *,
                              import_interactor *, export_interactor *, reverter *, module_selector *, marker_selector *,
-                             track_selector *, escaper *, pasteboard *);
+                             track_selector *, escaper *, pasteboard *, vertical_scrolling *);
 
    private:
     project_lifetime_id const _project_lifetime_id;
@@ -60,6 +61,7 @@ struct project_editing_receiver final : action_receivable {
     track_selector *const _track_selector;
     escaper *const _escaper;
     pasteboard *const _pasteboard;
+    vertical_scrolling *const _vertical_scrolling;
 
     project_editing_receiver(project_editing_receiver const &) = delete;
     project_editing_receiver(project_editing_receiver &&) = delete;

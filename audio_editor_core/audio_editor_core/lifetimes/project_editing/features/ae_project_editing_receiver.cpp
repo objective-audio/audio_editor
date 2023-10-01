@@ -27,6 +27,7 @@
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_project_settings_opener.hpp>
 #include <audio_editor_core/ae_track_selector.hpp>
+#include <audio_editor_core/ae_vertical_scrolling.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -38,7 +39,8 @@ project_editing_receiver::project_editing_receiver(
     module_renaming_opener *module_renaming_opener, marker_renaming_opener *marker_renaming_opener,
     project_settings_opener *settings_opener, timing *timing, import_interactor *import_interactor,
     export_interactor *export_interactor, reverter *reverter, module_selector *module_selector,
-    marker_selector *marker_selector, track_selector *track_selector, escaper *escaper, pasteboard *pasteboard)
+    marker_selector *marker_selector, track_selector *track_selector, escaper *escaper, pasteboard *pasteboard,
+    vertical_scrolling *vertical_scrolling)
     : _project_lifetime_id(project_lifetime_id),
       _database(database),
       _module_editor(module_editor),
@@ -60,7 +62,8 @@ project_editing_receiver::project_editing_receiver(
       _marker_selector(marker_selector),
       _track_selector(track_selector),
       _escaper(escaper),
-      _pasteboard(pasteboard) {
+      _pasteboard(pasteboard),
+      _vertical_scrolling(vertical_scrolling) {
 }
 
 std::optional<action_id> project_editing_receiver::receivable_id() const {
@@ -119,6 +122,10 @@ std::optional<ae::action> project_editing_receiver::to_action(ae::key const &key
             return action{editing_action_name::go_to_marker, 7};
         case key::num_9:
             return action{editing_action_name::go_to_marker, 8};
+        case key::up:
+            return action{editing_action_name::move_to_next_track};
+        case key::down:
+            return action{editing_action_name::move_to_previous_track};
         case key::esc:
             return action{editing_action_name::escape};
 
@@ -127,8 +134,6 @@ std::optional<ae::action> project_editing_receiver::to_action(ae::key const &key
         case key::ret:
         case key::tab:
         case key::shift_tab:
-        case key::up:
-        case key::down:
             return std::nullopt;
     }
 }
@@ -292,6 +297,13 @@ void project_editing_receiver::receive(ae::action const &action) const {
                             case editing_action_name::open_project_settings:
                                 this->_settings_opener->open();
                                 break;
+
+                            case editing_action_name::move_to_next_track:
+                                this->_vertical_scrolling->move_to_next_track(1);
+                                break;
+                            case editing_action_name::move_to_previous_track:
+                                this->_vertical_scrolling->move_to_previous_track(1);
+                                break;
                         }
                     });
                 } break;
@@ -419,6 +431,10 @@ action_receivable_state project_editing_receiver::receivable_state(ae::action co
 
                 case editing_action_name::open_project_settings:
                     return to_state(this->_settings_opener->can_open());
+
+                case editing_action_name::move_to_next_track:
+                case editing_action_name::move_to_previous_track:
+                    return to_state(true);
             }
         }
 
