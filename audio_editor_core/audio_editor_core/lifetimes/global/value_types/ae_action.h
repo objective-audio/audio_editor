@@ -65,6 +65,8 @@ enum class editing_action_name {
     open_project_settings,
     move_to_previous_track,
     move_to_next_track,
+    move_to_previous_track_more,
+    move_to_next_track_more,
     escape,
 };
 

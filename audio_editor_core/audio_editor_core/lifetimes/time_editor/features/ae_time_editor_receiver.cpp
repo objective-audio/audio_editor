@@ -78,6 +78,8 @@ std::optional<ae::action> time_editor_receiver::to_action(ae::key const &key) co
         case key::right_bracket:
         case key::shift_left:
         case key::shift_right:
+        case key::shift_up:
+        case key::shift_down:
             return std::nullopt;
     }
 }

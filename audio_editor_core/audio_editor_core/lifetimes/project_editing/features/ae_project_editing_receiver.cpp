@@ -126,6 +126,10 @@ std::optional<ae::action> project_editing_receiver::to_action(ae::key const &key
             return action{editing_action_name::move_to_next_track};
         case key::down:
             return action{editing_action_name::move_to_previous_track};
+        case key::shift_up:
+            return action{editing_action_name::move_to_next_track_more};
+        case key::shift_down:
+            return action{editing_action_name::move_to_previous_track_more};
         case key::esc:
             return action{editing_action_name::escape};
 
@@ -304,6 +308,12 @@ void project_editing_receiver::receive(ae::action const &action) const {
                             case editing_action_name::move_to_previous_track:
                                 this->_vertical_scrolling->move_to_previous_track(1);
                                 break;
+                            case editing_action_name::move_to_next_track_more:
+                                this->_vertical_scrolling->move_to_next_track(10);
+                                break;
+                            case editing_action_name::move_to_previous_track_more:
+                                this->_vertical_scrolling->move_to_previous_track(10);
+                                break;
                         }
                     });
                 } break;
@@ -434,6 +444,8 @@ action_receivable_state project_editing_receiver::receivable_state(ae::action co
 
                 case editing_action_name::move_to_next_track:
                 case editing_action_name::move_to_previous_track:
+                case editing_action_name::move_to_next_track_more:
+                case editing_action_name::move_to_previous_track_more:
                     return to_state(true);
             }
         }

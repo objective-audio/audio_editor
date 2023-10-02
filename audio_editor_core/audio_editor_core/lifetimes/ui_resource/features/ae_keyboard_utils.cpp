@@ -108,6 +108,10 @@ std::optional<key> keyboard_utils::to_key(ui::key_event const &event,
             return key::shift_left;
         } else if (key_code == 124) {
             return key::shift_right;
+        } else if (key_code == 125) {
+            return key::shift_down;
+        } else if (key_code == 126) {
+            return key::shift_up;
         }
     }
 
