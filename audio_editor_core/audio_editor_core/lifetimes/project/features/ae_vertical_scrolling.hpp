@@ -23,6 +23,9 @@ struct vertical_scrolling final : scrolling_for_track_selector {
     void end();
     [[nodiscard]] bool is_began() const;
 
+    void move_to_previous_track(track_index_t const offset);
+    void move_to_next_track(track_index_t const offset);
+
    private:
     observing::value::holder_ptr<double> const _position;
 

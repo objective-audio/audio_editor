@@ -63,6 +63,10 @@ enum class editing_action_name {
     toggle_track_selection,
     begin_time_editing,
     open_project_settings,
+    move_to_previous_track,
+    move_to_next_track,
+    move_to_previous_track_more,
+    move_to_next_track_more,
     escape,
 };
 
