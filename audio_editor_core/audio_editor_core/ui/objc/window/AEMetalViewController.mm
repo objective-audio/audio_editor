@@ -164,6 +164,18 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)jumpToTrackBeginning:(NSMenuItem *)sender {
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(editing_action_name::jump_to_track_beginning);
+    }
+}
+
+- (IBAction)jumpToTrackEnd:(NSMenuItem *)sender {
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(editing_action_name::jump_to_track_end);
+    }
+}
+
 - (IBAction)insertMarker:(NSMenuItem *)sender {
     if (auto const action_sender = self->_action_sender.lock()) {
         action_sender->send(editing_action_name::insert_marker);
@@ -248,6 +260,10 @@ using namespace yas::ae;
         return editing_action_name::jump_to_beginning;
     } else if (selector == @selector(jumpToEnd:)) {
         return editing_action_name::jump_to_end;
+    } else if (selector == @selector(jumpToTrackBeginning:)) {
+        return editing_action_name::jump_to_track_beginning;
+    } else if (selector == @selector(jumpToTrackEnd:)) {
+        return editing_action_name::jump_to_track_end;
     } else if (selector == @selector(insertMarker:)) {
         return editing_action_name::insert_marker;
     } else if (selector == @selector(returnToZero:)) {

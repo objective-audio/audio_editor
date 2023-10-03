@@ -29,6 +29,8 @@
 		B6132D002A34672E00E81E3A /* ae_track_selector_dependencies.h in Headers */ = {isa = PBXBuildFile; fileRef = B6132CFF2A3466E800E81E3A /* ae_track_selector_dependencies.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6137F6C27C7B23C0097A3C6 /* ae_project_editing_lifetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6137F6A27C7B23C0097A3C6 /* ae_project_editing_lifetime.cpp */; };
 		B6137F6D27C7B23C0097A3C6 /* ae_project_editing_lifetime.h in Headers */ = {isa = PBXBuildFile; fileRef = B6137F6B27C7B23C0097A3C6 /* ae_project_editing_lifetime.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B61441AB2ACC57390084F8DA /* ae_track_jumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61441A92ACC57390084F8DA /* ae_track_jumper.cpp */; };
+		B61441AC2ACC57390084F8DA /* ae_track_jumper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B61441AA2ACC57390084F8DA /* ae_track_jumper.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6169835286707AC00DD87AF /* ae_action_sender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6169833286707AC00DD87AF /* ae_action_sender.cpp */; };
 		B6169836286707AC00DD87AF /* ae_action_sender.h in Headers */ = {isa = PBXBuildFile; fileRef = B6169834286707AC00DD87AF /* ae_action_sender.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B616983A2867085A00DD87AF /* ae_action_receivable.h in Headers */ = {isa = PBXBuildFile; fileRef = B61698382867085A00DD87AF /* ae_action_receivable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -595,6 +597,8 @@
 		B6132CFF2A3466E800E81E3A /* ae_track_selector_dependencies.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_track_selector_dependencies.h; sourceTree = "<group>"; };
 		B6137F6A27C7B23C0097A3C6 /* ae_project_editing_lifetime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_editing_lifetime.cpp; sourceTree = "<group>"; };
 		B6137F6B27C7B23C0097A3C6 /* ae_project_editing_lifetime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_editing_lifetime.h; sourceTree = "<group>"; };
+		B61441A92ACC57390084F8DA /* ae_track_jumper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_track_jumper.cpp; sourceTree = "<group>"; };
+		B61441AA2ACC57390084F8DA /* ae_track_jumper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_track_jumper.hpp; sourceTree = "<group>"; };
 		B6169833286707AC00DD87AF /* ae_action_sender.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_action_sender.cpp; sourceTree = "<group>"; };
 		B6169834286707AC00DD87AF /* ae_action_sender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_action_sender.h; sourceTree = "<group>"; };
 		B61698382867085A00DD87AF /* ae_action_receivable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_action_receivable.h; sourceTree = "<group>"; };
@@ -2288,6 +2292,8 @@
 				B69E47712828C22D002F2AFF /* ae_jumper_dependency.h */,
 				B69ED0C62824D6E400AC9AB1 /* ae_jumper.cpp */,
 				B69ED0C72824D6E400AC9AB1 /* ae_jumper.h */,
+				B61441A92ACC57390084F8DA /* ae_track_jumper.cpp */,
+				B61441AA2ACC57390084F8DA /* ae_track_jumper.hpp */,
 				B6C3D6302825F31E00A8FCFE /* ae_time_editing_opener.cpp */,
 				B6C3D6312825F31E00A8FCFE /* ae_time_editing_opener.h */,
 				B6F3832A29F4E31200A8E143 /* ae_project_settings_opener.cpp */,
@@ -2840,6 +2846,7 @@
 				B677A7EA2A05D7DE008D1FE3 /* ae_app_settings_opener.hpp in Headers */,
 				B6DC2CC627B654AA000EF5F9 /* ae_edge_presenter_dependency.h in Headers */,
 				B64504AE2719C4D9009E05D6 /* ae_module_content.h in Headers */,
+				B61441AC2ACC57390084F8DA /* ae_track_jumper.hpp in Headers */,
 				B661269A28549A5E00E66214 /* ae_project_sub_lifetime.h in Headers */,
 				B69E11182A01F240006A4915 /* ae_app_settings_lifecycle.hpp in Headers */,
 				B6E923A5296B9CF900AFD754 /* ae_ui_framed_square.hpp in Headers */,
@@ -3127,6 +3134,7 @@
 				B6A55ECC266C81980039E56F /* ae_ui_layout_utils.cpp in Sources */,
 				B63561CC28A63CA100A7AD28 /* ae_ui_playing_line.mm in Sources */,
 				B69E11032A014A3C006A4915 /* AppSettingsPresenterObjc.mm in Sources */,
+				B61441AB2ACC57390084F8DA /* ae_track_jumper.cpp in Sources */,
 				B637D583289EB0B1007E30A1 /* ae_ui_resource_lifecycle.mm in Sources */,
 				B66B796D2A8DF23600D3653F /* ae_display_space_range.cpp in Sources */,
 				B69E110B2A014B00006A4915 /* AppSettingsHostingController.swift in Sources */,

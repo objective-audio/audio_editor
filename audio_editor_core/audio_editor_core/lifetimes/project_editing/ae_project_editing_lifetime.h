@@ -65,6 +65,7 @@ class display_space_track_range;
 class display_space_range;
 class track_selector;
 class selector_enabler;
+class track_jumper;
 
 struct project_editing_lifetime final {
     [[nodiscard]] static std::shared_ptr<project_editing_lifetime> make_shared(project_lifetime_id const &);
@@ -124,6 +125,7 @@ struct project_editing_lifetime final {
     std::shared_ptr<display_space_time_range> const display_space_time_range;
     std::shared_ptr<display_space_track_range> const display_space_track_range;
     std::shared_ptr<display_space_range> const display_space_range;
+    std::shared_ptr<track_jumper> const track_jumper;
     std::shared_ptr<escaper> const escaper;
     std::shared_ptr<project_editing_receiver> const receiver;
 

@@ -35,6 +35,8 @@ struct module_pool final : jumpable_on_jumper {
     [[nodiscard]] std::optional<frame_index_t> last_next_frame() const;
     [[nodiscard]] std::optional<frame_index_t> next_jumpable_frame(frame_index_t const) const override;
     [[nodiscard]] std::optional<frame_index_t> previous_jumpable_frame(frame_index_t const) const override;
+    [[nodiscard]] std::optional<track_index_t> first_track() const;
+    [[nodiscard]] std::optional<track_index_t> last_track() const;
 
     void split_at(std::set<track_index_t> const &, frame_index_t const);
     void split(selected_module_set const &, frame_index_t const);

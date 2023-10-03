@@ -113,6 +113,40 @@ std::optional<frame_index_t> module_pool::previous_jumpable_frame(frame_index_t 
     return module_pool_utils::previous_jumpable_frame(this->_modules, frame);
 }
 
+std::optional<track_index_t> module_pool::first_track() const {
+    std::optional<track_index_t> result = std::nullopt;
+
+    for (auto const &pair : this->_modules) {
+        auto const &track = pair.first.track;
+        if (result.has_value()) {
+            if (track < result.value()) {
+                result = track;
+            }
+        } else {
+            result = track;
+        }
+    }
+
+    return result;
+}
+
+std::optional<track_index_t> module_pool::last_track() const {
+    std::optional<track_index_t> result = std::nullopt;
+
+    for (auto const &pair : this->_modules) {
+        auto const &track = pair.first.track;
+        if (result.has_value()) {
+            if (result.value() < track) {
+                result = track;
+            }
+        } else {
+            result = track;
+        }
+    }
+
+    return result;
+}
+
 void module_pool::split_at(std::set<track_index_t> const &tracks, frame_index_t const frame) {
     auto const modules = this->splittable_modules_at(tracks, frame);
     this->_split_modules(modules, frame);
