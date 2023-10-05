@@ -139,7 +139,7 @@ ui_marker_element::ui_marker_element(
 void ui_marker_element::set_content(marker_content const &content) {
     this->_content = content;
     this->_node->set_is_enabled(true);
-    this->_node->set_position({content.x, this->_node->position().y});
+    this->_node->set_x(content.x);
     this->_update_name();
     this->_update_color();
 }
@@ -147,7 +147,7 @@ void ui_marker_element::set_content(marker_content const &content) {
 void ui_marker_element::update_content(marker_content const &content) {
     if (this->_content.has_value() && this->_content.value().identifier == content.identifier) {
         this->_content = content;
-        this->_node->set_position({content.x, this->_node->position().y});
+        this->_node->set_x(content.x);
         this->_update_name();
         this->_update_color();
     } else {

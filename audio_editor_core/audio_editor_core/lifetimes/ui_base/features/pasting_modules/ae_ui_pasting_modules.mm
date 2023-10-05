@@ -142,6 +142,5 @@ void ui_pasting_modules::_update_mesh(std::set<std::size_t> const &inserted, std
 }
 
 void ui_pasting_modules::_update_y_offset() {
-    this->_mesh_container->node->set_position(
-        ui::point{.x = 0.0f, .y = static_cast<float>(this->_presenter->y_offset())});
+    this->_mesh_container->node->set_y(static_cast<float>(this->_presenter->y_offset()));
 }
