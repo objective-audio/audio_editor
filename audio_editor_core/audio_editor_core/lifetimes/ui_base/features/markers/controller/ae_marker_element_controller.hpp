@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <audio_editor_core/ae_marker_content_pool.h>
 #include <audio_editor_core/ae_project_lifetime_id.h>
+#include <ui/yas_ui_types.h>
 
 #include <audio_editor_core/ae_marker_index.hpp>
 
