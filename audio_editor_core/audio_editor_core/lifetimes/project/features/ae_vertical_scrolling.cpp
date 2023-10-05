@@ -53,14 +53,18 @@ bool vertical_scrolling::is_began() const {
     return this->_is_began;
 }
 
+void vertical_scrolling::move_to_track(track_index_t const track) {
+    this->end();
+
+    this->_position->set_value(track);
+}
+
 void vertical_scrolling::move_to_previous_track(track_index_t const offset) {
     if (offset <= 0) {
         throw std::underflow_error("offset is less than 1.");
     }
 
-    this->end();
-
-    this->_position->set_value(static_cast<double>(this->track() - offset));
+    this->move_to_track(this->track() - offset);
 }
 
 void vertical_scrolling::move_to_next_track(track_index_t const offset) {
@@ -68,7 +72,5 @@ void vertical_scrolling::move_to_next_track(track_index_t const offset) {
         throw std::underflow_error("offset is less than 1.");
     }
 
-    this->end();
-
-    this->_position->set_value(static_cast<double>(this->track() + offset));
+    this->move_to_track(this->track() + offset);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22154"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -395,6 +395,17 @@ DQ
                                         <menuItem title="Jump To End" keyEquivalent="" id="jlN-3t-0OH">
                                             <connections>
                                                 <action selector="jumpToEnd:" target="Ady-hI-5gd" id="Ymz-BP-Me5"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="eYK-Vr-BLC"/>
+                                        <menuItem title="Jump To Track Beginning" keyEquivalent="" id="D4z-RE-smh">
+                                            <connections>
+                                                <action selector="jumpToTrackBeginning:" target="Ady-hI-5gd" id="EQQ-ST-k3A"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Jump To Track End" keyEquivalent="" id="Ct2-AQ-8f1">
+                                            <connections>
+                                                <action selector="jumpToTrackEnd:" target="Ady-hI-5gd" id="DAK-5A-IQ3"/>
                                             </connections>
                                         </menuItem>
                                     </items>

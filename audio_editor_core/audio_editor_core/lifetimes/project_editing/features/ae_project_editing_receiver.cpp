@@ -26,6 +26,7 @@
 #include <audio_editor_core/ae_marker_selector.hpp>
 #include <audio_editor_core/ae_module_selector.hpp>
 #include <audio_editor_core/ae_project_settings_opener.hpp>
+#include <audio_editor_core/ae_track_jumper.hpp>
 #include <audio_editor_core/ae_track_selector.hpp>
 #include <audio_editor_core/ae_vertical_scrolling.hpp>
 
@@ -40,7 +41,7 @@ project_editing_receiver::project_editing_receiver(
     project_settings_opener *settings_opener, timing *timing, import_interactor *import_interactor,
     export_interactor *export_interactor, reverter *reverter, module_selector *module_selector,
     marker_selector *marker_selector, track_selector *track_selector, escaper *escaper, pasteboard *pasteboard,
-    vertical_scrolling *vertical_scrolling)
+    vertical_scrolling *vertical_scrolling, track_jumper *track_jumper)
     : _project_lifetime_id(project_lifetime_id),
       _database(database),
       _module_editor(module_editor),
@@ -63,7 +64,8 @@ project_editing_receiver::project_editing_receiver(
       _track_selector(track_selector),
       _escaper(escaper),
       _pasteboard(pasteboard),
-      _vertical_scrolling(vertical_scrolling) {
+      _vertical_scrolling(vertical_scrolling),
+      _track_jumper(track_jumper) {
 }
 
 std::optional<action_id> project_editing_receiver::receivable_id() const {
@@ -314,6 +316,12 @@ void project_editing_receiver::receive(ae::action const &action) const {
                             case editing_action_name::move_to_previous_track_more:
                                 this->_vertical_scrolling->move_to_previous_track(10);
                                 break;
+                            case editing_action_name::jump_to_track_beginning:
+                                this->_track_jumper->jump_to_beginning();
+                                break;
+                            case editing_action_name::jump_to_track_end:
+                                this->_track_jumper->jump_to_end();
+                                break;
                         }
                     });
                 } break;
@@ -355,7 +363,7 @@ action_receivable_state project_editing_receiver::receivable_state(ae::action co
                 case editing_action_name::jump_next:
                     return to_state(this->_jumper->can_jump_to_next_edge());
                 case editing_action_name::jump_to_beginning:
-                    return to_state(this->_jumper->can_jump_to_beginnig());
+                    return to_state(this->_jumper->can_jump_to_beginning());
                 case editing_action_name::jump_to_end:
                     return to_state(this->_jumper->can_jump_to_end());
 
@@ -447,6 +455,11 @@ action_receivable_state project_editing_receiver::receivable_state(ae::action co
                 case editing_action_name::move_to_next_track_more:
                 case editing_action_name::move_to_previous_track_more:
                     return to_state(true);
+
+                case editing_action_name::jump_to_track_beginning:
+                    return to_state(this->_track_jumper->can_jump_to_beginning());
+                case editing_action_name::jump_to_track_end:
+                    return to_state(this->_track_jumper->can_jump_to_end());
             }
         }
 

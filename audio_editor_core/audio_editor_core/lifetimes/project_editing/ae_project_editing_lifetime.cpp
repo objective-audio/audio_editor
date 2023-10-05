@@ -61,6 +61,7 @@
 #include <audio_editor_core/ae_range_selector.hpp>
 #include <audio_editor_core/ae_selected_track_pool.hpp>
 #include <audio_editor_core/ae_selector_enabler.hpp>
+#include <audio_editor_core/ae_track_jumper.hpp>
 #include <audio_editor_core/ae_track_selector.hpp>
 #include <audio_editor_core/ae_vertical_scrolling.hpp>
 
@@ -161,6 +162,8 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
           project_lifetime->display_space.get(), project_lifetime->vertical_scrolling.get())),
       display_space_range(std::make_shared<ae::display_space_range>(this->display_space_time_range.get(),
                                                                     this->display_space_track_range.get())),
+      track_jumper(
+          std::make_shared<ae::track_jumper>(this->module_pool.get(), project_lifetime->vertical_scrolling.get())),
       escaper(std::make_shared<ae::escaper>(this->pasteboard.get(), this->deselector.get())),
       receiver(std::make_shared<project_editing_receiver>(
           project_lifetime_id, this->database.get(), this->module_editor.get(), this->playing_toggler.get(),
@@ -169,5 +172,5 @@ project_editing_lifetime::project_editing_lifetime(project_lifetime const *proje
           this->marker_renaming_opener.get(), this->settings_opener.get(), this->timing.get(),
           this->import_interactor.get(), this->export_interactor.get(), this->reverter.get(),
           this->module_selector.get(), this->marker_selector.get(), this->track_selector.get(), this->escaper.get(),
-          this->pasteboard.get(), project_lifetime->vertical_scrolling.get())) {
+          this->pasteboard.get(), project_lifetime->vertical_scrolling.get(), this->track_jumper.get())) {
 }

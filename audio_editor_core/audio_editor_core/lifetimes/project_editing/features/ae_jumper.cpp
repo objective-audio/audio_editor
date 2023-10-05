@@ -27,7 +27,7 @@ bool jumper::can_jump_to_next_edge() const {
     return this->_next_jumpable_frame().has_value();
 }
 
-bool jumper::can_jump_to_beginnig() const {
+bool jumper::can_jump_to_beginning() const {
     if (auto const edge = this->_first_edge().has_value()) {
         if (edge != this->_player->current_frame()) {
             return true;
