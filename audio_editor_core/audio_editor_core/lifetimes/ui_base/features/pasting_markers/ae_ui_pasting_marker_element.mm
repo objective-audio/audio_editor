@@ -50,13 +50,13 @@ ui_pasting_marker_element::ui_pasting_marker_element(std::shared_ptr<ui::standar
 void ui_pasting_marker_element::set_content(pasting_marker_content const &content) {
     this->_content = content;
     this->_node->set_is_enabled(true);
-    this->_node->set_position({content.x, this->_node->position().y});
+    this->_node->set_x(content.x);
 }
 
 void ui_pasting_marker_element::update_content(pasting_marker_content const &content) {
     if (this->_content.has_value() && this->_content.value().identifier == content.identifier) {
         this->_content = content;
-        this->_node->set_position({content.x, this->_node->position().y});
+        this->_node->set_x(content.x);
     } else {
         assertion_failure_if_not_test();
     }
