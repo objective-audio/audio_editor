@@ -47,13 +47,28 @@ void dynamic_mesh_container<VertexElement, IndexElement>::write_vertex_elements(
     std::function<void(index_range const range, VertexElement *)> const &handler) {
     auto each = make_fast_each(this->_contents.size());
     while (yas_each_next(each)) {
-        auto const &idx = yas_each_index(each);
-        auto const top_element_idx = this->_interval * idx;
+        auto const &content_idx = yas_each_index(each);
+        auto const top_element_idx = this->_interval * content_idx;
 
-        this->_contents.at(idx)->vertex_data->write(
-            [range = index_range{.index = top_element_idx, .length = this->_interval},
-             &handler](std::vector<ui::vertex2d_t> &vertices) { handler(range, (VertexElement *)vertices.data()); });
+        this->_contents.at(content_idx)
+            ->vertex_data->write([range = index_range{.index = top_element_idx, .length = this->_interval},
+                                  &handler](std::vector<ui::vertex2d_t> &vertices) {
+                handler(range, (VertexElement *)vertices.data());
+            });
     }
+}
+
+template <typename VertexElement, typename IndexElement>
+void dynamic_mesh_container<VertexElement, IndexElement>::write_vertex_element(
+    std::size_t const idx, std::function<void(VertexElement *)> const &handler) {
+    std::size_t const content_idx = (idx == 0) ? 0 : (idx / this->_interval);
+    std::size_t const idx_in_content = idx - (content_idx * this->_interval);
+
+    this->_contents.at(content_idx)
+        ->vertex_data->write([&handler, idx_in_content](std::vector<ui::vertex2d_t> &vertices) {
+            auto *elements = (VertexElement *)vertices.data();
+            handler(&elements[idx_in_content]);
+        });
 }
 
 template <typename VertexElement, typename IndexElement>
