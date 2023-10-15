@@ -11,17 +11,25 @@ using namespace yas::ae;
 
 marker_content::marker_content(object_id const &identifier, frame_index_t const &frame, uint32_t const sample_rate,
                                float const scale, std::string const &name, bool const is_selected)
-    : marker_content(identifier, marker_content_utils::to_x(frame, sample_rate, scale), name, is_selected) {
+    : identifier(identifier),
+      frame(frame),
+      sample_rate(sample_rate),
+      scale(scale),
+      name(name),
+      is_selected(is_selected) {
 }
 
-marker_content::marker_content(object_id const &identifier, float const x, std::string const &name,
-                               bool const is_selected)
-    : identifier(identifier), x(x), name(name), is_selected(is_selected) {
+marker_index marker_content::marker_index() const {
+    return {this->identifier, this->frame};
+}
+
+float marker_content::x() const {
+    return marker_content_utils::to_x(frame, sample_rate, scale);
 }
 
 bool marker_content::operator==(marker_content const &rhs) const {
-    return this->identifier == rhs.identifier && this->x == rhs.x && this->name == rhs.name &&
-           this->is_selected == rhs.is_selected;
+    return this->identifier == rhs.identifier && this->frame == rhs.frame && this->sample_rate == rhs.sample_rate &&
+           this->scale == rhs.scale && this->name == rhs.name && this->is_selected == rhs.is_selected;
 }
 
 bool marker_content::operator!=(marker_content const &rhs) const {

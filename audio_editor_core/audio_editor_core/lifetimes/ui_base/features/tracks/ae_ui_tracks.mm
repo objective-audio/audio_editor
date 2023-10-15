@@ -45,7 +45,7 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
       _left_guide(standard->view_look()->view_layout_guide()->left()),
       _vertex_datas(std::make_unique<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>>()),
       _fill_mesh_container(
-          ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_tracks_constants::reserving_interval)),
+          ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_tracks_constants::reserving_interval, true)),
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_fill_mesh_container->node)) {
     node->add_sub_node(this->_fill_mesh_container->node);
 

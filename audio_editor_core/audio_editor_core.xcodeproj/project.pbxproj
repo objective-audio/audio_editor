@@ -544,8 +544,8 @@
 		B6EE90DD27A25A06000470F3 /* ae_ui_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B6EE90DC27A25A06000470F3 /* ae_ui_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6EE90DF27A25A26000470F3 /* ae_ui_types.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6EE90DE27A25A26000470F3 /* ae_ui_types.cpp */; };
 		B6F09CE327E81FA000638C6A /* ae_ui_time_constants.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F09CE227E81F9E00638C6A /* ae_ui_time_constants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B6F09CE727E84F1300638C6A /* ae_ui_marker_element.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6F09CE527E84F1300638C6A /* ae_ui_marker_element.mm */; };
-		B6F09CE827E84F1300638C6A /* ae_ui_marker_element.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F09CE627E84F1300638C6A /* ae_ui_marker_element.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6F09CE727E84F1300638C6A /* ae_ui_marker_name.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6F09CE527E84F1300638C6A /* ae_ui_marker_name.mm */; };
+		B6F09CE827E84F1300638C6A /* ae_ui_marker_name.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F09CE627E84F1300638C6A /* ae_ui_marker_name.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6F09CEC27E89C8C00638C6A /* ae_ui_mesh_data.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6F09CEA27E89C8C00638C6A /* ae_ui_mesh_data.mm */; };
 		B6F09CED27E89C8C00638C6A /* ae_ui_mesh_data.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F09CEB27E89C8C00638C6A /* ae_ui_mesh_data.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6F133BC29B777D400E91090 /* ae_display_space_time_range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6F133BA29B777D400E91090 /* ae_display_space_time_range.cpp */; };
@@ -1114,8 +1114,8 @@
 		B6EE90DC27A25A06000470F3 /* ae_ui_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_types.h; sourceTree = "<group>"; };
 		B6EE90DE27A25A26000470F3 /* ae_ui_types.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_ui_types.cpp; sourceTree = "<group>"; };
 		B6F09CE227E81F9E00638C6A /* ae_ui_time_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_time_constants.h; sourceTree = "<group>"; };
-		B6F09CE527E84F1300638C6A /* ae_ui_marker_element.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_marker_element.mm; sourceTree = "<group>"; };
-		B6F09CE627E84F1300638C6A /* ae_ui_marker_element.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_marker_element.h; sourceTree = "<group>"; };
+		B6F09CE527E84F1300638C6A /* ae_ui_marker_name.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_marker_name.mm; sourceTree = "<group>"; };
+		B6F09CE627E84F1300638C6A /* ae_ui_marker_name.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_marker_name.h; sourceTree = "<group>"; };
 		B6F09CEA27E89C8C00638C6A /* ae_ui_mesh_data.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_mesh_data.mm; sourceTree = "<group>"; };
 		B6F09CEB27E89C8C00638C6A /* ae_ui_mesh_data.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_ui_mesh_data.h; sourceTree = "<group>"; };
 		B6F133BA29B777D400E91090 /* ae_display_space_time_range.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_display_space_time_range.cpp; sourceTree = "<group>"; };
@@ -2535,8 +2535,8 @@
 			isa = PBXGroup;
 			children = (
 				B6D7DFF428A9194C007961AC /* ae_ui_marker_constants.h */,
-				B6F09CE627E84F1300638C6A /* ae_ui_marker_element.h */,
-				B6F09CE527E84F1300638C6A /* ae_ui_marker_element.mm */,
+				B6F09CE627E84F1300638C6A /* ae_ui_marker_name.h */,
+				B6F09CE527E84F1300638C6A /* ae_ui_marker_name.mm */,
 				B629D7702717101300EE379A /* ae_ui_markers.h */,
 				B629D7712717101300EE379A /* ae_ui_markers.mm */,
 				B65DB41329AA51D800423A80 /* controller */,
@@ -2886,7 +2886,7 @@
 				B6F09CE327E81FA000638C6A /* ae_ui_time_constants.h in Headers */,
 				B6288E9F29D5417400BBA440 /* ae_app_settings.hpp in Headers */,
 				B6B1E5D827E435FD00FA4B88 /* ae_ui_scroller.h in Headers */,
-				B6F09CE827E84F1300638C6A /* ae_ui_marker_element.h in Headers */,
+				B6F09CE827E84F1300638C6A /* ae_ui_marker_name.h in Headers */,
 				B6DC2CBF27B649D5000EF5F9 /* ae_ui_edge.h in Headers */,
 				B64504B3271A7316009E05D6 /* ae_markers_presenter.h in Headers */,
 				B645E059291FCD1000B6711C /* ae_pasting_marker.hpp in Headers */,
@@ -3089,7 +3089,7 @@
 				B6D2CBCE29FCFBBA00218960 /* ProjectSettingsWindowController.swift in Sources */,
 				B6DC2CC327B64A87000EF5F9 /* ae_edge_presenter.cpp in Sources */,
 				B644411D2824C967001AFE8B /* ae_nudger.cpp in Sources */,
-				B6F09CE727E84F1300638C6A /* ae_ui_marker_element.mm in Sources */,
+				B6F09CE727E84F1300638C6A /* ae_ui_marker_name.mm in Sources */,
 				B69E10F629FE63A5006A4915 /* ae_timing_types+objc.mm in Sources */,
 				B6D283AD288110BE00F294EC /* AEMetalView.mm in Sources */,
 				B6CF425A2632ED2A00F9F297 /* ae_project_presenter.cpp in Sources */,

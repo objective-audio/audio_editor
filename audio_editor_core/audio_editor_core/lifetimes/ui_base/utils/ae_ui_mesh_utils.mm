@@ -9,8 +9,9 @@ using namespace yas::ae;
 
 namespace yas::ae::ui_mesh_utils {
 std::unique_ptr<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>> make_fill_container(
-    std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>> *vertex_datas, std::size_t const interval) {
-    auto make_fill_element = [vertex_datas](std::size_t const idx, std::size_t const element_count) {
+    std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>> *vertex_datas, std::size_t const interval,
+    bool const use_mesh_color) {
+    auto make_fill_element = [vertex_datas, use_mesh_color](std::size_t const idx, std::size_t const element_count) {
         if (vertex_datas->size() == idx) {
             vertex_datas->emplace_back(
                 ui::dynamic_mesh_vertex_data::make_shared(element_count * vertex2d_rect::vector_count));
@@ -21,8 +22,9 @@ std::unique_ptr<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>> make_f
         auto const &vertex_data = vertex_datas->at(idx);
         auto const index_data =
             ui::dynamic_mesh_index_data::make_shared(element_count * fill_index2d_rect::vector_count);
-        auto mesh = ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle, .use_mesh_color = true},
-                                          vertex_data, index_data, nullptr);
+        auto mesh =
+            ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle, .use_mesh_color = use_mesh_color},
+                                  vertex_data, index_data, nullptr);
 
         return std::unique_ptr<dynamic_mesh_content>(new dynamic_mesh_content{
             .vertex_data = vertex_data, .index_data = std::move(index_data), .mesh = std::move(mesh)});
