@@ -104,7 +104,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
         ->add_to(this->_canceller_pool);
 }
 
-std::vector<std::optional<marker_content>> markers_presenter::contents() const {
+std::vector<std::optional<marker_content>> const &markers_presenter::contents() const {
     return this->_content_pool->elements();
 }
 
@@ -119,6 +119,20 @@ observing::syncable markers_presenter::observe_range(std::function<void(range_se
     } else {
         return observing::syncable{};
     }
+}
+
+std::optional<marker_index> markers_presenter::marker_index_at(std::size_t const content_idx) const {
+    if (content_idx < this->contents().size()) {
+        if (auto const &content = this->contents().at(content_idx); content.has_value()) {
+            if (auto const marker_pool = this->_marker_pool.lock()) {
+                if (auto const marker = marker_pool->marker_for_id(content.value().identifier)) {
+                    return marker.value().index();
+                }
+            }
+        }
+    }
+
+    return std::nullopt;
 }
 
 void markers_presenter::update_if_needed() {

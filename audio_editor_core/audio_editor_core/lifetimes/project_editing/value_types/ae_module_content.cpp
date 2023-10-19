@@ -11,6 +11,10 @@
 using namespace yas;
 using namespace yas::ae;
 
+namespace yas::ae::module_content_constants {
+static float constexpr square_height = 0.8f;
+};
+
 namespace yas::ae::module_content_utils {
 using mesh_element = module_content::mesh_element;
 
@@ -91,9 +95,9 @@ ui::region module_content::region() const {
     double const sample_rate = static_cast<double>(this->sample_rate);
     float const x = static_cast<double>(this->range.frame) / sample_rate;
     float const width = static_cast<double>(this->range.length) / sample_rate;
-    double const height = 0.8;
-    float const y = static_cast<double>(this->track) - height * 0.5f;
-    return ui::region{.origin = {.x = x, .y = y}, .size = {.width = width, .height = static_cast<float>(height)}};
+    float const y = static_cast<double>(this->track) - module_content_constants::square_height * 0.5f;
+    return ui::region{.origin = {.x = x, .y = y},
+                      .size = {.width = width, .height = module_content_constants::square_height}};
 }
 
 uint32_t module_content::total_rect_count() const {

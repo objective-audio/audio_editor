@@ -28,9 +28,11 @@ struct markers_presenter final {
                       std::shared_ptr<display_space_time_range> const &, std::shared_ptr<marker_content_pool> const &,
                       std::shared_ptr<range_selector> const &);
 
-    [[nodiscard]] std::vector<std::optional<marker_content>> contents() const;
+    [[nodiscard]] std::vector<std::optional<marker_content>> const &contents() const;
     [[nodiscard]] observing::syncable observe_contents(std::function<void(marker_content_pool_event const &)> &&);
     [[nodiscard]] observing::syncable observe_range(std::function<void(range_selection const &)> &&);
+
+    [[nodiscard]] std::optional<marker_index> marker_index_at(std::size_t const content_idx) const;
 
     void update_if_needed();
 

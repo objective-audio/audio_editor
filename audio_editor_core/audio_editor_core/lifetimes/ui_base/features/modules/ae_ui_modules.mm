@@ -49,8 +49,8 @@ ui_modules::ui_modules(std::shared_ptr<modules_presenter> const &presenter,
       _atlas(atlas),
       _waveforms(waveforms),
       _vertex_datas(std::make_unique<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>>()),
-      _fill_mesh_container(
-          ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_modules_constants::reserving_interval)),
+      _fill_mesh_container(ui_mesh_utils::make_fill_container(this->_vertex_datas.get(),
+                                                              ui_modules_constants::reserving_interval, true)),
       _frame_mesh_container(
           ui_mesh_utils::make_frame_container(this->_vertex_datas.get(), ui_modules_constants::reserving_interval)),
       _names_root_node(ui::node::make_shared()),

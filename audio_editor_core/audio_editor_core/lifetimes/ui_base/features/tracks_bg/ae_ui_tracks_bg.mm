@@ -38,8 +38,8 @@ ui_tracks_bg::ui_tracks_bg(project_lifetime_id const &project_lifetime_id, ui::n
       _left_guide(standard->view_look()->view_layout_guide()->left()),
       _width_guide(standard->view_look()->view_layout_guide()->width()),
       _vertex_datas(std::make_unique<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>>()),
-      _fill_mesh_container(
-          ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_tracks_bg_constants::reserving_interval)) {
+      _fill_mesh_container(ui_mesh_utils::make_fill_container(this->_vertex_datas.get(),
+                                                              ui_tracks_bg_constants::reserving_interval, true)) {
     node->add_sub_node(this->_fill_mesh_container->node);
 
     presenter

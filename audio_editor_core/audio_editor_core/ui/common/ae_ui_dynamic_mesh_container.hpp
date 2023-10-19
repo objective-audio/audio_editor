@@ -25,6 +25,7 @@ struct dynamic_mesh_container {
     [[nodiscard]] std::size_t reserved_element_count() const;
     void set_element_count(std::size_t const);
     void write_vertex_elements(std::function<void(index_range const, VertexElement *)> const &);
+    void write_vertex_element(std::size_t const idx, std::function<void(VertexElement *)> const &);
 
    private:
     std::size_t const _interval;
