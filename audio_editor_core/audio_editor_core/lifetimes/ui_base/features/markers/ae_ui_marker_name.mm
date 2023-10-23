@@ -14,20 +14,16 @@ using namespace yas::ae;
 
 std::unique_ptr<ui_marker_name> ui_marker_name::make_unique(project_lifetime_id const &lifetime_id,
                                                             ui::node *parent_node) {
-    auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(lifetime_id);
 
-    return std::unique_ptr<ui_marker_name>(
-        new ui_marker_name{app_lifetime->color, resource_lifetime->normal_font_atlas, parent_node});
+    return std::unique_ptr<ui_marker_name>(new ui_marker_name{resource_lifetime->normal_font_atlas, parent_node});
 }
 
-ui_marker_name::ui_marker_name(std::shared_ptr<ae::color> const &color,
-                               std::shared_ptr<ui::font_atlas> const &font_atlas, ui::node *parent_node)
+ui_marker_name::ui_marker_name(std::shared_ptr<ui::font_atlas> const &font_atlas, ui::node *parent_node)
     : _name_strings(ui::strings::make_shared(
           {.frame = ui::region{.origin = ui::point::zero(),
                                .size = {0.0f, -static_cast<float>(font_atlas->ascent() + font_atlas->descent())}}},
-          font_atlas)),
-      _color(color) {
+          font_atlas)) {
     parent_node->add_sub_node(this->node());
 }
 
@@ -59,8 +55,6 @@ void ui_marker_name::update_content(marker_content const &content) {
     node->set_x(content.x());
 
     this->_name_strings->set_text(content.name);
-
-    this->update_color();
 }
 
 void ui_marker_name::reset_content() {
@@ -87,10 +81,10 @@ void ui_marker_name::finalize() {
     this->node()->remove_from_super_node();
 }
 
-void ui_marker_name::update_color() {
+void ui_marker_name::update_color(ui::color const &selected_color, ui::color const &normal_color) {
     if (this->_content.has_value()) {
         bool const is_selected = this->_content.value().is_selected;
-        auto const text_color = is_selected ? this->_color->selected_marker_text() : this->_color->marker_text();
+        auto const &text_color = is_selected ? selected_color : normal_color;
 
         this->node()->set_color(text_color);
     }

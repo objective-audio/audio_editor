@@ -211,11 +211,14 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
 void ui_markers::_replace_data() {
     auto const &contents = this->_presenter->contents();
     auto const &names = this->_names;
+    auto const normal_name_color = this->_color->marker_text();
+    auto const selected_name_color = this->_color->selected_marker_text();
 
     this->_set_rect_count(contents.size());
 
     this->_square_fill_mesh_container->write_vertex_elements(
-        [this, &contents, &names](index_range const range, vertex2d_rect *vertex_rects) {
+        [this, &contents, &names, &normal_name_color, &selected_name_color](index_range const range,
+                                                                            vertex2d_rect *vertex_rects) {
             if (contents.size() <= range.index) {
                 return;
             }
@@ -236,6 +239,7 @@ void ui_markers::_replace_data() {
 
                 if (content.has_value()) {
                     element->set_content(content.value(), this->_square_region_updating(content_idx));
+                    element->update_color(selected_name_color, normal_name_color);
 
                     rect.set_tex_coord(filled_tex_coords);
 
@@ -283,15 +287,17 @@ void ui_markers::_replace_data() {
 // こことは別に_update_dataで部分的に色を更新しているので、変更する際は注意
 void ui_markers::_update_colors() {
     auto const &contents = this->_presenter->contents();
+    auto const normal_bg_color = this->_color->marker_square().v;
+    auto const selected_bg_color = this->_color->selected_marker_square().v;
+    auto const normal_color = this->_color->marker_text();
+    auto const selected_color = this->_color->selected_marker_text();
 
     this->_square_fill_mesh_container->write_vertex_elements(
-        [this, &contents](index_range const range, vertex2d_rect *vertex_rects) {
+        [this, &contents, &normal_bg_color, &selected_bg_color](index_range const range, vertex2d_rect *vertex_rects) {
             if (contents.size() <= range.index) {
                 return;
             }
 
-            auto const normal_bg_color = this->_color->marker_square().v;
-            auto const selected_bg_color = this->_color->selected_marker_square().v;
             auto const process_length = std::min(range.length, contents.size() - range.index);
 
             auto each = make_fast_each(process_length);
@@ -311,7 +317,7 @@ void ui_markers::_update_colors() {
     while (yas_each_next(each)) {
         auto const &idx = yas_each_index(each);
         auto const &name = this->_names.at(idx);
-        name->update_color();
+        name->update_color(selected_color, normal_color);
     }
 
     this->_line_mesh_container->node->set_color(this->_color->marker_line());
@@ -322,11 +328,17 @@ void ui_markers::_update_data(std::set<std::size_t> const &inserted, std::set<st
     auto const &contents = this->_presenter->contents();
     auto const &names = this->_names;
     auto const contents_size = contents.size();
+    auto const &color = this->_color;
+    auto const normal_bg_color = color->marker_square().v;
+    auto const selected_bg_color = color->selected_marker_square().v;
+    auto const normal_name_color = color->marker_text();
+    auto const selected_name_color = color->selected_marker_text();
 
     this->_set_rect_count(contents_size);
 
     this->_square_fill_mesh_container->write_vertex_elements(
-        [&contents, &names, &erased, &inserted, &replaced, this](index_range const range, vertex2d_rect *vertex_rects) {
+        [&contents, &names, &erased, &inserted, &replaced, this, &normal_bg_color, &selected_bg_color,
+         &normal_name_color, &selected_name_color](index_range const range, vertex2d_rect *vertex_rects) {
             auto const &colliders = this->_square_fill_mesh_container->node->colliders();
 
             for (auto const &pair : erased) {
@@ -343,9 +355,6 @@ void ui_markers::_update_data(std::set<std::size_t> const &inserted, std::set<st
                 }
             }
 
-            auto const &color = this->_color;
-            auto const normal_bg_color = color->marker_square().v;
-            auto const selected_bg_color = color->selected_marker_square().v;
             auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
             for (auto const &content_idx : inserted) {
@@ -355,6 +364,7 @@ void ui_markers::_update_data(std::set<std::size_t> const &inserted, std::set<st
                     auto const &name = names.at(content_idx);
 
                     name->set_content(content, this->_square_region_updating(content_idx));
+                    name->update_color(selected_name_color, normal_name_color);
 
                     auto &rect = vertex_rects[vertex_idx];
                     rect.set_tex_coord(filled_tex_coords);
@@ -374,6 +384,7 @@ void ui_markers::_update_data(std::set<std::size_t> const &inserted, std::set<st
                     auto const &name = names.at(content_idx);
 
                     name->update_content(content);
+                    name->update_color(selected_name_color, normal_name_color);
 
                     auto const &bg_color = content.is_selected ? selected_bg_color : normal_bg_color;
                     vertex_rects[vertex_idx].set_color(bg_color);
