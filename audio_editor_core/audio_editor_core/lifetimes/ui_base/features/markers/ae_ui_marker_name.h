@@ -14,7 +14,7 @@ class color;
 struct ui_marker_name final {
     [[nodiscard]] static std::unique_ptr<ui_marker_name> make_unique(project_lifetime_id const &,
                                                                      ui::node *parent_node);
-    ui_marker_name(std::shared_ptr<ae::color> const &, std::shared_ptr<ui::font_atlas> const &, ui::node *parent_node);
+    ui_marker_name(std::shared_ptr<ui::font_atlas> const &, ui::node *parent_node);
 
     [[nodiscard]] std::shared_ptr<ui::node> const &node() const;
 
@@ -22,7 +22,7 @@ struct ui_marker_name final {
     void update_content(marker_content const &);
     void reset_content();
 
-    void update_color();
+    void update_color(ui::color const &selected_color, ui::color const &normal_color);
 
     [[nodiscard]] ui::region name_region() const;
 
@@ -32,7 +32,6 @@ struct ui_marker_name final {
     std::optional<marker_content> _content;
 
     std::shared_ptr<ui::strings> const _name_strings;
-    std::shared_ptr<ae::color> const _color;
 
     observing::cancellable_ptr _cancellable;
 
