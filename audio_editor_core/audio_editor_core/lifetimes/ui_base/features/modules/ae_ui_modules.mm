@@ -253,15 +253,18 @@ void ui_modules::_replace_data() {
 // こことは別に_update_dataで部分的に色を更新しているので、変更する際は注意
 void ui_modules::_update_colors() {
     auto const &contents = this->_presenter->contents();
+    auto const &color = this->_color;
+    auto const normal_bg_color = color->module_bg().v;
+    auto const selected_bg_color = color->selected_module_bg().v;
+    auto const normal_name_color = color->module_name();
+    auto const selected_name_color = color->selected_module_name();
 
     this->_fill_mesh_container->write_vertex_elements(
-        [this, &contents](index_range const range, vertex2d_rect *vertex_rects) {
+        [this, &contents, &normal_bg_color, &selected_bg_color](index_range const range, vertex2d_rect *vertex_rects) {
             if (contents.size() <= range.index) {
                 return;
             }
 
-            auto const normal_bg_color = this->_color->module_bg().v;
-            auto const selected_bg_color = this->_color->selected_module_bg().v;
             auto const process_length = std::min(range.length, contents.size() - range.index);
 
             auto each = make_fast_each(process_length);
@@ -276,9 +279,6 @@ void ui_modules::_update_colors() {
                 }
             }
         });
-
-    auto const normal_name_color = this->_color->module_name();
-    auto const selected_name_color = this->_color->selected_module_name();
 
     auto each = make_fast_each(contents.size());
     while (yas_each_next(each)) {
@@ -296,11 +296,17 @@ void ui_modules::_update_colors() {
 void ui_modules::_update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                               std::map<std::size_t, module_content> const &erased) {
     auto const &contents = this->_presenter->contents();
+    auto const &color = this->_color;
+    auto const normal_bg_color = color->module_bg().v;
+    auto const selected_bg_color = color->selected_module_bg().v;
+    auto const normal_name_color = color->module_name();
+    auto const selected_name_color = color->selected_module_name();
 
     this->_set_rect_count(contents.size());
 
     this->_fill_mesh_container->write_vertex_elements(
-        [&contents, &erased, &inserted, &replaced, this](index_range const range, vertex2d_rect *vertex_rects) {
+        [&contents, &erased, &inserted, &replaced, this, &normal_bg_color, &selected_bg_color](
+            index_range const range, vertex2d_rect *vertex_rects) {
             auto const &colliders = this->_fill_mesh_container->node->colliders();
 
             for (auto const &pair : erased) {
@@ -315,9 +321,6 @@ void ui_modules::_update_data(std::set<std::size_t> const &inserted, std::set<st
                 }
             }
 
-            auto const &color = this->_color;
-            auto const normal_bg_color = color->module_bg().v;
-            auto const selected_bg_color = color->selected_module_bg().v;
             auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
             for (auto const &content_idx : inserted) {
@@ -348,9 +351,6 @@ void ui_modules::_update_data(std::set<std::size_t> const &inserted, std::set<st
                 }
             }
         });
-
-    auto const normal_name_color = this->_color->module_name();
-    auto const selected_name_color = this->_color->selected_module_name();
 
     for (auto const &pair : erased) {
         auto const &content_idx = pair.first;
