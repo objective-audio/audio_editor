@@ -8,6 +8,7 @@
 #include <cpp_utils/yas_assertion.h>
 #include <cpp_utils/yas_cf_utils.h>
 #include <cpp_utils/yas_unowned.h>
+#include <cpp_utils/yas_url.h>
 
 using namespace yas;
 using namespace yas::ae;
@@ -37,6 +38,14 @@ using namespace yas::ae;
     self->_presenter = project_presenter::make_shared(lifetime_id);
     self.window.title = (__bridge NSString *)to_cf_object(self->_presenter->title());
 
+    if (auto const url = self->_presenter->represented_url(); url.has_value()) {
+        self.window.representedURL = (__bridge NSURL *)url.value().cf_url();
+    }
+
+    if (auto const auto_save_name = self->_presenter->auto_save_name(); auto_save_name.has_value()) {
+        self.window.frameAutosaveName = (__bridge NSString *)to_cf_object(auto_save_name.value());
+    }
+
     auto unowned = make_unowned(self);
 
     self->_presenter
@@ -56,13 +65,6 @@ using namespace yas::ae;
 
 - (project_lifetime_id const &)lifetime_id {
     return self->_presenter->lifetime_id;
-}
-
-- (void)windowDidLoad {
-    [super windowDidLoad];
-
-    auto const visible_frame = self.window.screen.visibleFrame;
-    [self.window setFrame:visible_frame display:NO];
 }
 
 - (BOOL)windowShouldClose:(NSWindow *)sender {

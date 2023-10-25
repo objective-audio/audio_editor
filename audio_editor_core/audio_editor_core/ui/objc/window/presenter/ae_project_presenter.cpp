@@ -38,6 +38,22 @@ std::string project_presenter::title() const {
     }
 }
 
+std::optional<std::string> project_presenter::auto_save_name() const {
+    if (auto const project_path = this->_project_path.lock()) {
+        return project_path->root_directory().string();
+    } else {
+        return "project_window";
+    }
+}
+
+std::optional<url> project_presenter::represented_url() const {
+    if (auto const project_path = this->_project_path.lock()) {
+        return yas::url::file_url(project_path->root_directory());
+    } else {
+        return std::nullopt;
+    }
+}
+
 bool project_presenter::should_close() {
     auto const closer = this->_closer.lock();
 

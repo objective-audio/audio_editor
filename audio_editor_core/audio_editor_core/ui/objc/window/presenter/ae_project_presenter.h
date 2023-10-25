@@ -7,6 +7,7 @@
 #include <audio_editor_core/ae_project_lifetime_id.h>
 #include <audio_editor_core/ae_project_presenter_dependency.h>
 #include <audio_editor_core/ae_project_presenter_types.h>
+#include <cpp_utils/yas_url.h>
 
 #include <observing/yas_observing_umbrella.hpp>
 
@@ -24,6 +25,8 @@ struct project_presenter final {
     project_lifetime_id const lifetime_id;
 
     [[nodiscard]] std::string title() const;
+    [[nodiscard]] std::optional<std::string> auto_save_name() const;
+    [[nodiscard]] std::optional<url> represented_url() const;
 
     [[nodiscard]] bool should_close();
 
