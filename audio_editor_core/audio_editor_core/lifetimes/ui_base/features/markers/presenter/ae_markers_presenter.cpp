@@ -80,6 +80,9 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
             switch (event.type) {
                 case selected_pool_event_type::fetched:
                     break;
+                case selected_pool_event_type::replaced:
+                    this->_update_all_contents(update_type::update);
+                    break;
                 case selected_pool_event_type::toggled:
                     this->_replace_contents_if_in_space_range(event.toggled);
                     break;

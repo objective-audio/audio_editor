@@ -76,6 +76,7 @@ modules_presenter::modules_presenter(project_format const &project_format, std::
         ->observe_event([this, sample_rate](selected_module_pool::event const &event) {
             switch (event.type) {
                 case selected_pool_event_type::fetched:
+                case selected_pool_event_type::replaced:
                     this->_update_all_contents(true, false);
                     break;
                 case selected_pool_event_type::toggled: {

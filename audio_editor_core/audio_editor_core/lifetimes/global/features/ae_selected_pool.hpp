@@ -10,6 +10,7 @@
 namespace yas::ae {
 enum class selected_pool_event_type {
     fetched,
+    replaced,
     toggled,
 };
 
@@ -31,6 +32,8 @@ struct selected_pool final {
     void begin_toggling();
     void toggle(element_set const &);
     void end_toggling();
+
+    void replace(element_set &&);
 
     [[nodiscard]] bool can_clear() const;
     void clear();
