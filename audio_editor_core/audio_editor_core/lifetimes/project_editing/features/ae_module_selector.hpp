@@ -6,6 +6,7 @@
 
 #include <audio_editor_core/ae_module_index.hpp>
 #include <audio_editor_core/ae_selected_module_pool.hpp>
+#include <audio_editor_core/ae_selected_track_pool.hpp>
 
 namespace yas::ae {
 class module_pool;
@@ -14,7 +15,8 @@ class deselector;
 class selector_enabler;
 
 struct module_selector final {
-    module_selector(module_pool const *, selected_module_pool *, editing_status const *, selector_enabler const *);
+    module_selector(module_pool const *, selected_module_pool *, selected_track_pool *, editing_status const *,
+                    selector_enabler const *);
 
     [[nodiscard]] bool can_select() const;
     void begin_selection();
@@ -24,9 +26,12 @@ struct module_selector final {
     [[nodiscard]] bool can_toggle() const;
     void toggle(module_index const &);
 
+    void select_all();
+
    private:
     module_pool const *const _module_pool;
-    selected_module_pool *const _selected_pool;
+    selected_module_pool *const _selected_module_pool;
+    selected_track_pool const *const _selected_track_pool;
     editing_status const *const _editing_status;
     selector_enabler const *const _enabler;
 

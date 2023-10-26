@@ -75,6 +75,15 @@ void selected_pool<Element>::end_toggling() {
 }
 
 template <typename Element>
+void selected_pool<Element>::replace(element_set &&elements) {
+    this->end_toggling();
+
+    this->_elements = std::move(elements);
+
+    this->_event_fetcher->push({.type = selected_pool_event_type::replaced});
+}
+
+template <typename Element>
 bool selected_pool<Element>::can_clear() const {
     return !this->_elements.empty();
 }

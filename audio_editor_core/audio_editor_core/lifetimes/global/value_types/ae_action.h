@@ -51,6 +51,7 @@ enum class editing_action_name {
     begin_modules_selection,
     end_modules_selection,
     select_modules,
+    select_all_modules,
     toggle_module_selection,
     begin_marker_renaming,
     begin_markers_selection,

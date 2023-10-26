@@ -48,6 +48,7 @@ tracks_presenter::tracks_presenter(project_lifetime_id const &project_lifetime_i
         ->observe_event([this](selected_track_pool::event const &event) {
             switch (event.type) {
                 case selected_pool_event_type::fetched:
+                case selected_pool_event_type::replaced:
                     this->_update_all_contents(true, false);
                     break;
                 case selected_pool_event_type::toggled: {

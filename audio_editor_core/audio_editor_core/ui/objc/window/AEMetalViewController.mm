@@ -242,6 +242,12 @@ using namespace yas::ae;
     }
 }
 
+- (IBAction)selectAll:(id)sender {
+    if (auto const action_sender = self->_action_sender.lock()) {
+        action_sender->send(editing_action_name::select_all_modules);
+    }
+}
+
 #pragma mark -
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
@@ -286,6 +292,8 @@ using namespace yas::ae;
         return editing_action_name::purge;
     } else if (selector == @selector(openProjectSettings:)) {
         return editing_action_name::open_project_settings;
+    } else if (selector == @selector(selectAll:)) {
+        return editing_action_name::select_all_modules;
     }
 
     return std::nullopt;
