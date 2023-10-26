@@ -259,6 +259,9 @@ void project_editing_receiver::receive(ae::action const &action) const {
                             case editing_action_name::select_modules:
                                 this->_module_selector->select(action.module_index_set_value());
                                 break;
+                            case editing_action_name::select_all_modules:
+                                this->_module_selector->select_all();
+                                break;
                             case editing_action_name::end_modules_selection:
                                 this->_module_selector->end_selection();
                                 break;
@@ -413,6 +416,8 @@ action_receivable_state project_editing_receiver::receivable_state(ae::action co
                 case editing_action_name::begin_modules_selection:
                     return to_state(this->_module_selector->can_select());
                 case editing_action_name::select_modules:
+                    return to_state(this->_module_selector->can_select());
+                case editing_action_name::select_all_modules:
                     return to_state(this->_module_selector->can_select());
                 case editing_action_name::end_modules_selection:
                     return to_state(this->_module_selector->can_select());
