@@ -32,6 +32,7 @@ struct tracks_presenter final {
    private:
     std::weak_ptr<track_content_pool> const _content_pool;
     std::weak_ptr<selected_track_pool> const _selected_pool;
+    std::weak_ptr<display_space> const _display_space;
     std::weak_ptr<display_space_range> const _display_space_range;
     std::weak_ptr<range_selector> const _range_selector;
     observing::canceller_pool _canceller_pool;

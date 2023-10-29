@@ -34,6 +34,7 @@ tracks_presenter::tracks_presenter(project_lifetime_id const &project_lifetime_i
                                    std::shared_ptr<range_selector> const &range_selector)
     : _content_pool(content_pool),
       _selected_pool(selected_pool),
+      _display_space(display_space),
       _display_space_range(display_space_range),
       _range_selector(range_selector) {
     display_space
