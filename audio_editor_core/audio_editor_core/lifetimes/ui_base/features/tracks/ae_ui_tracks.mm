@@ -17,7 +17,7 @@ using namespace yas::ae;
 namespace yas::ae::ui_tracks_constants {
 static std::size_t constexpr reserving_interval = 64;
 static float constexpr square_width = 20.0f;
-static float constexpr square_height = 0.95f;
+static float constexpr square_height_rate = 0.95f;
 }
 
 std::shared_ptr<ui_tracks> ui_tracks::make_shared(project_lifetime_id const &project_lifetime_id, ui::node *node) {
@@ -169,43 +169,44 @@ void ui_tracks::_replace_data() {
 
     this->_set_rect_count(contents.size());
 
-    this->_fill_mesh_container->write_vertex_elements([this, &contents](index_range const range,
-                                                                        vertex2d_rect *vertex_rects) {
-        if (contents.size() <= range.index) {
-            return;
-        }
-
-        auto const &colliders = this->_fill_mesh_container->node->colliders();
-        auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
-
-        auto const process_length = std::min(range.length, contents.size() - range.index);
-        auto each = make_fast_each(process_length);
-        while (yas_each_next(each)) {
-            auto const &vertex_idx = yas_each_index(each);
-            auto const content_idx = range.index + vertex_idx;
-
-            auto const &content = contents.at(content_idx);
-            auto const &collider = colliders.at(content_idx);
-            auto &rect = vertex_rects[vertex_idx];
-
-            if (content.has_value()) {
-                auto const &value = content.value();
-                ui::region const region{
-                    .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height * 0.5f)},
-                    .size = {.width = ui_tracks_constants::square_width, .height = ui_tracks_constants::square_height}};
-                rect.set_position(region);
-                rect.set_tex_coord(filled_tex_coords);
-
-                collider->set_shape(ui::shape::make_shared({.rect = region}));
-                collider->set_enabled(true);
-            } else {
-                rect.set_position(ui::region::zero());
-
-                collider->set_enabled(false);
-                collider->set_shape(nullptr);
+    this->_fill_mesh_container->write_vertex_elements(
+        [this, &contents](index_range const range, vertex2d_rect *vertex_rects) {
+            if (contents.size() <= range.index) {
+                return;
             }
-        }
-    });
+
+            auto const &colliders = this->_fill_mesh_container->node->colliders();
+            auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
+
+            auto const process_length = std::min(range.length, contents.size() - range.index);
+            auto each = make_fast_each(process_length);
+            while (yas_each_next(each)) {
+                auto const &vertex_idx = yas_each_index(each);
+                auto const content_idx = range.index + vertex_idx;
+
+                auto const &content = contents.at(content_idx);
+                auto const &collider = colliders.at(content_idx);
+                auto &rect = vertex_rects[vertex_idx];
+
+                if (content.has_value()) {
+                    auto const &value = content.value();
+                    ui::region const region{
+                        .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height_rate * 0.5f)},
+                        .size = {.width = ui_tracks_constants::square_width,
+                                 .height = ui_tracks_constants::square_height_rate}};
+                    rect.set_position(region);
+                    rect.set_tex_coord(filled_tex_coords);
+
+                    collider->set_shape(ui::shape::make_shared({.rect = region}));
+                    collider->set_enabled(true);
+                } else {
+                    rect.set_position(ui::region::zero());
+
+                    collider->set_enabled(false);
+                    collider->set_shape(nullptr);
+                }
+            }
+        });
 
     this->_update_colors();
 }
@@ -244,57 +245,58 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std
 
     this->_set_rect_count(contents.size());
 
-    this->_fill_mesh_container->write_vertex_elements([&contents, &erased, &inserted, &replaced, this](
-                                                          index_range const range, vertex2d_rect *vertex_rects) {
-        auto const &colliders = this->_fill_mesh_container->node->colliders();
+    this->_fill_mesh_container->write_vertex_elements(
+        [&contents, &erased, &inserted, &replaced, this](index_range const range, vertex2d_rect *vertex_rects) {
+            auto const &colliders = this->_fill_mesh_container->node->colliders();
 
-        for (auto const &pair : erased) {
-            auto const &content_idx = pair.first;
-            if (range.contains(content_idx)) {
-                auto const vertex_idx = content_idx - range.index;
-                vertex_rects[vertex_idx].set_position(ui::region::zero());
+            for (auto const &pair : erased) {
+                auto const &content_idx = pair.first;
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    vertex_rects[vertex_idx].set_position(ui::region::zero());
 
-                auto const &collider = colliders.at(content_idx);
-                collider->set_enabled(false);
-                collider->set_shape(nullptr);
+                    auto const &collider = colliders.at(content_idx);
+                    collider->set_enabled(false);
+                    collider->set_shape(nullptr);
+                }
             }
-        }
 
-        auto const &color = this->_color;
-        auto const normal_square_color = color->track_square().v;
-        auto const selected_square_color = color->selected_track_square().v;
-        auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
+            auto const &color = this->_color;
+            auto const normal_square_color = color->track_square().v;
+            auto const selected_square_color = color->selected_track_square().v;
+            auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
-        for (auto const &content_idx : inserted) {
-            if (range.contains(content_idx)) {
-                auto const vertex_idx = content_idx - range.index;
-                auto const &value = contents.at(content_idx).value();
-                ui::region const region{
-                    .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height * 0.5f)},
-                    .size = {.width = ui_tracks_constants::square_width, .height = ui_tracks_constants::square_height}};
+            for (auto const &content_idx : inserted) {
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    auto const &value = contents.at(content_idx).value();
+                    ui::region const region{
+                        .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height_rate * 0.5f)},
+                        .size = {.width = ui_tracks_constants::square_width,
+                                 .height = ui_tracks_constants::square_height_rate}};
 
-                auto &rect = vertex_rects[vertex_idx];
-                rect.set_position(region);
-                rect.set_tex_coord(filled_tex_coords);
+                    auto &rect = vertex_rects[vertex_idx];
+                    rect.set_position(region);
+                    rect.set_tex_coord(filled_tex_coords);
 
-                auto const &square_color = value.is_selected ? selected_square_color : normal_square_color;
-                rect.set_color(square_color);
+                    auto const &square_color = value.is_selected ? selected_square_color : normal_square_color;
+                    rect.set_color(square_color);
 
-                auto const &collider = colliders.at(content_idx);
-                collider->set_shape(ui::shape::make_shared({.rect = region}));
-                collider->set_enabled(true);
+                    auto const &collider = colliders.at(content_idx);
+                    collider->set_shape(ui::shape::make_shared({.rect = region}));
+                    collider->set_enabled(true);
+                }
             }
-        }
 
-        for (auto const &content_idx : replaced) {
-            if (range.contains(content_idx)) {
-                auto const vertex_idx = content_idx - range.index;
-                auto const &value = contents.at(content_idx).value();
-                auto const &square_color = value.is_selected ? selected_square_color : normal_square_color;
-                vertex_rects[vertex_idx].set_color(square_color);
+            for (auto const &content_idx : replaced) {
+                if (range.contains(content_idx)) {
+                    auto const vertex_idx = content_idx - range.index;
+                    auto const &value = contents.at(content_idx).value();
+                    auto const &square_color = value.is_selected ? selected_square_color : normal_square_color;
+                    vertex_rects[vertex_idx].set_color(square_color);
+                }
             }
-        }
-    });
+        });
 }
 
 void ui_tracks::_set_rect_count(std::size_t const rect_count) {
