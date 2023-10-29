@@ -79,6 +79,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
         ->observe_event([this](selected_marker_pool::event const &event) {
             switch (event.type) {
                 case selected_pool_event_type::fetched:
+                    // marker_poolの通知に任せてendにしているので呼ばれない
                     break;
                 case selected_pool_event_type::replaced:
                     this->_update_all_contents(update_type::update);
@@ -95,7 +96,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
         ->observe([this](display_space_event const &event) {
             switch (event.source) {
                 case display_space_event_source::fetched:
-                    this->_update_all_contents(update_type::update);
+                    // marker_poolの通知に任せてendにしているので呼ばれない
                     break;
                 case display_space_event_source::view:
                 case display_space_event_source::scale:
@@ -103,7 +104,7 @@ markers_presenter::markers_presenter(project_format const &project_format, std::
                     break;
             }
         })
-        .sync()
+        .end()
         ->add_to(this->_canceller_pool);
 }
 
