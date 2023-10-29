@@ -15,7 +15,7 @@ using namespace yas::ae;
 
 namespace yas::ae::ui_tracks_bg_constants {
 static std::size_t constexpr reserving_interval = 64;
-static float constexpr square_height = 0.95f;
+static float constexpr square_height_rate = 0.95f;
 }
 
 std::shared_ptr<ui_tracks_bg> ui_tracks_bg::make_shared(project_lifetime_id const &project_lifetime_id,
@@ -119,8 +119,8 @@ void ui_tracks_bg::_replace_data() {
                 if (content.has_value()) {
                     auto const &value = content.value();
                     ui::region const region{
-                        .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_bg_constants::square_height * 0.5f)},
-                        .size = {.width = 1.0f, .height = ui_tracks_bg_constants::square_height}};
+                        .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_bg_constants::square_height_rate * 0.5f)},
+                        .size = {.width = 1.0f, .height = ui_tracks_bg_constants::square_height_rate}};
                     rect.set_position(region);
                     rect.set_tex_coord(filled_tex_coords);
                 } else {
@@ -186,8 +186,8 @@ void ui_tracks_bg::_update_data(std::set<std::size_t> const &inserted, std::set<
                     auto const vertex_idx = content_idx - range.index;
                     auto const &value = contents.at(content_idx).value();
                     ui::region const region{
-                        .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_bg_constants::square_height * 0.5f)},
-                        .size = {.width = 1.0f, .height = ui_tracks_bg_constants::square_height}};
+                        .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_bg_constants::square_height_rate * 0.5f)},
+                        .size = {.width = 1.0f, .height = ui_tracks_bg_constants::square_height_rate}};
 
                     auto &rect = vertex_rects[vertex_idx];
                     rect.set_position(region);
