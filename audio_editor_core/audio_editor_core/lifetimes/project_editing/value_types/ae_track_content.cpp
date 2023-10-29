@@ -12,7 +12,7 @@ track_index_t const &track_content::track() const {
 }
 
 bool track_content::operator==(track_content const &rhs) const {
-    return this->identifier == rhs.identifier && this->is_selected == rhs.is_selected;
+    return this->identifier == rhs.identifier && this->is_selected == rhs.is_selected && this->scale == rhs.scale;
 }
 
 bool track_content::operator!=(track_content const &rhs) const {

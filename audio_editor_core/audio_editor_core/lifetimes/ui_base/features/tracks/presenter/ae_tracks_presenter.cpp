@@ -109,21 +109,24 @@ std::optional<ae::space_range> tracks_presenter::_space_range() const {
 }
 
 void tracks_presenter::_replace_contents(selected_track_set const &changed) {
-    auto const locked = yas::lock(this->_content_pool, this->_selected_pool);
+    auto const locked = yas::lock(this->_content_pool, this->_selected_pool, this->_display_space);
 
     if (!fulfilled(locked)) {
         return;
     }
 
-    auto const &[content_pool, selected_pool] = locked;
+    auto const &[content_pool, selected_pool, display_space] = locked;
 
     auto const space_range = this->_space_range();
 
     if (space_range.has_value()) {
         auto const &space_track_range = space_range.value().track_range;
+        auto const &scale = display_space->scale();
+
         for (auto const &track_idx : changed) {
             if (space_track_range.contains(track_idx)) {
-                content_pool->replace({.identifier = track_idx, .is_selected = selected_pool->contains(track_idx)});
+                content_pool->replace(track_content{
+                    .identifier = track_idx, .is_selected = selected_pool->contains(track_idx), .scale = scale});
             }
         }
     }
