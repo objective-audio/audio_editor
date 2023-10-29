@@ -37,24 +37,31 @@ tracks_presenter::tracks_presenter(project_lifetime_id const &project_lifetime_i
       _display_space(display_space),
       _display_space_range(display_space_range),
       _range_selector(range_selector) {
-    display_space
-        ->observe([this](display_space_event const &event) {
-            // 画面サイズが変わった時に呼ばれる
-            this->_update_all_contents(true, false);
-        })
-        .sync()
-        ->add_to(this->_canceller_pool);
-
     selected_pool
         ->observe_event([this](selected_track_pool::event const &event) {
             switch (event.type) {
                 case selected_pool_event_type::fetched:
                 case selected_pool_event_type::replaced:
-                    this->_update_all_contents(true, false);
+                    this->_update_all_contents(update_type::update);
                     break;
-                case selected_pool_event_type::toggled: {
+                case selected_pool_event_type::toggled:
                     this->_replace_contents(event.toggled);
-                } break;
+                    break;
+            }
+        })
+        .sync()
+        ->add_to(this->_canceller_pool);
+
+    display_space
+        ->observe([this](display_space_event const &event) {
+            switch (event.source) {
+                case display_space_event_source::fetched:
+                    // selected_poolの通知に任せてendにしているので呼ばれない
+                    break;
+                case display_space_event_source::view:
+                case display_space_event_source::scale:
+                    this->_update_all_contents(update_type::replace);
+                    break;
             }
         })
         .end()
@@ -88,7 +95,7 @@ observing::syncable tracks_presenter::observe_range(std::function<void(range_sel
 
 void tracks_presenter::update_if_needed() {
     // 毎フレーム呼ばれて、位置が変わっていたら更新する
-    this->_update_all_contents(false, false);
+    this->_update_all_contents(update_type::update_if_changed);
 }
 
 std::optional<ae::space_range> tracks_presenter::_space_range() const {
@@ -122,16 +129,14 @@ void tracks_presenter::_replace_contents(selected_track_set const &changed) {
     }
 }
 
-// force_updating -> スケールや再生位置が変わっていなくても強制的に更新するか
-// force_replacing -> 要素が変わっていなくても強制的に更新するか
-void tracks_presenter::_update_all_contents(bool const force_updating, bool const force_replacing) {
+void tracks_presenter::_update_all_contents(update_type const type) {
     auto const space_range = this->_space_range();
     auto const locked = yas::lock(this->_content_pool, this->_selected_pool);
 
     if (space_range.has_value() && fulfilled(locked)) {
         auto const &[content_pool, selected_pool] = locked;
 
-        if (space_range == this->_last_space_range && !force_updating) {
+        if (space_range == this->_last_space_range && type == update_type::update_if_changed) {
             return;
         }
 
@@ -145,7 +150,17 @@ void tracks_presenter::_update_all_contents(bool const force_updating, bool cons
                 track_content{.identifier = track_idx, .is_selected = selected_pool->contains(track_idx)});
         }
 
-        content_pool->update_all(contents, force_replacing);
+        switch (type) {
+            case update_type::replace:
+                content_pool->replace_all(contents);
+                break;
+            case update_type::update:
+                content_pool->update_all(contents, true);
+                break;
+            case update_type::update_if_changed:
+                content_pool->update_all(contents, false);
+                break;
+        }
 
         this->_last_space_range = space_range;
     }
