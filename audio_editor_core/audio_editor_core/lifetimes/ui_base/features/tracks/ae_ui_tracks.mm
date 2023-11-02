@@ -37,6 +37,7 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
                      modifiers_holder *modifiers_holder, ui_atlas const *atlas)
     : _project_lifetime_id(project_lifetime_id),
       _node(node),
+      _names_root_node(ui::node::make_shared()),
       _presenter(presenter),
       _controller(controller),
       _color(color),
@@ -48,6 +49,7 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
           ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_tracks_constants::reserving_interval, true)),
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_fill_mesh_container->node)) {
     node->add_sub_node(this->_fill_mesh_container->node);
+    node->add_sub_node(this->_names_root_node);
 
     presenter
         ->observe_contents([this](track_content_pool_event const &event) {
@@ -157,6 +159,7 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
         ->add_to(this->_pool);
 
     this->_fill_mesh_container->node->attach_x_layout_guide(*this->_left_guide);
+    this->_names_root_node->attach_x_layout_guide(*this->_left_guide);
 }
 
 void ui_tracks::set_scale(ui::size const &scale) {

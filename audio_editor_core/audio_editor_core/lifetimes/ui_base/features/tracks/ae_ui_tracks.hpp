@@ -30,6 +30,7 @@ struct ui_tracks {
    private:
     project_lifetime_id const _project_lifetime_id;
     ui::node *const _node;
+    std::shared_ptr<ui::node> const _names_root_node;
     std::shared_ptr<tracks_presenter> const _presenter;
     std::shared_ptr<tracks_controller> const _controller;
     ae::color *const _color;
