@@ -233,19 +233,19 @@ void ui_markers::_replace_data() {
                 auto const content_idx = range.index + vertex_idx;
 
                 auto const &content = contents.at(content_idx);
-                auto const &element = names.at(content_idx);
+                auto const &name = names.at(content_idx);
                 auto const &collider = colliders.at(content_idx);
                 auto &rect = vertex_rects[vertex_idx];
 
                 if (content.has_value()) {
-                    element->set_content(content.value(), this->_square_region_updating(content_idx));
-                    element->update_color(selected_name_color, normal_name_color);
+                    name->set_content(content.value(), this->_square_region_updating(content_idx));
+                    name->update_color(selected_name_color, normal_name_color);
 
                     rect.set_tex_coord(filled_tex_coords);
 
                     collider->set_enabled(true);
                 } else {
-                    element->reset_content();
+                    name->reset_content();
 
                     rect.set_position(ui::region::zero());
 
