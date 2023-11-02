@@ -14,6 +14,7 @@ struct track_content {
     ui::size scale;
 
     track_index_t const &track() const;
+    std::string const name() const;
 
     bool operator==(track_content const &rhs) const;
     bool operator!=(track_content const &rhs) const;

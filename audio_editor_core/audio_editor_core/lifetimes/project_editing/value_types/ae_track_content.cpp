@@ -11,6 +11,10 @@ track_index_t const &track_content::track() const {
     return this->identifier;
 }
 
+std::string const track_content::name() const {
+    return std::to_string(this->track());
+}
+
 bool track_content::operator==(track_content const &rhs) const {
     return this->identifier == rhs.identifier && this->is_selected == rhs.is_selected && this->scale == rhs.scale;
 }

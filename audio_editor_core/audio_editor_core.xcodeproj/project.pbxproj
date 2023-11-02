@@ -379,6 +379,8 @@
 		B6AAB8D7282D4F8A007A87B5 /* ae_file_module_loading_state_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B6AAB8D5282D4F8A007A87B5 /* ae_file_module_loading_state_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6AAB8DC282E90EB007A87B5 /* ae_project_format.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6AAB8DA282E90EB007A87B5 /* ae_project_format.cpp */; };
 		B6AAB8DD282E90EB007A87B5 /* ae_project_format.h in Headers */ = {isa = PBXBuildFile; fileRef = B6AAB8DB282E90EB007A87B5 /* ae_project_format.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6AB316F2AF33F270088FF50 /* ae_ui_track_name.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6AB316D2AF33F270088FF50 /* ae_ui_track_name.mm */; };
+		B6AB31702AF33F270088FF50 /* ae_ui_track_name.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B6AB316E2AF33F270088FF50 /* ae_ui_track_name.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6ABBC55289F9D710044BA1E /* ae_ui_node_hierarchy.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6ABBC53289F9D710044BA1E /* ae_ui_node_hierarchy.mm */; };
 		B6ABBC56289F9D710044BA1E /* ae_ui_node_hierarchy.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B6ABBC54289F9D710044BA1E /* ae_ui_node_hierarchy.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6B002B8263BC7320013E6D0 /* ae_file_info_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6B002B6263BC7320013E6D0 /* ae_file_info_loader.cpp */; };
@@ -949,6 +951,8 @@
 		B6AAB8D5282D4F8A007A87B5 /* ae_file_module_loading_state_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_file_module_loading_state_holder.h; sourceTree = "<group>"; };
 		B6AAB8DA282E90EB007A87B5 /* ae_project_format.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_project_format.cpp; sourceTree = "<group>"; };
 		B6AAB8DB282E90EB007A87B5 /* ae_project_format.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ae_project_format.h; sourceTree = "<group>"; };
+		B6AB316D2AF33F270088FF50 /* ae_ui_track_name.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_track_name.mm; sourceTree = "<group>"; };
+		B6AB316E2AF33F270088FF50 /* ae_ui_track_name.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_ui_track_name.hpp; sourceTree = "<group>"; };
 		B6ABBC53289F9D710044BA1E /* ae_ui_node_hierarchy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ae_ui_node_hierarchy.mm; sourceTree = "<group>"; };
 		B6ABBC54289F9D710044BA1E /* ae_ui_node_hierarchy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ae_ui_node_hierarchy.hpp; sourceTree = "<group>"; };
 		B6B002B6263BC7320013E6D0 /* ae_file_info_loader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ae_file_info_loader.cpp; sourceTree = "<group>"; };
@@ -1535,6 +1539,8 @@
 			children = (
 				B65C4AF12AA322AB000EF633 /* ae_ui_tracks.mm */,
 				B65C4AF22AA322AB000EF633 /* ae_ui_tracks.hpp */,
+				B6AB316D2AF33F270088FF50 /* ae_ui_track_name.mm */,
+				B6AB316E2AF33F270088FF50 /* ae_ui_track_name.hpp */,
 				B65C4AF52AA323C8000EF633 /* presenter */,
 				B65C4AF62AA323CD000EF633 /* controller */,
 			);
@@ -2757,6 +2763,7 @@
 				B677A7FA2A077D5C008D1FE3 /* ae_project_opener_event.h in Headers */,
 				B666CE4D26351D7900C1693D /* ae_project_path.h in Headers */,
 				B668BE0D262DCC260021AD20 /* ae_app_lifetime_types.h in Headers */,
+				B6AB31702AF33F270088FF50 /* ae_ui_track_name.hpp in Headers */,
 				B6B9736127006FF500E1BD12 /* ae_ui_button_utils.h in Headers */,
 				B6D2CBC729FCF2BC00218960 /* ProjectLifetimeId.h in Headers */,
 				B6BBA31028C2F84600A20EA2 /* ae_db_module_constants.h in Headers */,
@@ -3167,6 +3174,7 @@
 				B64D080827F0225600EB6FD5 /* ae_module_name_presenter.cpp in Sources */,
 				B6C3A58727102C9800514B94 /* ae_ui_modules.mm in Sources */,
 				B66F476F278BEAE000CB724C /* ae_timing_utils.cpp in Sources */,
+				B6AB316F2AF33F270088FF50 /* ae_ui_track_name.mm in Sources */,
 				B6C9A727264047B100585FDF /* ae_player.cpp in Sources */,
 				B6A454EC289F554A0060A19E /* ae_ui_base_lifecycle.mm in Sources */,
 				B657D4D726806DA90048C6AD /* ae_keyboard_utils.cpp in Sources */,
