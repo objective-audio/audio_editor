@@ -48,6 +48,7 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
       _controller(controller),
       _color(color),
       _atlas(atlas),
+      _top_guide(standard->view_look()->view_layout_guide()->top()),
       _square_vertex_datas(std::make_unique<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>>()),
       _square_fill_mesh_container(ui_mesh_utils::make_fill_container(this->_square_vertex_datas.get(),
                                                                      ui_markers_constants::reserving_interval, true)),
@@ -86,9 +87,8 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
         .sync()
         ->add_to(this->_pool);
 
-    auto const &view_top_guide = standard->view_look()->view_layout_guide()->top();
-    this->_square_fill_mesh_container->node->attach_y_layout_guide(*view_top_guide);
-    this->_names_root_node->attach_y_layout_guide(*view_top_guide);
+    this->_square_fill_mesh_container->node->attach_y_layout_guide(*this->_top_guide);
+    this->_names_root_node->attach_y_layout_guide(*this->_top_guide);
 
     standard->view_look()
         ->view_layout_guide()

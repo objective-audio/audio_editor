@@ -36,6 +36,7 @@ struct ui_markers final {
 
     ae::color const *const _color;
     ui_atlas const *const _atlas;
+    std::shared_ptr<ui::layout_value_guide> const _top_guide;
     std::unique_ptr<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>> _square_vertex_datas;
     std::unique_ptr<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>> _square_fill_mesh_container;
     std::unique_ptr<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>> _line_vertex_datas;
