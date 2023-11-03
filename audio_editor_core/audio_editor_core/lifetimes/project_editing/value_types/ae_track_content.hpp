@@ -17,7 +17,6 @@ struct track_content {
     std::string const name() const;
     ui::range vertical_range() const;
     float const bottom_y() const;
-    float const top_y() const;
     float const height() const;
 
     bool operator==(track_content const &rhs) const;

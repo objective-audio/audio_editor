@@ -27,10 +27,6 @@ float const track_content::bottom_y() const {
     return (this->track() - (track_content_constants::square_height_rate * 0.5f)) * this->scale;
 }
 
-float const track_content::top_y() const {
-    return (this->track() + (track_content_constants::square_height_rate * 0.5f)) * this->scale;
-}
-
 float const track_content::height() const {
     return this->scale * track_content_constants::square_height_rate;
 }
