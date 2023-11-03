@@ -19,6 +19,10 @@ std::string const track_content::name() const {
     return std::to_string(this->track());
 }
 
+ui::range track_content::vertical_range() const {
+    return {.location = this->bottom_y(), .length = this->height()};
+}
+
 float const track_content::bottom_y() const {
     return (this->track() - (track_content_constants::square_height_rate * 0.5f)) * this->scale;
 }

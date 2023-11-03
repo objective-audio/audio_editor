@@ -15,6 +15,7 @@ struct track_content {
 
     track_index_t const &track() const;
     std::string const name() const;
+    ui::range vertical_range() const;
     float const bottom_y() const;
     float const top_y() const;
     float const height() const;
