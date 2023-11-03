@@ -11,10 +11,11 @@ namespace yas::ae {
 struct track_content {
     track_index_t identifier;
     bool is_selected;
-    ui::size scale;
+    float scale;
 
     track_index_t const &track() const;
     std::string const name() const;
+    float const y() const;
 
     bool operator==(track_content const &rhs) const;
     bool operator!=(track_content const &rhs) const;

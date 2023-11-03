@@ -15,6 +15,10 @@ std::string const track_content::name() const {
     return std::to_string(this->track());
 }
 
+float const track_content::y() const {
+    return this->track() * this->scale;
+}
+
 bool track_content::operator==(track_content const &rhs) const {
     return this->identifier == rhs.identifier && this->is_selected == rhs.is_selected && this->scale == rhs.scale;
 }
