@@ -15,7 +15,9 @@ struct track_content {
 
     track_index_t const &track() const;
     std::string const name() const;
-    float const y() const;
+    float const bottom_y() const;
+    float const top_y() const;
+    float const height() const;
 
     bool operator==(track_content const &rhs) const;
     bool operator!=(track_content const &rhs) const;

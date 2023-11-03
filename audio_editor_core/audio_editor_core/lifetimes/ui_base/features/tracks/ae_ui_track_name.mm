@@ -39,7 +39,7 @@ void ui_track_name::update_content(track_content const &content) {
 
     auto const &node = this->node();
     node->set_is_enabled(true);
-    node->set_y(this->_content->y());
+    node->set_y(this->_content->top_y());
 
     this->_name_strings->set_text(content.name());
 }
