@@ -133,23 +133,24 @@ void tracks_presenter::_replace_contents(selected_track_set const &changed) {
 
 void tracks_presenter::_update_all_contents(update_type const type) {
     auto const space_range = this->_space_range();
-    auto const locked = yas::lock(this->_content_pool, this->_selected_pool);
+    auto const locked = yas::lock(this->_content_pool, this->_selected_pool, this->_display_space);
 
     if (space_range.has_value() && fulfilled(locked)) {
-        auto const &[content_pool, selected_pool] = locked;
+        auto const &[content_pool, selected_pool, display_space] = locked;
 
         if (space_range == this->_last_space_range && type == update_type::update_if_changed) {
             return;
         }
 
         std::vector<track_content> contents;
+        float const height_scale = display_space->scale().height;
 
         auto const &track_range = space_range->track_range;
         auto each = make_fast_each(track_range.min, track_range.max + 1);
         while (yas_each_next(each)) {
             auto const &track_idx = yas_each_index(each);
-            contents.emplace_back(
-                track_content{.identifier = track_idx, .is_selected = selected_pool->contains(track_idx)});
+            contents.emplace_back(track_content{
+                .identifier = track_idx, .is_selected = selected_pool->contains(track_idx), .scale = height_scale});
         }
 
         switch (type) {
