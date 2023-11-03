@@ -17,6 +17,7 @@ class tracks_controller;
 class color;
 class ui_atlas;
 class modifiers_holder;
+class ui_track_name;
 
 struct ui_tracks {
     [[nodiscard]] static std::shared_ptr<ui_tracks> make_shared(project_lifetime_id const &, ui::node *);
@@ -41,6 +42,7 @@ struct ui_tracks {
     std::shared_ptr<ui::touch_tracker> const _touch_tracker;
     std::optional<std::size_t> _began_collider_idx;
     modifiers_holder *const _modifiers_holder;
+    std::vector<std::unique_ptr<ui_track_name>> _names;
 
     ui::size _scale = ui::size::one();
 

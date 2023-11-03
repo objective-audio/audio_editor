@@ -10,6 +10,7 @@
 #include <audio_editor_core/ae_tracks_presenter.hpp>
 #include <audio_editor_core/ae_ui_atlas.hpp>
 #include <audio_editor_core/ae_ui_mesh_utils.hpp>
+#include <audio_editor_core/ae_ui_track_name.hpp>
 
 using namespace yas;
 using namespace yas::ae;
@@ -169,11 +170,12 @@ void ui_tracks::set_scale(ui::size const &scale) {
 
 void ui_tracks::_replace_data() {
     auto const &contents = this->_presenter->contents();
+    auto const &names = this->_names;
 
     this->_set_rect_count(contents.size());
 
     this->_fill_mesh_container->write_vertex_elements(
-        [this, &contents](index_range const range, vertex2d_rect *vertex_rects) {
+        [this, &contents, &names](index_range const range, vertex2d_rect *vertex_rects) {
             if (contents.size() <= range.index) {
                 return;
             }
@@ -188,6 +190,7 @@ void ui_tracks::_replace_data() {
                 auto const content_idx = range.index + vertex_idx;
 
                 auto const &content = contents.at(content_idx);
+                auto const &name = names.at(content_idx);
                 auto const &collider = colliders.at(content_idx);
                 auto &rect = vertex_rects[vertex_idx];
 
@@ -202,11 +205,15 @@ void ui_tracks::_replace_data() {
 
                     collider->set_shape(ui::shape::make_shared({.rect = region}));
                     collider->set_enabled(true);
+
+                    name->set_content(value);
                 } else {
                     rect.set_position(ui::region::zero());
 
                     collider->set_enabled(false);
                     collider->set_shape(nullptr);
+
+                    name->reset_content();
                 }
             }
         });
@@ -217,6 +224,8 @@ void ui_tracks::_replace_data() {
 // こことは別に_update_dataで部分的に色を更新しているので、変更する際は注意
 void ui_tracks::_update_colors() {
     auto const &contents = this->_presenter->contents();
+    auto const normal_name_color = this->_color->marker_text();
+    auto const selected_name_color = this->_color->selected_marker_text();
 
     this->_fill_mesh_container->write_vertex_elements([this, &contents](index_range const range,
                                                                         vertex2d_rect *vertex_rects) {
@@ -240,16 +249,30 @@ void ui_tracks::_update_colors() {
             }
         }
     });
+
+    auto each = make_fast_each(this->_names.size());
+    while (yas_each_next(each)) {
+        auto const &idx = yas_each_index(each);
+        auto const &name = this->_names.at(idx);
+        name->update_color(selected_name_color, normal_name_color);
+    }
 }
 
 void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                              std::map<std::size_t, track_content> const &erased) {
     auto const &contents = this->_presenter->contents();
+    auto const &names = this->_names;
+    auto const &color = this->_color;
+    auto const normal_square_color = color->track_square().v;
+    auto const selected_square_color = color->selected_track_square().v;
+    auto const normal_name_color = color->track_text();
+    auto const selected_name_color = color->selected_track_text();
 
     this->_set_rect_count(contents.size());
 
     this->_fill_mesh_container->write_vertex_elements(
-        [&contents, &erased, &inserted, &replaced, this](index_range const range, vertex2d_rect *vertex_rects) {
+        [&contents, &names, &erased, &inserted, &replaced, this, &normal_square_color, &selected_square_color,
+         &normal_name_color, &selected_name_color](index_range const range, vertex2d_rect *vertex_rects) {
             auto const &colliders = this->_fill_mesh_container->node->colliders();
 
             for (auto const &pair : erased) {
@@ -261,12 +284,11 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std
                     auto const &collider = colliders.at(content_idx);
                     collider->set_enabled(false);
                     collider->set_shape(nullptr);
+
+                    names.at(content_idx)->reset_content();
                 }
             }
 
-            auto const &color = this->_color;
-            auto const normal_square_color = color->track_square().v;
-            auto const selected_square_color = color->selected_track_square().v;
             auto const &filled_tex_coords = this->_atlas->white_filled_tex_coords();
 
             for (auto const &content_idx : inserted) {
@@ -288,6 +310,10 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std
                     auto const &collider = colliders.at(content_idx);
                     collider->set_shape(ui::shape::make_shared({.rect = region}));
                     collider->set_enabled(true);
+
+                    auto const &name = names.at(content_idx);
+                    name->set_content(value);
+                    name->update_color(selected_name_color, normal_name_color);
                 }
             }
 
@@ -297,15 +323,37 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std
                     auto const &value = contents.at(content_idx).value();
                     auto const &square_color = value.is_selected ? selected_square_color : normal_square_color;
                     vertex_rects[vertex_idx].set_color(square_color);
+
+                    auto const &name = names.at(content_idx);
+                    name->update_content(value);
+                    name->update_color(selected_name_color, normal_name_color);
                 }
             }
         });
 }
 
 void ui_tracks::_set_rect_count(std::size_t const rect_count) {
+    auto const prev_names_count = this->_names.size();
+    auto const reserving_count = common_utils::reserving_count(rect_count, ui_tracks_constants::reserving_interval);
+
     this->_fill_mesh_container->set_element_count(rect_count);
 
-    auto const reserving_count = common_utils::reserving_count(rect_count, ui_tracks_constants::reserving_interval);
+    if (prev_names_count < rect_count) {
+        this->_names.reserve(reserving_count);
+
+        auto each = make_fast_each(rect_count - prev_names_count);
+        while (yas_each_next(each)) {
+            this->_names.emplace_back(
+                ui_track_name::make_unique(this->_project_lifetime_id, this->_names_root_node.get()));
+        }
+    } else if (rect_count < prev_names_count) {
+        auto each = make_fast_each(prev_names_count - rect_count);
+        while (yas_each_next(each)) {
+            auto const idx = prev_names_count - 1 - yas_each_index(each);
+            this->_names.at(idx)->finalize();
+        }
+        this->_names.resize(rect_count);
+    }
 
     auto const colliders_size = this->_fill_mesh_container->node->colliders().size();
     if (colliders_size < reserving_count) {
