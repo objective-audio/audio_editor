@@ -24,7 +24,7 @@ struct ui_marker_name final {
 
     void update_color(ui::color const &selected_color, ui::color const &normal_color);
 
-    [[nodiscard]] ui::region name_region() const;
+    [[nodiscard]] ui::region square_region() const;
 
     void finalize();
 

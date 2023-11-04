@@ -33,7 +33,7 @@ void ui_track_name::set_content(track_content const &content,
 
     this->_name_strings->actual_layout_source()
         ->observe_layout_region(
-            [this, handler = std::move(region_updated)](ui::region const &) { handler(this->name_region()); })
+            [this, handler = std::move(region_updated)](ui::region const &) { handler(this->square_region()); })
         .sync()
         ->set_to(this->_cancellable);
 }
@@ -66,14 +66,13 @@ void ui_track_name::update_color(ui::color const &selected_color, ui::color cons
     }
 }
 
-ui::region ui_track_name::name_region() const {
+ui::region ui_track_name::square_region() const {
     if (!this->_content.has_value()) {
         return ui::region::zero();
     }
 
     auto const &content_value = this->_content.value();
     auto const region = this->_name_strings->actual_frame();
-    auto const &font_atlas = this->_name_strings->font_atlas();
 
     return ui::region{.origin = {.x = 0.0f, .y = content_value.bottom_y()},
                       .size = {.width = std::max(region.size.width, ui_track_constants::min_square_width),

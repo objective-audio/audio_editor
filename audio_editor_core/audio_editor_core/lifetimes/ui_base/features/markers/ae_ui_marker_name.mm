@@ -39,7 +39,7 @@ void ui_marker_name::set_content(marker_content const &content,
 
     this->_name_strings->actual_layout_source()
         ->observe_layout_region(
-            [this, handler = std::move(region_updated)](ui::region const &) { handler(this->name_region()); })
+            [this, handler = std::move(region_updated)](ui::region const &) { handler(this->square_region()); })
         .sync()
         ->set_to(this->_cancellable);
 }
@@ -64,7 +64,7 @@ void ui_marker_name::reset_content() {
     this->node()->set_is_enabled(false);
 }
 
-ui::region ui_marker_name::name_region() const {
+ui::region ui_marker_name::square_region() const {
     if (!this->_content.has_value()) {
         return ui::region::zero();
     }
