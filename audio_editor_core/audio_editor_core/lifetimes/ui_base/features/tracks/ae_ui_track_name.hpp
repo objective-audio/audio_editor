@@ -12,11 +12,13 @@ struct ui_track_name {
 
     [[nodiscard]] std::shared_ptr<ui::node> const &node() const;
 
-    void set_content(track_content const &);
+    void set_content(track_content const &, std::function<void(ui::region const &)> &&region_updated);
     void update_content(track_content const &);
     void reset_content();
 
     void update_color(ui::color const &selected_color, ui::color const &normal_color);
+
+    [[nodiscard]] ui::region name_region() const;
 
     void finalize();
 

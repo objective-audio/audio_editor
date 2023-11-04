@@ -5,6 +5,7 @@
 #include "ae_ui_tracks.hpp"
 #include <audio_editor_core/ae_color.h>
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_ui_track_constants.h>
 #include <audio_editor_core/ae_modifiers_holder.hpp>
 #include <audio_editor_core/ae_tracks_controller.hpp>
 #include <audio_editor_core/ae_tracks_presenter.hpp>
@@ -14,12 +15,6 @@
 
 using namespace yas;
 using namespace yas::ae;
-
-namespace yas::ae::ui_tracks_constants {
-static std::size_t constexpr reserving_interval = 64;
-static float constexpr square_width = 20.0f;
-static float constexpr square_height_rate = 0.95f;
-}
 
 std::shared_ptr<ui_tracks> ui_tracks::make_shared(project_lifetime_id const &project_lifetime_id, ui::node *node) {
     auto const presenter = tracks_presenter::make_shared(project_lifetime_id);
@@ -47,7 +42,7 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
       _left_guide(standard->view_look()->view_layout_guide()->left()),
       _vertex_datas(std::make_unique<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>>()),
       _fill_mesh_container(
-          ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_tracks_constants::reserving_interval, true)),
+          ui_mesh_utils::make_fill_container(this->_vertex_datas.get(), ui_track_constants::reserving_interval, true)),
       _touch_tracker(ui::touch_tracker::make_shared(standard, this->_fill_mesh_container->node)) {
     node->add_sub_node(this->_fill_mesh_container->node);
     node->add_sub_node(this->_names_root_node);
@@ -196,17 +191,11 @@ void ui_tracks::_replace_data() {
 
                 if (content.has_value()) {
                     auto const &value = content.value();
-                    ui::region const region{
-                        .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height_rate * 0.5f)},
-                        .size = {.width = ui_tracks_constants::square_width,
-                                 .height = ui_tracks_constants::square_height_rate}};
-                    rect.set_position(region);
                     rect.set_tex_coord(filled_tex_coords);
 
-                    collider->set_shape(ui::shape::make_shared({.rect = region}));
                     collider->set_enabled(true);
 
-                    name->set_content(value);
+                    name->set_content(value, this->_square_region_updated(content_idx));
                 } else {
                     rect.set_position(ui::region::zero());
 
@@ -295,24 +284,18 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std
                 if (range.contains(content_idx)) {
                     auto const vertex_idx = content_idx - range.index;
                     auto const &value = contents.at(content_idx).value();
-                    ui::region const region{
-                        .origin = {.x = 0.0f, .y = value.track() - (ui_tracks_constants::square_height_rate * 0.5f)},
-                        .size = {.width = ui_tracks_constants::square_width,
-                                 .height = ui_tracks_constants::square_height_rate}};
 
                     auto &rect = vertex_rects[vertex_idx];
-                    rect.set_position(region);
                     rect.set_tex_coord(filled_tex_coords);
 
                     auto const &square_color = value.is_selected ? selected_square_color : normal_square_color;
                     rect.set_color(square_color);
 
                     auto const &collider = colliders.at(content_idx);
-                    collider->set_shape(ui::shape::make_shared({.rect = region}));
                     collider->set_enabled(true);
 
                     auto const &name = names.at(content_idx);
-                    name->set_content(value);
+                    name->set_content(value, this->_square_region_updated(content_idx));
                     name->update_color(selected_name_color, normal_name_color);
                 }
             }
@@ -334,7 +317,7 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std
 
 void ui_tracks::_set_rect_count(std::size_t const rect_count) {
     auto const prev_names_count = this->_names.size();
-    auto const reserving_count = common_utils::reserving_count(rect_count, ui_tracks_constants::reserving_interval);
+    auto const reserving_count = common_utils::reserving_count(rect_count, ui_track_constants::reserving_interval);
 
     this->_fill_mesh_container->set_element_count(rect_count);
 
@@ -364,4 +347,21 @@ void ui_tracks::_set_rect_count(std::size_t const rect_count) {
             this->_fill_mesh_container->node->push_back_collider(std::move(collider));
         }
     }
+}
+
+void ui_tracks::_update_square_region(std::size_t const content_idx, ui::region const &name_region) {
+    this->_fill_mesh_container->write_vertex_element(
+        content_idx, [this, &content_idx, &name_region](vertex2d_rect *rect) {
+            auto const &colliders = this->_fill_mesh_container->node->colliders();
+
+            rect->set_position(name_region);
+
+            auto const &collider = colliders.at(content_idx);
+            collider->set_shape(ui::shape::make_shared({.rect = name_region}));
+        });
+}
+
+std::function<void(ui::region const &)> ui_tracks::_square_region_updated(std::size_t const content_idx) {
+    return
+        [this, content_idx](ui::region const &name_region) { this->_update_square_region(content_idx, name_region); };
 }

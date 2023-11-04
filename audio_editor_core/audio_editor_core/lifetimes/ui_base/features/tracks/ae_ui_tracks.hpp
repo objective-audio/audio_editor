@@ -61,5 +61,8 @@ struct ui_tracks {
     void _update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                       std::map<std::size_t, track_content> const &erased);
     void _set_rect_count(std::size_t const rect_count);
+
+    void _update_square_region(std::size_t const content_idx, ui::region const &name_region);
+    [[nodiscard]] std::function<void(ui::region const &)> _square_region_updated(std::size_t const content_idx);
 };
 }  // namespace yas::ae

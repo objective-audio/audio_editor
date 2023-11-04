@@ -1,5 +1,6 @@
 #include "ae_ui_track_name.hpp"
 #include <audio_editor_core/ae_ui_hierarchy.h>
+#include <audio_editor_core/ae_ui_track_constants.h>
 #include <cpp_utils/yas_assertion.h>
 
 using namespace yas;
@@ -24,10 +25,17 @@ std::shared_ptr<ui::node> const &ui_track_name::node() const {
     return this->_name_strings->rect_plane()->node();
 }
 
-void ui_track_name::set_content(track_content const &content) {
+void ui_track_name::set_content(track_content const &content,
+                                std::function<void(ui::region const &)> &&region_updated) {
     this->_content = std::nullopt;
 
     this->update_content(content);
+
+    this->_name_strings->actual_layout_source()
+        ->observe_layout_region(
+            [this, handler = std::move(region_updated)](ui::region const &) { handler(this->name_region()); })
+        .sync()
+        ->set_to(this->_cancellable);
 }
 
 void ui_track_name::update_content(track_content const &content) {
@@ -56,6 +64,20 @@ void ui_track_name::update_color(ui::color const &selected_color, ui::color cons
 
         this->node()->set_color(text_color);
     }
+}
+
+ui::region ui_track_name::name_region() const {
+    if (!this->_content.has_value()) {
+        return ui::region::zero();
+    }
+
+    auto const &content_value = this->_content.value();
+    auto const region = this->_name_strings->actual_frame();
+    auto const &font_atlas = this->_name_strings->font_atlas();
+
+    return ui::region{.origin = {.x = 0.0f, .y = content_value.bottom_y()},
+                      .size = {.width = std::max(region.size.width, ui_track_constants::min_square_width),
+                               .height = content_value.height()}};
 }
 
 void ui_track_name::finalize() {

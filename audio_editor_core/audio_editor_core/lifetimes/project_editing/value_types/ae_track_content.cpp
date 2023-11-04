@@ -4,12 +4,10 @@
 
 #include "ae_track_content.hpp"
 
+#include <audio_editor_core/ae_ui_track_constants.h>
+
 using namespace yas;
 using namespace yas::ae;
-
-namespace yas::ae::track_content_constants {
-static float constexpr square_height_rate = 0.95f;
-}
 
 track_index_t const &track_content::track() const {
     return this->identifier;
@@ -24,11 +22,11 @@ ui::range track_content::vertical_range() const {
 }
 
 float const track_content::bottom_y() const {
-    return (this->track() - (track_content_constants::square_height_rate * 0.5f)) * this->scale;
+    return (this->track() - (ui_track_constants::square_height_rate * 0.5f)) * this->scale;
 }
 
 float const track_content::height() const {
-    return this->scale * track_content_constants::square_height_rate;
+    return this->scale * ui_track_constants::square_height_rate;
 }
 
 bool track_content::operator==(track_content const &rhs) const {
