@@ -65,6 +65,6 @@ struct ui_markers final {
     void _set_rect_count(std::size_t const rect_count);
 
     void _update_square_region(std::size_t const content_idx, ui::region const &name_region);
-    [[nodiscard]] std::function<void(ui::region const &)> _square_region_updating(std::size_t const content_idx);
+    [[nodiscard]] std::function<void(ui::region const &)> _square_region_updated(std::size_t const content_idx);
 };
 }  // namespace yas::ae

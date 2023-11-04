@@ -235,7 +235,7 @@ void ui_markers::_replace_data() {
                 auto &rect = vertex_rects[vertex_idx];
 
                 if (content.has_value()) {
-                    name->set_content(content.value(), this->_square_region_updating(content_idx));
+                    name->set_content(content.value(), this->_square_region_updated(content_idx));
 
                     rect.set_tex_coord(filled_tex_coords);
 
@@ -359,7 +359,7 @@ void ui_markers::_update_data(std::set<std::size_t> const &inserted, std::set<st
                     auto const &content = contents.at(content_idx).value();
                     auto const &name = names.at(content_idx);
 
-                    name->set_content(content, this->_square_region_updating(content_idx));
+                    name->set_content(content, this->_square_region_updated(content_idx));
                     name->update_color(selected_name_color, normal_name_color);
 
                     auto &rect = vertex_rects[vertex_idx];
@@ -460,7 +460,7 @@ void ui_markers::_update_square_region(std::size_t const content_idx, ui::region
         });
 }
 
-std::function<void(ui::region const &)> ui_markers::_square_region_updating(std::size_t const content_idx) {
+std::function<void(ui::region const &)> ui_markers::_square_region_updated(std::size_t const content_idx) {
     return
         [this, content_idx](ui::region const &name_region) { this->_update_square_region(content_idx, name_region); };
 }

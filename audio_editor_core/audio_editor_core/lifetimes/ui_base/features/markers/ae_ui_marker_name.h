@@ -18,7 +18,7 @@ struct ui_marker_name final {
 
     [[nodiscard]] std::shared_ptr<ui::node> const &node() const;
 
-    void set_content(marker_content const &, std::function<void(ui::region const &)> &&name_region_updated);
+    void set_content(marker_content const &, std::function<void(ui::region const &)> &&region_updated);
     void update_content(marker_content const &);
     void reset_content();
 
