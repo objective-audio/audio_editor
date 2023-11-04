@@ -37,11 +37,10 @@ void ui_track_name::update_content(track_content const &content) {
 
     this->_content = content;
 
-    auto const &node = this->node();
-    node->set_is_enabled(true);
-    node->set_y(this->_content->vertical_range().max());
+    this->node()->set_is_enabled(true);
 
     this->_name_strings->set_text(content.name());
+    this->_name_strings->preferred_layout_guide()->vertical_range()->set_range(content.vertical_range());
 }
 
 void ui_track_name::reset_content() {
