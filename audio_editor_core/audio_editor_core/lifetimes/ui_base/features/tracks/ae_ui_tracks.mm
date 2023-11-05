@@ -159,8 +159,8 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
 }
 
 void ui_tracks::set_scale(ui::size const &scale) {
+    // 必要なかったら削除したい
     this->_scale = scale;
-    this->_fill_mesh_container->node->set_scale({.width = 1.0f, .height = scale.height});
 }
 
 void ui_tracks::_replace_data() {
