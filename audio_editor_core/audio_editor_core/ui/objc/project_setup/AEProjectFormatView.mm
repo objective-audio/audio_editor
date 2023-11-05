@@ -26,7 +26,7 @@ using namespace yas::ae;
     observing::canceller_pool _pool;
 }
 
-+ (instancetype)instantiate {
++ (nullable instancetype)instantiate {
     NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ProjectFormat" bundle:[NSBundle bundleForClass:[self class]]];
 
     NSArray *objects = nil;

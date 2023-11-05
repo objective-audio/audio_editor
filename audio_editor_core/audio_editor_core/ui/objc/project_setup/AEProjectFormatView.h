@@ -8,7 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AEProjectFormatView : NSView
 
-+ (instancetype)instantiate;
++ (nullable instancetype)instantiate;
 
 @end
 
