@@ -23,8 +23,8 @@ struct ui_tracks {
     [[nodiscard]] static std::shared_ptr<ui_tracks> make_shared(project_lifetime_id const &, ui::node *);
 
     ui_tracks(project_lifetime_id const &, ui::node *, std::shared_ptr<tracks_presenter> const &,
-              std::shared_ptr<tracks_controller> const &, std::shared_ptr<ui::standard> const &, ae::color *,
-              modifiers_holder *, ui_atlas const *);
+              std::shared_ptr<tracks_controller> const &, std::shared_ptr<ui::standard> const &,
+              std::shared_ptr<ui::font_atlas> const &, ae::color *, modifiers_holder *, ui_atlas const *);
 
     void set_scale(ui::size const &);
 
@@ -62,7 +62,7 @@ struct ui_tracks {
                       std::map<std::size_t, track_content> const &erased);
     void _set_rect_count(std::size_t const rect_count);
 
-    void _update_square_region(std::size_t const content_idx, ui::region const &name_region);
-    [[nodiscard]] std::function<void(ui::region const &)> _square_region_updated(std::size_t const content_idx);
+    void _update_square_region(std::size_t const content_idx);
+    void _update_square_regions();
 };
 }  // namespace yas::ae

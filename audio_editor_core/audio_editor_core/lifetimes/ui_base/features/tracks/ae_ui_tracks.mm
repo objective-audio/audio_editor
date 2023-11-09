@@ -22,15 +22,15 @@ std::shared_ptr<ui_tracks> ui_tracks::make_shared(project_lifetime_id const &pro
     auto const &app_lifetime = hierarchy::app_lifetime();
     auto const &resource_lifetime = ui_hierarchy::resource_lifetime_for_project_lifetime_id(project_lifetime_id);
     return std::make_shared<ui_tracks>(project_lifetime_id, node, presenter, controller, resource_lifetime->standard,
-                                       app_lifetime->color.get(), resource_lifetime->modifiers_holder.get(),
-                                       resource_lifetime->atlas.get());
+                                       resource_lifetime->normal_font_atlas, app_lifetime->color.get(),
+                                       resource_lifetime->modifiers_holder.get(), resource_lifetime->atlas.get());
 }
 
 ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *node,
                      std::shared_ptr<tracks_presenter> const &presenter,
                      std::shared_ptr<tracks_controller> const &controller,
-                     std::shared_ptr<ui::standard> const &standard, ae::color *color,
-                     modifiers_holder *modifiers_holder, ui_atlas const *atlas)
+                     std::shared_ptr<ui::standard> const &standard, std::shared_ptr<ui::font_atlas> const &font_atlas,
+                     ae::color *color, modifiers_holder *modifiers_holder, ui_atlas const *atlas)
     : _project_lifetime_id(project_lifetime_id),
       _node(node),
       _names_root_node(ui::node::make_shared()),
@@ -70,6 +70,10 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
     standard->view_look()
         ->observe_appearance([this](auto const &) { this->_update_colors(); })
         .sync()
+        ->add_to(this->_pool);
+
+    font_atlas->observe_rects_updated(1, [this](auto const &) { this->_update_square_regions(); })
+        .end()
         ->add_to(this->_pool);
 
     atlas
@@ -195,7 +199,7 @@ void ui_tracks::_replace_data() {
 
                     collider->set_enabled(true);
 
-                    name->set_content(value, this->_square_region_updated(content_idx));
+                    name->set_content(value);
                 } else {
                     rect.set_position(ui::region::zero());
 
@@ -207,6 +211,7 @@ void ui_tracks::_replace_data() {
             }
         });
 
+    this->_update_square_regions();
     this->_update_colors();
 }
 
@@ -295,7 +300,8 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std
                     collider->set_enabled(true);
 
                     auto const &name = names.at(content_idx);
-                    name->set_content(value, this->_square_region_updated(content_idx));
+                    name->set_content(value);
+                    this->_update_square_region(content_idx);
                     name->update_color(selected_name_color, normal_name_color);
                 }
             }
@@ -309,6 +315,7 @@ void ui_tracks::_update_data(std::set<std::size_t> const &inserted, std::set<std
 
                     auto const &name = names.at(content_idx);
                     name->update_content(value);
+                    this->_update_square_region(content_idx);
                     name->update_color(selected_name_color, normal_name_color);
                 }
             }
@@ -349,19 +356,41 @@ void ui_tracks::_set_rect_count(std::size_t const rect_count) {
     }
 }
 
-void ui_tracks::_update_square_region(std::size_t const content_idx, ui::region const &name_region) {
-    this->_fill_mesh_container->write_vertex_element(
-        content_idx, [this, &content_idx, &name_region](vertex2d_rect *rect) {
-            auto const &colliders = this->_fill_mesh_container->node->colliders();
+void ui_tracks::_update_square_region(std::size_t const content_idx) {
+    this->_fill_mesh_container->write_vertex_element(content_idx, [this, &content_idx](vertex2d_rect *rect) {
+        auto const &colliders = this->_fill_mesh_container->node->colliders();
+        auto const square_region = this->_names.at(content_idx)->square_region();
 
-            rect->set_position(name_region);
+        rect->set_position(square_region);
 
-            auto const &collider = colliders.at(content_idx);
-            collider->set_shape(ui::shape::make_shared({.rect = name_region}));
-        });
+        auto const &collider = colliders.at(content_idx);
+        collider->set_shape(ui::shape::make_shared({.rect = square_region}));
+    });
 }
 
-std::function<void(ui::region const &)> ui_tracks::_square_region_updated(std::size_t const content_idx) {
-    return
-        [this, content_idx](ui::region const &name_region) { this->_update_square_region(content_idx, name_region); };
+void ui_tracks::_update_square_regions() {
+    auto const &contents = this->_presenter->contents();
+    auto const &names = this->_names;
+    auto const &colliders = this->_fill_mesh_container->node->colliders();
+
+    this->_fill_mesh_container->write_vertex_elements(
+        [&contents, &names, &colliders](index_range const range, vertex2d_rect *vertex_rects) {
+            if (contents.size() <= range.index) {
+                return;
+            }
+
+            auto const process_length = std::min(range.length, contents.size() - range.index);
+            auto each = make_fast_each(process_length);
+            while (yas_each_next(each)) {
+                auto const &vertex_idx = yas_each_index(each);
+                auto const content_idx = range.index + vertex_idx;
+                auto const square_region = names.at(content_idx)->square_region();
+
+                auto &rect = vertex_rects[vertex_idx];
+                rect.set_position(square_region);
+
+                auto const &collider = colliders.at(content_idx);
+                collider->set_shape(ui::shape::make_shared({.rect = square_region}));
+            }
+        });
 }

@@ -12,7 +12,7 @@ struct ui_track_name {
 
     [[nodiscard]] std::shared_ptr<ui::node> const &node() const;
 
-    void set_content(track_content const &, std::function<void(ui::region const &)> &&region_updated);
+    void set_content(track_content const &);
     void update_content(track_content const &);
     void reset_content();
 

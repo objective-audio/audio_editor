@@ -25,17 +25,10 @@ std::shared_ptr<ui::node> const &ui_track_name::node() const {
     return this->_name_strings->rect_plane()->node();
 }
 
-void ui_track_name::set_content(track_content const &content,
-                                std::function<void(ui::region const &)> &&region_updated) {
+void ui_track_name::set_content(track_content const &content) {
     this->_content = std::nullopt;
 
     this->update_content(content);
-
-    this->_name_strings->actual_layout_source()
-        ->observe_layout_region(
-            [this, handler = std::move(region_updated)](ui::region const &) { handler(this->square_region()); })
-        .sync()
-        ->set_to(this->_cancellable);
 }
 
 void ui_track_name::update_content(track_content const &content) {
