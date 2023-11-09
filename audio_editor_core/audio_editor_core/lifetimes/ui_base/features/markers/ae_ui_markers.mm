@@ -48,6 +48,7 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
       _controller(controller),
       _color(color),
       _atlas(atlas),
+      _top_guide(standard->view_look()->view_layout_guide()->top()),
       _square_vertex_datas(std::make_unique<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>>()),
       _square_fill_mesh_container(ui_mesh_utils::make_fill_container(this->_square_vertex_datas.get(),
                                                                      ui_markers_constants::reserving_interval, true)),
@@ -86,9 +87,8 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
         .sync()
         ->add_to(this->_pool);
 
-    auto const &view_top_guide = standard->view_look()->view_layout_guide()->top();
-    this->_square_fill_mesh_container->node->attach_y_layout_guide(*view_top_guide);
-    this->_names_root_node->attach_y_layout_guide(*view_top_guide);
+    this->_square_fill_mesh_container->node->attach_y_layout_guide(*this->_top_guide);
+    this->_names_root_node->attach_y_layout_guide(*this->_top_guide);
 
     standard->view_look()
         ->view_layout_guide()
@@ -211,14 +211,11 @@ ui_markers::ui_markers(project_lifetime_id const &project_lifetime_id,
 void ui_markers::_replace_data() {
     auto const &contents = this->_presenter->contents();
     auto const &names = this->_names;
-    auto const normal_name_color = this->_color->marker_text();
-    auto const selected_name_color = this->_color->selected_marker_text();
 
     this->_set_rect_count(contents.size());
 
     this->_square_fill_mesh_container->write_vertex_elements(
-        [this, &contents, &names, &normal_name_color, &selected_name_color](index_range const range,
-                                                                            vertex2d_rect *vertex_rects) {
+        [this, &contents, &names](index_range const range, vertex2d_rect *vertex_rects) {
             if (contents.size() <= range.index) {
                 return;
             }
@@ -233,19 +230,18 @@ void ui_markers::_replace_data() {
                 auto const content_idx = range.index + vertex_idx;
 
                 auto const &content = contents.at(content_idx);
-                auto const &element = names.at(content_idx);
+                auto const &name = names.at(content_idx);
                 auto const &collider = colliders.at(content_idx);
                 auto &rect = vertex_rects[vertex_idx];
 
                 if (content.has_value()) {
-                    element->set_content(content.value(), this->_square_region_updating(content_idx));
-                    element->update_color(selected_name_color, normal_name_color);
+                    name->set_content(content.value(), this->_square_region_updated(content_idx));
 
                     rect.set_tex_coord(filled_tex_coords);
 
                     collider->set_enabled(true);
                 } else {
-                    element->reset_content();
+                    name->reset_content();
 
                     rect.set_position(ui::region::zero());
 
@@ -363,7 +359,7 @@ void ui_markers::_update_data(std::set<std::size_t> const &inserted, std::set<st
                     auto const &content = contents.at(content_idx).value();
                     auto const &name = names.at(content_idx);
 
-                    name->set_content(content, this->_square_region_updating(content_idx));
+                    name->set_content(content, this->_square_region_updated(content_idx));
                     name->update_color(selected_name_color, normal_name_color);
 
                     auto &rect = vertex_rects[vertex_idx];
@@ -418,24 +414,24 @@ void ui_markers::_update_data(std::set<std::size_t> const &inserted, std::set<st
 }
 
 void ui_markers::_set_rect_count(std::size_t const rect_count) {
-    auto const prev_rect_count = this->_names.size();
+    auto const prev_names_count = this->_names.size();
     auto const reserving_count = common_utils::reserving_count(rect_count, ui_markers_constants::reserving_interval);
 
     this->_square_fill_mesh_container->set_element_count(rect_count);
     this->_line_mesh_container->set_element_count(rect_count);
 
-    if (prev_rect_count < rect_count) {
+    if (prev_names_count < rect_count) {
         this->_names.reserve(reserving_count);
 
-        auto each = make_fast_each(rect_count - prev_rect_count);
+        auto each = make_fast_each(rect_count - prev_names_count);
         while (yas_each_next(each)) {
             this->_names.emplace_back(
                 ui_marker_name::make_unique(this->_project_lifetime_id, this->_names_root_node.get()));
         }
-    } else if (rect_count < prev_rect_count) {
-        auto each = make_fast_each(prev_rect_count - rect_count);
+    } else if (rect_count < prev_names_count) {
+        auto each = make_fast_each(prev_names_count - rect_count);
         while (yas_each_next(each)) {
-            auto const idx = prev_rect_count - 1 - yas_each_index(each);
+            auto const idx = prev_names_count - 1 - yas_each_index(each);
             this->_names.at(idx)->finalize();
         }
         this->_names.resize(rect_count);
@@ -464,7 +460,7 @@ void ui_markers::_update_square_region(std::size_t const content_idx, ui::region
         });
 }
 
-std::function<void(ui::region const &)> ui_markers::_square_region_updating(std::size_t const content_idx) {
+std::function<void(ui::region const &)> ui_markers::_square_region_updated(std::size_t const content_idx) {
     return
         [this, content_idx](ui::region const &name_region) { this->_update_square_region(content_idx, name_region); };
 }

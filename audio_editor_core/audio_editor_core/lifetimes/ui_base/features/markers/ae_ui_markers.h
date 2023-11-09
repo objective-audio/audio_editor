@@ -36,6 +36,7 @@ struct ui_markers final {
 
     ae::color const *const _color;
     ui_atlas const *const _atlas;
+    std::shared_ptr<ui::layout_value_guide> const _top_guide;
     std::unique_ptr<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>> _square_vertex_datas;
     std::unique_ptr<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>> _square_fill_mesh_container;
     std::unique_ptr<std::vector<std::shared_ptr<ui::dynamic_mesh_vertex_data>>> _line_vertex_datas;
@@ -64,6 +65,6 @@ struct ui_markers final {
     void _set_rect_count(std::size_t const rect_count);
 
     void _update_square_region(std::size_t const content_idx, ui::region const &name_region);
-    [[nodiscard]] std::function<void(ui::region const &)> _square_region_updating(std::size_t const content_idx);
+    [[nodiscard]] std::function<void(ui::region const &)> _square_region_updated(std::size_t const content_idx);
 };
 }  // namespace yas::ae

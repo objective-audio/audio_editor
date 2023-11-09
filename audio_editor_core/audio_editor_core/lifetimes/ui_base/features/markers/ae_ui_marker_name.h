@@ -18,13 +18,13 @@ struct ui_marker_name final {
 
     [[nodiscard]] std::shared_ptr<ui::node> const &node() const;
 
-    void set_content(marker_content const &, std::function<void(ui::region const &)> &&name_region_updated);
+    void set_content(marker_content const &, std::function<void(ui::region const &)> &&region_updated);
     void update_content(marker_content const &);
     void reset_content();
 
     void update_color(ui::color const &selected_color, ui::color const &normal_color);
 
-    [[nodiscard]] ui::region name_region() const;
+    [[nodiscard]] ui::region square_region() const;
 
     void finalize();
 

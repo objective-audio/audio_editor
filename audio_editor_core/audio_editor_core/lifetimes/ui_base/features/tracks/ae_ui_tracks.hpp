@@ -17,19 +17,21 @@ class tracks_controller;
 class color;
 class ui_atlas;
 class modifiers_holder;
+class ui_track_name;
 
 struct ui_tracks {
     [[nodiscard]] static std::shared_ptr<ui_tracks> make_shared(project_lifetime_id const &, ui::node *);
 
     ui_tracks(project_lifetime_id const &, ui::node *, std::shared_ptr<tracks_presenter> const &,
-              std::shared_ptr<tracks_controller> const &, std::shared_ptr<ui::standard> const &, ae::color *,
-              modifiers_holder *, ui_atlas const *);
+              std::shared_ptr<tracks_controller> const &, std::shared_ptr<ui::standard> const &,
+              std::shared_ptr<ui::font_atlas> const &, ae::color *, modifiers_holder *, ui_atlas const *);
 
     void set_scale(ui::size const &);
 
    private:
     project_lifetime_id const _project_lifetime_id;
     ui::node *const _node;
+    std::shared_ptr<ui::node> const _names_root_node;
     std::shared_ptr<tracks_presenter> const _presenter;
     std::shared_ptr<tracks_controller> const _controller;
     ae::color *const _color;
@@ -40,6 +42,7 @@ struct ui_tracks {
     std::shared_ptr<ui::touch_tracker> const _touch_tracker;
     std::optional<std::size_t> _began_collider_idx;
     modifiers_holder *const _modifiers_holder;
+    std::vector<std::unique_ptr<ui_track_name>> _names;
 
     ui::size _scale = ui::size::one();
 
@@ -58,5 +61,8 @@ struct ui_tracks {
     void _update_data(std::set<std::size_t> const &inserted, std::set<std::size_t> const &replaced,
                       std::map<std::size_t, track_content> const &erased);
     void _set_rect_count(std::size_t const rect_count);
+
+    void _update_square_region(std::size_t const content_idx);
+    void _update_square_regions();
 };
 }  // namespace yas::ae

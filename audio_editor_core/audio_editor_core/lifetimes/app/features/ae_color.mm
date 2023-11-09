@@ -146,6 +146,14 @@ ui::color color::selected_track_bg() const {
     return to_color(@"selected_track_bg");
 }
 
+ui::color color::track_text() const {
+    return to_color(@"track_text");
+}
+
+ui::color color::selected_track_text() const {
+    return to_color(@"selected_track_text");
+}
+
 ui::color color::modal_bg() const {
     return to_color(@"modal_bg");
 }

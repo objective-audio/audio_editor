@@ -60,7 +60,7 @@ struct markers_presenter final {
     enum class update_type {
         replace,            // 全て更新。scaleが変わったので強制的に全て置き換える
         update,             // 全て更新。位置は変わらないので変更があったところだけ更新
-        update_if_changed,  // 前回の更新から変更などがあったら更新
+        update_if_changed,  // 前回の更新から画面や再生位置に変更があったら更新
     };
 
     void _update_all_contents(update_type const type);
