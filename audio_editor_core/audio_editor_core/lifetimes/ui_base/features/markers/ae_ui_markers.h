@@ -24,8 +24,9 @@ struct ui_markers final {
                                                                  std::shared_ptr<ui::node> const &);
 
     ui_markers(project_lifetime_id const &, std::shared_ptr<markers_presenter> const &,
-               std::shared_ptr<markers_controller> const &, std::shared_ptr<ui::standard> const &, ui::node *,
-               modifiers_holder *, ui_atlas const *, ae::color const *);
+               std::shared_ptr<markers_controller> const &, std::shared_ptr<ui::standard> const &,
+               std::shared_ptr<ui::font_atlas> const &, ui::node *, modifiers_holder *, ui_atlas const *,
+               ae::color const *);
 
    private:
     project_lifetime_id const _project_lifetime_id;
@@ -64,7 +65,7 @@ struct ui_markers final {
 
     void _set_rect_count(std::size_t const rect_count);
 
-    void _update_square_region(std::size_t const content_idx, ui::region const &name_region);
-    [[nodiscard]] std::function<void(ui::region const &)> _square_region_updated(std::size_t const content_idx);
+    void _update_square_region(std::size_t const content_idx);
+    void _update_square_regions();
 };
 }  // namespace yas::ae
