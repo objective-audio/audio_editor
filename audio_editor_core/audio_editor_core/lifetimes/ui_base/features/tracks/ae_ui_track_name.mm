@@ -66,10 +66,13 @@ ui::region ui_track_name::square_region() const {
 
     auto const &content_value = this->_content.value();
     auto const region = this->_name_strings->actual_frame();
+    auto const content_height = content_value.height();
+    auto const square_height = region.size.height == 0 ? content_height : region.size.height;
+    auto const bottom_y = content_value.bottom_y() + content_height - square_height;
 
-    return ui::region{.origin = {.x = 0.0f, .y = content_value.bottom_y()},
-                      .size = {.width = std::max(region.size.width, ui_track_constants::min_square_width),
-                               .height = content_value.height()}};
+    return ui::region{
+        .origin = {.x = 0.0f, .y = bottom_y},
+        .size = {.width = std::max(region.size.width, ui_track_constants::min_square_width), .height = square_height}};
 }
 
 void ui_track_name::finalize() {
