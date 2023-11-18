@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B603DB402B0844C3007FF352 /* yas_ui_dynamic_mesh_container_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B603DB3F2B0844C3007FF352 /* yas_ui_dynamic_mesh_container_tests.mm */; };
 		B6126305278332610019B364 /* ae_nudging_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6126304278332610019B364 /* ae_nudging_tests.mm */; };
 		B6132CFE2A3464F500E81E3A /* ae_vertical_scrolling_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6132CFD2A3464F500E81E3A /* ae_vertical_scrolling_tests.mm */; };
 		B61E3236264ACAC9000DB2B1 /* ae_module_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B61E3235264ACAC9000DB2B1 /* ae_module_tests.mm */; };
@@ -60,6 +61,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B603DB3F2B0844C3007FF352 /* yas_ui_dynamic_mesh_container_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = yas_ui_dynamic_mesh_container_tests.mm; path = ../../audio_editor_tests/yas_ui_dynamic_mesh_container_tests.mm; sourceTree = "<group>"; };
 		B6126304278332610019B364 /* ae_nudging_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_nudging_tests.mm; path = ../../audio_editor_tests/ae_nudging_tests.mm; sourceTree = "<group>"; };
 		B6132CFD2A3464F500E81E3A /* ae_vertical_scrolling_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_vertical_scrolling_tests.mm; path = ../../audio_editor_tests/ae_vertical_scrolling_tests.mm; sourceTree = "<group>"; };
 		B61E3235264ACAC9000DB2B1 /* ae_module_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ae_module_tests.mm; path = ../../audio_editor_tests/ae_module_tests.mm; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				B6288EA029D54C3300BBA440 /* ae_app_settings_tests.mm */,
 				B69503E229D7BB8500E1F3BA /* ae_timing_types_tests.mm */,
 				B6132CFD2A3464F500E81E3A /* ae_vertical_scrolling_tests.mm */,
+				B603DB3F2B0844C3007FF352 /* yas_ui_dynamic_mesh_container_tests.mm */,
 				B66909F7262A7CD600E86353 /* Info.plist */,
 				B666CE412634FF3900C1693D /* utils */,
 			);
@@ -337,6 +340,7 @@
 				B64E2121263C44A300B1BF51 /* ae_file_info_loader_tests.mm in Sources */,
 				B66F5D6E27AE5D3700441616 /* ae_color_tests.mm in Sources */,
 				B6A1237E27887BF800F31B31 /* ae_horizontal_scrolling_tests.mm in Sources */,
+				B603DB402B0844C3007FF352 /* yas_ui_dynamic_mesh_container_tests.mm in Sources */,
 				B6A1237C27883C4100F31B31 /* ae_timing_tests.mm in Sources */,
 				B6DEE38729758E6E00FA6172 /* ae_range_selector_tests.mm in Sources */,
 				B666CDF32634152600C1693D /* ae_system_url_tests.mm in Sources */,
