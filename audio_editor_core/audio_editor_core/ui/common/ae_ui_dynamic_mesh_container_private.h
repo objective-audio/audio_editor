@@ -15,6 +15,10 @@ dynamic_mesh_container<VertexElement, IndexElement>::dynamic_mesh_container(std:
 
 template <typename VertexElement, typename IndexElement>
 void dynamic_mesh_container<VertexElement, IndexElement>::set_element_count(std::size_t const element_count) {
+    if (this->_element_count == element_count) {
+        return;
+    }
+
     this->_element_count = element_count;
 
     auto const reserving_count = common_utils::reserving_count(element_count, this->_interval);
