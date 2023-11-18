@@ -10,11 +10,13 @@ namespace yas::ae {
 template <typename VertexElement, typename IndexElement>
 dynamic_mesh_container<VertexElement, IndexElement>::dynamic_mesh_container(std::size_t const interval,
                                                                             make_content_f &&make_content)
-    : _interval(interval), _make_content(std::move(make_content)) {
+    : _element_count(0), _interval(interval), _make_content(std::move(make_content)) {
 }
 
 template <typename VertexElement, typename IndexElement>
 void dynamic_mesh_container<VertexElement, IndexElement>::set_element_count(std::size_t const element_count) {
+    this->_element_count = element_count;
+
     auto const reserving_count = common_utils::reserving_count(element_count, this->_interval);
     this->_remake_contents_if_needed(reserving_count / this->_interval);
 
@@ -43,15 +45,29 @@ std::size_t dynamic_mesh_container<VertexElement, IndexElement>::reserved_elemen
 }
 
 template <typename VertexElement, typename IndexElement>
+std::size_t dynamic_mesh_container<VertexElement, IndexElement>::element_count() const {
+    return this->_element_count;
+}
+
+template <typename VertexElement, typename IndexElement>
 void dynamic_mesh_container<VertexElement, IndexElement>::write_vertex_elements(
     std::function<void(index_range const range, VertexElement *)> const &handler) {
-    auto each = make_fast_each(this->_contents.size());
+    if (this->_element_count == 0) {
+        return;
+    }
+
+    std::size_t const element_mod_count = this->_element_count % this->_interval;
+    std::size_t const floored_contents_count = this->_element_count / this->_interval;
+    std::size_t const contents_count = floored_contents_count + (element_mod_count != 0 ? 1 : 0);
+
+    auto each = make_fast_each(contents_count);
     while (yas_each_next(each)) {
-        auto const &content_idx = yas_each_index(each);
-        auto const top_element_idx = this->_interval * content_idx;
+        std::size_t const &content_idx = yas_each_index(each);
+        std::size_t const top_element_idx = this->_interval * content_idx;
+        std::size_t const length = (content_idx == floored_contents_count) ? element_mod_count : this->_interval;
 
         this->_contents.at(content_idx)
-            ->vertex_data->write([range = index_range{.index = top_element_idx, .length = this->_interval},
+            ->vertex_data->write([range = index_range{.index = top_element_idx, .length = length},
                                   &handler](std::vector<ui::vertex2d_t> &vertices) {
                 handler(range, (VertexElement *)vertices.data());
             });
@@ -61,6 +77,10 @@ void dynamic_mesh_container<VertexElement, IndexElement>::write_vertex_elements(
 template <typename VertexElement, typename IndexElement>
 void dynamic_mesh_container<VertexElement, IndexElement>::write_vertex_element(
     std::size_t const idx, std::function<void(VertexElement *)> const &handler) {
+    if (this->_element_count <= idx) {
+        return;
+    }
+
     std::size_t const content_idx = (idx == 0) ? 0 : (idx / this->_interval);
     std::size_t const idx_in_content = idx - (content_idx * this->_interval);
 

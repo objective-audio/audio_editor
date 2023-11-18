@@ -23,11 +23,13 @@ struct dynamic_mesh_container {
     dynamic_mesh_container(std::size_t const interval, make_content_f &&);
 
     [[nodiscard]] std::size_t reserved_element_count() const;
+    [[nodiscard]] std::size_t element_count() const;
     void set_element_count(std::size_t const);
     void write_vertex_elements(std::function<void(index_range const, VertexElement *)> const &);
     void write_vertex_element(std::size_t const idx, std::function<void(VertexElement *)> const &);
 
    private:
+    std::size_t _element_count;
     std::size_t const _interval;
     std::vector<std::unique_ptr<dynamic_mesh_content>> _contents;
     make_content_f const _make_content;
