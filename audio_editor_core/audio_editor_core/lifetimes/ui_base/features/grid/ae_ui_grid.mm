@@ -67,7 +67,10 @@ ui_grid::ui_grid(std::shared_ptr<grid_presenter> const &presenter, std::shared_p
         ->add_to(this->_pool);
 
     standard->renderer()
-        ->observe_will_render([this](auto const &) { this->_presenter->update_contents(); })
+        ->observe_will_render([this](auto const &) {
+            this->_presenter->update_contents();
+            this->_mesh_container->reduce_if_needed();
+        })
         .end()
         ->add_to(this->_pool);
 

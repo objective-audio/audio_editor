@@ -20,8 +20,7 @@ std::unique_ptr<dynamic_mesh_container<vertex2d_rect, fill_index2d_rect>> make_f
         }
 
         auto const &vertex_data = vertex_datas->at(idx);
-        auto const index_data =
-            ui::dynamic_mesh_index_data::make_shared(element_count * fill_index2d_rect::vector_count);
+        auto index_data = ui::dynamic_mesh_index_data::make_shared(element_count * fill_index2d_rect::vector_count);
         auto mesh =
             ui::mesh::make_shared({.primitive_type = ui::primitive_type::triangle, .use_mesh_color = use_mesh_color},
                                   vertex_data, index_data, nullptr);

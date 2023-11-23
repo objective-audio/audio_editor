@@ -71,6 +71,7 @@ ui_pasting_modules::ui_pasting_modules(std::shared_ptr<pasting_modules_presenter
         ->observe_will_render([this](auto const &) {
             this->_presenter->update_if_needed();
             this->_update_y_offset();
+            this->_mesh_container->reduce_if_needed();
         })
         .end()
         ->add_to(this->_pool);
