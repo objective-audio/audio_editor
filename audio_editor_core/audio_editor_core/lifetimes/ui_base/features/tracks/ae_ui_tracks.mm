@@ -63,7 +63,10 @@ ui_tracks::ui_tracks(project_lifetime_id const &project_lifetime_id, ui::node *n
         ->add_to(this->_pool);
 
     standard->renderer()
-        ->observe_will_render([this](auto const &) { this->_presenter->update_if_needed(); })
+        ->observe_will_render([this](auto const &) {
+            this->_presenter->update_if_needed();
+            this->_fill_mesh_container->reduce_if_needed();
+        })
         .end()
         ->add_to(this->_pool);
 
