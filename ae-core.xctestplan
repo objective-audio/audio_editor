@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "ADB16ACF-58E2-459C-8E26-E7882C97C332",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ae-bundle-tests",
+        "name" : "ae-bundle-tests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ae-core-tests",
+        "name" : "ae-core-tests"
+      }
+    }
+  ],
+  "version" : 1
+}

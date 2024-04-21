@@ -2,5 +2,6 @@
 
 if [ ! $CI ]; then
   export PATH=$PATH:/opt/homebrew/bin
-  clang-format -i -style=file `find ../audio_editor ../audio_editor_core ../audio_editor_tests -type f \( -name *.h -o -name *.cpp -o -name *.hpp -o -name *.m -o -name *.mm \)`
+  clang-format -i -style=file `find ./ae-core/Sources ./ae-core/Tests -type f \( -name *.h -o -name *.cpp -o -name *.hpp -o -name *.m -o -name *.mm \)`
+  swift-format -r ./ae-core/Sources ./ae-core/Tests -i
 fi
