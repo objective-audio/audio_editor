@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="bU7-R8-ocO">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Module Name View Controller-->
+        <scene sceneID="PEd-7d-5j0">
+            <objects>
+                <viewController showSeguePresentationStyle="single" id="bU7-R8-ocO" customClass="AEModuleNameViewController" customModule="ae_ui" sceneMemberID="viewController">
+                    <view key="view" id="tOy-S4-hL0">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PXs-uO-wXH">
+                                <rect key="frame" x="20" y="235" width="410" height="45"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IVf-bm-S3q">
+                                        <rect key="frame" x="-2" y="29" width="88" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Module Name" id="7vj-lW-whI">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tQ3-qq-tyJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="410" height="21"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="x9Y-ZI-V6m">
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h98-nG-Thx">
+                                <rect key="frame" x="308" y="20" width="122" height="20"/>
+                                <subviews>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pVS-BM-JtH">
+                                        <rect key="frame" x="-7" y="-7" width="76" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ahd-V0-K1G">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="cancel:" target="bU7-R8-ocO" id="iLh-6a-xGN"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uEn-X1-zeN">
+                                        <rect key="frame" x="63" y="-7" width="66" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tYH-Wr-j4U">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="done:" target="bU7-R8-ocO" id="Zhw-8Q-Fl9"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="PXs-uO-wXH" secondAttribute="trailing" constant="20" symbolic="YES" id="6nm-rU-8ON"/>
+                            <constraint firstAttribute="bottom" secondItem="h98-nG-Thx" secondAttribute="bottom" constant="20" symbolic="YES" id="HJr-ND-1Gb"/>
+                            <constraint firstItem="PXs-uO-wXH" firstAttribute="top" secondItem="tOy-S4-hL0" secondAttribute="top" constant="20" symbolic="YES" id="e1v-Z5-6Ek"/>
+                            <constraint firstItem="PXs-uO-wXH" firstAttribute="leading" secondItem="tOy-S4-hL0" secondAttribute="leading" constant="20" symbolic="YES" id="lIc-ox-90v"/>
+                            <constraint firstAttribute="trailing" secondItem="h98-nG-Thx" secondAttribute="trailing" constant="20" symbolic="YES" id="tQ3-4U-Dx0"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="nameTextField" destination="tQ3-qq-tyJ" id="j6b-O1-ceT"/>
+                        <outlet property="titleLabel" destination="IVf-bm-S3q" id="7jS-2S-qwa"/>
+                    </connections>
+                </viewController>
+                <customObject id="9uD-mB-xHs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="91" y="131"/>
+        </scene>
+    </scenes>
+</document>
