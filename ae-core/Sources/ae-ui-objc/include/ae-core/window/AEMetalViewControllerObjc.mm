@@ -4,22 +4,21 @@
 
 #import "AEMetalViewControllerObjc.h"
 #import <UniformTypeIdentifiers/UTCoreTypes.h>
-#include <ae-core/audio_editor_core_umbrella.h>
-#include <ae-core/global/ae_ui_hierarchy.h>
-#include <ae-core/global/utils/ae_json_utils.h>
-#include <ae-core/global/value_types/ae_project_lifetime_id+objc.h>
-#import <ae-core/global/value_types/ae_project_sub_lifetime_id+objc.h>
-#include <ae-core/project_editing/features/ae_project_action_sender.h>
-#include <ae-core/project_editing/lifecycles/ae_project_modal_lifecycle.h>
-#include <ae-core/ui_base/features/event_handling/presenter/ae_event_handling_presenter.h>
+#include <ae-core/global/ui_hierarchy.h>
+#include <ae-core/global/utils/json_utils.h>
+#include <ae-core/global/value_types/project_lifetime_id+objc.h>
+#import <ae-core/global/value_types/project_sub_lifetime_id+objc.h>
+#include <ae-core/project_editing/features/project_action_sender.h>
+#include <ae-core/project_editing/lifecycles/project_modal_lifecycle.h>
+#include <ae-core/ui_base/features/event_handling/presenter/event_handling_presenter.h>
 #import <ae-core/window/AEMetalViewObjc.h>
 #include <cpp-utils/assertion.h>
 #include <cpp-utils/cf_utils.h>
 #include <cpp-utils/unowned.h>
-#include <ae-core/app/lifecycles/ae_ui_resource_lifecycle.hpp>
-#include <ae-core/module_name_sheet/features/ae_module_name_editor.hpp>
-#include <ae-core/ui_base/ae_ui_base_lifetime.hpp>
-#include <ae-core/ui_resource/ae_ui_resource_lifetime.hpp>
+#include <ae-core/app/lifecycles/ui_resource_lifecycle.hpp>
+#include <ae-core/module_name_sheet/features/module_name_editor.hpp>
+#include <ae-core/ui_base/ui_base_lifetime.hpp>
+#include <ae-core/ui_resource/ui_resource_lifetime.hpp>
 
 using namespace yas;
 using namespace yas::ae;

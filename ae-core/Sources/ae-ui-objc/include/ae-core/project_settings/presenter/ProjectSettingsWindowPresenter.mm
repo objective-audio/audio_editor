@@ -3,9 +3,9 @@
 //
 
 #import "ProjectSettingsWindowPresenter.h"
-#include <ae-core/global/ae_hierarchy.h>
-#import <ae-core/global/value_types/ae_project_lifetime_id+objc.h>
-#include <ae-core/project_settings/features/ae_project_settings_closer.hpp>
+#include <ae-core/global/hierarchy.h>
+#import <ae-core/global/value_types/project_lifetime_id+objc.h>
+#include <ae-core/project_settings/features/project_settings_closer.hpp>
 
 using namespace yas;
 using namespace yas::ae;

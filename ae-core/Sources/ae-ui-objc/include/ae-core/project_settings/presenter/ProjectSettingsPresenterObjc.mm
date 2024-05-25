@@ -3,10 +3,10 @@
 //
 
 #import "ProjectSettingsPresenterObjc.h"
-#include <ae-core/global/ae_hierarchy.h>
-#include <ae-core/global/value_types/ae_project_lifetime_id+objc.h>
-#include <ae-core/project_editing/value_types/ae_timing_types+objc.h>
-#include <ae-core/app/features/ae_app_settings.hpp>
+#include <ae-core/global/hierarchy.h>
+#include <ae-core/global/value_types/project_lifetime_id+objc.h>
+#include <ae-core/project_editing/value_types/timing_types+objc.h>
+#include <ae-core/app/features/app_settings.hpp>
 
 using namespace yas;
 using namespace yas::ae;

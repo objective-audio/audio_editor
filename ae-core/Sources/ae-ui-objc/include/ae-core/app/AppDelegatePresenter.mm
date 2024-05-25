@@ -1,6 +1,6 @@
 #import "AppDelegatePresenter.h"
 #import <ae-core/app/AppWindowPresenterObjc.h>
-#include <ae-core/global/ae_hierarchy.h>
+#include <ae-core/global/hierarchy.h>
 
 using namespace yas;
 using namespace yas::ae;

@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import <ae-core/project_editing/value_types/ae_timing_types_objc.h>
+#import <ae-core/project_editing/value_types/timing_types_objc.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

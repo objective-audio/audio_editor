@@ -1,6 +1,6 @@
 #import "AppSettingsLifetimeId.h"
 
-#include <ae-core/global/value_types/ae_app_settings_lifetime_id.hpp>
+#include <ae-core/global/value_types/app_settings_lifetime_id.hpp>
 
 using namespace yas;
 using namespace yas::ae;

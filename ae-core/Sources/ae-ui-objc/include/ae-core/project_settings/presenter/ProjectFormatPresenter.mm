@@ -1,6 +1,6 @@
 #import "ProjectFormatPresenter.h"
-#include <ae-core/global/ae_hierarchy.h>
-#include <ae-core/project_format_dialog/features/ae_project_format_setup.h>
+#include <ae-core/global/hierarchy.h>
+#include <ae-core/project_format_dialog/features/project_format_setup.h>
 #include <cpp-utils/assertion.h>
 #include <cpp-utils/unowned.h>
 

@@ -3,8 +3,8 @@
 //
 
 #import "ModuleNamePresenterObjc.h"
-#include <ae-core/global/value_types/ae_project_sub_lifetime_id+objc.h>
-#include <ae-core/module_name/presenter/ae_module_name_presenter.h>
+#include <ae-core/global/value_types/project_sub_lifetime_id+objc.h>
+#include <ae-core/module_name/presenter/module_name_presenter.h>
 #include <cpp-utils/cf_utils.h>
 
 using namespace yas;

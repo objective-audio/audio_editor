@@ -1,18 +1,18 @@
 #import "AppWindowPresenterObjc.h"
 
-#include <ae-core/app/features/ae_project_opener.h>
-#include <ae-core/app/lifecycles/ae_app_modal_lifecycle.h>
-#include <ae-core/app/lifecycles/ae_project_lifecycle.h>
-#include <ae-core/global/ae_hierarchy.h>
-#import <ae-core/global/value_types/ae_app_settings_lifetime_id+objc.h>
-#import <ae-core/global/value_types/ae_project_lifetime_id+objc.h>
-#include <ae-core/project_setup/presenter/ae_project_setup_presenter.h>
+#include <ae-core/app/features/project_opener.h>
+#include <ae-core/app/lifecycles/app_modal_lifecycle.h>
+#include <ae-core/app/lifecycles/project_lifecycle.h>
+#include <ae-core/global/hierarchy.h>
+#import <ae-core/global/value_types/app_settings_lifetime_id+objc.h>
+#import <ae-core/global/value_types/project_lifetime_id+objc.h>
+#include <ae-core/project_setup/presenter/project_setup_presenter.h>
 #include <cpp-utils/cf_utils.h>
 #include <cpp-utils/unowned.h>
-#include <ae-core/app/features/ae_app_settings_opener.hpp>
-#include <ae-core/app/features/ae_project_setup_dialog_opener.hpp>
-#include <ae-core/app/lifecycles/ae_app_settings_lifecycle.hpp>
-#include <ae-core/app/lifecycles/ae_project_settings_lifecycle.hpp>
+#include <ae-core/app/features/app_settings_opener.hpp>
+#include <ae-core/app/features/project_setup_dialog_opener.hpp>
+#include <ae-core/app/lifecycles/app_settings_lifecycle.hpp>
+#include <ae-core/app/lifecycles/project_settings_lifecycle.hpp>
 
 using namespace yas;
 using namespace yas::ae;

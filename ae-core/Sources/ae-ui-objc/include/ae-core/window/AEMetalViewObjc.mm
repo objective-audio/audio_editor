@@ -3,12 +3,12 @@
 //
 
 #import "AEMetalViewObjc.h"
-#include <ae-core/global/ae_hierarchy.h>
-#include <ae-core/global/utils/ae_action_utils.h>
-#include <ae-core/global/value_types/ae_project_lifetime_id+objc.h>
-#include <ae-core/project_editing/features/ae_project_action_sender.h>
-#include <ae-core/project_editing/lifecycles/ae_project_modal_lifecycle.h>
-#include <ae-core/ui_base/utils/ae_ui_event_utils.h>
+#include <ae-core/global/hierarchy.h>
+#include <ae-core/global/utils/action_utils.h>
+#include <ae-core/global/value_types/project_lifetime_id+objc.h>
+#include <ae-core/project_editing/features/project_action_sender.h>
+#include <ae-core/project_editing/lifecycles/project_modal_lifecycle.h>
+#include <ae-core/ui_base/utils/ui_event_utils.h>
 #include <cpp-utils/assertion.h>
 #include <cpp-utils/cf_utils.h>
 #include <cpp-utils/unowned.h>

@@ -1,7 +1,7 @@
 #import "MarkerNamePresenterObjc.h"
-#include <ae-core/global/value_types/ae_project_sub_lifetime_id+objc.h>
+#include <ae-core/global/value_types/project_sub_lifetime_id+objc.h>
 #include <cpp-utils/cf_utils.h>
-#include <ae-core/marker_name/presenter/ae_marker_name_presenter.hpp>
+#include <ae-core/marker_name/presenter/marker_name_presenter.hpp>
 
 using namespace yas;
 using namespace yas::ae;
