@@ -1,7 +1,7 @@
 #import "AppSettingsWindowPresenter.h"
-#include <ae-core/global/ae_hierarchy.h>
-#import <ae-core/global/value_types/ae_app_settings_lifetime_id+objc.h>
-#include <ae-core/app_settings/features/ae_app_settings_closer.hpp>
+#include <ae-core/global/hierarchy.h>
+#import <ae-core/global/value_types/app_settings_lifetime_id+objc.h>
+#include <ae-core/app_settings/features/app_settings_closer.hpp>
 
 using namespace yas;
 using namespace yas::ae;

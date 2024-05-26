@@ -1,5 +1,5 @@
 #import <XCTest/XCTest.h>
-#include <ae-core/ui_base/features/common/ae_ui_dynamic_mesh_container.hpp>
+#include <ae-core/ui_base/features/common/ui_dynamic_mesh_container.hpp>
 
 using namespace yas;
 using namespace yas::ae;

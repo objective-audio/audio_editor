@@ -1,6 +1,6 @@
 #import "ProjectWindowPresenter.h"
-#include <ae-core/global/value_types/ae_project_lifetime_id+objc.h>
-#include <ae-core/window/presenter/ae_project_presenter.h>
+#include <ae-core/global/value_types/project_lifetime_id+objc.h>
+#include <ae-core/window/presenter/project_presenter.h>
 #include <cpp-utils/cf_utils.h>
 #include <cpp-utils/unowned.h>
 
